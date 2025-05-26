@@ -6,8 +6,9 @@ interface IDecisionModal {
   portalId: string;
   description: string;
   title: string;
-  onClick: () => void;
   onCloseModal: () => void;
+  onClick?: () => void;
+  subtitle?: string;
   withCancelButton?: boolean;
   moreDetails?: string;
   sizeIcon?: string;

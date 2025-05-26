@@ -10,6 +10,7 @@ import { Table } from "@design/data/table";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
 import { tabLabels } from "@config/payrollAgreement/requestsInProgressTab/tabLabels";
+import { ComponentAppearance } from "@enum/appearances";
 
 const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
   const {
@@ -35,7 +36,6 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
         theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
       }
       borderRadius={tokens.spacing.s100}
-      width="auto"
       padding={smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`}
     >
       <Stack
@@ -47,7 +47,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s400} direction="column">
+        <Stack gap={tokens.spacing.s400} direction="column" width="100%">
           <Stack
             justifyContent={smallScreen ? "center" : "start"}
             direction={smallScreen ? "column" : "row"}
@@ -71,7 +71,11 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             </Stack>
           </Stack>
           <Stack>
-            <Text type="title" size="medium" appearance="dark">
+            <Text
+              type="title"
+              size="medium"
+              appearance={ComponentAppearance.DARK}
+            >
               {tabLabels.description}
             </Text>
           </Stack>
@@ -86,6 +90,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             loading={loading}
             columnWidths={columnWidths}
             pageLength={pageLength}
+            tableLayout="auto"
           />
         </Stack>
       </Stack>

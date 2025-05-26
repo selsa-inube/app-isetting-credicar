@@ -31,6 +31,8 @@ const MoreDetails = (props: IMoreDetails) => {
     ordinaryEliminatedData,
     extraordinaryIncludedData,
     extraordinaryEliminatedData,
+    title,
+    moreDetails = true,
     onCloseModal,
     onTabChange,
   } = props;
@@ -73,7 +75,7 @@ const MoreDetails = (props: IMoreDetails) => {
       labelCloseButton={moreDetailsRequestModal.labelCloseButton}
       labelCloseModal={moreDetailsRequestModal.labelCloseModal}
       portalId={portalId}
-      title={moreDetailsRequestModal.title}
+      title={title}
       onClick={onCloseModal}
       onCloseModal={onCloseModal}
     >
@@ -94,17 +96,20 @@ const MoreDetails = (props: IMoreDetails) => {
         overflowY="auto"
         overflowX="hidden"
       >
-        <Stack gap={tokens.spacing.s100} direction="column">
-          <Text
-            type="title"
-            size="medium"
-            appearance={ComponentAppearance.GRAY}
-            weight="bold"
-          >
-            {`${moreDetailsRequestModal.subtitle} ${abbreviatedName}`}
-          </Text>
-          <Divider dashed />
-        </Stack>
+        {moreDetails && (
+          <Stack gap={tokens.spacing.s100} direction="column">
+            <Text
+              type="title"
+              size={isMobile ? "small" : "medium"}
+              appearance={ComponentAppearance.GRAY}
+              weight="bold"
+            >
+              {`${moreDetailsRequestModal.subtitle} ${abbreviatedName}`}
+            </Text>
+            <Divider dashed />
+          </Stack>
+        )}
+
         <Grid
           templateColumns={isMobile ? "auto" : "repeat(2,auto)"}
           templateRows={isMobile ? "repeat(4,auto)" : "repeat(2,auto)"}

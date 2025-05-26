@@ -8,6 +8,7 @@ import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsUI";
 import { StyledContainerIcon } from "./styles";
 import { RequestsInProcess } from "./requestsInProcess";
+import { detailsLabels } from "@src/config/payrollAgreement/payrollAgreementTab/generic/detailsLabels";
 
 const DetailsUI = (props: IDetailsUI) => {
   const {
@@ -47,7 +48,7 @@ const DetailsUI = (props: IDetailsUI) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            Detalles
+            {detailsLabels.title}
           </Text>
         )}
       </StyledContainerIcon>
@@ -80,6 +81,7 @@ const DetailsUI = (props: IDetailsUI) => {
           ordinaryEliminatedData={ordinaryEliminatedData}
           extraordinaryIncludedData={extraordinaryIncludedData}
           extraordinaryEliminatedData={extraordinaryEliminatedData}
+          title={detailsLabels.titleMoreDetails}
           onCloseModal={onToggleMoreDetailsModal}
           onTabChange={onTabChange}
         />

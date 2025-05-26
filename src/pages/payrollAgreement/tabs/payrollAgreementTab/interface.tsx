@@ -51,10 +51,10 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s200} direction="column" width="100%">
+        <Stack gap={tokens.spacing.s200} direction="column">
           <Stack
             justifyContent={smallScreen ? "center" : "space-between"}
-            direction={smallScreen ? "column-reverse" : "row"}
+            direction={smallScreen ? "column" : "row"}
             gap={
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
@@ -62,7 +62,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
             <Stack justifyContent="center">
               <Searchfield
                 name="searchPayrollAgreement"
-                label={tabLabels.search}
+                label={smallScreen ? "" : tabLabels.search}
                 id="searchPayrollAgreement"
                 placeholder={tabLabels.placeholderSearch}
                 size="compact"
@@ -72,21 +72,28 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
                 }
               />
             </Stack>
-            <Button
-              spacing="wide"
-              appearance={ComponentAppearance.PRIMARY}
-              variant="filled"
-              iconBefore={<MdAdd />}
-              type="link"
-              path="/payroll-agreement/add-payroll-agreement"
-              fullwidth={smallScreen}
-            >
-              {payrollTabLabels.buttonLabel}
-            </Button>
+            {!smallScreen && (
+              <Button
+                spacing="wide"
+                appearance={ComponentAppearance.PRIMARY}
+                variant="filled"
+                iconBefore={<MdAdd />}
+                type="link"
+                path="/payroll-agreement/add-payroll-agreement"
+                fullwidth={smallScreen}
+              >
+                {payrollTabLabels.buttonLabel}
+              </Button>
+            )}
           </Stack>
 
           <Stack>
-            <Text type="title" size="medium" appearance="dark">
+            <Text
+              type="title"
+              size={smallScreen ? "small" : "medium"}
+              appearance={ComponentAppearance.DARK}
+              ellipsis
+            >
               {payrollTabLabels.description}
             </Text>
           </Stack>
