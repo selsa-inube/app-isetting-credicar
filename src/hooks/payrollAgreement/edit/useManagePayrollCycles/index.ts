@@ -32,7 +32,6 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
   ): IRegularPaymentCycles[] =>
     newValues.map((item) => ({
       payrollForDeductionAgreementId: item.cycleId ?? "",
-      regularPaymentCycleNumber: item.cycleId ?? "",
       regularPaymentCycleName: item.nameCycle ?? "",
       schedule:
         normalizeEnumTranslationCode(item.periodicity ?? "")?.code ??

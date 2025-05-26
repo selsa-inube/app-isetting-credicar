@@ -11,6 +11,7 @@ import { IDetailsTabsConfig } from "@ptypes/payrollAgreement/requestInProgTab/ID
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { eventBus } from "@events/eventBus";
 import { getDayPayment } from "@utils/getDayPayment";
+import { dataTranslations } from "@utils/dataTranslations";
 
 const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
   const { data, detailsTabsConfig, showModalReq } = props;
@@ -21,7 +22,9 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
 
   const normalizeData = {
     id: data.id,
-    TypePayroll: data.payrollForDeductionAgreementType,
+    TypePayroll:
+      dataTranslations[data.payrollForDeductionAgreementType] ??
+      data.payrollForDeductionAgreementType,
     daysToDetermineDate:
       data.numberOfDaysForReceivingTheDiscounts ?? data.applicationDaysPayroll,
     company: data.payingEntityName,
