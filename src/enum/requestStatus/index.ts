@@ -7,7 +7,7 @@ enum RequestStatus {
   InTheProcessOfComplementationAndValidation = "En proceso de complementación y validación",
   ProcessingRequest = "Procesando solicitud",
   RejectedRequest = "Solicitud rechazada",
-  RequestPendingProcessing = "Solicitud pendiente de procesamiento",
+  RequestReadyToProcess = "Solicitud lista para procesar",
 }
 
 export { RequestStatus };
