@@ -83,10 +83,6 @@ const enumsTranslation = [
     code: "PersonalBusinessUtilities",
     name: "Utilidades personales y comerciales",
   },
-  {
-    code: "PersonalBusinessUtilities",
-    name: "Utilidades personales y comerciales",
-  },
 ];
 
 export { enumsTranslation };

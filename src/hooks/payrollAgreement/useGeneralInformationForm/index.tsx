@@ -90,7 +90,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     const updatedData = sourcesOfIncomeValues.map((entry) =>
       entry.id === name ? { ...entry, values } : entry,
     );
-    formik.setFieldValue("sourcesOfIncome", values);
+    formik.setFieldValue("sourcesOfIncome", values.trim());
     setSourcesOfIncomeValues(updatedData);
   };
 

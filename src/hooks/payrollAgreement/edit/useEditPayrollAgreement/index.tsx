@@ -28,7 +28,7 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
 import { dataTranslations } from "@utils/dataTranslations";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
-import { getIncomeTypesData } from "@utils/IncomeTypesData";
+
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { getDayPayment } from "@utils/getDayPayment";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
@@ -139,6 +139,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const initialValues = initialData.generalInformation.values;
+
   const navigate = useNavigate();
   const conditionRule = "PayrollAgreement";
   const smallScreen = useMediaQuery(mediaQueryMobile);
@@ -151,15 +153,17 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
-  const { newRegularPayment, newExtraordinaryPayment } = useManagePayrollCycles(
-    {
+  const { newRegularPayment, newExtraordinaryPayment, newSourcesIncome } =
+    useManagePayrollCycles({
       initialData,
       regularPaymentCycles,
       isSelected,
       extraordinaryPayment,
       setExtraordinaryPayment,
-    },
-  );
+      sourcesOfIncome: formValues.generalInformation.values.sourcesOfIncome,
+      initialSourcesOfIncome: initialValues.sourcesOfIncome,
+      payrollId: data.payrollForDeductionAgreementId,
+    });
 
   useEffect(() => {
     setTypeRegularPayroll(
@@ -330,8 +334,6 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       modifyJustification: `Solicitud de modificación de una nómina de convenio por ${appData.user.userAccount} `,
     };
 
-    const initialValues = initialData.generalInformation.values;
-
     (
       ["abbreviatedName", "sourcesOfIncome", "applicationDaysPayroll"] as const
     ).forEach((key) => {
@@ -351,13 +353,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         0;
     }
 
-    if (
-      formValues.generalInformation.values.sourcesOfIncome !==
-      initialValues.sourcesOfIncome
-    ) {
-      changedFields.incomeTypes = getIncomeTypesData(
-        formValues.generalInformation.values.sourcesOfIncome,
-      );
+    if (newSourcesIncome().incomeTypes.length > 0) {
+      changedFields.incomeTypes = newSourcesIncome().incomeTypes;
     }
 
     const regularPayments = newRegularPayment();

@@ -10,7 +10,7 @@ const getSourcesIncome = (incomeTypesData?: IIncomeTypes[]) => {
     }
   });
 
-  return incomeTypesValues.join(", ");
+  return incomeTypesValues.join(",").trim();
 };
 
 export { getSourcesIncome };

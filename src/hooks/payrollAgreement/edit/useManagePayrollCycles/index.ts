@@ -16,6 +16,7 @@ import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
 import { IUseManagePayrollCycles } from "@ptypes/hooks/IUseManagePayrollCycles";
 import { checkDayWeek } from "@utils/checkDayWeek";
 import { formatPaymentDay } from "@utils/formatPaymentDay";
+import { getIncomeTypesEditData } from "@utils/IncomeTypesEditData";
 
 const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
   const {
@@ -24,6 +25,9 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
     isSelected,
     extraordinaryPayment,
     setExtraordinaryPayment,
+    sourcesOfIncome,
+    initialSourcesOfIncome,
+    payrollId,
   } = props;
 
   const newObjRegularPayment = (
@@ -196,9 +200,46 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
     };
   };
 
+  const newSourcesIncome = () => {
+    const dataIncome = sourcesOfIncome.split(",");
+    const initialIncome = initialSourcesOfIncome.split(",");
+
+    const newValues = dataIncome.filter(
+      (formValue) =>
+        !initialIncome.some(
+          (initialValue) =>
+            JSON.stringify(initialValue) === JSON.stringify(formValue),
+        ),
+    );
+
+    const deleteValues = initialIncome.filter(
+      (formValue) =>
+        !dataIncome.some(
+          (initialValue) =>
+            JSON.stringify(initialValue) === JSON.stringify(formValue),
+        ),
+    );
+
+    return {
+      incomeTypes: [
+        ...getIncomeTypesEditData(
+          newValues,
+          payrollId,
+          TransactionOperation.INSERT,
+        ),
+        ...getIncomeTypesEditData(
+          deleteValues,
+          payrollId,
+          TransactionOperation.DELETE,
+        ),
+      ],
+    };
+  };
+
   return {
     newRegularPayment,
     newExtraordinaryPayment,
+    newSourcesIncome,
   };
 };
 
