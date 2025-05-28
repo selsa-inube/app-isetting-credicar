@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getOptionsByBusinessUnit } from "@services/staffPortal/getOptionsByBusinessUnits";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
 import { normalizeOptionsByPublicCode } from "@utils/optionByBusinessunit";
+import { t } from "i18next";
 
 const useOptionsByBusinessUnit = (
   businessUnit: string,
@@ -37,14 +38,38 @@ const useOptionsByBusinessUnit = (
     fetchOptionBusinessUnitData();
   }, [businessUnit]);
 
+  const translationMap: Record<
+    string,
+    { titleKey: string; descriptionKey: string }
+  > = {
+    "Destinos de dinero": {
+      titleKey: "mainMenuNavigation.moneyDestination",
+      descriptionKey: "moneyDestination.descriptionPage",
+    },
+    "Nóminas de convenio": {
+      titleKey: "mainMenuNavigation.payrollAgreement",
+      descriptionKey: "payrollAgreement.descriptionPage",
+    },
+    "Politicas generales de credito": {
+      titleKey: "mainMenuNavigation.generalCreditPolicies",
+      descriptionKey: "generalCreditPolicies.descriptionPage",
+    },
+  };
+
   const optionsCards = optionsBusinessUnit
     .filter((option) => normalizeOptionsByPublicCode(option.publicCode))
     .map((option) => {
       const normalizedOption = normalizeOptionsByPublicCode(option.publicCode);
+      const translationEntry = translationMap[option.publicCode];
+
       return {
         id: option.publicCode,
-        publicCode: option.abbreviatedName,
-        description: option.descriptionUse,
+        publicCode: translationEntry
+          ? t(translationEntry.titleKey)
+          : option.abbreviatedName,
+        description: translationEntry
+          ? t(translationEntry.descriptionKey)
+          : option.descriptionUse,
         icon: normalizedOption?.icon ?? "",
         url: normalizedOption?.url ?? "",
       };

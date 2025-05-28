@@ -1,19 +1,27 @@
-import { en } from "@locales/en/translation";
-import { es } from "@locales/es/translation";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 
-i18next.use(initReactI18next).init({
-  lng: "en",
-  debug: true,
-  resources: {
-    en: { translation: en },
-    es: { translation: es },
-  },
-  fallbackLng: "es",
-  interpolation: {
-    escapeValue: false,
-  },
-});
+import { en } from "@locales/en/translation";
+import { es } from "@locales/es/translation";
+import { enviroment } from "@config/environment";
 
-export { i18next as i18n };
+let initialized = false;
+
+if (!initialized) {
+  i18next.use(initReactI18next).init({
+    lng: enviroment.VITE_LANGUAGE,
+    fallbackLng: "es",
+    debug: true,
+    resources: {
+      en: { translation: en },
+      es: { translation: es },
+    },
+    interpolation: {
+      escapeValue: false,
+    },
+    initImmediate: false,
+  });
+  initialized = true;
+}
+
+export { i18next };

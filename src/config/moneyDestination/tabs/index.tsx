@@ -1,3 +1,4 @@
+import "@i18n";
 import { t } from "i18next";
 
 const moneyDestinationTabsConfig = {
@@ -5,6 +6,8 @@ const moneyDestinationTabsConfig = {
     id: "moneyDestination",
     isDisabled: false,
     label: t("moneyDestination.tabs.moneyDestination"),
+    buttonLabel: t("moneyDestination.tabs.buttonLabel.addMoneyDestination"),
+    placeholder: t("moneyDestination.tabs.searchInput.placeholder"),
   },
   requestsInProgress: {
     id: "requestsInProgress",

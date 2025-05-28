@@ -15,7 +15,7 @@ const revertModalDisplayData = (
 
   return {
     ...originalDecision,
-    conditions: dataDecision.conditionThatEstablishesTheDecision?.map(
+    conditions: dataDecision.conditionsThatEstablishesTheDecision?.map(
       (condition) => (condition.hidden ? conditionToRestore : condition),
     ),
   };

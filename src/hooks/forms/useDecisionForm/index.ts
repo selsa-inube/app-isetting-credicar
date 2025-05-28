@@ -42,10 +42,10 @@ const useDecisionForm = (
     const isEditing = selectedDecision !== null;
 
     const updatedConditions =
-      decisionTemplate.conditionThatEstablishesTheDecision?.map(
+      decisionTemplate.conditionsThatEstablishesTheDecision?.map(
         (templateCondition) => {
           const existingCondition =
-            dataDecision.conditionThatEstablishesTheDecision?.find(
+            dataDecision.conditionsThatEstablishesTheDecision?.find(
               (condition) =>
                 condition.conditionName === templateCondition.conditionName,
             );

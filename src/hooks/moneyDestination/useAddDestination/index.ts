@@ -72,8 +72,8 @@ const useAddDestination = () => {
 
   const decisionsData = creditLineDecisions.map((decision) => {
     const decisionByRule: IRuleDecision = {
-      conditionThatEstablishesTheDecision:
-        decision.conditionThatEstablishesTheDecision?.map((condition) => {
+      conditionsThatEstablishesTheDecision:
+        decision.conditionsThatEstablishesTheDecision?.map((condition) => {
           return {
             labelName: condition.labelName,
             conditionName: condition.conditionName,

@@ -7,6 +7,7 @@ import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { mainNavigation } from "@config/mainNavigation";
 import { userMenu } from "@config/menuMainConfiguration";
+import { homeConfig } from "@config/home";
 import { ICardData } from "@ptypes/home/ICardData";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import {
@@ -57,7 +58,7 @@ function HomeUI(props: IHomeUI) {
     handleLogoClick,
   } = props;
   const username = appData.user.userName.split(" ")[0];
-
+  const config = homeConfig(username);
   const {
     "(max-width: 532px)": screenMobile,
     "(max-width: 805px)": screenTablet,
@@ -112,8 +113,8 @@ function HomeUI(props: IHomeUI) {
         <StyledContainerSection $isMobile={screenMobile}>
           <StyledTitle $isTablet={screenTablet}>
             <Title
-              title={`Bienvenid@, ${username}`}
-              description="Selecciona una opción para empezar a ajustar la configuración."
+              title={config.title}
+              description={config.description}
               icon={<MdOutlineDoorFront />}
               sizeTitle="large"
             />

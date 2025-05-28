@@ -15,12 +15,13 @@ import { GeneralInformationForm } from "@design/forms/generalInformationDestinat
 import { DecisionsForm } from "@design/forms/decisions";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
-import { crumbsAddDestination } from "@config/moneyDestination/addDestination/navigation";
+import { crumbsAddDestination } from "@src/config/moneyDestination/addDestination/breadcrumbs";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { attentionModal, deleteModal } from "@config/decisions/messages";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { VerificationForm } from "@design/forms/verificationDestination";
+import { locationConfig } from "@config/moneyDestination/addDestination/location";
 
 interface IAddDestinationUI {
   creditLineDecisions: IRuleDecision[];
@@ -91,8 +92,8 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsAddDestination} />
           <Title
-            title="Destinos de dinero"
-            description=" Destino del dinero para crédito."
+            title={locationConfig.title}
+            description={locationConfig.description}
             sizeTitle="large"
           />
         </Stack>

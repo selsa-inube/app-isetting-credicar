@@ -3,20 +3,32 @@ import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestin
 import { getWithRetries } from "@services/core/getWithRetries";
 import { axiosInstance } from "@api/isettingCredicar";
 import { mapMoneyDestinationToEntities } from "./mappers";
+import { translateObject } from "@isettingkit/business-rules";
+import { enviroment } from "@config/environment";
 
 const getMoneyDestinationData = async (
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<IMoneyDestinationData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllMoneyDestination",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
-  const data: IMoneyDestinationData[] = await getWithRetries<
-    IMoneyDestinationData[]
-  >(axiosInstance, `/money-destinations`, config);
-  return Array.isArray(data) ? mapMoneyDestinationToEntities(data) : [];
+
+  const data = await getWithRetries<IMoneyDestinationData[]>(
+    axiosInstance,
+    `/money-destinations`,
+    config,
+  );
+
+  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
+
+  const translatedArray = Array.isArray(translatedRaw)
+    ? translatedRaw
+    : Object.values(translatedRaw);
+
+  return mapMoneyDestinationToEntities(translatedArray);
 };
 
 export { getMoneyDestinationData };

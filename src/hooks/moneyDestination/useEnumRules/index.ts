@@ -76,8 +76,8 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   }, [ruleData.listOfPossibleValues, hasFetchedListValuesDecision]);
 
   useEffect(() => {
-    if (ruleData.conditionThatEstablishesTheDecision) {
-      ruleData.conditionThatEstablishesTheDecision.forEach((condition) => {
+    if (ruleData.conditionsThatEstablishesTheDecision) {
+      ruleData.conditionsThatEstablishesTheDecision.forEach((condition) => {
         if (condition.listOfPossibleValues) {
           if (
             condition.listOfPossibleValues &&
@@ -92,7 +92,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
         }
       });
     }
-  }, [ruleData.conditionThatEstablishesTheDecision]);
+  }, [ruleData.conditionsThatEstablishesTheDecision]);
 
   useEffect(() => {
     if (listValuesDecision) {
@@ -114,17 +114,19 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
       setRuleData((prevRuleData) => ({
         ...prevRuleData,
         conditionThatEstablishesTheDecision:
-          prevRuleData.conditionThatEstablishesTheDecision?.map((condition) => {
-            if (condition.listOfPossibleValues) {
-              return {
-                ...condition,
-                howToSetTheCondition: "ListOfValues",
-                listOfPossibleValues: { list: arrayListValues },
-                value: "",
-              };
-            }
-            return condition;
-          }),
+          prevRuleData.conditionsThatEstablishesTheDecision?.map(
+            (condition) => {
+              if (condition.listOfPossibleValues) {
+                return {
+                  ...condition,
+                  howToSetTheCondition: "ListOfValues",
+                  listOfPossibleValues: { list: arrayListValues },
+                  value: "",
+                };
+              }
+              return condition;
+            },
+          ),
       }));
     }
   }, [listValuesDecision, listValuesCondition]);

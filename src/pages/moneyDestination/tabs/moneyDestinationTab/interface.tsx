@@ -11,6 +11,7 @@ import {
   titles,
 } from "@config/moneyDestination/moneyDestinationTab/table";
 import { StyledContainer } from "./styles";
+import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 
 interface IMoneyDestinationTabUI {
   entries: IEntry[];
@@ -55,7 +56,9 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Input
                 name="searchMoneyDestination"
                 id="searchMoneyDestination"
-                placeholder="Palabra clave..."
+                placeholder={
+                  moneyDestinationTabsConfig.moneyDestination.placeholder
+                }
                 type="search"
                 size="compact"
                 value={searchMoneyDestination}
@@ -73,7 +76,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               path="/money-destination/add-destination"
               fullwidth={smallScreen}
             >
-              Agregar destino
+              {moneyDestinationTabsConfig.moneyDestination.buttonLabel}
             </Button>
           </Stack>
 

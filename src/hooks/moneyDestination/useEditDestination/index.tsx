@@ -77,7 +77,7 @@ const useEditDestination = (
       return {
         ...item,
         conditionThatEstablishesTheDecision:
-          item.conditionThatEstablishesTheDecision?.map((condition) => {
+          item.conditionsThatEstablishesTheDecision?.map((condition) => {
             return {
               ...condition,
               hidden: condition.conditionName === conditionRule,
@@ -104,14 +104,16 @@ const useEditDestination = (
         )
         .map((decision) => {
           const decisionByRule: IRuleDecision = {
-            conditionThatEstablishesTheDecision:
-              decision.conditionThatEstablishesTheDecision?.map((condition) => {
-                return {
-                  conditionName: condition.conditionName,
-                  labelName: condition.labelName,
-                  value: condition.value,
-                };
-              }) as ICondition[],
+            conditionsThatEstablishesTheDecision:
+              decision.conditionsThatEstablishesTheDecision?.map(
+                (condition) => {
+                  return {
+                    conditionName: condition.conditionName,
+                    labelName: condition.labelName,
+                    value: condition.value,
+                  };
+                },
+              ) as ICondition[],
             effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             value: decision.value,
             transactionOperation: TransactionOperation.INSERT,
@@ -137,14 +139,16 @@ const useEditDestination = (
         .filter((decision) => !findDecision(creditLineDecisions, decision))
         .map((decision: IRuleDecision) => {
           const decisionByRule: IRuleDecision = {
-            conditionThatEstablishesTheDecision:
-              decision.conditionThatEstablishesTheDecision?.map((condition) => {
-                return {
-                  conditionName: condition.conditionName,
-                  labelName: condition.labelName,
-                  value: condition.value,
-                };
-              }) as ICondition[],
+            conditionsThatEstablishesTheDecision:
+              decision.conditionsThatEstablishesTheDecision?.map(
+                (condition) => {
+                  return {
+                    conditionName: condition.conditionName,
+                    labelName: condition.labelName,
+                    value: condition.value,
+                  };
+                },
+              ) as ICondition[],
             effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             value: decision.value,
             transactionOperation: TransactionOperation.DELETE,

@@ -9,9 +9,9 @@ const decisionTemplateConfig = ({
   ruleName,
   labelName,
   decisionDataType,
-  conditionThatEstablishesTheDecision,
+  conditionsThatEstablishesTheDecision,
 }: IRuleDecision) => {
-  if (labelName && decisionDataType && conditionThatEstablishesTheDecision) {
+  if (labelName && decisionDataType && conditionsThatEstablishesTheDecision) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
@@ -23,8 +23,8 @@ const decisionTemplateConfig = ({
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      conditionThatEstablishesTheDecision:
-        conditionThatEstablishesTheDecision.map((condition) => ({
+      conditionsThatEstablishesTheDecision:
+        conditionsThatEstablishesTheDecision.map((condition) => ({
           conditionName: condition.conditionName,
           labelName: dataTranslations[condition.labelName],
           conditionDataType: condition.conditionDataType,

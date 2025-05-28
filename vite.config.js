@@ -55,6 +55,7 @@ export default defineConfig({
       "@routes": path.resolve(__dirname, "./src/routes"),
       "@events": path.resolve(__dirname, "./src/events"),
       "@locales": path.resolve(__dirname, "./src/locales"),
+      "@i18n": path.resolve(__dirname, "./src/utils/i18n"),
     },
   },
 });
