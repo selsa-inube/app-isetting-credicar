@@ -33,7 +33,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       sourcesOfIncome: validationRules.string.required(
         validationMessages.required,
       ),
-      applicationDaysPayroll: validationRules.string.required(
+      applicationDaysPayroll: validationRules.number.required(
         validationMessages.required,
       ),
     });
@@ -78,8 +78,11 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   }, [formik.values.applicationDaysPayroll]);
 
   const handleChangeAutosuggest = (name: string, value: string) => {
-    setAutosuggestValue(value);
-    formik.setFieldValue(name, value);
+    const isNumeric = /^[0-9]*$/.test(value);
+    if (isNumeric) {
+      setAutosuggestValue(value);
+      formik.setFieldValue(name, value);
+    }
   };
 
   const handleChangeSelect = (name: string, value: string) => {
