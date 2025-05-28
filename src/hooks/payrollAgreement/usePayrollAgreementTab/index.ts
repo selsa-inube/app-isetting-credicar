@@ -47,7 +47,7 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   };
 
   const smallScreen = useMediaQuery("(max-width: 690px)");
-  const columnWidths = smallScreen ? [65] : [80];
+  const columnWidths = smallScreen ? [20, 53] : [20, 60];
 
   return {
     payrollAgreement,

@@ -33,7 +33,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       sourcesOfIncome: validationRules.string.required(
         validationMessages.required,
       ),
-      applicationDaysPayroll: validationRules.string.required(
+      applicationDaysPayroll: validationRules.number.required(
         validationMessages.required,
       ),
     });
