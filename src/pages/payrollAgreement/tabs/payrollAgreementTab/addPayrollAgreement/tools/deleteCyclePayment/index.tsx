@@ -1,20 +1,16 @@
 import { DeleteRecord } from "@design/feedback/DeleteRecord";
-import { IEntry } from "@design/data/table/types";
+
 import { useDeleteCyclePayment } from "@hooks/payrollAgreement/useDeleteCyclePayment";
 import { deleteCyclePaymentModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deleteCyclePaymentModal";
-
-interface IDeleteCyclePayment {
-  data: IEntry;
-  setEntryDeleted: (value: string | number) => void;
-}
+import { IDeleteCyclePayment } from "@ptypes/payrollAgreement/payrollAgreementTab/IDeleteCyclePayment";
 
 const DeleteCyclePayment = (props: IDeleteCyclePayment) => {
   const { data, setEntryDeleted } = props;
 
-  const { showModal, handleToggleModal, handleClick } = useDeleteCyclePayment(
+  const { showModal, handleToggleModal, handleClick } = useDeleteCyclePayment({
     data,
     setEntryDeleted,
-  );
+  });
 
   return (
     <DeleteRecord

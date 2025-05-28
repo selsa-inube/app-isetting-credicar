@@ -14,13 +14,13 @@ interface IAppCard {
   icon?: React.ReactNode;
   label?: string;
   url?: string;
-  isLoading?: boolean;
+  loading?: boolean;
 }
 
 const AppCard = (props: IAppCard) => {
-  const { label, description, icon, url, isLoading } = props;
+  const { label, description, icon, url, loading } = props;
   const screenMobile = useMediaQuery("(max-width: 400px)");
-  if (isLoading) {
+  if (loading) {
     return (
       <StyledAppCard to={url ?? ""} $isMobile={screenMobile}>
         <Stack direction="column" gap={tokens.spacing.s200}>

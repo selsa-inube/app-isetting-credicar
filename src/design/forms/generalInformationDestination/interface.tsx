@@ -1,4 +1,3 @@
-import { FormikProps } from "formik";
 import {
   Autosuggest,
   Button,
@@ -7,34 +6,20 @@ import {
   Textarea,
   useMediaQuery,
 } from "@inubekit/inubekit";
+import { MdOutlineFax } from "react-icons/md";
 
 import { tokens } from "@design/tokens";
-
-import { MdOutlineFax } from "react-icons/md";
-import { IServerDomain } from "@ptypes/IServerDomain";
 import { ComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/forms/getFieldState";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
+import { IGeneralInformationFormUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationFormUI";
+import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
+import { isInvalid } from "@utils/isInvalid";
 import {
   StyledContainer,
   StyledContainerFields,
   StyledFormContent,
   StyledIcon,
 } from "./styles";
-
-interface IGeneralInformationFormUI {
-  formik: FormikProps<IGeneralInformationEntry>;
-  optionsDestination: IServerDomain[];
-  autosuggestValue: string;
-  editDataOption: boolean;
-  icon: JSX.Element | undefined;
-  valuesEqual: boolean;
-  loading: boolean;
-  onButtonClick: () => void;
-  onReset: () => void;
-  onChange: (name: string, value: string) => void;
-  isDisabledButton?: boolean;
-}
 
 const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
   const {
@@ -43,12 +28,13 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     optionsDestination,
     editDataOption,
     icon,
+    labelButtonNext,
     onChange,
     onButtonClick,
     onReset,
     valuesEqual,
     autosuggestValue,
-    isDisabledButton,
+    buttonDisabledState,
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 990px)");
@@ -66,18 +52,17 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                 >
                   <Stack width={isMobile ? "100%" : "350px"}>
                     <Autosuggest
-                      label="Nombre del destino"
+                      label={generalInfoLabels.name}
                       name="nameDestination"
                       id="nameDestination"
-                      placeholder="Por favor, escribe algo"
+                      placeholder={generalInfoLabels.placeholderName}
                       value={autosuggestValue}
                       onChange={onChange}
                       options={optionsDestination}
                       onBlur={formik.handleBlur}
-                      disabled={false}
-                      required={false}
                       size="compact"
                       fullwidth
+                      invalid={isInvalid(formik, "nameDestination")}
                     />
                   </Stack>
                   <Stack
@@ -86,7 +71,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                     alignItems="center"
                   >
                     <Text type="label" size="small" weight="bold">
-                      Icono
+                      {generalInfoLabels.icon}
                     </Text>
                     <StyledIcon $isMobile={isMobile}>
                       {icon ?? <MdOutlineFax size={24} />}
@@ -95,18 +80,19 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                 </Stack>
 
                 <Textarea
-                  label="Descripción"
-                  placeholder="Describe el destino."
+                  label={generalInfoLabels.description}
+                  placeholder={generalInfoLabels.placeholderdescription}
                   name="description"
                   id="description"
                   value={formik.values.description}
-                  maxLength={1000}
+                  maxLength={generalInfoLabels.maxLengthDescrip}
                   disabled={loading}
                   status={getFieldState(formik, "description")}
                   message={formik.errors.description}
                   fullwidth
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
+                  required
                 />
               </Stack>
             </StyledContainerFields>
@@ -121,20 +107,18 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
             appearance={ComponentAppearance.GRAY}
             disabled={valuesEqual}
           >
-            Cancelar
+            {generalInfoLabels.cancelButton}
           </Button>
         )}
 
         <Button
           fullwidth={isMobile}
           onClick={onButtonClick}
-          disabled={
-            editDataOption ? isDisabledButton && !loading : isDisabledButton
-          }
+          disabled={buttonDisabledState}
           loading={loading}
           appearance={ComponentAppearance.PRIMARY}
         >
-          {editDataOption ? "Guardar" : "Siguiente"}
+          {labelButtonNext}
         </Button>
       </Stack>
     </StyledContainer>

@@ -5,6 +5,7 @@ interface IDecision {
   businessRuleId?: string;
   conditionDataType?: string;
   conditionName?: string;
+  conditionsThatEstablishesTheDecision?: IConditionEstablishesDecision[];
   conditionThatEstablishesTheDecision?: IConditionEstablishesDecision[];
   decision?: IDecision;
   decisions?: IDecision[];

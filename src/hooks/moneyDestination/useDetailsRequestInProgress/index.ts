@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-
-import { IEntry } from "@design/data/table/types";
 import { eventBus } from "@events/eventBus";
 import { formatDateTable } from "@utils/date/formatDateTable";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useDetailsRequestInProgress = (data: IEntry) => {
   const [showModal, setShowModal] = useState(false);

@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
-import { IEntry } from "@design/data/table/types";
 import { deletedCycleMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedCycleMessage";
+import { IUseDeleteCyclePayment } from "@ptypes/hooks/IUseDeleteCyclePayment";
+import { eventBus } from "@events/eventBus";
 
-const useDeleteCyclePayment = (
-  data: IEntry,
-  setEntryDeleted: (id: string | number) => void,
-) => {
+const useDeleteCyclePayment = (props: IUseDeleteCyclePayment) => {
+  const { data, setEntryDeleted } = props;
   const [showModal, setShowModal] = useState(false);
   const { addFlag } = useFlag();
 
@@ -24,6 +23,10 @@ const useDeleteCyclePayment = (
       duration: deletedCycleMessage.success.duration,
     });
   };
+
+  useEffect(() => {
+    eventBus.emit("secondModalState", showModal);
+  }, [showModal]);
 
   return {
     showModal,

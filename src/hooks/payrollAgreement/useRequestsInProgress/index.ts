@@ -1,10 +1,12 @@
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
 
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
-import { useMediaQuery } from "@inubekit/inubekit";
+import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
 
-const useRequestsInProgress = (bussinesUnits: string) => {
+const useRequestsInProgress = (props: IUseRequestsInProgress) => {
+  const { bussinesUnits } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -51,13 +53,15 @@ const useRequestsInProgress = (bussinesUnits: string) => {
   const smallScreen = useMediaQuery("(max-width: 690px)");
   const widthFirstColumn = smallScreen ? 60 : 10;
 
+  const columnWidths = smallScreen ? [60, 20, 23] : [widthFirstColumn, 55, 23];
+
   return {
     requestsInProgress,
     hasError,
     searchRequestsInProgress,
     loading,
-    widthFirstColumn,
     smallScreen,
+    columnWidths,
     handleSearchRequestsInProgress,
     setEntryCanceled,
   };

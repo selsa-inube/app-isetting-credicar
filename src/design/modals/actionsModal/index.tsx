@@ -2,8 +2,9 @@ import { MdClear } from "react-icons/md";
 import { Grid, Stack } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { IAction, IEntry } from "@design/data/table/types";
 import { StyledModal, StyledContentActions } from "./styles";
+import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IActionsModal {
   actions: IAction[];

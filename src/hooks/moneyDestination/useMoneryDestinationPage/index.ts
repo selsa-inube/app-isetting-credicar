@@ -1,20 +1,28 @@
 import { useContext, useEffect, useState } from "react";
 import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
-import { ChangeToRequestTab } from "@context/changeToRequestTab";
+
 import { decrypt } from "@utils/crypto/decrypt";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { useTranslation } from "react-i18next";
 
 const useMoneryDestinationPage = (businessUnitSigla: string) => {
+  const { t } = useTranslation();
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
   const [isSelected, setIsSelected] = useState<string>();
 
-  const { descriptionOptions } = useOptionsByBusinessUnit(
-    businessUnitSigla,
-    staffPortalId,
-    "Destinos de dinero",
-  );
-
+  const { descriptionOptions: rawDescriptionOptions } =
+    useOptionsByBusinessUnit({
+      businessUnit: businessUnitSigla,
+      staffPortalId,
+    });
+  const translatedDescriptionOptions = {
+    ...rawDescriptionOptions,
+    id: t("moneyDestination.titlePage"),
+    publicCode: t("moneyDestination.titlePage"),
+    description: t("moneyDestination.descriptionPage"),
+  };
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
   };
@@ -35,7 +43,7 @@ const useMoneryDestinationPage = (businessUnitSigla: string) => {
 
   return {
     isSelected,
-    descriptionOptions,
+    descriptionOptions: translatedDescriptionOptions,
     handleTabChange,
   };
 };

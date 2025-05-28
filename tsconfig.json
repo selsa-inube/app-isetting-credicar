@@ -24,7 +24,9 @@
       "@api/*": ["src/api/*"],
       "@validations/*": ["src/validations/*"],
       "@routes/*": ["src/routes/*"],
-      "@events/*": ["src/events/*"]
+      "@events/*": ["src/events/*"],
+      "@locales/*": ["src/locales/*"],
+      "@i18n/*": ["src/utils/i18n/*"]
     },
 
     /* Bundler mode */

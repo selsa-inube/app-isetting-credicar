@@ -1,4 +1,4 @@
-import { ICity } from "@src/types/ICity";
+import { ICity } from "@ptypes/ICity";
 
 const mapCitiesToEntity = (data: ICity): ICity => {
   const newData: ICity = {

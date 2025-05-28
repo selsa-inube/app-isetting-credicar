@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { IEntry } from "@design/data/table/types";
 import { dataTranslations } from "@utils/dataTranslations";
 import { formatDate } from "@utils/date/formatDate";
 import { IconWithText } from "@design/data/iconWithText";
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useMoreDetailsRequestProgress = (data: IEntry) => {
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
@@ -30,7 +30,7 @@ const useMoreDetailsRequestProgress = (data: IEntry) => {
 
   const decisions = data.configurationRequestData.rules
     ? data.configurationRequestData.rules.map((rule: IEntry, index: number) => {
-        const decisionByRule = rule.decisionByRule.find(
+        const decisionByRule = rule.decisionsByRule?.find(
           (decision: IEntry) => decision,
         );
 
@@ -38,22 +38,24 @@ const useMoreDetailsRequestProgress = (data: IEntry) => {
           decisionId: `Decisión ${index + 1}`,
           labelName: dataTranslations[rule.ruleName] ?? rule.ruleName,
           ruleName: rule.ruleName,
-          value: decisionByRule.value,
-          effectiveFrom: decisionByRule.effectiveFrom
+          value: decisionByRule?.value,
+          effectiveFrom: decisionByRule?.effectiveFrom
             ? formatDate(new Date(decisionByRule.effectiveFrom))
             : undefined,
-          validUntil: decisionByRule.validUntil
+          validUntil: decisionByRule?.validUntil
             ? formatDate(new Date(decisionByRule.validUntil))
             : undefined,
-          transactionOperation: decisionByRule.transactionOperation,
+          transactionOperation: decisionByRule?.transactionOperation,
           dataEvaluated: ["MoneyDestination"],
-          conditionThatEstablishesTheDecision:
-            decisionByRule.conditionThatEstablishesTheDecision
-              ? decisionByRule.conditionThatEstablishesTheDecision.map(
+          conditionsThatEstablishesTheDecision:
+            decisionByRule?.conditionsThatEstablishesTheDecision
+              ? decisionByRule.conditionsThatEstablishesTheDecision.map(
                   (condition: IEntry) => {
                     return {
                       conditionName: condition.conditionName,
-                      labelName: condition.labelName,
+                      labelName:
+                        dataTranslations[condition.labelName] ??
+                        condition.labelName,
                       value: condition.value,
                       conditionDataType: "Alphabetical",
                       howToSetTheCondition: "EqualTo",

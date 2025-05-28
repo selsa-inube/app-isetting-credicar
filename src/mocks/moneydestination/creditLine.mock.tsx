@@ -12,7 +12,7 @@ const decision1: IRuleDecision = {
   howToSetTheDecision: ValueHowToSetUp.EQUAL,
   effectiveFrom: "2024-12-31",
   validUntil: "2024-12-31",
-  conditionThatEstablishesTheDecision: [
+  conditionsThatEstablishesTheDecision: [
     {
       labelName: "Categoria del cliente",
       conditionName: "CategoriaCliente",
@@ -31,7 +31,7 @@ const decision2: IRuleDecision = {
   howToSetTheDecision: ValueHowToSetUp.EQUAL,
   effectiveFrom: "2024-12-31",
   validUntil: "2024-12-31",
-  conditionThatEstablishesTheDecision: [
+  conditionsThatEstablishesTheDecision: [
     {
       labelName: "Categoria del cliente",
       conditionName: "CategoriaCliente",
@@ -50,7 +50,7 @@ const decision3: IRuleDecision = {
   howToSetTheDecision: ValueHowToSetUp.EQUAL,
   effectiveFrom: "2024-12-31",
   validUntil: "2024-12-31",
-  conditionThatEstablishesTheDecision: [
+  conditionsThatEstablishesTheDecision: [
     {
       labelName: "Categoria del cliente",
       conditionName: "CategoriaCliente",

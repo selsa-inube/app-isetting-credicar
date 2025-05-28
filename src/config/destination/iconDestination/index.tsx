@@ -89,6 +89,10 @@ const iconDestination = [
     icon: <MdOutlineHandshake size={20} />,
   },
   {
+    value: "MdOutlineHandshak",
+    icon: <MdOutlineHandshake size={20} />,
+  },
+  {
     value: "MdOutlineTravelExplore",
     icon: <MdOutlineTravelExplore size={20} />,
   },

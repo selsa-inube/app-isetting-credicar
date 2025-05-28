@@ -1,17 +1,21 @@
-import { IAction, IEntry, ITitle } from "@design/data/table/types";
 import { Edit } from "@pages/moneyDestination/tabs/moneyDestinationTab/tools/edit";
 import { Delete } from "@pages/moneyDestination/tabs/moneyDestinationTab/tools/delete";
 import { Details } from "@pages/moneyDestination/tabs/moneyDestinationTab/tools/details";
+import "@i18n";
+import { t } from "i18next";
+import { IAction } from "@ptypes/design/table/IAction";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const titles: ITitle[] = [
   {
     id: "abbreviatedName",
-    titleName: "Nombre",
+    titleName: t("moneyDestination.table.titles.firstColumnLabel"),
     priority: 0,
   },
   {
     id: "descriptionUse",
-    titleName: "Descripción",
+    titleName: t("moneyDestination.table.titles.secondColumnLabel"),
     priority: 1,
   },
 ];
@@ -19,7 +23,7 @@ const titles: ITitle[] = [
 const actionsConfig = (setEntryDeleted: (value: string | number) => void) => {
   const actions: IAction[] = [
     {
-      id: "Details",
+      id: "details",
       content: (entry: IEntry) => <Details data={entry} />,
     },
     {

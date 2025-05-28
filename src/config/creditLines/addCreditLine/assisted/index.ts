@@ -1,29 +1,39 @@
 import { IAssistedStep } from "@inubekit/inubekit";
 
+import { t } from "i18next";
+
 const addCreditLinesSteps: IAssistedStep[] = [
   {
     id: 1,
     number: 1,
-    name: "Datos generales",
-    description: "Datos generales de la línea de crédito.",
+    name: t("creditLines.addCreditLine.assisted.generalData"),
+    description: t(
+      "creditLines.addCreditLine.assisted.generalDataOfTheCreditLine",
+    ),
   },
   {
     id: 2,
     number: 2,
-    name: "Opciones para el prospecto de crédito",
-    description: "Opciones para la creación del prospecto de crédito.",
+    name: t("creditLines.addCreditLine.assisted.creditProspectOptions"),
+    description: t(
+      "creditLines.addCreditLine.assisted.optionsForCreatingTheCreditProspect",
+    ),
   },
   {
     id: 3,
     number: 3,
-    name: "Monto máximo",
-    description: "Configura las decisiones de monto máximo.",
+    name: t("creditLines.addCreditLine.assisted.maximumAmount"),
+    description: t(
+      "creditLines.addCreditLine.assisted.configureMaximumAmountDecisions",
+    ),
   },
   {
     id: 4,
     number: 4,
-    name: "Verificación",
-    description: "Confirma la información diligenciada en pasos anteriores.",
+    name: t("creditLines.addCreditLine.assisted.verification"),
+    description: t(
+      "creditLines.addCreditLine.assisted.confirmFilledInformation",
+    ),
   },
 ];
 

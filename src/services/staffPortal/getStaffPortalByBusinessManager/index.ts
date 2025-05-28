@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isaasQuery";
+import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
 const staffPortalByBusinessManager = async (
@@ -18,7 +18,7 @@ const staffPortalByBusinessManager = async (
   const data: IStaffPortalByBusinessManager[] = await getWithRetries<
     IStaffPortalByBusinessManager[]
   >(
-    axiosInstance,
+    isaasQueryAxiosInstance,
     `/staff-portals-by-business-manager?${queryParams.toString()}`,
     config,
   );

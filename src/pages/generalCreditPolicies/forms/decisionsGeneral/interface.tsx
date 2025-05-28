@@ -18,6 +18,7 @@ import { IDecisionsGeneralFormUI } from "@ptypes/generalCredPolicies/forms/IDeci
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { methodsOfCalculation } from "@config/generalCreditPolicies/assisted/methodsOfCalculation";
 import { infoModal } from "@config/generalCreditPolicies/generic/infoModal";
+import { isInvalid } from "@utils/isInvalid";
 import { ToggleGeneralDecision } from "./toggleGeneralDecision";
 import { StyledFormContent } from "./styles";
 
@@ -79,9 +80,10 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 onChange={onReferenceChange}
                 options={getDomainById("referenceDecision")}
                 size="compact"
+                onBlur={formik.handleBlur}
                 value={formik.values.reference ?? ""}
                 message={formik.errors.reference}
-                invalid={formik.errors.reference ? true : false}
+                invalid={isInvalid(formik, "reference")}
               />
             </Stack>
 

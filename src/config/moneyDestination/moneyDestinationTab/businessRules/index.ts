@@ -29,7 +29,7 @@ const decisionTemplate: IRuleDecision = {
   value: "",
   effectiveFrom: "",
   validUntil: "",
-  conditionThatEstablishesTheDecision: [
+  conditionsThatEstablishesTheDecision: [
     {
       labelName: "Antigüedad del cliente(Días)",
       conditionName: "AntigüedadDelCliente",

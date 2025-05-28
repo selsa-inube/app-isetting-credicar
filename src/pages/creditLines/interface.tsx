@@ -107,7 +107,7 @@ function CreditLinesUI(props: ICreditLinesUI) {
                 actions={actions}
                 breakpoints={breakPoints}
                 filter={searchCreditLines}
-                isLoading={loading}
+                loading={loading}
                 columnWidths={[widthFirstColumn, 55]}
               />
             </Stack>

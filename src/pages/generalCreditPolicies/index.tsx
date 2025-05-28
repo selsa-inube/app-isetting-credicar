@@ -1,27 +1,57 @@
-import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
-import { DecisionModal } from "@design/modals/decisionModal";
-import { AddGenCreditPolicies } from "./addGeneralCreditPolicies";
 import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/useGeneralCreditPolicies";
+import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
+import { ICardData } from "@ptypes/home/ICardData";
+import { GeneralCreditPoliciesUI } from "./interface";
 
 const GeneralCreditPolicies = () => {
-  const { showModal, handleCloseModal, handlePolicies } =
-    useGeneralCreditPolicies();
+  const {
+    withoutPolicies,
+    isSelected,
+    descriptionOptions,
+    smallScreen,
+    smallScreenTab,
+    showPoliciesTab,
+    policiesTabs,
+    referenceData,
+    contributionsData,
+    incomeData,
+    scoreModelsData,
+    methodsData,
+    additionalDebtorsData,
+    sourcesIncomeData,
+    financialObligData,
+    realGuaranteesData,
+    loadingPolicies,
+    showAddPolicies,
+    handleTabChange,
+    handleCloseModal,
+    handlePolicies,
+  } = useGeneralCreditPolicies();
+
   return (
-    <>
-      {showModal && (
-        <>
-          <AddGenCreditPolicies />
-          <DecisionModal
-            portalId="portal"
-            title={notPoliciesModal.title}
-            description={notPoliciesModal.description}
-            actionText={notPoliciesModal.actionText}
-            onCloseModal={handleCloseModal}
-            onClick={handlePolicies}
-          />
-        </>
-      )}
-    </>
+    <GeneralCreditPoliciesUI
+      policiesTabs={policiesTabs}
+      descriptionOptions={descriptionOptions as ICardData}
+      isSelected={isSelected ?? generalPoliciesTabsConfig.generalPolicies.id}
+      onTabChange={handleTabChange}
+      smallScreenTab={smallScreenTab}
+      showPoliciesTab={showPoliciesTab}
+      smallScreen={smallScreen}
+      onCloseModal={handleCloseModal}
+      onPolicies={handlePolicies}
+      referenceData={referenceData}
+      contributionsData={contributionsData}
+      incomeData={incomeData}
+      scoreModelsData={scoreModelsData}
+      methodsData={methodsData}
+      additionalDebtorsData={additionalDebtorsData}
+      sourcesIncomeData={sourcesIncomeData}
+      financialObligData={financialObligData}
+      realGuaranteesData={realGuaranteesData}
+      withoutPolicies={withoutPolicies}
+      loadingPolicies={loadingPolicies ?? true}
+      showAddPolicies={showAddPolicies ?? false}
+    />
   );
 };
 

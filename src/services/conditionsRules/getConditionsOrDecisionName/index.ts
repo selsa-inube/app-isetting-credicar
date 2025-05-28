@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { ICondtionOrDecision } from "@ptypes/decisions/ICondtionOrDecision";
 
 const getConditionsOrDecisionName = async (
@@ -15,7 +15,7 @@ const getConditionsOrDecisionName = async (
     },
   };
   const data: ICondtionOrDecision = await getWithRetries<ICondtionOrDecision>(
-    axiosInstance,
+    credicarAxiosInstance,
     `/crediboard-business-unit-rules/${condition}`,
     config,
   );

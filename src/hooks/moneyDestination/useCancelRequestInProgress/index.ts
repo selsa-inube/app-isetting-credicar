@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
-import { IEntry } from "@design/data/table/types";
 import { ICancelReqInProcRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
 import { cancelRequestInProgMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
-import { cancelRequestInProgress } from "@services/moneyDestination/cancelRequestInProgress";
+import { cancelRequestInProgress } from "@services/requestInProgress/cancelRequestInProgress";
 import { eventBus } from "@events/eventBus";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useCancelRequestInProgress = (
   businessUnit: string,

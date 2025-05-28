@@ -1,25 +1,19 @@
 import { MdAdd } from "react-icons/md";
-import { Stack, Input, Button, Text } from "@inubekit/inubekit";
+import { Stack, Button, Text, inube, Searchfield } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
-import { IEntry } from "@design/data/table/types";
 import {
   actionsConfig,
   breakPoints,
   titles,
 } from "@config/payrollAgreement/payrollAgreementTab/table";
-import { StyledContainer } from "./styles";
-
-interface IpayrollAgreementTabUI {
-  entries: IEntry[];
-  loading: boolean;
-  searchPayrollAgreement: string;
-  smallScreen: boolean;
-  setEntryDeleted: (id: string | number) => void;
-  onSearchPayrollAgreement: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
+import { IpayrollAgreementTabUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IpayrollAgreementTabUI";
+import { BoxContainer } from "@design/layout/boxContainer";
+import { useThemeData } from "@utils/theme";
+import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
 
 const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
   const {
@@ -27,12 +21,27 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
     entries,
     loading,
     smallScreen,
+    columnWidths,
+    pageLength,
     setEntryDeleted,
     onSearchPayrollAgreement,
   } = props;
 
+  const theme = useThemeData();
+
   return (
-    <StyledContainer $smallScreen={smallScreen}>
+    <BoxContainer
+      borderColor={
+        theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
+      }
+      borderRadius={tokens.spacing.s100}
+      padding={smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`}
+      backgroundColor={
+        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
+      }
+      boxSizing="initial"
+      overflowY="auto"
+    >
       <Stack
         width="-webkit-fill-available"
         direction="column"
@@ -42,7 +51,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s200} direction="column">
+        <Stack gap={tokens.spacing.s200} direction="column" width="100%">
           <Stack
             justifyContent={smallScreen ? "center" : "space-between"}
             direction={smallScreen ? "column-reverse" : "row"}
@@ -51,12 +60,11 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
             }
           >
             <Stack justifyContent="center">
-              <Input
+              <Searchfield
                 name="searchPayrollAgreement"
-                label="Buscar"
+                label={tabLabels.search}
                 id="searchPayrollAgreement"
-                placeholder="Palabra clave..."
-                type="search"
+                placeholder={tabLabels.placeholderSearch}
                 size="compact"
                 value={searchPayrollAgreement}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -73,13 +81,13 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
               path="/payroll-agreement/add-payroll-agreement"
               fullwidth={smallScreen}
             >
-              Agregar nómina
+              {payrollTabLabels.buttonLabel}
             </Button>
           </Stack>
 
           <Stack>
             <Text type="title" size="medium" appearance="dark">
-              Consulta de las nóminas de convenio disponibles
+              {payrollTabLabels.description}
             </Text>
           </Stack>
 
@@ -90,14 +98,14 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
             actions={actionsConfig(setEntryDeleted)}
             breakpoints={breakPoints}
             filter={searchPayrollAgreement}
-            isLoading={loading}
-            columnWidths={[80]}
-            pageLength={8}
-            emptyDataMessage="Aún no hay nóminas de convenio registradas, presiona “+ Agregar nómina” para empezar."
+            loading={loading}
+            columnWidths={columnWidths}
+            pageLength={pageLength}
+            emptyDataMessage={payrollTabLabels.emptyDataMessage}
           />
         </Stack>
       </Stack>
-    </StyledContainer>
+    </BoxContainer>
   );
 };
 

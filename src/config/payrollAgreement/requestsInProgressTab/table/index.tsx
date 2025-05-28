@@ -1,6 +1,7 @@
-import { IAction, ITitle } from "@design/data/table/types";
 import { Cancel } from "@pages/payrollAgreement/tabs/requestsInProgressTab/tools/cancel";
 import { Details } from "@pages/payrollAgreement/tabs/requestsInProgressTab/tools/details";
+import { IAction } from "@ptypes/design/table/IAction";
+import { ITitle } from "@ptypes/design/table/ITitle";
 
 const titles: ITitle[] = [
   {

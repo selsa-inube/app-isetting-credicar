@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { enviroment, fetchTimeoutServices } from "@config/environment";
 
-const axiosInstance: AxiosInstance = axios.create({
+const isaasQueryAxiosInstance: AxiosInstance = axios.create({
   baseURL: enviroment.IVITE_ISAAS_QUERY_PROCESS_SERVICE,
   timeout: fetchTimeoutServices,
   headers: {
@@ -9,7 +9,7 @@ const axiosInstance: AxiosInstance = axios.create({
   },
 });
 
-axiosInstance.interceptors.response.use(
+isaasQueryAxiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.code === "ECONNABORTED") {
@@ -19,4 +19,4 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export { axiosInstance };
+export { isaasQueryAxiosInstance };

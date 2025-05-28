@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
-import { IEntry } from "@design/data/table/types";
 import { eventBus } from "@events/eventBus";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useDetailsDestination = (appData: IAppData, data: IEntry) => {
   const [showModal, setShowModal] = useState(false);

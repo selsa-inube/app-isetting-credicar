@@ -2,8 +2,6 @@ import { Divider, inube, Stack, Text } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
-
-import { IEntry } from "@design/data/table/types";
 import { RequestType } from "@enum/requestType";
 import { TraceabilityCard } from "@design/feedback/traceabilityCard";
 import { ModalWrapper } from "@design/modals/modalWrapper";
@@ -11,6 +9,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { detailsRequestInProgressModal } from "@config/moneyDestination/requestsInProgressTab/details/detailsRequestInProgressModal";
 import { ILabel } from "@ptypes/ILabel";
 import { DetailBox } from "@design/feedback/detailBox";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IRequestsInProcess {
   data: IEntry;

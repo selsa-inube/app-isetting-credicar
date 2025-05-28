@@ -20,7 +20,7 @@ interface IRequestStatusModal {
   title: string;
   actionText: string;
   description: string;
-  isLoading: boolean;
+  loading: boolean;
   requestNumber: string;
   onClick: () => void;
   onCloseModal: () => void;
@@ -34,7 +34,7 @@ const RequestStatusModal = (props: IRequestStatusModal) => {
     title,
     appearance,
     description,
-    isLoading,
+    loading,
     requestNumber,
     onClick,
     onCloseModal,
@@ -107,7 +107,7 @@ const RequestStatusModal = (props: IRequestStatusModal) => {
             spacing="wide"
             appearance={appearance}
             variant="filled"
-            loading={isLoading}
+            loading={loading}
             onClick={onClick}
             fullwidth={isMobile ? true : false}
           >

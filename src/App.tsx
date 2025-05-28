@@ -8,6 +8,7 @@ import { GlobalStyles } from "./styles/global";
 import { AuthAndPortalDataProvider } from "./context/authAndPortalDataProvider";
 import { ErrorPage } from "./design/layout/errorPage";
 import { ChangeToRequestTabProvider } from "./context/changeToRequestTab";
+import { ThemeProviderWrapper } from "./context/theme";
 
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
@@ -44,13 +45,15 @@ function App(props: IApp) {
   return (
     <>
       <GlobalStyles />
-      <FlagProvider>
-        <AuthAndPortalDataProvider>
-          <ChangeToRequestTabProvider>
-            <RouterProvider router={mainNavigation} />
-          </ChangeToRequestTabProvider>
-        </AuthAndPortalDataProvider>
-      </FlagProvider>
+      <ThemeProviderWrapper>
+        <FlagProvider>
+          <AuthAndPortalDataProvider>
+            <ChangeToRequestTabProvider>
+              <RouterProvider router={mainNavigation} />
+            </ChangeToRequestTabProvider>
+          </AuthAndPortalDataProvider>
+        </FlagProvider>
+      </ThemeProviderWrapper>
     </>
   );
 }

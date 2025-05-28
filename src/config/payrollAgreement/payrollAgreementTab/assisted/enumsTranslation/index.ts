@@ -51,6 +51,42 @@ const enumsTranslation = [
     code: "Bounty",
     name: "Prima",
   },
+  {
+    code: "ProfessionalFees",
+    name: "Honorarios profesionales",
+  },
+  {
+    code: "Leases",
+    name: "Arrendamientos",
+  },
+  {
+    code: "Dividends",
+    name: "Dividendos",
+  },
+  {
+    code: "OtherNonSalaryEmoluments",
+    name: "Otros emolumentos no salariales",
+  },
+  {
+    code: "FinancialIncome",
+    name: "Ingresos financieros",
+  },
+  {
+    code: "PensionAllowances",
+    name: "Subsidios de pensión",
+  },
+  {
+    code: "PeriodicSalary",
+    name: "Salario Periódico",
+  },
+  {
+    code: "PersonalBusinessUtilities",
+    name: "Utilidades personales y comerciales",
+  },
+  {
+    code: "PersonalBusinessUtilities",
+    name: "Utilidades personales y comerciales",
+  },
 ];
 
 export { enumsTranslation };

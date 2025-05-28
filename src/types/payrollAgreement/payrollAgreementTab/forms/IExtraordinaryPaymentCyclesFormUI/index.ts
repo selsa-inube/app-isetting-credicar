@@ -1,6 +1,6 @@
 import { FormikProps } from "formik";
-import { IEntry } from "@design/data/table/types";
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { IExtraordinaryCyclesEntry } from "../IExtraordinaryCyclesEntry";
 
 interface IExtraordinaryPaymentCyclesFormUI {
@@ -15,6 +15,9 @@ interface IExtraordinaryPaymentCyclesFormUI {
   numberDaysUntilCutOptions: IServerDomain[];
   monthOptions: IServerDomain[];
   dayOptions: IServerDomain[];
+  labelButtonNext: string;
+  labelButtonPrevious: string;
+  columnWidths: number[];
   onAddCycle: () => void;
   onToggleModal: () => void;
   onButtonClick: () => void;

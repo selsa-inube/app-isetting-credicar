@@ -3,9 +3,9 @@ import { useState } from "react";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { ComponentAppearance } from "@enum/appearances";
-import { IEntry } from "@design/data/table/types";
 import { detailsTabsConfig } from "@config/creditLines/details/tabs";
 import { DetailsCreditLinesModal } from "@design/modals/detailsCreditLinesModal";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { StyledContainerIcon } from "./styles";
 
 interface IDetails {

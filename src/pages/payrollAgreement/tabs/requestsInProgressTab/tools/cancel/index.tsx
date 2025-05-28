@@ -1,21 +1,21 @@
 import { useContext } from "react";
 import { CancelRecord } from "@design/feedback/cancelRecord";
-import { cancelRequestInProgressModal } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgressModal";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useCancelRequestInProgress } from "@hooks/moneyDestination/useCancelRequestInProgress";
 import { ICancel } from "@ptypes/payrollAgreement/requestInProgTab/ICancel";
+import { cancelRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/generic/cancelRequestInProgressModal";
+import { useCancelRequestInProgress } from "@hooks/payrollAgreement/useCancelRequestInProgress";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
 const Cancel = (props: ICancel) => {
   const { data, setEntryCanceled } = props;
   const { appData } = useContext(AuthAndPortalData);
 
   const { showModal, loading, handleToggleModal, handleClick } =
-    useCancelRequestInProgress(
-      appData.businessUnit.publicCode,
+    useCancelRequestInProgress({
+      businessUnit: appData.businessUnit.publicCode,
       data,
-      appData.user.userAccount,
+      userAccount: appData.user.userAccount,
       setEntryCanceled,
-    );
+    });
 
   return (
     <CancelRecord

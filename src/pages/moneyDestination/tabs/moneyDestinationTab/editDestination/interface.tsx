@@ -1,48 +1,21 @@
-import { FormikProps } from "formik";
-import { IRuleDecision } from "@isettingkit/input";
-import { Breadcrumbs, Stack, Tabs, useMediaQuery } from "@inubekit/inubekit";
+import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
 import { GeneralInformationForm } from "@design/forms/generalInformationDestination";
 import { DecisionsForm } from "@design/forms/decisions";
-
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
-import { IEditDestinationTabsConfig } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/tabs/ITabConfig/IEditDestinationTabsConfig";
 import { attentionModal, deleteModal } from "@config/decisions/messages";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
 import { RequestProcess } from "@design/feedback/RequestProcess";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { ComponentAppearance } from "@enum/appearances";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
-
-interface IEditDestinationUI {
-  editDestinationTabsConfig: IEditDestinationTabsConfig;
-  creditLineDecisions: IRuleDecision[];
-  normalizeEvaluateRuleData: IRuleDecision[];
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
-  initialGeneralInformationValues: IGeneralInformationEntry;
-  initialGeneralInfData: IGeneralInformationEntry;
-  isSelected: string;
-  requestSteps: IRequestSteps[];
-  loading: boolean;
-  showPendingReqModal: boolean;
-  showRequestProcessModal: boolean;
-  saveMoneyDestination: ISaveDataResponse;
-  onTabChange: (id: string) => void;
-  onButtonClick: () => void;
-  onReset: () => void;
-  setCreditLineDecisions: (decisions: IRuleDecision[]) => void;
-  setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
-  onCloseRequestStatus: () => void;
-  onClosePendingReqModal: () => void;
-}
+import { IEditDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IEditDestinationUI";
+import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
 
 const EditDestinationUI = (props: IEditDestinationUI) => {
   const {
@@ -58,6 +31,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     loading,
     showPendingReqModal,
     showRequestProcessModal,
+    smallScreen,
     onTabChange,
     onButtonClick,
     onReset,
@@ -66,8 +40,6 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     onCloseRequestStatus,
     onClosePendingReqModal,
   } = props;
-
-  const smallScreen = useMediaQuery("(max-width: 990px)");
 
   return (
     <Stack
@@ -83,8 +55,8 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsEditDestination} />
           <Title
-            title="Destinos de dinero"
-            description=" Destino del dinero para crédito."
+            title={editDestinationLabels.title}
+            description={editDestinationLabels.description}
             sizeTitle="large"
           />
         </Stack>
@@ -118,14 +90,14 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 setDecisions={setCreditLineDecisions}
                 revertModalDisplayData={revertModalDisplayData}
                 labelBusinessRules="LineOfCredit"
-                nameMoneyDestination={
-                  initialGeneralInformationValues.nameDestination
-                }
+                nameRule={initialGeneralInformationValues.nameDestination}
                 editDataOption
                 showAttentionModal={false}
                 setShowAttentionModal={() => console.log()}
-                titleContentAddCard="Agregar línea de crédito"
-                messageEmptyDecisions="Agrega línea de crédito"
+                titleContentAddCard={editDestinationLabels.addLineCredit}
+                messageEmptyDecisions={
+                  editDestinationLabels.messageEmptyDecisions
+                }
                 normalizeEvaluateRuleData={normalizeEvaluateRuleData ?? []}
               />
             )}
@@ -146,16 +118,16 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
       {showPendingReqModal && saveMoneyDestination.requestNumber && (
         <RequestStatusModal
           portalId="portal"
-          title={requestStatusMessage(saveMoneyDestination.responsible).title}
+          title={requestStatusMessage(saveMoneyDestination.staffName).title}
           description={
-            requestStatusMessage(saveMoneyDestination.responsible).description
+            requestStatusMessage(saveMoneyDestination.staffName).description
           }
           requestNumber={saveMoneyDestination.requestNumber}
           onClick={onClosePendingReqModal}
           onCloseModal={onClosePendingReqModal}
-          isLoading={false}
+          loading={false}
           actionText={
-            requestStatusMessage(saveMoneyDestination.responsible).actionText
+            requestStatusMessage(saveMoneyDestination.staffName).actionText
           }
           appearance={ComponentAppearance.PRIMARY}
         />

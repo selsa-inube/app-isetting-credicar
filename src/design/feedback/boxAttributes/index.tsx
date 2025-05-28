@@ -1,20 +1,12 @@
-import { Stack, Text, Grid, useMediaQuery } from "@inubekit/inubekit";
+import { Stack, Text, Grid, useMediaQuery, inube } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
-import { IAttribute } from "./types";
+import { IBoxAttribute } from "@ptypes/design/IBoxAttribute";
+import { BoxContainer } from "@design/layout/boxContainer";
 import { ButtonAttribute } from "./ButtonAttribute";
-import { StyledBoxAttribute } from "./styles";
-
-interface IBoxAttribute {
-  label: string;
-  value?: number | string | IAttribute[];
-  withButton?: boolean;
-  buttonIcon?: React.JSX.Element;
-  buttonValue?: string | number;
-  direction?: "row" | "column";
-  onClickButton?: () => void;
-}
+import { useThemeData } from "@utils/theme";
+import { ContainerAttribute } from "./containerAttribute";
 
 const BoxAttribute = (props: IBoxAttribute) => {
   const {
@@ -25,12 +17,27 @@ const BoxAttribute = (props: IBoxAttribute) => {
     buttonValue,
     direction,
     onClickButton,
+    withTag,
+    children,
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 990px)");
+  const theme = useThemeData();
 
   return (
-    <StyledBoxAttribute $smallScreen={isMobile}>
+    <BoxContainer
+      alignItems="center"
+      borderRadius={tokens.spacing.s100}
+      padding={
+        isMobile
+          ? tokens.spacing.s100
+          : `${tokens.spacing.s075} ${tokens.spacing.s200}`
+      }
+      boxSizing="border-box"
+      backgroundColor={
+        theme ? theme?.palette?.neutral?.N10 : inube.palette.neutral.N10
+      }
+    >
       <Grid
         templateColumns={direction === "column" ? "1fr" : "auto 1fr"}
         templateRows="auto auto"
@@ -60,21 +67,21 @@ const BoxAttribute = (props: IBoxAttribute) => {
               onClick={onClickButton}
             />
           ) : (
-            <Text
-              size={isMobile ? "small" : "medium"}
-              appearance={ComponentAppearance.GRAY}
-              textAlign={direction === "column" ? "start" : "end"}
-            >
-              {typeof value === "object"
-                ? JSON.stringify(value)
-                : String(value)}
-            </Text>
+            <>
+              <ContainerAttribute
+                withTag={withTag ?? false}
+                isMobile={isMobile}
+                direction={direction}
+                value={value}
+              >
+                {children}
+              </ContainerAttribute>
+            </>
           )}
         </Stack>
       </Grid>
-    </StyledBoxAttribute>
+    </BoxContainer>
   );
 };
 
 export { BoxAttribute };
-export type { IBoxAttribute };

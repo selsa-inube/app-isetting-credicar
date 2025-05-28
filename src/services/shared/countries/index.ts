@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 
 import { getWithRetries } from "@services/core/getWithRetries";
 import { ICountry } from "@ptypes/ICountry";
-import { axiosInstance } from "@api/isaasQuery";
+import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { mapCountriesToEntities } from "./mappers";
 
 const getCountriesData = async (): Promise<ICountry[]> => {
@@ -12,7 +12,7 @@ const getCountriesData = async (): Promise<ICountry[]> => {
     },
   };
   const data: ICountry[] = await getWithRetries<ICountry[]>(
-    axiosInstance,
+    isaasQueryAxiosInstance,
     `/country-catalogs`,
     config,
   );

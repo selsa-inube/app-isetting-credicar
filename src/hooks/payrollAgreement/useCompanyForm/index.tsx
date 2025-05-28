@@ -1,23 +1,19 @@
 import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
-import { FormikProps, useFormik } from "formik";
+import { useFormik } from "formik";
 import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { ICompanyEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyEntry";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useCountries } from "@hooks/generic/useCountries";
 import { useCities } from "@hooks/generic/useCities";
 import { alertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/alertModal";
+import { IUseCompanyForm } from "@ptypes/hooks/IUseCompanyForm";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useLegalPerson } from "../useLegalPerson";
 
-const useCompanyForm = (
-  initialValues: ICompanyEntry,
-  ref: React.ForwardedRef<FormikProps<ICompanyEntry>>,
-  onSubmit: ((values: ICompanyEntry) => void) | undefined,
-  onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined,
-) => {
+const useCompanyForm = (props: IUseCompanyForm) => {
+  const { initialValues, ref, onSubmit, onFormValid } = props;
   const validationSchema = object().shape({
     companySelected: validationRules.string.required(
       validationMessages.required,
@@ -46,9 +42,9 @@ const useCompanyForm = (
   useImperativeHandle(ref, () => formik);
 
   const { appData } = useContext(AuthAndPortalData);
-  const { legalPersonOptions, legalPersonData } = useLegalPerson(
-    appData.businessUnit.publicCode,
-  );
+  const { legalPersonOptions, legalPersonData } = useLegalPerson({
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
   const { optionsCountries } = useCountries();
   const { optionsCities } = useCities();
   const [showModal, setShowModal] = useState(false);
@@ -164,6 +160,8 @@ const useCompanyForm = (
     setShowModal(!showModal);
   };
 
+  const isAddingCompany = formik.values.companySelected === "addCompany";
+
   return {
     formik,
     legalPersonOptions,
@@ -175,6 +173,7 @@ const useCompanyForm = (
     actionText,
     moreDetails,
     showModal,
+    isAddingCompany,
     handleChange,
     handleCompanyChange,
     handleToggleAlertModal,

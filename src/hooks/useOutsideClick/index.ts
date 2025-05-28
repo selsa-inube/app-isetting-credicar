@@ -1,11 +1,8 @@
 import { useEffect } from "react";
+import { IUseOutsideClick } from "@ptypes/hooks/IUseOutsideClick";
 
-function useOutsideClick(
-  primaryRef: React.RefObject<HTMLDivElement>,
-  isSecondModalOpen: boolean,
-  isThirdModalOpen: boolean,
-  callback: () => void,
-) {
+const useOutsideClick = (props: IUseOutsideClick) => {
+  const { primaryRef, isSecondModalOpen, isThirdModalOpen, callback } = props;
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (primaryRef.current?.contains(event.target as Node)) {
@@ -38,6 +35,6 @@ function useOutsideClick(
 
     callback();
   }, [isSecondModalOpen, isThirdModalOpen]);
-}
+};
 
 export { useOutsideClick };

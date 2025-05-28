@@ -1,7 +1,7 @@
 import { inube } from "@inubekit/inubekit";
 import { ILabel } from "@ptypes/ILabel";
-import { IEntry } from "@design/data/table/types";
 import { tokens } from "@design/tokens";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { DetailBox } from "../../detailBox";
 
 interface IRenderDetailBox {

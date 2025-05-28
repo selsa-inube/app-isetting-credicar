@@ -4,18 +4,9 @@ import { FormikProps } from "formik";
 import { useEnumerators } from "@hooks/useEnumerators";
 import { useGeneralInformationForm } from "@hooks/moneyDestination/useGeneralInformationForm";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
+import { IGeneralInformationForm } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationForm";
 import { GeneralInformationFormUI } from "./interface";
-
-interface IGeneralInformationForm {
-  initialValues: IGeneralInformationEntry;
-  onButtonClick: () => void;
-  loading?: boolean;
-  onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSubmit?: (values: IGeneralInformationEntry) => void;
-  editDataOption?: boolean;
-  initialGeneralInfData?: IGeneralInformationEntry;
-}
 
 const GeneralInformationForm = forwardRef<
   FormikProps<IGeneralInformationEntry>,
@@ -35,17 +26,18 @@ const GeneralInformationForm = forwardRef<
   ) => {
     const { appData } = useContext(AuthAndPortalData);
 
-    const { enumData } = useEnumerators(
-      "moneydestination",
-      appData.businessUnit.publicCode,
-    );
+    const { enumData } = useEnumerators({
+      enumDestination: "moneydestination",
+      bussinesUnits: appData.businessUnit.publicCode,
+    });
 
     const {
       autosuggestValue,
       optionsDestination,
       formik,
-      isDisabledButton,
+      buttonDisabledState,
       icon,
+      labelButtonNext,
       handleChange,
       handleReset,
       valuesEqualBoton,
@@ -69,10 +61,11 @@ const GeneralInformationForm = forwardRef<
         onChange={handleChange}
         autosuggestValue={autosuggestValue}
         editDataOption={editDataOption}
-        isDisabledButton={isDisabledButton}
+        buttonDisabledState={buttonDisabledState}
         icon={icon}
         valuesEqual={valuesEqualBoton}
         onReset={handleReset}
+        labelButtonNext={labelButtonNext}
       />
     );
   },
@@ -81,4 +74,3 @@ const GeneralInformationForm = forwardRef<
 GeneralInformationForm.displayName = "GeneralInformationForm";
 
 export { GeneralInformationForm };
-export type { IGeneralInformationForm };

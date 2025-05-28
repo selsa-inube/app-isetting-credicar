@@ -1,10 +1,9 @@
 import { useContext } from "react";
 
 import { useMoneyDestination } from "@hooks/moneyDestination/useMoneyDestination";
-
-import { IEntry } from "@design/data/table/types";
-import { MoneyDestinationTabUI } from "./interface";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { MoneyDestinationTabUI } from "./interface";
 
 function MoneyDestinationTab() {
   const { appData } = useContext(AuthAndPortalData);
@@ -13,6 +12,8 @@ function MoneyDestinationTab() {
     moneyDestination,
     searchMoneyDestination,
     loading,
+    smallScreen,
+    columnWidths,
     handleSearchMoneyDestination,
     setEntryDeleted,
   } = useMoneyDestination(appData.businessUnit.publicCode);
@@ -24,6 +25,8 @@ function MoneyDestinationTab() {
       loading={loading}
       entries={moneyDestination as IEntry[]}
       setEntryDeleted={setEntryDeleted}
+      smallScreen={smallScreen}
+      columnWidths={columnWidths}
     />
   );
 }

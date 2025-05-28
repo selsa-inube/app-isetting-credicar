@@ -4,6 +4,8 @@ import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusines
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { decrypt } from "@utils/crypto/decrypt";
+import { useMediaQuery } from "@inubekit/inubekit";
+import { mainNavigation } from "@config/mainNavigation";
 
 const useAppPage = (
   appData: IAppData,
@@ -17,14 +19,16 @@ const useAppPage = (
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
 
-  const { optionsCards } = useOptionsByBusinessUnit(
-    businessUnitSigla,
+  const { optionsCards } = useOptionsByBusinessUnit({
+    businessUnit: businessUnitSigla,
     staffPortalId,
-  );
+  });
 
   const navigate = useNavigate();
 
   const location = useLocation();
+
+  const { optionsHeader, optionsNav } = mainNavigation(optionsCards, location);
 
   useEffect(() => {
     if (appData.businessUnit.publicCode) {
@@ -40,13 +44,18 @@ const useAppPage = (
     navigate("/");
   };
 
+  const isTablet = useMediaQuery("(max-width: 849px)");
+  const isTabletMain = useMediaQuery("(max-width: 1000px)");
+
   return {
     collapse,
     collapseMenuRef,
-    optionsCards,
     businessUnitChangeRef,
     selectedClient,
-    location,
+    isTablet,
+    isTabletMain,
+    optionsHeader,
+    optionsNav,
     setCollapse,
     handleLogoClick,
   };

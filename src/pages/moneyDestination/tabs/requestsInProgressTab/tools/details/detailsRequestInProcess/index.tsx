@@ -5,10 +5,10 @@ import { IRuleDecision } from "@isettingkit/input";
 import { ComponentAppearance } from "@enum/appearances";
 import { labelsOfRequest } from "@config/moneyDestination/requestsInProgressTab/details/labelsOfRequest";
 import { labelsOfTraceability } from "@config/moneyDestination/requestsInProgressTab/details/labelsOfTraceability";
-import { IEntry } from "@design/data/table/types";
 import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
 import { IDetailsTabsConfig } from "@design/modals/detailsDestinationModal/types";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { StyledContainerIcon } from "./styles";
 import { RequestsInProcess } from "../requestsInProcess";
 

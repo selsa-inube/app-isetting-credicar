@@ -1,14 +1,14 @@
 import { Stack, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { IEntry } from "@design/data/table/types";
 import { ComponentAppearance } from "@enum/appearances";
 import {
   StyledContainerDataName,
   StyledContainerDescription,
   StyledContainerName,
 } from "./styles";
-import { mediaQueryMobile } from "@src/config/environment";
+import { mediaQueryMobile } from "@config/environment";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IGeneralDataTab {
   data: IEntry;

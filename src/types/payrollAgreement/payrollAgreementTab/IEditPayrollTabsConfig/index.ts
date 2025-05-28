@@ -1,4 +1,4 @@
-import { ITabConfig } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/tabs/ITabConfig";
+import { ITabConfig } from "../../requestInProgTab/ITabConfig";
 
 interface IEditPayrollTabsConfig {
   generalInformation: ITabConfig;

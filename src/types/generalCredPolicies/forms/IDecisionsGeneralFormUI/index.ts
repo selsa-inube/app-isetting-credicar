@@ -1,5 +1,5 @@
-import { IDecisionsGeneralEntry } from "../IDecisionsGeneralEntry";
 import { FormikProps } from "formik";
+import { IDecisionsGeneralEntry } from "../IDecisionsGeneralEntry";
 
 interface IDecisionsGeneralFormUI {
   editDataOption: boolean;
@@ -10,11 +10,11 @@ interface IDecisionsGeneralFormUI {
   isDisabledButton: boolean;
   buttonLabel: string;
   onToggle: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onReferenceChange: (name: string, value: string) => void;
   onInfoModal: () => void;
   onButtonClick: () => void;
   onResetEdit?: () => void;
   onResetAdd?: () => void;
-  onReferenceChange: (name: string, value: string) => void;
 }
 
 export type { IDecisionsGeneralFormUI };

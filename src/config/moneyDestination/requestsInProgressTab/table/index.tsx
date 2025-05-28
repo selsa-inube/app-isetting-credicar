@@ -1,21 +1,22 @@
 import { Details } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details";
-import { IAction, ITitle } from "@design/data/table/types";
 import { Cancel } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/cancel";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { IAction } from "@ptypes/design/table/IAction";
 
 const titles: ITitle[] = [
   {
     id: "requestDate",
-    titleName: "Fecha",
+    titleName: "Fecha de solicitud",
     priority: 0,
   },
   {
     id: "description",
-    titleName: "Descripción",
+    titleName: "Descripción de solicitud",
     priority: 1,
   },
   {
     id: "requestStatus",
-    titleName: "Estado",
+    titleName: "Estado de solicitud",
     priority: 2,
   },
 ];

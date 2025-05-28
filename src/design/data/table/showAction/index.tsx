@@ -1,12 +1,9 @@
 import { Td } from "@inubekit/inubekit";
-import { IAction, IEntry } from "@design/data/table/types";
 import { ActionMobile } from "@design/data/table/actionMobile";
+import { IShowAction } from "@ptypes/design/IShowAction";
 
-const ShowAction = (
-  actionContent: IAction[],
-  entry: IEntry,
-  mediaQuery: boolean,
-) => {
+const ShowAction = (props: IShowAction) => {
+  const { actionContent, entry, mediaQuery } = props;
   return mediaQuery ? (
     <>
       <Td type="custom" align="center">

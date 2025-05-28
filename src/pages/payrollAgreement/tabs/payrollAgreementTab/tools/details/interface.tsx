@@ -1,7 +1,7 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text } from "@inubekit/inubekit";
 import { ComponentAppearance } from "@enum/appearances";
-import { MoreDetails } from "@design/modals/moreDetails";
+import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IDetailsUI";
 import { StyledContainerIcon } from "./styles";
 

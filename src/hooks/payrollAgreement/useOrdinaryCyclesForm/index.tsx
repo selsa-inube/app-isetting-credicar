@@ -1,35 +1,37 @@
 import { useContext, useEffect, useImperativeHandle, useState } from "react";
-import { FormikProps, useFormik } from "formik";
+import { useFormik } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
-import { IEntry } from "@design/data/table/types";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { payDayOrdinaryOptions } from "@utils/payDayOrdinary";
 import { addLeadingZero } from "@utils/addLeadingZero";
 import { courtDaysOrdinaryOptions } from "@utils/courtDaysOrdinary";
 import { payDayValues } from "@utils/payDayValues";
 import { useEnumerators } from "@hooks/useEnumerators";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
+import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
-const useOrdinaryCyclesForm = (
-  ref: React.ForwardedRef<FormikProps<IOrdinaryCyclesEntry>>,
-  editDataOption: boolean,
-  loading: boolean | undefined,
-  onSubmit: ((values: IOrdinaryCyclesEntry) => void) | undefined,
-  onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined,
-  regularPaymentCycles: IOrdinaryCyclesEntry[],
-  setRegularPaymentCycles: React.Dispatch<
-    React.SetStateAction<IOrdinaryCyclesEntry[]>
-  >,
-  initialData?: IOrdinaryCyclesEntry[],
-) => {
+const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
+  const {
+    ref,
+    editDataOption,
+    loading,
+    onSubmit,
+    onFormValid,
+    regularPaymentCycles,
+    setRegularPaymentCycles,
+    initialData,
+  } = props;
+
   const createValidationSchema = () =>
     object().shape({
       nameCycle: validationRules.string.required(validationMessages.required),
@@ -74,10 +76,10 @@ const useOrdinaryCyclesForm = (
   >([]);
 
   const { appData } = useContext(AuthAndPortalData);
-  const { enumData: periodicity } = useEnumerators(
-    "schedule",
-    appData.businessUnit.publicCode,
-  );
+  const { enumData: periodicity } = useEnumerators({
+    enumDestination: "schedule",
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   const periodicityOptions = optionsFromEnumerators(periodicity);
 
@@ -99,12 +101,14 @@ const useOrdinaryCyclesForm = (
   useEffect(() => {
     if (!formik.values.periodicity) {
       formik.setFieldValue("payday", "");
+      formik.setFieldValue("numberDaysUntilCut", "");
       setPaydayOptions([]);
       setNumberDaysUntilCutOptions([]);
     }
 
     if (formik.values.periodicity) {
       formik.setFieldValue("payday", "");
+      formik.setFieldValue("numberDaysUntilCut", "");
       const Payday = payDayOrdinaryOptions(formik.values.periodicity);
       setPaydayOptions(Payday);
 
@@ -186,6 +190,20 @@ const useOrdinaryCyclesForm = (
     }
   }, [entryDeleted]);
 
+  const columnWidths = isMobile ? [70, 30, 20, 18] : [8, 30, 20, 18, 15];
+
+  const labelButtonPrevious = editDataOption
+    ? cyclespaymentLabels.cancelButton
+    : cyclespaymentLabels.previousButton;
+
+  const labelButtonNext = editDataOption
+    ? cyclespaymentLabels.sendButton
+    : cyclespaymentLabels.nextButton;
+
+  const disabledButtonNext = editDataOption
+    ? isDisabledButton && !loading
+    : entries.length === 0;
+
   return {
     formik,
     isDisabledButton,
@@ -197,6 +215,10 @@ const useOrdinaryCyclesForm = (
     paydayOptions,
     periodicityOptions,
     isMobile,
+    columnWidths,
+    labelButtonPrevious,
+    labelButtonNext,
+    disabledButtonNext,
     onToggleInfoModal,
     handleChange,
     handleAddCycle,

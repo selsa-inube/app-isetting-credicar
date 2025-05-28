@@ -3,8 +3,8 @@ import { useLocation } from "react-router-dom";
 import { useEditPayrollAgreement } from "@hooks/payrollAgreement/edit/useEditPayrollAgreement";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { EditPayrollAgreementUI } from "./interface";
 
 const EditPayrollAgreement = () => {
@@ -27,12 +27,15 @@ const EditPayrollAgreement = () => {
     typeRegularPayroll,
     regularPaymentCycles,
     extraordinaryPayment,
-    filteredTabsConfig,
     showDeletedAlertModal,
-    typePayroll,
     showGeneralInfPayrollForm,
     showRegularPaymentCyclesForm,
     showExtraPaymentCyclesForm,
+    filteredTabs,
+    title,
+    description,
+    actionText,
+    moreDetails,
     handleToggleDeletedAlertModal,
     setExtraordinaryPayment,
     setRegularPaymentCycles,
@@ -47,29 +50,26 @@ const EditPayrollAgreement = () => {
     setShowModal,
     setShowRequestProcessModal,
     setSourcesOfIncomeValues,
-  } = useEditPayrollAgreement(
-    data ?? {
-      abbreviatedName: "",
-      payrollForDeductionAgreementType: "",
-      numberOfDaysForReceivingTheDiscounts: 0,
-    },
-  );
+  } = useEditPayrollAgreement({ data });
 
   const {
     savePayrollAgreement,
     requestSteps,
     loadingSendData,
-    showPendingReqModal,
+    showRequestStatus,
+    titleRequest,
+    descriptionRequest,
+    actionTextRequest,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
-  } = useSavePayrollAgreement(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSavePayrollAgreement({
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
-  );
+  });
 
   return (
     <EditPayrollAgreementUI
@@ -87,7 +87,6 @@ const EditPayrollAgreement = () => {
       companyAgreement={companyAgreement}
       showRequestProcessModal={showRequestProcessModal}
       savePayrollAgreement={savePayrollAgreement as ISaveDataResponse}
-      showPendingReqModal={showPendingReqModal}
       requestSteps={requestSteps}
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
@@ -103,13 +102,20 @@ const EditPayrollAgreement = () => {
       extraordinaryPayment={extraordinaryPayment}
       setExtraordinaryPayment={setExtraordinaryPayment}
       setRegularPaymentCycles={setRegularPaymentCycles}
-      filteredTabsConfig={filteredTabsConfig}
       showDeletedAlertModal={showDeletedAlertModal}
       onToggleDeletedAlertModal={handleToggleDeletedAlertModal}
-      typePayroll={typePayroll}
       showGeneralInfPayrollForm={showGeneralInfPayrollForm}
       showRegularPaymentCyclesForm={showRegularPaymentCyclesForm}
       showExtraPaymentCyclesForm={showExtraPaymentCyclesForm}
+      showRequestStatus={showRequestStatus}
+      filteredTabs={filteredTabs}
+      title={title}
+      description={description}
+      actionText={actionText}
+      moreDetails={moreDetails}
+      titleRequest={titleRequest}
+      descriptionRequest={descriptionRequest}
+      actionTextRequest={actionTextRequest}
     />
   );
 };

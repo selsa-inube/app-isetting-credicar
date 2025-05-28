@@ -1,6 +1,6 @@
-import { IEntry } from "@design/data/table/types";
 import { IDetailsTabsConfig } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsTabsConfig";
 import { ILabel } from "@ptypes/ILabel";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IDetailsUI {
   data: IEntry;

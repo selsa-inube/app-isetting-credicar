@@ -1,8 +1,8 @@
 import { biweeklyPayDayOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/biweeklyPayDay";
 import { everyTenPayDayOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/everyTenPayDay";
 import { bimonthlyCourtDaysOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/bimonthlyCourtDays";
-import { monthlyCourtDaysOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/monthlyCourtDays";
 import { weeklyCourtDaysOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/weeklyCourtDays";
+import { extraordinaryDaysOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/extraordinaryDay";
 
 const courtDaysOrdinaryOptions = (periodicity: string) => {
   switch (periodicity) {
@@ -13,7 +13,7 @@ const courtDaysOrdinaryOptions = (periodicity: string) => {
     case "Biweekly":
       return biweeklyPayDayOptions;
     case "Monthly":
-      return monthlyCourtDaysOptions;
+      return extraordinaryDaysOptions;
     case "Semimonthly":
       return bimonthlyCourtDaysOptions;
   }

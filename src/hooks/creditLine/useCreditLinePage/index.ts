@@ -7,11 +7,11 @@ const useCreditLinePage = (businessUnitSigla: string) => {
   const staffPortalId = portalId ? decrypt(portalId) : "";
   const [searchCreditLines, setSearchCreditLines] = useState<string>("");
 
-  const { descriptionOptions } = useOptionsByBusinessUnit(
-    businessUnitSigla,
+  const { descriptionOptions } = useOptionsByBusinessUnit({
+    businessUnit: businessUnitSigla,
     staffPortalId,
-    "Lineas de credito",
-  );
+    optionName: "Lineas de credito",
+  });
 
   const handleSearchCreditLines = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchCreditLines(e.target.value);

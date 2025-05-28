@@ -1,52 +1,24 @@
-import { FormikProps } from "formik";
-import { IRuleDecision } from "@isettingkit/input";
 import {
   Assisted,
   Breadcrumbs,
-  IAssistedStep,
   Stack,
   useMediaQuery,
 } from "@inubekit/inubekit";
 
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { GeneralInformationForm } from "@design/forms/generalInformationDestination";
 import { DecisionsForm } from "@design/forms/decisions";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
-import { crumbsAddDestination } from "@config/moneyDestination/addDestination/navigation";
+import { crumbsAddDestination } from "@config/moneyDestination/addDestination/breadcrumbs";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { attentionModal, deleteModal } from "@config/decisions/messages";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { VerificationForm } from "@design/forms/verificationDestination";
-
-interface IAddDestinationUI {
-  creditLineDecisions: IRuleDecision[];
-  currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
-  initialGeneralInformationValues: IGeneralInformationEntry;
-  isCurrentFormValid: boolean;
-  requestSteps: IRequestSteps[];
-  showModal: boolean;
-  showRequestProcessModal: boolean;
-  steps: IAssistedStep[];
-  saveMoneyDestination: ISaveDataResponse;
-  loading: boolean;
-  showPendingReqModal: boolean;
-  showAttentionModal: boolean;
-  onFinishForm: () => void;
-  onNextStep: () => void;
-  onPreviousStep: () => void;
-  onToggleModal: () => void;
-  setCreditLineDecisions: (decisions: IRuleDecision[]) => void;
-  setCurrentStep: (step: number) => void;
-  setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
-  onCloseRequestStatus: () => void;
-  onClosePendingReqModal: () => void;
-  setShowAttentionModal: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { controlsAssisted } from "@config/controlsAssisted";
+import { lineCreditLabels } from "@config/moneyDestination/addDestination/assisted/lineCreditLabels";
+import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IAddDestinationUI";
+import { locationConfig } from "@config/moneyDestination/addDestination/location";
 
 const AddDestinationUI = (props: IAddDestinationUI) => {
   const {
@@ -91,8 +63,8 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsAddDestination} />
           <Title
-            title="Destinos de dinero"
-            description=" Destino del dinero para crédito."
+            title={locationConfig.title}
+            description={locationConfig.description}
             sizeTitle="large"
           />
         </Stack>
@@ -104,11 +76,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
             onNextClick={onNextStep}
             onSubmitClick={onToggleModal}
             disableNext={!isCurrentFormValid}
-            controls={{
-              goBackText: "Anterior",
-              goNextText: "Siguiente",
-              submitText: "Finalizar",
-            }}
+            controls={controlsAssisted}
             size={smallScreen ? "small" : "large"}
           />
           <Stack direction="column">
@@ -132,13 +100,13 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                 setDecisions={setCreditLineDecisions}
                 revertModalDisplayData={revertModalDisplayData}
                 labelBusinessRules="LineOfCredit"
-                nameMoneyDestination={
-                  initialGeneralInformationValues.nameDestination
-                }
+                nameRule={initialGeneralInformationValues.nameDestination}
                 showAttentionModal={showAttentionModal}
                 setShowAttentionModal={setShowAttentionModal}
-                titleContentAddCard="Agregar línea de crédito"
-                messageEmptyDecisions="Agrega línea de crédito"
+                titleContentAddCard={lineCreditLabels.titleContentAddCard}
+                messageEmptyDecisions={
+                  lineCreditLabels.messageEmptyDecisions as unknown as string
+                }
               />
             )}
             {currentStep === 3 && (

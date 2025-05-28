@@ -1,24 +1,29 @@
 import { IAssistedStep } from "@inubekit/inubekit";
+import { t } from "i18next";
 
 const addDestinationStepsConfig = (nameDescription: string) => {
   const addDestinationSteps: IAssistedStep[] = [
     {
       id: 1,
       number: 1,
-      name: "Datos generales",
-      description: "Selecciona o agrega un nuevo destino.",
+      name: t("moneyDestination.addDestination.assisted.generalData"),
+      description: t(
+        "moneyDestination.addDestination.assisted.generalDataDescription",
+      ),
     },
     {
       id: 2,
       number: 2,
-      name: "Línea de crédito",
+      name: t("moneyDestination.addDestination.assisted.creditProspectOptions"),
       description: `Agregar decisión para ${nameDescription}.`,
     },
     {
       id: 3,
       number: 3,
-      name: "Verificación",
-      description: "Confirma la información diligenciada en pasos anteriores.",
+      name: t("moneyDestination.addDestination.assisted.maximumAmount"),
+      description: t(
+        "moneyDestination.addDestination.assisted.configureMaximumAmountDecisions",
+      ),
     },
   ];
   return addDestinationSteps;
