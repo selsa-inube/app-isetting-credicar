@@ -5,6 +5,7 @@ import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDes
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { UseCase } from "@enum/useCase";
 import { AddDestinationUI } from "./interface";
 
 function AddDestination() {
@@ -41,6 +42,7 @@ function AddDestination() {
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination(
+    UseCase.ADD,
     appData.businessUnit.publicCode,
     appData.user.userAccount,
     showRequestProcessModal,

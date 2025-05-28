@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { decrypt } from "@utils/crypto/decrypt";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
+import { validateAndTrimString } from "@utils/validateAndTrimString";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { usePortalData } from "../../staffPortal/usePortalData";
 import { useBusinessManagers } from "../../staffPortal/useBusinessManagers";
@@ -52,7 +53,7 @@ const useValidatingLoginInformation = () => {
       urlLogo: businessUnitData?.urlLogo ?? "",
     },
     user: {
-      userAccount: user?.email ?? "",
+      userAccount: validateAndTrimString(user?.email ?? "") ?? "",
       userName: user?.name ?? "",
     },
   });

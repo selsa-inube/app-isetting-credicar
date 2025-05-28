@@ -1,9 +1,9 @@
 import { AxiosRequestConfig } from "axios";
 
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IEnumerators } from "@ptypes/IEnumerators";
-import { mapEnumMoneyDestinationToEntities } from "./mappers";
+import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getEnumerators = async (
   enumCredicar: string,
@@ -16,11 +16,11 @@ const getEnumerators = async (
     },
   };
   const data: IEnumerators[] = await getWithRetries<IEnumerators[]>(
-    axiosInstance,
+    credicarAxiosInstance,
     `/enumerators/${enumCredicar}`,
     config,
   );
-  return Array.isArray(data) ? mapEnumMoneyDestinationToEntities(data) : [];
+  return Array.isArray(data) ? mapEnumToEntities(data) : [];
 };
 
 export { getEnumerators };

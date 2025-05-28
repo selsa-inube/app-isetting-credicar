@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { ICondition, IRuleDecision } from "@isettingkit/input";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
@@ -76,7 +77,7 @@ const useEditDestination = (
     evaluateRuleData?.map((item) => {
       return {
         ...item,
-        conditionThatEstablishesTheDecision:
+        conditionsThatEstablishesTheDecision:
           item.conditionsThatEstablishesTheDecision?.map((condition) => {
             return {
               ...condition,
@@ -103,7 +104,7 @@ const useEditDestination = (
             !findDecision(prevCreditLineDecisionsRef.current, decision),
         )
         .map((decision) => {
-          const decisionByRule: IRuleDecision = {
+          const decisionsByRule: IRuleDecision = {
             conditionsThatEstablishesTheDecision:
               decision.conditionsThatEstablishesTheDecision?.map(
                 (condition) => {
@@ -120,14 +121,15 @@ const useEditDestination = (
           };
 
           if (decision.validUntil) {
-            decisionByRule.validUntil = formatDateDecision(
+            decisionsByRule.validUntil = formatDateDecision(
               decision.validUntil as string,
             );
           }
 
           return {
+            modifyJustification: `La modificación de la decisión es solicitada por ${appData.user.userAccount}`,
             ruleName: decision.ruleName,
-            decisionByRule: [decisionByRule],
+            decisionsByRule: [decisionsByRule],
           };
         });
     }
@@ -138,7 +140,7 @@ const useEditDestination = (
       return prevCreditLineDecisionsRef.current
         .filter((decision) => !findDecision(creditLineDecisions, decision))
         .map((decision: IRuleDecision) => {
-          const decisionByRule: IRuleDecision = {
+          const decisionsByRule: IRuleDecision = {
             conditionsThatEstablishesTheDecision:
               decision.conditionsThatEstablishesTheDecision?.map(
                 (condition) => {
@@ -155,14 +157,15 @@ const useEditDestination = (
           };
 
           if (decision.validUntil) {
-            decisionByRule.validUntil = formatDateDecision(
+            decisionsByRule.validUntil = formatDateDecision(
               decision.validUntil as string,
             );
           }
 
           return {
+            modifyJustification: `La modificación de la decisión es solicitada por ${appData.user.userAccount}`,
             ruleName: decision.ruleName,
-            decisionByRule: [decisionByRule],
+            decisionsByRule: [decisionsByRule],
           };
         });
     }
@@ -187,12 +190,14 @@ const useEditDestination = (
 
     const configurationRequestData: {
       moneyDestinationId: string;
+      modifyJustification: string;
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
       rules?: IRuleDecision[];
     } = {
       moneyDestinationId: data.id,
+      modifyJustification: `La modificación del destino de dinero es solicitada por ${appData.user.userAccount}`,
     };
 
     if (currentValues?.nameDestination !== undefined && valuesUpdatedName) {
@@ -255,6 +260,8 @@ const useEditDestination = (
     setCreditLineDecisions(normalizeEvaluateRuleData ?? []);
   };
 
+  const smallScreen = useMediaQuery("(max-width: 990px)");
+
   return {
     creditLineDecisions,
     normalizeEvaluateRuleData,
@@ -267,6 +274,7 @@ const useEditDestination = (
     saveData,
     showRequestProcessModal,
     showModal,
+    smallScreen,
     handleReset,
     onSubmit,
     setCreditLineDecisions,

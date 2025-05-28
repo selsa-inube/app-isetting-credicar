@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { mapMoneyDestinationToEntities } from "./mappers";
 import { translateObject } from "@isettingkit/business-rules";
 import { enviroment } from "@config/environment";
@@ -16,11 +16,9 @@ const getMoneyDestinationData = async (
     },
   };
 
-  const data = await getWithRetries<IMoneyDestinationData[]>(
-    axiosInstance,
-    `/money-destinations`,
-    config,
-  );
+  const data: IMoneyDestinationData[] = await getWithRetries<
+    IMoneyDestinationData[]
+  >(credicarAxiosInstance, `/money-destinations`, config);
 
   const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
 

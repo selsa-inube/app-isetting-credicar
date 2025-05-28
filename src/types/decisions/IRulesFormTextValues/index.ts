@@ -12,8 +12,8 @@ interface IRulesFormTextValues {
   selectOption: string;
   selectOptions: string;
   termEnd: string;
-  terms: string;
   termStart: string;
+  terms?: string;
 }
 
 export type { IRulesFormTextValues };

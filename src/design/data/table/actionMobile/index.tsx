@@ -2,16 +2,12 @@ import { useEffect, useState, useRef } from "react";
 import { MdPending } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 
-import { ActionsModal } from "@design/modals/actionsModal";
 import { eventBus } from "@events/eventBus";
+import { ActionsModal } from "@design/modals/actionsModal";
 import { useOutsideClick } from "@hooks/useOutsideClick";
-import { IAction, IEntry } from "../types";
+import { ComponentAppearance } from "@enum/appearances";
+import { IActionMobile } from "@ptypes/design/IActionMobile";
 import { StyledContainer, StyledContainerIcon } from "./styles";
-
-interface IActionMobile {
-  actions: IAction[];
-  entry: IEntry;
-}
 
 const ActionMobile = (props: IActionMobile) => {
   const { actions, entry } = props;
@@ -41,21 +37,26 @@ const ActionMobile = (props: IActionMobile) => {
   const handleToggleModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
-  useOutsideClick(modalRef, isSecondModalOpen, isThirdModalOpen, () => {
-    if (!isSecondModalOpen) {
-      handleCloseModal();
-    }
+  useOutsideClick({
+    primaryRef: modalRef,
+    isSecondModalOpen: isSecondModalOpen,
+    isThirdModalOpen: isThirdModalOpen,
+    callback: () => {
+      if (!isSecondModalOpen) {
+        handleCloseModal();
+      }
 
-    if (!isThirdModalOpen) {
-      handleCloseModal();
-    }
+      if (!isThirdModalOpen) {
+        handleCloseModal();
+      }
+    },
   });
 
   return (
     <StyledContainer>
       <StyledContainerIcon>
         <Icon
-          appearance="primary"
+          appearance={ComponentAppearance.PRIMARY}
           icon={<MdPending />}
           size="20px"
           onClick={handleToggleModal}
@@ -76,4 +77,3 @@ const ActionMobile = (props: IActionMobile) => {
 };
 
 export { ActionMobile };
-export type { IActionMobile };

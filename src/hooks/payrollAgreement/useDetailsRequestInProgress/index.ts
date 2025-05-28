@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { IEntry } from "@design/data/table/types";
 import { eventBus } from "@events/eventBus";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { mediaQueryMobile } from "@config/environment";
 import { TransactionOperation } from "@enum/transactionOperation";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
 import { IUseDetailsRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseDetailsRequestInProgress";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const { data } = props;
@@ -22,11 +22,13 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     id: data.id,
     request: data.useCaseName,
     responsable: "",
+    dateExecution: data.requestDate,
     payrollForDeductionAgreementType: normalizeEnumName(
       data.configurationRequestData.payrollForDeductionAgreementType,
     ),
     numberOfDaysForReceivingTheDiscounts:
-      data.configurationRequestData.numberOfDaysForReceivingTheDiscounts,
+      data.configurationRequestData.numberOfDaysForReceivingTheDiscounts ??
+      data.configurationRequestData.applicationDaysPayroll,
     legalPersonName: data.configurationRequestData.legalPersonName,
     status: data.requestStatus,
     traceability: data.configurationRequestsTraceability.map(
@@ -37,6 +39,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         description: traceability.description,
       }),
     ),
+    sourcesOfIncome: data.configurationRequestData.sourcesOfIncome,
     regularCyclesEliminated: [],
     regularCyclesIncluded: [],
     payrollSpecialBenCyclesIncluded: [],

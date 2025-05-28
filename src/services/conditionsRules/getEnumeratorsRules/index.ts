@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IDecision } from "@ptypes/decisions/IDecision";
 import { mapEnumeratorsRulesApiToEntity } from "./mappers";
 
@@ -16,7 +16,7 @@ const getEnumeratorsRules = async (
     },
   };
   const data: IDecision = await getWithRetries<IDecision>(
-    axiosInstance,
+    credicarAxiosInstance,
     `/enums/business-rules-catalog/${ruleName}`,
     config,
   );

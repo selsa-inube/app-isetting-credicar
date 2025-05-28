@@ -1,22 +1,17 @@
 import { useContext } from "react";
 
 import { DeleteRecord } from "@design/feedback/DeleteRecord";
-import { IEntry } from "@design/data/table/types";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ComponentAppearance } from "@enum/appearances";
-import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
-import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
 import { deletePayrollAgreModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletePayrollAgreModal";
 import { useDeletePayroll } from "@hooks/payrollAgreement/useDeletePayroll";
-
-interface IDelete {
-  data: IEntry;
-  setEntryDeleted: (id: string | number) => void;
-}
+import { IDelete } from "@ptypes/payrollAgreement/IDelete";
+import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestProcessMessage";
+import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
 const Delete = (props: IDelete) => {
   const { data } = props;
@@ -31,28 +26,25 @@ const Delete = (props: IDelete) => {
     setShowRequestProcessModal,
     setShowModal,
     setShowPendingReq,
-  } = useDeletePayroll(data, appData);
+  } = useDeletePayroll({ data, appData });
 
   const {
     savePayrollAgreement,
     requestSteps,
-    showPendingReqModal,
     loadingSendData,
+    showRequestProcess,
+    showRequestStatus,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
-  } = useSavePayrollAgreement(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSavePayrollAgreement({
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
     setShowPendingReq,
-  );
-
-  const showRequestProcess = showRequestProcessModal && savePayrollAgreement;
-  const showRequestStatus =
-    showPendingReqModal && savePayrollAgreement?.requestNumber;
+  });
 
   return (
     <>
@@ -77,16 +69,16 @@ const Delete = (props: IDelete) => {
       {showRequestStatus && (
         <RequestStatusModal
           portalId="portal"
-          title={requestStatusMessage(savePayrollAgreement.responsible).title}
+          title={requestStatusMessage(savePayrollAgreement?.staffName).title}
           description={
-            requestStatusMessage(savePayrollAgreement.responsible).description
+            requestStatusMessage(savePayrollAgreement?.staffName).description
           }
-          requestNumber={savePayrollAgreement.requestNumber}
+          requestNumber={savePayrollAgreement?.requestNumber ?? ""}
           onClick={handleClosePendingReqModal}
           onCloseModal={handleClosePendingReqModal}
-          isLoading={false}
+          loading={false}
           actionText={
-            requestStatusMessage(savePayrollAgreement.responsible).actionText
+            requestStatusMessage(savePayrollAgreement?.staffName).actionText
           }
           appearance={ComponentAppearance.PRIMARY}
         />

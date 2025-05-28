@@ -1,13 +1,9 @@
 import { Th } from "@inubekit/inubekit";
-import { IAction } from "../types";
+import { IShowActionTitle } from "@ptypes/design/IShowActionTitle";
 import { useTranslation } from "react-i18next";
 
-const ShowActionTitle = (
-  numberActions: number,
-  mediaQuery: boolean,
-  actionTitle: IAction[],
-  title?: boolean,
-) => {
+const ShowActionTitle = (props: IShowActionTitle) => {
+  const { numberActions, mediaQuery, actionTitle, title } = props;
   const { t } = useTranslation();
   return title ? (
     actionTitle.map((action) => (

@@ -2,29 +2,33 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
-import { postSaveRequest } from "@services/saveRequest/postSaveRequest";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
-import { requestStepsInitial } from "@config/moneyDestination/addDestination/requestSteps";
+
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { getRequestInProgressById } from "@services/moneyDestination/getRequestInProgressById";
-import { flowAutomaticMessages } from "@config/moneyDestination/moneyDestinationTab/generics/flowAutomaticMessages";
-import { interventionHumanMessage } from "@config/moneyDestination/moneyDestinationTab/generics/interventionHumanMessage";
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
-import { ChangeToRequestTab } from "@context/changeToRequestTab";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { IUseSavePayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseSavePayrollAgreement";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
+import { requestStepsInitial } from "@config/requestSteps";
+import { getRequestInProgressById } from "@services/requestInProgress/getRequestInProgressById";
+import { flowAutomaticMessages } from "@config/payrollAgreement/payrollAgreementTab/generic/flowAutomaticMessages";
+import { interventionHumanMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/interventionHumanMessage";
+import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 
-const useSavePayrollAgreement = (
-  bussinesUnits: string,
-  userAccount: string,
-  sendData: boolean,
-  data: ISaveDataRequest,
-  setSendData: React.Dispatch<React.SetStateAction<boolean>>,
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
-  setShowPendingReq?: React.Dispatch<React.SetStateAction<boolean>>,
-  setErrorFetchSaveData?: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
+  const {
+    bussinesUnits,
+    userAccount,
+    sendData,
+    data,
+    setSendData,
+    setShowModal,
+    setShowPendingReq,
+    setErrorFetchSaveData,
+  } = props;
+
   const [savePayrollAgreement, setSavePayrollAgreement] =
     useState<ISaveDataResponse>();
   const [statusRequest, setStatusRequest] = useState<string>();
@@ -236,11 +240,26 @@ const useSavePayrollAgreement = (
     handleStatusChange();
   }, [statusRequest]);
 
+  const showRequestProcess = sendData && savePayrollAgreement;
+  const showRequestStatus =
+    showPendingReqModal && savePayrollAgreement?.requestNumber;
+
+  const {
+    title: titleRequest,
+    description: descriptionRequest,
+    actionText: actionTextRequest,
+  } = requestStatusMessage(savePayrollAgreement?.staffName);
+
   return {
     savePayrollAgreement,
     requestSteps,
     showPendingReqModal,
     loadingSendData,
+    showRequestProcess,
+    showRequestStatus,
+    titleRequest,
+    descriptionRequest,
+    actionTextRequest,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   };

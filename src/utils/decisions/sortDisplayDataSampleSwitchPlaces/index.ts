@@ -14,7 +14,7 @@ const sortDisplayDataSampleSwitchPlaces = (decision: IRuleDecision) => {
       decisionDataType: conditionToDisplay.conditionDataType,
       value: conditionToDisplay.value,
       howToSetTheDecision: conditionToDisplay.howToSetTheCondition,
-      conditionThatEstablishesTheDecision:
+      conditionsThatEstablishesTheDecision:
         data.conditionsThatEstablishesTheDecision!.map((condition) =>
           condition.conditionName === conditionToDisplay.conditionName
             ? { ...condition, hidden: true }

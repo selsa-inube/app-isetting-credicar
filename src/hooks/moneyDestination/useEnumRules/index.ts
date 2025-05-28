@@ -69,7 +69,11 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   };
 
   useEffect(() => {
-    if (ruleData.listOfPossibleValues && !hasFetchedListValuesDecision) {
+    if (
+      ruleData.listOfPossibleValues &&
+      !hasFetchedListValuesDecision &&
+      enumRuleData.listOfPossibleValues
+    ) {
       fetchListValuesDecision(enumRuleData.listOfPossibleValues as string);
       setHasFetchedListValuesDecision(true);
     }

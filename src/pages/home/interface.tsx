@@ -1,50 +1,30 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MdOutlineChevronRight, MdOutlineDoorFront } from "react-icons/md";
-import { Icon, useMediaQueries, Header } from "@inubekit/inubekit";
+import { Icon, Header, Text, inube } from "@inubekit/inubekit";
 
 import { AppCard } from "@design/feedback/appCard";
 import { Title } from "@design/data/title";
 import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
-import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
-import { mainNavigation } from "@config/mainNavigation";
 import { userMenu } from "@config/menuMainConfiguration";
-import { homeConfig } from "@config/home";
-import { ICardData } from "@ptypes/home/ICardData";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
+import { IHomeUI } from "@ptypes/home/IHomeUI";
+import { ComponentAppearance } from "@enum/appearances";
+import { RenderLogo } from "@design/feedback/renderLogo";
+import { homeLabels } from "@config/home/homeLabels";
+import { BoxContainer } from "@design/layout/boxContainer";
+import { tokens } from "@design/tokens";
+import { useThemeData } from "@utils/theme";
 import {
   StyledCollapse,
   StyledCollapseIcon,
-  StyledContainer,
-  StyledContainerCards,
-  StyledContainerSection,
-  StyledContentImg,
   StyledFooter,
   StyledHeaderContainer,
   StyledLogo,
   StyledTitle,
 } from "./styles";
+import { homeConfig } from "@config/home";
 
-interface IHomeUI {
-  appData: IAppData;
-  businessUnitChangeRef: React.RefObject<HTMLDivElement>;
-  businessUnitsToTheStaff: IBusinessUnitsPortalStaff[];
-  collapse: boolean;
-  collapseMenuRef: React.RefObject<HTMLDivElement>;
-  selectedClient: string;
-  handleLogoClick: (businessUnit: IBusinessUnitsPortalStaff) => void;
-  setCollapse: (value: boolean) => void;
-  loading: boolean;
-  data: ICardData[];
-}
-
-const renderLogo = (imgUrl: string) => {
-  return (
-    <StyledContentImg to="/">
-      <StyledLogo src={imgUrl} />
-    </StyledContentImg>
-  );
-};
-
-function HomeUI(props: IHomeUI) {
+const HomeUI = (props: IHomeUI) => {
+  const theme = useThemeData();
   const {
     data,
     appData,
@@ -54,36 +34,41 @@ function HomeUI(props: IHomeUI) {
     collapseMenuRef,
     selectedClient,
     loading,
+    username,
+    screenMobile,
+    screenTablet,
+    screenTabletHeader,
+    hasMultipleBusinessUnits,
+    optionsHeader,
+    dataExists,
     setCollapse,
     handleLogoClick,
   } = props;
-  const username = appData.user.userName.split(" ")[0];
-  const config = homeConfig(username);
-  const {
-    "(max-width: 532px)": screenMobile,
-    "(max-width: 805px)": screenTablet,
-    "(max-width: 944px)": screenTabletHeader,
-  }: Record<string, boolean> = useMediaQueries([
-    "(max-width: 532px)",
-    "(max-width: 805px)",
-    "(max-width: 944px)",
-  ]);
 
   return (
     <>
-      <StyledContainer>
+      <BoxContainer
+        direction="column"
+        boxSizing="border-box"
+        padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`}
+        height="100vh"
+        overflowY="auto"
+        backgroundColor={
+          theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
+        }
+      >
         <StyledHeaderContainer>
           <Header
-            portalId="portal"
-            navigation={mainNavigation(data)}
-            logoURL={renderLogo(appData.businessUnit.urlLogo)}
+            navigation={optionsHeader as any}
+            logoURL={<RenderLogo imgUrl={appData.businessUnit.urlLogo} />}
             user={{
               username: appData.user.userName,
               breakpoint: "848px",
             }}
             menu={userMenu}
+            portalId={""}
           />
-          {businessUnitsToTheStaff.length > 1 && (
+          {hasMultipleBusinessUnits && (
             <>
               <StyledCollapseIcon
                 $collapse={collapse}
@@ -93,7 +78,7 @@ function HomeUI(props: IHomeUI) {
               >
                 <Icon
                   icon={<MdOutlineChevronRight />}
-                  appearance="primary"
+                  appearance={ComponentAppearance.PRIMARY}
                   size="24px"
                   cursorHover
                 />
@@ -110,34 +95,62 @@ function HomeUI(props: IHomeUI) {
             </>
           )}
         </StyledHeaderContainer>
-        <StyledContainerSection $isMobile={screenMobile}>
+        <BoxContainer
+          direction="column"
+          padding={
+            screenMobile ? `${tokens.spacing.s200}` : `${tokens.spacing.s0}`
+          }
+          gap={screenMobile ? `${tokens.spacing.s300}` : `${tokens.spacing.s0}`}
+          backgroundColor={
+            theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
+          }
+          boxSizing="initial"
+        >
           <StyledTitle $isTablet={screenTablet}>
             <Title
-              title={config.title}
-              description={config.description}
+              title={homeConfig(username).title}
+              description={homeConfig(username).description}
               icon={<MdOutlineDoorFront />}
               sizeTitle="large"
             />
           </StyledTitle>
-          <StyledContainerCards $isTablet={screenTablet}>
-            {data?.map((card) => (
-              <AppCard
-                key={card.id}
-                label={card.publicCode}
-                description={card.description}
-                icon={card.icon}
-                url={card.url}
-                isLoading={loading}
-              />
-            ))}
-          </StyledContainerCards>
-        </StyledContainerSection>
+          <BoxContainer
+            direction="row"
+            boxSizing="border-box"
+            padding={
+              screenTablet
+                ? `${tokens.spacing.s0}`
+                : `${tokens.spacing.s0} ${tokens.spacing.s1400} ${tokens.spacing.s400} 170px`
+            }
+            justifyContent={screenTablet ? "center" : "flex-start"}
+            wrap="wrap"
+            gap={tokens.spacing.s400}
+            backgroundColor={
+              theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
+            }
+          >
+            {dataExists ? (
+              data?.map((card) => (
+                <AppCard
+                  key={card.id}
+                  label={card.publicCode}
+                  description={card.description}
+                  icon={card.icon}
+                  url={card.url}
+                  loading={loading}
+                />
+              ))
+            ) : (
+              <Text size="medium">{homeLabels.noData}</Text>
+            )}
+          </BoxContainer>
+        </BoxContainer>
         <StyledFooter $isMobile={screenMobile}>
           <StyledLogo src={appData.businessManager.urlBrand} />
         </StyledFooter>
-      </StyledContainer>
+      </BoxContainer>
     </>
   );
-}
+};
 
 export { HomeUI };

@@ -1,30 +1,28 @@
-import { useContext } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useHome } from "@hooks/useHome";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { decrypt } from "@utils/crypto/decrypt";
 import { ICardData } from "@ptypes/home/ICardData";
 import { HomeUI } from "./interface";
 
-function Home() {
-  const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
-  const portalId = localStorage.getItem("portalCode");
-  const staffPortalId = portalId ? decrypt(portalId) : "";
-
+const Home = () => {
   const {
     businessUnitChangeRef,
     businessUnitsToTheStaff,
     collapse,
     collapseMenuRef,
     selectedClient,
+    optionsCards,
+    loading,
+    appData,
+    username,
+    screenMobile,
+    screenTablet,
+    screenTabletHeader,
+    hasMultipleBusinessUnits,
+    dataExists,
+    optionsHeader,
     setCollapse,
     handleLogoClick,
   } = useHome();
-
-  const { optionsCards, loading } = useOptionsByBusinessUnit(
-    businessUnitSigla,
-    staffPortalId,
-  );
 
   return (
     <HomeUI
@@ -38,8 +36,15 @@ function Home() {
       setCollapse={setCollapse}
       handleLogoClick={handleLogoClick}
       loading={loading}
+      username={username}
+      screenMobile={screenMobile}
+      screenTablet={screenTablet}
+      screenTabletHeader={screenTabletHeader}
+      hasMultipleBusinessUnits={hasMultipleBusinessUnits}
+      dataExists={dataExists}
+      optionsHeader={optionsHeader as any}
     />
   );
-}
+};
 
 export { Home };

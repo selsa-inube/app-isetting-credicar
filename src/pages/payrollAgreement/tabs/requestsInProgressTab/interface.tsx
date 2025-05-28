@@ -1,4 +1,4 @@
-import { Input, inube, Stack } from "@inubekit/inubekit";
+import { inube, Searchfield, Stack, Text } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { IRequestsInProgressTabUI } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgressTabUI";
 import {
@@ -8,23 +8,32 @@ import {
 } from "@config/payrollAgreement/requestsInProgressTab/table";
 import { Table } from "@design/data/table";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { useThemeData } from "@utils/theme";
+import { tabLabels } from "@config/payrollAgreement/requestsInProgressTab/tabLabels";
 
 const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
   const {
     entries,
     searchrequestProgress,
     loading,
-    widthFirstColumn,
     smallScreen,
+    columnWidths,
+    pageLength,
     setEntryCanceled,
     onSearchrequestProgress,
   } = props;
 
+  const theme = useThemeData();
+
   return (
     <BoxContainer
-      backgroundColor={inube.palette.neutral.N0}
+      backgroundColor={
+        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
+      }
       boxSizing="initial"
-      borderColor={inube.palette.neutral.N40}
+      borderColor={
+        theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
+      }
       borderRadius={tokens.spacing.s100}
       width="auto"
       padding={smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`}
@@ -47,10 +56,11 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             }
           >
             <Stack justifyContent="center">
-              <Input
+              <Searchfield
                 name="searchrequestProgress"
                 id="searchrequestProgress"
-                placeholder="Palabra clave..."
+                label={tabLabels.search}
+                placeholder={tabLabels.placeholderSearch}
                 type="search"
                 size="compact"
                 value={searchrequestProgress}
@@ -60,6 +70,11 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
               />
             </Stack>
           </Stack>
+          <Stack>
+            <Text type="title" size="medium" appearance="dark">
+              {tabLabels.description}
+            </Text>
+          </Stack>
 
           <Table
             id="portal"
@@ -68,11 +83,9 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             actions={actionsConfig(setEntryCanceled)}
             breakpoints={breakPoints}
             filter={searchrequestProgress}
-            isLoading={loading}
-            columnWidths={
-              smallScreen ? [10, 20, 23] : [widthFirstColumn, 55, 23]
-            }
-            pageLength={8}
+            loading={loading}
+            columnWidths={columnWidths}
+            pageLength={pageLength}
           />
         </Stack>
       </Stack>

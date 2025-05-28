@@ -1,23 +1,16 @@
-import { IIconAppearance, useMediaQuery } from "@inubekit/inubekit";
+import {
+  Date,
+  Divider,
+  Icon,
+  Stack,
+  Text,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 import { ComponentAppearance } from "@enum/appearances";
-import { DecisionModalUI } from "./interface";
 import { mediaQueryMobile } from "@config/environment";
-
-interface IDecisionModal {
-  actionText: string;
-  description: string;
-  portalId: string;
-  title: string;
-  onClick: () => void;
-  onCloseModal: () => void;
-  appearance?: IIconAppearance;
-  icon?: React.JSX.Element;
-  isLoading?: boolean;
-  withIcon?: boolean;
-  withCancelButton?: boolean;
-  moreDetails?: string;
-  sizeIcon?: string;
-}
+import { tokens } from "@design/tokens";
+import { IDecisionModal } from "@ptypes/design/IDecisionModal";
+import { ModalWrapper } from "../modalWrapper";
 
 const DecisionModal = (props: IDecisionModal) => {
   const {
@@ -25,46 +18,75 @@ const DecisionModal = (props: IDecisionModal) => {
     icon = <></>,
     withIcon = false,
     description,
-    isLoading = false,
+    loading = false,
     sizeIcon = "60px",
-    portalId,
+    portalId = "portal",
     title,
     appearance = ComponentAppearance.PRIMARY,
     withCancelButton = true,
     moreDetails,
+    withDate,
+    onDateChange,
+    statusDate,
+    valueDate,
+    messageDate,
+    isDisabledButton = false,
+    onBlurDate,
     onClick,
     onCloseModal,
   } = props;
 
   const isMobile = useMediaQuery(mediaQueryMobile);
 
-  const node = document.getElementById(portalId);
-
-  if (!node) {
-    throw new Error(
-      "The portal node is not defined. This can occur when the specific node used to render the portal has not been defined correctly.",
-    );
-  }
-
   return (
-    <DecisionModalUI
-      actionText={actionText}
-      appearance={appearance}
-      description={description}
-      icon={icon}
-      isLoading={isLoading}
-      onClick={onClick}
-      onCloseModal={onCloseModal}
+    <ModalWrapper
+      portalId={portalId}
+      width={isMobile ? "335px" : "450px"}
       isMobile={isMobile}
+      labelActionButton={actionText}
+      labelCloseButton="Cancelar"
+      labelCloseModal="Cerrar"
       title={title}
-      withIcon={withIcon}
       withCancelButton={withCancelButton}
-      moreDetails={moreDetails}
-      node={node}
-      sizeIcon={sizeIcon}
-    />
+      onCloseModal={onCloseModal}
+      onClick={onClick}
+      loading={loading}
+      disabledActionButton={isDisabledButton}
+    >
+      {withIcon && (
+        <Stack width="100%" alignItems="center" justifyContent="center">
+          <Icon icon={icon} appearance={appearance} size={sizeIcon} />
+        </Stack>
+      )}
+
+      <Text appearance={ComponentAppearance.DARK} type="body" size="medium">
+        {description}
+      </Text>
+
+      {withDate && (
+        <Date
+          id="date"
+          name="date"
+          onChange={onDateChange}
+          status={statusDate}
+          value={valueDate}
+          size="compact"
+          message={messageDate}
+          fullwidth
+          onBlur={onBlurDate}
+        />
+      )}
+
+      {moreDetails && (
+        <Stack direction="column" gap={tokens.spacing.s200}>
+          <Divider dashed />
+          <Text size="medium" appearance="dark">
+            {moreDetails}
+          </Text>
+        </Stack>
+      )}
+    </ModalWrapper>
   );
 };
 
 export { DecisionModal };
-export type { IDecisionModal };

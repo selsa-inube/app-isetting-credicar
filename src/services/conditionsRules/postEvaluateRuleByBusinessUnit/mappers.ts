@@ -31,7 +31,7 @@ const mapEvaluateRuleByBusinessEntities = (
     validUntil: item.validUntil
       ? formatDate(new Date(item.validUntil))
       : undefined,
-    conditionThatEstablishesTheDecision:
+    conditionsThatEstablishesTheDecision:
       item.conditionsThatEstablishesTheDecision?.map((condition) => ({
         ...condition,
         labelName:

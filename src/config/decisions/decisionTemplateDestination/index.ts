@@ -12,7 +12,7 @@ const decisionTemplateConfig = (
   }: IRuleDecision,
   nameMoneyDestination: string,
 ) => {
-  if (labelName && decisionDataType && conditionsThatEstablishesTheDecision) {
+  if (labelName && decisionDataType) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
@@ -26,11 +26,15 @@ const decisionTemplateConfig = (
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
       conditionsThatEstablishesTheDecision:
-        conditionsThatEstablishesTheDecision.map((condition) => ({
+        conditionsThatEstablishesTheDecision?.map((condition) => ({
           conditionName: condition.conditionName,
-          labelName: dataTranslations[condition.labelName],
+          labelName:
+            dataTranslations[condition.labelName] ?? condition.labelName,
           conditionDataType: condition.conditionDataType,
-          value: nameMoneyDestination,
+          value:
+            condition.conditionName === "MoneyDestination"
+              ? nameMoneyDestination
+              : condition.value,
           listOfPossibleValues: condition.listOfPossibleValues,
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden: condition.conditionName === "MoneyDestination",

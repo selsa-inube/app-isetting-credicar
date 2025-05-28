@@ -1,11 +1,8 @@
 import { Col } from "@inubekit/inubekit";
-import { ITitle } from "@design/data/table/types";
+import { IWidthColmnsData } from "@ptypes/design/IWidthColmnsData";
 
-const WidthColmnsData = (
-  titleColumns: ITitle[],
-  widthPercentageTotalColumns?: number,
-  columnWidths?: number[],
-) => {
+const WidthColmnsData = (props: IWidthColmnsData) => {
+  const { titleColumns, widthPercentageTotalColumns, columnWidths } = props;
   const calculateSize = (totalWidth: number, length: number) =>
     totalWidth / length;
 

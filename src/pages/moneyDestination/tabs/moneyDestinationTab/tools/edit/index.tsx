@@ -1,6 +1,6 @@
-import { IEntry } from "@design/data/table/types";
 import { EditRecord } from "@design/feedback/editRecord";
 import { useEditDestinationConsultation } from "@hooks/moneyDestination/useEditDestinationConsultation";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IEdit {
   data: IEntry;

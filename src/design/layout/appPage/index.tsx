@@ -1,12 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from "react";
 import { Outlet } from "react-router-dom";
 import { MdOutlineChevronRight } from "react-icons/md";
-import { useAuth0 } from "@auth0/auth0-react";
-import { Icon, Grid, useMediaQuery, Header, Nav } from "@inubekit/inubekit";
+import { Icon, Grid, Header, Nav } from "@inubekit/inubekit";
 
 import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { mainNavigation } from "@config/mainNavigation";
 import { userMenu } from "@config/menuMainConfiguration";
 import { actionsConfig } from "@config/mainActionLogout";
 import { useAppPage } from "@hooks/design/useAppPage";
@@ -36,34 +35,33 @@ function AppPage() {
     setBusinessUnitSigla,
     businessUnitSigla,
   } = useContext(AuthAndPortalData);
-  const { logout } = useAuth0();
 
   const {
     collapse,
     collapseMenuRef,
-    optionsCards,
+    optionsHeader,
+    optionsNav,
+    isTablet,
+    isTabletMain,
     businessUnitChangeRef,
     selectedClient,
-    location,
     setCollapse,
     handleLogoClick,
   } = useAppPage(appData, businessUnitSigla, setBusinessUnitSigla);
-  const isTablet = useMediaQuery("(max-width: 849px)");
-  const isTabletMain = useMediaQuery("(max-width: 1000px)");
 
   return (
     <StyledAppPage>
       <Grid templateRows="auto 1fr" height="100vh" justifyContent="unset">
         <StyledHeaderContainer>
           <Header
-            portalId="portal"
-            navigation={mainNavigation(optionsCards)}
+            navigation={optionsHeader as any}
             user={{
               username: appData.user.userName,
               breakpoint: "848px",
             }}
             logoURL={renderLogo(appData.businessUnit.urlLogo)}
             menu={userMenu}
+            portalId={""}
           />
         </StyledHeaderContainer>
         {businessUnitsToTheStaff.length > 1 && (
@@ -99,10 +97,7 @@ function AppPage() {
             height={"95vh"}
           >
             {!isTablet && (
-              <Nav
-                navigation={mainNavigation(optionsCards, location).items}
-                actions={actionsConfig(logout)}
-              />
+              <Nav navigation={optionsNav} actions={actionsConfig()} />
             )}
             <StyledMain $isMobile={isTabletMain}>
               <Outlet />

@@ -15,8 +15,10 @@ import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { IModalWrapper } from "@ptypes/design/IModalWrapper";
+import { useThemeData } from "@utils/theme";
 
-function ModalWrapper(props: IModalWrapper) {
+const ModalWrapper = (props: IModalWrapper) => {
+  const theme = useThemeData();
   const {
     appearanceButton,
     children,
@@ -30,7 +32,8 @@ function ModalWrapper(props: IModalWrapper) {
     title,
     width = "auto",
     withCancelButton,
-    isLoading = false,
+    loading = false,
+    disabledActionButton = false,
     minHeight,
     maxHeight,
     onClick,
@@ -51,7 +54,9 @@ function ModalWrapper(props: IModalWrapper) {
         width={width}
         height={height}
         direction="column"
-        backgroundColor={inube.palette.neutral.N0}
+        backgroundColor={
+          theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0
+        }
         borderRadius={tokens.spacing.s100}
         padding={tokens.spacing.s300}
         gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
@@ -83,7 +88,12 @@ function ModalWrapper(props: IModalWrapper) {
           <Divider />
         </Stack>
 
-        <Stack height="100%" width="100%">
+        <Stack
+          height="100%"
+          width="100%"
+          direction="column"
+          gap={tokens.spacing.s200}
+        >
           {children}
         </Stack>
 
@@ -104,8 +114,9 @@ function ModalWrapper(props: IModalWrapper) {
             appearance={appearanceButton ?? ComponentAppearance.PRIMARY}
             variant="filled"
             onClick={onClick}
-            loading={isLoading}
+            loading={loading}
             iconBefore={iconBeforeButton ?? <></>}
+            disabled={disabledActionButton}
           >
             {labelActionButton}
           </Button>
@@ -114,7 +125,6 @@ function ModalWrapper(props: IModalWrapper) {
     </Blanket>,
     node,
   );
-}
+};
 
 export { ModalWrapper };
-export type { IModalWrapper };

@@ -1,41 +1,12 @@
-import { MdAddCircleOutline, MdOutlineWarningAmber } from "react-icons/md";
-import { IRuleDecision } from "@isettingkit/input";
+import { MdOutlineWarningAmber } from "react-icons/md";
 import { BusinessRules } from "@isettingkit/business-rules";
-import { Stack, useMediaQuery, Button } from "@inubekit/inubekit";
+import { Stack, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
-import { IMessageModal } from "@ptypes/decisions/IMessageModal";
-import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { DecisionModal } from "@design/modals/decisionModal";
+import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
 import { StyledContainer } from "./styles";
-
-interface IDecisionsFormUI {
-  attentionModal: IMessageModal;
-  decisions: IRuleDecision[];
-  decisionTemplate: IRuleDecision;
-  deleteModal: IMessageModal;
-  isModalOpen: boolean;
-  loading: boolean;
-  selectedDecision: IRuleDecision | null;
-  showAttentionModal: boolean;
-  showDeleteModal: boolean;
-  textValuesBusinessRules: IRulesFormTextValues;
-  hasChanges: boolean;
-  onButtonClick: () => void;
-  onPreviousStep: () => void;
-  onCloseModal: () => void;
-  onDelete: () => void;
-  onOpenModal: () => void;
-  onSubmitForm: (dataDecision: IRuleDecision) => void;
-  onToggleAttentionModal: () => void;
-  onToggleDeleteModal: (id: string) => void;
-  onSave: () => void;
-  handleReset: () => void;
-  editDataOption?: boolean;
-  titleContentAddCard?: string;
-  messageEmptyDecisions?: string;
-}
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
   const {
@@ -46,45 +17,31 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     isModalOpen,
     loading,
     selectedDecision,
-    showAttentionModal,
     showDeleteModal,
     textValuesBusinessRules,
-    editDataOption,
-    hasChanges,
     titleContentAddCard,
     messageEmptyDecisions,
+    isMobile,
+    saveButtonLabel,
+    cancelButtonLabel,
+    showDecisionModal,
+    disabledNext,
+    disabledPrevius,
+    cancelButton,
     onCloseModal,
     onDelete,
     onButtonClick,
     onOpenModal,
-    onPreviousStep,
     onSubmitForm,
     onToggleAttentionModal,
     onToggleDeleteModal,
     onSave,
-    handleReset,
   } = props;
-
-  const isMobile = useMediaQuery("(max-width: 990px)");
 
   return (
     <form>
       <Stack direction="column" gap={tokens.spacing.s300}>
         <StyledContainer $isMobile={isMobile}>
-          <Stack
-            justifyContent="flex-end"
-            alignItems="center"
-            gap={tokens.spacing.s250}
-          >
-            <Button
-              iconBefore={<MdAddCircleOutline />}
-              spacing="wide"
-              onClick={onOpenModal}
-              fullwidth={isMobile}
-            >
-              Agregar decisión
-            </Button>
-          </Stack>
           <BusinessRules
             decisions={decisions}
             textValues={textValuesBusinessRules}
@@ -104,28 +61,28 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
         <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
           <Button
             fullwidth={isMobile}
-            onClick={editDataOption ? handleReset : onPreviousStep}
+            onClick={cancelButton}
             appearance={ComponentAppearance.GRAY}
-            disabled={editDataOption ? !hasChanges : false}
+            disabled={disabledPrevius}
           >
-            {editDataOption ? "Cancelar" : "Anterior"}
+            {cancelButtonLabel}
           </Button>
 
           <Button
             fullwidth={isMobile}
             onClick={onSave}
             appearance={ComponentAppearance.PRIMARY}
-            disabled={editDataOption ? !hasChanges : false}
+            disabled={disabledNext}
           >
-            {editDataOption ? "Guardar" : "Siguiente"}
+            {saveButtonLabel}
           </Button>
         </Stack>
-        {showAttentionModal && (
+        {showDecisionModal && (
           <DecisionModal
             portalId="portal"
-            title={attentionModal.title}
-            description={attentionModal.description}
-            actionText={attentionModal.actionText}
+            title={attentionModal!.title}
+            description={attentionModal!.description}
+            actionText={attentionModal!.actionText}
             withIcon
             icon={<MdOutlineWarningAmber />}
             appearance={ComponentAppearance.WARNING}

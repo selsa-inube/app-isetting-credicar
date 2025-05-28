@@ -1,9 +1,9 @@
 import { inube, Stack } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { IEntry } from "@design/data/table/types";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { ILabel } from "@ptypes/ILabel";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { RenderDetailBox } from "./renderDetailBox";
 
 interface ITraceabilityCard {

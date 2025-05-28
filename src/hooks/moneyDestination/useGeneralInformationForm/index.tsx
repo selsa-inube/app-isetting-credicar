@@ -5,7 +5,7 @@ import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { normalizeNameDestination } from "@utils/destination/normalizeNameDestination";
@@ -14,6 +14,7 @@ import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { normalizeEditDestination } from "@utils/destination/normalizeEditDestination";
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
 import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
+import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
 
 const useGeneralInformationForm = (
   enumData: IEnumerators[],
@@ -198,16 +199,26 @@ const useGeneralInformationForm = (
     }
   };
 
+  const labelButtonNext = editDataOption
+    ? generalInfoLabels.saveButton
+    : generalInfoLabels.nextButton;
+
+  const buttonDisabledState = editDataOption
+    ? isDisabledButton && !loading
+    : isDisabledButton;
+
   return {
     autosuggestValue,
     optionsDestination,
     formik,
     isDisabledButton,
     icon,
+    labelButtonNext,
     handleChange,
     handleReset,
     valuesEqual,
     valuesEqualBoton,
+    buttonDisabledState,
   };
 };
 

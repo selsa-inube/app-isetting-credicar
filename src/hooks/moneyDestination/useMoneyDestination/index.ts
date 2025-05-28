@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
@@ -43,11 +44,18 @@ const useMoneyDestination = (bussinesUnits: string) => {
     setSearchMoneyDestination(e.target.value);
   };
 
+  const smallScreen = useMediaQuery("(max-width: 690px)");
+  const widthFirstColumn = smallScreen ? 64 : 25;
+
+  const columnWidths = [widthFirstColumn, 55];
+
   return {
     moneyDestination,
     hasError,
     searchMoneyDestination,
     loading,
+    smallScreen,
+    columnWidths,
     handleSearchMoneyDestination,
     setEntryDeleted,
   };

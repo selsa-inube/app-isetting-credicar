@@ -4,12 +4,12 @@ import { useAddPayrollAgreement } from "@hooks/payrollAgreement/useAddPayrollAgr
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { AddPayrollAgreementUI } from "./interface";
 
-function AddPayrollAgreement() {
+const AddPayrollAgreement = () => {
   const { appData } = useContext(AuthAndPortalData);
   const {
     currentStep,
@@ -39,7 +39,7 @@ function AddPayrollAgreement() {
     setShowModal,
     setShowRequestProcessModal,
     setSourcesOfIncomeValues,
-  } = useAddPayrollAgreement(appData);
+  } = useAddPayrollAgreement({ appData });
 
   const {
     savePayrollAgreement,
@@ -48,14 +48,14 @@ function AddPayrollAgreement() {
     showPendingReqModal,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
-  } = useSavePayrollAgreement(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSavePayrollAgreement({
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
-  );
+  });
 
   return (
     <AddPayrollAgreementUI
@@ -101,6 +101,6 @@ function AddPayrollAgreement() {
       setCurrentStep={setCurrentStep}
     />
   );
-}
+};
 
 export { AddPayrollAgreement };

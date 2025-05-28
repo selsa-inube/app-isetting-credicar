@@ -16,13 +16,14 @@ import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
 import { ComponentAppearance } from "@enum/appearances";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { IEntry } from "@design/data/table/types";
+
 import { StyledContainerButton, StyledModal } from "./styles";
 import { GeneralDataTab } from "./tabs/GeneralDataTab";
 import { CreditLineTab } from "./tabs/creditLineTab";
 import { IDetailsTabsConfig } from "./types";
 import { CreditLinesIncluded } from "./tabs/creditLinesIncluded";
 import { CreditLinesRemoved } from "./tabs/creditLinesRemoved";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IDetailsDestinationModalUI {
   data: IEntry;

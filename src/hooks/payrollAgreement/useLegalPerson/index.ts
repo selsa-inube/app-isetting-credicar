@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 
 import { ILegalPerson } from "@ptypes/payrollAgreement/payrollAgreementTab/ILegalPerson";
 import { getLegalPersonsData } from "@services/payrollAgreement/getLegalPersons";
+import { IUseLegalPerson } from "@ptypes/hooks/IUseLegalPerson";
 
-const useLegalPerson = (bussinesUnits: string) => {
+const useLegalPerson = (props: IUseLegalPerson) => {
+  const { bussinesUnits } = props;
   const [legalPersonData, setLegalPersonData] = useState<ILegalPerson[]>(
     [] as ILegalPerson[],
   );

@@ -2,7 +2,7 @@ import { IDecision } from "@ptypes/decisions/IDecision";
 
 const mapEnumeratorsRulesApiToEntity = (enumerator: IDecision): IDecision => {
   const enumeratorEntry: IDecision = {
-    conditionThatEstablishesTheDecision: Object(
+    conditionsThatEstablishesTheDecision: Object(
       enumerator.conditionThatEstablishesTheDecision,
     ),
     decisionDataType: enumerator.decisionDataType,

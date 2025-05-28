@@ -1,8 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
-import { ChangeToRequestTab } from "@context/changeToRequestTab";
+
 import { decrypt } from "@utils/crypto/decrypt";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { useTranslation } from "react-i18next";
 
 const useMoneryDestinationPage = (businessUnitSigla: string) => {
@@ -12,11 +13,10 @@ const useMoneryDestinationPage = (businessUnitSigla: string) => {
   const [isSelected, setIsSelected] = useState<string>();
 
   const { descriptionOptions: rawDescriptionOptions } =
-    useOptionsByBusinessUnit(
-      businessUnitSigla,
+    useOptionsByBusinessUnit({
+      businessUnit: businessUnitSigla,
       staffPortalId,
-      "Destinos de dinero",
-    );
+    });
   const translatedDescriptionOptions = {
     ...rawDescriptionOptions,
     id: t("moneyDestination.titlePage"),

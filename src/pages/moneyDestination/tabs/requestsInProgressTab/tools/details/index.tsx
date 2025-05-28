@@ -1,6 +1,5 @@
 import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
 import { useDetailsRequestInProgress } from "@hooks/moneyDestination/useDetailsRequestInProgress";
-import { IEntry } from "@design/data/table/types";
 import {
   decisionTemplate,
   textValuesBusinessRules,
@@ -8,6 +7,7 @@ import {
 import { useMoreDetailsRequestProgress } from "@hooks/moneyDestination/useMoreDetailsRequestProgress";
 import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/tabs";
 import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
+import { IEntry } from "@ptypes/design/table/IEntry";
 interface IDetails {
   data: IEntry;
 }
@@ -34,6 +34,7 @@ const Details = (props: IDetails) => {
     defaultSelectedTab,
     decisionDeleted,
     decisionInserted,
+    filteredDecisions,
   } = useDetailsDestinationModal(
     moreDetailsData,
     detailsTabsConfig,
@@ -50,7 +51,7 @@ const Details = (props: IDetails) => {
       showMoreDetailsModal={showMoreDetailsModal}
       detailsTabsConfig={detailsTabsConfig}
       decisionTemplate={decisionTemplate}
-      decisions={decisions}
+      decisions={filteredDecisions}
       textValuesBusinessRules={textValuesBusinessRules}
       onToggleMoreDetailsModal={onToggleMoreDetailsModal}
       isMoreDetails={isMoreDetails}

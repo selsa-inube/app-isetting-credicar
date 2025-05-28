@@ -16,7 +16,7 @@ const decisionTemplateConfig = ({
 
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
-      labelName: dataTranslations[labelName],
+      labelName: dataTranslations[labelName] ?? labelName,
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision: ValueHowToSetUp.EQUAL,

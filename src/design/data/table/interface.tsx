@@ -10,36 +10,13 @@ import {
   Thead,
   Tr,
 } from "@inubekit/inubekit";
-
-import { IAction, IEntry, ITitle } from "./types";
+import { ComponentAppearance } from "@enum/appearances";
+import { getAlignment } from "@utils/getAlignment/index.";
+import { ITableUI } from "@ptypes/design/table/ITableUI";
 import { WidthColmnsData } from "./widthColumns";
 import { ShowActionTitle } from "./showActionTitle";
 import { ShowAction } from "./showAction";
 import { DataLoading } from "./dataLoading";
-
-interface ITableUI {
-  actions: IAction[];
-  entriesLength: number;
-  entries: IEntry[];
-  filteredEntries: IEntry[];
-  firstEntryInPage: number;
-  isLoading: boolean;
-  lastEntryInPage: number;
-  pageLength: number;
-  titles: ITitle[];
-  mobileTitle?: string;
-  widthPercentageTotalColumns?: number;
-  columnWidths?: number[];
-  goToEndPage: () => void;
-  goToFirstPage: () => void;
-  nextPage: () => void;
-  prevPage: () => void;
-  mediaActionOpen: boolean;
-  numberActions: number;
-  TitleColumns: ITitle[];
-  emptyDataMessage?: string;
-  withActionsTitles?: boolean;
-}
 
 const TableUI = (props: ITableUI) => {
   const {
@@ -48,7 +25,7 @@ const TableUI = (props: ITableUI) => {
     entriesLength,
     filteredEntries,
     firstEntryInPage,
-    isLoading,
+    loading,
     lastEntryInPage,
     pageLength,
     titles,
@@ -66,13 +43,13 @@ const TableUI = (props: ITableUI) => {
   } = props;
 
   return (
-    <Table tableLayout={mediaActionOpen ? "auto" : "fixed"}>
+    <Table tableLayout="fixed">
       <Colgroup>
-        {WidthColmnsData(
-          TitleColumns,
+        {WidthColmnsData({
+          titleColumns: TitleColumns,
           widthPercentageTotalColumns,
           columnWidths,
-        )}
+        })}
       </Colgroup>
 
       <Thead>
@@ -82,17 +59,17 @@ const TableUI = (props: ITableUI) => {
               {title.titleName}
             </Th>
           ))}
-          {ShowActionTitle(
+          {ShowActionTitle({
             numberActions,
-            mediaActionOpen,
-            actions,
-            withActionsTitles,
-          )}
+            mediaQuery: mediaActionOpen,
+            actionTitle: actions,
+            title: withActionsTitles,
+          })}
         </Tr>
       </Thead>
       <Tbody>
-        {isLoading ? (
-          DataLoading(TitleColumns, numberActions)
+        {loading ? (
+          DataLoading({ titleColumns: TitleColumns, numberActions })
         ) : (
           <>
             {entriesLength === 0 ? (
@@ -118,19 +95,19 @@ const TableUI = (props: ITableUI) => {
                       {TitleColumns.map((title, index) => (
                         <Td
                           key={`${index}-${entry[title.id]}`}
-                          align={entry.action ? "center" : "left"}
+                          align={getAlignment(title.id, entry[title.id])}
                           type="custom"
                         >
-                          {typeof entry[title.id] !== "string" ? (
-                            entry[title.id]
-                          ) : (
-                            <Text type="body" size="small" ellipsis>
-                              {entry[title.id]}
-                            </Text>
-                          )}
+                          <Text size="small" ellipsis={true}>
+                            {entry[title.id]}
+                          </Text>
                         </Td>
                       ))}
-                      {ShowAction(actions, entry, mediaActionOpen)}
+                      {ShowAction({
+                        actionContent: actions,
+                        entry,
+                        mediaQuery: mediaActionOpen,
+                      })}
                     </Tr>
                   ))
                 ) : (
@@ -139,7 +116,7 @@ const TableUI = (props: ITableUI) => {
                       <Text
                         type="label"
                         size="large"
-                        appearance="dark"
+                        appearance={ComponentAppearance.DARK}
                         ellipsis
                       >
                         No hay resultados que coincidan con la búsqueda.

@@ -4,7 +4,7 @@ import { Icon, Text } from "@inubekit/inubekit";
 import { ComponentAppearance } from "@enum/appearances";
 import { labelsOfTraceability } from "@config/payrollAgreement/requestsInProgressTab/details/labelsOfTraceability";
 
-import { MoreDetails } from "@src/design/modals/moreDetails";
+import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsUI";
 import { StyledContainerIcon } from "./styles";
 import { RequestsInProcess } from "./requestsInProcess";

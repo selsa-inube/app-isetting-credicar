@@ -1,8 +1,7 @@
 import { IRuleDecision } from "@isettingkit/input";
-
-import { IEntry } from "@design/data/table/types";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { DetailsDestinationModalUI } from "./interface";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "./types";
 interface IDetailsDestinationModal {
   data: IEntry;

@@ -7,6 +7,7 @@ import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { tokens } from "@design/tokens";
 import { RequestProcessModal } from "@design/modals/requestProcessModal";
+import { noStaffName } from "@config/noStaffName";
 
 interface IRequestProcess {
   descriptionRequestProcess: {
@@ -37,6 +38,8 @@ const RequestProcess = (props: IRequestProcess) => {
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  const staffDisplayName = saveData?.staffName ?? noStaffName.label;
+
   return (
     <Stack
       direction="column"
@@ -59,25 +62,13 @@ const RequestProcess = (props: IRequestProcess) => {
         ) : (
           <RequestStatusModal
             portalId={portalId}
-            title={
-              descriptionRequestStatus(
-                saveData.responsible ?? "uno de nuestros funcionarios",
-              ).title
-            }
-            description={
-              descriptionRequestStatus(
-                saveData.responsible ?? "uno de nuestros funcionarios",
-              ).description
-            }
+            title={descriptionRequestStatus(staffDisplayName).title}
+            description={descriptionRequestStatus(staffDisplayName).description}
             requestNumber={saveData.requestNumber}
             onClick={onCloseRequestStatus}
             onCloseModal={onCloseRequestStatus}
-            isLoading={false}
-            actionText={
-              descriptionRequestStatus(
-                saveData.responsible ?? "uno de nuestros funcionarios",
-              ).actionText
-            }
+            loading={false}
+            actionText={descriptionRequestStatus(staffDisplayName).actionText}
             appearance={ComponentAppearance.PRIMARY}
           />
         ))}

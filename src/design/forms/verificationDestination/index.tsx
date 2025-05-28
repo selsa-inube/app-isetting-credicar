@@ -108,7 +108,7 @@ function VerificationForm(props: IVerificationForm) {
           actionText={finishModal.actionText}
           onCloseModal={onToggleModal}
           onClick={onFinishForm}
-          isLoading={loading}
+          loading={loading}
         />
       )}
       {showRequestProcessModal && saveMoneyDestination && (
@@ -125,16 +125,16 @@ function VerificationForm(props: IVerificationForm) {
       {showPendingReqModal && saveMoneyDestination.requestNumber && (
         <RequestStatusModal
           portalId="portal"
-          title={requestStatusMessage(saveMoneyDestination.responsible).title}
+          title={requestStatusMessage(saveMoneyDestination.staffName).title}
           description={
-            requestStatusMessage(saveMoneyDestination.responsible).description
+            requestStatusMessage(saveMoneyDestination.staffName).description
           }
           requestNumber={saveMoneyDestination.requestNumber}
           onClick={onClosePendingReqModal}
           onCloseModal={onClosePendingReqModal}
-          isLoading={false}
+          loading={false}
           actionText={
-            requestStatusMessage(saveMoneyDestination.responsible).actionText
+            requestStatusMessage(saveMoneyDestination.staffName).actionText
           }
           appearance={ComponentAppearance.PRIMARY}
         />

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { inube } from "@inubekit/inubekit";
-
 import { tokens } from "@design/tokens";
 
 const StyledContainer = styled.div`
@@ -11,7 +10,7 @@ const StyledContainer = styled.div`
   gap: ${tokens.spacing.s100};
   border-radius: ${tokens.spacing.s050};
   background-color: ${({ theme }) =>
-    theme.color?.surface?.gray?.regular ?? inube.palette.neutral.N30};
+    theme?.palette?.neutral.N30 ?? inube.palette.neutral.N30};
   cursor: pointer;
 `;
 

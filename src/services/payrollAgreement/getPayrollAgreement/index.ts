@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
-import { mapPayrollAgreementToEntities } from "./mappers";
+import { mapPayrollAgreementToEntities } from "./mappers/mapPayrollAgreementToEntities";
 
 const getPayrollAgreementData = async (
   bussinesUnits: string,
@@ -15,7 +15,7 @@ const getPayrollAgreementData = async (
   };
   const data: IPayrollAgreementData[] = await getWithRetries<
     IPayrollAgreementData[]
-  >(axiosInstance, `/payroll-for-deduction-agreement`, config);
+  >(credicarAxiosInstance, `/payroll-for-deduction-agreement`, config);
   return Array.isArray(data) ? mapPayrollAgreementToEntities(data) : [];
 };
 

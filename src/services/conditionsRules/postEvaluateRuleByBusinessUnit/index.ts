@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { IRuleDecision } from "@isettingkit/input";
 import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
 import { postWithRetries } from "@services/core/postWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { mapEvaluateRuleByBusinessEntities } from "./mappers";
 
 const evaluateRuleByBusinessUnit = async (
@@ -22,7 +22,7 @@ const evaluateRuleByBusinessUnit = async (
     `/crediboard-business-unit-rules`,
     config,
     rulesData as unknown as string[],
-    axiosInstance,
+    credicarAxiosInstance,
   );
 
   return mapEvaluateRuleByBusinessEntities(data);

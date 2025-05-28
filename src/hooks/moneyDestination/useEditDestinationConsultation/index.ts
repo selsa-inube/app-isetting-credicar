@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { IEntry } from "@design/data/table/types";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useEditDestinationConsultation = (data: IEntry) => {
   const navigate = useNavigate();

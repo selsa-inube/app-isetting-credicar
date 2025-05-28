@@ -13,7 +13,6 @@ import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementT
 import { typePayrollForCyclesExtraord } from "@config/payrollAgreement/payrollAgreementTab/assisted/typePayrollForCyclesExtraord";
 import { compareObjects } from "@utils/compareObjects";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { formatDate } from "@utils/date/formatDate";
 import { useEnumerators } from "@hooks/useEnumerators";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
@@ -25,9 +24,11 @@ import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreeme
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
 import { TransactionOperation } from "@enum/transactionOperation";
+import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
 import { useLegalPerson } from "../useLegalPerson";
 
-const useAddPayrollAgreement = (appData: IAppData) => {
+const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
+  const { appData } = props;
   const initialValues = {
     company: {
       isValid: false,
@@ -98,12 +99,14 @@ const useAddPayrollAgreement = (appData: IAppData) => {
     IServerDomain[]
   >([]);
 
-  const { enumData: incometype } = useEnumerators(
-    "incometype",
-    appData.businessUnit.publicCode,
-  );
+  const { enumData: incometype } = useEnumerators({
+    enumDestination: "incometype",
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
-  const { legalPersonData } = useLegalPerson(appData.businessUnit.publicCode);
+  const { legalPersonData } = useLegalPerson({
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   const navigate = useNavigate();
 
@@ -155,12 +158,11 @@ const useAddPayrollAgreement = (appData: IAppData) => {
           },
         }));
         setIsCurrentFormValid(generalInformationRef.current.isValid);
-        const typePayroll =
-          generalInformationRef.current.values.typePayroll &&
-          typePayrollForCyclesExtraord.includes(
-            generalInformationRef.current.values.typePayroll,
-          );
-        const stepOrdinaryCycles = typePayroll ? currentStep + 1 : 4;
+        const showOrdinary = typePayrollForCyclesExtraord.includes(
+          generalInformationRef.current.values.typePayroll,
+        );
+
+        const stepOrdinaryCycles = showOrdinary ? currentStep + 1 : 4;
         setCurrentStep(stepOrdinaryCycles);
       } else {
         setCurrentStep(currentStep + 1);

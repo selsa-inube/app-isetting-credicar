@@ -7,7 +7,7 @@ const payrollAgreementTabsConfig = {
   requestsInProgress: {
     id: "requestsInProgress",
     isDisabled: false,
-    label: "Nóminas de convenio en trámite de creación",
+    label: "Nóminas de convenio en trámite",
   },
 };
 

@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
+import { decisionsLabels } from "@config/decisions/decisionsLabels";
+import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 
 const useDecisionForm = (
   initialValues: IRuleDecision[],
@@ -9,10 +12,13 @@ const useDecisionForm = (
   ) => void,
   onButtonClick: () => void,
   setCreditLineDecisions: (decisions: IRuleDecision[]) => void,
-  setShowAttentionModal: React.Dispatch<React.SetStateAction<boolean>>,
-  showAttentionModal: boolean,
+  showAttentionModal?: boolean,
+  setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>,
   normalizeEvaluateRuleData?: IRuleDecision[],
   editDataOption?: boolean,
+  disabledButton?: boolean,
+  onPreviousStep?: () => void,
+  attentionModal?: IMessageModal,
 ) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
@@ -23,7 +29,7 @@ const useDecisionForm = (
   const [hasChanges, setHasChanges] = useState(false);
   const [savedDecisions, setSavedDecisions] = useState<IRuleDecision[]>([]);
 
-  const initialDecisions = useState(initialValues)[0];
+  const [initialDecisions] = useState<IRuleDecision[]>(initialValues);
 
   const handleOpenModal = () => {
     setSelectedDecision(null);
@@ -66,7 +72,7 @@ const useDecisionForm = (
       : {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,
-          conditionThatEstablishesTheDecision: updatedConditions,
+          conditionsThatEstablishesTheDecision: updatedConditions,
         };
 
     const updatedDecisions = isEditing
@@ -83,7 +89,7 @@ const useDecisionForm = (
   };
 
   const handleToggleAttentionModal = () => {
-    setShowAttentionModal(!showAttentionModal);
+    if (setShowAttentionModal) setShowAttentionModal(!showAttentionModal);
   };
 
   const handleToggleDeleteModal = (id: string) => {
@@ -129,7 +135,7 @@ const useDecisionForm = (
 
   useEffect(() => {
     if (
-      JSON.stringify(decisions) !== JSON.stringify(initialDecisions) ||
+      JSON.stringify(decisions) !== JSON.stringify(initialValues) ||
       JSON.stringify(normalizeEvaluateRuleData) !== JSON.stringify(decisions)
     ) {
       setHasChanges(true);
@@ -138,6 +144,29 @@ const useDecisionForm = (
     }
   }, [decisions, initialDecisions]);
 
+  const isMobile = useMediaQuery("(max-width: 990px)");
+
+  const saveButtonLabel = editDataOption
+    ? decisionsLabels.labelSaveButton
+    : decisionsLabels.labelNextButton;
+
+  const cancelButtonLabel = editDataOption
+    ? decisionsLabels.labelCancelButton
+    : decisionsLabels.labelPreviusButton;
+
+  const shouldShowAttentionModal = Boolean(
+    showAttentionModal && attentionModal,
+  );
+
+  const disabledNext = editDataOption ? !hasChanges : disabledButton;
+
+  const disabledPrevius = editDataOption ? !hasChanges : false;
+
+  const cancelButton = editDataOption ? handleReset : onPreviousStep;
+
+  const showDecisionModal =
+    shouldShowAttentionModal && attentionModal ? true : false;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -145,6 +174,14 @@ const useDecisionForm = (
     showDeleteModal,
     hasChanges,
     savedDecisions,
+    isMobile,
+    saveButtonLabel,
+    cancelButtonLabel,
+    shouldShowAttentionModal,
+    disabledNext,
+    disabledPrevius,
+    showDecisionModal,
+    cancelButton,
     handleOpenModal,
     handleCloseModal,
     handleSubmitForm,

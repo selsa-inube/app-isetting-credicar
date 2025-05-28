@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
-import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
+import { IUseRequestsInProgress } from "@ptypes/hooks/IUseRequestsInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const { bussinesUnits } = props;
@@ -49,11 +50,20 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     setSearchRequestsInProgress(e.target.value);
   };
 
+  const smallScreen = useMediaQuery("(max-width: 690px)");
+  const widthFirstColumn = smallScreen ? 60 : 14;
+
+  const columnWidths = smallScreen
+    ? [widthFirstColumn, 25, 23]
+    : [widthFirstColumn, 50, 23];
+
   return {
     requestsInProgress,
     hasError,
     searchRequestsInProgress,
     loading,
+    smallScreen,
+    columnWidths,
     handleSearchRequestsInProgress,
     setEntryCanceled,
   };

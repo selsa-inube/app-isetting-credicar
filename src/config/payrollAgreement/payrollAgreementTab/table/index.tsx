@@ -1,7 +1,9 @@
-import { IAction, IEntry, ITitle } from "@design/data/table/types";
 import { Delete } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/delete";
 import { Edit } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/edit";
 import { Details } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/details";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const titles: ITitle[] = [
   {

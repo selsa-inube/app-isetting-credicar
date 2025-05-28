@@ -6,24 +6,24 @@ import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreement
 import { normalizeEnumTranslationCode } from "@utils/normalizeEnumTranslationCode";
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
-import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
 import { getDatesFromDaysWeek } from "@utils/getDatesFromDaysWeek";
 import { getDaysWeekSelected } from "@utils/getDaysWeekSelected";
-import { areObjectsEqual } from "@utils/payrollAgreement/areObjectEqual";
+import { areObjectsEqual } from "@utils/areObjectEqual";
 import { getUniquePaydays } from "@utils/getUniqueDays";
 import { getDaysInNumber } from "@utils/getDaysInNumber";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
 import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
+import { IUseManagePayrollCycles } from "@ptypes/hooks/IUseManagePayrollCycles";
 
-const useManagePayrollCycles = (
-  initialData: IEditPayrollAgreementForms,
-  regularPaymentCycles: IOrdinaryCyclesEntry[],
-  isSelected: string,
-  extraordinaryPayment: IExtraordinaryCyclesEntry[],
-  setExtraordinaryPayment: React.Dispatch<
-    React.SetStateAction<IExtraordinaryCyclesEntry[]>
-  >,
-) => {
+const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
+  const {
+    initialData,
+    regularPaymentCycles,
+    isSelected,
+    extraordinaryPayment,
+    setExtraordinaryPayment,
+  } = props;
+
   const newObjRegularPayment = (
     newValues: IOrdinaryCyclesEntry[],
     transactionOperation: string,
