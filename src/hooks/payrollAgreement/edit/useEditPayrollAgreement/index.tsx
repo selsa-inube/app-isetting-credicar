@@ -32,6 +32,7 @@ import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncom
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { getDayPayment } from "@utils/getDayPayment";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
+import { jsonLabels } from "@src/config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const { data } = props;
@@ -331,7 +332,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       incomeTypes?: IIncomeTypes[];
     } = {
       payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
-      modifyJustification: `Solicitud de modificación de una nómina de convenio por ${appData.user.userAccount} `,
+      modifyJustification: jsonLabels(appData.user.userAccount)
+        .modifyJustification,
     };
 
     (

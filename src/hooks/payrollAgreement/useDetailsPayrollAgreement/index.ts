@@ -12,6 +12,7 @@ import { IEntry } from "@ptypes/design/table/IEntry";
 import { eventBus } from "@events/eventBus";
 import { getDayPayment } from "@utils/getDayPayment";
 import { dataTranslations } from "@utils/dataTranslations";
+import { getSourcesIncome } from "@utils/getSourcesIncome";
 
 const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
   const { data, detailsTabsConfig, showModalReq } = props;
@@ -28,7 +29,7 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     daysToDetermineDate:
       data.numberOfDaysForReceivingTheDiscounts ?? data.applicationDaysPayroll,
     company: data.payingEntityName,
-    paymentSources: data.sourcesOfIncome,
+    paymentSources: getSourcesIncome(data.incomeTypes),
   };
 
   const handleToggleModal = () => {
