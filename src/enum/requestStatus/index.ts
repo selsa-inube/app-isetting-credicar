@@ -8,6 +8,7 @@ enum RequestStatus {
   ProcessingRequest = "Procesando solicitud",
   RejectedRequest = "Solicitud rechazada",
   RequestReadyToProcess = "Solicitud lista para procesar",
+  RequestPendingProcessing = "Solicitud pendiente de procesamiento",
 }
 
 export { RequestStatus };

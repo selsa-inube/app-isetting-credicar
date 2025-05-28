@@ -19,7 +19,8 @@ const mapRequestsInProgressToEntity = (
     requestDate: formatDateTable(new Date(String(data.requestDate))),
     requestNumber: String(data.requestNumber),
     requestStatus:
-      RequestStatus[data.requestStatus as keyof typeof RequestStatus],
+      RequestStatus[data.requestStatus as keyof typeof RequestStatus] ??
+      data.requestStatus,
     settingRequestId: String(data.settingRequestId),
     useCaseName: String(data.useCaseName),
     userManagingConfigurationRequests: Object(
