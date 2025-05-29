@@ -49,6 +49,9 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     titleRequest,
     descriptionRequest,
     actionTextRequest,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
+    regularDeleted,
     setExtraordinaryPayment,
     setRegularPaymentCycles,
     onTabChange,
@@ -117,6 +120,8 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
                 setRegularPaymentCycles={setRegularPaymentCycles}
                 editDataOption
                 initialData={initialValues.ordinaryCycles.values}
+                setIncludeExtraPayDay={setIncludeExtraPayDay}
+                setRegularDeleted={setRegularDeleted}
               />
             )}
             {showExtraPaymentCyclesForm && (
@@ -130,6 +135,7 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
                 regularPaymentCycles={regularPaymentCycles}
                 initialData={initialValues.extraordinaryCycles.values}
                 editDataOption
+                regularDeleted={regularDeleted}
               />
             )}
           </Stack>

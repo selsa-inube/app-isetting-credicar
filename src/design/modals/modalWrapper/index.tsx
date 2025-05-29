@@ -24,7 +24,7 @@ const ModalWrapper = (props: IModalWrapper) => {
     children,
     height = "auto",
     iconBeforeButton,
-    isMobile,
+    isMobile = false,
     labelActionButton,
     labelCloseButton,
     labelCloseModal,
@@ -66,7 +66,11 @@ const ModalWrapper = (props: IModalWrapper) => {
       >
         <Stack direction="column" gap={tokens.spacing.s150}>
           <Grid templateColumns="1fr auto" templateRows="1fr">
-            <Text type="headline" size="small" appearance="dark">
+            <Text
+              type="headline"
+              size="small"
+              appearance={ComponentAppearance.DARK}
+            >
               {title}
             </Text>
 

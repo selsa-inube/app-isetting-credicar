@@ -85,11 +85,17 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const [regularPaymentCycles, setRegularPaymentCycles] = useState<
     IOrdinaryCyclesEntry[]
   >([]);
+  const [includeExtraPayDay, setIncludeExtraPayDay] = useState<
+    IOrdinaryCyclesEntry[]
+  >([]);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [extraordinaryPayment, setExtraordinaryPayment] = useState<
     IExtraordinaryCyclesEntry[]
   >([]);
+  const [regularDeleted, setRegularDeleted] = useState<IOrdinaryCyclesEntry[]>(
+    [],
+  );
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [typeRegularPayroll, setTypeRegularPayroll] = useState<boolean>(false);
   const [canRefresh, setCanRefresh] = useState(false);
@@ -176,8 +182,9 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
             values: regularPaymentCycles ?? [],
           },
         }));
+        const step = includeExtraPayDay.length === 0 ? 5 : currentStep + 1;
         setIsCurrentFormValid(true);
-        setCurrentStep(currentStep + 1);
+        setCurrentStep(step);
       }
 
       if (currentStep === 4) {
@@ -201,6 +208,12 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
 
     if (currentStep === 4) {
       const stepOrdinaryCycles = typeRegularPayroll ? currentStep - 1 : 2;
+      setCurrentStep(stepOrdinaryCycles);
+    }
+
+    if (currentStep === 5) {
+      const stepOrdinaryCycles =
+        includeExtraPayDay.length === 0 ? 3 : currentStep - 1;
       setCurrentStep(stepOrdinaryCycles);
     }
   };
@@ -389,10 +402,14 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     showModal,
     showRequestProcessModal,
     saveData,
+    includeExtraPayDay,
+    regularDeleted,
+    setIncludeExtraPayDay,
     handleToggleModal,
     setExtraordinaryPayment,
     setSourcesOfIncomeValues,
     setRegularPaymentCycles,
+    setRegularDeleted,
     handleNextStep,
     handlePreviousStep,
     setCurrentStep,

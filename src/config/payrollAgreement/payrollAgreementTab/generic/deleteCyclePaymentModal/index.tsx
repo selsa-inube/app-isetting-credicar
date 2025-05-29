@@ -1,7 +1,7 @@
 const deleteCyclePaymentModal = {
-  title: "Eliminación",
-  description: " ¿Realmente quieres eliminar este ciclo de pago?",
-  actionText: "Eliminar",
+  title: "Quitar",
+  description: " ¿Realmente quieres quitar este ciclo de pago?",
+  actionText: "Quitar",
 };
 
 export { deleteCyclePaymentModal };

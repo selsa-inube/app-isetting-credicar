@@ -12,8 +12,11 @@ interface ITableUI {
   lastEntryInPage: number;
   pageLength: number;
   titles: ITitle[];
+  withActionMobile: boolean;
+  withGeneralizedTitle: boolean;
   mobileTitle?: string;
   widthPercentageTotalColumns?: number;
+  tableLayout: "fixed" | "auto";
   columnWidths?: number[];
   goToEndPage: () => void;
   goToFirstPage: () => void;

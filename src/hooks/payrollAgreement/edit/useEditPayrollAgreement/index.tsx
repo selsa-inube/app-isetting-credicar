@@ -130,6 +130,11 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const [sourcesOfIncomeValues, setSourcesOfIncomeValues] = useState<
     IServerDomain[]
   >([]);
+  const [regularDeleted, setRegularDeleted] = useState<IOrdinaryCyclesEntry[]>(
+    [],
+  );
+  const [includeExtraPayDay, setIncludeExtraPayDay] =
+    useState<IOrdinaryCyclesEntry[]>();
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -410,6 +415,10 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     description,
     actionText,
     moreDetails,
+    regularDeleted,
+    includeExtraPayDay,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
     handleToggleDeletedAlertModal,
     setExtraordinaryPayment,
     setRegularPaymentCycles,

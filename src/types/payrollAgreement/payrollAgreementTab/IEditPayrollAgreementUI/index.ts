@@ -39,6 +39,13 @@ interface IEditPayrollAgreementUI {
   titleRequest: string;
   descriptionRequest: string;
   actionTextRequest: string;
+  setIncludeExtraPayDay: React.Dispatch<
+    React.SetStateAction<IOrdinaryCyclesEntry[]>
+  >;
+  setRegularDeleted: React.Dispatch<
+    React.SetStateAction<IOrdinaryCyclesEntry[]>
+  >;
+  regularDeleted: IOrdinaryCyclesEntry[];
   setExtraordinaryPayment: React.Dispatch<
     React.SetStateAction<IExtraordinaryCyclesEntry[]>
   >;

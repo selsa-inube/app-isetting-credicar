@@ -33,7 +33,6 @@ const RenderExtraordinaryVerification = (
           height="auto"
           templateColumns={columnsAttribute(values as IEntry[], isMobile)}
           templateRows={rowsAttribute(values as IEntry[], isMobile)}
-          gap={tokens.spacing.s200}
         >
           {values.map((item) => (
             <BoxAttribute

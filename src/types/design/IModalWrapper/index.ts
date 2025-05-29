@@ -2,7 +2,7 @@ import { ComponentAppearance } from "@enum/appearances";
 
 interface IModalWrapper {
   children: React.ReactNode;
-  isMobile: boolean;
+  isMobile?: boolean;
   labelActionButton: string;
   labelCloseModal: string;
   portalId: string;

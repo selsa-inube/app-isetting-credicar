@@ -36,6 +36,9 @@ const TableUI = (props: ITableUI) => {
     TitleColumns,
     emptyDataMessage,
     withActionsTitles,
+    tableLayout,
+    withActionMobile,
+    withGeneralizedTitle,
     goToEndPage,
     goToFirstPage,
     nextPage,
@@ -43,7 +46,7 @@ const TableUI = (props: ITableUI) => {
   } = props;
 
   return (
-    <Table tableLayout="fixed">
+    <Table tableLayout={tableLayout}>
       <Colgroup>
         {WidthColmnsData({
           titleColumns: TitleColumns,
@@ -64,6 +67,7 @@ const TableUI = (props: ITableUI) => {
             mediaQuery: mediaActionOpen,
             actionTitle: actions,
             title: withActionsTitles,
+            withGeneralizedTitle,
           })}
         </Tr>
       </Thead>
@@ -78,8 +82,7 @@ const TableUI = (props: ITableUI) => {
                   <Text
                     type="label"
                     size={mediaActionOpen ? "medium" : "large"}
-                    appearance="dark"
-                    ellipsis
+                    appearance={ComponentAppearance.DARK}
                   >
                     {emptyDataMessage
                       ? `${emptyDataMessage}`
@@ -107,6 +110,7 @@ const TableUI = (props: ITableUI) => {
                         actionContent: actions,
                         entry,
                         mediaQuery: mediaActionOpen,
+                        withActionMobile,
                       })}
                     </Tr>
                   ))

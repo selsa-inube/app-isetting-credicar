@@ -15,6 +15,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
 import { StyledFormContent } from "../styles";
 import { AddCycleModal } from "../../addCycleModal";
+import { FloatingAddButton } from "../../floatingAddButton";
 
 const ExtraordinaryPaymentCyclesFormUI = (
   props: IExtraordinaryPaymentCyclesFormUI,
@@ -76,27 +77,31 @@ const ExtraordinaryPaymentCyclesFormUI = (
               gap={tokens.spacing.s250}
               alignItems="end"
             >
-              <Button
-                fullwidth={isMobile}
-                iconBefore={<MdOutlineAdd />}
-                onClick={onToggleModal}
-                appearance={ComponentAppearance.PRIMARY}
-              >
-                {cyclespaymentLabels.titlePaymentCycle}
-              </Button>
+              {!isMobile && (
+                <Button
+                  iconBefore={<MdOutlineAdd />}
+                  onClick={onToggleModal}
+                  appearance={ComponentAppearance.PRIMARY}
+                >
+                  {cyclespaymentLabels.titlePaymentCycle}
+                </Button>
+              )}
 
               <Table
                 id="portal"
                 titles={titles}
                 entries={entries}
-                actions={actionsConfig(setEntryDeleted)}
+                actions={actionsConfig(setEntryDeleted, isMobile)}
                 breakpoints={breakPoints}
                 loading={loading}
                 columnWidths={columnWidths}
                 withActionsTitles
                 emptyDataMessage={cyclespaymentLabels.emptyDataMessage}
+                withActionMobile={false}
+                withGeneralizedTitle={true}
               />
             </Stack>
+            {isMobile && <FloatingAddButton onToggleModal={onToggleModal} />}
           </BoxContainer>
         </Stack>
       </StyledFormContent>

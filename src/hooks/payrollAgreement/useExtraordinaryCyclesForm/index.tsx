@@ -23,6 +23,9 @@ import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCycl
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { eventBus } from "@events/eventBus";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
+import { getUniquePaydays } from "@utils/getUniqueDays";
+import { getDaysInNumber } from "@utils/getDaysInNumber";
 
 const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const {
@@ -34,8 +37,8 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     onFormValid,
     extraordinaryPayment,
     setExtraordinaryPayment,
-
     regularPaymentCycles,
+    regularDeleted,
     initialData,
   } = props;
 
@@ -133,7 +136,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       );
       setDayOptions(options);
     }
-  }, [formik.values.month]);
+  }, [formik.values.month, regularPaymentCycles]);
 
   useEffect(() => {
     const updateButton = () => {
@@ -185,6 +188,53 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       );
     }
   }, [entryDeleted]);
+
+  const filterExtraordinaryPayment = () => {
+    const days = getUniquePaydays(regularDeleted);
+    const daysInNumber = getDaysInNumber(days);
+    const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
+
+    let verifyDays: number[] = [];
+    let lastDayOfMonth: number[] = [];
+
+    extraordinaryPayment.forEach((item) => {
+      const month = Number(item.payday?.slice(0, 2));
+      const paydayValue = Number(item.payday?.slice(-2));
+      lastDayOfMonth = getLastDayOfMonth(days, month - 1);
+
+      verifyDays = Array.from(new Set([...daysInNumber, ...lastDayOfMonth]));
+
+      const filteredRegularPaymentCycles = regularPaymentCycles?.flatMap(
+        (item) => {
+          const filteredPayday = item.payday
+            .split(",")
+            .map((payday) => Number(payday.trim()));
+          return filteredPayday.filter((payday) => verifyDays.includes(payday));
+        },
+      );
+
+      if ((filteredRegularPaymentCycles ?? []).length > 0) {
+        verifyDays = verifyDays.filter(
+          (day) => !(filteredRegularPaymentCycles ?? []).includes(day),
+        );
+      }
+
+      if (!verifyDays.includes(paydayValue)) {
+        filteredExtraordinary.push(item);
+      }
+    });
+
+    return {
+      filteredExtraordinary,
+    };
+  };
+
+  useEffect(() => {
+    if (regularDeleted && regularDeleted.length > 0) {
+      const { filteredExtraordinary } = filterExtraordinaryPayment();
+      setExtraordinaryPayment(filteredExtraordinary);
+    }
+  }, [regularDeleted]);
 
   const labelButtonPrevious = editDataOption
     ? cyclespaymentLabels.cancelButton

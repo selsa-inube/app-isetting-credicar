@@ -151,7 +151,7 @@ const AddCycleModal = (props: IAddCycleModal) => {
               </Stack>
               <Grid
                 gap={tokens.spacing.s075}
-                templateColumns={`repeat(${isMobile ? 1 : 2}, 1fr)`}
+                templateColumns={`repeat(2, 1fr)`}
                 autoRows="auto"
                 width="100%"
               >

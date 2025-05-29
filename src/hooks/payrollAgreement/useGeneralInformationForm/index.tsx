@@ -126,10 +126,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
 
   const gridTemplateRows = editDataOption
     ? isMobile
-      ? "repeat(5, 1fr)"
+      ? "repeat(5, auto"
       : "repeat(3, auto)"
     : isMobile
-      ? "repeat(4, 1fr)"
+      ? "repeat(4, auto)"
       : "repeat(2, 1fr)";
 
   const labelButtonPrevious = editDataOption

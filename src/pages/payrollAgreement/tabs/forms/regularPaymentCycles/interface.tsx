@@ -8,7 +8,6 @@ import {
   titles,
   actionsConfig,
 } from "@config/payrollAgreement/payrollAgreementTab/assisted/ordinaryCyclesTable";
-
 import { DecisionModal } from "@design/modals/decisionModal";
 import { IRegularPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IRegularPaymentCyclesFormUI";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
@@ -16,6 +15,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
 import { StyledFormContent } from "./styles";
 import { AddCycleModal } from "../../addCycleModal";
+import { FloatingAddButton } from "../../floatingAddButton";
 
 const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
   const {
@@ -61,6 +61,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
             backgroundColor={
               theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
             }
+            direction="column"
             boxSizing="initial"
             borderColor={
               theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
@@ -78,33 +79,36 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
               gap={tokens.spacing.s250}
               alignItems="end"
             >
-              <Button
-                fullwidth={isMobile}
-                iconBefore={<MdOutlineAdd />}
-                onClick={onToggleModal}
-                appearance={ComponentAppearance.PRIMARY}
-              >
-                {cyclespaymentLabels.titlePaymentCycle}
-              </Button>
+              {!isMobile && (
+                <Button
+                  iconBefore={<MdOutlineAdd />}
+                  onClick={onToggleModal}
+                  appearance={ComponentAppearance.PRIMARY}
+                >
+                  {cyclespaymentLabels.titlePaymentCycle}
+                </Button>
+              )}
 
               <Table
                 id="portal"
                 titles={titles}
                 entries={entries}
-                actions={actionsConfig(setEntryDeleted)}
+                actions={actionsConfig(setEntryDeleted, isMobile)}
                 breakpoints={breakPoints}
                 loading={loading}
                 columnWidths={columnWidths}
                 withActionsTitles
                 emptyDataMessage={cyclespaymentLabels.emptyDataMessage}
+                withActionMobile={false}
+                withGeneralizedTitle={true}
               />
             </Stack>
+            {isMobile && <FloatingAddButton onToggleModal={onToggleModal} />}
           </BoxContainer>
         </Stack>
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          fullwidth={isMobile}
           onClick={onPreviousStep}
           appearance={ComponentAppearance.GRAY}
           variant="outlined"
@@ -113,7 +117,6 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
         </Button>
 
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={disabledButtonNext}
           loading={loading}

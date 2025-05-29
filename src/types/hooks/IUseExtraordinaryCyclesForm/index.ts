@@ -10,6 +10,7 @@ interface IUseExtraordinaryCyclesForm {
   onSubmit: ((values: IExtraordinaryCyclesEntry) => void) | undefined;
   onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined;
   extraordinaryPayment: IExtraordinaryCyclesEntry[];
+  regularDeleted: IOrdinaryCyclesEntry[];
   setExtraordinaryPayment: React.Dispatch<
     React.SetStateAction<IExtraordinaryCyclesEntry[]>
   >;
