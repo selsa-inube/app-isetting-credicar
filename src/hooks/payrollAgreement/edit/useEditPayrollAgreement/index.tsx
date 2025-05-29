@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 
@@ -27,6 +27,7 @@ import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreement
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
@@ -170,8 +171,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     );
   }, [formValues.generalInformation.values.typePayroll]);
 
-  const filteredTabsConfig = Object.keys(editPayrollAgTabsConfig).reduce(
-    (acc, key) => {
+  const filteredTabsConfig = useMemo(() => {
+    return Object.keys(editPayrollAgTabsConfig).reduce((acc, key) => {
       const tab =
         editPayrollAgTabsConfig[key as keyof typeof editPayrollAgTabsConfig];
 
@@ -183,14 +184,21 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       ) {
         return acc;
       }
+      if (
+        key === editPayrollAgTabsConfig.extraordinaryPaymentCycles.id &&
+        !regularPaymentCycles.some((e) =>
+          includedPeriodicity.includes(e.periodicity),
+        )
+      ) {
+        return acc;
+      }
 
       if (tab !== undefined) {
         acc[key as keyof IEditPayrollTabsConfig] = tab;
       }
       return acc;
-    },
-    {} as IEditPayrollTabsConfig,
-  );
+    }, {} as IEditPayrollTabsConfig);
+  }, [regularPaymentValues]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {

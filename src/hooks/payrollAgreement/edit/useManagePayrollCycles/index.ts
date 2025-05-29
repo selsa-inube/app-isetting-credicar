@@ -6,14 +6,12 @@ import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreement
 import { normalizeEnumTranslationCode } from "@utils/normalizeEnumTranslationCode";
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
-import { getDatesFromDaysWeek } from "@utils/getDatesFromDaysWeek";
-import { getDaysWeekSelected } from "@utils/getDaysWeekSelected";
 import { areObjectsEqual } from "@utils/areObjectEqual";
-import { getUniquePaydays } from "@utils/getUniqueDays";
-import { getDaysInNumber } from "@utils/getDaysInNumber";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
-import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
 import { IUseManagePayrollCycles } from "@ptypes/hooks/IUseManagePayrollCycles";
+import { getDaysInNumber } from "@utils/getDaysInNumber";
+import { getUniquePaydays } from "@utils/getUniqueDays";
+import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
 
 const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
   const {
@@ -65,23 +63,19 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
 
   const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
     const days = getUniquePaydays(entries);
-    const daysWeekSelected = getDaysWeekSelected(days);
     const daysInNumber = getDaysInNumber(days);
     const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
 
-    let daysMonth: number[] = [];
     let verifyDays: number[] = [];
     let lastDayOfMonth: number[] = [];
 
     extraordinaryPayment.forEach((item) => {
       const month = Number(item.payday?.slice(0, 2));
       const paydayValue = Number(item.payday?.slice(-2));
-      daysMonth = getDatesFromDaysWeek(daysWeekSelected, month - 1);
+
       lastDayOfMonth = getLastDayOfMonth(days, month - 1);
 
-      verifyDays = Array.from(
-        new Set([...daysInNumber, ...daysMonth, ...lastDayOfMonth]),
-      );
+      verifyDays = Array.from(new Set([...daysInNumber, ...lastDayOfMonth]));
 
       const filteredRegularPaymentCycles = regularPaymentCycles.flatMap(
         (item) => {

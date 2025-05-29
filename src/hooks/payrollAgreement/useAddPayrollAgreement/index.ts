@@ -29,6 +29,7 @@ import { useLegalPerson } from "../useLegalPerson";
 import { getUniquePaydays } from "@utils/getUniqueDays";
 import { getDaysInNumber } from "@utils/getDaysInNumber";
 import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;
@@ -145,7 +146,11 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   }, [formValues.generalInformation.values.typePayroll]);
 
   const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
-    const days = getUniquePaydays(entries);
+    const filteredEntries = entries.filter((item) =>
+      includedPeriodicity.includes(item.periodicity),
+    );
+
+    const days = getUniquePaydays(filteredEntries);
     const daysInNumber = getDaysInNumber(days);
     const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
 
