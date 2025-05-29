@@ -35,7 +35,6 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
     steps,
     typeRegularPayroll,
     includeExtraPayDay,
-    regularDeleted,
     onCloseModal,
     onClosePendingReqModal,
     onCloseRequestStatus,
@@ -84,6 +83,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
             disableNext={formValid}
             controls={controlsAssisted}
             size={smallScreen ? "small" : "large"}
+            showCurrentStepNumber={false}
           />
           <Stack direction="column">
             {currentStep === 1 && (
@@ -127,7 +127,6 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 onPreviousStep={onPreviousStep}
                 typeRegularPayroll={typeRegularPayroll}
                 regularPaymentCycles={includeExtraPayDay}
-                regularDeleted={regularDeleted}
               />
             )}
             {currentStep === 5 && (

@@ -26,6 +26,9 @@ import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assis
 import { TransactionOperation } from "@enum/transactionOperation";
 import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
 import { useLegalPerson } from "../useLegalPerson";
+import { getUniquePaydays } from "@utils/getUniqueDays";
+import { getDaysInNumber } from "@utils/getDaysInNumber";
+import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;
@@ -140,6 +143,62 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
         : false,
     );
   }, [formValues.generalInformation.values.typePayroll]);
+
+  const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
+    const days = getUniquePaydays(entries);
+    const daysInNumber = getDaysInNumber(days);
+    const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
+
+    let verifyDays: number[] = [];
+    let lastDayOfMonth: number[] = [];
+
+    extraordinaryPayment.forEach((item) => {
+      const month = Number(item.payday?.slice(0, 2));
+      const paydayValue = Number(item.payday?.split("-")[1]);
+      lastDayOfMonth = getLastDayOfMonth(days, month - 1);
+
+      verifyDays = Array.from(new Set([...daysInNumber, ...lastDayOfMonth]));
+
+      const filteredRegularPaymentCycles = regularPaymentCycles.flatMap(
+        (item) => {
+          const filteredPayday = item.payday
+            .split(",")
+            .map((payday) => Number(payday.trim()));
+          return filteredPayday.filter((payday) => verifyDays.includes(payday));
+        },
+      );
+
+      if (filteredRegularPaymentCycles.length > 0) {
+        verifyDays = verifyDays.filter(
+          (day) => !filteredRegularPaymentCycles.includes(day),
+        );
+      }
+
+      if (!verifyDays.includes(paydayValue)) {
+        filteredExtraordinary.push(item);
+      }
+    });
+
+    return {
+      filteredExtraordinary,
+    };
+  };
+
+  useEffect(() => {
+    if (regularDeleted && regularDeleted.length > 0) {
+      const { filteredExtraordinary } =
+        filterExtraordinaryPayment(regularDeleted);
+      setExtraordinaryPayment((prev) =>
+        prev.filter((item) => {
+          return filteredExtraordinary.some(
+            (filteredItem) =>
+              filteredItem.id === item.id &&
+              item.nameCycle === filteredItem.nameCycle,
+          );
+        }),
+      );
+    }
+  }, [regularDeleted]);
 
   const handleNextStep = () => {
     if (currentStep < addPayrollAgreementSteps.length) {

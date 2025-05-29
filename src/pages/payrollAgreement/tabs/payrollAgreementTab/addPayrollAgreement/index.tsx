@@ -26,7 +26,6 @@ const AddPayrollAgreement = () => {
     showRequestProcessModal,
     saveData,
     includeExtraPayDay,
-    regularDeleted,
     handleCloseModal,
     handleGoBack,
     handleNextStep,
@@ -106,7 +105,6 @@ const AddPayrollAgreement = () => {
       setCurrentStep={setCurrentStep}
       setIncludeExtraPayDay={setIncludeExtraPayDay}
       includeExtraPayDay={includeExtraPayDay}
-      regularDeleted={regularDeleted}
     />
   );
 };

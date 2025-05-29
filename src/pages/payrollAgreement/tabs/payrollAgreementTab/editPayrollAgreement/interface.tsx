@@ -51,7 +51,6 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     actionTextRequest,
     setIncludeExtraPayDay,
     setRegularDeleted,
-    regularDeleted,
     setExtraordinaryPayment,
     setRegularPaymentCycles,
     onTabChange,
@@ -135,7 +134,6 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
                 regularPaymentCycles={regularPaymentCycles}
                 initialData={initialValues.extraordinaryCycles.values}
                 editDataOption
-                regularDeleted={regularDeleted}
               />
             )}
           </Stack>

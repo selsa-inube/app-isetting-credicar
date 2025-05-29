@@ -45,7 +45,6 @@ interface IEditPayrollAgreementUI {
   setRegularDeleted: React.Dispatch<
     React.SetStateAction<IOrdinaryCyclesEntry[]>
   >;
-  regularDeleted: IOrdinaryCyclesEntry[];
   setExtraordinaryPayment: React.Dispatch<
     React.SetStateAction<IExtraordinaryCyclesEntry[]>
   >;

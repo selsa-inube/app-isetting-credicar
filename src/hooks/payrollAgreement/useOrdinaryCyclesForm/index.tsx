@@ -198,12 +198,14 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       );
 
       setIncludeExtraPayDay((prev) =>
-        prev.filter((entry) => entry.id !== entryDeleted),
+        prev?.filter((entry) => entry.id !== entryDeleted),
       );
 
-      setRegularDeleted((prev) =>
-        prev.filter((entry) => entry.id === entryDeleted),
+      setRegularDeleted(() =>
+        regularPaymentCycles.filter((entry) => entry.id === entryDeleted),
       );
+    } else {
+      setRegularDeleted([]);
     }
   }, [entryDeleted]);
 

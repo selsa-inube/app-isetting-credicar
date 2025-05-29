@@ -15,7 +15,6 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
       extraordinaryPayment,
       typeRegularPayroll,
       regularPaymentCycles,
-      regularDeleted,
       setExtraordinaryPayment,
       onFormValid,
       onSubmit,
@@ -55,7 +54,6 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
       extraordinaryPayment,
       setExtraordinaryPayment,
       regularPaymentCycles,
-      regularDeleted,
       initialData,
     });
 

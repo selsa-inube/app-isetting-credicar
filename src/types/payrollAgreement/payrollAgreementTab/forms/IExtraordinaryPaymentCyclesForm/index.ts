@@ -5,7 +5,6 @@ interface IExtraordinaryPaymentCyclesForm {
   extraordinaryPayment: IExtraordinaryCyclesEntry[];
   typeRegularPayroll: boolean;
   regularPaymentCycles: IOrdinaryCyclesEntry[];
-  regularDeleted: IOrdinaryCyclesEntry[];
   setExtraordinaryPayment: React.Dispatch<
     React.SetStateAction<IExtraordinaryCyclesEntry[]>
   >;

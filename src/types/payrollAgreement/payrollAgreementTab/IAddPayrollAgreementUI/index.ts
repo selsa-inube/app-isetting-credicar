@@ -27,7 +27,6 @@ interface IAddPayrollAgreementUI {
   steps: IAssistedStep[];
   typeRegularPayroll: boolean;
   includeExtraPayDay: IOrdinaryCyclesEntry[];
-  regularDeleted: IOrdinaryCyclesEntry[];
   onToggleModal: () => void;
   setSourcesOfIncomeValues: React.Dispatch<
     React.SetStateAction<IServerDomain[]>
