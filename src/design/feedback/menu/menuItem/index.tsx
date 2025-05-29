@@ -1,11 +1,10 @@
 import { MdInfoOutline, MdOutlineClear } from "react-icons/md";
-import { Icon, inube, Stack, Text } from "@inubekit/inubekit";
+import { Icon, Stack, Text } from "@inubekit/inubekit";
 
 import { IMenuItem } from "@ptypes/design/IMenuItem";
 import { ComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
 import { StyledMenuItemLink } from "./styles";
 
 const MenuItem = (props: IMenuItem) => {
@@ -19,7 +18,6 @@ const MenuItem = (props: IMenuItem) => {
     onClose,
   } = props;
 
-  const theme = useThemeData();
   const disabledPath = disabled ? "" : path;
 
   return (
@@ -31,7 +29,6 @@ const MenuItem = (props: IMenuItem) => {
       padding={`${tokens.spacing.s100} ${tokens.spacing.s150}`}
       gap={tokens.spacing.s050}
       boxSizing="border-box"
-      backgroundColor={theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0}
     >
       <StyledMenuItemLink to={disabledPath}>
         <Stack gap={tokens.spacing.s050} alignItems="center">

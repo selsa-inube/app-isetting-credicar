@@ -66,6 +66,8 @@ const MoreDetails = (props: IMoreDetails) => {
     isField({ id: field.id }),
   );
 
+  const subtitle = `${moreDetailsRequestModal.subtitle} ${abbreviatedName}`;
+
   return (
     <ModalWrapper
       width={isMobile ? "335px" : "700px"}
@@ -105,7 +107,7 @@ const MoreDetails = (props: IMoreDetails) => {
               appearance={ComponentAppearance.GRAY}
               weight="bold"
             >
-              {`${moreDetailsRequestModal.subtitle} ${abbreviatedName}`}
+              {subtitle}
             </Text>
             <Divider dashed />
           </Stack>

@@ -9,7 +9,7 @@ import { MenuItem } from "./menuItem";
 const Menu = (props: IMenu) => {
   const { options, onToggleInfoModal, onClose } = props;
 
-  const close = options.length > 1 ? false : true;
+  const close: boolean = options.length > 1;
 
   return (
     <StyledContent $options={options.length}>
