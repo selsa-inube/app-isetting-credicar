@@ -12,9 +12,10 @@ import { IDelete } from "@ptypes/payrollAgreement/IDelete";
 import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestProcessMessage";
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { UseCase } from "@enum/useCase";
 
 const Delete = (props: IDelete) => {
-  const { data } = props;
+  const { data, setEntryDeleted } = props;
   const { appData } = useContext(AuthAndPortalData);
 
   const {
@@ -37,6 +38,7 @@ const Delete = (props: IDelete) => {
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
+    useCase: UseCase.DELETE,
     bussinesUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
@@ -44,6 +46,7 @@ const Delete = (props: IDelete) => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     setShowPendingReq,
+    setEntryDeleted,
   });
 
   return (

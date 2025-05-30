@@ -3,7 +3,7 @@ import { postWithRetries } from "@services/core/postWithRetries";
 
 import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IRequestMoneyDestination } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IRequestMoneyDestination";
-import { mapAddMoneyDestinationEntityToApi } from "./mappers.ts";
+import { mapAddMoneyDestinationEntityToApi } from "./mappers";
 
 const postAddMoneyDestination = async (
   businessUnit: string,

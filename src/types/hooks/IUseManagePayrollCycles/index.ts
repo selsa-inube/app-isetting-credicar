@@ -7,6 +7,9 @@ interface IUseManagePayrollCycles {
   regularPaymentCycles: IOrdinaryCyclesEntry[];
   isSelected: string;
   extraordinaryPayment: IExtraordinaryCyclesEntry[];
+  sourcesOfIncome: string;
+  initialSourcesOfIncome: string;
+  payrollId: string;
   setExtraordinaryPayment: React.Dispatch<
     React.SetStateAction<IExtraordinaryCyclesEntry[]>
   >;

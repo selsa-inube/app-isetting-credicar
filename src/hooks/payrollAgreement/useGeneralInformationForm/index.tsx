@@ -78,8 +78,11 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   }, [formik.values.applicationDaysPayroll]);
 
   const handleChangeAutosuggest = (name: string, value: string) => {
-    setAutosuggestValue(value);
-    formik.setFieldValue(name, value);
+    const isNumeric = /^[0-9]*$/.test(value);
+    if (isNumeric) {
+      setAutosuggestValue(value);
+      formik.setFieldValue(name, value);
+    }
   };
 
   const handleChangeSelect = (name: string, value: string) => {
@@ -90,7 +93,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     const updatedData = sourcesOfIncomeValues.map((entry) =>
       entry.id === name ? { ...entry, values } : entry,
     );
-    formik.setFieldValue("sourcesOfIncome", values);
+    formik.setFieldValue("sourcesOfIncome", values.trim());
     setSourcesOfIncomeValues(updatedData);
   };
 

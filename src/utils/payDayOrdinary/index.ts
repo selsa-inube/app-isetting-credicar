@@ -5,7 +5,7 @@ import { weeklyPayDayOptions } from "@config/payrollAgreement/payrollAgreementTa
 
 const payDayOrdinaryOptions = (periodicity: string) => {
   switch (periodicity) {
-    case "weekly":
+    case "Weekly":
       return weeklyPayDayOptions;
     case "Intervals_10_days":
       return everyTenPayDayOptions;

@@ -7,6 +7,7 @@ import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { UseCase } from "@enum/useCase";
 import { AddPayrollAgreementUI } from "./interface";
 
 const AddPayrollAgreement = () => {
@@ -49,6 +50,7 @@ const AddPayrollAgreement = () => {
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
+    useCase: UseCase.ADD,
     bussinesUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

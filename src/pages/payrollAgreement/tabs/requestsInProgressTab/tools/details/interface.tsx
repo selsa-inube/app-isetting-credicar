@@ -21,6 +21,8 @@ const DetailsUI = (props: IDetailsUI) => {
     detailsTabsConfig,
     labelsDetails,
     labelsPaymentCard,
+    ordinaryPaymentData,
+    extraordinaryPaymentData,
     ordinaryIncludedData,
     ordinaryEliminatedData,
     extraordinaryIncludedData,
@@ -77,6 +79,8 @@ const DetailsUI = (props: IDetailsUI) => {
           portalId="portal"
           labelsDetails={labelsDetails}
           labelsPaymentCard={labelsPaymentCard}
+          ordinaryPaymentData={ordinaryPaymentData}
+          extraordinaryPaymentData={extraordinaryPaymentData}
           ordinaryIncludedData={ordinaryIncludedData}
           ordinaryEliminatedData={ordinaryEliminatedData}
           extraordinaryIncludedData={extraordinaryIncludedData}

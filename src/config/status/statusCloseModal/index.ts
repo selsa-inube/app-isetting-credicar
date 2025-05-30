@@ -1,5 +1,4 @@
 const statusCloseModal = [
-  "RequestCanceled",
   "RequestProcessedWithError",
   "PendingApproval",
   "RejectedRequest",

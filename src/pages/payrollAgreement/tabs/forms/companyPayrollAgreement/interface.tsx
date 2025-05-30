@@ -288,7 +288,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}

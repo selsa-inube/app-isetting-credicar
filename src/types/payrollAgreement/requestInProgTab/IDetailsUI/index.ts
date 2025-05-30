@@ -15,6 +15,8 @@ interface IDetailsUI {
   detailsTabsConfig: IDetailsTabsConfig;
   labelsDetails: ILabel[];
   labelsPaymentCard: ILabel[];
+  ordinaryPaymentData: IEntry[];
+  extraordinaryPaymentData: IEntry[];
   ordinaryIncludedData: IEntry[];
   ordinaryEliminatedData: IEntry[];
   extraordinaryIncludedData: IEntry[];

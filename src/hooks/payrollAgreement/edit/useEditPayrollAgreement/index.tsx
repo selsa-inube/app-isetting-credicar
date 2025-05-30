@@ -24,9 +24,15 @@ import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreement
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
 import { IUseEditPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseEditPayrollAgreement";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
-
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
+import { dataTranslations } from "@utils/dataTranslations";
+import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
+
+import { getSourcesIncome } from "@utils/getSourcesIncome";
+import { getDayPayment } from "@utils/getDayPayment";
+import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
+import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
@@ -38,8 +44,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         id: String(index + 1),
         cycleId: `cycle-${addLeadingZero(index + 1).toString()}`,
         nameCycle: entry.regularPaymentCycleName,
-        periodicity: entry.schedule,
-        payday: entry.paymentDay,
+        periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
+        payday: getDayPayment(entry.paymentDay),
         numberDaysUntilCut: Number(entry.numberOfDaysBeforePaymentToBill),
       }));
     } else {
@@ -57,7 +63,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
                 id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
                 nameCycle: entry.abbreviatedName,
                 typePayment: specialBenefitPayment[0],
-                payday: entry.paymentDay,
+                payday: getDayPayment(entry.paymentDay),
                 numberDaysUntilCut: String(
                   entry.numberOfDaysBeforePaymentToBill,
                 ),
@@ -74,7 +80,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
                 id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
                 nameCycle: entry.abbreviatedName,
                 typePayment: severancePay[0],
-                payday: entry.paymentDay,
+                payday: getDayPayment(entry.paymentDay),
                 numberDaysUntilCut: String(
                   entry.numberOfDaysBeforePaymentToBill,
                 ),
@@ -91,8 +97,10 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       isValid: false,
       values: {
         abbreviatedName: data.abbreviatedName ?? "",
-        typePayroll: data.payrollForDeductionAgreementType ?? "",
-        sourcesOfIncome: "Independiente",
+        typePayroll:
+          dataTranslations[data.payrollForDeductionAgreementType] ??
+          data.payrollForDeductionAgreementType,
+        sourcesOfIncome: getSourcesIncome(data.incomeTypes),
         applicationDaysPayroll: String(
           data.numberOfDaysForReceivingTheDiscounts ?? 0,
         ),
@@ -108,7 +116,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     },
   };
 
-  const companyAgreement = data.legalPersonName ?? "";
+  const companyAgreement = data.payingEntityName ?? "";
   const { appData } = useContext(AuthAndPortalData);
   const [isSelected, setIsSelected] = useState<string>(
     editPayrollAgTabsConfig.generalInformation.id,
@@ -133,6 +141,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const initialValues = initialData.generalInformation.values;
+
   const navigate = useNavigate();
   const conditionRule = "PayrollAgreement";
   const smallScreen = useMediaQuery(mediaQueryMobile);
@@ -145,15 +155,17 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
-  const { newRegularPayment, newExtraordinaryPayment } = useManagePayrollCycles(
-    {
+  const { newRegularPayment, newExtraordinaryPayment, newSourcesIncome } =
+    useManagePayrollCycles({
       initialData,
       regularPaymentCycles,
       isSelected,
       extraordinaryPayment,
       setExtraordinaryPayment,
-    },
-  );
+      sourcesOfIncome: formValues.generalInformation.values.sourcesOfIncome,
+      initialSourcesOfIncome: initialValues.sourcesOfIncome,
+      payrollId: data.payrollForDeductionAgreementId,
+    });
 
   useEffect(() => {
     setTypeRegularPayroll(
@@ -163,7 +175,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         ? true
         : false,
     );
-  }, [formValues.generalInformation.values.typePayroll]);
+  }, []);
 
   const filteredTabsConfig = Object.keys(editPayrollAgTabsConfig).reduce(
     (acc, key) => {
@@ -312,12 +324,18 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       abbreviatedName?: string;
       sourcesOfIncome?: string;
       applicationDaysPayroll?: string;
+      numberOfDaysForReceivingTheDiscounts?: number;
+      payrollForDeductionAgreementId?: string;
       regularPaymentCycles?: IRegularPaymentCycles[];
       payrollSpecialBenefitPaymentCycles?: IPayrollSpecialBenefit[];
       severancePaymentCycles?: ISeverancePaymentCycles[];
-    } = {};
-
-    const initialValues = initialData.generalInformation.values;
+      modifyJustification?: string;
+      incomeTypes?: IIncomeTypes[];
+    } = {
+      payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
+      modifyJustification: jsonLabels(appData.user.userAccount)
+        .modifyJustification,
+    };
 
     (
       ["abbreviatedName", "sourcesOfIncome", "applicationDaysPayroll"] as const
@@ -328,6 +346,19 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     });
 
     const hasChanges = Object.keys(changedFields).length > 0;
+
+    if (
+      formValues.generalInformation.values.applicationDaysPayroll !==
+      initialValues.applicationDaysPayroll
+    ) {
+      changedFields.numberOfDaysForReceivingTheDiscounts =
+        Number(formValues.generalInformation.values.applicationDaysPayroll) ||
+        0;
+    }
+
+    if (newSourcesIncome().incomeTypes.length > 0) {
+      changedFields.incomeTypes = newSourcesIncome().incomeTypes;
+    }
 
     const regularPayments = newRegularPayment();
     if (regularPayments.length > 0) {
@@ -365,8 +396,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   };
 
   const typePayroll = typeRegularPayroll
-    ? "remuneración ordinaria"
-    : "Primas o cesantias";
+    ? payrollType.ordinary
+    : payrollType.extraordinary;
 
   const showGeneralInfPayrollForm =
     isSelected === editPayrollAgTabsConfig.generalInformation.id;
