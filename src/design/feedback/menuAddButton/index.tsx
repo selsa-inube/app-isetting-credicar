@@ -2,7 +2,7 @@ import { MdOutlineMoreVert } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 import { ComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { disabledModal } from "@src/config/disabledModal";
+import { disabledModal } from "@config/disabledModal";
 import { IMenuAddButton } from "@ptypes/design/IMenuAddButton";
 import { Menu } from "../menu";
 

@@ -1,6 +1,6 @@
 import { MdOutlineClear } from "react-icons/md";
 import { Icon, Stack } from "@inubekit/inubekit";
-import { IMenu } from "@src/types/design/IMenu";
+import { IMenu } from "@ptypes/design/IMenu";
 import { ComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { StyledContent } from "./styles";

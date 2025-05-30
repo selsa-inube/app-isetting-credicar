@@ -6,9 +6,9 @@ import { labelsOfTraceability } from "@config/payrollAgreement/requestsInProgres
 
 import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsUI";
+import { detailsLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/detailsLabels";
 import { StyledContainerIcon } from "./styles";
 import { RequestsInProcess } from "./requestsInProcess";
-import { detailsLabels } from "@src/config/payrollAgreement/payrollAgreementTab/generic/detailsLabels";
 
 const DetailsUI = (props: IDetailsUI) => {
   const {

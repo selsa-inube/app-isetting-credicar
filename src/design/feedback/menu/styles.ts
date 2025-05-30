@@ -1,5 +1,5 @@
 import { inube } from "@inubekit/inubekit";
-import { tokens } from "@src/design/tokens";
+import { tokens } from "@design/tokens";
 import styled from "styled-components";
 interface IStyledContent {
   $options?: number;

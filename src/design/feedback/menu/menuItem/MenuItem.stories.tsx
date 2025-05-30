@@ -2,7 +2,7 @@ import { MdAdd } from "react-icons/md";
 import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn, StoryObj } from "@storybook/react";
 import { MenuItem } from ".";
-import { IMenuItem } from "@src/types/design/IMenuItem";
+import { IMenuItem } from "@ptypes/design/IMenuItem";
 
 const meta: Meta<typeof MenuItem> = {
   title: "feedback/MenuItem",
