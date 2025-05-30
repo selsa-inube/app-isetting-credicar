@@ -3,6 +3,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { getPayrollAgreementData } from "@services/payrollAgreement/getPayrollAgreement";
 import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { IUsePayrollAgreementTab } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementTab";
+import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
 
 const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   const { bussinesUnits } = props;
@@ -47,7 +48,11 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   };
 
   const smallScreen = useMediaQuery("(max-width: 690px)");
-  const columnWidths = smallScreen ? [65] : [80];
+  const columnWidths = smallScreen ? [20, 53] : [20, 60];
+
+  const emptyDataMessage = smallScreen
+    ? payrollTabLabels.emptyDataMessageMobile
+    : payrollTabLabels.emptyDataMessageDesk;
 
   return {
     payrollAgreement,
@@ -56,6 +61,7 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     hasError,
     smallScreen,
     columnWidths,
+    emptyDataMessage,
     setEntryDeleted,
     handleSearchPayrollAgreement,
   };

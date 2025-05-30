@@ -13,18 +13,36 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   const { businessUnitSigla, bussinesUnits } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
+
+  const smallScreen = useMediaQuery("(max-width: 990px)");
+
+  const tabs = payrollAgreementTabsConfig(smallScreen);
+
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
   const [isSelected, setIsSelected] = useState<string>(
-    payrollAgreementTabsConfig.payrollAgreement.id,
+    tabs.payrollAgreement.id,
   );
+  const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
     optionName: "Nóminas de convenio",
   });
+
+  const onToggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const onToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
+  const onCloseMenu = () => {
+    setShowModal(!showModal);
+  };
 
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
@@ -49,48 +67,37 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
 
   useEffect(() => {
     if (changeTab) {
-      setIsSelected(payrollAgreementTabsConfig.requestsInProgress.id);
+      setIsSelected(tabs.requestsInProgress.id);
     }
   }, [changeTab]);
 
   useEffect(() => {
-    if (isSelected === payrollAgreementTabsConfig.requestsInProgress.id) {
+    if (isSelected === tabs.requestsInProgress.id) {
       setChangeTab(false);
-      setIsSelected(payrollAgreementTabsConfig.requestsInProgress.id);
+      setIsSelected(tabs.requestsInProgress.id);
     }
   }, [isSelected]);
 
-  const filteredTabsConfig = Object.keys(payrollAgreementTabsConfig).reduce(
-    (acc, key) => {
-      const tab =
-        payrollAgreementTabsConfig[
-          key as keyof typeof payrollAgreementTabsConfig
-        ];
+  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
+    const tab = tabs[key as keyof typeof payrollAgreementTabsConfig];
 
-      if (
-        key === payrollAgreementTabsConfig.requestsInProgress.id &&
-        requestsInProgress &&
-        requestsInProgress.length === 0
-      ) {
-        return acc;
-      }
-
-      if (tab !== undefined) {
-        acc[key as keyof IPayrollTabsConfig] = tab;
-      }
+    if (
+      key === tabs.requestsInProgress.id &&
+      requestsInProgress &&
+      requestsInProgress.length === 0
+    ) {
       return acc;
-    },
-    {} as IPayrollTabsConfig,
-  );
+    }
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
-  const smallScreenTab = useMediaQuery("(max-width: 450px)");
+    if (tab !== undefined) {
+      acc[key as keyof IPayrollTabsConfig] = tab;
+    }
+    return acc;
+  }, {} as IPayrollTabsConfig);
 
-  const showPayrollAgreementTab =
-    isSelected === payrollAgreementTabsConfig.payrollAgreement.id;
+  const showPayrollAgreementTab = isSelected === tabs.payrollAgreement.id;
 
-  const showRequestsInProgressTab =
-    isSelected === payrollAgreementTabsConfig.requestsInProgress.id;
+  const showRequestsInProgressTab = isSelected === tabs.requestsInProgress.id;
 
   const payrollAgreementTabs = Object.values(filteredTabsConfig);
 
@@ -100,9 +107,13 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     showPayrollAgreementTab,
     showRequestsInProgressTab,
     smallScreen,
-    smallScreenTab,
     payrollAgreementTabs,
     filteredTabsConfig,
+    showModal,
+    showInfoModal,
+    onToggleInfoModal,
+    onCloseMenu,
+    onToggleModal,
     handleTabChange,
   };
 };

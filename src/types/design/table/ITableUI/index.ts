@@ -14,6 +14,7 @@ interface ITableUI {
   titles: ITitle[];
   mobileTitle?: string;
   widthPercentageTotalColumns?: number;
+  tableLayout: "fixed" | "auto";
   columnWidths?: number[];
   goToEndPage: () => void;
   goToFirstPage: () => void;

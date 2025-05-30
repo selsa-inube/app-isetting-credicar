@@ -31,7 +31,7 @@ const StyledContainerTable = styled.div<IStyledContainer>`
     }
 
     & > div > div {
-    min-height: 220px;
+    min-height: 320px;
   }
   `}
 `;

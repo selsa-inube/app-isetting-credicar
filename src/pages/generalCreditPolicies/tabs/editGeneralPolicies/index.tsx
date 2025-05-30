@@ -6,8 +6,8 @@ import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/useEditGenC
 import { UseCase } from "@enum/useCase";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useThemeData } from "@utils/theme";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
+import { useThemeData } from "@utils/theme";
 import { EditGeneralPoliciesUI } from "./interface";
 
 const EditGeneralPolicies = (props: IEditGeneralPolicies) => {

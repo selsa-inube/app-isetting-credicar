@@ -13,8 +13,10 @@ interface IMoreDetails {
   smallScreenTab: boolean;
   labelsDetails: ILabel[];
   labelsPaymentCard: ILabel[];
+  title: string;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
+  moreDetails?: boolean;
   ordinaryPaymentData?: IEntry[];
   extraordinaryPaymentData?: IEntry[];
   ordinaryIncludedData?: IEntry[];

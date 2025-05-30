@@ -26,6 +26,7 @@ const Table = (props: ITable) => {
     mobileTitle,
     pageLength = 10,
     breakpoints,
+    tableLayout = "fixed",
     widthPercentageTotalColumns,
     columnWidths,
     emptyDataMessage,
@@ -90,6 +91,7 @@ const Table = (props: ITable) => {
           columnWidths={columnWidths}
           emptyDataMessage={emptyDataMessage}
           withActionsTitles={withActionsTitles}
+          tableLayout={tableLayout}
         />
       </Stack>
     </StyledContainerTable>
