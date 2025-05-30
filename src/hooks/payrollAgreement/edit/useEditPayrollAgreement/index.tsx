@@ -31,8 +31,8 @@ import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncom
 
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { getDayPayment } from "@utils/getDayPayment";
+import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
-import { jsonLabels } from "@src/config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const { data } = props;
