@@ -6,6 +6,7 @@ import { labelsOfTraceability } from "@config/payrollAgreement/requestsInProgres
 
 import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsUI";
+import { detailsLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/detailsLabels";
 import { StyledContainerIcon } from "./styles";
 import { RequestsInProcess } from "./requestsInProcess";
 
@@ -47,7 +48,7 @@ const DetailsUI = (props: IDetailsUI) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            Detalles
+            {detailsLabels.title}
           </Text>
         )}
       </StyledContainerIcon>
@@ -80,6 +81,7 @@ const DetailsUI = (props: IDetailsUI) => {
           ordinaryEliminatedData={ordinaryEliminatedData}
           extraordinaryIncludedData={extraordinaryIncludedData}
           extraordinaryEliminatedData={extraordinaryEliminatedData}
+          title={detailsLabels.titleMoreDetails}
           onCloseModal={onToggleMoreDetailsModal}
           onTabChange={onTabChange}
         />

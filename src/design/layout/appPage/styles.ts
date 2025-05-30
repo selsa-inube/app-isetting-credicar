@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-import { tokens } from "@design/tokens";
-
 interface IStyledCollapseIcon {
   $collapse: boolean;
   $isTablet: boolean;
@@ -30,7 +28,6 @@ const StyledMain = styled.main<IStyledMain>`
   box-sizing: border-box;
   height: calc(100vh - 54px);
   overflow-y: auto;
-  padding: ${({ $isMobile }) => $isMobile && `${tokens.spacing.s300}`};
 `;
 
 const StyledHeaderContainer = styled.div`

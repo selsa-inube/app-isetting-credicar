@@ -18,6 +18,7 @@ interface ITable {
   columnWidths?: number[];
   emptyDataMessage?: string;
   withActionsTitles?: boolean;
+  tableLayout?: "fixed" | "auto";
 }
 
 export type { ITable };
