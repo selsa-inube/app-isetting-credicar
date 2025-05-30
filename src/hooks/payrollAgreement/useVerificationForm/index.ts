@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
 import { IUseVerification } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IUseVerification";
+import { verificationFormLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/verificationFormLabels";
 
 const useVerification = (props: IUseVerification) => {
   const {
@@ -23,7 +24,8 @@ const useVerification = (props: IUseVerification) => {
     savePayrollAgreement.requestNumber.length > 0;
 
   const steps = addPayrollAgreementSteps.filter((step) => {
-    if (step.name.toLowerCase() === "verificación") return false;
+    if (step.name.toLowerCase() === verificationFormLabels.verification)
+      return false;
     if (
       Number(step.id) === 4 &&
       (!updatedData.extraordinaryCycles.values ||

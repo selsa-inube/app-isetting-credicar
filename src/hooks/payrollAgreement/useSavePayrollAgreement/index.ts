@@ -20,6 +20,7 @@ import { RequestStepsStatus } from "@enum/requestStepsStatus";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { requestStepsInitial } from "@config/requestSteps";
 import { operationTypes } from "@config/useCase";
+import { requestStepsNames } from "@config/requestStepsNames";
 import { UseCase } from "@enum/useCase";
 
 const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
@@ -171,7 +172,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[0].name,
+            requestStepsNames.requestFiled,
             RequestStepsStatus.ERROR,
           ),
         );
@@ -180,7 +181,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[0].name,
+            requestStepsNames.requestFiled,
             RequestStepsStatus.COMPLETED,
           ),
         );
@@ -191,7 +192,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[1].name,
+            requestStepsNames.adding,
             RequestStepsStatus.COMPLETED,
           ),
         );
@@ -201,14 +202,14 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[1].name,
+            requestStepsNames.adding,
             RequestStepsStatus.COMPLETED,
           ),
         );
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[2].name,
+            requestStepsNames.requestAdded,
             RequestStepsStatus.COMPLETED,
           ),
         );
@@ -218,13 +219,14 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[1].name,
+            requestStepsNames.adding,
             RequestStepsStatus.ERROR,
           ),
         );
       }
     }, 2000);
   };
+
   const handleStatusChange = () => {
     if (isStatusIntAutomatic(savePayrollAgreement?.requestStatus)) {
       if (isStatusCloseModal()) {
