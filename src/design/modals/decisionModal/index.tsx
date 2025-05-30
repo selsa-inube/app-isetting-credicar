@@ -50,12 +50,7 @@ const DecisionModal = (props: IDecisionModal) => {
       title={title}
       withCancelButton={withCancelButton}
       onCloseModal={onCloseModal}
-      onClick={
-        onClick ??
-        (() => {
-          console.log();
-        })
-      }
+      onClick={onClick ?? (() => void 0)}
       loading={loading}
       disabledActionButton={isDisabledButton}
     >
