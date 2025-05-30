@@ -32,6 +32,7 @@ import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncom
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { getDayPayment } from "@utils/getDayPayment";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
+import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
@@ -395,8 +396,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   };
 
   const typePayroll = typeRegularPayroll
-    ? "Remuneración ordinaria"
-    : "Primas o cesantias";
+    ? payrollType.ordinary
+    : payrollType.extraordinary;
 
   const showGeneralInfPayrollForm =
     isSelected === editPayrollAgTabsConfig.generalInformation.id;
