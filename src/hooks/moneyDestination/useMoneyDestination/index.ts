@@ -47,7 +47,7 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   };
 
   const smallScreen = useMediaQuery("(max-width: 990px)");
-  const widthFirstColumn = smallScreen ? 64 : 25;
+  const widthFirstColumn = smallScreen ? 72 : 25;
 
   const columnWidths = [widthFirstColumn, 55];
 

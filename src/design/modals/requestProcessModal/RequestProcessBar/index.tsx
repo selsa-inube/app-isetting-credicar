@@ -11,14 +11,14 @@ import {
 } from "../styles";
 import { IRequestSteps } from "../types";
 
-interface IRequestProcessDesktop {
+interface IRequestProcess {
   requestSteps: IRequestSteps[];
   sizeIcon: string;
   stepCurrent: number;
   stepCurrentIndex: number;
 }
 
-const RequestProcessDesktop = (props: IRequestProcessDesktop) => {
+const RequestProcessBar = (props: IRequestProcess) => {
   const { requestSteps, sizeIcon, stepCurrent, stepCurrentIndex } = props;
 
   const appearance =
@@ -36,6 +36,8 @@ const RequestProcessDesktop = (props: IRequestProcessDesktop) => {
 
   const numberOfSteps = `${stepCurrent}/${requestSteps.length}`;
 
+  const Showicon = stepCurrent === requestSteps.length;
+
   return (
     <StyledContainerFields>
       <Stack
@@ -45,7 +47,7 @@ const RequestProcessDesktop = (props: IRequestProcessDesktop) => {
         alignItems="center"
       >
         <Stack gap={tokens.spacing.s100} alignItems="center" width="100%">
-          {stepCurrent === requestSteps.length ? (
+          {Showicon ? (
             <Icon
               icon={<MdCheckCircle />}
               size={sizeIcon}
@@ -96,4 +98,4 @@ const RequestProcessDesktop = (props: IRequestProcessDesktop) => {
   );
 };
 
-export { RequestProcessDesktop };
+export { RequestProcessBar };

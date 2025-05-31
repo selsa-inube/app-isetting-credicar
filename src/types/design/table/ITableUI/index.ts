@@ -11,6 +11,7 @@ interface ITableUI {
   loading: boolean;
   lastEntryInPage: number;
   pageLength: number;
+  ellipsisCell: boolean;
   titles: ITitle[];
   mobileTitle?: string;
   widthPercentageTotalColumns?: number;

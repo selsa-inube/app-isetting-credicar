@@ -54,7 +54,6 @@ const RequestProcess = (props: IRequestProcess) => {
             portalId={portalId}
             title={descriptionRequestProcess.title}
             description={descriptionRequestProcess.description}
-            appearance={ComponentAppearance.SUCCESS}
             requestSteps={requestProcessSteps}
             isMobile={isMobile}
             sizeIcon="28px"
