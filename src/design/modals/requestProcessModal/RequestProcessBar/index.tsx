@@ -4,19 +4,13 @@ import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
 import { countVerifiedRequests } from "@utils/countVerifiedRequests";
 import { verifiedErrorRequest } from "@utils/verifiedErrorRequest";
+
 import {
   StyledContainerFields,
   StyledContainerProgressBar,
   StyledStepIndicator,
 } from "../styles";
-import { IRequestSteps } from "../types";
-
-interface IRequestProcess {
-  requestSteps: IRequestSteps[];
-  sizeIcon: string;
-  stepCurrent: number;
-  stepCurrentIndex: number;
-}
+import { IRequestProcess } from "@ptypes/design/IRequestProcess";
 
 const RequestProcessBar = (props: IRequestProcess) => {
   const { requestSteps, sizeIcon, stepCurrent, stepCurrentIndex } = props;

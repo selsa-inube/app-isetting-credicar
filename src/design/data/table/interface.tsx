@@ -45,8 +45,6 @@ const TableUI = (props: ITableUI) => {
     prevPage,
   } = props;
 
-  console.log({ ellipsisCell });
-
   return (
     <Table tableLayout={tableLayout}>
       <Colgroup>

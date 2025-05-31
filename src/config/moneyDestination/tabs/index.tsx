@@ -1,3 +1,5 @@
+import { MdOutlineReportProblem } from "react-icons/md";
+
 const moneyDestinationTabsConfig = (smallScreen: boolean) => {
   return {
     moneyDestination: {
@@ -10,6 +12,7 @@ const moneyDestinationTabsConfig = (smallScreen: boolean) => {
       isDisabled: false,
       label: smallScreen ? "En trámite" : "Solicitudes en trámite",
       notificationIndicators: 2,
+      icon: <MdOutlineReportProblem />,
     },
   };
 };

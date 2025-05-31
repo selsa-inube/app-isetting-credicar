@@ -1,9 +1,9 @@
 import { IRuleDecision } from "@isettingkit/input";
 import { FormikProps } from "formik";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 import { IEditDestinationTabsConfig } from "../tabs/ITabConfig/IEditDestinationTabsConfig";
+import { IRequestSteps } from "@src/types/design/IRequestSteps";
 
 interface IEditDestinationUI {
   editDestinationTabsConfig: IEditDestinationTabsConfig;

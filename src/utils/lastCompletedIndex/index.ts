@@ -1,4 +1,4 @@
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
+import { IRequestSteps } from "@src/types/design/IRequestSteps";
 
 const lastCompletedIndex = (requestSteps: IRequestSteps[]) => {
   return requestSteps.reduce((lastIndex, current, index) => {

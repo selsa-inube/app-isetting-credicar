@@ -1,4 +1,4 @@
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
+import { IRequestSteps } from "../IRequestSteps";
 
 interface IRequestProcessModal {
   portalId: string;

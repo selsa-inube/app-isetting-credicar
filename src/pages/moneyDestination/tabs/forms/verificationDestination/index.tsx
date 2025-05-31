@@ -4,7 +4,6 @@ import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { ComponentAppearance } from "@enum/appearances";
 import { Accordion } from "@design/data/accordions";
 import { tokens } from "@design/tokens";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { finishModal } from "@config/moneyDestination/moneyDestinationTab/form/verificationForm";
 import { IFormsUpdateData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IFormsUpdateData";
@@ -16,6 +15,7 @@ import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationT
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { verificationLabels } from "@config/moneyDestination/moneyDestinationTab/form/verificationLabels";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { VerificationBoxes } from "./verificationBoxes";
 
 interface IVerificationForm {
