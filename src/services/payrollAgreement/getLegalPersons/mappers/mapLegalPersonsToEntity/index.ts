@@ -12,7 +12,7 @@ const mapLegalPersonsToEntity = (data: ILegalPerson): ILegalPerson => {
     ),
     identificationTypeLegalPerson: String(data.identificationTypeLegalPerson),
     legalPersonId: String(data.legalPersonId),
-    legalPersonName: String(data.legalPersonName),
+    payingEntityName: String(data.payingEntityName),
     tradename: String(data.tradename),
     registeredContactsByCustomerLegalEntity: Object(
       data.registeredContactsByCustomerLegalEntity,

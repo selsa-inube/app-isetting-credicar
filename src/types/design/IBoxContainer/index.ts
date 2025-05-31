@@ -9,8 +9,8 @@ import {
 interface IBoxContainer {
   children: React.ReactNode;
   boxSizing: string;
-  backgroundColor?: string;
   borderColor?: string;
+  backgroundColor?: string;
   borderRadius?: string;
   wrap?: IStackWrapControl;
   direction?: IStackDirectionAlignment;

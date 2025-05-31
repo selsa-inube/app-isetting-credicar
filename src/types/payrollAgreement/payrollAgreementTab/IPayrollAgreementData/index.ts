@@ -1,11 +1,12 @@
 import { ISeverancePaymentCycles } from "../ISeverancePaymentCycles";
 import { IPayrollSpecialBenefit } from "../IPayrollSpecialBenefit";
 import { IRegularPaymentCycles } from "../IRegularPaymentCycles";
+import { IIncomeTypes } from "../../RequestPayrollAgre/IIncomeTypes";
 
 interface IPayrollAgreementData {
   abbreviatedName: string;
-  legalPersonIdentification: string;
-  legalPersonName: string;
+  payingIdentification: string;
+  payingEntityName: string;
   numberOfDaysForReceivingTheDiscounts: number;
   payrollForDeductionAgreementCode: string;
   payrollForDeductionAgreementId: string;
@@ -14,6 +15,7 @@ interface IPayrollAgreementData {
   regularPaymentCycles: IRegularPaymentCycles[];
   severancePaymentCycles: ISeverancePaymentCycles[];
   id?: string;
+  incomeTypes?: IIncomeTypes[];
 }
 
 export type { IPayrollAgreementData };

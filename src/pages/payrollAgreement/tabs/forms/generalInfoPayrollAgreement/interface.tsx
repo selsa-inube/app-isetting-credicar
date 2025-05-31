@@ -201,7 +201,6 @@ const GeneralInformationPayrollFormUI = (
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          fullwidth={isMobile}
           onClick={editDataOption ? onResetEdit : onPreviousStep}
           variant="outlined"
           appearance={ComponentAppearance.GRAY}
@@ -210,7 +209,6 @@ const GeneralInformationPayrollFormUI = (
         </Button>
 
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}

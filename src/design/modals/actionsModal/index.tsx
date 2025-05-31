@@ -29,9 +29,7 @@ const ActionsModal = (props: IActionsModal) => {
               key={index}
               onClick={(e) => e.stopPropagation()}
             >
-              <div onClick={(e) => e.stopPropagation()}>
-                {action.content(entry)}
-              </div>
+              {action.content(entry)}
             </StyledContentActions>
           ))}
         </Stack>

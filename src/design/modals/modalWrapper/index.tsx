@@ -36,6 +36,7 @@ const ModalWrapper = (props: IModalWrapper) => {
     disabledActionButton = false,
     minHeight,
     maxHeight,
+    padding = tokens.spacing.s300,
     onClick,
     onCloseModal,
   } = props;
@@ -58,7 +59,7 @@ const ModalWrapper = (props: IModalWrapper) => {
           theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0
         }
         borderRadius={tokens.spacing.s100}
-        padding={tokens.spacing.s300}
+        padding={padding}
         gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
         boxSizing="border-box"
         minHeight={minHeight}

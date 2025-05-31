@@ -1,6 +1,6 @@
 const periodicityData = [
   {
-    id: "weekly",
+    id: "Weekly",
     label: "Semanal",
     value: "Semanal",
   },

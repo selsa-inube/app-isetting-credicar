@@ -27,9 +27,9 @@ const useLegalPerson = (props: IUseLegalPerson) => {
   }, []);
 
   const legalPersonOptions = legalPersonData.map((item) => ({
-    id: item.legalPersonName,
-    label: item.legalPersonName,
-    value: item.legalPersonName,
+    id: item.payingEntityName,
+    label: item.payingEntityName,
+    value: item.payingEntityName,
   }));
 
   legalPersonOptions.push({

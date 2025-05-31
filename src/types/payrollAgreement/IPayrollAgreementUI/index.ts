@@ -1,5 +1,6 @@
 import { ITab } from "@inubekit/inubekit";
 import { ICardData } from "@ptypes/home/ICardData";
+import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 interface IPayrollAgreementUI {
   isSelected: string;
@@ -7,8 +8,13 @@ interface IPayrollAgreementUI {
   showPayrollAgreementTab: boolean;
   showRequestsInProgressTab: boolean;
   smallScreen: boolean;
-  smallScreenTab: boolean;
   payrollAgreementTabs: ITab[];
+  showModal: boolean;
+  showInfoModal: boolean;
+  options: IMenuOptions[];
+  onToggleInfoModal: () => void;
+  onCloseMenu: () => void;
+  onToggleModal: () => void;
   handleTabChange: (id: string) => void;
 }
 

@@ -29,7 +29,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     numberOfDaysForReceivingTheDiscounts:
       data.configurationRequestData.numberOfDaysForReceivingTheDiscounts ??
       data.configurationRequestData.applicationDaysPayroll,
-    legalPersonName: data.configurationRequestData.legalPersonName,
+    payingEntityName: data.configurationRequestData.payingEntityName,
     status: data.requestStatus,
     traceability: data.configurationRequestsTraceability.map(
       (traceability: IEntry) => ({
@@ -40,6 +40,9 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
       }),
     ),
     sourcesOfIncome: data.configurationRequestData.sourcesOfIncome,
+    regularPaymentCycles: [],
+    payrollSpecialBenefitPaymentCycles: [],
+    severancePaymentCycles: [],
     regularCyclesEliminated: [],
     regularCyclesIncluded: [],
     payrollSpecialBenCyclesIncluded: [],
@@ -48,7 +51,18 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     severanceCyclesEliminated: [],
   };
 
-  if (data.configurationRequestData.regularPaymentCycles) {
+  if (
+    data.useCaseName === "AddPayrollAgreement" &&
+    data.configurationRequestData.regularPaymentCycles
+  ) {
+    normalizeData.regularPaymentCycles =
+      data.configurationRequestData.regularPaymentCycles;
+  }
+
+  if (
+    data.useCaseName !== "AddPayrollAgreement" &&
+    data.configurationRequestData.regularPaymentCycles
+  ) {
     normalizeData.regularCyclesIncluded =
       data.configurationRequestData.regularPaymentCycles.filter(
         (item: IEntry) =>
@@ -59,6 +73,13 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         (item: IEntry) =>
           item.transactionOperation === TransactionOperation.DELETE,
       );
+  }
+  if (
+    data.useCaseName === "AddPayrollAgreement" &&
+    data.configurationRequestData.payrollSpecialBenefitPaymentCycles
+  ) {
+    normalizeData.payrollSpecialBenefitPaymentCycles =
+      data.configurationRequestData.payrollSpecialBenefitPaymentCycles;
   }
 
   if (data.configurationRequestData.payrollSpecialBenefitPaymentCycles) {
@@ -72,6 +93,14 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         (item: IEntry) =>
           item.transactionOperation === TransactionOperation.DELETE,
       );
+  }
+
+  if (
+    data.useCaseName === "AddPayrollAgreement" &&
+    data.configurationRequestData.severancePaymentCycles
+  ) {
+    normalizeData.severancePaymentCycles =
+      data.configurationRequestData.severancePaymentCycles;
   }
 
   if (data.configurationRequestData.severancePaymentCycles) {

@@ -8,7 +8,6 @@ import {
   titles,
   actionsConfig,
 } from "@config/payrollAgreement/payrollAgreementTab/assisted/extraordinaryCyclesTable";
-
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { IExtraordinaryPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesFormUI";
 import { BoxContainer } from "@design/layout/boxContainer";
@@ -102,7 +101,6 @@ const ExtraordinaryPaymentCyclesFormUI = (
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          fullwidth={isMobile}
           onClick={onPreviousStep}
           appearance={ComponentAppearance.GRAY}
           variant="outlined"
@@ -111,7 +109,6 @@ const ExtraordinaryPaymentCyclesFormUI = (
         </Button>
 
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}

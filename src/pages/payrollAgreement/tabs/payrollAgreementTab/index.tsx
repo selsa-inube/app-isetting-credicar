@@ -14,6 +14,7 @@ const PayrollAgreementTab = () => {
     loading,
     smallScreen,
     columnWidths,
+    emptyDataMessage,
     setEntryDeleted,
     handleSearchPayrollAgreement,
   } = usePayrollAgreementTab({
@@ -32,6 +33,7 @@ const PayrollAgreementTab = () => {
       smallScreen={smallScreen}
       columnWidths={columnWidths}
       pageLength={pageLength}
+      emptyDataMessage={emptyDataMessage}
     />
   );
 };

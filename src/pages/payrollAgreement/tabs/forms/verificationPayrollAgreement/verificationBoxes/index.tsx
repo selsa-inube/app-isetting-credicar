@@ -15,7 +15,7 @@ const VerificationBoxes = (props: IVerificationBoxes) => {
 
   const showExtraordinaryCycles =
     stepKey === stepKeysPayroll.EXTRAORDINARY_CYCLES &&
-    updatedData.extraordinaryCycles.values.length >= 1;
+    updatedData.extraordinaryCycles.values.length > 0;
 
   return (
     <>

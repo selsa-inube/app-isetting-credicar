@@ -104,7 +104,6 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          fullwidth={isMobile}
           onClick={onPreviousStep}
           appearance={ComponentAppearance.GRAY}
           variant="outlined"
@@ -113,7 +112,6 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
         </Button>
 
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={disabledButtonNext}
           loading={loading}

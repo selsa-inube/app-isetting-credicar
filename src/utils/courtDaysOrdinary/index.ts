@@ -6,7 +6,7 @@ import { extraordinaryDaysOptions } from "@config/payrollAgreement/payrollAgreem
 
 const courtDaysOrdinaryOptions = (periodicity: string) => {
   switch (periodicity) {
-    case "weekly":
+    case "Weekly":
       return weeklyCourtDaysOptions;
     case "Intervals_10_days":
       return everyTenPayDayOptions;
