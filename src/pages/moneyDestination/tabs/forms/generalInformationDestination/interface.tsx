@@ -1,11 +1,4 @@
-import {
-  Autosuggest,
-  Button,
-  Stack,
-  Text,
-  Textarea,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+import { Autosuggest, Button, Stack, Text, Textarea } from "@inubekit/inubekit";
 import { MdOutlineFax } from "react-icons/md";
 
 import { tokens } from "@design/tokens";
@@ -29,6 +22,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     editDataOption,
     icon,
     labelButtonNext,
+    isMobile,
     onChange,
     onButtonClick,
     onReset,
@@ -36,8 +30,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     autosuggestValue,
     buttonDisabledState,
   } = props;
-
-  const isMobile = useMediaQuery("(max-width: 990px)");
 
   return (
     <StyledContainer>
@@ -102,7 +94,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         {editDataOption && (
           <Button
-            fullwidth={isMobile}
             onClick={onReset}
             appearance={ComponentAppearance.GRAY}
             disabled={valuesEqual}
@@ -112,7 +103,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
         )}
 
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={buttonDisabledState}
           loading={loading}

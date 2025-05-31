@@ -15,10 +15,12 @@ interface IEditDestinationUI {
   isSelected: string;
   requestSteps: IRequestSteps[];
   loading: boolean;
-  showPendingReqModal: boolean;
   showRequestProcessModal: boolean;
   saveMoneyDestination: ISaveDataResponse;
   smallScreen: boolean;
+  showGeneralInformation: boolean;
+  showDecisionsForm: boolean;
+  showRequestStatus: string | false | undefined;
   onTabChange: (id: string) => void;
   onButtonClick: () => void;
   onReset: () => void;

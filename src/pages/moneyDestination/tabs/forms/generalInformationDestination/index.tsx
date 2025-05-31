@@ -38,6 +38,7 @@ const GeneralInformationForm = forwardRef<
       buttonDisabledState,
       icon,
       labelButtonNext,
+      isMobile,
       handleChange,
       handleReset,
       valuesEqualBoton,
@@ -66,6 +67,7 @@ const GeneralInformationForm = forwardRef<
         valuesEqual={valuesEqualBoton}
         onReset={handleReset}
         labelButtonNext={labelButtonNext}
+        isMobile={isMobile}
       />
     );
   },

@@ -23,7 +23,8 @@ const StyledFormContent = styled.div`
 `;
 
 const StyledContainerFields = styled.div<IStyledContainerFields>`
-  border: 1px solid ${inube.palette.neutral.N40};
+  border: ${({ theme }) =>
+    ` 1px solid ${theme.palette.neutral.N40 ?? inube.palette.neutral.N40}`};
   border-radius: ${tokens.spacing.s100};
   width: auto;
   gap: ${tokens.spacing.s300};
@@ -34,7 +35,8 @@ const StyledContainerFields = styled.div<IStyledContainerFields>`
 const StyledIcon = styled.div<IStyledIcon>`
   display: flex;
   justify-content: center;
-  border: 1px solid ${inube.palette.neutral.N40};
+  border: ${({ theme }) =>
+    ` 1px solid ${theme.palette.neutral.N40 ?? inube.palette.neutral.N40}`};
   border-radius: ${tokens.spacing.s100};
   width: ${({ $isMobile }) => ($isMobile ? "100%" : "56px")};
   height: 40px;

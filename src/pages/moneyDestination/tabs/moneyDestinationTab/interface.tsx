@@ -56,17 +56,19 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
                 }
               />
             </Stack>
-            <Button
-              spacing="wide"
-              appearance={ComponentAppearance.PRIMARY}
-              variant="filled"
-              iconBefore={<MdAdd />}
-              type="link"
-              path="/money-destination/add-destination"
-              fullwidth={smallScreen}
-            >
-              {tablabels.addButton}
-            </Button>
+            {!smallScreen && (
+              <Button
+                spacing="wide"
+                appearance={ComponentAppearance.PRIMARY}
+                variant="filled"
+                iconBefore={<MdAdd />}
+                type="link"
+                path="/money-destination/add-destination"
+                fullwidth={smallScreen}
+              >
+                {tablabels.addButton}
+              </Button>
+            )}
           </Stack>
 
           <Stack>

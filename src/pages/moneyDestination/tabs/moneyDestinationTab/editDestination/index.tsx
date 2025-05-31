@@ -25,6 +25,8 @@ const EditDestination = () => {
     saveData,
     showRequestProcessModal,
     smallScreen,
+    showGeneralInformation,
+    showDecisionsForm,
     onSubmit,
     handleReset,
     setCreditLineDecisions,
@@ -32,15 +34,7 @@ const EditDestination = () => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowModal,
-  } = useEditDestination(
-    data ?? {
-      id: "",
-      nameDestination: "",
-      description: "",
-      icon: "",
-    },
-    appData,
-  );
+  } = useEditDestination({ data, appData });
 
   const {
     saveMoneyDestination,
@@ -49,15 +43,18 @@ const EditDestination = () => {
     showPendingReqModal,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
-  } = useSaveMoneyDestination(
-    UseCase.EDIT,
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
-    setShowModal,
-  );
+  } = useSaveMoneyDestination({
+    useCase: UseCase.EDIT,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
+    setShowModal: setShowModal,
+  });
+
+  const showRequestStatus =
+    showPendingReqModal && saveMoneyDestination?.requestNumber;
 
   return (
     <EditDestinationUI
@@ -74,13 +71,15 @@ const EditDestination = () => {
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}
       requestSteps={requestSteps}
       loading={loadingSendData}
-      showPendingReqModal={showPendingReqModal}
       showRequestProcessModal={showRequestProcessModal}
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
       initialGeneralInfData={initialGeneralInfData}
       normalizeEvaluateRuleData={normalizeEvaluateRuleData as IRuleDecision[]}
       smallScreen={smallScreen}
+      showGeneralInformation={showGeneralInformation}
+      showDecisionsForm={showDecisionsForm}
+      showRequestStatus={showRequestStatus}
     />
   );
 };

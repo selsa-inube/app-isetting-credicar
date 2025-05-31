@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
-
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -10,11 +8,11 @@ import { flowAutomaticMessages } from "@config/moneyDestination/moneyDestination
 import { interventionHumanMessage } from "@config/moneyDestination/moneyDestinationTab/generics/interventionHumanMessage";
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
-
 import { postAddMoneyDestination } from "@services/moneyDestination/postAddMoneyDestination";
 import { IRequestMoneyDestination } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IRequestMoneyDestination";
 import { patchEditMoneyDestination } from "@services/moneyDestination/patchEditMoneyDestination";
 import { deleteMoneyDestination } from "@services/moneyDestination/deleteMoneyDestination";
+import { IUseSaveMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseSaveMoneyDestination";
 import { UseCase } from "@enum/useCase";
 import { operationTypes } from "@config/useCase";
 import { RequestStepsStatus } from "@enum/requestStepsStatus";
@@ -22,16 +20,17 @@ import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { requestStepsInitial } from "@config/requestSteps";
 
-const useSaveMoneyDestination = (
-  useCase: "add" | "edit" | "delete",
-  bussinesUnits: string,
-  userAccount: string,
-  sendData: boolean,
-  data: ISaveDataRequest,
-  setSendData: React.Dispatch<React.SetStateAction<boolean>>,
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>,
-  setEntryDeleted?: (id: string | number) => void,
-) => {
+const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
+  const {
+    useCase,
+    bussinesUnits,
+    userAccount,
+    sendData,
+    data,
+    setSendData,
+    setShowModal,
+    setEntryDeleted,
+  } = props;
   const [saveMoneyDestination, setSaveMoneyDestination] =
     useState<ISaveDataResponse>();
   const [statusRequest, setStatusRequest] = useState<string>();

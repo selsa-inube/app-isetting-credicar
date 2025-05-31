@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { IUseDeleteDestination } from "@ptypes/hooks/moneyDestination/IUseDeleteDestination";
 
-const useDeleteDestination = (data: IEntry, appData: IAppData) => {
+const useDeleteDestination = (props: IUseDeleteDestination) => {
+  const { data, appData } = props;
   const [showModal, setShowModal] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [showPendingReq, setShowPendingReq] = useState(false);

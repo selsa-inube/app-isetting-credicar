@@ -5,7 +5,6 @@ import { ComponentAppearance } from "@enum/appearances";
 import { Accordion } from "@design/data/accordions";
 import { tokens } from "@design/tokens";
 import { IRequestSteps } from "@design/modals/requestProcessModal/types";
-import { VerificationBoxes } from "@design/forms/verificationDestination/verificationBoxes";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { finishModal } from "@config/moneyDestination/moneyDestinationTab/form/verificationForm";
 import { IFormsUpdateData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IFormsUpdateData";
@@ -16,6 +15,8 @@ import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
+import { verificationLabels } from "@config/moneyDestination/moneyDestinationTab/form/verificationLabels";
+import { VerificationBoxes } from "./verificationBoxes";
 
 interface IVerificationForm {
   requestSteps: IRequestSteps[];
@@ -33,7 +34,7 @@ interface IVerificationForm {
   onClosePendingReqModal: () => void;
 }
 
-function VerificationForm(props: IVerificationForm) {
+const VerificationForm = (props: IVerificationForm) => {
   const {
     requestSteps,
     showModal,
@@ -52,7 +53,10 @@ function VerificationForm(props: IVerificationForm) {
 
   const isTablet = useMediaQuery("(max-width: 1224px)");
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const showRequestProcess = showRequestProcessModal && saveMoneyDestination;
+
+  const ShowRequestStatus =
+    showPendingReqModal && saveMoneyDestination.requestNumber;
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
@@ -77,26 +81,21 @@ function VerificationForm(props: IVerificationForm) {
                 appearance={ComponentAppearance.DARK}
                 variant="none"
               >
-                Regresar a este paso
+                {verificationLabels.returnStep}
               </Button>
             </Stack>
           </Accordion>
         ))}
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
-        <Button
-          fullwidth={isMobile}
-          onClick={onPreviousStep}
-          appearance={ComponentAppearance.GRAY}
-        >
-          Anterior
+        <Button onClick={onPreviousStep} appearance={ComponentAppearance.GRAY}>
+          {verificationLabels.previus}
         </Button>
 
         <Button
-          fullwidth={isMobile}
           onClick={onToggleModal}
           appearance={ComponentAppearance.PRIMARY}
         >
-          Finalizar
+          {verificationLabels.finish}
         </Button>
       </Stack>
 
@@ -111,7 +110,7 @@ function VerificationForm(props: IVerificationForm) {
           loading={loading}
         />
       )}
-      {showRequestProcessModal && saveMoneyDestination && (
+      {showRequestProcess && (
         <RequestProcess
           portalId="portal"
           saveData={saveMoneyDestination}
@@ -122,7 +121,7 @@ function VerificationForm(props: IVerificationForm) {
           onCloseRequestStatus={onCloseRequestStatus}
         />
       )}
-      {showPendingReqModal && saveMoneyDestination.requestNumber && (
+      {ShowRequestStatus && (
         <RequestStatusModal
           portalId="portal"
           title={requestStatusMessage(saveMoneyDestination.staffName).title}
@@ -141,6 +140,6 @@ function VerificationForm(props: IVerificationForm) {
       )}
     </Stack>
   );
-}
+};
 
 export { VerificationForm };

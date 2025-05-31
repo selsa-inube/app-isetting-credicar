@@ -12,12 +12,7 @@ import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationT
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { UseCase } from "@enum/useCase";
-import { IEntry } from "@ptypes/design/table/IEntry";
-
-interface IDelete {
-  data: IEntry;
-  setEntryDeleted: (id: string | number) => void;
-}
+import { IDelete } from "@ptypes/moneyDestination/tabs/IDelete";
 
 const Delete = (props: IDelete) => {
   const { data, setEntryDeleted } = props;
@@ -31,7 +26,7 @@ const Delete = (props: IDelete) => {
     handleClick,
     setShowRequestProcessModal,
     setShowModal,
-  } = useDeleteDestination(data, appData);
+  } = useDeleteDestination({ data, appData });
 
   const {
     saveMoneyDestination,
@@ -40,16 +35,21 @@ const Delete = (props: IDelete) => {
     loadingSendData,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
-  } = useSaveMoneyDestination(
-    UseCase.DELETE,
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSaveMoneyDestination({
+    useCase: UseCase.DELETE,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
     setEntryDeleted,
-  );
+  });
+
+  const showRequestProcess = showRequestProcessModal && saveMoneyDestination;
+
+  const showRequestStatus =
+    showPendingReqModal && saveMoneyDestination?.requestNumber;
 
   return (
     <>
@@ -60,7 +60,7 @@ const Delete = (props: IDelete) => {
         onClick={handleClick}
         loading={loadingSendData}
       />
-      {showRequestProcessModal && saveMoneyDestination && (
+      {showRequestProcess && (
         <RequestProcess
           portalId="portal"
           saveData={saveMoneyDestination}
@@ -71,7 +71,7 @@ const Delete = (props: IDelete) => {
           onCloseRequestStatus={handleCloseRequestStatus}
         />
       )}
-      {showPendingReqModal && saveMoneyDestination?.requestNumber && (
+      {showRequestStatus && (
         <RequestStatusModal
           portalId="portal"
           title={requestStatusMessage(saveMoneyDestination.staffName).title}

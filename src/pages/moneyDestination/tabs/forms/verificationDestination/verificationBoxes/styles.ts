@@ -5,7 +5,7 @@ import { tokens } from "@design/tokens";
 const StyledConatinerAttribute = styled.div`
   display: flex;
   flex-direction: column;
-  border-radius: 8px;
+  border-radius: ${tokens.spacing.s100};
   width: 100%;
   min-height: 52px;
   background-color: ${({ theme }) =>

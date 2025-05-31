@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useEffect, useImperativeHandle, useState } from "react";
 import { MdOutlineFax } from "react-icons/md";
 import { FormikProps, useFormik } from "formik";
@@ -207,6 +208,8 @@ const useGeneralInformationForm = (
     ? isDisabledButton && !loading
     : isDisabledButton;
 
+  const isMobile = useMediaQuery("(max-width: 990px)");
+
   return {
     autosuggestValue,
     optionsDestination,
@@ -214,6 +217,7 @@ const useGeneralInformationForm = (
     isDisabledButton,
     icon,
     labelButtonNext,
+    isMobile,
     handleChange,
     handleReset,
     valuesEqual,

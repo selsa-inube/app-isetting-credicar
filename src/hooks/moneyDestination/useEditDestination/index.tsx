@@ -6,23 +6,16 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { arraysEqual } from "@utils/destination/arraysEqual";
 import { findDecision } from "@utils/destination/findDecision";
 import { TransactionOperation } from "@enum/transactionOperation";
+import { IUseEditDestination } from "@ptypes/hooks/moneyDestination/IUseEditDestination";
 
-const useEditDestination = (
-  data: {
-    nameDestination: string;
-    description: string;
-    icon: string;
-    id: string;
-  },
-  appData: IAppData,
-) => {
+const useEditDestination = (props: IUseEditDestination) => {
+  const { data, appData } = props;
   const initialGeneralInfData = {
     nameDestination: data.nameDestination ?? "",
     description: data.description ?? "",
@@ -262,6 +255,12 @@ const useEditDestination = (
 
   const smallScreen = useMediaQuery("(max-width: 990px)");
 
+  const showGeneralInformation =
+    isSelected === editDestinationTabsConfig.generalInformation.id;
+
+  const showDecisionsForm =
+    isSelected === editDestinationTabsConfig.creditLine.id;
+
   return {
     creditLineDecisions,
     normalizeEvaluateRuleData,
@@ -275,6 +274,8 @@ const useEditDestination = (
     showRequestProcessModal,
     showModal,
     smallScreen,
+    showGeneralInformation,
+    showDecisionsForm,
     handleReset,
     onSubmit,
     setCreditLineDecisions,

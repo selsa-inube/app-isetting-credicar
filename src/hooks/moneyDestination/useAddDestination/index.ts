@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { IRuleDecision, ICondition } from "@isettingkit/input";
@@ -96,6 +97,8 @@ const useAddDestination = () => {
     };
   });
 
+  const smallScreen = useMediaQuery("(max-width: 990px)");
+
   const handleSubmitClick = () => {
     setSaveData({
       applicationName: "ifac",
@@ -126,6 +129,7 @@ const useAddDestination = () => {
     showRequestProcessModal,
     saveData,
     showAttentionModal,
+    smallScreen,
     handleNextStep,
     handlePreviousStep,
     handleSubmitClick,

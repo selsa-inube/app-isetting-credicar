@@ -2,8 +2,10 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
+import { IUseMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseMoneyDestination";
 
-const useMoneyDestination = (bussinesUnits: string) => {
+const useMoneyDestination = (props: IUseMoneyDestination) => {
+  const { bussinesUnits } = props;
   const [moneyDestination, setMoneyDestination] = useState<
     IMoneyDestinationData[]
   >([]);
@@ -44,7 +46,7 @@ const useMoneyDestination = (bussinesUnits: string) => {
     setSearchMoneyDestination(e.target.value);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 690px)");
+  const smallScreen = useMediaQuery("(max-width: 990px)");
   const widthFirstColumn = smallScreen ? 64 : 25;
 
   const columnWidths = [widthFirstColumn, 55];

@@ -6,10 +6,15 @@ interface IStyledContainer {
   $isMobile: boolean;
 }
 
+const StyledFormContent = styled.div`
+  flex-grow: 1;
+`;
+
 const StyledContainer = styled.div<IStyledContainer>`
   display: flex;
   flex-direction: column;
-  border: 1px solid ${inube.palette.neutral.N40};
+  border: ${({ theme }) =>
+    ` 1px solid ${theme.palette.neutral.N40 ?? inube.palette.neutral.N40}`};
   border-radius: ${tokens.spacing.s100};
   width: auto;
   padding: ${({ $isMobile }) =>
@@ -17,4 +22,4 @@ const StyledContainer = styled.div<IStyledContainer>`
   gap: ${tokens.spacing.s250};
 `;
 
-export { StyledContainer };
+export { StyledContainer, StyledFormContent };
