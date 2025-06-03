@@ -34,38 +34,60 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s400} direction="column">
+        <Stack
+          gap={smallScreen ? tokens.spacing.s150 : tokens.spacing.s400}
+          direction="column"
+        >
+          {smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+                ellipsis
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
           <Stack
             justifyContent={smallScreen ? "center" : "start"}
             direction={smallScreen ? "column" : "row"}
             gap={
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
+            width="100%"
           >
-            <Stack justifyContent="center">
+            <Stack
+              justifyContent="center"
+              width={smallScreen ? "100%" : "auto"}
+            >
               <Searchfield
                 name="searchMoneyDestination"
                 id="searchMoneyDestination"
                 placeholder={tablabels.searchPlaceholder}
-                label={tablabels.searchLabel}
+                label={smallScreen ? "" : tablabels.searchLabel}
                 size="compact"
                 value={searchrequestProgress}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onSearchrequestProgress(e)
                 }
+                fullwidth={smallScreen}
               />
             </Stack>
           </Stack>
 
-          <Stack>
-            <Text
-              type="title"
-              size="medium"
-              appearance={ComponentAppearance.DARK}
-            >
-              {tablabels.description}
-            </Text>
-          </Stack>
+          {!smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
 
           <Table
             id="portal"
