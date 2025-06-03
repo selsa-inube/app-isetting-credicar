@@ -13,9 +13,9 @@ import { IRegularPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgr
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
+import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { StyledFormContent } from "./styles";
 import { AddCycleModal } from "../../addCycleModal";
-import { FloatingAddButton } from "../../floatingAddButton";
 
 const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
   const {

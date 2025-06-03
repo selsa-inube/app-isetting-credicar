@@ -13,9 +13,9 @@ import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTa
 import { IExtraordinaryPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesFormUI";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
+import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { StyledFormContent } from "../styles";
 import { AddCycleModal } from "../../addCycleModal";
-import { FloatingAddButton } from "../../floatingAddButton";
 
 const ExtraordinaryPaymentCyclesFormUI = (
   props: IExtraordinaryPaymentCyclesFormUI,
