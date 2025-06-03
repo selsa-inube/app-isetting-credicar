@@ -48,7 +48,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
     >
       <BoxContainer
         direction="column"
-        backgroundColor={theme.palette.neutral.N0 ?? inube.palette.neutral.N0}
         borderRadius={tokens.spacing.s100}
         borderColor={theme.palette.neutral.N40 ?? inube.palette.neutral.N40}
         boxSizing="border-box"
@@ -81,7 +80,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
           </Stack>
         </Stack>
         <BoxContainer
-          backgroundColor={theme.palette.neutral.N0 ?? inube.palette.neutral.N0}
           overflowY="auto"
           boxSizing="border-box"
           wrap="wrap"
@@ -98,9 +96,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
                 field={field}
                 data={data}
                 id={id}
-                backgroundColor={
-                  theme.palette.neutral.N10 ?? inube.palette.neutral.N10
-                }
                 borderRadius={tokens.spacing.s100}
                 padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
                 width={isMobile ? "253px" : "240px"}

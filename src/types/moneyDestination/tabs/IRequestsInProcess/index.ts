@@ -1,5 +1,5 @@
 import { ILabel } from "@ptypes/ILabel";
-import { IEntry } from "@src/types/design/table/IEntry";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IRequestsInProcess {
   data: IEntry;

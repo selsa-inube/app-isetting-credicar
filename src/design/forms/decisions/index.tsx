@@ -41,6 +41,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     disabledNext,
     disabledPrevius,
     showDecisionModal,
+    showFloatingAddButton,
     handleOpenModal,
     handleCloseModal,
     handleSubmitForm,
@@ -112,6 +113,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
       disabledPrevius={disabledPrevius}
       cancelButton={onPreviousStep}
       showDecisionModal={showDecisionModal}
+      showFloatingAddButton={showFloatingAddButton}
     />
   );
 };

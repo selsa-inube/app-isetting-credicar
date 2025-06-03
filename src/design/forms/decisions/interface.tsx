@@ -28,6 +28,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     showDecisionModal,
     disabledNext,
     disabledPrevius,
+    showFloatingAddButton,
     cancelButton,
     onCloseModal,
     onDelete,
@@ -59,7 +60,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
               customMessageEmptyDecisions={messageEmptyDecisions}
             />
           </StyledContainer>
-          {isMobile && decisions.length > 0 && (
+          {showFloatingAddButton && (
             <FloatingAddButton
               onToggleModal={onOpenModal}
               bottom="60px"

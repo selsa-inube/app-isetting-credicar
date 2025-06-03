@@ -99,7 +99,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             loading={loading}
             columnWidths={columnWidths}
             pageLength={8}
-            ellipsisCell={smallScreen ? false : true}
+            ellipsisCell={smallScreen}
           />
         </Stack>
       </Stack>

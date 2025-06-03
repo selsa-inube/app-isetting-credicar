@@ -1,18 +1,19 @@
+import { IVerificationBoxes } from "@ptypes/moneyDestination/tabs/IVerificationBoxes";
+import { stepsKeysMoneyDest } from "@enum/stepsKeysMoneyDest";
 import { RenderPersonalInfoVerification } from "../personalInfoVerification";
 import { RenderCreditlineVerification } from "../creditlineVerification";
-import { IVerificationBoxes } from "@ptypes/moneyDestination/tabs/IVerificationBoxes";
 
 const VerificationBoxes = (props: IVerificationBoxes) => {
   const { updatedData, stepKey } = props;
 
   return (
     <>
-      {stepKey === 1 && (
+      {stepKey === stepsKeysMoneyDest.GENERAL_DATA && (
         <RenderPersonalInfoVerification
           values={updatedData.personalInformation.values}
         />
       )}
-      {stepKey === 2 && (
+      {stepKey === stepsKeysMoneyDest.LINE_CREDIT && (
         <RenderCreditlineVerification values={updatedData.creditline.values} />
       )}
     </>

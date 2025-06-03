@@ -7,7 +7,7 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { notCancelStatus } from "@config/status/notCancelStatus";
 import { RequestStatus } from "@enum/requestStatus";
 import { StyledContainerIcon } from "./styles";
-import { cancelLabels } from "@src/config/cancelLabels";
+import { cancelLabels } from "@config/cancelLabels";
 
 interface ICancelRecord {
   showModal: boolean;

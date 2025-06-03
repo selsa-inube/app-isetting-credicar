@@ -17,6 +17,7 @@ interface IDecisionsFormUI {
   disabledNext: boolean;
   disabledPrevius: boolean;
   showDecisionModal: boolean;
+  showFloatingAddButton: boolean;
   onButtonClick: () => void;
   onCloseModal: () => void;
   onDelete: () => void;

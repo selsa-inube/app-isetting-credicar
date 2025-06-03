@@ -1,4 +1,4 @@
-import { IRequestSteps } from "@src/types/design/IRequestSteps";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 
 const lastCompletedIndex = (requestSteps: IRequestSteps[]) => {
   return requestSteps.reduce((lastIndex, current, index) => {
