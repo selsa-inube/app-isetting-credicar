@@ -47,7 +47,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
     <BoxContainer
       direction="column"
       gap={tokens.spacing.s300}
-      minHeight="55vh"
+      minHeight="60vh"
       backgroundColor={
         theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
       }
@@ -100,7 +100,13 @@ const ExtraordinaryPaymentCyclesFormUI = (
                 withGeneralizedTitle={true}
               />
             </Stack>
-            {isMobile && <FloatingAddButton onToggleModal={onToggleModal} />}
+            {isMobile && (
+              <FloatingAddButton
+                bottom="130px"
+                right="36px"
+                onToggleModal={onToggleModal}
+              />
+            )}
           </BoxContainer>
         </Stack>
       </StyledFormContent>

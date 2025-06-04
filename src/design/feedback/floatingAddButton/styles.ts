@@ -1,10 +1,15 @@
 import { inube } from "@inubekit/inubekit";
 import styled from "styled-components";
 
-const StyledFloatingButton = styled.div`
+interface IStyledFloatingButton {
+  $bottom: string;
+  $right: string;
+}
+
+const StyledFloatingButton = styled.div<IStyledFloatingButton>`
   position: fixed;
-  bottom: 130px;
-  right: 36px;
+  bottom: ${({ $bottom }) => $bottom};
+  right: ${({ $right }) => $right};
   z-index: 0.5;
   cursor: pointer;
 `;

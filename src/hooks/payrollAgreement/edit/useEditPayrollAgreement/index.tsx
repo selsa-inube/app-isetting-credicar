@@ -3,7 +3,6 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 
-import { mediaQueryMobile } from "@config/environment";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
 import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
@@ -28,13 +27,13 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
 import { dataTranslations } from "@utils/dataTranslations";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
-
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { getDayPayment } from "@utils/getDayPayment";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
+import { mediaQueryMobile } from "@config/environment";
 import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
-import { includedPeriodicity } from "@src/config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const { data } = props;
