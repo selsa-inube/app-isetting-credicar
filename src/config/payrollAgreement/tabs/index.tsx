@@ -1,3 +1,6 @@
+import { MdOutlineReportProblem } from "react-icons/md";
+import { ComponentAppearance } from "@enum/appearances";
+
 const payrollAgreementTabsConfig = (smallScreen: boolean) => {
   return {
     payrollAgreement: {
@@ -9,6 +12,10 @@ const payrollAgreementTabsConfig = (smallScreen: boolean) => {
       id: "requestsInProgress",
       isDisabled: false,
       label: smallScreen ? `En trámite` : "Nóminas de convenio en trámite",
+      icon: {
+        icon: <MdOutlineReportProblem />,
+        appearance: ComponentAppearance.WARNING,
+      },
     },
   };
 };

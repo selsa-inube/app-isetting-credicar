@@ -266,6 +266,13 @@ const sistemasenlinea = {
       },
     },
   },
+  tabs: {
+    content: {
+      appearance: {
+        selected: "primary",
+      },
+    },
+  },
 };
 
 export { sistemasenlinea };

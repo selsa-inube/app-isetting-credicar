@@ -31,6 +31,7 @@ const Table = (props: ITable) => {
     columnWidths,
     emptyDataMessage,
     withActionsTitles,
+    ellipsisCell = true,
     withActionMobile = true,
     withGeneralizedTitle = false,
   } = props;
@@ -94,6 +95,7 @@ const Table = (props: ITable) => {
           emptyDataMessage={emptyDataMessage}
           withActionsTitles={withActionsTitles}
           tableLayout={tableLayout}
+          ellipsisCell={ellipsisCell}
           withActionMobile={withActionMobile}
           withGeneralizedTitle={withGeneralizedTitle}
         />

@@ -13,6 +13,7 @@ import {
 import { ComponentAppearance } from "@enum/appearances";
 import { getAlignment } from "@utils/getAlignment/index.";
 import { ITableUI } from "@ptypes/design/table/ITableUI";
+import { tableLabels } from "@config/tableLabels";
 import { WidthColmnsData } from "./widthColumns";
 import { ShowActionTitle } from "./showActionTitle";
 import { ShowAction } from "./showAction";
@@ -37,6 +38,7 @@ const TableUI = (props: ITableUI) => {
     emptyDataMessage,
     withActionsTitles,
     tableLayout,
+    ellipsisCell,
     withActionMobile,
     withGeneralizedTitle,
     goToEndPage,
@@ -87,7 +89,7 @@ const TableUI = (props: ITableUI) => {
                   >
                     {emptyDataMessage
                       ? `${emptyDataMessage}`
-                      : "No se encontró información"}
+                      : tableLabels.emptyData}
                   </Text>
                 </Td>
               </Tr>
@@ -102,7 +104,7 @@ const TableUI = (props: ITableUI) => {
                           align={getAlignment(title.id, entry[title.id])}
                           type="custom"
                         >
-                          <Text size="small" ellipsis={true}>
+                          <Text size="small" ellipsis={ellipsisCell}>
                             {entry[title.id]}
                           </Text>
                         </Td>
@@ -124,7 +126,7 @@ const TableUI = (props: ITableUI) => {
                         appearance={ComponentAppearance.DARK}
                         ellipsis
                       >
-                        No hay resultados que coincidan con la búsqueda.
+                        {tableLabels.emptySearch}
                       </Text>
                     </Td>
                   </Tr>

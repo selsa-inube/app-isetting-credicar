@@ -167,6 +167,8 @@ const useDecisionForm = (
   const showDecisionModal =
     shouldShowAttentionModal && attentionModal ? true : false;
 
+  const showFloatingAddButton = isMobile && decisions.length > 0;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -181,6 +183,7 @@ const useDecisionForm = (
     disabledNext,
     disabledPrevius,
     showDecisionModal,
+    showFloatingAddButton,
     cancelButton,
     handleOpenModal,
     handleCloseModal,

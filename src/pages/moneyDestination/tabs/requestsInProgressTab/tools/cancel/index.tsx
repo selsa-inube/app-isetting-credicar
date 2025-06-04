@@ -3,11 +3,7 @@ import { CancelRecord } from "@design/feedback/cancelRecord";
 import { cancelRequestInProgressModal } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgressModal";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useCancelRequestInProgress } from "@hooks/moneyDestination/useCancelRequestInProgress";
-import { IEntry } from "@ptypes/design/table/IEntry";
-interface ICancel {
-  data: IEntry;
-  setEntryCanceled: (id: string | number) => void;
-}
+import { ICancel } from "@ptypes/moneyDestination/tabs/ICancel";
 
 const Cancel = (props: ICancel) => {
   const { data, setEntryCanceled } = props;

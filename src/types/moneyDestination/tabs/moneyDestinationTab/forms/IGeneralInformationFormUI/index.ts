@@ -12,6 +12,7 @@ interface IGeneralInformationFormUI {
   loading: boolean;
   labelButtonNext: string;
   buttonDisabledState: boolean;
+  isMobile: boolean;
   onButtonClick: () => void;
   onReset: () => void;
   onChange: (name: string, value: string) => void;

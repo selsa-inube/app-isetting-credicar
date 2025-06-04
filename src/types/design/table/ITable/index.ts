@@ -16,6 +16,7 @@ interface ITable {
   mobileTitle?: string;
   pageLength?: number;
   widthPercentageTotalColumns?: number;
+  ellipsisCell?: boolean;
   columnWidths?: number[];
   emptyDataMessage?: string;
   withActionsTitles?: boolean;

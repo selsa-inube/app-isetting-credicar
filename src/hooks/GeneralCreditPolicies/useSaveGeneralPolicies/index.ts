@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
@@ -15,6 +14,7 @@ import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest"
 import { IUseSaveGeneralPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseSaveGeneralPolicies";
 import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { requestStepsInitial } from "@config/requestSteps";
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {

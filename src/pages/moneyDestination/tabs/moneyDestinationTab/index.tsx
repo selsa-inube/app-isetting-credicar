@@ -16,7 +16,7 @@ function MoneyDestinationTab() {
     columnWidths,
     handleSearchMoneyDestination,
     setEntryDeleted,
-  } = useMoneyDestination(appData.businessUnit.publicCode);
+  } = useMoneyDestination({ bussinesUnits: appData.businessUnit.publicCode });
 
   return (
     <MoneyDestinationTabUI

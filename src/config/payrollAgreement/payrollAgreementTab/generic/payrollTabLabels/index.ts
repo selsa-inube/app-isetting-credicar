@@ -1,6 +1,6 @@
 const payrollTabLabels = {
   buttonLabel: "Agregar nómina",
-  description: "Consulta de las nóminas de convenio disponibles",
+  description: "Consulta de nóminas de convenio disponibles",
   emptyDataMessageDesk:
     "Aún no hay nóminas de convenio registradas, presiona “+ Agregar nómina” para empezar.",
   emptyDataMessageMobile:

@@ -35,49 +35,73 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s400} direction="column">
+        <Stack
+          gap={smallScreen ? tokens.spacing.s150 : tokens.spacing.s400}
+          direction="column"
+        >
+          {smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+                ellipsis
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
           <Stack
             justifyContent={smallScreen ? "center" : "space-between"}
             direction={smallScreen ? "column-reverse" : "row"}
             gap={
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
+            width="100%"
           >
-            <Stack justifyContent="center">
+            <Stack
+              justifyContent="center"
+              width={smallScreen ? "100%" : "auto"}
+            >
               <Searchfield
                 name="searchMoneyDestination"
                 id="searchMoneyDestination"
                 placeholder={tablabels.searchPlaceholder}
-                label={tablabels.searchLabel}
+                label={smallScreen ? "" : tablabels.searchLabel}
                 size="compact"
                 value={searchMoneyDestination}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onSearchMoneyDestination(e)
                 }
+                fullwidth={smallScreen}
               />
             </Stack>
-            <Button
-              spacing="wide"
-              appearance={ComponentAppearance.PRIMARY}
-              variant="filled"
-              iconBefore={<MdAdd />}
-              type="link"
-              path="/money-destination/add-destination"
-              fullwidth={smallScreen}
-            >
-              {tablabels.addButton}
-            </Button>
+            {!smallScreen && (
+              <Button
+                spacing="wide"
+                appearance={ComponentAppearance.PRIMARY}
+                variant="filled"
+                iconBefore={<MdAdd />}
+                type="link"
+                path="/money-destination/add-destination"
+                fullwidth={smallScreen}
+              >
+                {tablabels.addButton}
+              </Button>
+            )}
           </Stack>
 
-          <Stack>
-            <Text
-              type="title"
-              size="medium"
-              appearance={ComponentAppearance.DARK}
-            >
-              {tablabels.description}
-            </Text>
-          </Stack>
+          {!smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
 
           <Table
             id="portal"

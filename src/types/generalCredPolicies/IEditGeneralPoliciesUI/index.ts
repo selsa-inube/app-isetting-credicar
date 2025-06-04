@@ -1,11 +1,11 @@
 import { FormikProps } from "formik";
 import { ITab } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IDateVerification } from "../forms/IDateVerification";
 import { IDecisionsGeneralEntry } from "../forms/IDecisionsGeneralEntry";
 import { DefaultTheme } from "styled-components/dist/types";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 
 interface IEditGeneralPoliciesUI {
   filteredTabsConfig: ITab[];
