@@ -32,7 +32,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
   } = props;
 
   return (
-    <StyledContainer>
+    <StyledContainer $isMobile={isMobile}>
       <StyledFormContent>
         <form>
           <Stack direction="column" gap={tokens.spacing.s300}>

@@ -1,5 +1,8 @@
+import { MdAddCircle } from "react-icons/md";
+import { Icon } from "@inubekit/inubekit";
 import { IFloatingAddButton } from "@ptypes/design/IFloatingAddButton";
-import { StyledCircleWithCross, StyledFloatingButton } from "./styles";
+import { ComponentAppearance } from "@enum/appearances";
+import { StyledFloatingButton } from "./styles";
 
 const FloatingAddButton = (props: IFloatingAddButton) => {
   const { bottom, right, onToggleModal } = props;
@@ -10,7 +13,11 @@ const FloatingAddButton = (props: IFloatingAddButton) => {
       $bottom={bottom}
       $right={right}
     >
-      <StyledCircleWithCross />
+      <Icon
+        icon={<MdAddCircle />}
+        size={"60px"}
+        appearance={ComponentAppearance.PRIMARY}
+      />
     </StyledFloatingButton>
   );
 };

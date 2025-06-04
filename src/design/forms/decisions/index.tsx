@@ -114,6 +114,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
       cancelButton={onPreviousStep}
       showDecisionModal={showDecisionModal}
       showFloatingAddButton={showFloatingAddButton}
+      editDataOption={editDataOption}
     />
   );
 };

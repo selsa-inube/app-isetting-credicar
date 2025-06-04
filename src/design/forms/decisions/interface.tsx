@@ -29,6 +29,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     disabledNext,
     disabledPrevius,
     showFloatingAddButton,
+    editDataOption,
     cancelButton,
     onCloseModal,
     onDelete,
@@ -40,9 +41,16 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onSave,
   } = props;
 
+  const heightContent =
+    isMobile && editDataOption ? "70vh" : isMobile ? "60vh" : "auto";
+
   return (
     <form>
-      <Stack direction="column" gap={tokens.spacing.s300} height="50vh">
+      <Stack
+        direction="column"
+        gap={tokens.spacing.s300}
+        height={heightContent}
+      >
         <StyledFormContent>
           <StyledContainer $isMobile={isMobile}>
             <BusinessRules
@@ -63,7 +71,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
           {showFloatingAddButton && (
             <FloatingAddButton
               onToggleModal={onOpenModal}
-              bottom="60px"
+              bottom={editDataOption ? "55px" : "45px"}
               right="36px"
             />
           )}

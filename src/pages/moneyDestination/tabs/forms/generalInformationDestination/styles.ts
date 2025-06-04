@@ -11,11 +11,11 @@ interface IStyledIcon {
   $isMobile: boolean;
 }
 
-const StyledContainer = styled.div`
+const StyledContainer = styled.div<IStyledIcon>`
   display: flex;
   flex-direction: column;
   gap: ${tokens.spacing.s300};
-  min-height: 55vh;
+  min-height: ${({ $isMobile }) => ($isMobile ? "60vh" : "50vh")};
 `;
 
 const StyledFormContent = styled.div`
