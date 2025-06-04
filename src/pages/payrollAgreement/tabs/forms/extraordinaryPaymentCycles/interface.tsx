@@ -103,7 +103,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
             {isMobile && (
               <FloatingAddButton
                 bottom="130px"
-                right="36px"
+                right="32px"
                 onToggleModal={onToggleModal}
               />
             )}

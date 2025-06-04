@@ -106,7 +106,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
             {isMobile && (
               <FloatingAddButton
                 bottom="130px"
-                right="36px"
+                right="32px"
                 onToggleModal={onToggleModal}
               />
             )}
