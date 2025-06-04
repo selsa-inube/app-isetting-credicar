@@ -7,6 +7,12 @@ interface IRegularPaymentCyclesForm {
   setRegularPaymentCycles: React.Dispatch<
     React.SetStateAction<IOrdinaryCyclesEntry[]>
   >;
+  setIncludeExtraPayDay: React.Dispatch<
+    React.SetStateAction<IOrdinaryCyclesEntry[]>
+  >;
+  setRegularDeleted: React.Dispatch<
+    React.SetStateAction<IOrdinaryCyclesEntry[]>
+  >;
   loading?: boolean;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;
   onSubmit?: (values: IOrdinaryCyclesEntry) => void;

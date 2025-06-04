@@ -12,6 +12,7 @@ import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTa
 import { IExtraordinaryPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesFormUI";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
+import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { StyledFormContent } from "../styles";
 import { AddCycleModal } from "../../addCycleModal";
 
@@ -46,7 +47,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
     <BoxContainer
       direction="column"
       gap={tokens.spacing.s300}
-      minHeight="55vh"
+      minHeight="60vh"
       backgroundColor={
         theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
       }
@@ -75,27 +76,37 @@ const ExtraordinaryPaymentCyclesFormUI = (
               gap={tokens.spacing.s250}
               alignItems="end"
             >
-              <Button
-                fullwidth={isMobile}
-                iconBefore={<MdOutlineAdd />}
-                onClick={onToggleModal}
-                appearance={ComponentAppearance.PRIMARY}
-              >
-                {cyclespaymentLabels.titlePaymentCycle}
-              </Button>
+              {!isMobile && (
+                <Button
+                  iconBefore={<MdOutlineAdd />}
+                  onClick={onToggleModal}
+                  appearance={ComponentAppearance.PRIMARY}
+                >
+                  {cyclespaymentLabels.titlePaymentCycle}
+                </Button>
+              )}
 
               <Table
                 id="portal"
                 titles={titles}
                 entries={entries}
-                actions={actionsConfig(setEntryDeleted)}
+                actions={actionsConfig(setEntryDeleted, isMobile)}
                 breakpoints={breakPoints}
                 loading={loading}
                 columnWidths={columnWidths}
                 withActionsTitles
                 emptyDataMessage={cyclespaymentLabels.emptyDataMessage}
+                withActionMobile={false}
+                withGeneralizedTitle={true}
               />
             </Stack>
+            {isMobile && (
+              <FloatingAddButton
+                bottom="130px"
+                right="32px"
+                onToggleModal={onToggleModal}
+              />
+            )}
           </BoxContainer>
         </Stack>
       </StyledFormContent>

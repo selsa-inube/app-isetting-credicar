@@ -57,7 +57,7 @@ const GeneralInformationPayrollFormUI = (
   return (
     <BoxContainer
       direction="column"
-      gap={tokens.spacing.s250}
+      gap={tokens.spacing.s150}
       backgroundColor={
         theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
       }
@@ -73,7 +73,6 @@ const GeneralInformationPayrollFormUI = (
               }
               borderRadius={tokens.spacing.s100}
               width="100%"
-              gap={tokens.spacing.s300}
               backgroundColor={
                 theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
               }
@@ -86,7 +85,7 @@ const GeneralInformationPayrollFormUI = (
                 templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
                 templateRows={gridTemplateRows}
                 width="100%"
-                gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s250}
+                gap={isMobile ? tokens.spacing.s150 : tokens.spacing.s250}
               >
                 {editDataOption && (
                   <>

@@ -23,6 +23,7 @@ const DecisionModal = (props: IDecisionModal) => {
     portalId = "portal",
     title,
     appearance = ComponentAppearance.PRIMARY,
+    appearanceButton = ComponentAppearance.PRIMARY,
     withCancelButton = true,
     moreDetails,
     withDate,
@@ -53,6 +54,7 @@ const DecisionModal = (props: IDecisionModal) => {
       onClick={onClick ?? (() => void 0)}
       loading={loading}
       disabledActionButton={isDisabledButton}
+      appearanceButton={appearanceButton}
     >
       {withIcon && (
         <Stack width="100%" alignItems="center" justifyContent="center">

@@ -11,6 +11,12 @@ interface IUseOrdinaryCyclesForm {
   setRegularPaymentCycles: React.Dispatch<
     React.SetStateAction<IOrdinaryCyclesEntry[]>
   >;
+  setIncludeExtraPayDay: React.Dispatch<
+    React.SetStateAction<IOrdinaryCyclesEntry[]>
+  >;
+  setRegularDeleted: React.Dispatch<
+    React.SetStateAction<IOrdinaryCyclesEntry[]>
+  >;
   initialData?: IOrdinaryCyclesEntry[];
 }
 

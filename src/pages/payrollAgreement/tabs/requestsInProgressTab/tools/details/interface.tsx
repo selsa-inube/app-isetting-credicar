@@ -50,7 +50,7 @@ const DetailsUI = (props: IDetailsUI) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            {detailsLabels.title}
+            {detailsLabels.titleMobile}
           </Text>
         )}
       </StyledContainerIcon>

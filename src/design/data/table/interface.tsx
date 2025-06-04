@@ -39,6 +39,8 @@ const TableUI = (props: ITableUI) => {
     withActionsTitles,
     tableLayout,
     ellipsisCell,
+    withActionMobile,
+    withGeneralizedTitle,
     goToEndPage,
     goToFirstPage,
     nextPage,
@@ -67,6 +69,7 @@ const TableUI = (props: ITableUI) => {
             mediaQuery: mediaActionOpen,
             actionTitle: actions,
             title: withActionsTitles,
+            withGeneralizedTitle,
           })}
         </Tr>
       </Thead>
@@ -110,6 +113,7 @@ const TableUI = (props: ITableUI) => {
                         actionContent: actions,
                         entry,
                         mediaQuery: mediaActionOpen,
+                        withActionMobile,
                       })}
                     </Tr>
                   ))

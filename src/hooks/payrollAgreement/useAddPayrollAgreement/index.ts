@@ -29,6 +29,10 @@ import { checkDayWeek } from "@utils/checkDayWeek";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
 import { getIncomeTypesData } from "@utils/IncomeTypesData";
 import { useLegalPerson } from "../useLegalPerson";
+import { getUniquePaydays } from "@utils/getUniqueDays";
+import { getDaysInNumber } from "@utils/getDaysInNumber";
+import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;
@@ -88,11 +92,17 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const [regularPaymentCycles, setRegularPaymentCycles] = useState<
     IOrdinaryCyclesEntry[]
   >([]);
+  const [includeExtraPayDay, setIncludeExtraPayDay] = useState<
+    IOrdinaryCyclesEntry[]
+  >([]);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [extraordinaryPayment, setExtraordinaryPayment] = useState<
     IExtraordinaryCyclesEntry[]
   >([]);
+  const [regularDeleted, setRegularDeleted] = useState<IOrdinaryCyclesEntry[]>(
+    [],
+  );
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [typeRegularPayroll, setTypeRegularPayroll] = useState<boolean>(false);
   const [canRefresh, setCanRefresh] = useState(false);
@@ -138,6 +148,66 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     );
   }, [formValues.generalInformation.values.typePayroll]);
 
+  const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
+    const filteredEntries = entries.filter((item) =>
+      includedPeriodicity.includes(item.periodicity ?? ""),
+    );
+
+    const days = getUniquePaydays(filteredEntries);
+    const daysInNumber = getDaysInNumber(days);
+    const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
+
+    let verifyDays: number[] = [];
+    let lastDayOfMonth: number[] = [];
+
+    extraordinaryPayment.forEach((item) => {
+      const month = Number(item.payday?.slice(0, 2));
+      const paydayValue = Number(item.payday?.split("-")[1]);
+      lastDayOfMonth = getLastDayOfMonth(days, month - 1);
+
+      verifyDays = Array.from(new Set([...daysInNumber, ...lastDayOfMonth]));
+
+      const filteredRegularPaymentCycles = regularPaymentCycles.flatMap(
+        (item) => {
+          const filteredPayday = item.payday
+            ? item.payday.split(",").map((payday) => Number(payday.trim()))
+            : [];
+          return filteredPayday.filter((payday) => verifyDays.includes(payday));
+        },
+      );
+
+      if (filteredRegularPaymentCycles.length > 0) {
+        verifyDays = verifyDays.filter(
+          (day) => !filteredRegularPaymentCycles.includes(day),
+        );
+      }
+
+      if (!verifyDays.includes(paydayValue)) {
+        filteredExtraordinary.push(item);
+      }
+    });
+
+    return {
+      filteredExtraordinary,
+    };
+  };
+
+  useEffect(() => {
+    if (regularDeleted && regularDeleted.length > 0) {
+      const { filteredExtraordinary } =
+        filterExtraordinaryPayment(regularDeleted);
+      setExtraordinaryPayment((prev) =>
+        prev.filter((item) => {
+          return filteredExtraordinary.some(
+            (filteredItem) =>
+              filteredItem.id === item.id &&
+              item.nameCycle === filteredItem.nameCycle,
+          );
+        }),
+      );
+    }
+  }, [regularDeleted]);
+
   const handleNextStep = () => {
     if (currentStep < addPayrollAgreementSteps.length) {
       if (companyRef.current) {
@@ -179,8 +249,9 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
             values: regularPaymentCycles ?? [],
           },
         }));
+        const step = includeExtraPayDay.length === 0 ? 5 : currentStep + 1;
         setIsCurrentFormValid(true);
-        setCurrentStep(currentStep + 1);
+        setCurrentStep(step);
       }
 
       if (currentStep === 4) {
@@ -204,6 +275,12 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
 
     if (currentStep === 4) {
       const stepOrdinaryCycles = typeRegularPayroll ? currentStep - 1 : 2;
+      setCurrentStep(stepOrdinaryCycles);
+    }
+
+    if (currentStep === 5) {
+      const stepOrdinaryCycles =
+        includeExtraPayDay.length === 0 ? 3 : currentStep - 1;
       setCurrentStep(stepOrdinaryCycles);
     }
   };
@@ -390,10 +467,14 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     showModal,
     showRequestProcessModal,
     saveData,
+    includeExtraPayDay,
+    regularDeleted,
+    setIncludeExtraPayDay,
     handleToggleModal,
     setExtraordinaryPayment,
     setSourcesOfIncomeValues,
     setRegularPaymentCycles,
+    setRegularDeleted,
     handleNextStep,
     handlePreviousStep,
     setCurrentStep,

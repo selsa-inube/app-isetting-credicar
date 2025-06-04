@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 
-import { mediaQueryMobile } from "@config/environment";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
 import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
@@ -28,10 +27,11 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
 import { dataTranslations } from "@utils/dataTranslations";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
-
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { getDayPayment } from "@utils/getDayPayment";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
+import { mediaQueryMobile } from "@config/environment";
 import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
@@ -138,6 +138,11 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const [sourcesOfIncomeValues, setSourcesOfIncomeValues] = useState<
     IServerDomain[]
   >([]);
+  const [regularDeleted, setRegularDeleted] = useState<IOrdinaryCyclesEntry[]>(
+    [],
+  );
+  const [includeExtraPayDay, setIncludeExtraPayDay] =
+    useState<IOrdinaryCyclesEntry[]>();
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -177,8 +182,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     );
   }, []);
 
-  const filteredTabsConfig = Object.keys(editPayrollAgTabsConfig).reduce(
-    (acc, key) => {
+  const filteredTabsConfig = useMemo(() => {
+    return Object.keys(editPayrollAgTabsConfig).reduce((acc, key) => {
       const tab =
         editPayrollAgTabsConfig[key as keyof typeof editPayrollAgTabsConfig];
 
@@ -190,14 +195,23 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       ) {
         return acc;
       }
+      if (
+        key === editPayrollAgTabsConfig.extraordinaryPaymentCycles.id &&
+        !regularPaymentCycles.some(
+          (e) =>
+            e.periodicity !== undefined &&
+            includedPeriodicity.includes(e.periodicity),
+        )
+      ) {
+        return acc;
+      }
 
       if (tab !== undefined) {
         acc[key as keyof IEditPayrollTabsConfig] = tab;
       }
       return acc;
-    },
-    {} as IEditPayrollTabsConfig,
-  );
+    }, {} as IEditPayrollTabsConfig);
+  }, [regularPaymentValues]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -415,32 +429,36 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     deletedAlertModal(typePayroll);
 
   return {
+    actionText,
+    companyAgreement,
+    description,
+    extraordinaryPayment,
+    filteredTabs,
+    filteredTabsConfig,
     formValues,
     generalInformationRef,
+    includeExtraPayDay,
+    initialData,
     isCurrentFormValid,
     isSelected,
-    smallScreen,
-    sourcesOfIncomeValues,
-    companyAgreement,
-    showRequestProcessModal,
+    moreDetails,
+    regularDeleted,
+    regularPaymentCycles,
     saveData,
+    showDeletedAlertModal,
+    showExtraPaymentCyclesForm,
+    showGeneralInfPayrollForm,
     showGoBackModal,
     showModal,
-    initialData,
-    typeRegularPayroll,
-    regularPaymentCycles,
-    extraordinaryPayment,
-    filteredTabsConfig,
-    showDeletedAlertModal,
-    typePayroll,
-    showGeneralInfPayrollForm,
     showRegularPaymentCyclesForm,
-    showExtraPaymentCyclesForm,
-    filteredTabs,
+    showRequestProcessModal,
+    smallScreen,
+    sourcesOfIncomeValues,
     title,
-    description,
-    actionText,
-    moreDetails,
+    typePayroll,
+    typeRegularPayroll,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
     handleToggleDeletedAlertModal,
     setExtraordinaryPayment,
     setRegularPaymentCycles,

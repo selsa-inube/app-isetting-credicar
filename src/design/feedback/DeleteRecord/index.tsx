@@ -2,22 +2,24 @@ import { MdDeleteOutline } from "react-icons/md";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { ComponentAppearance } from "@enum/appearances";
-import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 import { DecisionModal } from "@design/modals/decisionModal";
+import { IDelete } from "@ptypes/design/IDelete";
+import { deleteRecordLabels } from "@config/deleteRecordLabels";
 import { StyledContainerIcon } from "./styles";
 
-interface IDelete {
-  showModal: boolean;
-  messageDelete: IMessageModal;
-  loading: boolean;
-  onToggleModal: () => void;
-  onClick: () => void;
-}
-
 const DeleteRecord = (props: IDelete) => {
-  const { showModal, messageDelete, loading, onToggleModal, onClick } = props;
+  const {
+    showModal,
+    messageDelete,
+    loading,
+    withActionMobile = true,
+    onToggleModal,
+    onClick,
+  } = props;
 
   const screenTablet = useMediaQuery("(max-width: 1200px)");
+
+  const showTitle = screenTablet && withActionMobile;
 
   return (
     <>
@@ -30,9 +32,9 @@ const DeleteRecord = (props: IDelete) => {
           cursorHover
           spacing="narrow"
         />
-        {screenTablet && (
+        {showTitle && (
           <Text type="body" size="medium">
-            Eliminar
+            {deleteRecordLabels.title}
           </Text>
         )}
       </StyledContainerIcon>

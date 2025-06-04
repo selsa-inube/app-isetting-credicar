@@ -10,6 +10,7 @@ interface ITable {
   titles: ITitle[];
   actions: IAction[];
   breakpoints: IBreakpoint[];
+  withGeneralizedTitle?: boolean;
   filter?: string;
   infoTitle?: string;
   mobileTitle?: string;
@@ -20,6 +21,7 @@ interface ITable {
   emptyDataMessage?: string;
   withActionsTitles?: boolean;
   tableLayout?: "fixed" | "auto";
+  withActionMobile?: boolean;
 }
 
 export type { ITable };

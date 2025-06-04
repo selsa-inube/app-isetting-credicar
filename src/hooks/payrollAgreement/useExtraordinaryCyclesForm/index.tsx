@@ -34,7 +34,6 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     onFormValid,
     extraordinaryPayment,
     setExtraordinaryPayment,
-
     regularPaymentCycles,
     initialData,
   } = props;
@@ -133,7 +132,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       );
       setDayOptions(options);
     }
-  }, [formik.values.month]);
+  }, [formik.values.month, regularPaymentCycles]);
 
   useEffect(() => {
     const updateButton = () => {
