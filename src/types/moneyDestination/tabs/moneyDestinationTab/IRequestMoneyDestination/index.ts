@@ -1,5 +1,5 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { ISettingRequest } from "../ISettingRequest";
+import { ISettingRequest } from "@ptypes/ISettingRequest";
 
 interface IRequestMoneyDestination {
   abbreviatedName?: string;

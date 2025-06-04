@@ -27,10 +27,13 @@ const useDeletePayroll = (props: IUseDeletePayroll) => {
       useCaseName: "DeletePayrollAgreement",
       configurationRequestData: {
         abbreviatedName: data.abbreviatedName,
-        numberOfDaysForReceivingTheDiscounts:
+        payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
+        payrollForDeductionAgreementCode: data.payrollForDeductionAgreementCode,
+        numberOfDaysForReceivingTheDiscounts: Number(
           data.numberOfDaysForReceivingTheDiscounts,
+        ),
         payrollForDeductionAgreementType: data.payrollForDeductionAgreementType,
-        justification: `La eliminación de la nomina de convenio es solicitada por ${appData.user.userAccount}`,
+        removalJustification: `La eliminación de la nomina de convenio es solicitada por ${appData.user.userAccount}`,
       },
     });
     setShowRequestProcessModal(true);

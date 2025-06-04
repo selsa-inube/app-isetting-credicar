@@ -28,6 +28,20 @@ const dataTranslations: Record<string, string> = {
   "Business unit": "Unidad de negocio",
   amount: "Monto",
   net: "Neto",
+  Sunday: "Domingo",
+  Monday: "Lunes",
+  Tuesday: "Martes",
+  Wednesday: "Miércoles",
+  Thursday: "Jueves",
+  Friday: "Viernes",
+  Saturday: "Sábado",
+  Weekly: "Semanal",
+  Biweekly: "Quincenal",
+  Semimonthly: "Bimensual",
+  Monthly: "Mensual",
+  Intervals_10_days: "Cada 10 días",
+  OrdinaryRemuneration: "Remuneración ordinaria",
+  BonusesOrSeverancePay: "Primas o cesantías",
 };
 
 export { dataTranslations };

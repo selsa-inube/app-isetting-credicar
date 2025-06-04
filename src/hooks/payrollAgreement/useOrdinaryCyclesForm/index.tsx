@@ -162,9 +162,12 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     cycleId: addLeadingZero(id).toString(),
     nameCycle: formik.values.nameCycle,
     periodicity:
-      normalizeEnumTranslation(formik.values.periodicity)?.name ??
+      normalizeEnumTranslation(formik.values.periodicity ?? "")?.name ??
       formik.values.periodicity,
-    payday: payDayValues(formik.values.periodicity, formik.values.payday),
+    payday: payDayValues(
+      formik.values.periodicity ?? "",
+      formik.values.payday ?? "",
+    ),
     numberDaysUntilCut: formik.values.numberDaysUntilCut,
   });
 
@@ -179,7 +182,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       return [...prev, createNewCycle(prev.length + 1)];
     });
 
-    if (includedPeriodicity.includes(formik.values.periodicity)) {
+    if (includedPeriodicity.includes(formik.values.periodicity ?? "")) {
       setIncludeExtraPayDay((prev) => {
         if (!Array.isArray(prev)) return [];
         return [...prev, createNewCycle(prev.length + 1)];

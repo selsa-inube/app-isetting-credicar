@@ -31,6 +31,8 @@ const MoreDetails = (props: IMoreDetails) => {
     ordinaryEliminatedData,
     extraordinaryIncludedData,
     extraordinaryEliminatedData,
+    title,
+    moreDetails = true,
     onCloseModal,
     onTabChange,
   } = props;
@@ -64,16 +66,19 @@ const MoreDetails = (props: IMoreDetails) => {
     isField({ id: field.id }),
   );
 
+  const subtitle = `${moreDetailsRequestModal.subtitle} ${abbreviatedName}`;
+
   return (
     <ModalWrapper
-      width={isMobile ? "300px" : "700px"}
+      width={isMobile ? "335px" : "700px"}
       maxHeight={isMobile ? "600px" : "750px"}
       isMobile={isMobile}
+      padding={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`}
       labelActionButton={moreDetailsRequestModal.labelActionButton}
       labelCloseButton={moreDetailsRequestModal.labelCloseButton}
       labelCloseModal={moreDetailsRequestModal.labelCloseModal}
       portalId={portalId}
-      title={moreDetailsRequestModal.title}
+      title={title}
       onClick={onCloseModal}
       onCloseModal={onCloseModal}
     >
@@ -86,7 +91,7 @@ const MoreDetails = (props: IMoreDetails) => {
         borderRadius={tokens.spacing.s100}
         width="100%"
         maxHeight={isMobile ? "410px" : "auto"}
-        padding={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s200}`}
+        padding={isMobile ? `${tokens.spacing.s050}` : `${tokens.spacing.s200}`}
         backgroundColor={
           theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
         }
@@ -94,17 +99,20 @@ const MoreDetails = (props: IMoreDetails) => {
         overflowY="auto"
         overflowX="hidden"
       >
-        <Stack gap={tokens.spacing.s100} direction="column">
-          <Text
-            type="title"
-            size="medium"
-            appearance={ComponentAppearance.GRAY}
-            weight="bold"
-          >
-            {`${moreDetailsRequestModal.subtitle} ${abbreviatedName}`}
-          </Text>
-          <Divider dashed />
-        </Stack>
+        {moreDetails && (
+          <Stack gap={tokens.spacing.s100} direction="column">
+            <Text
+              type="title"
+              size={isMobile ? "small" : "medium"}
+              appearance={ComponentAppearance.GRAY}
+              weight="bold"
+            >
+              {subtitle}
+            </Text>
+            <Divider dashed />
+          </Stack>
+        )}
+
         <Grid
           templateColumns={isMobile ? "auto" : "repeat(2,auto)"}
           templateRows={isMobile ? "repeat(4,auto)" : "repeat(2,auto)"}

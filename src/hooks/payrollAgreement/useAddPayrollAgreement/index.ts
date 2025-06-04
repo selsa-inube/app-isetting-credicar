@@ -23,8 +23,11 @@ import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreemen
 import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
-import { TransactionOperation } from "@enum/transactionOperation";
 import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
+import { formatPaymentDay } from "@utils/formatPaymentDay";
+import { checkDayWeek } from "@utils/checkDayWeek";
+import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
+import { getIncomeTypesData } from "@utils/IncomeTypesData";
 import { useLegalPerson } from "../useLegalPerson";
 import { getUniquePaydays } from "@utils/getUniqueDays";
 import { getDaysInNumber } from "@utils/getDaysInNumber";
@@ -147,7 +150,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
 
   const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
     const filteredEntries = entries.filter((item) =>
-      includedPeriodicity.includes(item.periodicity),
+      includedPeriodicity.includes(item.periodicity ?? ""),
     );
 
     const days = getUniquePaydays(filteredEntries);
@@ -167,8 +170,8 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       const filteredRegularPaymentCycles = regularPaymentCycles.flatMap(
         (item) => {
           const filteredPayday = item.payday
-            .split(",")
-            .map((payday) => Number(payday.trim()));
+            ? item.payday.split(",").map((payday) => Number(payday.trim()))
+            : [];
           return filteredPayday.filter((payday) => verifyDays.includes(payday));
         },
       );
@@ -339,10 +342,9 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       : !isCurrentFormValid;
 
   const company = {
-    legalPersonId: formValues.company.values.companyNumberIdent,
     identificationDocumentNumber: formValues.company.values.companyNumberIdent,
     identificationTypeLegalPerson: formValues.company.values.companyTypeIdent,
-    legalPersonName: formValues.company.values.companyName,
+    payingEntityName: formValues.company.values.companyName,
     tradename: formValues.company.values.companyNameCommercial,
     countryTaxResidence: formValues.company.values.companyCountry,
     headquarterCity: formValues.company.values.companyCity,
@@ -353,14 +355,13 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const regularPayment = formValues.ordinaryCycles.values
     .filter((item) => item.cycleId !== "")
     .map((item) => ({
-      cycleId: item.cycleId,
-      nameCycle: item.nameCycle,
-      periodicity:
-        normalizeEnumTranslationCode(item.periodicity)?.code ??
+      regularPaymentCycleNumber: item.cycleId,
+      regularPaymentCycleName: item.nameCycle,
+      schedule:
+        normalizeEnumTranslationCode(item.periodicity ?? "")?.code ??
         item.periodicity,
-      payday: item.payday,
-      numberDaysUntilCut: Number(item.numberDaysUntilCut),
-      transactionOperation: TransactionOperation.INSERT,
+      paymentDay: checkDayWeek(item.payday ?? ""),
+      numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
     }));
 
   const payrollSpecialBenefit = formValues.extraordinaryCycles.values
@@ -368,9 +369,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     .map((item) => ({
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
-      paymentDay: item.payday ?? "",
-      payrollForDeductionAgreementId: item.id ?? "",
-      transactionOperation: TransactionOperation.INSERT,
+      paymentDay: formatPaymentDay(item.payday ?? "") ?? "",
     }));
 
   const severancePayment = formValues.extraordinaryCycles.values
@@ -378,48 +377,50 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     .map((item) => ({
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
-      paymentDay: item.payday ?? "",
-      payrollForDeductionAgreementId: item.id ?? "",
-      transactionOperation: TransactionOperation.INSERT,
+      paymentDay: formatPaymentDay(item.payday ?? "") ?? "",
     }));
 
   const handleSubmitClick = () => {
     const legalPersonIdent = legalPersonData.find(
       (item) =>
-        item.legalPersonName === formValues.company.values.companySelected,
+        item.payingEntityName === formValues.company.values.companySelected,
     );
 
     const configurationRequestData: {
       abbreviatedName?: string;
-      numberOfDaysForReceivingTheDiscounts?: string;
+      numberOfDaysForReceivingTheDiscounts?: number;
       payrollForDeductionAgreementType?: string;
-      legalPersonIdentification?: string;
-      legalPersonName?: string;
+      payingIdentification?: string;
+      payingEntityName?: string;
       company?: ILegalPerson;
       regularPaymentCycles?: IOrdinaryCyclesEntry[];
       payrollSpecialBenefitPaymentCycles?: IPayrollSpecialBenefit[];
       severancePaymentCycles?: ISeverancePaymentCycles[];
+      incomeTypes?: IIncomeTypes[];
     } = {
       abbreviatedName: formValues.generalInformation.values.abbreviatedName,
-      numberOfDaysForReceivingTheDiscounts: String(
+      numberOfDaysForReceivingTheDiscounts: Number(
         formValues.generalInformation.values.applicationDaysPayroll,
       ),
       payrollForDeductionAgreementType:
         formValues.generalInformation.values.typePayroll,
+      incomeTypes: getIncomeTypesData(
+        formValues.generalInformation.values.sourcesOfIncome,
+      ),
     };
 
     if (formValues.company.values.companySelected !== "addCompany") {
-      configurationRequestData.legalPersonName =
+      configurationRequestData.payingEntityName =
         formValues.company.values.companySelected;
       if (legalPersonIdent) {
-        configurationRequestData.legalPersonIdentification =
+        configurationRequestData.payingIdentification =
           legalPersonIdent.identificationDocumentNumber;
       }
     }
 
     if (
       formValues.company.values.companySelected === "addCompany" &&
-      company.legalPersonId
+      company.identificationDocumentNumber
     ) {
       configurationRequestData.company = company as ILegalPerson;
     }

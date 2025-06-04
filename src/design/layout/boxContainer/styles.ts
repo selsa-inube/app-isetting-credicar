@@ -1,10 +1,11 @@
+import { inube } from "@inubekit/inubekit";
 import styled from "styled-components";
 
 interface IStyledFlex {
-  $backgroundColor: string;
   $boxSizing: string;
   $justifyContent?: string;
   $alignItems?: string;
+  $backgroundColor?: string;
   $alignContent?: string;
   $direction?: string;
   $wrap?: string;
@@ -36,7 +37,10 @@ const StyledFlex = styled.div<IStyledFlex>`
   margin: ${({ $margin }) => $margin};
   padding: ${({ $padding }) => $padding};
   box-sizing: ${({ $boxSizing }) => $boxSizing};
-  background-color: ${({ $backgroundColor }) => $backgroundColor};
+  background-color: ${({ $backgroundColor, theme }) =>
+    $backgroundColor
+      ? $backgroundColor
+      : `${theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0}`};
   border: ${({ $borderColor }) => `1px solid ${$borderColor}`};
   border-radius: ${({ $borderRadius }) => $borderRadius};
   overflow-y: ${({ $overflowY }) => $overflowY};

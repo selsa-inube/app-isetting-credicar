@@ -27,7 +27,7 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
       backgroundColor={
         theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
       }
-      width={isMobile ? "200px" : "290px"}
+      width="290px"
       height="282px"
       borderRadius={tokens.spacing.s100}
       padding={tokens.spacing.s200}

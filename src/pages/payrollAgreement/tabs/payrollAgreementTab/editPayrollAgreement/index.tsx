@@ -6,6 +6,7 @@ import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
+import { UseCase } from "@enum/useCase";
 import { EditPayrollAgreementUI } from "./interface";
 
 const EditPayrollAgreement = () => {
@@ -66,6 +67,7 @@ const EditPayrollAgreement = () => {
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
+    useCase: UseCase.EDIT,
     bussinesUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

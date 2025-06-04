@@ -1,6 +1,7 @@
 import { MdOutlineWarningAmber } from "react-icons/md";
 
 import {
+  Autocomplete,
   Button,
   Divider,
   Fieldset,
@@ -28,7 +29,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
     formik,
     loading,
     optionsCountries,
-    optionsCities,
     legalPerson,
     isDisabledButton,
     isMobile,
@@ -148,7 +148,12 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                     />
                   </Stack>
 
-                  <Fieldset legend="Identificación" type="body" size="medium">
+                  <Fieldset
+                    legend={companyLabels.fieldsetIdentification}
+                    type="body"
+                    size="medium"
+                    spacing="compact"
+                  >
                     <Stack
                       direction={isMobile ? "column" : "row"}
                       gap={tokens.spacing.s250}
@@ -208,15 +213,31 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                   </Fieldset>
 
                   <Fieldset
-                    legend="Dirección de la sede"
+                    legend={companyLabels.fieldsetAdress}
                     type="body"
                     size="medium"
+                    spacing="compact"
                   >
                     <Stack
                       direction="column"
                       width="100%"
                       gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s200}
                     >
+                      <Autocomplete
+                        disabled={false}
+                        id="companyCity"
+                        name="companyCity"
+                        label={companyLabels.companyCity}
+                        placeholder={companyLabels.placeholderCompanyCity}
+                        onChange={onChange}
+                        options={getDomainById("cities")}
+                        size="compact"
+                        onBlur={formik.handleBlur}
+                        value={formik.values.companyCity ?? ""}
+                        message={formik.errors.companyCity}
+                        invalid={isInvalid(formik, "companyCity")}
+                        fullwidth
+                      />
                       <Stack
                         direction={isMobile ? "column" : "row"}
                         gap={tokens.spacing.s250}
@@ -257,21 +278,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                           required
                         />
                       </Stack>
-                      <Select
-                        disabled={false}
-                        id="companyCity"
-                        name="companyCity"
-                        label={companyLabels.companyCity}
-                        placeholder={companyLabels.placeholderCompanyCity}
-                        onChange={onChange}
-                        options={optionsCities}
-                        size="compact"
-                        onBlur={formik.handleBlur}
-                        value={formik.values.companyCity ?? ""}
-                        message={formik.errors.companyCity}
-                        invalid={isInvalid(formik, "companyCity")}
-                        fullwidth
-                      />
                     </Stack>
                   </Fieldset>
                 </Stack>
@@ -282,7 +288,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          fullwidth={isMobile}
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}

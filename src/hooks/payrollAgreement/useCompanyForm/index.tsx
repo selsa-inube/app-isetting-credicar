@@ -80,7 +80,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
 
   const { title, description, actionText, moreDetails } = alertModal(
     legalPersonExists(formik.values.companyNumberIdent ?? "")
-      ?.legalPersonName ?? "",
+      ?.payingEntityName ?? "",
   );
 
   useEffect(() => {

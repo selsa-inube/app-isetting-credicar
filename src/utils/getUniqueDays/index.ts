@@ -5,9 +5,11 @@ const getUniquePaydays = (
 ): string[] => {
   return Array.from(
     new Set(
-      regularPaymentCycles.flatMap((cycle) =>
-        cycle.payday.split(",").map((payday) => payday.trim()),
-      ),
+      regularPaymentCycles
+        .flatMap((cycle) =>
+          cycle.payday?.split(",").map((payday) => payday.trim()),
+        )
+        .filter((payday): payday is string => typeof payday === "string"),
     ),
   );
 };

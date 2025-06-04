@@ -22,6 +22,8 @@ const Details = (props: IDetails) => {
     defaultSelectedTab,
     labelsOfRequestDetails,
     title,
+    ordinaryPaymentData,
+    extraordinaryPaymentData,
     ordinaryIncludedData,
     ordinaryEliminatedData,
     extraordinaryIncludedData,
@@ -50,6 +52,8 @@ const Details = (props: IDetails) => {
       detailsTabsConfig={detailsRequestPayrollTabsConfig}
       labelsDetails={labelsDetails}
       labelsPaymentCard={labelsPaymentCard}
+      ordinaryPaymentData={ordinaryPaymentData() as IEntry[]}
+      extraordinaryPaymentData={extraordinaryPaymentData() as IEntry[]}
       ordinaryIncludedData={ordinaryIncludedData() as IEntry[]}
       ordinaryEliminatedData={ordinaryEliminatedData() as IEntry[]}
       extraordinaryIncludedData={extraordinaryIncludedData() as IEntry[]}

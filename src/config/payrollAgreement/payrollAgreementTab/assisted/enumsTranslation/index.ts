@@ -8,7 +8,7 @@ const enumsTranslation = [
     name: "Bimensual",
   },
   {
-    code: "weekly",
+    code: "Weekly",
     name: "Semanal",
   },
   {
@@ -78,10 +78,6 @@ const enumsTranslation = [
   {
     code: "PeriodicSalary",
     name: "Salario Periódico",
-  },
-  {
-    code: "PersonalBusinessUtilities",
-    name: "Utilidades personales y comerciales",
   },
   {
     code: "PersonalBusinessUtilities",

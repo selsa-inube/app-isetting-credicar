@@ -83,6 +83,7 @@ const TableUI = (props: ITableUI) => {
                     type="label"
                     size={mediaActionOpen ? "medium" : "large"}
                     appearance={ComponentAppearance.DARK}
+                    ellipsis
                   >
                     {emptyDataMessage
                       ? `${emptyDataMessage}`

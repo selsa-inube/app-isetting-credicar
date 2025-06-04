@@ -32,6 +32,7 @@ const DecisionModal = (props: IDecisionModal) => {
     valueDate,
     messageDate,
     isDisabledButton = false,
+    subtitle,
     onBlurDate,
     onClick,
     onCloseModal,
@@ -50,7 +51,7 @@ const DecisionModal = (props: IDecisionModal) => {
       title={title}
       withCancelButton={withCancelButton}
       onCloseModal={onCloseModal}
-      onClick={onClick}
+      onClick={onClick ?? (() => void 0)}
       loading={loading}
       disabledActionButton={isDisabledButton}
       appearanceButton={appearanceButton}
@@ -59,6 +60,16 @@ const DecisionModal = (props: IDecisionModal) => {
         <Stack width="100%" alignItems="center" justifyContent="center">
           <Icon icon={icon} appearance={appearance} size={sizeIcon} />
         </Stack>
+      )}
+      {subtitle && (
+        <Text
+          appearance={ComponentAppearance.DARK}
+          type="body"
+          size="large"
+          weight="bold"
+        >
+          {subtitle}
+        </Text>
       )}
 
       <Text appearance={ComponentAppearance.DARK} type="body" size="medium">
