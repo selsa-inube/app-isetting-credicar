@@ -1,4 +1,4 @@
-import { ILabel } from "@src/types/ILabel";
+import { ILabel } from "@ptypes/ILabel";
 import { IEntry } from "../table/IEntry";
 
 interface IDetailsCyclesModal {
