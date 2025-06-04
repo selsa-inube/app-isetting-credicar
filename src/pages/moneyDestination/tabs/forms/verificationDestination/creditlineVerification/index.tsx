@@ -1,3 +1,4 @@
+import { IRuleDecision } from "@isettingkit/input";
 import { Stack, Tag, Text } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { creditlineVerifLabels } from "@config/moneyDestination/moneyDestinationTab/form/creditlineVerifLabels";
@@ -12,6 +13,11 @@ const RenderCreditlineVerification = (props: ICreditlineVerification) => {
   const { values } = props;
 
   const hasValues = values && values.length > 0;
+
+  const labelTag = (decision: IRuleDecision) =>
+    typeof decision.value === "object"
+      ? JSON.stringify(decision.value)
+      : String(decision.value);
   return (
     <StyledConatinerAttribute>
       <Stack
@@ -34,11 +40,7 @@ const RenderCreditlineVerification = (props: ICreditlineVerification) => {
               <Tag
                 key={index}
                 appearance={ComponentAppearance.GRAY}
-                label={
-                  typeof decision.value === "object"
-                    ? JSON.stringify(decision.value)
-                    : String(decision.value)
-                }
+                label={labelTag(decision)}
                 displayIcon={false}
               />
             ))}
