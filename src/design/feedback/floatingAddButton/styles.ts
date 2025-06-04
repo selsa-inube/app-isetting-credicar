@@ -9,7 +9,6 @@ const StyledFloatingButton = styled.div<IStyledFloatingButton>`
   position: fixed;
   bottom: ${({ $bottom }) => $bottom};
   right: ${({ $right }) => $right};
-  z-index: 1;
   cursor: pointer;
 `;
 
