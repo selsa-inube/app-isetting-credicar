@@ -19,6 +19,7 @@ interface IAddDestinationUI {
   loading: boolean;
   showPendingReqModal: boolean;
   showAttentionModal: boolean;
+  smallScreen: boolean;
   onFinishForm: () => void;
   onNextStep: () => void;
   onPreviousStep: () => void;

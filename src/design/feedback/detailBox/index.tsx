@@ -1,14 +1,14 @@
-import { Stack, Tag, Text } from "@inubekit/inubekit";
+import { inube, Stack, Tag, Text } from "@inubekit/inubekit";
 import { BoxContainer } from "@design/layout/boxContainer";
 
 import { ComponentAppearance } from "@enum/appearances";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { useThemeData } from "@utils/theme";
 interface IDetailBox {
   field: { id: string; titleName: string };
   data: IEntry;
   id: number;
   width: string;
-  backgroundColor: string;
   borderRadius?: string;
   padding?: string;
   borderColor?: string;
@@ -22,19 +22,23 @@ const DetailBox = (props: IDetailBox) => {
     field,
     data,
     width,
-    backgroundColor,
     borderRadius,
     borderColor,
     padding,
     withTag,
     ellipsis = false,
   } = props;
+
+  const theme = useThemeData();
+
   return (
     <BoxContainer
       key={id}
       direction="column"
       width={width}
-      backgroundColor={backgroundColor}
+      backgroundColor={
+        theme ? theme?.palette?.neutral?.N10 : inube.palette.neutral.N10
+      }
       borderRadius={borderRadius}
       borderColor={borderColor}
       boxSizing="border-box"

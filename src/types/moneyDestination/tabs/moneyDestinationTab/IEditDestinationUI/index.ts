@@ -1,6 +1,6 @@
 import { IRuleDecision } from "@isettingkit/input";
 import { FormikProps } from "formik";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 import { IEditDestinationTabsConfig } from "../tabs/ITabConfig/IEditDestinationTabsConfig";
@@ -15,10 +15,12 @@ interface IEditDestinationUI {
   isSelected: string;
   requestSteps: IRequestSteps[];
   loading: boolean;
-  showPendingReqModal: boolean;
   showRequestProcessModal: boolean;
   saveMoneyDestination: ISaveDataResponse;
   smallScreen: boolean;
+  showGeneralInformation: boolean;
+  showDecisionsForm: boolean;
+  showRequestStatus: string | false | undefined;
   onTabChange: (id: string) => void;
   onButtonClick: () => void;
   onReset: () => void;

@@ -1,4 +1,4 @@
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 
 const verifiedErrorRequest = (requests: IRequestSteps[]): boolean => {
   return requests.find((request) => request.status === "error") ? true : false;

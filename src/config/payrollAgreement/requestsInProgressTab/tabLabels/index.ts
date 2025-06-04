@@ -1,7 +1,7 @@
 const tabLabels = {
   search: "Buscar",
   placeholderSearch: "Palabra clave...",
-  description: "Consulta de las solicitudes en trámite",
+  description: "Consulta de solicitudes en trámite",
 };
 
 export { tabLabels };

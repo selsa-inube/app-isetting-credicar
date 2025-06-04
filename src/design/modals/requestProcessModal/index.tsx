@@ -1,35 +1,16 @@
 import { createPortal } from "react-dom";
-import {
-  Stack,
-  Text,
-  IIconAppearance,
-  Blanket,
-  Divider,
-} from "@inubekit/inubekit";
+import { Stack, Text, Blanket, Divider } from "@inubekit/inubekit";
 
 import { ComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
-
 import { lastCompletedIndex } from "@utils/lastCompletedIndex";
+import { IRequestProcessModal } from "@ptypes/design/IRequestProcessModal";
 import { StyledModal } from "./styles";
-import { RequestProcessMobile } from "./requestProcessMobile";
-import { RequestProcessDesktop } from "./requestProcessDesktop";
-
-interface IRequestProcessModal {
-  portalId: string;
-  appearance: IIconAppearance;
-  requestSteps: IRequestSteps[];
-  isMobile: boolean;
-  title: string;
-  description: string;
-  sizeIcon?: string;
-}
+import { RequestProcessBar } from "./RequestProcessBar";
 
 const RequestProcessModal = (props: IRequestProcessModal) => {
   const {
     portalId,
-    appearance,
     sizeIcon = "28px",
     requestSteps,
     isMobile,
@@ -66,20 +47,13 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
               {description}
             </Text>
           </Stack>
-          {isMobile ? (
-            <RequestProcessMobile
-              requestSteps={requestSteps}
-              sizeIcon={sizeIcon}
-              appearance={appearance}
-            />
-          ) : (
-            <RequestProcessDesktop
-              requestSteps={requestSteps}
-              sizeIcon={sizeIcon}
-              stepCurrent={stepCurrent}
-              stepCurrentIndex={stepCurrentIndex}
-            />
-          )}
+
+          <RequestProcessBar
+            requestSteps={requestSteps}
+            sizeIcon={sizeIcon}
+            stepCurrent={stepCurrent}
+            stepCurrentIndex={stepCurrentIndex}
+          />
         </Stack>
       </StyledModal>
     </Blanket>,

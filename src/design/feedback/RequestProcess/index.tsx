@@ -1,32 +1,14 @@
-import { ISpinnerAppearance, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { Stack, useMediaQuery } from "@inubekit/inubekit";
 
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
 import { ComponentAppearance } from "@enum/appearances";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { tokens } from "@design/tokens";
 import { RequestProcessModal } from "@design/modals/requestProcessModal";
 import { noStaffName } from "@config/noStaffName";
+import { IRequestProcessContent } from "@ptypes/design/IRequestProcessContent";
 
-interface IRequestProcess {
-  descriptionRequestProcess: {
-    title: string;
-    description: string;
-  };
-  portalId: string;
-  requestProcessSteps: IRequestSteps[];
-  descriptionRequestStatus: (responsible: string) => {
-    actionText: string;
-    description: string;
-    title: string;
-  };
-  onCloseRequestStatus: () => void;
-  saveData?: ISaveDataResponse;
-  appearance?: ISpinnerAppearance;
-}
-
-const RequestProcess = (props: IRequestProcess) => {
+const RequestProcess = (props: IRequestProcessContent) => {
   const {
     descriptionRequestProcess,
     portalId,
@@ -54,7 +36,6 @@ const RequestProcess = (props: IRequestProcess) => {
             portalId={portalId}
             title={descriptionRequestProcess.title}
             description={descriptionRequestProcess.description}
-            appearance={ComponentAppearance.SUCCESS}
             requestSteps={requestProcessSteps}
             isMobile={isMobile}
             sizeIcon="28px"
@@ -77,4 +58,3 @@ const RequestProcess = (props: IRequestProcess) => {
 };
 
 export { RequestProcess };
-export type { IRequestProcess };

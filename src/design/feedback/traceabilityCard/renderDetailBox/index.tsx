@@ -1,4 +1,3 @@
-import { inube } from "@inubekit/inubekit";
 import { ILabel } from "@ptypes/ILabel";
 import { tokens } from "@design/tokens";
 import { IEntry } from "@ptypes/design/table/IEntry";
@@ -21,7 +20,6 @@ const RenderDetailBox = (props: IRenderDetailBox) => {
       field={field}
       data={data}
       id={id}
-      backgroundColor={inube.palette.neutral.N10}
       borderRadius={tokens.spacing.s100}
       padding={
         isMobile

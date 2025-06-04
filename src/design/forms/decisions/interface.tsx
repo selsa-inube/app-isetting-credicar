@@ -6,7 +6,8 @@ import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
-import { StyledContainer } from "./styles";
+import { FloatingAddButton } from "@design/feedback/floatingAddButton";
+import { StyledContainer, StyledFormContent } from "./styles";
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
   const {
@@ -27,6 +28,8 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     showDecisionModal,
     disabledNext,
     disabledPrevius,
+    showFloatingAddButton,
+    editDataOption,
     cancelButton,
     onCloseModal,
     onDelete,
@@ -38,29 +41,43 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onSave,
   } = props;
 
+  const heightContent =
+    isMobile && editDataOption ? "70vh" : isMobile ? "60vh" : "auto";
+
   return (
     <form>
-      <Stack direction="column" gap={tokens.spacing.s300}>
-        <StyledContainer $isMobile={isMobile}>
-          <BusinessRules
-            decisions={decisions}
-            textValues={textValuesBusinessRules}
-            loading={loading}
-            decisionTemplate={decisionTemplate}
-            isModalOpen={isModalOpen}
-            selectedDecision={selectedDecision}
-            handleOpenModal={onOpenModal}
-            handleCloseModal={onCloseModal}
-            handleSubmitForm={onSubmitForm}
-            handleDelete={onToggleDeleteModal}
-            customTitleContentAddCard={titleContentAddCard}
-            customMessageEmptyDecisions={messageEmptyDecisions}
-          />
-        </StyledContainer>
-
+      <Stack
+        direction="column"
+        gap={tokens.spacing.s300}
+        height={heightContent}
+      >
+        <StyledFormContent>
+          <StyledContainer $isMobile={isMobile}>
+            <BusinessRules
+              decisions={decisions}
+              textValues={textValuesBusinessRules}
+              loading={loading}
+              decisionTemplate={decisionTemplate}
+              isModalOpen={isModalOpen}
+              selectedDecision={selectedDecision}
+              handleOpenModal={onOpenModal}
+              handleCloseModal={onCloseModal}
+              handleSubmitForm={onSubmitForm}
+              handleDelete={onToggleDeleteModal}
+              customTitleContentAddCard={titleContentAddCard}
+              customMessageEmptyDecisions={messageEmptyDecisions}
+            />
+          </StyledContainer>
+          {showFloatingAddButton && (
+            <FloatingAddButton
+              onToggleModal={onOpenModal}
+              bottom={editDataOption ? "55px" : "45px"}
+              right="36px"
+            />
+          )}
+        </StyledFormContent>
         <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
           <Button
-            fullwidth={isMobile}
             onClick={cancelButton}
             appearance={ComponentAppearance.GRAY}
             disabled={disabledPrevius}
@@ -69,7 +86,6 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
           </Button>
 
           <Button
-            fullwidth={isMobile}
             onClick={onSave}
             appearance={ComponentAppearance.PRIMARY}
             disabled={disabledNext}

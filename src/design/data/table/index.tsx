@@ -31,6 +31,7 @@ const Table = (props: ITable) => {
     columnWidths,
     emptyDataMessage,
     withActionsTitles,
+    ellipsisCell = true,
   } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,6 +93,7 @@ const Table = (props: ITable) => {
           emptyDataMessage={emptyDataMessage}
           withActionsTitles={withActionsTitles}
           tableLayout={tableLayout}
+          ellipsisCell={ellipsisCell}
         />
       </Stack>
     </StyledContainerTable>

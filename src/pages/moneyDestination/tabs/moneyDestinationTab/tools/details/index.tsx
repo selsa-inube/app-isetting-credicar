@@ -5,11 +5,7 @@ import { DetailsMoneyDestination } from "@design/feedback/detailsMoneyDestinatio
 import { useDetailsDestination } from "@hooks/moneyDestination/useDetailsDestination";
 import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/generics/detailsTabsConfig";
 import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
-import { IEntry } from "@ptypes/design/table/IEntry";
-
-interface IDetails {
-  data: IEntry;
-}
+import { IDetails } from "@ptypes/moneyDestination/tabs/IDetails";
 
 const Details = (props: IDetails) => {
   const { data } = props;
