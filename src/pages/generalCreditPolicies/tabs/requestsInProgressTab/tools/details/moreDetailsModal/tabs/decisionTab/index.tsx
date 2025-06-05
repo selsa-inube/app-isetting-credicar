@@ -24,10 +24,10 @@ const DecisionTab = (props: IDecisionTab) => {
           isModalOpen={false}
           selectedDecision={null}
           loading={false}
-          handleOpenModal={() => console.log("")}
-          handleCloseModal={() => console.log("")}
-          handleSubmitForm={() => console.log("")}
-          handleDelete={() => console.log("")}
+          handleOpenModal={() => void 0}
+          handleCloseModal={() => void 0}
+          handleSubmitForm={() => void 0}
+          handleDelete={() => void 0}
         />
       </StyledContainer>
     </Stack>
