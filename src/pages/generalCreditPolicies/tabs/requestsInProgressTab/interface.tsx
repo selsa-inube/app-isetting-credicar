@@ -29,9 +29,6 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
 
   return (
     <BoxContainer
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
       boxSizing="initial"
       borderColor={
         theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
@@ -48,7 +45,23 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s400} direction="column" width="100%">
+        <Stack
+          gap={smallScreen ? tokens.spacing.s150 : tokens.spacing.s400}
+          direction="column"
+          width="100%"
+        >
+          {smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+              >
+                {tabLabels.description}
+              </Text>
+            </Stack>
+          )}
+
           <Stack
             justifyContent={smallScreen ? "center" : "start"}
             direction={smallScreen ? "column" : "row"}
@@ -56,11 +69,14 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
           >
-            <Stack justifyContent="center">
+            <Stack
+              justifyContent="center"
+              width={smallScreen ? "100%" : "auto"}
+            >
               <Searchfield
                 name="searchrequestProgress"
                 id="searchrequestProgress"
-                label={tabLabels.search}
+                label={smallScreen ? "" : tabLabels.search}
                 placeholder={tabLabels.placeholderSearch}
                 type="search"
                 size="compact"
@@ -68,18 +84,21 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onSearchrequestProgress(e)
                 }
+                fullwidth={smallScreen}
               />
             </Stack>
           </Stack>
-          <Stack>
-            <Text
-              type="title"
-              size="medium"
-              appearance={ComponentAppearance.DARK}
-            >
-              {tabLabels.description}
-            </Text>
-          </Stack>
+          {!smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+              >
+                {tabLabels.description}
+              </Text>
+            </Stack>
+          )}
 
           <Table
             id="portal"
@@ -92,6 +111,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             columnWidths={columnWidths}
             pageLength={pageLength}
             tableLayout="auto"
+            ellipsisCell={!smallScreen}
           />
         </Stack>
       </Stack>

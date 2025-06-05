@@ -95,7 +95,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
                 field={field}
                 data={data}
                 id={id}
-                backgroundColor={inube.palette.neutral.N10}
                 borderRadius={tokens.spacing.s100}
                 padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
                 width={isMobile ? "253px" : "240px"}

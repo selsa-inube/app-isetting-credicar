@@ -41,6 +41,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     const hasReciprocity = allConditionsRules(methodsData).some((condition) =>
       reciprocity.includes(condition.conditionName),
     );
+
     const hasCalculation = allConditionsRules(methodsData).some((condition) =>
       calculation.includes(condition.conditionName),
     );

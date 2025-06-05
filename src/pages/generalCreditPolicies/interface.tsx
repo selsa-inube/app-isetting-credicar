@@ -15,7 +15,6 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     policiesTabs,
     descriptionOptions,
     isSelected,
-    smallScreenTab,
     showPoliciesTab,
     showrequestTab,
     smallScreen,
@@ -75,7 +74,10 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                   : `${tokens.spacing.s400} ${tokens.spacing.s800}`
               }
             >
-              <Stack gap={tokens.spacing.s600} direction="column">
+              <Stack
+                gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s600}
+                direction="column"
+              >
                 <Stack gap={tokens.spacing.s300} direction="column">
                   <Breadcrumbs crumbs={crumbsGeneralpolicies} />
                   <Title
@@ -94,7 +96,6 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                     tabs={policiesTabs}
                     selectedTab={isSelected}
                     onChange={onTabChange}
-                    scroll={smallScreenTab ? true : false}
                   />
 
                   {showPoliciesTab && (

@@ -1,3 +1,6 @@
+import { MdOutlineReportProblem } from "react-icons/md";
+import { ComponentAppearance } from "@enum/appearances";
+
 const generalPoliciesTabsConfig = (smallScreen: boolean) => {
   return {
     generalPolicies: {
@@ -11,6 +14,11 @@ const generalPoliciesTabsConfig = (smallScreen: boolean) => {
       label: smallScreen
         ? "Politicas en trámite"
         : "Politicas generales en trámite",
+
+      icon: {
+        icon: <MdOutlineReportProblem />,
+        appearance: ComponentAppearance.WARNING,
+      },
     },
   };
 };
