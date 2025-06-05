@@ -12,8 +12,16 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
   const {
     isSelected,
     filteredTabsConfig,
-    detailsTabsConfig,
-    isMoreDetails,
+    showGeneralDecisionsTab,
+    showDecisionsRecip,
+    showContribInserted,
+    showContribDeleted,
+    showDecisionsIncome,
+    showIncomeInserted,
+    showIncomeDeleted,
+    showScoreModels,
+    showScoreModelsInserted,
+    showScoreModelsDeleted,
     data,
     portalId,
     textValues,
@@ -51,84 +59,72 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
           onChange={onTabChange}
           scroll={Object.values(filteredTabsConfig).length > 2}
         />
-        {isSelected === detailsTabsConfig.generalDecision?.id && (
+        {showGeneralDecisionsTab && (
           <GeneralDecisionsTab data={data} labelsDetails={generalDataLabels} />
         )}
-        {!isMoreDetails &&
-          isSelected === detailsTabsConfig.contributionQuota?.id &&
-          decisionsReciprocity.length > 0 && (
-            <DecisionTab
-              data={decisionsReciprocity}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {isMoreDetails &&
-          isSelected === detailsTabsConfig.contribQuotaIncluded?.id && (
-            <DecisionTab
-              data={contribQuotaInserted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {isMoreDetails &&
-          isSelected === detailsTabsConfig.contribQuotaRemoved?.id && (
-            <DecisionTab
-              data={contribQuotaDeleted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {!isMoreDetails &&
-          isSelected === detailsTabsConfig.incomeQuota?.id &&
-          decisionsIncomePortfolio.length > 0 && (
-            <DecisionTab
-              data={decisionsIncomePortfolio}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {isMoreDetails &&
-          isSelected === detailsTabsConfig.incomeQuotaIncluded?.id && (
-            <DecisionTab
-              data={incomeQuotaInserted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {isMoreDetails &&
-          isSelected === detailsTabsConfig.incomeQuotaRemoved?.id && (
-            <DecisionTab
-              data={incomeQuotaDeleted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {!isMoreDetails &&
-          isSelected === detailsTabsConfig.scoreModels?.id &&
-          decisionsScoreModels.length > 0 && (
-            <DecisionTab
-              data={decisionsScoreModels}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {isMoreDetails &&
-          isSelected === detailsTabsConfig.scoreModelsIncluded?.id && (
-            <DecisionTab
-              data={scoreModelsInserted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-        {isMoreDetails &&
-          isSelected === detailsTabsConfig.scoreModelsRemoved?.id && (
-            <DecisionTab
-              data={scoreModelsDeleted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
+        {showDecisionsRecip && (
+          <DecisionTab
+            data={decisionsReciprocity}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showContribInserted && (
+          <DecisionTab
+            data={contribQuotaInserted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showContribDeleted && (
+          <DecisionTab
+            data={contribQuotaDeleted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showDecisionsIncome && (
+          <DecisionTab
+            data={decisionsIncomePortfolio}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showIncomeInserted && (
+          <DecisionTab
+            data={incomeQuotaInserted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showIncomeDeleted && (
+          <DecisionTab
+            data={incomeQuotaDeleted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showScoreModels && (
+          <DecisionTab
+            data={decisionsScoreModels}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showScoreModelsInserted && (
+          <DecisionTab
+            data={scoreModelsInserted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showScoreModelsDeleted && (
+          <DecisionTab
+            data={scoreModelsDeleted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
         <Divider />
       </Stack>
     </ModalWrapper>

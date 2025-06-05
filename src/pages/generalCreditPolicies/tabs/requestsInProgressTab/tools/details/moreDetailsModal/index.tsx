@@ -26,11 +26,44 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     onTabChange,
   } = props;
 
+  const showGeneralDecisionsTab =
+    isSelected === detailsTabsConfig.generalDecision?.id;
+
+  const showDecisionsRecip =
+    !isMoreDetails &&
+    isSelected === detailsTabsConfig.contributionQuota?.id &&
+    decisionsReciprocity.length > 0;
+
+  const showContribInserted =
+    isMoreDetails && isSelected === detailsTabsConfig.contribQuotaIncluded?.id;
+  const showContribDeleted =
+    isMoreDetails && isSelected === detailsTabsConfig.contribQuotaRemoved?.id;
+
+  const showDecisionsIncome =
+    !isMoreDetails &&
+    isSelected === detailsTabsConfig.incomeQuota?.id &&
+    decisionsIncomePortfolio.length > 0;
+
+  const showIncomeInserted =
+    isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaIncluded?.id;
+
+  const showIncomeDeleted =
+    isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaRemoved?.id;
+
+  const showScoreModels =
+    !isMoreDetails &&
+    isSelected === detailsTabsConfig.scoreModels?.id &&
+    decisionsScoreModels.length > 0;
+
+  const showScoreModelsInserted =
+    isMoreDetails && isSelected === detailsTabsConfig.scoreModelsIncluded?.id;
+
+  const showScoreModelsDeleted =
+    isMoreDetails && isSelected === detailsTabsConfig.scoreModelsRemoved?.id;
   return (
     <MoreDetailsModalUI
       data={data}
       filteredTabsConfig={filteredTabsConfig}
-      detailsTabsConfig={detailsTabsConfig}
       isSelected={isSelected ?? defaultSelectedTab}
       onCloseModal={onCloseModal}
       onTabChange={onTabChange}
@@ -41,7 +74,6 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       decisionsReciprocity={decisionsReciprocity}
       decisionsIncomePortfolio={decisionsIncomePortfolio}
       decisionsScoreModels={decisionsScoreModels}
-      isMoreDetails={isMoreDetails}
       contribQuotaInserted={contribQuotaInserted}
       contribQuotaDeleted={contribQuotaDeleted}
       incomeQuotaInserted={incomeQuotaInserted}
@@ -49,6 +81,16 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       scoreModelsInserted={scoreModelsInserted}
       scoreModelsDeleted={scoreModelsDeleted}
       isMobile={isMobile}
+      showGeneralDecisionsTab={showGeneralDecisionsTab}
+      showDecisionsRecip={showDecisionsRecip}
+      showContribInserted={showContribInserted}
+      showContribDeleted={showContribDeleted}
+      showDecisionsIncome={showDecisionsIncome}
+      showIncomeInserted={showIncomeInserted}
+      showIncomeDeleted={showIncomeDeleted}
+      showScoreModels={showScoreModels}
+      showScoreModelsInserted={showScoreModelsInserted}
+      showScoreModelsDeleted={showScoreModelsDeleted}
     />
   );
 };

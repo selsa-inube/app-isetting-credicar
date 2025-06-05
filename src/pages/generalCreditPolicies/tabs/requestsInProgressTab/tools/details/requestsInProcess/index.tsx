@@ -78,7 +78,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
           </Stack>
         </Stack>
         <BoxContainer
-          backgroundColor={inube.palette.neutral.N0}
           overflowY="auto"
           boxSizing="border-box"
           wrap="wrap"

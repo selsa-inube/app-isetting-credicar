@@ -7,7 +7,6 @@ interface IMoreDetailsModalUI {
   data: IEntry;
   decisionTemplate: IRuleDecision;
   filteredTabsConfig: IDetailsTabsConfig;
-  detailsTabsConfig: IDetailsTabsConfig;
   isSelected: string;
   portalId: string;
   smallScreenTab: boolean;
@@ -15,8 +14,17 @@ interface IMoreDetailsModalUI {
   decisionsReciprocity: IRuleDecision[];
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];
-  isMoreDetails: boolean;
   isMobile: boolean;
+  showGeneralDecisionsTab: boolean;
+  showDecisionsRecip: boolean;
+  showContribInserted: boolean;
+  showContribDeleted: boolean;
+  showDecisionsIncome: boolean;
+  showIncomeInserted: boolean;
+  showIncomeDeleted: boolean;
+  showScoreModels: boolean;
+  showScoreModelsInserted: boolean;
+  showScoreModelsDeleted: boolean;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
   contribQuotaInserted?: IRuleDecision[];
