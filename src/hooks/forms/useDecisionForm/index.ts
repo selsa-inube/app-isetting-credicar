@@ -2,24 +2,24 @@ import { useState, useEffect } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
-import { IMessageModal } from "@ptypes/decisions/IMessageModal";
+import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 
-const useDecisionForm = (
-  initialValues: IRuleDecision[],
-  revertModalDisplayData: (
-    dataDecision: IRuleDecision,
-    originalDecision: IRuleDecision,
-  ) => void,
-  onButtonClick: () => void,
-  setCreditLineDecisions: (decisions: IRuleDecision[]) => void,
-  showAttentionModal?: boolean,
-  setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>,
-  normalizeEvaluateRuleData?: IRuleDecision[],
-  editDataOption?: boolean,
-  disabledButton?: boolean,
-  onPreviousStep?: () => void,
-  attentionModal?: IMessageModal,
-) => {
+const useDecisionForm = (props: IUseDecisionForm) => {
+  const {
+    initialValues,
+    revertModalDisplayData,
+    onButtonClick,
+    setCreditLineDecisions,
+    showAttentionModal,
+    setShowAttentionModal,
+    normalizeEvaluateRuleData,
+    editDataOption,
+    disabledButton,
+    onPreviousStep,
+    attentionModal,
+    heightContentPage,
+  } = props;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
@@ -169,6 +169,9 @@ const useDecisionForm = (
 
   const showFloatingAddButton = isMobile && decisions.length > 0;
 
+  const heightContent =
+    isMobile && editDataOption ? heightContentPage : isMobile ? "60vh" : "auto";
+
   return {
     isModalOpen,
     selectedDecision,
@@ -184,6 +187,7 @@ const useDecisionForm = (
     disabledPrevius,
     showDecisionModal,
     showFloatingAddButton,
+    heightContent,
     cancelButton,
     handleOpenModal,
     handleCloseModal,

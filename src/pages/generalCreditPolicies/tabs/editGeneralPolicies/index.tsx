@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/useSaveGeneralPolicies";
-import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/useEditGenCredPolicies";
+import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
 import { UseCase } from "@enum/useCase";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
@@ -47,6 +47,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
+    heightContPageContribut,
+    heightContPageIncome,
+    heightContPageScoreModels,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
@@ -138,6 +141,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       setShowReciprocity={setShowReciprocity}
       setShowFactor={setShowFactor}
       theme={theme}
+      heightContPageContribut={heightContPageContribut}
+      heightContPageIncome={heightContPageIncome}
+      heightContPageScoreModels={heightContPageScoreModels}
     />
   );
 };

@@ -21,6 +21,8 @@ const DecisionsForm = (props: IDecisionsForm) => {
     messageEmptyDecisions,
     normalizeEvaluateRuleData,
     disabledButton,
+    heightContentPage = "70vh",
+    bottomAddButton = "55px",
     decisionTemplateConfig,
     onButtonClick,
     onPreviousStep,
@@ -42,6 +44,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     disabledPrevius,
     showDecisionModal,
     showFloatingAddButton,
+    heightContent,
     handleOpenModal,
     handleCloseModal,
     handleSubmitForm,
@@ -49,11 +52,11 @@ const DecisionsForm = (props: IDecisionsForm) => {
     handleToggleDeleteModal,
     handleDelete,
     handleSave,
-  } = useDecisionForm(
+  } = useDecisionForm({
     initialValues,
     revertModalDisplayData,
     onButtonClick,
-    setDecisions,
+    setCreditLineDecisions: setDecisions,
     showAttentionModal,
     setShowAttentionModal,
     normalizeEvaluateRuleData,
@@ -61,7 +64,8 @@ const DecisionsForm = (props: IDecisionsForm) => {
     disabledButton,
     onPreviousStep,
     attentionModal,
-  );
+    heightContentPage,
+  });
 
   const { appData } = useContext(AuthAndPortalData);
   const { ruleData } = useEnumRules(
@@ -115,9 +119,10 @@ const DecisionsForm = (props: IDecisionsForm) => {
       showDecisionModal={showDecisionModal}
       showFloatingAddButton={showFloatingAddButton}
       editDataOption={editDataOption}
+      heightContent={heightContent}
+      bottomAddButton={bottomAddButton}
     />
   );
 };
 
 export { DecisionsForm };
-export type { IDecisionsForm };
