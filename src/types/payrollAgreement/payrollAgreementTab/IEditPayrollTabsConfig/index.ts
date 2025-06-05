@@ -1,4 +1,4 @@
-import { ITabConfig } from "../../requestInProgTab/ITabConfig";
+import { ITabConfig } from "../../../ITabConfig";
 
 interface IEditPayrollTabsConfig {
   generalInformation: ITabConfig;

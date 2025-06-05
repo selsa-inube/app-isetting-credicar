@@ -3,9 +3,9 @@ import { ICondition, IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { mediaQueryMobile } from "@config/environment";
-import { IDetailsTabsConfig } from "@design/modals/detailsDestinationModal/types";
 import { TransactionOperation } from "@enum/transactionOperation";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
 
 const useDetailsDestinationModal = (
   data: IEntry,

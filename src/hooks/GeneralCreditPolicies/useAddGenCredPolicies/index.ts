@@ -164,18 +164,13 @@ const useAddGenCredPolicies = (props: IUseAddGenCredPolicies) => {
           formValues.decisionsGeneral.values.reciprocity,
         ),
         factor: renderValue(formValues.decisionsGeneral.values.factor),
-        ruleName: rules,
+        rules: rules,
       },
     });
     setShowRequestProcessModal(!showRequestProcessModal);
   };
 
-  const formValid =
-    (currentStep === 2 && contributionsPortfolio.length === 0) ||
-    (currentStep === 3 && incomePortfolio.length === 0) ||
-    (currentStep === 4 && scoreModels.length === 0)
-      ? true
-      : isCurrentFormValid;
+  const formValid = isCurrentFormValid;
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {

@@ -8,6 +8,7 @@ import { crumbsGeneralpolicies } from "@config/generalCreditPolicies/navigation"
 import { loadingLabels } from "@config/loadingLabels";
 import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
 import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
+import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
 
 const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
   const {
@@ -16,6 +17,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     isSelected,
     smallScreenTab,
     showPoliciesTab,
+    showrequestTab,
     smallScreen,
     referenceData,
     contributionsData,
@@ -108,6 +110,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                       realGuaranteesData={realGuaranteesData}
                     />
                   )}
+                  {showrequestTab && <RequestsInProgressTab />}
                 </Stack>
               </Stack>
             </Stack>

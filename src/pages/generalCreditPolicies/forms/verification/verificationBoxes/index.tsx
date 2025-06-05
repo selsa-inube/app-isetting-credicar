@@ -3,6 +3,7 @@ import { IVerificationBoxes } from "@ptypes/generalCredPolicies/forms/IVerificat
 import { RenderDecisionsGenVerification } from "../decisionsGenVerification";
 import { RenderContributionsVerification } from "../contributionsPortfVerification";
 import { RenderIncomeVerification } from "../incomePortfVerification";
+import { RendersCoreModelsVerification } from "../scoreModelsVerification";
 
 const VerificationBoxes = (props: IVerificationBoxes) => {
   const { updatedData, stepKey, isMobile } = props;
@@ -42,7 +43,7 @@ const VerificationBoxes = (props: IVerificationBoxes) => {
         />
       )}
       {showScoreModels && (
-        <RenderIncomeVerification
+        <RendersCoreModelsVerification
           values={updatedData.scoreModels.values}
           isMobile={isMobile}
         />

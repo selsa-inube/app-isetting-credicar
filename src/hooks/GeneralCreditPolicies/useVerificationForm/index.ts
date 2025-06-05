@@ -18,17 +18,18 @@ const useVerificationForm = (props: IUseVerificationForm) => {
   const canShowPendingRequest =
     showPendingReqModal && saveGeneralPolicies.requestNumber;
 
-  const { reciprocity, factor } = updatedData.decisionsGeneral.values;
+  const contributionsPortf = updatedData.contributionsPortfolio.values;
+  const incomePortfolio = updatedData.incomePortfolio.values;
+  const scoreModels = updatedData.scoreModels.values;
 
   const steps = addGenCredPoliciesSteps.filter((step) => {
     if (step.name.toLowerCase() === "verificación") return false;
 
-    if (reciprocity === false && step.id === 2) return false;
+    if (contributionsPortf.length === 0 && step.id === 2) return false;
 
-    if (factor === false && step.id === 3) return false;
+    if (incomePortfolio.length === 0 && step.id === 3) return false;
 
-    if (updatedData.scoreModels.values.length === 0 && step.id === 4)
-      return false;
+    if (scoreModels.length === 0 && step.id === 4) return false;
 
     return true;
   });

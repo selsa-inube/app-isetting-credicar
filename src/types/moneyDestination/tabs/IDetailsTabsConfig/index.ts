@@ -1,9 +1,4 @@
-interface ITabConfig {
-  id: string;
-  isDisabled: boolean;
-  label: string;
-  notificationIndicators?: number;
-}
+import { ITabConfig } from "@ptypes/ITabConfig";
 
 interface IDetailsTabsConfig {
   generalData: ITabConfig;

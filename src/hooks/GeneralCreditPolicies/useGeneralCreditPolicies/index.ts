@@ -30,9 +30,12 @@ const useGeneralCreditPolicies = () => {
   const [withoutPoliciesData, setWithoutPoliciesData] =
     useState<boolean>(false);
 
-  const [isSelected, setIsSelected] = useState<string>(
-    generalPoliciesTabsConfig.generalPolicies.id,
-  );
+  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreenTab = useMediaQuery("(max-width: 450px)");
+
+  const tabs = generalPoliciesTabsConfig(smallScreen);
+
+  const [isSelected, setIsSelected] = useState<string>(tabs.generalPolicies.id);
 
   const navigate = useNavigate();
 
@@ -68,13 +71,11 @@ const useGeneralCreditPolicies = () => {
     setIsSelected(tabId);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
-  const smallScreenTab = useMediaQuery("(max-width: 450px)");
+  const showPoliciesTab = isSelected === tabs.generalPolicies.id;
 
-  const showPoliciesTab =
-    isSelected === generalPoliciesTabsConfig.generalPolicies.id;
+  const showrequestTab = isSelected === tabs.requestsInProgress.id;
 
-  const policiesTabs = Object.values(generalPoliciesTabsConfig);
+  const policiesTabs = Object.values(tabs);
 
   const showAddPolicies = withoutPoliciesData && showModal;
 
@@ -85,6 +86,7 @@ const useGeneralCreditPolicies = () => {
     smallScreen,
     smallScreenTab,
     showPoliciesTab,
+    showrequestTab,
     policiesTabs,
     referenceData,
     contributionsData,
