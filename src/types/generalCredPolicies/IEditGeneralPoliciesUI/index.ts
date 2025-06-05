@@ -34,6 +34,9 @@ interface IEditGeneralPoliciesUI {
   showDateModal: boolean;
   date: IDateVerification;
   isRequestStatusModal: boolean;
+  heightContPageContribut: string;
+  heightContPageIncome: string;
+  heightContPageScoreModels: string;
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
   setDateDecisions: React.Dispatch<

@@ -42,6 +42,9 @@ const dataTranslations: Record<string, string> = {
   Intervals_10_days: "Cada 10 días",
   OrdinaryRemuneration: "Remuneración ordinaria",
   BonusesOrSeverancePay: "Primas o cesantías",
+  ReciprocityFactorForCreditLimitGP: "Número de veces los aportes",
+  RiskScoreFactorForCreditLimitGP: "Número de veces los ingresos",
+  CreditRiskScoringModelGp: "Modelo de score",
 };
 
 export { dataTranslations };

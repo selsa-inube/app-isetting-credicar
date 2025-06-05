@@ -8,14 +8,15 @@ import { crumbsGeneralpolicies } from "@config/generalCreditPolicies/navigation"
 import { loadingLabels } from "@config/loadingLabels";
 import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
 import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
+import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
 
 const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
   const {
     policiesTabs,
     descriptionOptions,
     isSelected,
-    smallScreenTab,
     showPoliciesTab,
+    showrequestTab,
     smallScreen,
     referenceData,
     contributionsData,
@@ -73,7 +74,10 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                   : `${tokens.spacing.s400} ${tokens.spacing.s800}`
               }
             >
-              <Stack gap={tokens.spacing.s600} direction="column">
+              <Stack
+                gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s600}
+                direction="column"
+              >
                 <Stack gap={tokens.spacing.s300} direction="column">
                   <Breadcrumbs crumbs={crumbsGeneralpolicies} />
                   <Title
@@ -92,7 +96,6 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                     tabs={policiesTabs}
                     selectedTab={isSelected}
                     onChange={onTabChange}
-                    scroll={smallScreenTab ? true : false}
                   />
 
                   {showPoliciesTab && (
@@ -108,6 +111,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                       realGuaranteesData={realGuaranteesData}
                     />
                   )}
+                  {showrequestTab && <RequestsInProgressTab />}
                 </Stack>
               </Stack>
             </Stack>

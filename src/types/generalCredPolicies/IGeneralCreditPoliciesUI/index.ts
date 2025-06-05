@@ -9,6 +9,7 @@ interface IGeneralCreditPoliciesUI {
   descriptionOptions: ICardData;
   smallScreenTab: boolean;
   showPoliciesTab: boolean;
+  showrequestTab: boolean;
   isSelected: string;
   loadingPolicies: boolean;
   showAddPolicies: boolean;

@@ -21,6 +21,7 @@ interface IDecisionsForm {
   ) => void;
   nameRule: string;
   disabledButton?: boolean;
+  bottomAddButton?: string;
   editDataOption?: boolean;
   showAttentionModal?: boolean;
   attentionModal?: IMessageModal;
@@ -28,6 +29,7 @@ interface IDecisionsForm {
   titleContentAddCard?: string;
   setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>;
   messageEmptyDecisions?: string;
+  heightContentPage?: string;
 }
 
 export type { IDecisionsForm };

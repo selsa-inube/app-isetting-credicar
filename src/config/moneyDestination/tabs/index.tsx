@@ -12,7 +12,6 @@ const moneyDestinationTabsConfig = (smallScreen: boolean) => {
       id: "requestsInProgress",
       isDisabled: false,
       label: smallScreen ? "En trámite" : "Solicitudes en trámite",
-      notificationIndicators: 2,
       icon: {
         icon: <MdOutlineReportProblem />,
         appearance: ComponentAppearance.WARNING,
