@@ -17,6 +17,7 @@ interface IDecisionsFormUI {
   disabledNext: boolean;
   disabledPrevius: boolean;
   showDecisionModal: boolean;
+  showFloatingAddButton: boolean;
   onButtonClick: () => void;
   onCloseModal: () => void;
   onDelete: () => void;
@@ -25,6 +26,7 @@ interface IDecisionsFormUI {
   onToggleAttentionModal: () => void;
   onToggleDeleteModal: (id: string) => void;
   onSave: () => void;
+  editDataOption?: boolean;
   shouldShowAttentionModal?: boolean;
   cancelButton?: () => void;
   attentionModal?: IMessageModal;

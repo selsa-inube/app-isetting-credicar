@@ -1,23 +1,19 @@
-import {
-  Assisted,
-  Breadcrumbs,
-  Stack,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-import { GeneralInformationForm } from "@design/forms/generalInformationDestination";
 import { DecisionsForm } from "@design/forms/decisions";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsAddDestination } from "@config/moneyDestination/addDestination/navigation";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { attentionModal, deleteModal } from "@config/decisions/messages";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
-import { VerificationForm } from "@design/forms/verificationDestination";
 import { controlsAssisted } from "@config/controlsAssisted";
 import { lineCreditLabels } from "@config/moneyDestination/addDestination/assisted/lineCreditLabels";
+import { addDestinatrionLabels } from "@config/moneyDestination/moneyDestinationTab/addDestinationLabels";
 import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IAddDestinationUI";
+import { GeneralInformationForm } from "../../forms/generalInformationDestination";
+import { VerificationForm } from "../../forms/verificationDestination";
 
 const AddDestinationUI = (props: IAddDestinationUI) => {
   const {
@@ -34,6 +30,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     saveMoneyDestination,
     showPendingReqModal,
     showAttentionModal,
+    smallScreen,
     onFinishForm,
     onNextStep,
     onPreviousStep,
@@ -45,8 +42,6 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     onClosePendingReqModal,
     setShowAttentionModal,
   } = props;
-
-  const smallScreen = useMediaQuery("(max-width: 990px)");
 
   return (
     <Stack
@@ -62,8 +57,8 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsAddDestination} />
           <Title
-            title="Destinos de dinero"
-            description=" Destino del dinero para crédito."
+            title={addDestinatrionLabels.title}
+            description={addDestinatrionLabels.description}
             sizeTitle="large"
           />
         </Stack>

@@ -5,6 +5,7 @@ import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollA
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { UseCase } from "@enum/useCase";
 import { EditPayrollAgreementUI } from "./interface";
 
@@ -37,6 +38,8 @@ const EditPayrollAgreement = () => {
     description,
     actionText,
     moreDetails,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
     handleToggleDeletedAlertModal,
     setExtraordinaryPayment,
     setRegularPaymentCycles,
@@ -118,6 +121,12 @@ const EditPayrollAgreement = () => {
       titleRequest={titleRequest}
       descriptionRequest={descriptionRequest}
       actionTextRequest={actionTextRequest}
+      setIncludeExtraPayDay={
+        setIncludeExtraPayDay as React.Dispatch<
+          React.SetStateAction<IOrdinaryCyclesEntry[]>
+        >
+      }
+      setRegularDeleted={setRegularDeleted}
     />
   );
 };

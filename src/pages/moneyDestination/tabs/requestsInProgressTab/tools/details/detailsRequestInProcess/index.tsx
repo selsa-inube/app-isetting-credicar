@@ -9,6 +9,7 @@ import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal"
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { detailsLabels } from "@config/moneyDestination/requestsInProgressTab/details/detailsLabels";
 import { StyledContainerIcon } from "./styles";
 import { RequestsInProcess } from "../requestsInProcess";
 
@@ -69,7 +70,7 @@ const DetailsRequestInProcess = (props: IDetails) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            Detalles
+            {detailsLabels.title}
           </Text>
         )}
       </StyledContainerIcon>

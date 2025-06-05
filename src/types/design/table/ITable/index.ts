@@ -10,15 +10,18 @@ interface ITable {
   titles: ITitle[];
   actions: IAction[];
   breakpoints: IBreakpoint[];
+  withGeneralizedTitle?: boolean;
   filter?: string;
   infoTitle?: string;
   mobileTitle?: string;
   pageLength?: number;
   widthPercentageTotalColumns?: number;
+  ellipsisCell?: boolean;
   columnWidths?: number[];
   emptyDataMessage?: string;
   withActionsTitles?: boolean;
   tableLayout?: "fixed" | "auto";
+  withActionMobile?: boolean;
 }
 
 export type { ITable };

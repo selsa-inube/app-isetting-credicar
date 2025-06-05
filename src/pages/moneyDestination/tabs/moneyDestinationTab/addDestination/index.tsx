@@ -20,6 +20,7 @@ function AddDestination() {
     showRequestProcessModal,
     saveData,
     showAttentionModal,
+    smallScreen,
     handleNextStep,
     handlePreviousStep,
     handleSubmitClick,
@@ -41,15 +42,15 @@ function AddDestination() {
     showPendingReqModal,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
-  } = useSaveMoneyDestination(
-    UseCase.ADD,
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSaveMoneyDestination({
+    useCase: UseCase.ADD,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
-  );
+  });
 
   return (
     <AddDestinationUI
@@ -76,6 +77,7 @@ function AddDestination() {
       onClosePendingReqModal={handleClosePendingReqModal}
       showAttentionModal={showAttentionModal}
       setShowAttentionModal={setShowAttentionModal}
+      smallScreen={smallScreen}
     />
   );
 }

@@ -1,24 +1,30 @@
-import { Stack, Tabs, useMediaQuery, Breadcrumbs } from "@inubekit/inubekit";
+import { Stack, Tabs, Breadcrumbs, Grid } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { Title } from "@design/data/title";
 import { crumbsMoneyDestination } from "@config/moneyDestination/navigation";
-import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 import { MoneyDestinationTab } from "@pages/moneyDestination/tabs/moneyDestinationTab";
 import { RequestsInProgressTab } from "@pages/moneyDestination/tabs/requestsInProgressTab";
-import { ICardData } from "@ptypes/home/ICardData";
+import { MenuAddButton } from "@design/feedback/menuAddButton";
+import { IMoneyDestinationUI } from "@ptypes/moneyDestination/tabs/IMoneyDestinationUI";
+import { StyledMenuContainer } from "./styles";
 
-interface IMoneyDestinationUI {
-  isSelected: string;
-  descriptionOptions: ICardData;
-  handleTabChange: (id: string) => void;
-}
-
-function MoneyDestinationUI(props: IMoneyDestinationUI) {
-  const { isSelected, descriptionOptions, handleTabChange } = props;
-
-  const smallScreen = useMediaQuery("(max-width: 990px)");
-  const smallScreenTab = useMediaQuery("(max-width: 450px)");
+const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
+  const {
+    isSelected,
+    descriptionOptions,
+    options,
+    showModal,
+    showInfoModal,
+    smallScreen,
+    showMoneyTab,
+    showRequestsTab,
+    moneyDestinationTabs,
+    onCloseMenu,
+    onToggleModal,
+    onToggleInfoModal,
+    handleTabChange,
+  } = props;
 
   return (
     <Stack
@@ -30,33 +36,51 @@ function MoneyDestinationUI(props: IMoneyDestinationUI) {
           : `${tokens.spacing.s400} ${tokens.spacing.s800}`
       }
     >
-      <Stack gap={tokens.spacing.s600} direction="column">
+      <Stack
+        gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s600}
+        direction="column"
+      >
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsMoneyDestination} />
-          <Title
-            title={descriptionOptions?.publicCode ?? ""}
-            description={descriptionOptions?.description ?? ""}
-            sizeTitle="large"
-          />
+          <Grid
+            gap={tokens.spacing.s200}
+            justifyContent="space-between"
+            templateColumns="1fr auto"
+            templateRows="auto"
+          >
+            <Title
+              title={descriptionOptions?.publicCode ?? ""}
+              description={descriptionOptions?.description ?? ""}
+              sizeTitle="large"
+            />
+
+            {smallScreen && (
+              <StyledMenuContainer>
+                <MenuAddButton
+                  showModal={showModal}
+                  showInfoModal={showInfoModal}
+                  options={options}
+                  onToggleInfoModal={onToggleInfoModal}
+                  onCloseMenu={onCloseMenu}
+                  onToggleModal={onToggleModal}
+                />
+              </StyledMenuContainer>
+            )}
+          </Grid>
         </Stack>
         <Stack gap={tokens.spacing.s300} direction="column">
           <Tabs
-            tabs={Object.values(moneyDestinationTabsConfig)}
+            tabs={moneyDestinationTabs}
             selectedTab={isSelected}
             onChange={handleTabChange}
-            scroll={smallScreenTab ? true : false}
           />
 
-          {isSelected === moneyDestinationTabsConfig.moneyDestination.id && (
-            <MoneyDestinationTab />
-          )}
-          {isSelected === moneyDestinationTabsConfig.requestsInProgress.id && (
-            <RequestsInProgressTab />
-          )}
+          {showMoneyTab && <MoneyDestinationTab />}
+          {showRequestsTab && <RequestsInProgressTab />}
         </Stack>
       </Stack>
     </Stack>
   );
-}
+};
 
 export { MoneyDestinationUI };

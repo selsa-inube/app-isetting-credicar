@@ -1,4 +1,4 @@
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 
 const requestStepsInitial: IRequestSteps[] = [
   { name: "Solicitud radicada", status: "pending" },

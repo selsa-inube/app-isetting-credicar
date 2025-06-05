@@ -2,7 +2,6 @@ import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-import { GeneralInformationForm } from "@design/forms/generalInformationDestination";
 import { DecisionsForm } from "@design/forms/decisions";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
@@ -16,6 +15,7 @@ import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationT
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { IEditDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IEditDestinationUI";
 import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
+import { GeneralInformationForm } from "../../forms/generalInformationDestination";
 
 const EditDestinationUI = (props: IEditDestinationUI) => {
   const {
@@ -29,9 +29,11 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     saveMoneyDestination,
     requestSteps,
     loading,
-    showPendingReqModal,
+    showRequestStatus,
     showRequestProcessModal,
     smallScreen,
+    showGeneralInformation,
+    showDecisionsForm,
     onTabChange,
     onButtonClick,
     onReset,
@@ -67,7 +69,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
             onChange={onTabChange}
           />
           <Stack direction="column">
-            {isSelected === editDestinationTabsConfig.generalInformation.id && (
+            {showGeneralInformation && (
               <GeneralInformationForm
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
@@ -78,7 +80,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 initialGeneralInfData={initialGeneralInfData}
               />
             )}
-            {isSelected === editDestinationTabsConfig.creditLine.id && (
+            {showDecisionsForm && (
               <DecisionsForm
                 attentionModal={attentionModal}
                 deleteModal={deleteModal}
@@ -93,7 +95,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 nameRule={initialGeneralInformationValues.nameDestination}
                 editDataOption
                 showAttentionModal={false}
-                setShowAttentionModal={() => console.log()}
+                setShowAttentionModal={() => void 0}
                 titleContentAddCard={editDestinationLabels.addLineCredit}
                 messageEmptyDecisions={
                   editDestinationLabels.messageEmptyDecisions
@@ -115,7 +117,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           onCloseRequestStatus={onCloseRequestStatus}
         />
       )}
-      {showPendingReqModal && saveMoneyDestination.requestNumber && (
+      {showRequestStatus && (
         <RequestStatusModal
           portalId="portal"
           title={requestStatusMessage(saveMoneyDestination.staffName).title}

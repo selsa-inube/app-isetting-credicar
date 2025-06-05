@@ -19,6 +19,8 @@ const RegularPaymentCyclesForm = forwardRef<
       onButtonClick,
       onPreviousStep,
       setRegularPaymentCycles,
+      setIncludeExtraPayDay,
+      setRegularDeleted,
       loading = false,
       editDataOption = false,
       initialData,
@@ -53,6 +55,8 @@ const RegularPaymentCyclesForm = forwardRef<
       onFormValid,
       regularPaymentCycles,
       setRegularPaymentCycles,
+      setIncludeExtraPayDay,
+      setRegularDeleted,
       initialData,
     });
 

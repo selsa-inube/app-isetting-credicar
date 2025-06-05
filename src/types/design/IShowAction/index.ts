@@ -5,6 +5,7 @@ interface IShowAction {
   actionContent: IAction[];
   entry: IEntry;
   mediaQuery: boolean;
+  withActionMobile: boolean;
 }
 
 export type { IShowAction };

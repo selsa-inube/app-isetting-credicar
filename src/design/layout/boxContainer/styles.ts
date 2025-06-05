@@ -4,8 +4,8 @@ import styled from "styled-components";
 interface IStyledFlex {
   $boxSizing: string;
   $justifyContent?: string;
-  $alignItems?: string;
   $backgroundColor?: string;
+  $alignItems?: string;
   $alignContent?: string;
   $direction?: string;
   $wrap?: string;

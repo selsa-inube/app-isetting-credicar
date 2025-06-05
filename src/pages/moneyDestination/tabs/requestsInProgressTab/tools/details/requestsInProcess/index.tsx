@@ -7,20 +7,12 @@ import { TraceabilityCard } from "@design/feedback/traceabilityCard";
 import { ModalWrapper } from "@design/modals/modalWrapper";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { detailsRequestInProgressModal } from "@config/moneyDestination/requestsInProgressTab/details/detailsRequestInProgressModal";
-import { ILabel } from "@ptypes/ILabel";
 import { DetailBox } from "@design/feedback/detailBox";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IRequestsInProcess } from "@ptypes/moneyDestination/tabs/IRequestsInProcess";
+import { useThemeData } from "@utils/theme";
 
-interface IRequestsInProcess {
-  data: IEntry;
-  labelsOfRequest: ILabel[];
-  labelsOfTraceability: ILabel[];
-  isMobile: boolean;
-  onCloseModal: () => void;
-  onClick: () => void;
-}
-
-function RequestsInProcess(props: IRequestsInProcess) {
+const RequestsInProcess = (props: IRequestsInProcess) => {
   const {
     data,
     labelsOfRequest,
@@ -29,6 +21,8 @@ function RequestsInProcess(props: IRequestsInProcess) {
     onCloseModal,
     onClick,
   } = props;
+
+  const theme = useThemeData();
 
   const labelsOfRequestDetails = labelsOfRequest.filter(
     (field) => data[field.id],
@@ -54,9 +48,8 @@ function RequestsInProcess(props: IRequestsInProcess) {
     >
       <BoxContainer
         direction="column"
-        backgroundColor={inube.palette.neutral.N0}
         borderRadius={tokens.spacing.s100}
-        borderColor={inube.palette.neutral.N40}
+        borderColor={theme.palette.neutral.N40 ?? inube.palette.neutral.N40}
         boxSizing="border-box"
         width="auto"
         height={isMobile ? "400px" : "430px"}
@@ -87,7 +80,6 @@ function RequestsInProcess(props: IRequestsInProcess) {
           </Stack>
         </Stack>
         <BoxContainer
-          backgroundColor={inube.palette.neutral.N0}
           overflowY="auto"
           boxSizing="border-box"
           wrap="wrap"
@@ -104,11 +96,12 @@ function RequestsInProcess(props: IRequestsInProcess) {
                 field={field}
                 data={data}
                 id={id}
-                backgroundColor={inube.palette.neutral.N10}
                 borderRadius={tokens.spacing.s100}
                 padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
                 width={isMobile ? "253px" : "240px"}
-                borderColor={inube.palette.neutral.N40}
+                borderColor={
+                  theme.palette.neutral.N40 ?? inube.palette.neutral.N40
+                }
                 ellipsis
               />
             ))}
@@ -146,7 +139,7 @@ function RequestsInProcess(props: IRequestsInProcess) {
       </BoxContainer>
     </ModalWrapper>
   );
-}
+};
 
 export { RequestsInProcess };
 export type { IRequestsInProcess };

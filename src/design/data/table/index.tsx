@@ -1,7 +1,5 @@
 import { Stack, useMediaQueries, useMediaQuery } from "@inubekit/inubekit";
 
-import { TableUI } from "./interface";
-import { StyledContainerTable } from "./styles";
 import { useMemo, useState } from "react";
 import { filterEntries } from "@utils/table/filterEntries";
 import { getQueriesArray } from "@utils/table/breakpoint/getQueriesArray";
@@ -14,6 +12,8 @@ import { getPageEntries } from "@utils/table/pagination/getPageEntries";
 import { titleColumns } from "@utils/table/titleColumns";
 import { findCurrentMediaQuery } from "@utils/table/breakpoint/findCurrentMediaQuery";
 import { ITable } from "@ptypes/design/table/ITable";
+import { TableUI } from "./interface";
+import { StyledContainerTable } from "./styles";
 
 const Table = (props: ITable) => {
   const {
@@ -31,6 +31,9 @@ const Table = (props: ITable) => {
     columnWidths,
     emptyDataMessage,
     withActionsTitles,
+    ellipsisCell = true,
+    withActionMobile = true,
+    withGeneralizedTitle = false,
   } = props;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,6 +95,9 @@ const Table = (props: ITable) => {
           emptyDataMessage={emptyDataMessage}
           withActionsTitles={withActionsTitles}
           tableLayout={tableLayout}
+          ellipsisCell={ellipsisCell}
+          withActionMobile={withActionMobile}
+          withGeneralizedTitle={withGeneralizedTitle}
         />
       </Stack>
     </StyledContainerTable>

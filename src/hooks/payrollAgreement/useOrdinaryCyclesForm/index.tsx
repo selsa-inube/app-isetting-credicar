@@ -19,6 +19,7 @@ import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 
 const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   const {
@@ -29,6 +30,8 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     onFormValid,
     regularPaymentCycles,
     setRegularPaymentCycles,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
     initialData,
   } = props;
 
@@ -179,6 +182,12 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       return [...prev, createNewCycle(prev.length + 1)];
     });
 
+    if (includedPeriodicity.includes(formik.values.periodicity ?? "")) {
+      setIncludeExtraPayDay((prev) => {
+        if (!Array.isArray(prev)) return [];
+        return [...prev, createNewCycle(prev.length + 1)];
+      });
+    }
     formik.resetForm();
     setShowAddModal(false);
   };
@@ -190,6 +199,16 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       setRegularPaymentCycles((prev) =>
         prev.filter((entry) => entry.id !== entryDeleted),
       );
+
+      setIncludeExtraPayDay((prev) =>
+        prev?.filter((entry) => entry.id !== entryDeleted),
+      );
+
+      setRegularDeleted(() =>
+        regularPaymentCycles.filter((entry) => entry.id === entryDeleted),
+      );
+    } else {
+      setRegularDeleted([]);
     }
   }, [entryDeleted]);
 

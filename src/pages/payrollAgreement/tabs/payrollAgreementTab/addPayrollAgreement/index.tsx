@@ -26,6 +26,7 @@ const AddPayrollAgreement = () => {
     showModal,
     showRequestProcessModal,
     saveData,
+    includeExtraPayDay,
     handleCloseModal,
     handleGoBack,
     handleNextStep,
@@ -37,6 +38,8 @@ const AddPayrollAgreement = () => {
     setExtraordinaryPayment,
     setIsCurrentFormValid,
     setRegularPaymentCycles,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
     setShowModal,
     setShowRequestProcessModal,
     setSourcesOfIncomeValues,
@@ -89,6 +92,7 @@ const AddPayrollAgreement = () => {
           React.SetStateAction<IOrdinaryCyclesEntry[]>
         >
       }
+      setRegularDeleted={setRegularDeleted}
       isCurrentFormValid={formValid}
       showModal={showModal}
       onToggleModal={handleToggleModal}
@@ -101,6 +105,8 @@ const AddPayrollAgreement = () => {
       loading={loadingSendData}
       onFinishForm={handleSubmitClick}
       setCurrentStep={setCurrentStep}
+      setIncludeExtraPayDay={setIncludeExtraPayDay}
+      includeExtraPayDay={includeExtraPayDay}
     />
   );
 };
