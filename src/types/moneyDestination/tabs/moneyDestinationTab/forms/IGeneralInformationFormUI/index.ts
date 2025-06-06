@@ -1,4 +1,5 @@
 import { FormikProps } from "formik";
+import { IStackAlignItem, IStackDirectionAlignment } from "@inubekit/inubekit";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 
@@ -13,6 +14,10 @@ interface IGeneralInformationFormUI {
   labelButtonNext: string;
   buttonDisabledState: boolean;
   isMobile: boolean;
+  widthStack: string;
+  directionStack: IStackDirectionAlignment;
+  alignItemsIcon: IStackAlignItem;
+  paddingIcon: string;
   onButtonClick: () => void;
   onReset: () => void;
   onChange: (name: string, value: string) => void;

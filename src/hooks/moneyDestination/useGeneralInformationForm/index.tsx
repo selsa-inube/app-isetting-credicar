@@ -1,4 +1,8 @@
-import { useMediaQuery } from "@inubekit/inubekit";
+import {
+  IStackAlignItem,
+  IStackDirectionAlignment,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 import { useEffect, useImperativeHandle, useState } from "react";
 import { MdOutlineFax } from "react-icons/md";
 import { FormikProps, useFormik } from "formik";
@@ -16,6 +20,7 @@ import { normalizeEditDestination } from "@utils/destination/normalizeEditDestin
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
 import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
+import { tokens } from "@design/tokens";
 
 const useGeneralInformationForm = (
   enumData: IEnumerators[],
@@ -210,6 +215,13 @@ const useGeneralInformationForm = (
 
   const isMobile = useMediaQuery("(max-width: 990px)");
 
+  const directionStack: IStackDirectionAlignment = isMobile ? "column" : "row";
+  const widthStack = isMobile ? "100%" : "350px";
+  const alignItemsIcon: IStackAlignItem = isMobile ? "flex-start" : "center";
+  const paddingIcon = isMobile
+    ? `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s050} ${tokens.spacing.s250}`
+    : tokens.spacing.s0;
+
   return {
     autosuggestValue,
     optionsDestination,
@@ -218,6 +230,10 @@ const useGeneralInformationForm = (
     icon,
     labelButtonNext,
     isMobile,
+    widthStack,
+    directionStack,
+    alignItemsIcon,
+    paddingIcon,
     handleChange,
     handleReset,
     valuesEqual,
