@@ -151,7 +151,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   };
 
   const createNewCycle = (id: number) => ({
-    id: `cycle-${addLeadingZero(id).toString()}`,
+    id: `cycle-${addLeadingZero(id).toString()}-${formik.values.nameCycle}-${formik.values.month}-${formik.values.day}`,
     nameCycle: formik.values.nameCycle,
     typePayment:
       normalizeEnumTranslation(formik.values.typePayment)?.name ??

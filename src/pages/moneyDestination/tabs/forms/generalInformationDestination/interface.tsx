@@ -60,11 +60,19 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                   <Stack
                     direction="column"
                     gap={tokens.spacing.s050}
-                    alignItems="center"
+                    alignItems={isMobile ? "flex-start" : "center"}
                   >
-                    <Text type="label" size="small" weight="bold">
-                      {generalInfoLabels.icon}
-                    </Text>
+                    <Stack
+                      padding={
+                        isMobile
+                          ? `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s050} ${tokens.spacing.s250}`
+                          : tokens.spacing.s0
+                      }
+                    >
+                      <Text type="label" size="medium" weight="bold">
+                        {generalInfoLabels.icon}
+                      </Text>
+                    </Stack>
                     <StyledIcon $isMobile={isMobile}>
                       {icon ?? <MdOutlineFax size={24} />}
                     </StyledIcon>

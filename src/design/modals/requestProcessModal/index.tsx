@@ -6,9 +6,9 @@ import { tokens } from "@design/tokens";
 import { lastCompletedIndex } from "@utils/lastCompletedIndex";
 import { requestProcessLabels } from "@config/requestProcessLabels";
 import { IRequestProcessModal } from "@ptypes/design/IRequestProcessModal";
+import { percentage } from "@utils/percentage";
 import { StyledModal } from "./styles";
 import { RequestProcessBar } from "./RequestProcessBar";
-import { countVerifiedRequests } from "@utils/countVerifiedRequests";
 
 const RequestProcessModal = (props: IRequestProcessModal) => {
   const {
@@ -32,9 +32,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
   const stepCurrentIndex = lastCompletedIndex(requestSteps);
   const stepCurrent = stepCurrentIndex + 1;
 
-  const percentage = `${countVerifiedRequests(requestSteps).toFixed()}%`;
-
-  const percentageNumber = Number(percentage.split("%")[0]);
+  const percentageNumber = Number(percentage(requestSteps).split("%")[0]);
 
   return createPortal(
     <Blanket>
@@ -60,7 +58,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
             sizeIcon={sizeIcon}
             stepCurrent={stepCurrent}
             stepCurrentIndex={stepCurrentIndex}
-            percentage={percentage}
+            percentage={percentage(requestSteps)}
           />
         </Stack>
         {percentageNumber > 98 && (
