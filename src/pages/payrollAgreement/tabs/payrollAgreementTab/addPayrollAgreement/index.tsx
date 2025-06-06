@@ -51,6 +51,7 @@ const AddPayrollAgreement = () => {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
     useCase: UseCase.ADD,
@@ -107,6 +108,7 @@ const AddPayrollAgreement = () => {
       setCurrentStep={setCurrentStep}
       setIncludeExtraPayDay={setIncludeExtraPayDay}
       includeExtraPayDay={includeExtraPayDay}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

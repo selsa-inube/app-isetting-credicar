@@ -15,6 +15,7 @@ interface IRequestProcessContent {
     title: string;
   };
   onCloseRequestStatus: () => void;
+  onCloseProcess: () => void;
   saveData?: ISaveDataResponse;
   appearance?: ISpinnerAppearance;
 }

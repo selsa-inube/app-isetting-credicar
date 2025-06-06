@@ -70,6 +70,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     setIsCurrentFormValid,
     onCloseRequestStatus,
     onClosePendingReqModal,
+    onCloseProcess,
   } = props;
 
   return (
@@ -210,6 +211,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
         />
       )}
       {isRequestStatusModal && (

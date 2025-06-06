@@ -39,6 +39,10 @@ const GeneralInformationForm = forwardRef<
       icon,
       labelButtonNext,
       isMobile,
+      widthStack,
+      directionStack,
+      alignItemsIcon,
+      paddingIcon,
       handleChange,
       handleReset,
       valuesEqualBoton,
@@ -68,6 +72,10 @@ const GeneralInformationForm = forwardRef<
         onReset={handleReset}
         labelButtonNext={labelButtonNext}
         isMobile={isMobile}
+        widthStack={widthStack}
+        directionStack={directionStack}
+        alignItemsIcon={alignItemsIcon}
+        paddingIcon={paddingIcon}
       />
     );
   },

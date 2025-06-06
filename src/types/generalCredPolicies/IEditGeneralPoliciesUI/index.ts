@@ -54,6 +54,7 @@ interface IEditGeneralPoliciesUI {
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
+  onCloseProcess: () => void;
   normalizeEvaluateRuleData?: IRuleDecision[];
   normalizedContributions?: IRuleDecision[];
   normalizedIncome?: IRuleDecision[];

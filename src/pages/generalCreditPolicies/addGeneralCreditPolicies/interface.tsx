@@ -55,6 +55,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     onNextStep,
     onPreviousStep,
     onToggleModal,
+    onCloseProcess,
   } = props;
 
   return (
@@ -190,6 +191,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 onClosePendingReqModal={onClosePendingReqModal}
                 date={dateVerification}
                 setDateVerification={setDateVerification}
+                onCloseProcess={onCloseProcess}
               />
             )}
           </Stack>

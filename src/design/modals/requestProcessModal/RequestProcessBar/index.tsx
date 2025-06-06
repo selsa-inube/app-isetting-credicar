@@ -13,7 +13,8 @@ import {
 import { IRequestProcess } from "@ptypes/design/IRequestProcess";
 
 const RequestProcessBar = (props: IRequestProcess) => {
-  const { requestSteps, sizeIcon, stepCurrent, stepCurrentIndex } = props;
+  const { requestSteps, percentage, sizeIcon, stepCurrent, stepCurrentIndex } =
+    props;
 
   const appearance =
     requestSteps[stepCurrentIndex].status === "error"
@@ -25,8 +26,6 @@ const RequestProcessBar = (props: IRequestProcess) => {
   const appearanceProgressBar = verifiedErrorRequest(requestSteps)
     ? ComponentAppearance.DANGER
     : ComponentAppearance.SUCCESS;
-
-  const percentage = `${countVerifiedRequests(requestSteps).toFixed()}%`;
 
   const numberOfSteps = `${stepCurrent}/${requestSteps.length}`;
 

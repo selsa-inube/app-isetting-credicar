@@ -20,6 +20,7 @@ import { IEntry } from "@ptypes/design/table/IEntry";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
+import { getNextId } from "@utils/getNextId";
 
 const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   const {
@@ -158,7 +159,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   };
 
   const createNewCycle = (id: number) => ({
-    id: `cycle-${addLeadingZero(id).toString()}`,
+    id: id,
     cycleId: addLeadingZero(id).toString(),
     nameCycle: formik.values.nameCycle,
     periodicity:
@@ -174,23 +175,27 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   const handleAddCycle = () => {
     setEntries((prev) => {
       if (!Array.isArray(prev)) return [];
-      return [...prev, createNewCycle(prev.length + 1)];
+      const nextId = getNextId(prev);
+      return [...prev, createNewCycle(nextId)];
     });
 
     setRegularPaymentCycles((prev) => {
       if (!Array.isArray(prev)) return [];
-      return [...prev, createNewCycle(prev.length + 1)];
+      const nextId = getNextId(prev as IEntry[]);
+      return [...prev, createNewCycle(nextId)];
     });
 
-    if (includedPeriodicity.includes(formik.values.periodicity ?? "")) {
-      setIncludeExtraPayDay((prev) => {
-        if (!Array.isArray(prev)) return [];
-        return [...prev, createNewCycle(prev.length + 1)];
-      });
-    }
     formik.resetForm();
     setShowAddModal(false);
   };
+
+  useEffect(() => {
+    const newData = regularPaymentCycles.filter((entry) =>
+      includedPeriodicity.includes(entry.periodicity ?? ""),
+    );
+
+    setIncludeExtraPayDay(newData);
+  }, [regularPaymentCycles]);
 
   useEffect(() => {
     if (entryDeleted) {
@@ -198,10 +203,6 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
 
       setRegularPaymentCycles((prev) =>
         prev.filter((entry) => entry.id !== entryDeleted),
-      );
-
-      setIncludeExtraPayDay((prev) =>
-        prev?.filter((entry) => entry.id !== entryDeleted),
       );
 
       setRegularDeleted(() =>

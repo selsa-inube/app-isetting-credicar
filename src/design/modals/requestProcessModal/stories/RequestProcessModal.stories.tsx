@@ -35,6 +35,19 @@ Default.args = {
   ],
 };
 
+export const Complete = Template.bind({});
+Complete.args = {
+  portalId: "portal",
+  title: "Procesando solicitud",
+  description:
+    "Hemos recibido tu solicitud y se encuentra en proceso. Por favor, espera mientras la gestionamos.",
+  requestSteps: [
+    { name: "Solicitud radicada", status: "completed" },
+    { name: "Agregando", status: "completed" },
+    { name: "Destino agregado", status: "completed" },
+  ],
+};
+
 export const WithError = Template.bind({});
 WithError.args = {
   portalId: "portal",

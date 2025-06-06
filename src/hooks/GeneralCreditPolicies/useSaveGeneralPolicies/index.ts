@@ -159,7 +159,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     if (isStatusIntAutomatic(saveGeneralPolicies?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
-        navigate(navigatePage);
         addFlag({
           title: flowAutomaticMessages().errorCreateRequest.title,
           description: flowAutomaticMessages().errorCreateRequest.description,
@@ -170,9 +169,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       }
 
       if (isStatusRequestFinished()) {
-        if (useCase !== UseCase.DELETE) {
-          navigate(navigatePage);
-        }
         addFlag({
           title: flowAutomaticMessages(operationTypes[useCase])
             .SuccessfulCreateRequest.title,
@@ -184,6 +180,16 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
             .SuccessfulCreateRequest.duration,
         });
       }
+    }
+  };
+
+  const handleCloseProcess = () => {
+    setSendData(false);
+    if (useCase !== UseCase.DELETE) {
+      navigate(navigatePage);
+    }
+    if (isStatusCloseModal() || isStatusRequestFinished()) {
+      handleStatusChange();
     }
   };
 
@@ -201,13 +207,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   useEffect(() => {
     changeRequestSteps();
-
-    if (isStatusCloseModal() || isStatusRequestFinished()) {
-      setTimeout(() => {
-        handleStatusChange();
-        setSendData(false);
-      }, 3000);
-    }
   }, [statusRequest]);
 
   const handleCloseRequestStatus = () => {
@@ -240,6 +239,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     showPendingReqModal,
     loadingSendData,
     isRequestStatusModal,
+    handleCloseProcess,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   };

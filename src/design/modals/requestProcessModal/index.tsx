@@ -1,10 +1,13 @@
 import { createPortal } from "react-dom";
-import { Stack, Text, Blanket, Divider } from "@inubekit/inubekit";
+import { Stack, Text, Blanket, Divider, Button } from "@inubekit/inubekit";
 
 import { ComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { lastCompletedIndex } from "@utils/lastCompletedIndex";
+import { requestProcessLabels } from "@config/requestProcessLabels";
 import { IRequestProcessModal } from "@ptypes/design/IRequestProcessModal";
+import { percentage } from "@utils/percentage";
+import { percTotalNumber } from "@config/percentageNumber";
 import { StyledModal } from "./styles";
 import { RequestProcessBar } from "./RequestProcessBar";
 
@@ -16,6 +19,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
     isMobile,
     description,
     title,
+    onClose,
   } = props;
 
   const node = document.getElementById(portalId);
@@ -28,6 +32,8 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
 
   const stepCurrentIndex = lastCompletedIndex(requestSteps);
   const stepCurrent = stepCurrentIndex + 1;
+
+  const percentageNumber = Number(percentage(requestSteps).split("%")[0]);
 
   return createPortal(
     <Blanket>
@@ -53,8 +59,20 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
             sizeIcon={sizeIcon}
             stepCurrent={stepCurrent}
             stepCurrentIndex={stepCurrentIndex}
+            percentage={percentage(requestSteps)}
           />
         </Stack>
+        {percentageNumber > percTotalNumber && (
+          <Stack justifyContent="end">
+            <Button
+              spacing="wide"
+              appearance={ComponentAppearance.SUCCESS}
+              onClick={onClose}
+            >
+              {requestProcessLabels.labelButton}
+            </Button>
+          </Stack>
+        )}
       </StyledModal>
     </Blanket>,
     node,

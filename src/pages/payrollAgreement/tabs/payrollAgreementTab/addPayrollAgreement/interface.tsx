@@ -51,6 +51,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
     setRegularDeleted,
     setIncludeExtraPayDay,
     setSourcesOfIncomeValues,
+    onCloseProcess,
   } = props;
 
   return (
@@ -163,6 +164,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 showPendingReqModal={showPendingReqModal}
                 onClosePendingReqModal={onClosePendingReqModal}
                 typeRegularPayroll={typeRegularPayroll}
+                onCloseProcess={onCloseProcess}
               />
             )}
           </Stack>

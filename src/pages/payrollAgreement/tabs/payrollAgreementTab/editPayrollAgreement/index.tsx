@@ -65,6 +65,7 @@ const EditPayrollAgreement = () => {
     descriptionRequest,
     actionTextRequest,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
     useCase: UseCase.EDIT,
@@ -127,6 +128,7 @@ const EditPayrollAgreement = () => {
         >
       }
       setRegularDeleted={setRegularDeleted}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

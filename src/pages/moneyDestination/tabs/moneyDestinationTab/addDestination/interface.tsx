@@ -41,6 +41,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     onCloseRequestStatus,
     onClosePendingReqModal,
     setShowAttentionModal,
+    onCloseProcess,
   } = props;
 
   return (
@@ -127,6 +128,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                 onCloseRequestStatus={onCloseRequestStatus}
                 showPendingReqModal={showPendingReqModal}
                 onClosePendingReqModal={onClosePendingReqModal}
+                onCloseProcess={onCloseProcess}
               />
             )}
           </Stack>

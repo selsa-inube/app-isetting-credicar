@@ -23,6 +23,10 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     icon,
     labelButtonNext,
     isMobile,
+    widthStack,
+    directionStack,
+    alignItemsIcon,
+    paddingIcon,
     onChange,
     onButtonClick,
     onReset,
@@ -38,11 +42,8 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
           <Stack direction="column" gap={tokens.spacing.s300}>
             <StyledContainerFields $isMobile={isMobile}>
               <Stack direction="column" width="100%" gap={tokens.spacing.s250}>
-                <Stack
-                  direction={isMobile ? "column" : "row"}
-                  gap={tokens.spacing.s250}
-                >
-                  <Stack width={isMobile ? "100%" : "350px"}>
+                <Stack direction={directionStack} gap={tokens.spacing.s250}>
+                  <Stack width={widthStack}>
                     <Autosuggest
                       label={generalInfoLabels.name}
                       name="nameDestination"
@@ -60,11 +61,13 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                   <Stack
                     direction="column"
                     gap={tokens.spacing.s050}
-                    alignItems="center"
+                    alignItems={alignItemsIcon}
                   >
-                    <Text type="label" size="small" weight="bold">
-                      {generalInfoLabels.icon}
-                    </Text>
+                    <Stack padding={paddingIcon}>
+                      <Text type="label" size="medium" weight="bold">
+                        {generalInfoLabels.icon}
+                      </Text>
+                    </Stack>
                     <StyledIcon $isMobile={isMobile}>
                       {icon ?? <MdOutlineFax size={24} />}
                     </StyledIcon>

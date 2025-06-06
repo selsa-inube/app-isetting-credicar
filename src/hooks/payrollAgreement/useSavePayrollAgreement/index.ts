@@ -108,22 +108,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           bussinesUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
-
         setStatusRequest(newData.settingRequest?.requestStatus);
-        setTimeout(() => {
-          if (
-            setEntryDeleted &&
-            newData?.settingRequest?.requestStatus &&
-            statusRequestFinished.includes(
-              newData?.settingRequest?.requestStatus,
-            )
-          ) {
-            setEntryDeleted(
-              data.configurationRequestData
-                .payrollForDeductionAgreementId as string,
-            );
-          }
-        }, 3000);
       }
     } catch (error) {
       console.info(error);
@@ -231,7 +216,6 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     if (isStatusIntAutomatic(savePayrollAgreement?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
-        navigate(navigatePage);
         addFlag({
           title: flowAutomaticMessages().errorCreateRequest.title,
           description: flowAutomaticMessages().errorCreateRequest.description,
@@ -242,9 +226,6 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       }
 
       if (isStatusRequestFinished()) {
-        if (useCase !== UseCase.DELETE) {
-          navigate(navigatePage);
-        }
         addFlag({
           title: flowAutomaticMessages(operationTypes[useCase])
             .SuccessfulCreateRequest.title,
@@ -256,6 +237,25 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
             .SuccessfulCreateRequest.duration,
         });
       }
+    }
+  };
+
+  const handleCloseProcess = () => {
+    setSendData(false);
+    if (useCase !== UseCase.DELETE) {
+      navigate(navigatePage);
+    }
+    if (
+      setEntryDeleted &&
+      statusRequest &&
+      statusRequestFinished.includes(statusRequest)
+    ) {
+      setEntryDeleted(
+        data.configurationRequestData.payrollForDeductionAgreementId as string,
+      );
+    }
+    if (isStatusCloseModal() || isStatusRequestFinished()) {
+      handleStatusChange();
     }
   };
 
@@ -272,13 +272,6 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
 
   useEffect(() => {
     changeRequestSteps();
-
-    if (isStatusCloseModal() || isStatusRequestFinished()) {
-      setTimeout(() => {
-        handleStatusChange();
-        setSendData(false);
-      }, 3000);
-    }
   }, [statusRequest]);
 
   const handleCloseRequestStatus = () => {
@@ -322,6 +315,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     titleRequest,
     descriptionRequest,
     actionTextRequest,
+    handleCloseProcess,
     handleCloseRequestStatus,
     handleClosePendingReqModal,
   };

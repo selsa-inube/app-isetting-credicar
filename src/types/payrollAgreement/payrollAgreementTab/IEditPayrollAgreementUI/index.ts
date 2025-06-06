@@ -64,6 +64,7 @@ interface IEditPayrollAgreementUI {
   onToggleEditedModal: () => void;
   onEditedModal: () => void;
   onToggleDeletedAlertModal: () => void;
+  onCloseProcess: () => void;
 }
 
 export type { IEditPayrollAgreementUI };

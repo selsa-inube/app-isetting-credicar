@@ -84,6 +84,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showPendingReqModal,
     isRequestStatusModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveGeneralPolicies({
     useCase: UseCase.EDIT,
@@ -144,6 +145,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       heightContPageContribut={heightContPageContribut}
       heightContPageIncome={heightContPageIncome}
       heightContPageScoreModels={heightContPageScoreModels}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

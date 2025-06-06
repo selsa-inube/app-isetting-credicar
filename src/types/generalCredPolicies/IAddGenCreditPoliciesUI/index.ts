@@ -45,6 +45,7 @@ interface IAddGenCreditPoliciesUI {
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   handleFormValidChange: (isValid: boolean) => void;
   setCurrentStep: (step: number) => void;
+  onCloseProcess: () => void;
 }
 
 export type { IAddGenCreditPoliciesUI };

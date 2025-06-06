@@ -65,6 +65,7 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     onToggleEditedModal,
     onEditedModal,
     onToggleDeletedAlertModal,
+    onCloseProcess,
   } = props;
 
   return (
@@ -186,6 +187,7 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
         />
       )}
       {showRequestStatus && (

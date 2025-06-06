@@ -31,6 +31,7 @@ const VerificationForm = (props: IVerificationForm) => {
     onToggleModal,
     onCloseRequestStatus,
     onClosePendingReqModal,
+    onCloseProcess,
   } = props;
 
   const {
@@ -113,6 +114,7 @@ const VerificationForm = (props: IVerificationForm) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
         />
       )}
       {canShowPendingRequest && (
