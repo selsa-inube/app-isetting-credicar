@@ -7,6 +7,7 @@ import { lastCompletedIndex } from "@utils/lastCompletedIndex";
 import { requestProcessLabels } from "@config/requestProcessLabels";
 import { IRequestProcessModal } from "@ptypes/design/IRequestProcessModal";
 import { percentage } from "@utils/percentage";
+import { percTotalNumber } from "@config/percentageNumber";
 import { StyledModal } from "./styles";
 import { RequestProcessBar } from "./RequestProcessBar";
 
@@ -61,7 +62,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
             percentage={percentage(requestSteps)}
           />
         </Stack>
-        {percentageNumber > 98 && (
+        {percentageNumber > percTotalNumber && (
           <Stack justifyContent="end">
             <Button
               spacing="wide"
