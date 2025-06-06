@@ -36,6 +36,7 @@ const Delete = (props: IDelete) => {
     showRequestProcess,
     showRequestStatus,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
     useCase: UseCase.DELETE,
@@ -67,6 +68,7 @@ const Delete = (props: IDelete) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={handleCloseRequestStatus}
+          onCloseProcess={handleCloseProcess}
         />
       )}
       {showRequestStatus && (

@@ -5,6 +5,7 @@ interface IRequestProcess {
   sizeIcon: string;
   stepCurrent: number;
   stepCurrentIndex: number;
+  percentage: string;
 }
 
 export type { IRequestProcess };

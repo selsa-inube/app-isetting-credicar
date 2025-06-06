@@ -1,12 +1,14 @@
 import { createPortal } from "react-dom";
-import { Stack, Text, Blanket, Divider } from "@inubekit/inubekit";
+import { Stack, Text, Blanket, Divider, Button } from "@inubekit/inubekit";
 
 import { ComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { lastCompletedIndex } from "@utils/lastCompletedIndex";
+import { requestProcessLabels } from "@config/requestProcessLabels";
 import { IRequestProcessModal } from "@ptypes/design/IRequestProcessModal";
 import { StyledModal } from "./styles";
 import { RequestProcessBar } from "./RequestProcessBar";
+import { countVerifiedRequests } from "@utils/countVerifiedRequests";
 
 const RequestProcessModal = (props: IRequestProcessModal) => {
   const {
@@ -16,6 +18,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
     isMobile,
     description,
     title,
+    onClose,
   } = props;
 
   const node = document.getElementById(portalId);
@@ -28,6 +31,10 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
 
   const stepCurrentIndex = lastCompletedIndex(requestSteps);
   const stepCurrent = stepCurrentIndex + 1;
+
+  const percentage = `${countVerifiedRequests(requestSteps).toFixed()}%`;
+
+  const percentageNumber = Number(percentage.split("%")[0]);
 
   return createPortal(
     <Blanket>
@@ -53,8 +60,20 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
             sizeIcon={sizeIcon}
             stepCurrent={stepCurrent}
             stepCurrentIndex={stepCurrentIndex}
+            percentage={percentage}
           />
         </Stack>
+        {percentageNumber > 98 && (
+          <Stack justifyContent="end">
+            <Button
+              spacing="wide"
+              appearance={ComponentAppearance.SUCCESS}
+              onClick={onClose}
+            >
+              {requestProcessLabels.labelButton}
+            </Button>
+          </Stack>
+        )}
       </StyledModal>
     </Blanket>,
     node,

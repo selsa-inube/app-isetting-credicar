@@ -53,6 +53,7 @@ interface IAddPayrollAgreementUI {
   onClosePendingReqModal: () => void;
   onFinishForm: () => void;
   setCurrentStep: (step: number) => void;
+  onCloseProcess: () => void;
 }
 
 export type { IAddPayrollAgreementUI };

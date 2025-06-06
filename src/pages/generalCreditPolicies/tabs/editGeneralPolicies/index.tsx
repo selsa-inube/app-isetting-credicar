@@ -81,6 +81,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showPendingReqModal,
     isRequestStatusModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveGeneralPolicies({
     useCase: UseCase.EDIT,
@@ -138,6 +139,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       setShowReciprocity={setShowReciprocity}
       setShowFactor={setShowFactor}
       theme={theme}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

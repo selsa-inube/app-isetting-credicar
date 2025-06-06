@@ -42,6 +42,7 @@ const EditDestination = () => {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
     useCase: UseCase.EDIT,
@@ -80,6 +81,7 @@ const EditDestination = () => {
       showGeneralInformation={showGeneralInformation}
       showDecisionsForm={showDecisionsForm}
       showRequestStatus={showRequestStatus}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

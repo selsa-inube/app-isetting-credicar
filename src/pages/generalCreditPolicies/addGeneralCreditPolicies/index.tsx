@@ -49,6 +49,7 @@ const AddGenCreditPolicies = () => {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveGeneralPolicies({
     useCase: UseCase.ADD,
@@ -95,6 +96,7 @@ const AddGenCreditPolicies = () => {
       onCloseGoBackModal={handleCloseGoBackModal}
       onGoBack={handleGoBack}
       onOpenModal={handleOpenModal}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

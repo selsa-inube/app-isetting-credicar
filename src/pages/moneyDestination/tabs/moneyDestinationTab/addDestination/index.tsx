@@ -41,6 +41,7 @@ function AddDestination() {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
     useCase: UseCase.ADD,
@@ -78,6 +79,7 @@ function AddDestination() {
       showAttentionModal={showAttentionModal}
       setShowAttentionModal={setShowAttentionModal}
       smallScreen={smallScreen}
+      onCloseProcess={handleCloseProcess}
     />
   );
 }

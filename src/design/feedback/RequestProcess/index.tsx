@@ -16,6 +16,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
     saveData,
     descriptionRequestStatus,
     onCloseRequestStatus,
+    onCloseProcess,
   } = props;
 
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -39,6 +40,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
             requestSteps={requestProcessSteps}
             isMobile={isMobile}
             sizeIcon="28px"
+            onClose={onCloseProcess}
           />
         ) : (
           <RequestStatusModal

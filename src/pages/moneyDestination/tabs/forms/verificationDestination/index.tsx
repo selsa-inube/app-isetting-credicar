@@ -31,6 +31,7 @@ interface IVerificationForm {
   onPreviousStep: () => void;
   onToggleModal: () => void;
   onCloseRequestStatus: () => void;
+  onCloseProcess: () => void;
   onClosePendingReqModal: () => void;
 }
 
@@ -48,6 +49,7 @@ const VerificationForm = (props: IVerificationForm) => {
     onPreviousStep,
     onToggleModal,
     onCloseRequestStatus,
+    onCloseProcess,
     onClosePendingReqModal,
   } = props;
 
@@ -119,6 +121,7 @@ const VerificationForm = (props: IVerificationForm) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
         />
       )}
       {ShowRequestStatus && (

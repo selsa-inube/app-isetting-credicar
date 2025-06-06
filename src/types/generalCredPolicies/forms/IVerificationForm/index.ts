@@ -21,6 +21,7 @@ interface IVerificationForm {
   onToggleModal: () => void;
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
+  onCloseProcess: () => void;
 }
 
 export type { IVerificationForm };

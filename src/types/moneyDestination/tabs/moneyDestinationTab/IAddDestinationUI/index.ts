@@ -28,6 +28,7 @@ interface IAddDestinationUI {
   setCurrentStep: (step: number) => void;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseRequestStatus: () => void;
+  onCloseProcess: () => void;
   onClosePendingReqModal: () => void;
   setShowAttentionModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

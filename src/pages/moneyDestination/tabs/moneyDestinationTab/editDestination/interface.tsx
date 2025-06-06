@@ -41,6 +41,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     setIsCurrentFormValid,
     onCloseRequestStatus,
     onClosePendingReqModal,
+    onCloseProcess,
   } = props;
 
   return (
@@ -115,6 +116,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
         />
       )}
       {showRequestStatus && (

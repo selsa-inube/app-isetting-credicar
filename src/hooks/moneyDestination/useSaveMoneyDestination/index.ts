@@ -110,19 +110,6 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         );
 
         setStatusRequest(newData.settingRequest?.requestStatus);
-        setTimeout(() => {
-          if (
-            setEntryDeleted &&
-            newData?.settingRequest?.requestStatus &&
-            statusRequestFinished.includes(
-              newData?.settingRequest?.requestStatus,
-            )
-          ) {
-            setEntryDeleted(
-              data.configurationRequestData.moneyDestinationId as string,
-            );
-          }
-        }, 3000);
       }
     } catch (error) {
       console.info(error);
@@ -230,7 +217,6 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     if (isStatusIntAutomatic(saveMoneyDestination?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
-        navigate(navigatePage);
         addFlag({
           title: flowAutomaticMessages().errorCreateRequest.title,
           description: flowAutomaticMessages().errorCreateRequest.description,
@@ -241,9 +227,6 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
       }
 
       if (isStatusRequestFinished()) {
-        if (useCase !== UseCase.DELETE) {
-          navigate(navigatePage);
-        }
         addFlag({
           title: flowAutomaticMessages(operationTypes[useCase])
             .SuccessfulCreateRequest.title,
@@ -255,6 +238,25 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
             .SuccessfulCreateRequest.duration,
         });
       }
+    }
+  };
+
+  const handleCloseProcess = () => {
+    setSendData(false);
+    if (useCase !== UseCase.DELETE) {
+      navigate(navigatePage);
+    }
+    if (
+      setEntryDeleted &&
+      statusRequest &&
+      statusRequestFinished.includes(statusRequest)
+    ) {
+      setEntryDeleted(
+        data.configurationRequestData.moneyDestinationId as string,
+      );
+    }
+    if (isStatusCloseModal() || isStatusRequestFinished()) {
+      handleStatusChange();
     }
   };
 
@@ -271,13 +273,6 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
   useEffect(() => {
     changeRequestSteps();
-
-    if (isStatusCloseModal() || isStatusRequestFinished()) {
-      setTimeout(() => {
-        handleStatusChange();
-        setSendData(false);
-      }, 3000);
-    }
   }, [statusRequest]);
 
   const handleCloseRequestStatus = () => {
@@ -307,6 +302,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     showPendingReqModal,
     loadingSendData,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   };
 };

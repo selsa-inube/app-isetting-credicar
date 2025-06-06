@@ -6,6 +6,7 @@ interface IRequestProcessModal {
   isMobile: boolean;
   title: string;
   description: string;
+  onClose: () => void;
   sizeIcon?: string;
 }
 

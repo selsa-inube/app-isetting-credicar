@@ -34,6 +34,7 @@ const Delete = (props: IDelete) => {
     showPendingReqModal,
     loadingSendData,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
     useCase: UseCase.DELETE,
@@ -69,6 +70,7 @@ const Delete = (props: IDelete) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={handleCloseRequestStatus}
+          onCloseProcess={handleCloseProcess}
         />
       )}
       {showRequestStatus && (
