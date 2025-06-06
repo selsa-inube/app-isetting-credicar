@@ -1,4 +1,4 @@
-import { ITabConfig } from "@ptypes/payrollAgreement/requestInProgTab/ITabConfig";
+import { ITabConfig } from "@ptypes/ITabConfig";
 
 interface IEditPoliciesTabsConfig {
   decisionsGeneral: ITabConfig;

@@ -30,6 +30,8 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     disabledPrevius,
     showFloatingAddButton,
     editDataOption,
+    heightContent,
+    bottomAddButton,
     cancelButton,
     onCloseModal,
     onDelete,
@@ -40,9 +42,6 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onToggleDeleteModal,
     onSave,
   } = props;
-
-  const heightContent =
-    isMobile && editDataOption ? "70vh" : isMobile ? "60vh" : "auto";
 
   return (
     <form>
@@ -71,7 +70,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
           {showFloatingAddButton && (
             <FloatingAddButton
               onToggleModal={onOpenModal}
-              bottom={editDataOption ? "55px" : "45px"}
+              bottom={editDataOption ? bottomAddButton : "45px"}
               right="36px"
             />
           )}

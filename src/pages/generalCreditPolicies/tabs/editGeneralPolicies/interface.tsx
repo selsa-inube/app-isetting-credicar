@@ -52,6 +52,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     normalizedIncome,
     normalizedScoreModels,
     theme,
+    heightContPageContribut,
+    heightContPageIncome,
+    heightContPageScoreModels,
     setShowFactor,
     setShowReciprocity,
     setDateDecisions,
@@ -73,7 +76,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
   return (
     <BoxContainer
       direction="column"
-      width="-webkit-fill-available"
+      width="auto"
+      height="auto"
       backgroundColor={theme.palette.neutral.N0 ?? inube.palette.neutral.N0}
       boxSizing="border-box"
       borderColor={theme.palette.neutral.N40 ?? inube.palette.neutral.N40}
@@ -84,7 +88,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           : `${tokens.spacing.s300} ${tokens.spacing.s800}`
       }
     >
-      <Stack gap={tokens.spacing.s300} direction="column">
+      <Stack gap={tokens.spacing.s300} direction="column" height="auto">
         <Tabs
           tabs={filteredTabsConfig}
           selectedTab={isSelected}
@@ -125,6 +129,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               disabledButton={contributionsPortfolio.length === 0}
               editDataOption
               normalizeEvaluateRuleData={normalizedContributions}
+              heightContentPage={heightContPageContribut}
+              bottomAddButton="80px"
             />
           )}
           {showIncomePort && (
@@ -146,6 +152,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               disabledButton={incomePortfolio.length === 0}
               editDataOption
               normalizeEvaluateRuleData={normalizedIncome}
+              heightContentPage={heightContPageIncome}
+              bottomAddButton="80px"
             />
           )}
           {showScoreModels && (
@@ -167,6 +175,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               disabledButton={scoreModels.length === 0}
               editDataOption
               normalizeEvaluateRuleData={normalizedScoreModels}
+              heightContentPage={heightContPageScoreModels}
+              bottomAddButton="80px"
             />
           )}
         </Stack>

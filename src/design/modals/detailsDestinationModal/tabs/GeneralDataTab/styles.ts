@@ -9,7 +9,8 @@ interface IStyledContainerName {
 const StyledContainerName = styled.div<IStyledContainerName>`
   display: flex;
   flex-direction: column;
-  background-color: ${inube.palette.neutral.N0};
+  background-color: ${({ theme }) =>
+    theme ? `${theme.palette.neutral.N0}` : `${inube.palette.neutral.N0}`};
   width: ${(props) => (props.$smallScreen ? "270px" : "672px")};
   height: 52px;
   border-radius: ${tokens.spacing.s100};
@@ -19,7 +20,8 @@ const StyledContainerName = styled.div<IStyledContainerName>`
       : `${tokens.spacing.s075} ${tokens.spacing.s200}`};
   gap: ${tokens.spacing.s050};
   box-sizing: border-box;
-  background-color: ${inube.palette.neutral.N10};
+  background-color: ${({ theme }) =>
+    theme ? `${theme.palette.neutral.N10}` : `${inube.palette.neutral.N10}`};
 `;
 
 const StyledContainerDescription = styled.div<IStyledContainerName>`
@@ -32,7 +34,8 @@ const StyledContainerDescription = styled.div<IStyledContainerName>`
   padding: ${tokens.spacing.s075} ${tokens.spacing.s200};
   gap: ${tokens.spacing.s050};
   box-sizing: border-box;
-  background-color: ${inube.palette.neutral.N10};
+  background-color: ${({ theme }) =>
+    theme ? `${theme.palette.neutral.N10}` : `${inube.palette.neutral.N10}`};
 
   & p {
     white-space: keep-all;
@@ -42,7 +45,10 @@ const StyledContainerDescription = styled.div<IStyledContainerName>`
 const StyledContainerDataName = styled.div`
   & p {
     font-size: 14px;
-    color: ${inube.palette.neutral.N300};
+    color: ${({ theme }) =>
+      theme
+        ? `${theme.palette.neutral.N300}`
+        : `${inube.palette.neutral.N300}`};
   }
 `;
 

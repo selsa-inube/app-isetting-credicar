@@ -13,15 +13,13 @@ import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
-import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
-import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { allConditionsRules } from "@utils/allConditionsRules";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { dataTranslations } from "@utils/dataTranslations";
-import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
+import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const {
@@ -41,6 +39,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     const hasReciprocity = allConditionsRules(methodsData).some((condition) =>
       reciprocity.includes(condition.conditionName),
     );
+
     const hasCalculation = allConditionsRules(methodsData).some((condition) =>
       calculation.includes(condition.conditionName),
     );
@@ -71,22 +70,10 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     initialDecisionsGenData,
   );
 
-  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
-  const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
-  const [showModal, setShowModal] = useState(false);
-  const [contributionsPortfolio, setContributionsPortfolio] = useState<
-    IRuleDecision[]
-  >(contributionsData ?? []);
-  const [incomePortfolio, setIncomePortfolio] = useState<IRuleDecision[]>([]);
-  const [scoreModels, setScoreModels] = useState<IRuleDecision[]>([]);
-  const [newDecisions, setNewDecisions] = useState<IRuleDecision[]>();
+
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
-  const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
-  const [showReciprocity, setShowReciprocity] = useState(false);
-  const [showFactor, setShowFactor] = useState(false);
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
@@ -100,6 +87,47 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     scoreModelsData,
     "BusinessUnit",
   );
+
+  const prevContributionsRef = useRef<IRuleDecision[]>([]);
+  prevContributionsRef.current = normalizedContributions ?? [];
+
+  const prevIncomesRef = useRef<IRuleDecision[]>([]);
+  prevIncomesRef.current = normalizedIncome ?? [];
+
+  const prevScoreModelsRef = useRef<IRuleDecision[]>([]);
+  prevScoreModelsRef.current = normalizedScoreModels ?? [];
+
+  const {
+    showRequestProcessModal,
+    contributionsPortfolio,
+    showModal,
+    isCurrentFormValid,
+    incomePortfolio,
+    scoreModels,
+    dateDecisions,
+    newDecisions,
+    showReciprocity,
+    showFactor,
+    setShowReciprocity,
+    setShowFactor,
+    setDateDecisions,
+    setIncomePortfolio,
+    setScoreModels,
+    setContributionsPortfolio,
+    setIsCurrentFormValid,
+    setShowRequestProcessModal,
+    setShowModal,
+  } = useNewDecisions({
+    contributionsData,
+    incomeData,
+    scoreModelsData,
+    normalizedContributions,
+    normalizedIncome,
+    normalizedScoreModels,
+    prevContributionsRef,
+    prevIncomesRef,
+    prevScoreModelsRef,
+  });
 
   const filteredTabs = useMemo(() => {
     return Object.keys(editGeneralPoliciesTabsConfig).reduce((acc, key) => {
@@ -139,15 +167,6 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     setIsSelected(tabId);
   };
 
-  const prevContributionsRef = useRef<IRuleDecision[]>([]);
-  prevContributionsRef.current = normalizedContributions ?? [];
-
-  const prevIncomesRef = useRef<IRuleDecision[]>([]);
-  prevIncomesRef.current = normalizedIncome ?? [];
-
-  const prevScoreModelsRef = useRef<IRuleDecision[]>([]);
-  prevScoreModelsRef.current = normalizedScoreModels ?? [];
-
   useEffect(() => {
     if (decisionsGeneralRef.current?.values) {
       setFormValues((prev) => ({
@@ -157,88 +176,9 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     }
   }, [decisionsGeneralRef.current?.values]);
 
-  useEffect(() => {
-    if (contributionsData && normalizedContributions) {
-      setContributionsPortfolio(normalizedContributions);
-    }
-  }, [contributionsData]);
-
-  useEffect(() => {
-    if (incomeData && normalizedIncome) {
-      setIncomePortfolio(normalizedIncome);
-    }
-  }, [incomeData]);
-
-  useEffect(() => {
-    if (scoreModelsData && normalizedScoreModels) {
-      setScoreModels(normalizedScoreModels);
-    }
-  }, [scoreModelsData]);
-
   const handleToggleDateModal = () => {
     setShowDateModal(!showDateModal);
   };
-
-  const newInsertValContribution = getNewInsertDecisions(
-    appData.user.userAccount,
-    prevContributionsRef,
-    contributionsPortfolio,
-    dateDecisions?.date,
-  );
-
-  const newInsertValIncomes = getNewInsertDecisions(
-    appData.user.userAccount,
-    prevIncomesRef,
-    incomePortfolio,
-    dateDecisions?.date,
-  );
-
-  const newInsertValScore = getNewInsertDecisions(
-    appData.user.userAccount,
-    prevScoreModelsRef,
-    scoreModels,
-    dateDecisions?.date,
-  );
-
-  const newDeleteValContribution = getNewDeletedDecisions(
-    appData.user.userAccount,
-    prevContributionsRef,
-    contributionsPortfolio,
-    dateDecisions?.date,
-  );
-
-  const newDeleteValIncomes = getNewDeletedDecisions(
-    appData.user.userAccount,
-    prevIncomesRef,
-    incomePortfolio,
-    dateDecisions?.date,
-  );
-
-  const newDeleteValScore = getNewDeletedDecisions(
-    appData.user.userAccount,
-    prevScoreModelsRef,
-    scoreModels,
-    dateDecisions?.date,
-  );
-
-  useEffect(() => {
-    const insertValues = [
-      newInsertValContribution,
-      newInsertValIncomes,
-      newInsertValScore,
-    ];
-
-    const deleteValues = [
-      newDeleteValContribution,
-      newDeleteValIncomes,
-      newDeleteValScore,
-    ];
-
-    setNewDecisions([
-      ...(insertValues as IRuleDecision[]),
-      ...(deleteValues as IRuleDecision[]),
-    ]);
-  }, [contributionsPortfolio, incomePortfolio, scoreModels]);
 
   const handleFinishForm = () => {
     const configurationRequestData: {
@@ -301,6 +241,11 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const showScoreModels =
     filteredTabs.scoreModels && isSelected === filteredTabs.scoreModels.id;
 
+  const heightContPageContribut =
+    contributionsPortfolio.length === 0 ? "58vh" : "auto";
+  const heightContPageIncome = incomePortfolio.length === 0 ? "58vh" : "auto";
+  const heightContPageScoreModels = scoreModels.length === 0 ? "58vh" : "auto";
+
   return {
     formValues,
     initialDecisionsGenData,
@@ -326,6 +271,9 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
+    heightContPageContribut,
+    heightContPageIncome,
+    heightContPageScoreModels,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,

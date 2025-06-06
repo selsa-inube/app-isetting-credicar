@@ -23,6 +23,7 @@ const GeneralCreditPolicies = () => {
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
+    showrequestTab,
     handleTabChange,
     handleCloseModal,
     handlePolicies,
@@ -32,10 +33,13 @@ const GeneralCreditPolicies = () => {
     <GeneralCreditPoliciesUI
       policiesTabs={policiesTabs}
       descriptionOptions={descriptionOptions as ICardData}
-      isSelected={isSelected ?? generalPoliciesTabsConfig.generalPolicies.id}
+      isSelected={
+        isSelected ?? generalPoliciesTabsConfig(smallScreen).generalPolicies.id
+      }
       onTabChange={handleTabChange}
       smallScreenTab={smallScreenTab}
       showPoliciesTab={showPoliciesTab}
+      showrequestTab={showrequestTab}
       smallScreen={smallScreen}
       onCloseModal={handleCloseModal}
       onPolicies={handlePolicies}

@@ -3,9 +3,9 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { eventBus } from "@events/eventBus";
 import { ICancelReqInProcRequest } from "@ptypes/payrollAgreement/requestInProgTab/ICancelReqInProcRequest";
-import { cancelRequestInProgMessage } from "@config/payrollAgreement/requestsInProgressTab/generic/cancelRequestInProgMessage";
 import { cancelRequestInProgress } from "@services/requestInProgress/cancelRequestInProgress";
 import { IUseCancelRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseCancelRequestInProgress";
+import { cancelRequestInProgMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgMessage";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   const { businessUnit, data, userAccount, setEntryCanceled } = props;

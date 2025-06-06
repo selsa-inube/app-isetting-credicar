@@ -6,17 +6,17 @@ import { IAction } from "@ptypes/design/table/IAction";
 const titles: ITitle[] = [
   {
     id: "requestDate",
-    titleName: "Fecha de solicitud",
+    titleName: "Fecha solicitud",
     priority: 2,
   },
   {
     id: "description",
-    titleName: "Descripción de solicitud",
+    titleName: "Descripción solicitud",
     priority: 0,
   },
   {
     id: "requestStatus",
-    titleName: "Estado de solicitud",
+    titleName: "Estado solicitud",
     priority: 1,
   },
 ];

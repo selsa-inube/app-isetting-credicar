@@ -118,7 +118,6 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 messageEmptyDecisions={
                   contributionsPortfLabels.messageEmptyDecisions as unknown as string
                 }
-                disabledButton={contributionsPortfolio.length === 0}
               />
             )}
             {currentStep === 3 && (
@@ -137,7 +136,6 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 messageEmptyDecisions={
                   incomePortfLabels.messageEmptyDecisions as unknown as string
                 }
-                disabledButton={incomePortfolio.length === 0}
               />
             )}
             {currentStep === 4 && (
@@ -156,7 +154,6 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 messageEmptyDecisions={
                   scoreModelsLabels.messageEmptyDecisions as unknown as string
                 }
-                disabledButton={scoreModels.length === 0}
               />
             )}
             {currentStep === 5 && (
