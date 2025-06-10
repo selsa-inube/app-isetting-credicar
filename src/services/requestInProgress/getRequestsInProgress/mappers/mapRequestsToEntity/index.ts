@@ -1,9 +1,11 @@
-import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
-import { RequestStatus } from "@enum/requestStatus";
 import { formatDateTable } from "@utils/date/formatDateTable";
+import { requestStatusDescription } from "@utils/requestStatusDescription";
+import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
+import { IEnumerators } from "@ptypes/IEnumerators";
 
 const mapRequestsInProgressToEntity = (
   data: IRequestsInProgress,
+  enumsRequests?: IEnumerators[],
 ): IRequestsInProgress => {
   const request: IRequestsInProgress = {
     id: String(data.settingRequestId),
@@ -18,23 +20,17 @@ const mapRequestsInProgressToEntity = (
     entityName: String(data.entityName),
     requestDate: formatDateTable(new Date(String(data.requestDate))),
     requestNumber: String(data.requestNumber),
-    requestStatus:
-      RequestStatus[data.requestStatus as keyof typeof RequestStatus] ??
-      data.requestStatus,
+    requestStatus: enumsRequests
+      ? requestStatusDescription(enumsRequests, data.requestStatus)
+      : String(data.requestStatus),
+    requestStatusCode: String(data.requestStatus),
     settingRequestId: String(data.settingRequestId),
     useCaseName: String(data.useCaseName),
     userManagingConfigurationRequests: Object(
       data.userManagingConfigurationRequests,
     ),
   };
-
   return request;
 };
 
-const mapRequestsInProgressToEntities = (
-  enums: IRequestsInProgress[],
-): IRequestsInProgress[] => {
-  return enums.map(mapRequestsInProgressToEntity);
-};
-
-export { mapRequestsInProgressToEntity, mapRequestsInProgressToEntities };
+export { mapRequestsInProgressToEntity };

@@ -1,14 +1,14 @@
 import { AxiosRequestConfig } from "axios";
 
-import { getWithRetries } from "@services/core/getWithRetries";
-import { credicarAxiosInstance } from "@api/isettingCredicar";
-import { IEnumerators } from "@ptypes/IEnumerators";
 import { translateObject } from "@isettingkit/business-rules";
-import { enviroment } from "@config/environment";
+import { getWithRetries } from "@services/core/getWithRetries";
+import { IEnumerators } from "@ptypes/IEnumerators";
+import { queryProcessAxiosInstance } from "@api/isettingProcess";
 import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
+import { enviroment } from "@config/environment";
 
-const getEnumerators = async (
-  enumCredicar: string,
+const getEnumeratorsRequest = async (
+  enumRequest: string,
   bussinesUnits: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
@@ -18,8 +18,8 @@ const getEnumerators = async (
     },
   };
   const data: IEnumerators[] = await getWithRetries<IEnumerators[]>(
-    credicarAxiosInstance,
-    `/enumerators/${enumCredicar}`,
+    queryProcessAxiosInstance,
+    `/enumerators/${enumRequest}`,
     config,
   );
 
@@ -32,4 +32,4 @@ const getEnumerators = async (
   return mapEnumToEntities(translatedArray);
 };
 
-export { getEnumerators };
+export { getEnumeratorsRequest };

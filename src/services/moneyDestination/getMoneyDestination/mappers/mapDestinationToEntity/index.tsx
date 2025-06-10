@@ -26,11 +26,4 @@ const mapMoneyDestinationToEntity = (
 
   return business;
 };
-
-const mapMoneyDestinationToEntities = (
-  enums: IMoneyDestinationData[],
-): IMoneyDestinationData[] => {
-  return enums.map(mapMoneyDestinationToEntity);
-};
-
-export { mapMoneyDestinationToEntity, mapMoneyDestinationToEntities };
+export { mapMoneyDestinationToEntity };

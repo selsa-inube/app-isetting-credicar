@@ -1,8 +1,10 @@
+import { translateObject } from "@isettingkit/business-rules";
 import { AxiosRequestConfig } from "axios";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
-import { mapMoneyDestinationToEntities } from "./mappers";
+import { enviroment } from "@config/environment";
+import { mapMoneyDestinationToEntities } from "./mappers/mapDestinationToEntities";
 
 const getMoneyDestinationData = async (
   bussinesUnits: string,
@@ -16,7 +18,14 @@ const getMoneyDestinationData = async (
   const data: IMoneyDestinationData[] = await getWithRetries<
     IMoneyDestinationData[]
   >(credicarAxiosInstance, `/money-destinations`, config);
-  return Array.isArray(data) ? mapMoneyDestinationToEntities(data) : [];
+
+  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
+
+  const translatedArray = Array.isArray(translatedRaw)
+    ? translatedRaw
+    : Object.values(translatedRaw);
+
+  return mapMoneyDestinationToEntities(translatedArray);
 };
 
 export { getMoneyDestinationData };

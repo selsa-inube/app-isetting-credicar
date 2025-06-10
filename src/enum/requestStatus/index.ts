@@ -1,14 +1,14 @@
 enum RequestStatus {
-  RequestProcessed = "Solicitud procesada",
-  RequestCanceled = "Solicitud cancelada",
-  RequestProcessedWithError = "Solicitud procesada con error",
-  PendingApproval = "Pendiente de aprobación",
-  InTheProcessOfValidation = "En proceso de validación",
-  InTheProcessOfComplementationAndValidation = "En proceso de complementación y validación",
-  ProcessingRequest = "Procesando solicitud",
-  RejectedRequest = "Solicitud rechazada",
-  RequestReadyToProcess = "Solicitud lista para procesar",
-  RequestPendingProcessing = "Solicitud pendiente de procesamiento",
+  RequestProcessed = "RequestProcessed",
+  RequestCanceled = "RequestCanceled",
+  RequestProcessedWithError = "RequestProcessedWithError",
+  PendingApproval = "PendingApproval",
+  InTheProcessOfValidation = "InTheProcessOfValidation",
+  InTheProcessOfComplementationAndValidation = "InTheProcessOfComplementationAndValidation",
+  ProcessingRequest = "ProcessingRequest",
+  RejectedRequest = "RejectedRequest",
+  RequestReadyToProcess = "RequestReadyToProcess",
+  RequestPendingProcessing = "RequestPendingProcessing",
 }
 
 export { RequestStatus };

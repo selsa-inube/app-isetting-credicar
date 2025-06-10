@@ -1,12 +1,16 @@
 import { AxiosRequestConfig } from "axios";
+import { translateObject } from "@isettingkit/business-rules";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { queryProcessAxiosInstance } from "@api/isettingProcess";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
-import { mapRequestsInProgressToEntities } from "./mappers";
+import { IEnumerators } from "@ptypes/IEnumerators";
+import { enviroment } from "@config/environment";
+import { mapRequestsInProgressToEntities } from "./mappers/mapRequestsToEntities";
 
 const getRequestsInProgress = async (
   bussinesUnits: string,
   entity: string,
+  enumsRequests?: IEnumerators[],
 ): Promise<IRequestsInProgress[]> => {
   const config: AxiosRequestConfig = {
     headers: {
@@ -27,7 +31,13 @@ const getRequestsInProgress = async (
     `/requests/business-unit/${bussinesUnits}?${queryParams.toString()}`,
     config,
   );
-  return Array.isArray(data) ? mapRequestsInProgressToEntities(data) : [];
+  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
+
+  const translatedArray = Array.isArray(translatedRaw)
+    ? translatedRaw
+    : Object.values(translatedRaw);
+
+  return mapRequestsInProgressToEntities(translatedArray, enumsRequests);
 };
 
 export { getRequestsInProgress };
