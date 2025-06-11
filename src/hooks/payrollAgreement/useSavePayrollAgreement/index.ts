@@ -242,20 +242,25 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
 
   const handleCloseProcess = () => {
     setSendData(false);
+    if (isStatusCloseModal() || isStatusRequestFinished()) {
+      handleStatusChange();
+    }
     if (useCase !== UseCase.DELETE) {
-      navigate(navigatePage);
+      setTimeout(() => {
+        navigate(navigatePage);
+      }, 3000);
     }
     if (
       setEntryDeleted &&
       statusRequest &&
       statusRequestFinished.includes(statusRequest)
     ) {
-      setEntryDeleted(
-        data.configurationRequestData.payrollForDeductionAgreementId as string,
-      );
-    }
-    if (isStatusCloseModal() || isStatusRequestFinished()) {
-      handleStatusChange();
+      setTimeout(() => {
+        setEntryDeleted(
+          data.configurationRequestData
+            .payrollForDeductionAgreementId as string,
+        );
+      }, 3000);
     }
   };
 

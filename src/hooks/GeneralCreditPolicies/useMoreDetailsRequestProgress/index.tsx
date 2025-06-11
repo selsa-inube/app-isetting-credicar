@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { IRuleDecision } from "@isettingkit/input";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
@@ -10,30 +11,63 @@ import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicie
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
+  let reference;
+  let methods;
+  let additionalDebtors;
+  let sourcesIncome;
+  let financialObligations;
+  let realGuarantees;
 
   const onToggleMoreDetailsModal = () => {
     setShowMoreDetailsModal(!showMoreDetailsModal);
   };
 
-  const calculation =
-    data.configurationRequestData?.calculation && optionsMethods.calculation;
+  data.configurationRequestData.rules.map((rule: IEntry) => {
+    if (rule === null) return;
+    rule.decisionsByRule?.filter((decision: IRuleDecision) => {
+      if (rule.ruleName === nameRules.reference) {
+        reference = decision.value;
+      }
 
-  const factor = data.configurationRequestData?.factor && optionsMethods.factor;
+      if (rule.ruleName === nameRules.additionalDebtors) {
+        additionalDebtors = decision.value;
+      }
 
-  const reciprocity =
-    data.configurationRequestData?.reciprocity && optionsMethods.reciprocity;
+      if (rule.ruleName === nameRules.sourcesIncome) {
+        sourcesIncome = decision.value;
+      }
 
-  const methodsArr = [calculation, factor, reciprocity].filter(Boolean);
-  const methods = methodsArr.length > 0 ? methodsArr.join(", ") : undefined;
+      if (rule.ruleName === nameRules.financialObligations) {
+        financialObligations = decision.value;
+      }
+
+      if (rule.ruleName === nameRules.realGuarantees) {
+        realGuarantees = decision.value;
+      }
+
+      if (rule.ruleName === nameRules.methods) {
+        const calculation =
+          decision.value === "CalculationByPaymentCapacity" &&
+          optionsMethods.CalculationByPaymentCapacity;
+        const factor =
+          decision.value === "RiskFactor" && optionsMethods.RiskFactor;
+        const reciprocity =
+          decision.value === "ReciprocityOfContributions" &&
+          optionsMethods.ReciprocityOfContributions;
+
+        methods = [calculation, factor, reciprocity].filter(Boolean).join(", ");
+      }
+    });
+  });
 
   const moreDetailsData = {
     id: data.id,
-    creditApplication: data.configurationRequestData.reference,
+    creditApplication: reference,
     methods: methods,
-    additionalDebtors: data.configurationRequestData.additionalDebtors,
-    sourcesIncome: data.configurationRequestData.sourcesIncome,
-    financialOblig: data.configurationRequestData.financialObligations,
-    guarantees: data.configurationRequestData.realGuarantees,
+    additionalDebtors: additionalDebtors,
+    sourcesIncome: sourcesIncome,
+    financialOblig: financialObligations,
+    guarantees: realGuarantees,
   };
 
   const decisionsReciprocity = getDecisionsByRule(

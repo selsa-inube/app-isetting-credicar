@@ -62,7 +62,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
             percentage={percentage(requestSteps)}
           />
         </Stack>
-        {percentageNumber > percTotalNumber && (
+        {percentageNumber === percTotalNumber && (
           <Stack justifyContent="end">
             <Button
               spacing="wide"
