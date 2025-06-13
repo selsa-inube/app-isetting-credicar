@@ -20,9 +20,9 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
+import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
 import { DecisionsGeneralForm } from "../../forms/decisionsGeneral";
-import { DateGeneralPolicies } from "../../dateGeneralPolicies";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
   const {
@@ -47,7 +47,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showScoreModels,
     showGoBackModal,
     showDateModal,
-    date,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
@@ -57,7 +56,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     heightContPageScoreModels,
     setShowFactor,
     setShowReciprocity,
-    setDateDecisions,
     onFinishForm,
     onToggleDateModal,
     onGoBack,
@@ -193,12 +191,13 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       )}
 
       {showDateModal && (
-        <DateGeneralPolicies
+        <DecisionModal
+          portalId="portal"
+          title={sendEditedModal.title}
+          description={sendEditedModal.description}
+          actionText={sendEditedModal.actionText}
           onCloseModal={onToggleDateModal}
-          onFinishForm={onFinishForm}
-          loading={loading}
-          initialValues={date}
-          setDateVerification={setDateDecisions}
+          onClick={onFinishForm}
         />
       )}
 

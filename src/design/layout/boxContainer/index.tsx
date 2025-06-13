@@ -53,4 +53,3 @@ const BoxContainer = (props: IBoxContainer) => {
 };
 
 export { BoxContainer };
-export type { IBoxContainer };

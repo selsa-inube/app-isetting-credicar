@@ -35,6 +35,8 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
 
   const percentageNumber = Number(percentage(requestSteps).split("%")[0]);
 
+  const showButton = percentageNumber === percTotalNumber;
+
   return createPortal(
     <Blanket>
       <StyledModal $smallScreen={isMobile}>
@@ -62,7 +64,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
             percentage={percentage(requestSteps)}
           />
         </Stack>
-        {percentageNumber === percTotalNumber && (
+        {showButton && (
           <Stack justifyContent="end">
             <Button
               spacing="wide"
