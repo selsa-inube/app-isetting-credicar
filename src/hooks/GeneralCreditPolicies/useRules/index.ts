@@ -2,6 +2,8 @@ import { formatRuleDecisions } from "@utils/formatRuleDecisions";
 import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
 import { IUseRules } from "@ptypes/hooks/IUseRules";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
+import { BooleanText } from "@src/enum/booleanText";
+import { rulesOfDecisions } from "@src/enum/rulesOfDecisions";
 
 const useRules = (props: IUseRules) => {
   const {
@@ -17,7 +19,12 @@ const useRules = (props: IUseRules) => {
     ruleName: string,
     value: string | boolean,
   ) => {
-    const data = typeof value === "boolean" ? (value ? "Si" : "No") : value;
+    const data =
+      typeof value === "boolean"
+        ? value
+          ? BooleanText.Yes
+          : BooleanText.No
+        : value;
 
     return [
       {
@@ -33,9 +40,12 @@ const useRules = (props: IUseRules) => {
   );
 
   const calculation =
-    decisionGeneralData.calculation && "CalculationByPaymentCapacity";
-  const factor = decisionGeneralData.factor && "ReciprocityOfContributions";
-  const reciprocity = decisionGeneralData.reciprocity && "RiskFactor";
+    decisionGeneralData.calculation &&
+    rulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY;
+  const factor =
+    decisionGeneralData.factor && rulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
+  const reciprocity =
+    decisionGeneralData.reciprocity && rulesOfDecisions.RISK_FACTOR;
 
   const methodsArray =
     calculation || factor || reciprocity

@@ -22,6 +22,7 @@ import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
 import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
+import { portalId } from "@config/portalId";
 import { DecisionsGeneralForm } from "../../forms/decisionsGeneral";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
@@ -215,7 +216,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       )}
       {isRequestStatusModal && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(saveGeneralPolicies.staffName).title}
           description={
             requestStatusMessage(saveGeneralPolicies.staffName).description
