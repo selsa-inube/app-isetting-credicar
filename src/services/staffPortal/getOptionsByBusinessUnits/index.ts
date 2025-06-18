@@ -4,7 +4,7 @@ import { getWithRetries } from "@services/core/getWithRetries";
 import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
 import { translateObject } from "@isettingkit/business-rules";
-import { enviroment } from "@config/environment";
+import { configTranslate, enviroment } from "@config/environment";
 import { mapOptionsByBusinessUnitsToEntities } from "./mappers";
 
 const getOptionsByBusinessUnit = async (
@@ -29,7 +29,11 @@ const getOptionsByBusinessUnit = async (
     config,
   );
 
-  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
+  const translatedRaw = await translateObject(
+    data,
+    enviroment.VITE_LANGUAGE,
+    configTranslate,
+  );
 
   const translatedArray = Array.isArray(translatedRaw)
     ? translatedRaw

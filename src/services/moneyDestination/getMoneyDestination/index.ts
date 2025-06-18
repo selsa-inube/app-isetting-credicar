@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from "axios";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
-import { enviroment } from "@config/environment";
+import { configTranslate, enviroment } from "@config/environment";
 import { mapMoneyDestinationToEntities } from "./mappers/mapDestinationToEntities";
 
 const getMoneyDestinationData = async (
@@ -19,8 +19,12 @@ const getMoneyDestinationData = async (
     IMoneyDestinationData[]
   >(credicarAxiosInstance, `/money-destinations`, config);
 
-  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
-
+  const translatedRaw = await translateObject(
+    data,
+    enviroment.VITE_LANGUAGE,
+    configTranslate,
+  );
+  console.log("Translated Raw Data:", translatedRaw);
   const translatedArray = Array.isArray(translatedRaw)
     ? translatedRaw
     : Object.values(translatedRaw);

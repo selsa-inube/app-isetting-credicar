@@ -4,7 +4,7 @@ import { getWithRetries } from "@services/core/getWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { translateObject } from "@isettingkit/business-rules";
-import { enviroment } from "@config/environment";
+import { configTranslate, enviroment } from "@config/environment";
 import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getEnumerators = async (
@@ -23,7 +23,11 @@ const getEnumerators = async (
     config,
   );
 
-  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
+  const translatedRaw = await translateObject(
+    data,
+    enviroment.VITE_LANGUAGE,
+    configTranslate,
+  );
 
   const translatedArray = Array.isArray(translatedRaw)
     ? translatedRaw

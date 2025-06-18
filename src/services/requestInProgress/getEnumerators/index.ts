@@ -5,7 +5,7 @@ import { getWithRetries } from "@services/core/getWithRetries";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { queryProcessAxiosInstance } from "@api/isettingProcess";
 import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
-import { enviroment } from "@config/environment";
+import { configTranslate, enviroment } from "@config/environment";
 
 const getEnumeratorsRequest = async (
   enumRequest: string,
@@ -23,7 +23,11 @@ const getEnumeratorsRequest = async (
     config,
   );
 
-  const translatedRaw = await translateObject(data, enviroment.VITE_LANGUAGE);
+  const translatedRaw = await translateObject(
+    data,
+    enviroment.VITE_LANGUAGE,
+    configTranslate,
+  );
 
   const translatedArray = Array.isArray(translatedRaw)
     ? translatedRaw

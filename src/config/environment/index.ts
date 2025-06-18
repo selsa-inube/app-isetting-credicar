@@ -9,6 +9,11 @@ const fetchTimeoutServices = 6000;
 
 const mediaQueryMobile = "(max-width: 770px)";
 
+const configTranslate = {
+  url: import.meta.env.URL_TRANSLATE,
+  apiKey: import.meta.env.APIKEY_TRANSLATE,
+};
+
 const enviroment = {
   CLIENT_ID: import.meta.env.VITE_AUTH0_CLIENT_ID,
   CLIENT_SECRET: import.meta.env.VITE_AUTH0_CLIENT_SECRET,
@@ -39,4 +44,5 @@ export {
   maxRetriesPost,
   maxRetriesDelete,
   fetchTimeoutServices,
+  configTranslate,
 };
