@@ -182,7 +182,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       </Stack>
       {showGoBackModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={goBackModal.title}
           description={goBackModal.description}
           actionText={goBackModal.actionText}
@@ -193,7 +193,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
 
       {showDateModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={sendEditedModal.title}
           description={sendEditedModal.description}
           actionText={sendEditedModal.actionText}
@@ -204,7 +204,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
 
       {showRequestProcessModal && (
         <RequestProcess
-          portalId="portal"
+          portalId={portalId}
           saveData={saveGeneralPolicies}
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}

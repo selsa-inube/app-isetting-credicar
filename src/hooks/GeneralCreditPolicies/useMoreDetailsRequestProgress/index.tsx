@@ -7,6 +7,7 @@ import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
+import { ERulesOfDecisions } from "@src/enum/rulesOfDecisions";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
@@ -47,12 +48,14 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
 
       if (rule.ruleName === nameRules.methods) {
         const calculation =
-          decision.value === "CalculationByPaymentCapacity" &&
+          decision.value ===
+            ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY &&
           optionsMethods.CalculationByPaymentCapacity;
         const factor =
-          decision.value === "RiskFactor" && optionsMethods.RiskFactor;
+          decision.value === ERulesOfDecisions.RISK_FACTOR &&
+          optionsMethods.RiskFactor;
         const reciprocity =
-          decision.value === "ReciprocityOfContributions" &&
+          decision.value === ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS &&
           optionsMethods.ReciprocityOfContributions;
 
         methods = [calculation, factor, reciprocity].filter(Boolean).join(", ");

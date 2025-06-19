@@ -1,6 +1,6 @@
-enum BooleanText {
-  Yes = "Si",
-  No = "No",
+enum EBooleanText {
+  YES = "Si",
+  NO = "No",
 }
 
-export { BooleanText };
+export { EBooleanText };
