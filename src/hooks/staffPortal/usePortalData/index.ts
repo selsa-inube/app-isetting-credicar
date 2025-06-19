@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { staffPortalByBusinessManager } from "@services/staffPortal/getStaffPortalByBusinessManager";
 import { encrypt } from "@utils/crypto/encrypt";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
-import { enviroment } from "@config/environment";
 
 const usePortalData = (portalCode: string | null) => {
   const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
@@ -21,11 +20,6 @@ const usePortalData = (portalCode: string | null) => {
           return;
         }
 
-        if (portalCode !== enviroment.PORTAL_CODE) {
-          setHasError(true);
-          setErrorCode(1002);
-          return;
-        }
         const StaffPortalData = await staffPortalByBusinessManager(portalCode);
         if (!StaffPortalData) {
           setHasError(true);
