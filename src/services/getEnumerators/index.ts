@@ -1,8 +1,9 @@
 import { AxiosRequestConfig } from "axios";
-
 import { getWithRetries } from "@services/core/getWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IEnumerators } from "@ptypes/IEnumerators";
+import { translateObject } from "@isettingkit/business-rules";
+import { configTranslate, enviroment } from "@config/environment";
 import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getEnumerators = async (
@@ -20,7 +21,19 @@ const getEnumerators = async (
     `/enumerators/${enumCredicar}`,
     config,
   );
-  return Array.isArray(data) ? mapEnumToEntities(data) : [];
+
+  const translatedRaw = await translateObject(
+    data,
+    enviroment.VITE_LANGUAGE,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    configTranslate! as any,
+  );
+
+  const translatedArray = Array.isArray(translatedRaw)
+    ? translatedRaw
+    : Object.values(translatedRaw);
+
+  return mapEnumToEntities(translatedArray);
 };
 
 export { getEnumerators };

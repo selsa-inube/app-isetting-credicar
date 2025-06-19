@@ -1,8 +1,6 @@
 import { useContext } from "react";
 import { CancelRecord } from "@design/feedback/cancelRecord";
-
 import { cancelRequestInProgressModal } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgressModal";
-
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ICancel } from "@ptypes/generalCredPolicies/ICancel";
 import { useCancelRequestInProgress } from "@hooks/GeneralCreditPolicies/useCancelRequestInProgress";
@@ -26,7 +24,7 @@ const Cancel = (props: ICancel) => {
       onToggleModal={handleToggleModal}
       onClick={handleClick}
       loading={loading}
-      status={data.requestStatus}
+      status={data.requestStatusCode}
     />
   );
 };

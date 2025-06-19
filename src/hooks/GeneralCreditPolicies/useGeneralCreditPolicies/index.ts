@@ -6,9 +6,12 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { decrypt } from "@utils/crypto/decrypt";
 import { useValidateRules } from "../useValidateRules";
+import { IGeneralPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IGeneralPoliciesTabsConfig";
+import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useGeneralCreditPolicies = () => {
-  const { businessUnitSigla } = useContext(AuthAndPortalData);
+  const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
 
   const {
     referenceData,
@@ -29,7 +32,9 @@ const useGeneralCreditPolicies = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [withoutPoliciesData, setWithoutPoliciesData] =
     useState<boolean>(false);
-
+  const [requestsInProgress, setRequestsInProgress] = useState<
+    IRequestsInProgress[]
+  >([]);
   const smallScreen = useMediaQuery("(max-width: 990px)");
   const smallScreenTab = useMediaQuery("(max-width: 450px)");
 
@@ -61,6 +66,22 @@ const useGeneralCreditPolicies = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    const fetchRequestsInProgressData = async () => {
+      try {
+        const data = await getRequestsInProgress(
+          appData.businessUnit.publicCode,
+          "GeneralCreditPolicies",
+        );
+        setRequestsInProgress(data);
+      } catch (error) {
+        console.info(error);
+      }
+    };
+
+    fetchRequestsInProgressData();
+  }, []);
+
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
@@ -71,11 +92,28 @@ const useGeneralCreditPolicies = () => {
     setIsSelected(tabId);
   };
 
+  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
+    const tab = tabs[key as keyof typeof tabs];
+
+    if (
+      key === tabs.requestsInProgress.id &&
+      requestsInProgress &&
+      requestsInProgress.length === 0
+    ) {
+      return acc;
+    }
+
+    if (tab !== undefined) {
+      acc[key as keyof IGeneralPoliciesTabsConfig] = tab;
+    }
+    return acc;
+  }, {} as IGeneralPoliciesTabsConfig);
+
   const showPoliciesTab = isSelected === tabs.generalPolicies.id;
 
   const showrequestTab = isSelected === tabs.requestsInProgress.id;
 
-  const policiesTabs = Object.values(tabs);
+  const policiesTabs = Object.values(filteredTabsConfig);
 
   const showAddPolicies = withoutPoliciesData && showModal;
 

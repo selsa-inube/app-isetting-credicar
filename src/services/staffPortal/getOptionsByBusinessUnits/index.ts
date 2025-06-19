@@ -3,6 +3,8 @@ import { AxiosRequestConfig } from "axios";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
+import { translateObject } from "@isettingkit/business-rules";
+import { configTranslate, enviroment } from "@config/environment";
 import { mapOptionsByBusinessUnitsToEntities } from "./mappers";
 
 const getOptionsByBusinessUnit = async (
@@ -27,7 +29,18 @@ const getOptionsByBusinessUnit = async (
     config,
   );
 
-  return Array.isArray(data) ? mapOptionsByBusinessUnitsToEntities(data) : [];
+  const translatedRaw = await translateObject(
+    data,
+    enviroment.VITE_LANGUAGE,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    configTranslate! as any,
+  );
+
+  const translatedArray = Array.isArray(translatedRaw)
+    ? translatedRaw
+    : Object.values(translatedRaw);
+
+  return mapOptionsByBusinessUnitsToEntities(translatedArray);
 };
 
 export { getOptionsByBusinessUnit };
