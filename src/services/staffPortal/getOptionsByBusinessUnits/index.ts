@@ -32,7 +32,8 @@ const getOptionsByBusinessUnit = async (
   const translatedRaw = await translateObject(
     data,
     enviroment.VITE_LANGUAGE,
-    configTranslate,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    configTranslate! as any,
   );
 
   const translatedArray = Array.isArray(translatedRaw)

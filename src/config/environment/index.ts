@@ -8,10 +8,12 @@ const maxRetriesDelete = 1;
 const fetchTimeoutServices = 6000;
 
 const mediaQueryMobile = "(max-width: 770px)";
-
+const stripLeadingSlash = (u?: string) => u?.replace(/^\/+/, "") ?? undefined;
 const configTranslate = {
-  url: import.meta.env.URL_TRANSLATE,
-  apiKey: import.meta.env.APIKEY_TRANSLATE,
+  url: stripLeadingSlash(
+    import.meta.env.VITE_URL_TRANSLATE as string | undefined,
+  ),
+  apiKey: import.meta.env.VITE_API_KEY_TRANSLATE as string | undefined,
 };
 
 const enviroment = {
@@ -34,7 +36,7 @@ const enviroment = {
     .VITE_ISAAS_PERSISTENCE_PROCESS_SERVICE,
   ISAAS_TOKEN_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_ISAAS_TOKEN_QUERY_PROCESS_SERVICE,
-  VITE_LANGUAGE: import.meta.env.VITE_LANGUAGE,
+  VITE_LANGUAGE: import.meta.env.VITE_LANGUAGE as string,
 };
 
 export {
