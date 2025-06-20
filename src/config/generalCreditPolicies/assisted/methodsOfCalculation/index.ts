@@ -2,17 +2,17 @@ const methodsOfCalculation = [
   {
     id: "calculation",
     label: "Cálculo por capacidad de pago",
-    value: "calculation",
+    value: "CalculationByPaymentCapacity",
   },
   {
     id: "reciprocity",
     label: "Reciprocidad de los aportes",
-    value: "reciprocity",
+    value: "ReciprocityOfContributions",
   },
   {
     id: "factor",
     label: "Factor de riesgo",
-    value: "factor",
+    value: "RiskFactor",
   },
 ];
 

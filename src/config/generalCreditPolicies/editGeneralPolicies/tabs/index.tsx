@@ -12,7 +12,7 @@ const editGeneralPoliciesTabsConfig = {
   incomePortfolio: {
     id: "incomePortfolio",
     isDisabled: false,
-    label: "Numero de veces los ingresos como cupo total de la cartera",
+    label: "Número de veces los ingresos como cupo total de la cartera",
   },
   scoreModels: {
     id: "scoreModels",

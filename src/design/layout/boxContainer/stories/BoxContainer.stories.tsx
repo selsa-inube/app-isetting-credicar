@@ -2,8 +2,9 @@ import { inube } from "@inubekit/inubekit";
 import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn } from "@storybook/react";
 
+import { IBoxContainer } from "@ptypes/design/IBoxContainer";
 import { tokens } from "@design/tokens";
-import { BoxContainer, IBoxContainer } from "..";
+import { BoxContainer } from "..";
 
 const meta: Meta<typeof BoxContainer> = {
   title: "layout/BoxContainer",

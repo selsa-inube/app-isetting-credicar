@@ -6,6 +6,7 @@ import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
 import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { IUseNewDecisions } from "@ptypes/hooks/IUseNewDecisions";
+import { formatDate } from "@utils/date/formatDate";
 
 const useNewDecisions = (props: IUseNewDecisions) => {
   const {
@@ -33,6 +34,14 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
   const [showReciprocity, setShowReciprocity] = useState(false);
   const [showFactor, setShowFactor] = useState(false);
+
+  const dateCurrent = String(formatDate(new Date()));
+
+  useEffect(() => {
+    setDateDecisions({
+      date: dateCurrent,
+    });
+  }, []);
 
   useEffect(() => {
     if (contributionsData && normalizedContributions) {

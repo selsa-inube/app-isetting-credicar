@@ -17,7 +17,7 @@ const addGenCredPoliciesSteps: IAssistedStep[] = [
     id: 3,
     number: 3,
     name: "# de veces los ingresos como cupo total de la cartera",
-    description: "Numero de veces los ingresos como cupo total de la cartera.",
+    description: "Número de veces los ingresos como cupo total de la cartera.",
   },
   {
     id: 4,

@@ -20,9 +20,10 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
+import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
+import { portalId } from "@config/portalId";
 import { DecisionsGeneralForm } from "../../forms/decisionsGeneral";
-import { DateGeneralPolicies } from "../../dateGeneralPolicies";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
   const {
@@ -47,7 +48,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showScoreModels,
     showGoBackModal,
     showDateModal,
-    date,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
@@ -57,7 +57,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     heightContPageScoreModels,
     setShowFactor,
     setShowReciprocity,
-    setDateDecisions,
     onFinishForm,
     onToggleDateModal,
     onGoBack,
@@ -183,7 +182,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       </Stack>
       {showGoBackModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={goBackModal.title}
           description={goBackModal.description}
           actionText={goBackModal.actionText}
@@ -193,18 +192,19 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       )}
 
       {showDateModal && (
-        <DateGeneralPolicies
+        <DecisionModal
+          portalId={portalId}
+          title={sendEditedModal.title}
+          description={sendEditedModal.description}
+          actionText={sendEditedModal.actionText}
           onCloseModal={onToggleDateModal}
-          onFinishForm={onFinishForm}
-          loading={loading}
-          initialValues={date}
-          setDateVerification={setDateDecisions}
+          onClick={onFinishForm}
         />
       )}
 
       {showRequestProcessModal && (
         <RequestProcess
-          portalId="portal"
+          portalId={portalId}
           saveData={saveGeneralPolicies}
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
@@ -216,7 +216,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       )}
       {isRequestStatusModal && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(saveGeneralPolicies.staffName).title}
           description={
             requestStatusMessage(saveGeneralPolicies.staffName).description
