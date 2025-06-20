@@ -7,17 +7,20 @@ const formatRuleDecisions = (
 ) =>
   rule.map((decision) => {
     const decisionsByRule: IRuleDecision = {
-      conditionsThatEstablishesTheDecision:
+      effectiveFrom: dateEffectiveFrom && formatDateDecision(dateEffectiveFrom),
+      value: decision.value,
+    };
+
+    if (decision.conditionsThatEstablishesTheDecision) {
+      decisionsByRule.conditionsThatEstablishesTheDecision =
         decision.conditionsThatEstablishesTheDecision
           ?.filter((condition) => condition.value !== undefined)
           .map((condition) => ({
             labelName: condition.labelName,
             conditionName: condition.conditionName,
             value: condition.value,
-          })) as ICondition[],
-      effectiveFrom: dateEffectiveFrom && formatDateDecision(dateEffectiveFrom),
-      value: decision.value,
-    };
+          })) as ICondition[];
+    }
     return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
   });
 

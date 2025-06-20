@@ -11,10 +11,9 @@ import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecis
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { IUseAddGenCredPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseAddGenCredPolicies";
-import { renderValue } from "@utils/renderValue";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
-import { formatRuleDecisions } from "@utils/formatRuleDecisions";
 import { compareObjects } from "@utils/compareObjects";
+import { useRules } from "../useRules";
 
 const useAddGenCredPolicies = (props: IUseAddGenCredPolicies) => {
   const { appData } = props;
@@ -118,21 +117,13 @@ const useAddGenCredPolicies = (props: IUseAddGenCredPolicies) => {
   const handleFormValidChange = (isValid: boolean) =>
     setIsCurrentFormValid(isValid);
 
-  const rulesContributions = formatRuleDecisions(
+  const { rules } = useRules({
+    formValues,
+    dateVerification: dateVerification ?? ({} as IDateVerification),
     contributionsPortfolio,
-    dateVerification?.date,
-  );
-  const rulesIncomes = formatRuleDecisions(
     incomePortfolio,
-    dateVerification?.date,
-  );
-
-  const ruleScoremodels = formatRuleDecisions(
     scoreModels,
-    dateVerification?.date,
-  );
-
-  const rules = [...rulesContributions, ...rulesIncomes, ...ruleScoremodels];
+  });
 
   const handleSubmitClick = () => {
     setSaveData({
@@ -144,26 +135,6 @@ const useAddGenCredPolicies = (props: IUseAddGenCredPolicies) => {
       requestDate: formatDate(new Date()),
       useCaseName: "AddGeneralCreditPolicies",
       configurationRequestData: {
-        reference: formValues.decisionsGeneral.values.reference,
-        additionalDebtors: renderValue(
-          formValues.decisionsGeneral.values.additionalDebtors,
-        ),
-        sourcesIncome: renderValue(
-          formValues.decisionsGeneral.values.sourcesIncome,
-        ),
-        financialObligations: renderValue(
-          formValues.decisionsGeneral.values.financialObligations,
-        ),
-        realGuarantees: renderValue(
-          formValues.decisionsGeneral.values.realGuarantees,
-        ),
-        calculation: renderValue(
-          formValues.decisionsGeneral.values.calculation,
-        ),
-        reciprocity: renderValue(
-          formValues.decisionsGeneral.values.reciprocity,
-        ),
-        factor: renderValue(formValues.decisionsGeneral.values.factor),
         rules: rules,
       },
     });

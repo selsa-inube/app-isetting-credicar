@@ -2,7 +2,6 @@ import { FormikProps } from "formik";
 import { ITab } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { IDateVerification } from "../forms/IDateVerification";
 import { IDecisionsGeneralEntry } from "../forms/IDecisionsGeneralEntry";
 import { DefaultTheme } from "styled-components/dist/types";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
@@ -14,6 +13,7 @@ interface IEditGeneralPoliciesUI {
   requestSteps: IRequestSteps[];
   loading: boolean;
   showPendingReqModal: boolean;
+  showDateModal: boolean;
   showRequestProcessModal: boolean;
   saveGeneralPolicies: ISaveDataResponse;
   smallScreen: boolean;
@@ -31,18 +31,13 @@ interface IEditGeneralPoliciesUI {
   showScoreModels: boolean;
   theme: DefaultTheme;
   showGoBackModal: boolean;
-  showDateModal: boolean;
-  date: IDateVerification;
   isRequestStatusModal: boolean;
   heightContPageContribut: string;
   heightContPageIncome: string;
   heightContPageScoreModels: string;
+  onFinishForm: () => void;
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
-  setDateDecisions: React.Dispatch<
-    React.SetStateAction<IDateVerification | undefined>
-  >;
-  onFinishForm: () => void;
   onToggleDateModal: () => void;
   onGoBack: () => void;
   onCloseGoBackModal: () => void;

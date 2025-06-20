@@ -16,10 +16,19 @@ import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flo
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { requestStepsInitial } from "@config/requestSteps";
+import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
+import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
-  const { userAccount, data, setSendData, sendData, setShowModal, useCase } =
-    props;
+  const {
+    bussinesUnits,
+    userAccount,
+    data,
+    setSendData,
+    sendData,
+    setShowModal,
+    useCase,
+  } = props;
 
   const [saveGeneralPolicies, setSaveGeneralPolicies] =
     useState<ISaveDataResponse>();
@@ -66,6 +75,38 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   const isStatusIntAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
+  };
+
+  const requestConfiguration = {
+    ...data?.configurationRequestData,
+    settingRequest: {
+      requestNumber: saveGeneralPolicies?.requestNumber,
+      settingRequestId: saveGeneralPolicies?.settingRequestId,
+    },
+  };
+
+  const fetchRequestData = async () => {
+    try {
+      if (useCase === UseCase.ADD) {
+        const newData = await postAddGeneralPolicies(
+          bussinesUnits,
+          requestConfiguration as IRequestGeneralPol,
+        );
+        setStatusRequest(newData.settingRequest?.requestStatus);
+      }
+    } catch (error) {
+      console.info(error);
+      setErrorFetchRequest(true);
+      setSendData(false);
+      addFlag({
+        title: flowAutomaticMessages().errorQueryingData.title,
+        description: flowAutomaticMessages().errorQueryingData.description,
+        appearance: flowAutomaticMessages().errorQueryingData
+          .appearance as IFlagAppearance,
+        duration: flowAutomaticMessages().errorQueryingData.duration,
+      });
+      setShowModal(false);
+    }
   };
 
   const updateRequestSteps = (
@@ -185,9 +226,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   const handleCloseProcess = () => {
     setSendData(false);
-    if (useCase !== UseCase.DELETE) {
-      navigate(navigatePage);
-    }
     if (isStatusCloseModal() || isStatusRequestFinished()) {
       handleStatusChange();
     }
@@ -200,8 +238,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   useEffect(() => {
     if (isStatusIntAutomatic(saveGeneralPolicies?.requestStatus)) {
-      setStatusRequest("");
-      setErrorFetchRequest(true);
+      fetchRequestData();
     }
   }, [saveGeneralPolicies]);
 

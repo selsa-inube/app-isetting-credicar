@@ -6,7 +6,7 @@ const interventionHumanMessage = {
     description:
       "Para realizar el seguimiento ve a la pestaña solicitudes en tramite.",
     appearance: ComponentAppearance.SUCCESS,
-    duration: 5000,
+    duration: 3000,
   },
 };
 

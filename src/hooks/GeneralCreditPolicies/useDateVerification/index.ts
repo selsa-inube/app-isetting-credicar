@@ -7,13 +7,25 @@ import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { mediaQueryMobile } from "@config/environment";
 import { IUseDateVerificationForm } from "@ptypes/hooks/generalCreditPolicies/IUseDateVerificationForm";
+import { formatDate } from "@utils/date/formatDate";
 
 const useDateVerification = (props: IUseDateVerificationForm) => {
   const { initialValues, ref, onSubmit, setDateVerification } = props;
 
+  const dateCurrent = String(formatDate(new Date()));
+
   const createValidationSchema = () =>
     object().shape({
-      date: validationRules.string.required(validationMessages.required),
+      date: validationRules.string
+        .required(validationMessages.required)
+        .test(
+          "max-date",
+          "La fecha no puede ser mayor a la actual",
+          (value) => {
+            if (!value) return true;
+            return value <= dateCurrent;
+          },
+        ),
     });
 
   const validationSchema = createValidationSchema();

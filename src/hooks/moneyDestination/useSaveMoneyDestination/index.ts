@@ -243,20 +243,26 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
   const handleCloseProcess = () => {
     setSendData(false);
+
+    if (isStatusCloseModal() || isStatusRequestFinished()) {
+      handleStatusChange();
+    }
+
     if (useCase !== UseCase.DELETE) {
-      navigate(navigatePage);
+      setTimeout(() => {
+        navigate(navigatePage);
+      }, 3000);
     }
     if (
       setEntryDeleted &&
       statusRequest &&
       statusRequestFinished.includes(statusRequest)
     ) {
-      setEntryDeleted(
-        data.configurationRequestData.moneyDestinationId as string,
-      );
-    }
-    if (isStatusCloseModal() || isStatusRequestFinished()) {
-      handleStatusChange();
+      setTimeout(() => {
+        setEntryDeleted(
+          data.configurationRequestData.moneyDestinationId as string,
+        );
+      }, 3000);
     }
   };
 

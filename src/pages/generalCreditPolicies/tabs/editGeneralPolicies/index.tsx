@@ -6,7 +6,6 @@ import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEdi
 import { UseCase } from "@enum/useCase";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { useThemeData } from "@utils/theme";
 import { EditGeneralPoliciesUI } from "./interface";
 
@@ -43,7 +42,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showScoreModels,
     showGoBackModal,
     showDateModal,
-    dateDecisions,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
@@ -52,7 +50,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageScoreModels,
     setShowReciprocity,
     setShowFactor,
-    setDateDecisions,
     handleFinishForm,
     handleToggleDateModal,
     handleGoBack,
@@ -131,8 +128,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       onGoBack={handleGoBack}
       onCloseGoBackModal={handleCloseGoBackModal}
       showDateModal={showDateModal}
-      date={dateDecisions ?? ({} as IDateVerification)}
-      setDateDecisions={setDateDecisions}
       onFinishForm={handleFinishForm}
       onToggleDateModal={handleToggleDateModal}
       normalizedContributions={normalizedContributions}
