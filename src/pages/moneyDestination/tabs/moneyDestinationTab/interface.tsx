@@ -1,10 +1,11 @@
 import { MdAdd } from "react-icons/md";
-import { Stack, useMediaQuery, Input, Button } from "@inubekit/inubekit";
+import { Stack, Button, Text, Searchfield } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
-import { IEntry } from "@design/data/table/types";
+import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
+import { tablabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
 import {
   actionsConfig,
   breakPoints,
@@ -12,25 +13,16 @@ import {
 } from "@config/moneyDestination/moneyDestinationTab/table";
 import { StyledContainer } from "./styles";
 
-interface IMoneyDestinationTabUI {
-  entries: IEntry[];
-  loading: boolean;
-  searchMoneyDestination: string;
-  onSearchMoneyDestination: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setEntryDeleted: (value: string | number) => void;
-}
-
 function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
   const {
     searchMoneyDestination,
     entries,
     loading,
+    smallScreen,
+    columnWidths,
     onSearchMoneyDestination,
     setEntryDeleted,
   } = props;
-
-  const smallScreen = useMediaQuery("(max-width: 690px)");
-  const widthFirstColumn = smallScreen ? 64 : 25;
 
   return (
     <StyledContainer $smallScreen={smallScreen}>
@@ -43,39 +35,73 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s400} direction="column">
+        <Stack
+          gap={smallScreen ? tokens.spacing.s150 : tokens.spacing.s400}
+          direction="column"
+        >
+          {smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+                ellipsis
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
           <Stack
             justifyContent={smallScreen ? "center" : "space-between"}
             direction={smallScreen ? "column-reverse" : "row"}
             gap={
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
+            width="100%"
           >
-            <Stack justifyContent="center">
-              <Input
+            <Stack
+              justifyContent="center"
+              width={smallScreen ? "100%" : "auto"}
+            >
+              <Searchfield
                 name="searchMoneyDestination"
                 id="searchMoneyDestination"
-                placeholder="Palabra clave..."
-                type="search"
+                placeholder={tablabels.searchPlaceholder}
+                label={smallScreen ? "" : tablabels.searchLabel}
                 size="compact"
                 value={searchMoneyDestination}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onSearchMoneyDestination(e)
                 }
+                fullwidth={smallScreen}
               />
             </Stack>
-            <Button
-              spacing="wide"
-              appearance={ComponentAppearance.PRIMARY}
-              variant="filled"
-              iconBefore={<MdAdd />}
-              type="link"
-              path="/money-destination/add-destination"
-              fullwidth={smallScreen}
-            >
-              Agregar destino
-            </Button>
+            {!smallScreen && (
+              <Button
+                spacing="wide"
+                appearance={ComponentAppearance.PRIMARY}
+                variant="filled"
+                iconBefore={<MdAdd />}
+                type="link"
+                path="/money-destination/add-destination"
+                fullwidth={smallScreen}
+              >
+                {tablabels.addButton}
+              </Button>
+            )}
           </Stack>
+
+          {!smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
 
           <Table
             id="portal"
@@ -84,8 +110,8 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
             actions={actionsConfig(setEntryDeleted)}
             breakpoints={breakPoints}
             filter={searchMoneyDestination}
-            isLoading={loading}
-            columnWidths={[widthFirstColumn, 55]}
+            loading={loading}
+            columnWidths={columnWidths}
             pageLength={8}
           />
         </Stack>

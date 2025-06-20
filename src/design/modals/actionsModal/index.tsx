@@ -2,8 +2,9 @@ import { MdClear } from "react-icons/md";
 import { Grid, Stack } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { IAction, IEntry } from "@design/data/table/types";
 import { StyledModal, StyledContentActions } from "./styles";
+import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IActionsModal {
   actions: IAction[];
@@ -28,9 +29,7 @@ const ActionsModal = (props: IActionsModal) => {
               key={index}
               onClick={(e) => e.stopPropagation()}
             >
-              <div onClick={(e) => e.stopPropagation()}>
-                {action.content(entry)}
-              </div>
+              {action.content(entry)}
             </StyledContentActions>
           ))}
         </Stack>

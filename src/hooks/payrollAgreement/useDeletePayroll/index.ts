@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { IEntry } from "@design/data/table/types";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
+import { IUseDeletePayroll } from "@ptypes/hooks/IUseDeletePayroll";
 
-const useDeletePayroll = (data: IEntry, appData: IAppData) => {
+const useDeletePayroll = (props: IUseDeletePayroll) => {
+  const { data, appData } = props;
   const [showModal, setShowModal] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [showPendingReq, setShowPendingReq] = useState(false);
@@ -27,10 +27,13 @@ const useDeletePayroll = (data: IEntry, appData: IAppData) => {
       useCaseName: "DeletePayrollAgreement",
       configurationRequestData: {
         abbreviatedName: data.abbreviatedName,
-        numberOfDaysForReceivingTheDiscounts:
+        payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
+        payrollForDeductionAgreementCode: data.payrollForDeductionAgreementCode,
+        numberOfDaysForReceivingTheDiscounts: Number(
           data.numberOfDaysForReceivingTheDiscounts,
+        ),
         payrollForDeductionAgreementType: data.payrollForDeductionAgreementType,
-        justification: `La eliminación de la nomina de convenio es solicitada por ${appData.user.userAccount}`,
+        removalJustification: `La eliminación de la nomina de convenio es solicitada por ${appData.user.userAccount}`,
       },
     });
     setShowRequestProcessModal(true);

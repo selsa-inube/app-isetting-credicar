@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isettingCredicar";
+import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { mapMoneyDestinationToEntities } from "./mappers";
 
 const getMoneyDestinationData = async (
@@ -15,7 +15,7 @@ const getMoneyDestinationData = async (
   };
   const data: IMoneyDestinationData[] = await getWithRetries<
     IMoneyDestinationData[]
-  >(axiosInstance, `/money-destinations`, config);
+  >(credicarAxiosInstance, `/money-destinations`, config);
   return Array.isArray(data) ? mapMoneyDestinationToEntities(data) : [];
 };
 

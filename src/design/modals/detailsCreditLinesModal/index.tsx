@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { mediaQueryMobile } from "@config/environment";
-import { IEntry } from "@design/data/table/types";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { DetailsCreditLinesModalUI } from "./interface";
 import { IDetailsTabsConfig } from "./types";
 

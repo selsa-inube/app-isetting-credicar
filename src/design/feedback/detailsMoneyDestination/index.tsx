@@ -8,8 +8,8 @@ import {
   textValuesBusinessRules,
 } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
-import { IEntry } from "@design/data/table/types";
-import { IDetailsTabsConfig } from "@design/modals/detailsDestinationModal/types";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
 import { StyledContainerIcon } from "./styles";
 
 interface IDetailsMoneyDestination {

@@ -7,6 +7,7 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { notCancelStatus } from "@config/status/notCancelStatus";
 import { RequestStatus } from "@enum/requestStatus";
 import { StyledContainerIcon } from "./styles";
+import { cancelLabels } from "@config/cancelLabels";
 
 interface ICancelRecord {
   showModal: boolean;
@@ -42,7 +43,7 @@ const CancelRecord = (props: ICancelRecord) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            Cancelar
+            {cancelLabels.title}
           </Text>
         )}
       </StyledContainerIcon>
@@ -55,7 +56,8 @@ const CancelRecord = (props: ICancelRecord) => {
           onClick={onClick}
           onCloseModal={onToggleModal}
           appearance={ComponentAppearance.DANGER}
-          isLoading={loading}
+          loading={loading}
+          appearanceButton={ComponentAppearance.DANGER}
         />
       )}
     </>

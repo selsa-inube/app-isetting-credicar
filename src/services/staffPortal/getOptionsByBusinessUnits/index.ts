@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isaasQuery";
+import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
 import { mapOptionsByBusinessUnitsToEntities } from "./mappers";
 
@@ -22,7 +22,7 @@ const getOptionsByBusinessUnit = async (
   const data: IOptionsByBusinessUnits[] = await getWithRetries<
     IOptionsByBusinessUnits[]
   >(
-    axiosInstance,
+    isaasQueryAxiosInstance,
     `/staff-portals-by-business-manager?${queryParams.toString()}`,
     config,
   );

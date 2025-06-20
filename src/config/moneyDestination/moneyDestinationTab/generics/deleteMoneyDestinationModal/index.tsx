@@ -1,7 +1,8 @@
 const deleteMoneyDestinationModal = {
-  title: "Eliminar",
-  description: "¿Realmente deseas eliminar este destino de dinero?",
-  actionText: "Eliminar",
+  title: "Enviar",
+  description:
+    "Se enviará la solicitud de eliminación. ¿Realmente quieres continuar con la eliminación?",
+  actionText: "Continuar",
 };
 
 export { deleteMoneyDestinationModal };

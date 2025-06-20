@@ -2,7 +2,7 @@ import { IConditionsEvaluateRule } from "../IConditionsEvaluateRule";
 
 interface IEvaluateRuleRequest {
   ruleName: string;
-  conditions: IConditionsEvaluateRule[];
+  conditions?: IConditionsEvaluateRule[];
 }
 
 export type { IEvaluateRuleRequest };

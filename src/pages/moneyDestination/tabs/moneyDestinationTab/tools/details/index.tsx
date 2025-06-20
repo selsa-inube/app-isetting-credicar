@@ -3,13 +3,9 @@ import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { DetailsMoneyDestination } from "@design/feedback/detailsMoneyDestination";
 import { useDetailsDestination } from "@hooks/moneyDestination/useDetailsDestination";
-import { IEntry } from "@design/data/table/types";
 import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/generics/detailsTabsConfig";
 import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
-
-interface IDetails {
-  data: IEntry;
-}
+import { IDetails } from "@ptypes/moneyDestination/tabs/IDetails";
 
 const Details = (props: IDetails) => {
   const { data } = props;
@@ -24,6 +20,7 @@ const Details = (props: IDetails) => {
     handleTabChange,
     filteredTabsConfig,
     defaultSelectedTab,
+    filteredDecisions,
   } = useDetailsDestinationModal(
     data,
     detailsTabsConfig,
@@ -36,7 +33,7 @@ const Details = (props: IDetails) => {
         data={data}
         showModal={showModal}
         detailsTabsConfig={detailsTabsConfig}
-        evaluateRuleData={evaluateRuleData}
+        evaluateRuleData={filteredDecisions}
         handleToggleModal={handleToggleModal}
         defaultSelectedTab={defaultSelectedTab ?? ""}
         filteredTabsConfig={filteredTabsConfig}

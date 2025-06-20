@@ -10,7 +10,7 @@ const decisionsGenLabels = {
   sixth:
     "6. ¿Las obligaciones con garantías reales se incluyen en el cálculo del descubierto?",
   buttonCancelLabel: "Cancelar",
-  buttonSaveLabel: "Guardar",
+  buttonSaveLabel: "Enviar",
   buttonNextLabel: "Siguiente",
   placeholderReference: "Seleccione de la lista",
 };

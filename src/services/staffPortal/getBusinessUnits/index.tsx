@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/iPortalStaff";
+import { portalStaffAxiosInstance } from "@api/iPortalStaff";
 import { mapBusinessUnitsPortalStaffToEntities } from "./mappers";
 
 const getBusinessUnitsPortalStaff = async (
@@ -16,7 +16,7 @@ const getBusinessUnitsPortalStaff = async (
   const data: IBusinessUnitsPortalStaff[] = await getWithRetries<
     IBusinessUnitsPortalStaff[]
   >(
-    axiosInstance,
+    portalStaffAxiosInstance,
     `/business-units-portal-staff/${userAccount}/${portalPublicCode}`,
     config,
   );

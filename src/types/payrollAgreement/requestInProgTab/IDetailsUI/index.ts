@@ -1,5 +1,5 @@
-import { IEntry } from "@design/data/table/types";
 import { ILabel } from "@ptypes/ILabel";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "../IDetailsTabsConfig";
 
 interface IDetailsUI {
@@ -15,6 +15,8 @@ interface IDetailsUI {
   detailsTabsConfig: IDetailsTabsConfig;
   labelsDetails: ILabel[];
   labelsPaymentCard: ILabel[];
+  ordinaryPaymentData: IEntry[];
+  extraordinaryPaymentData: IEntry[];
   ordinaryIncludedData: IEntry[];
   ordinaryEliminatedData: IEntry[];
   extraordinaryIncludedData: IEntry[];

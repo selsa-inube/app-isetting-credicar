@@ -1,19 +1,8 @@
-import { createContext, useState, ReactNode, useMemo } from "react";
+import { useState, useMemo } from "react";
+import { IChangeToRequestTabProvider } from "@ptypes/context/IChangeToRequestTabProvider";
+import { ChangeToRequestTab } from "./changeToRequest";
 
-interface IChangeToRequestTab {
-  changeTab: boolean;
-  setChangeTab: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const ChangeToRequestTab = createContext<IChangeToRequestTab>(
-  {} as IChangeToRequestTab,
-);
-
-interface ChangeToRequestTabProviderProps {
-  children: ReactNode;
-}
-
-const ChangeToRequestTabProvider = (props: ChangeToRequestTabProviderProps) => {
+const ChangeToRequestTabProvider = (props: IChangeToRequestTabProvider) => {
   const { children } = props;
   const [changeTab, setChangeTab] = useState<boolean>(false);
 
@@ -32,4 +21,4 @@ const ChangeToRequestTabProvider = (props: ChangeToRequestTabProviderProps) => {
   );
 };
 
-export { ChangeToRequestTabProvider, ChangeToRequestTab };
+export { ChangeToRequestTabProvider };

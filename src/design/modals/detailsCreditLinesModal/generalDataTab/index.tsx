@@ -1,7 +1,7 @@
 import { Stack, Text, Divider } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { IEntry } from "@design/data/table/types";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { ComponentAppearance } from "@enum/appearances";
 import { StyledContainerDescription, StyledContainerName } from "./styles";
 

@@ -1,9 +1,11 @@
 import { MdDeleteOutline, MdOutlineCreate } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 
-import { IAction, IEntry, ITitle } from "@design/data/table/types";
 import { ComponentAppearance } from "@enum/appearances";
 import { Details } from "@pages/creditLines/components/Details";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const titles: ITitle[] = [
   {

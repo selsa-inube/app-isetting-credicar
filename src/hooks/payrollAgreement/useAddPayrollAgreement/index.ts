@@ -13,7 +13,6 @@ import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementT
 import { typePayrollForCyclesExtraord } from "@config/payrollAgreement/payrollAgreementTab/assisted/typePayrollForCyclesExtraord";
 import { compareObjects } from "@utils/compareObjects";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { formatDate } from "@utils/date/formatDate";
 import { useEnumerators } from "@hooks/useEnumerators";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
@@ -24,10 +23,19 @@ import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreemen
 import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
+import { formatPaymentDay } from "@utils/formatPaymentDay";
+import { checkDayWeek } from "@utils/checkDayWeek";
+import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
+import { getIncomeTypesData } from "@utils/IncomeTypesData";
 import { useLegalPerson } from "../useLegalPerson";
+import { getUniquePaydays } from "@utils/getUniqueDays";
+import { getDaysInNumber } from "@utils/getDaysInNumber";
+import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 
-const useAddPayrollAgreement = (appData: IAppData) => {
+const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
+  const { appData } = props;
   const initialValues = {
     company: {
       isValid: false,
@@ -84,11 +92,17 @@ const useAddPayrollAgreement = (appData: IAppData) => {
   const [regularPaymentCycles, setRegularPaymentCycles] = useState<
     IOrdinaryCyclesEntry[]
   >([]);
+  const [includeExtraPayDay, setIncludeExtraPayDay] = useState<
+    IOrdinaryCyclesEntry[]
+  >([]);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [extraordinaryPayment, setExtraordinaryPayment] = useState<
     IExtraordinaryCyclesEntry[]
   >([]);
+  const [regularDeleted, setRegularDeleted] = useState<IOrdinaryCyclesEntry[]>(
+    [],
+  );
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [typeRegularPayroll, setTypeRegularPayroll] = useState<boolean>(false);
   const [canRefresh, setCanRefresh] = useState(false);
@@ -98,12 +112,14 @@ const useAddPayrollAgreement = (appData: IAppData) => {
     IServerDomain[]
   >([]);
 
-  const { enumData: incometype } = useEnumerators(
-    "incometype",
-    appData.businessUnit.publicCode,
-  );
+  const { enumData: incometype } = useEnumerators({
+    enumDestination: "incometype",
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
-  const { legalPersonData } = useLegalPerson(appData.businessUnit.publicCode);
+  const { legalPersonData } = useLegalPerson({
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   const navigate = useNavigate();
 
@@ -132,6 +148,66 @@ const useAddPayrollAgreement = (appData: IAppData) => {
     );
   }, [formValues.generalInformation.values.typePayroll]);
 
+  const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
+    const filteredEntries = entries.filter((item) =>
+      includedPeriodicity.includes(item.periodicity ?? ""),
+    );
+
+    const days = getUniquePaydays(filteredEntries);
+    const daysInNumber = getDaysInNumber(days);
+    const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
+
+    let verifyDays: number[] = [];
+    let lastDayOfMonth: number[] = [];
+
+    extraordinaryPayment.forEach((item) => {
+      const month = Number(item.payday?.slice(0, 2));
+      const paydayValue = Number(item.payday?.split("-")[1]);
+      lastDayOfMonth = getLastDayOfMonth(days, month - 1);
+
+      verifyDays = Array.from(new Set([...daysInNumber, ...lastDayOfMonth]));
+
+      const filteredRegularPaymentCycles = regularPaymentCycles.flatMap(
+        (item) => {
+          const filteredPayday = item.payday
+            ? item.payday.split(",").map((payday) => Number(payday.trim()))
+            : [];
+          return filteredPayday.filter((payday) => verifyDays.includes(payday));
+        },
+      );
+
+      if (filteredRegularPaymentCycles.length > 0) {
+        verifyDays = verifyDays.filter(
+          (day) => !filteredRegularPaymentCycles.includes(day),
+        );
+      }
+
+      if (!verifyDays.includes(paydayValue)) {
+        filteredExtraordinary.push(item);
+      }
+    });
+
+    return {
+      filteredExtraordinary,
+    };
+  };
+
+  useEffect(() => {
+    if (regularDeleted && regularDeleted.length > 0) {
+      const { filteredExtraordinary } =
+        filterExtraordinaryPayment(regularDeleted);
+      setExtraordinaryPayment((prev) =>
+        prev.filter((item) => {
+          return filteredExtraordinary.some(
+            (filteredItem) =>
+              filteredItem.id === item.id &&
+              item.nameCycle === filteredItem.nameCycle,
+          );
+        }),
+      );
+    }
+  }, [regularDeleted]);
+
   const handleNextStep = () => {
     if (currentStep < addPayrollAgreementSteps.length) {
       if (companyRef.current) {
@@ -155,12 +231,11 @@ const useAddPayrollAgreement = (appData: IAppData) => {
           },
         }));
         setIsCurrentFormValid(generalInformationRef.current.isValid);
-        const typePayroll =
-          generalInformationRef.current.values.typePayroll &&
-          typePayrollForCyclesExtraord.includes(
-            generalInformationRef.current.values.typePayroll,
-          );
-        const stepOrdinaryCycles = typePayroll ? currentStep + 1 : 4;
+        const showOrdinary = typePayrollForCyclesExtraord.includes(
+          generalInformationRef.current.values.typePayroll,
+        );
+
+        const stepOrdinaryCycles = showOrdinary ? currentStep + 1 : 4;
         setCurrentStep(stepOrdinaryCycles);
       } else {
         setCurrentStep(currentStep + 1);
@@ -174,8 +249,9 @@ const useAddPayrollAgreement = (appData: IAppData) => {
             values: regularPaymentCycles ?? [],
           },
         }));
+        const step = includeExtraPayDay.length === 0 ? 5 : currentStep + 1;
         setIsCurrentFormValid(true);
-        setCurrentStep(currentStep + 1);
+        setCurrentStep(step);
       }
 
       if (currentStep === 4) {
@@ -199,6 +275,12 @@ const useAddPayrollAgreement = (appData: IAppData) => {
 
     if (currentStep === 4) {
       const stepOrdinaryCycles = typeRegularPayroll ? currentStep - 1 : 2;
+      setCurrentStep(stepOrdinaryCycles);
+    }
+
+    if (currentStep === 5) {
+      const stepOrdinaryCycles =
+        includeExtraPayDay.length === 0 ? 3 : currentStep - 1;
       setCurrentStep(stepOrdinaryCycles);
     }
   };
@@ -260,10 +342,9 @@ const useAddPayrollAgreement = (appData: IAppData) => {
       : !isCurrentFormValid;
 
   const company = {
-    legalPersonId: formValues.company.values.companyNumberIdent,
     identificationDocumentNumber: formValues.company.values.companyNumberIdent,
     identificationTypeLegalPerson: formValues.company.values.companyTypeIdent,
-    legalPersonName: formValues.company.values.companyName,
+    payingEntityName: formValues.company.values.companyName,
     tradename: formValues.company.values.companyNameCommercial,
     countryTaxResidence: formValues.company.values.companyCountry,
     headquarterCity: formValues.company.values.companyCity,
@@ -274,14 +355,13 @@ const useAddPayrollAgreement = (appData: IAppData) => {
   const regularPayment = formValues.ordinaryCycles.values
     .filter((item) => item.cycleId !== "")
     .map((item) => ({
-      cycleId: item.cycleId,
-      nameCycle: item.nameCycle,
-      periodicity:
-        normalizeEnumTranslationCode(item.periodicity)?.code ??
+      regularPaymentCycleNumber: item.cycleId,
+      regularPaymentCycleName: item.nameCycle,
+      schedule:
+        normalizeEnumTranslationCode(item.periodicity ?? "")?.code ??
         item.periodicity,
-      payday: item.payday,
-      numberDaysUntilCut: Number(item.numberDaysUntilCut),
-      transactionOperation: TransactionOperation.INSERT,
+      paymentDay: checkDayWeek(item.payday ?? ""),
+      numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
     }));
 
   const payrollSpecialBenefit = formValues.extraordinaryCycles.values
@@ -289,9 +369,7 @@ const useAddPayrollAgreement = (appData: IAppData) => {
     .map((item) => ({
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
-      paymentDay: item.payday ?? "",
-      payrollForDeductionAgreementId: item.id ?? "",
-      transactionOperation: TransactionOperation.INSERT,
+      paymentDay: formatPaymentDay(item.payday ?? "") ?? "",
     }));
 
   const severancePayment = formValues.extraordinaryCycles.values
@@ -299,48 +377,50 @@ const useAddPayrollAgreement = (appData: IAppData) => {
     .map((item) => ({
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
-      paymentDay: item.payday ?? "",
-      payrollForDeductionAgreementId: item.id ?? "",
-      transactionOperation: TransactionOperation.INSERT,
+      paymentDay: formatPaymentDay(item.payday ?? "") ?? "",
     }));
 
   const handleSubmitClick = () => {
     const legalPersonIdent = legalPersonData.find(
       (item) =>
-        item.legalPersonName === formValues.company.values.companySelected,
+        item.payingEntityName === formValues.company.values.companySelected,
     );
 
     const configurationRequestData: {
       abbreviatedName?: string;
-      numberOfDaysForReceivingTheDiscounts?: string;
+      numberOfDaysForReceivingTheDiscounts?: number;
       payrollForDeductionAgreementType?: string;
-      legalPersonIdentification?: string;
-      legalPersonName?: string;
+      payingIdentification?: string;
+      payingEntityName?: string;
       company?: ILegalPerson;
       regularPaymentCycles?: IOrdinaryCyclesEntry[];
       payrollSpecialBenefitPaymentCycles?: IPayrollSpecialBenefit[];
       severancePaymentCycles?: ISeverancePaymentCycles[];
+      incomeTypes?: IIncomeTypes[];
     } = {
       abbreviatedName: formValues.generalInformation.values.abbreviatedName,
-      numberOfDaysForReceivingTheDiscounts: String(
+      numberOfDaysForReceivingTheDiscounts: Number(
         formValues.generalInformation.values.applicationDaysPayroll,
       ),
       payrollForDeductionAgreementType:
         formValues.generalInformation.values.typePayroll,
+      incomeTypes: getIncomeTypesData(
+        formValues.generalInformation.values.sourcesOfIncome,
+      ),
     };
 
     if (formValues.company.values.companySelected !== "addCompany") {
-      configurationRequestData.legalPersonName =
+      configurationRequestData.payingEntityName =
         formValues.company.values.companySelected;
       if (legalPersonIdent) {
-        configurationRequestData.legalPersonIdentification =
+        configurationRequestData.payingIdentification =
           legalPersonIdent.identificationDocumentNumber;
       }
     }
 
     if (
       formValues.company.values.companySelected === "addCompany" &&
-      company.legalPersonId
+      company.identificationDocumentNumber
     ) {
       configurationRequestData.company = company as ILegalPerson;
     }
@@ -387,10 +467,14 @@ const useAddPayrollAgreement = (appData: IAppData) => {
     showModal,
     showRequestProcessModal,
     saveData,
+    includeExtraPayDay,
+    regularDeleted,
+    setIncludeExtraPayDay,
     handleToggleModal,
     setExtraordinaryPayment,
     setSourcesOfIncomeValues,
     setRegularPaymentCycles,
+    setRegularDeleted,
     handleNextStep,
     handlePreviousStep,
     setCurrentStep,

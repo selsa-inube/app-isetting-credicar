@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 
 import { ILegalPerson } from "@ptypes/payrollAgreement/payrollAgreementTab/ILegalPerson";
 import { getLegalPersonsData } from "@services/payrollAgreement/getLegalPersons";
+import { IUseLegalPerson } from "@ptypes/hooks/IUseLegalPerson";
 
-const useLegalPerson = (bussinesUnits: string) => {
+const useLegalPerson = (props: IUseLegalPerson) => {
+  const { bussinesUnits } = props;
   const [legalPersonData, setLegalPersonData] = useState<ILegalPerson[]>(
     [] as ILegalPerson[],
   );
@@ -25,9 +27,9 @@ const useLegalPerson = (bussinesUnits: string) => {
   }, []);
 
   const legalPersonOptions = legalPersonData.map((item) => ({
-    id: item.legalPersonName,
-    label: item.legalPersonName,
-    value: item.legalPersonName,
+    id: item.payingEntityName,
+    label: item.payingEntityName,
+    value: item.payingEntityName,
   }));
 
   legalPersonOptions.push({

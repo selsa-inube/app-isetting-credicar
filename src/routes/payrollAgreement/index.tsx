@@ -3,7 +3,7 @@ import { PayrollAgreement } from "@pages/payrollAgreement";
 import { AddPayrollAgreement } from "@pages/payrollAgreement/tabs/payrollAgreementTab/addPayrollAgreement";
 import { EditPayrollAgreement } from "@pages/payrollAgreement/tabs/payrollAgreementTab/editPayrollAgreement";
 
-function PayrollAgreementRoutes() {
+const PayrollAgreementRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<PayrollAgreement />} />
@@ -11,6 +11,6 @@ function PayrollAgreementRoutes() {
       <Route path="edit-payroll" element={<EditPayrollAgreement />} />
     </Routes>
   );
-}
+};
 
 export { PayrollAgreementRoutes };

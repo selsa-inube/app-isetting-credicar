@@ -1,10 +1,6 @@
-import { IEntry } from "@design/data/table/types";
 import { EditRecord } from "@design/feedback/editRecord";
 import { useEditDestinationConsultation } from "@hooks/moneyDestination/useEditDestinationConsultation";
-
-interface IEdit {
-  data: IEntry;
-}
+import { IEdit } from "@ptypes/moneyDestination/tabs/IEdit";
 
 const Edit = (props: IEdit) => {
   const { data } = props;

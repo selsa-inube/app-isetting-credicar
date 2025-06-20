@@ -1,36 +1,29 @@
-import {
-  useContext,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
-import { FormikProps, useFormik } from "formik";
+import { useContext, useEffect, useImperativeHandle, useState } from "react";
+import { useFormik } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
-import { getDomainById } from "@mocks/domains/domainService.mocks";
-import { IServerDomain } from "@ptypes/IServerDomain";
 import { useEnumerators } from "@hooks/useEnumerators";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
+import { getDomainById } from "@mocks/domains/domainService.mocks";
+import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
+import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
-const useGeneralInformationForm = (
-  initialValues: IGeneralInformationEntry,
-  ref: React.ForwardedRef<FormikProps<IGeneralInformationEntry>>,
-  editDataOption: boolean,
-  loading: boolean | undefined,
-  sourcesOfIncomeValues: IServerDomain[],
-  onSubmit: ((values: IGeneralInformationEntry) => void) | undefined,
-  onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined,
-  setSourcesOfIncomeValues: React.Dispatch<
-    React.SetStateAction<IServerDomain[]>
-  >,
-  initialGeneralInfData?: IGeneralInformationEntry,
-) => {
+const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
+  const {
+    ref,
+    editDataOption,
+    loading,
+    onSubmit,
+    onFormValid,
+    initialValues,
+    setSourcesOfIncomeValues,
+    sourcesOfIncomeValues,
+    initialGeneralInfData,
+  } = props;
   const createValidationSchema = () =>
     object().shape({
       abbreviatedName: validationRules.string.required(
@@ -40,7 +33,7 @@ const useGeneralInformationForm = (
       sourcesOfIncome: validationRules.string.required(
         validationMessages.required,
       ),
-      applicationDaysPayroll: validationRules.string.required(
+      applicationDaysPayroll: validationRules.number.required(
         validationMessages.required,
       ),
     });
@@ -50,7 +43,7 @@ const useGeneralInformationForm = (
   const formik = useFormik({
     initialValues,
     validationSchema,
-    validateOnBlur: false,
+    validateOnBlur: true,
     onSubmit: onSubmit ?? (() => true),
   });
 
@@ -59,15 +52,11 @@ const useGeneralInformationForm = (
   );
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [displayList, setDisplayList] = useState(false);
-  const selectRef = useRef<HTMLDivElement>(null);
-
   const { appData } = useContext(AuthAndPortalData);
-  const { enumData: typePayroll } = useEnumerators(
-    "deductionagreementtype",
-    appData.businessUnit.publicCode,
-  );
+  const { enumData: typePayroll } = useEnumerators({
+    enumDestination: "deductionagreementtype",
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   const typePayrollOptions = optionsFromEnumerators(typePayroll);
 
@@ -89,26 +78,22 @@ const useGeneralInformationForm = (
   }, [formik.values.applicationDaysPayroll]);
 
   const handleChangeAutosuggest = (name: string, value: string) => {
-    setAutosuggestValue(value);
-    formik.setFieldValue(name, value);
+    const isNumeric = /^[0-9]*$/.test(value);
+    if (isNumeric) {
+      setAutosuggestValue(value);
+      formik.setFieldValue(name, value);
+    }
   };
 
   const handleChangeSelect = (name: string, value: string) => {
     formik.setFieldValue(name, value);
   };
 
-  const handleChangeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
+  const handleChangeCheck = (name: string, values: string) => {
     const updatedData = sourcesOfIncomeValues.map((entry) =>
-      entry.id === name ? { ...entry, checked } : entry,
+      entry.id === name ? { ...entry, values } : entry,
     );
-
-    const newValues = updatedData
-      ?.filter((item) => item.checked)
-      .map((option) => option.label)
-      .join(",");
-
-    formik.setFieldValue("sourcesOfIncome", newValues);
+    formik.setFieldValue("sourcesOfIncome", values.trim());
     setSourcesOfIncomeValues(updatedData);
   };
 
@@ -142,6 +127,22 @@ const useGeneralInformationForm = (
     setSourcesOfIncomeValues(getDomainById("sourcesOfIncome"));
   };
 
+  const gridTemplateRows = editDataOption
+    ? isMobile
+      ? "repeat(5, auto)"
+      : "repeat(3, auto)"
+    : isMobile
+      ? "repeat(4, auto)"
+      : "repeat(2, 1fr)";
+
+  const labelButtonPrevious = editDataOption
+    ? generalInfLabels.cancel
+    : generalInfLabels.previous;
+
+  const labelButtonNext = editDataOption
+    ? generalInfLabels.send
+    : generalInfLabels.next;
+
   return {
     autosuggestValue,
     formik,
@@ -150,12 +151,11 @@ const useGeneralInformationForm = (
     sourcesOfIncomeValues,
     valuesEqual,
     isMobile,
-    focused,
-    displayList,
-    selectRef,
     typePayrollOptions,
-    setFocused,
-    setDisplayList,
+    gridTemplateRows,
+    labelButtonPrevious,
+    labelButtonNext,
+
     handleChangeSelect,
     handleChangeAutosuggest,
     handleChangeCheck,

@@ -1,32 +1,50 @@
 import { useContext } from "react";
 
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ICardData } from "@ptypes/home/ICardData";
 import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
 import { usePayrollAgreementPage } from "@hooks/payrollAgreement/usePayrollAgreementPage";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { menuOptionsPayroll } from "@config/payrollAgreement/payrollAgreementTab/menuOptions";
 import { PayrollAgreementUI } from "./interface";
 
 const PayrollAgreement = () => {
-  const { businessUnitSigla } = useContext(AuthAndPortalData);
+  const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
   const {
     isSelected,
     descriptionOptions,
     showPayrollAgreementTab,
     showRequestsInProgressTab,
     smallScreen,
-    smallScreenTab,
+    payrollAgreementTabs,
+    showModal,
+    showInfoModal,
+    onToggleInfoModal,
+    onCloseMenu,
+    onToggleModal,
     handleTabChange,
-  } = usePayrollAgreementPage({ businessUnitSigla });
+  } = usePayrollAgreementPage({
+    businessUnitSigla,
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   return (
     <PayrollAgreementUI
-      isSelected={isSelected ?? payrollAgreementTabsConfig.payrollAgreement.id}
+      isSelected={
+        isSelected ??
+        payrollAgreementTabsConfig(smallScreen).payrollAgreement.id
+      }
       handleTabChange={handleTabChange}
       descriptionOptions={descriptionOptions as ICardData}
       showPayrollAgreementTab={showPayrollAgreementTab}
       showRequestsInProgressTab={showRequestsInProgressTab}
       smallScreen={smallScreen}
-      smallScreenTab={smallScreenTab}
+      payrollAgreementTabs={payrollAgreementTabs}
+      showModal={showModal}
+      showInfoModal={showInfoModal}
+      options={menuOptionsPayroll}
+      onToggleInfoModal={onToggleInfoModal}
+      onCloseMenu={onCloseMenu}
+      onToggleModal={onToggleModal}
     />
   );
 };

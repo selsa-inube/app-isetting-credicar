@@ -2,15 +2,14 @@ import { ComponentAppearance } from "@enum/appearances";
 
 const deletedCycleMessage = {
   success: {
-    title: "Ciclo de pago eliminado.",
-    description: "El ciclo de pago se eliminó correctamente.",
+    title: "Se quito el ciclo de pago.",
+    description: "El ciclo de pago se retiro correctamente.",
     appearance: ComponentAppearance.SUCCESS,
     duration: 5000,
   },
   error: {
-    title: "Error al eliminar ciclo de pago.",
-    description:
-      "No fue posible cancelar la solicitud por favor intenta más tarde",
+    title: "Error al quitar ciclo de pago.",
+    description: "No fue posible quitar el ciclo, por favor intenta más tarde",
     appearance: ComponentAppearance.DANGER,
     duration: 5000,
   },

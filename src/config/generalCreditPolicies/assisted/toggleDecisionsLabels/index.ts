@@ -1,6 +1,6 @@
 const toggleDecisionsLabels = {
-  yes: "SI",
-  no: "NO",
+  yes: "Sí, se define por línea",
+  no: "No",
 };
 
 export { toggleDecisionsLabels };

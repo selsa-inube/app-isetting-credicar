@@ -4,6 +4,11 @@ const referenceDecisionData = [
     label: "Monto",
     value: "amount",
   },
+  {
+    id: "02",
+    label: "Neto",
+    value: "net",
+  },
 ];
 
 export { referenceDecisionData };

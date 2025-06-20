@@ -1,27 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { ICondition, IRuleDecision } from "@isettingkit/input";
+import { useMediaQuery } from "@inubekit/inubekit";
 
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { arraysEqual } from "@utils/destination/arraysEqual";
 import { findDecision } from "@utils/destination/findDecision";
 import { TransactionOperation } from "@enum/transactionOperation";
+import { IUseEditDestination } from "@ptypes/hooks/moneyDestination/IUseEditDestination";
 
-const useEditDestination = (
-  data: {
-    nameDestination: string;
-    description: string;
-    icon: string;
-    id: string;
-  },
-  appData: IAppData,
-) => {
+const useEditDestination = (props: IUseEditDestination) => {
+  const { data, appData } = props;
   const initialGeneralInfData = {
     nameDestination: data.nameDestination ?? "",
     description: data.description ?? "",
@@ -76,8 +70,8 @@ const useEditDestination = (
     evaluateRuleData?.map((item) => {
       return {
         ...item,
-        conditionThatEstablishesTheDecision:
-          item.conditionThatEstablishesTheDecision?.map((condition) => {
+        conditionsThatEstablishesTheDecision:
+          item.conditionsThatEstablishesTheDecision?.map((condition) => {
             return {
               ...condition,
               hidden: condition.conditionName === conditionRule,
@@ -103,29 +97,32 @@ const useEditDestination = (
             !findDecision(prevCreditLineDecisionsRef.current, decision),
         )
         .map((decision) => {
-          const decisionByRule: IRuleDecision = {
-            conditionThatEstablishesTheDecision:
-              decision.conditionThatEstablishesTheDecision?.map((condition) => {
-                return {
-                  conditionName: condition.conditionName,
-                  labelName: condition.labelName,
-                  value: condition.value,
-                };
-              }) as ICondition[],
+          const decisionsByRule: IRuleDecision = {
+            conditionsThatEstablishesTheDecision:
+              decision.conditionsThatEstablishesTheDecision?.map(
+                (condition) => {
+                  return {
+                    conditionName: condition.conditionName,
+                    labelName: condition.labelName,
+                    value: condition.value,
+                  };
+                },
+              ) as ICondition[],
             effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             value: decision.value,
             transactionOperation: TransactionOperation.INSERT,
           };
 
           if (decision.validUntil) {
-            decisionByRule.validUntil = formatDateDecision(
+            decisionsByRule.validUntil = formatDateDecision(
               decision.validUntil as string,
             );
           }
 
           return {
+            modifyJustification: `La modificación de la decisión es solicitada por ${appData.user.userAccount}`,
             ruleName: decision.ruleName,
-            decisionByRule: [decisionByRule],
+            decisionsByRule: [decisionsByRule],
           };
         });
     }
@@ -136,29 +133,32 @@ const useEditDestination = (
       return prevCreditLineDecisionsRef.current
         .filter((decision) => !findDecision(creditLineDecisions, decision))
         .map((decision: IRuleDecision) => {
-          const decisionByRule: IRuleDecision = {
-            conditionThatEstablishesTheDecision:
-              decision.conditionThatEstablishesTheDecision?.map((condition) => {
-                return {
-                  conditionName: condition.conditionName,
-                  labelName: condition.labelName,
-                  value: condition.value,
-                };
-              }) as ICondition[],
+          const decisionsByRule: IRuleDecision = {
+            conditionsThatEstablishesTheDecision:
+              decision.conditionsThatEstablishesTheDecision?.map(
+                (condition) => {
+                  return {
+                    conditionName: condition.conditionName,
+                    labelName: condition.labelName,
+                    value: condition.value,
+                  };
+                },
+              ) as ICondition[],
             effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             value: decision.value,
             transactionOperation: TransactionOperation.DELETE,
           };
 
           if (decision.validUntil) {
-            decisionByRule.validUntil = formatDateDecision(
+            decisionsByRule.validUntil = formatDateDecision(
               decision.validUntil as string,
             );
           }
 
           return {
+            modifyJustification: `La modificación de la decisión es solicitada por ${appData.user.userAccount}`,
             ruleName: decision.ruleName,
-            decisionByRule: [decisionByRule],
+            decisionsByRule: [decisionsByRule],
           };
         });
     }
@@ -183,12 +183,14 @@ const useEditDestination = (
 
     const configurationRequestData: {
       moneyDestinationId: string;
+      modifyJustification: string;
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
       rules?: IRuleDecision[];
     } = {
       moneyDestinationId: data.id,
+      modifyJustification: `La modificación del destino de dinero es solicitada por ${appData.user.userAccount}`,
     };
 
     if (currentValues?.nameDestination !== undefined && valuesUpdatedName) {
@@ -251,6 +253,14 @@ const useEditDestination = (
     setCreditLineDecisions(normalizeEvaluateRuleData ?? []);
   };
 
+  const smallScreen = useMediaQuery("(max-width: 990px)");
+
+  const showGeneralInformation =
+    isSelected === editDestinationTabsConfig.generalInformation.id;
+
+  const showDecisionsForm =
+    isSelected === editDestinationTabsConfig.creditLine.id;
+
   return {
     creditLineDecisions,
     normalizeEvaluateRuleData,
@@ -263,6 +273,9 @@ const useEditDestination = (
     saveData,
     showRequestProcessModal,
     showModal,
+    smallScreen,
+    showGeneralInformation,
+    showDecisionsForm,
     handleReset,
     onSubmit,
     setCreditLineDecisions,

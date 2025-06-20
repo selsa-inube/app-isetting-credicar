@@ -3,12 +3,10 @@ import { useState, useEffect } from "react";
 import { getOptionsByBusinessUnit } from "@services/staffPortal/getOptionsByBusinessUnits";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
 import { normalizeOptionsByPublicCode } from "@utils/optionByBusinessunit";
+import { IUseOptionsByBusinessUnit } from "@ptypes/staffPortal/IUseOptionsByBusinessUnit";
 
-const useOptionsByBusinessUnit = (
-  businessUnit: string,
-  staffPortalId: string,
-  optionName?: string,
-) => {
+const useOptionsByBusinessUnit = (props: IUseOptionsByBusinessUnit) => {
+  const { businessUnit, staffPortalId, optionName } = props;
   const [optionsBusinessUnit, setOptionsBusinessUnit] = useState<
     IOptionsByBusinessUnits[]
   >([]);
@@ -19,7 +17,7 @@ const useOptionsByBusinessUnit = (
     const fetchOptionBusinessUnitData = async () => {
       setLoading(true);
       try {
-        const businessUnitSigla = JSON.parse(businessUnit || "{}");
+        const businessUnitSigla = JSON.parse(businessUnit ?? "{}");
 
         const data = await getOptionsByBusinessUnit(
           businessUnitSigla.publicCode,

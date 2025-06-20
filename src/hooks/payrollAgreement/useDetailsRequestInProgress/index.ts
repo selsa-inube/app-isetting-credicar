@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { IEntry } from "@design/data/table/types";
 import { eventBus } from "@events/eventBus";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { mediaQueryMobile } from "@config/environment";
 import { TransactionOperation } from "@enum/transactionOperation";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
 import { IUseDetailsRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseDetailsRequestInProgress";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const { data } = props;
@@ -22,12 +22,14 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     id: data.id,
     request: data.useCaseName,
     responsable: "",
+    dateExecution: data.requestDate,
     payrollForDeductionAgreementType: normalizeEnumName(
       data.configurationRequestData.payrollForDeductionAgreementType,
     ),
     numberOfDaysForReceivingTheDiscounts:
-      data.configurationRequestData.numberOfDaysForReceivingTheDiscounts,
-    legalPersonName: data.configurationRequestData.legalPersonName,
+      data.configurationRequestData.numberOfDaysForReceivingTheDiscounts ??
+      data.configurationRequestData.applicationDaysPayroll,
+    payingEntityName: data.configurationRequestData.payingEntityName,
     status: data.requestStatus,
     traceability: data.configurationRequestsTraceability.map(
       (traceability: IEntry) => ({
@@ -37,6 +39,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         description: traceability.description,
       }),
     ),
+    sourcesOfIncome: data.configurationRequestData.sourcesOfIncome,
+    regularPaymentCycles: [],
+    payrollSpecialBenefitPaymentCycles: [],
+    severancePaymentCycles: [],
     regularCyclesEliminated: [],
     regularCyclesIncluded: [],
     payrollSpecialBenCyclesIncluded: [],
@@ -45,7 +51,18 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     severanceCyclesEliminated: [],
   };
 
-  if (data.configurationRequestData.regularPaymentCycles) {
+  if (
+    data.useCaseName === "AddPayrollAgreement" &&
+    data.configurationRequestData.regularPaymentCycles
+  ) {
+    normalizeData.regularPaymentCycles =
+      data.configurationRequestData.regularPaymentCycles;
+  }
+
+  if (
+    data.useCaseName !== "AddPayrollAgreement" &&
+    data.configurationRequestData.regularPaymentCycles
+  ) {
     normalizeData.regularCyclesIncluded =
       data.configurationRequestData.regularPaymentCycles.filter(
         (item: IEntry) =>
@@ -56,6 +73,13 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         (item: IEntry) =>
           item.transactionOperation === TransactionOperation.DELETE,
       );
+  }
+  if (
+    data.useCaseName === "AddPayrollAgreement" &&
+    data.configurationRequestData.payrollSpecialBenefitPaymentCycles
+  ) {
+    normalizeData.payrollSpecialBenefitPaymentCycles =
+      data.configurationRequestData.payrollSpecialBenefitPaymentCycles;
   }
 
   if (data.configurationRequestData.payrollSpecialBenefitPaymentCycles) {
@@ -69,6 +93,14 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         (item: IEntry) =>
           item.transactionOperation === TransactionOperation.DELETE,
       );
+  }
+
+  if (
+    data.useCaseName === "AddPayrollAgreement" &&
+    data.configurationRequestData.severancePaymentCycles
+  ) {
+    normalizeData.severancePaymentCycles =
+      data.configurationRequestData.severancePaymentCycles;
   }
 
   if (data.configurationRequestData.severancePaymentCycles) {

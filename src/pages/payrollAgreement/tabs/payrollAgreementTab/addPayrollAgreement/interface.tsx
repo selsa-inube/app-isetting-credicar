@@ -1,67 +1,18 @@
-import {
-  Assisted,
-  Breadcrumbs,
-  IAssistedStep,
-  Stack,
-} from "@inubekit/inubekit";
+import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-import { IAddPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IAddPayrollAgreementForms";
-import { IAddPayrollAgreementRef } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IAddPayrollAgreementRef";
 import { crumbsAddPayrollAgreement } from "@config/payrollAgreement/payrollAgreementTab/navigation";
-import { CompanyForm } from "@design/forms/companyPayrollAgreement";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { goBackModal } from "@config/payrollAgreement/payrollAgreementTab/forms/goBackModal";
-import { IServerDomain } from "@ptypes/IServerDomain";
-import { GeneralInformationPayrollForm } from "@design/forms/generalInfoPayrollAgreement";
-import { RegularPaymentCyclesForm } from "@design/forms/regularPaymentCycles";
-import { ExtraordinaryPaymentCyclesForm } from "@design/forms/extraordinaryPaymentCycles";
-import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
-import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
-import { VerificationForm } from "@design/forms/verificationPayrollAgreement";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
-interface IAddPayrollAgreementUI {
-  currentStep: number;
-  extraordinaryPayment: IExtraordinaryCyclesEntry[];
-  formReferences: IAddPayrollAgreementRef;
-  formValid: boolean;
-  initialGeneralInformationValues: IAddPayrollAgreementForms;
-  isCurrentFormValid: boolean;
-  loading: boolean;
-  regularPaymentCycles: IOrdinaryCyclesEntry[];
-  requestSteps: IRequestSteps[];
-  savePayrollAgreement: ISaveDataResponse;
-  showGoBackModal: boolean;
-  showModal: boolean;
-  showPendingReqModal: boolean;
-  showRequestProcessModal: boolean;
-  smallScreen: boolean;
-  sourcesOfIncomeValues: IServerDomain[];
-  steps: IAssistedStep[];
-  typeRegularPayroll: boolean;
-  onToggleModal: () => void;
-  setSourcesOfIncomeValues: React.Dispatch<
-    React.SetStateAction<IServerDomain[]>
-  >;
-  onOpenModal: () => void;
-  onCloseModal: () => void;
-  onGoBack: () => void;
-  onNextStep: () => void;
-  onPreviousStep: () => void;
-  setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
-  setExtraordinaryPayment: React.Dispatch<
-    React.SetStateAction<IExtraordinaryCyclesEntry[]>
-  >;
-  setRegularPaymentCycles: React.Dispatch<
-    React.SetStateAction<IOrdinaryCyclesEntry[]>
-  >;
-  onCloseRequestStatus: () => void;
-  onClosePendingReqModal: () => void;
-  onFinishForm: () => void;
-  setCurrentStep: (step: number) => void;
-}
+import { goBackModal } from "@config/goBackModal";
+import { IAddPayrollAgreementUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IAddPayrollAgreementUI";
+import { CompanyForm } from "@pages/payrollAgreement/tabs/forms/companyPayrollAgreement";
+import { RegularPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/regularPaymentCycles";
+import { ExtraordinaryPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/extraordinaryPaymentCycles";
+import { VerificationForm } from "@pages/payrollAgreement/tabs/forms/verificationPayrollAgreement";
+import { GeneralInformationPayrollForm } from "@pages/payrollAgreement/tabs/forms/generalInfoPayrollAgreement";
+import { addPayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/addPayrollLabels";
+import { controlsAssisted } from "@config/controlsAssisted";
 
 const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
   const {
@@ -83,6 +34,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
     sourcesOfIncomeValues,
     steps,
     typeRegularPayroll,
+    includeExtraPayDay,
     onCloseModal,
     onClosePendingReqModal,
     onCloseRequestStatus,
@@ -96,7 +48,10 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
     setExtraordinaryPayment,
     setIsCurrentFormValid,
     setRegularPaymentCycles,
+    setRegularDeleted,
+    setIncludeExtraPayDay,
     setSourcesOfIncomeValues,
+    onCloseProcess,
   } = props;
 
   return (
@@ -113,8 +68,8 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsAddPayrollAgreement} />
           <Title
-            title="Agregar nómina de convenio"
-            description=" agrega nómina de convenio."
+            title={addPayrollLabels.title}
+            description={addPayrollLabels.description}
             sizeTitle="large"
             onClick={onOpenModal}
           />
@@ -127,12 +82,9 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
             onNextClick={onNextStep}
             onSubmitClick={onToggleModal}
             disableNext={formValid}
-            controls={{
-              goBackText: "Anterior",
-              goNextText: "Siguiente",
-              submitText: "Finalizar",
-            }}
+            controls={controlsAssisted}
             size={smallScreen ? "small" : "large"}
+            showCurrentStepNumber={false}
           />
           <Stack direction="column">
             {currentStep === 1 && (
@@ -163,6 +115,8 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 onButtonClick={onNextStep}
                 onPreviousStep={onPreviousStep}
                 setRegularPaymentCycles={setRegularPaymentCycles}
+                setIncludeExtraPayDay={setIncludeExtraPayDay}
+                setRegularDeleted={setRegularDeleted}
               />
             )}
             {currentStep === 4 && (
@@ -173,7 +127,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 onButtonClick={onNextStep}
                 onPreviousStep={onPreviousStep}
                 typeRegularPayroll={typeRegularPayroll}
-                regularPaymentCycles={regularPaymentCycles}
+                regularPaymentCycles={includeExtraPayDay}
               />
             )}
             {currentStep === 5 && (
@@ -210,6 +164,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 showPendingReqModal={showPendingReqModal}
                 onClosePendingReqModal={onClosePendingReqModal}
                 typeRegularPayroll={typeRegularPayroll}
+                onCloseProcess={onCloseProcess}
               />
             )}
           </Stack>

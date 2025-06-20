@@ -2,9 +2,9 @@ import { useDetailsRequestInProgress } from "@hooks/payrollAgreement/useDetailsR
 import { labelsDetails } from "@config/payrollAgreement/payrollAgreementTab/details/labels";
 import { labelsPaymentCard } from "@config/payrollAgreement/payrollAgreementTab/details/labelsPaymentCard";
 import { useDetailsPayrollAgreement } from "@hooks/payrollAgreement/useDetailsPayrollAgreement";
-import { IEntry } from "@design/data/table/types";
 import { detailsRequestPayrollTabsConfig } from "@config/payrollAgreement/requestsInProgressTab/tabs";
 import { IDetails } from "@ptypes/payrollAgreement/requestInProgTab/IDetails";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { DetailsUI } from "./interface";
 
 const Details = (props: IDetails) => {
@@ -22,6 +22,8 @@ const Details = (props: IDetails) => {
     defaultSelectedTab,
     labelsOfRequestDetails,
     title,
+    ordinaryPaymentData,
+    extraordinaryPaymentData,
     ordinaryIncludedData,
     ordinaryEliminatedData,
     extraordinaryIncludedData,
@@ -31,6 +33,7 @@ const Details = (props: IDetails) => {
   } = useDetailsPayrollAgreement({
     data: normalizeData,
     detailsTabsConfig: detailsRequestPayrollTabsConfig,
+    showModalReq: showModal,
   });
 
   return (
@@ -49,6 +52,8 @@ const Details = (props: IDetails) => {
       detailsTabsConfig={detailsRequestPayrollTabsConfig}
       labelsDetails={labelsDetails}
       labelsPaymentCard={labelsPaymentCard}
+      ordinaryPaymentData={ordinaryPaymentData() as IEntry[]}
+      extraordinaryPaymentData={extraordinaryPaymentData() as IEntry[]}
       ordinaryIncludedData={ordinaryIncludedData() as IEntry[]}
       ordinaryEliminatedData={ordinaryEliminatedData() as IEntry[]}
       extraordinaryIncludedData={extraordinaryIncludedData() as IEntry[]}

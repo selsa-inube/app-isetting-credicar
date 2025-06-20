@@ -1,10 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { IEntry } from "@design/data/table/types";
+import { IUseEditPayrollConsultation } from "@ptypes/hooks/IUseEditPayrollConsultation";
 
-const useEditPayrollConsultation = (payrollAgreementData: IEntry) => {
+const useEditPayrollConsultation = (props: IUseEditPayrollConsultation) => {
+  const { payrollAgreementData } = props;
   const navigate = useNavigate();
 
   const handleEdit = () => {
+    if (!payrollAgreementData) {
+      console.error("payrollAgreementData is undefined or null");
+      return;
+    }
+
     navigate(`/payroll-agreement/edit-payroll`, {
       state: { data: payrollAgreementData },
     });

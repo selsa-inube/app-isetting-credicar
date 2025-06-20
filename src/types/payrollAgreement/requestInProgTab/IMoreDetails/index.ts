@@ -1,5 +1,5 @@
-import { IEntry } from "@design/data/table/types";
 import { ILabel } from "@ptypes/ILabel";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "../IDetailsTabsConfig";
 
 interface IMoreDetails {
@@ -13,8 +13,10 @@ interface IMoreDetails {
   smallScreenTab: boolean;
   labelsDetails: ILabel[];
   labelsPaymentCard: ILabel[];
+  title: string;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
+  moreDetails?: boolean;
   ordinaryPaymentData?: IEntry[];
   extraordinaryPaymentData?: IEntry[];
   ordinaryIncludedData?: IEntry[];

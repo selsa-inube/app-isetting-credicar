@@ -1,11 +1,10 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useImperativeHandle, useState } from "react";
-import { FormikProps, useFormik } from "formik";
+import { useFormik } from "formik";
 import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IEntry } from "@design/data/table/types";
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { addLeadingZero } from "@utils/addLeadingZero";
 import { IServerDomain } from "@ptypes/IServerDomain";
@@ -14,28 +13,31 @@ import { monthExtraordinaryOptions } from "@config/payrollAgreement/payrollAgree
 import { daysOfMonth } from "@utils/daysOfMonth";
 import { convertToOptions } from "@utils/convertToOptions";
 import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
-import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumerators } from "@hooks/useEnumerators";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
+import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
+import { eventBus } from "@events/eventBus";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
-const useExtraordinaryCyclesForm = (
-  ref: React.ForwardedRef<FormikProps<IExtraordinaryCyclesEntry>>,
-  editDataOption: boolean,
-  typeRegularPayroll: boolean,
-  loading: boolean | undefined,
-  onSubmit: ((values: IExtraordinaryCyclesEntry) => void) | undefined,
-  onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined,
-  extraordinaryPayment: IExtraordinaryCyclesEntry[],
-  setExtraordinaryPayment: React.Dispatch<
-    React.SetStateAction<IExtraordinaryCyclesEntry[]>
-  >,
-  regularPaymentCycles?: IOrdinaryCyclesEntry[],
-  initialData?: IExtraordinaryCyclesEntry[],
-) => {
+const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
+  const {
+    ref,
+    editDataOption,
+    typeRegularPayroll,
+    loading,
+    onSubmit,
+    onFormValid,
+    extraordinaryPayment,
+    setExtraordinaryPayment,
+    regularPaymentCycles,
+    initialData,
+  } = props;
+
   const createValidationSchema = () =>
     object().shape({
       nameCycle: validationRules.string.required(validationMessages.required),
@@ -77,10 +79,10 @@ const useExtraordinaryCyclesForm = (
   const isMobile = useMediaQuery("(max-width: 990px)");
 
   const { appData } = useContext(AuthAndPortalData);
-  const { enumData } = useEnumerators(
-    "extraordinarypaymenttype",
-    appData.businessUnit.publicCode,
-  );
+  const { enumData } = useEnumerators({
+    enumDestination: "extraordinarypaymenttype",
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   const typePaymentOptions = optionsFromEnumerators(enumData);
 
@@ -130,7 +132,7 @@ const useExtraordinaryCyclesForm = (
       );
       setDayOptions(options);
     }
-  }, [formik.values.month]);
+  }, [formik.values.month, regularPaymentCycles]);
 
   useEffect(() => {
     const updateButton = () => {
@@ -149,7 +151,7 @@ const useExtraordinaryCyclesForm = (
   };
 
   const createNewCycle = (id: number) => ({
-    id: `cycle-${addLeadingZero(id).toString()}`,
+    id: `cycle-${addLeadingZero(id).toString()}-${formik.values.nameCycle}-${formik.values.month}-${formik.values.day}`,
     nameCycle: formik.values.nameCycle,
     typePayment:
       normalizeEnumTranslation(formik.values.typePayment)?.name ??
@@ -183,6 +185,20 @@ const useExtraordinaryCyclesForm = (
     }
   }, [entryDeleted]);
 
+  const labelButtonPrevious = editDataOption
+    ? cyclespaymentLabels.cancelButton
+    : cyclespaymentLabels.previousButton;
+
+  const labelButtonNext = editDataOption
+    ? cyclespaymentLabels.sendButton
+    : cyclespaymentLabels.nextButton;
+
+  const columnWidths = isMobile ? [70, 12, 10, 14] : [40, 15, 15, 14];
+
+  useEffect(() => {
+    eventBus.emit("secondModalState", showModal);
+  }, [showModal]);
+
   return {
     formik,
     isDisabledButton,
@@ -194,6 +210,9 @@ const useExtraordinaryCyclesForm = (
     numberDaysUntilCutOptions,
     monthOptions,
     dayOptions,
+    labelButtonPrevious,
+    labelButtonNext,
+    columnWidths,
     handleChange,
     handleAddCycle,
     handleToggleModal,

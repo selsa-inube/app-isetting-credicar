@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { IEntry } from "@design/data/table/types";
 import { usePayrollAgreementTab } from "@hooks/payrollAgreement/usePayrollAgreementTab";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { usePageLength } from "@hooks/usePageLength";
 import { PayrollAgreementTabUI } from "./interface";
 
 const PayrollAgreementTab = () => {
@@ -12,9 +13,15 @@ const PayrollAgreementTab = () => {
     searchPayrollAgreement,
     loading,
     smallScreen,
+    columnWidths,
+    emptyDataMessage,
     setEntryDeleted,
     handleSearchPayrollAgreement,
-  } = usePayrollAgreementTab(appData.businessUnit.publicCode);
+  } = usePayrollAgreementTab({
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
+
+  const pageLength = usePageLength();
 
   return (
     <PayrollAgreementTabUI
@@ -24,6 +31,9 @@ const PayrollAgreementTab = () => {
       entries={payrollAgreement as IEntry[]}
       setEntryDeleted={setEntryDeleted}
       smallScreen={smallScreen}
+      columnWidths={columnWidths}
+      pageLength={pageLength}
+      emptyDataMessage={emptyDataMessage}
     />
   );
 };

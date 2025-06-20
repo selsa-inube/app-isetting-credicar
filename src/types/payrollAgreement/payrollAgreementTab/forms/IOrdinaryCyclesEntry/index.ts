@@ -1,10 +1,14 @@
 interface IOrdinaryCyclesEntry {
-  cycleId: string;
-  nameCycle: string;
-  periodicity: string;
-  payday: string;
-  numberDaysUntilCut: string | number;
-  id?: string;
+  cycleId?: string;
+  nameCycle?: string;
+  payday?: string;
+  regularPaymentCycleName?: string;
+  id?: string | number;
+  periodicity?: string;
+  schedule?: string;
+  paymentDay?: string;
+  numberDaysUntilCut?: string | number;
+  numberOfDaysBeforePaymentToBill?: string | number;
 }
 
 export type { IOrdinaryCyclesEntry };

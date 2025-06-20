@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { IRuleDecision } from "@isettingkit/input";
 import { useLocation } from "react-router-dom";
 import { useEditDestination } from "@hooks/moneyDestination/useEditDestination";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
@@ -6,8 +7,8 @@ import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDes
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { UseCase } from "@enum/useCase";
 import { EditDestinationUI } from "./interface";
-import { IRuleDecision } from "@isettingkit/input";
 
 const EditDestination = () => {
   const location = useLocation();
@@ -23,6 +24,9 @@ const EditDestination = () => {
     isSelected,
     saveData,
     showRequestProcessModal,
+    smallScreen,
+    showGeneralInformation,
+    showDecisionsForm,
     onSubmit,
     handleReset,
     setCreditLineDecisions,
@@ -30,15 +34,7 @@ const EditDestination = () => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowModal,
-  } = useEditDestination(
-    data ?? {
-      id: "",
-      nameDestination: "",
-      description: "",
-      icon: "",
-    },
-    appData,
-  );
+  } = useEditDestination({ data, appData });
 
   const {
     saveMoneyDestination,
@@ -46,15 +42,20 @@ const EditDestination = () => {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
-  } = useSaveMoneyDestination(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
-    setShowModal,
-  );
+  } = useSaveMoneyDestination({
+    useCase: UseCase.EDIT,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
+    setShowModal: setShowModal,
+  });
+
+  const showRequestStatus =
+    showPendingReqModal && saveMoneyDestination?.requestNumber;
 
   return (
     <EditDestinationUI
@@ -71,12 +72,16 @@ const EditDestination = () => {
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}
       requestSteps={requestSteps}
       loading={loadingSendData}
-      showPendingReqModal={showPendingReqModal}
       showRequestProcessModal={showRequestProcessModal}
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
       initialGeneralInfData={initialGeneralInfData}
       normalizeEvaluateRuleData={normalizeEvaluateRuleData as IRuleDecision[]}
+      smallScreen={smallScreen}
+      showGeneralInformation={showGeneralInformation}
+      showDecisionsForm={showDecisionsForm}
+      showRequestStatus={showRequestStatus}
+      onCloseProcess={handleCloseProcess}
     />
   );
 };

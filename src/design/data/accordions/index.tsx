@@ -25,7 +25,7 @@ const Accordion = (props: IAccordion) => {
         <Text
           type="label"
           size={"large"}
-          appearance={ComponentAppearance.GRAY}
+          appearance={ComponentAppearance.DARK}
           weight="bold"
           ellipsis
         >

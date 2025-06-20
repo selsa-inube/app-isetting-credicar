@@ -6,36 +6,41 @@ import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreement
 import { normalizeEnumTranslationCode } from "@utils/normalizeEnumTranslationCode";
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
-import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
-import { getDatesFromDaysWeek } from "@utils/getDatesFromDaysWeek";
-import { getDaysWeekSelected } from "@utils/getDaysWeekSelected";
-import { areObjectsEqual } from "@utils/payrollAgreement/areObjectEqual";
-import { getUniquePaydays } from "@utils/getUniqueDays";
-import { getDaysInNumber } from "@utils/getDaysInNumber";
+import { areObjectsEqual } from "@utils/areObjectEqual";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
+import { IUseManagePayrollCycles } from "@ptypes/hooks/IUseManagePayrollCycles";
+import { getDaysInNumber } from "@utils/getDaysInNumber";
+import { getUniquePaydays } from "@utils/getUniqueDays";
 import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
+import { getIncomeTypesEditData } from "@utils/IncomeTypesEditData";
+import { checkDayWeek } from "@utils/checkDayWeek";
+import { formatPaymentDay } from "@utils/formatPaymentDay";
 
-const useManagePayrollCycles = (
-  initialData: IEditPayrollAgreementForms,
-  regularPaymentCycles: IOrdinaryCyclesEntry[],
-  isSelected: string,
-  extraordinaryPayment: IExtraordinaryCyclesEntry[],
-  setExtraordinaryPayment: React.Dispatch<
-    React.SetStateAction<IExtraordinaryCyclesEntry[]>
-  >,
-) => {
+const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
+  const {
+    initialData,
+    regularPaymentCycles,
+    isSelected,
+    extraordinaryPayment,
+    setExtraordinaryPayment,
+    sourcesOfIncome,
+    initialSourcesOfIncome,
+    payrollId,
+  } = props;
+
   const newObjRegularPayment = (
     newValues: IOrdinaryCyclesEntry[],
     transactionOperation: string,
   ): IRegularPaymentCycles[] =>
     newValues.map((item) => ({
-      payrollForDeductionAgreementId: item.cycleId,
-      regularPaymentCycleNumber: item.cycleId,
-      regularPaymentCycleName: item.nameCycle,
+      payrollForDeductionAgreementId: item.cycleId ?? "",
+      regularPaymentCycleNumber: item.cycleId ?? "",
+      regularPaymentCycleName: item.nameCycle ?? "",
       schedule:
-        normalizeEnumTranslationCode(item.periodicity)?.code ??
-        item.periodicity,
-      paymentDay: item.payday,
+        normalizeEnumTranslationCode(item.periodicity ?? "")?.code ??
+        item.periodicity ??
+        "",
+      paymentDay: checkDayWeek(item.payday ?? ""),
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
       transactionOperation: transactionOperation,
     }));
@@ -47,7 +52,7 @@ const useManagePayrollCycles = (
     newValues.map((item) => ({
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
-      paymentDay: item.payday ?? "",
+      paymentDay: formatPaymentDay(item.payday ?? ""),
       payrollForDeductionAgreementId: item.id ?? "",
       transactionOperation: transactionOperation,
     }));
@@ -65,30 +70,28 @@ const useManagePayrollCycles = (
 
   const filterExtraordinaryPayment = (entries: IOrdinaryCyclesEntry[]) => {
     const days = getUniquePaydays(entries);
-    const daysWeekSelected = getDaysWeekSelected(days);
     const daysInNumber = getDaysInNumber(days);
     const filteredExtraordinary: IExtraordinaryCyclesEntry[] = [];
 
-    let daysMonth: number[] = [];
     let verifyDays: number[] = [];
     let lastDayOfMonth: number[] = [];
 
     extraordinaryPayment.forEach((item) => {
       const month = Number(item.payday?.slice(0, 2));
       const paydayValue = Number(item.payday?.slice(-2));
-      daysMonth = getDatesFromDaysWeek(daysWeekSelected, month - 1);
+
       lastDayOfMonth = getLastDayOfMonth(days, month - 1);
 
-      verifyDays = Array.from(
-        new Set([...daysInNumber, ...daysMonth, ...lastDayOfMonth]),
-      );
+      verifyDays = Array.from(new Set([...daysInNumber, ...lastDayOfMonth]));
 
       const filteredRegularPaymentCycles = regularPaymentCycles.flatMap(
         (item) => {
           const filteredPayday = item.payday
-            .split(",")
+            ?.split(",")
             .map((payday) => Number(payday.trim()));
-          return filteredPayday.filter((payday) => verifyDays.includes(payday));
+          return filteredPayday?.filter((payday) =>
+            verifyDays.includes(payday),
+          );
         },
       );
 
@@ -194,9 +197,46 @@ const useManagePayrollCycles = (
     };
   };
 
+  const newSourcesIncome = () => {
+    const dataIncome = sourcesOfIncome.split(",");
+    const initialIncome = initialSourcesOfIncome.split(",");
+
+    const newValues = dataIncome.filter(
+      (formValue) =>
+        !initialIncome.some(
+          (initialValue) =>
+            JSON.stringify(initialValue) === JSON.stringify(formValue),
+        ),
+    );
+
+    const deleteValues = initialIncome.filter(
+      (formValue) =>
+        !dataIncome.some(
+          (initialValue) =>
+            JSON.stringify(initialValue) === JSON.stringify(formValue),
+        ),
+    );
+
+    return {
+      incomeTypes: [
+        ...getIncomeTypesEditData(
+          newValues,
+          payrollId,
+          TransactionOperation.INSERT,
+        ),
+        ...getIncomeTypesEditData(
+          deleteValues,
+          payrollId,
+          TransactionOperation.DELETE,
+        ),
+      ],
+    };
+  };
+
   return {
     newRegularPayment,
     newExtraordinaryPayment,
+    newSourcesIncome,
   };
 };
 

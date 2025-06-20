@@ -1,16 +1,18 @@
 import { useContext } from "react";
 import { useRequestsInProgress } from "@hooks/moneyDestination/useRequestsInProgress";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { IEntry } from "@design/data/table/types";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { RequestsInProgressTabUI } from "./interface";
 
-function RequestsInProgressTab() {
+const RequestsInProgressTab = () => {
   const { appData } = useContext(AuthAndPortalData);
 
   const {
     requestsInProgress,
     searchRequestsInProgress,
     loading,
+    smallScreen,
+    columnWidths,
     handleSearchRequestsInProgress,
     setEntryCanceled,
   } = useRequestsInProgress({ bussinesUnits: appData.businessUnit.publicCode });
@@ -22,8 +24,10 @@ function RequestsInProgressTab() {
       searchrequestProgress={searchRequestsInProgress}
       onSearchrequestProgress={handleSearchRequestsInProgress}
       setEntryCanceled={setEntryCanceled}
+      smallScreen={smallScreen}
+      columnWidths={columnWidths}
     />
   );
-}
+};
 
 export { RequestsInProgressTab };

@@ -1,30 +1,37 @@
-import { IAction, IEntry, ITitle } from "@design/data/table/types";
 import { DeleteCyclePayment } from "@pages/payrollAgreement/tabs/payrollAgreementTab/addPayrollAgreement/tools/deleteCyclePayment";
+import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { DetailsCycles } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/detailsCycles";
+import { detailsExtCycle } from "../detailsExtCycle";
 
 const titles: ITitle[] = [
   {
     id: "nameCycle",
-    titleName: "Nombre",
-    priority: 1,
+    titleName: "Nombre del ciclo",
+    priority: 0,
   },
   {
     id: "typePayment",
-    titleName: "Tipo de pago",
-    priority: 2,
+    titleName: "Tipo de pago del ciclo",
+    priority: 1,
   },
   {
     id: "payday",
-    titleName: "Día de pago",
-    priority: 3,
+    titleName: "Día de pago del ciclo",
+    priority: 2,
   },
   {
     id: "numberDaysUntilCut",
     titleName: "# de días para el corte",
-    priority: 4,
+    priority: 3,
   },
 ];
 
-const actionsConfig = (setEntryDeleted: (value: string | number) => void) => {
+const actionsConfig = (
+  setEntryDeleted: (value: string | number) => void,
+  isMobile: boolean,
+) => {
   const actions: IAction[] = [
     {
       id: "delete",
@@ -34,13 +41,22 @@ const actionsConfig = (setEntryDeleted: (value: string | number) => void) => {
       ),
     },
   ];
+  if (isMobile) {
+    actions.unshift({
+      id: "edit",
+      actionName: "Editar",
+      content: (entry: IEntry) => (
+        <DetailsCycles data={entry} detailsCycle={detailsExtCycle} />
+      ),
+    });
+  }
 
   return actions;
 };
 
 const breakPoints = [
   { breakpoint: "(min-width: 745px)", totalColumns: 4 },
-  { breakpoint: "(max-width: 744px)", totalColumns: 2 },
+  { breakpoint: "(max-width: 744px)", totalColumns: 1 },
 ];
 
 export { titles, actionsConfig, breakPoints };

@@ -1,40 +1,25 @@
 import { createPortal } from "react-dom";
-import {
-  Stack,
-  Text,
-  IIconAppearance,
-  Blanket,
-  Divider,
-} from "@inubekit/inubekit";
+import { Stack, Text, Blanket, Divider, Button } from "@inubekit/inubekit";
 
 import { ComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
-import { IRequestSteps } from "@design/modals/requestProcessModal/types";
-
 import { lastCompletedIndex } from "@utils/lastCompletedIndex";
+import { requestProcessLabels } from "@config/requestProcessLabels";
+import { IRequestProcessModal } from "@ptypes/design/IRequestProcessModal";
+import { percentage } from "@utils/percentage";
+import { percTotalNumber } from "@config/percentageNumber";
 import { StyledModal } from "./styles";
-import { RequestProcessMobile } from "./requestProcessMobile";
-import { RequestProcessDesktop } from "./requestProcessDesktop";
-
-interface IRequestProcessModal {
-  portalId: string;
-  appearance: IIconAppearance;
-  requestSteps: IRequestSteps[];
-  isMobile: boolean;
-  title: string;
-  description: string;
-  sizeIcon?: string;
-}
+import { RequestProcessBar } from "./RequestProcessBar";
 
 const RequestProcessModal = (props: IRequestProcessModal) => {
   const {
     portalId,
-    appearance,
     sizeIcon = "28px",
     requestSteps,
     isMobile,
     description,
     title,
+    onClose,
   } = props;
 
   const node = document.getElementById(portalId);
@@ -47,6 +32,8 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
 
   const stepCurrentIndex = lastCompletedIndex(requestSteps);
   const stepCurrent = stepCurrentIndex + 1;
+
+  const percentageNumber = Number(percentage(requestSteps).split("%")[0]);
 
   return createPortal(
     <Blanket>
@@ -66,21 +53,26 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
               {description}
             </Text>
           </Stack>
-          {isMobile ? (
-            <RequestProcessMobile
-              requestSteps={requestSteps}
-              sizeIcon={sizeIcon}
-              appearance={appearance}
-            />
-          ) : (
-            <RequestProcessDesktop
-              requestSteps={requestSteps}
-              sizeIcon={sizeIcon}
-              stepCurrent={stepCurrent}
-              stepCurrentIndex={stepCurrentIndex}
-            />
-          )}
+
+          <RequestProcessBar
+            requestSteps={requestSteps}
+            sizeIcon={sizeIcon}
+            stepCurrent={stepCurrent}
+            stepCurrentIndex={stepCurrentIndex}
+            percentage={percentage(requestSteps)}
+          />
         </Stack>
+        {percentageNumber > percTotalNumber && (
+          <Stack justifyContent="end">
+            <Button
+              spacing="wide"
+              appearance={ComponentAppearance.SUCCESS}
+              onClick={onClose}
+            >
+              {requestProcessLabels.labelButton}
+            </Button>
+          </Stack>
+        )}
       </StyledModal>
     </Blanket>,
     node,

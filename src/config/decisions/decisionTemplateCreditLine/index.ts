@@ -9,22 +9,22 @@ const decisionTemplateConfig = ({
   ruleName,
   labelName,
   decisionDataType,
-  conditionThatEstablishesTheDecision,
+  conditionsThatEstablishesTheDecision,
 }: IRuleDecision) => {
-  if (labelName && decisionDataType && conditionThatEstablishesTheDecision) {
+  if (labelName && decisionDataType && conditionsThatEstablishesTheDecision) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
-      labelName: dataTranslations[labelName],
+      labelName: dataTranslations[labelName] ?? labelName,
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision: ValueHowToSetUp.EQUAL,
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      conditionThatEstablishesTheDecision:
-        conditionThatEstablishesTheDecision.map((condition) => ({
+      conditionsThatEstablishesTheDecision:
+        conditionsThatEstablishesTheDecision.map((condition) => ({
           conditionName: condition.conditionName,
           labelName: dataTranslations[condition.labelName],
           conditionDataType: condition.conditionDataType,

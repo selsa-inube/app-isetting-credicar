@@ -1,5 +1,5 @@
-import { IEntry } from "@design/data/table/types";
 import { ILabel } from "@ptypes/ILabel";
+import { IEntry } from "../table/IEntry";
 
 interface IExtraordinaryPaymentCycles {
   data: IEntry[];

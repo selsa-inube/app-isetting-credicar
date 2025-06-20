@@ -12,7 +12,8 @@ const StyledContainerName = styled.div`
   padding: ${tokens.spacing.s075} ${tokens.spacing.s200};
   gap: ${tokens.spacing.s050};
   box-sizing: border-box;
-  background-color: ${inube.palette.neutral.N10};
+  background-color: ${({ theme }) =>
+    theme ? `${theme.palette.neutral.N10}` : `${inube.palette.neutral.N10}`};
 `;
 
 const StyledContainerDescription = styled.div`

@@ -1,11 +1,11 @@
 import { FormikProps } from "formik";
-import { IEntry } from "@design/data/table/types";
-import { IMessageModal } from "@ptypes/decisions/IMessageModal";
+
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { IMessageModal } from "@ptypes/design/IMessageModal";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { IOrdinaryCyclesEntry } from "../IOrdinaryCyclesEntry";
 
 interface IRegularPaymentCyclesFormUI {
-  editDataOption: boolean;
   entries: IEntry[];
   formik: FormikProps<IOrdinaryCyclesEntry>;
   infoModal: IMessageModal;
@@ -17,6 +17,10 @@ interface IRegularPaymentCyclesFormUI {
   showInfoModal: boolean;
   valuesEqual: boolean;
   isMobile: boolean;
+  columnWidths: number[];
+  labelButtonPrevious: string;
+  labelButtonNext: string;
+  disabledButtonNext: boolean;
   onToggleInfoModal: () => void;
   onAddCycle: () => void;
   onToggleModal: () => void;

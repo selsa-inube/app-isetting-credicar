@@ -3,7 +3,6 @@ import { useContext } from "react";
 import { deleteMoneyDestinationModal } from "@config/moneyDestination/moneyDestinationTab/generics/deleteMoneyDestinationModal";
 import { DeleteRecord } from "@design/feedback/DeleteRecord";
 import { useDeleteDestination } from "@hooks/moneyDestination/useDeleteDestination";
-import { IEntry } from "@design/data/table/types";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -12,14 +11,11 @@ import { requestProcessMessage } from "@config/moneyDestination/moneyDestination
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
-
-interface IDelete {
-  data: IEntry;
-  setEntryDeleted: (id: string | number) => void;
-}
+import { UseCase } from "@enum/useCase";
+import { IDelete } from "@ptypes/moneyDestination/tabs/IDelete";
 
 const Delete = (props: IDelete) => {
-  const { data } = props;
+  const { data, setEntryDeleted } = props;
   const { appData } = useContext(AuthAndPortalData);
 
   const {
@@ -30,8 +26,7 @@ const Delete = (props: IDelete) => {
     handleClick,
     setShowRequestProcessModal,
     setShowModal,
-    setShowPendingReq,
-  } = useDeleteDestination(data, appData);
+  } = useDeleteDestination({ data, appData });
 
   const {
     saveMoneyDestination,
@@ -39,16 +34,23 @@ const Delete = (props: IDelete) => {
     showPendingReqModal,
     loadingSendData,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
-  } = useSaveMoneyDestination(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSaveMoneyDestination({
+    useCase: UseCase.DELETE,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
-    setShowPendingReq
-  );
+    setEntryDeleted,
+  });
+
+  const showRequestProcess = showRequestProcessModal && saveMoneyDestination;
+
+  const showRequestStatus =
+    showPendingReqModal && saveMoneyDestination?.requestNumber;
 
   return (
     <>
@@ -59,7 +61,7 @@ const Delete = (props: IDelete) => {
         onClick={handleClick}
         loading={loadingSendData}
       />
-      {showRequestProcessModal && saveMoneyDestination && (
+      {showRequestProcess && (
         <RequestProcess
           portalId="portal"
           saveData={saveMoneyDestination}
@@ -68,21 +70,22 @@ const Delete = (props: IDelete) => {
           requestProcessSteps={requestSteps}
           appearance={ComponentAppearance.SUCCESS}
           onCloseRequestStatus={handleCloseRequestStatus}
+          onCloseProcess={handleCloseProcess}
         />
       )}
-      {showPendingReqModal && saveMoneyDestination?.requestNumber && (
+      {showRequestStatus && (
         <RequestStatusModal
           portalId="portal"
-          title={requestStatusMessage(saveMoneyDestination.responsible).title}
+          title={requestStatusMessage(saveMoneyDestination.staffName).title}
           description={
-            requestStatusMessage(saveMoneyDestination.responsible).description
+            requestStatusMessage(saveMoneyDestination.staffName).description
           }
           requestNumber={saveMoneyDestination.requestNumber}
           onClick={handleClosePendingReqModal}
           onCloseModal={handleClosePendingReqModal}
-          isLoading={false}
+          loading={false}
           actionText={
-            requestStatusMessage(saveMoneyDestination.responsible).actionText
+            requestStatusMessage(saveMoneyDestination.staffName).actionText
           }
           appearance={ComponentAppearance.PRIMARY}
         />

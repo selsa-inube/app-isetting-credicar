@@ -10,12 +10,13 @@ interface IStyledContainer {
 
 const StyledContainerTable = styled.div<IStyledContainer>`
   position: relative;
+  width: 100%;
   border-radius: 8px;
-  border: ${({ $pageLength, $entriesLength }) =>
+  border: ${({ $pageLength, $entriesLength, theme }) =>
     $pageLength &&
     $entriesLength &&
     $entriesLength > $pageLength &&
-    `1px solid ${inube.palette.neutral.N40}`};
+    `1px solid ${theme ? theme?.palette?.neutral.N40 : inube.palette.neutral.N40}`};
 
   & > td,
   & > div {
@@ -30,7 +31,7 @@ const StyledContainerTable = styled.div<IStyledContainer>`
     }
 
     & > div > div {
-    min-height: 220px;
+    min-height: 320px;
   }
   `}
 `;

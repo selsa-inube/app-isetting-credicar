@@ -1,24 +1,64 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useState } from "react";
-import { ChangeToRequestTab } from "@context/changeToRequestTab";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { decrypt } from "@utils/crypto/decrypt";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
 import { IUsePayrollAgreementPage } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementPage";
+import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig";
+import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
-  const { businessUnitSigla } = props;
+  const { businessUnitSigla, bussinesUnits } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
-  const [isSelected, setIsSelected] = useState<string>(
-    payrollAgreementTabsConfig.payrollAgreement.id,
-  );
 
-  const { descriptionOptions } = useOptionsByBusinessUnit(
-    businessUnitSigla,
-    staffPortalId,
-    "Nóminas de convenio",
+  const smallScreen = useMediaQuery("(max-width: 990px)");
+
+  const tabs = payrollAgreementTabsConfig(smallScreen);
+
+  const [requestsInProgress, setRequestsInProgress] = useState<
+    IRequestsInProgress[]
+  >([]);
+  const [isSelected, setIsSelected] = useState<string>(
+    tabs.payrollAgreement.id,
   );
+  const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
+  const { descriptionOptions } = useOptionsByBusinessUnit({
+    businessUnit: businessUnitSigla,
+    staffPortalId,
+    optionName: "Nóminas de convenio",
+  });
+
+  const onToggleModal = () => {
+    setShowModal(!showModal);
+  };
+
+  const onToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
+  const onCloseMenu = () => {
+    setShowModal(!showModal);
+  };
+
+  useEffect(() => {
+    const fetchRequestsInProgressData = async () => {
+      try {
+        const data = await getRequestsInProgress(
+          bussinesUnits,
+          "PayrollAgreement",
+        );
+        setRequestsInProgress(data);
+      } catch (error) {
+        console.info(error);
+      }
+    };
+
+    fetchRequestsInProgressData();
+  }, []);
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
@@ -27,25 +67,39 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
 
   useEffect(() => {
     if (changeTab) {
-      setIsSelected(payrollAgreementTabsConfig.requestsInProgress.id);
+      setIsSelected(tabs.requestsInProgress.id);
     }
   }, [changeTab]);
 
   useEffect(() => {
-    if (isSelected === payrollAgreementTabsConfig.requestsInProgress.id) {
+    if (isSelected === tabs.requestsInProgress.id) {
       setChangeTab(false);
-      setIsSelected(payrollAgreementTabsConfig.requestsInProgress.id);
+      setIsSelected(tabs.requestsInProgress.id);
     }
   }, [isSelected]);
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
-  const smallScreenTab = useMediaQuery("(max-width: 450px)");
+  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
+    const tab = tabs[key as keyof typeof payrollAgreementTabsConfig];
 
-  const showPayrollAgreementTab =
-    isSelected === payrollAgreementTabsConfig.payrollAgreement.id;
+    if (
+      key === tabs.requestsInProgress.id &&
+      requestsInProgress &&
+      requestsInProgress.length === 0
+    ) {
+      return acc;
+    }
 
-  const showRequestsInProgressTab =
-    isSelected === payrollAgreementTabsConfig.requestsInProgress.id;
+    if (tab !== undefined) {
+      acc[key as keyof IPayrollTabsConfig] = tab;
+    }
+    return acc;
+  }, {} as IPayrollTabsConfig);
+
+  const showPayrollAgreementTab = isSelected === tabs.payrollAgreement.id;
+
+  const showRequestsInProgressTab = isSelected === tabs.requestsInProgress.id;
+
+  const payrollAgreementTabs = Object.values(filteredTabsConfig);
 
   return {
     isSelected,
@@ -53,7 +107,13 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     showPayrollAgreementTab,
     showRequestsInProgressTab,
     smallScreen,
-    smallScreenTab,
+    payrollAgreementTabs,
+    filteredTabsConfig,
+    showModal,
+    showInfoModal,
+    onToggleInfoModal,
+    onCloseMenu,
+    onToggleModal,
     handleTabChange,
   };
 };

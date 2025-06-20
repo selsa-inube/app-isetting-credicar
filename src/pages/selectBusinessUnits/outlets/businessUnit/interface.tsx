@@ -1,12 +1,13 @@
 import React from "react";
 import { MdSearch } from "react-icons/md";
-import { Button, Input, Stack, Text } from "@inubekit/inubekit";
+import { Button, Searchfield, Stack, Text } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { RadioBusinessUnit } from "@design/feedback/radioBusinessUnit";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { IBusinessUnitstate } from "@ptypes/selectBusinessUnits/outlets/businessUnit/IBusinessUnitstate";
 import { NoResultsMessage } from "@design/feedback/noResultsMessage";
+import { businessUnitsLabel } from "@config/businessUnits/businessUnitsLabel";
 import {
   StyledBusinessUnits,
   StyledBusinessUnitsItem,
@@ -48,17 +49,16 @@ function BusinessUnitsUI(props: IBusinessUnitsUI) {
   return (
     <StyledBusinessUnits $isMobile={screenMobile}>
       <Text type="title" as="h2" textAlign="center">
-        Unidades de Negocios
+        {businessUnitsLabel.title}
       </Text>
       <Text size="medium" textAlign="center">
-        Seleccione la Unidad de Negocio
+        {businessUnitsLabel.selectUnit}
       </Text>
       <form>
         <Stack direction="column" alignItems="center" gap={tokens.spacing.s300}>
           {businessUnits.length > 5 && (
-            <Input
-              placeholder="Buscar..."
-              type="search"
+            <Searchfield
+              placeholder={businessUnitsLabel.placeholderSearch}
               name="searchBusinessUnits"
               id="searchBusinessUnits"
               value={search}
@@ -100,7 +100,7 @@ function BusinessUnitsUI(props: IBusinessUnitsUI) {
             disabled={businessUnit.value}
             onClick={handleSubmit}
           >
-            Continuar
+            {businessUnitsLabel.labelButton}
           </Button>
         </Stack>
       </form>

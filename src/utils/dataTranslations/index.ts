@@ -10,6 +10,41 @@ const dataTranslations: Record<string, string> = {
   "Increase factor guarantee offered":
     "Factor de incremento de garantía ofrecido",
   "Risk free interest rate": "Tasa de interés libre de riesgo",
+  "Employment contract term type": "Tipo de plazo del contrato de trabajo",
+  "Reciprocity factor for credit limit g p":
+    "Factor de reciprocidad para el límite de crédito g p",
+  "Risk score factor for credit limit g p":
+    "Factor de puntuación de riesgo para el límite de crédito g p",
+  "Affiliate seniority": "Antigüedad del afiliado",
+  AffiliateSeniority: "Antigüedad del afiliado",
+  Amount: "Monto",
+  Net: "Neto",
+  "Primary income type": "Tipo de ingreso primario",
+  "Credit risk score": "Puntuación de riesgo crediticio",
+  CreditRiskScore: "Puntuación de riesgo crediticio",
+  "Credit risk scoring model gp":
+    "Modelo de puntuación de riesgo crediticio gp",
+  "Credit risk profile": "Perfil de riesgo crediticio",
+  "Business unit": "Unidad de negocio",
+  amount: "Monto",
+  net: "Neto",
+  Sunday: "Domingo",
+  Monday: "Lunes",
+  Tuesday: "Martes",
+  Wednesday: "Miércoles",
+  Thursday: "Jueves",
+  Friday: "Viernes",
+  Saturday: "Sábado",
+  Weekly: "Semanal",
+  Biweekly: "Quincenal",
+  Semimonthly: "Bimensual",
+  Monthly: "Mensual",
+  Intervals_10_days: "Cada 10 días",
+  OrdinaryRemuneration: "Remuneración ordinaria",
+  BonusesOrSeverancePay: "Primas o cesantías",
+  ReciprocityFactorForCreditLimitGP: "Número de veces los aportes",
+  RiskScoreFactorForCreditLimitGP: "Número de veces los ingresos",
+  CreditRiskScoringModelGp: "Modelo de score",
 };
 
 export { dataTranslations };

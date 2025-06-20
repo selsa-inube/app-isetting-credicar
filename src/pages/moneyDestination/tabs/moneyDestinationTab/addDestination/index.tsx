@@ -5,6 +5,7 @@ import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDes
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { UseCase } from "@enum/useCase";
 import { AddDestinationUI } from "./interface";
 
 function AddDestination() {
@@ -19,6 +20,7 @@ function AddDestination() {
     showRequestProcessModal,
     saveData,
     showAttentionModal,
+    smallScreen,
     handleNextStep,
     handlePreviousStep,
     handleSubmitClick,
@@ -39,15 +41,17 @@ function AddDestination() {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
-  } = useSaveMoneyDestination(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSaveMoneyDestination({
+    useCase: UseCase.ADD,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
-  );
+  });
 
   return (
     <AddDestinationUI
@@ -74,6 +78,8 @@ function AddDestination() {
       onClosePendingReqModal={handleClosePendingReqModal}
       showAttentionModal={showAttentionModal}
       setShowAttentionModal={setShowAttentionModal}
+      smallScreen={smallScreen}
+      onCloseProcess={handleCloseProcess}
     />
   );
 }

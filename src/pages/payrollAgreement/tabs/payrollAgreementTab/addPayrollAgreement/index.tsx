@@ -4,12 +4,13 @@ import { useAddPayrollAgreement } from "@hooks/payrollAgreement/useAddPayrollAgr
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { UseCase } from "@enum/useCase";
 import { AddPayrollAgreementUI } from "./interface";
 
-function AddPayrollAgreement() {
+const AddPayrollAgreement = () => {
   const { appData } = useContext(AuthAndPortalData);
   const {
     currentStep,
@@ -25,6 +26,7 @@ function AddPayrollAgreement() {
     showModal,
     showRequestProcessModal,
     saveData,
+    includeExtraPayDay,
     handleCloseModal,
     handleGoBack,
     handleNextStep,
@@ -36,10 +38,12 @@ function AddPayrollAgreement() {
     setExtraordinaryPayment,
     setIsCurrentFormValid,
     setRegularPaymentCycles,
+    setIncludeExtraPayDay,
+    setRegularDeleted,
     setShowModal,
     setShowRequestProcessModal,
     setSourcesOfIncomeValues,
-  } = useAddPayrollAgreement(appData);
+  } = useAddPayrollAgreement({ appData });
 
   const {
     savePayrollAgreement,
@@ -47,15 +51,17 @@ function AddPayrollAgreement() {
     loadingSendData,
     showPendingReqModal,
     handleCloseRequestStatus,
+    handleCloseProcess,
     handleClosePendingReqModal,
-  } = useSavePayrollAgreement(
-    appData.businessUnit.publicCode,
-    appData.user.userAccount,
-    showRequestProcessModal,
-    saveData as ISaveDataRequest,
-    setShowRequestProcessModal,
+  } = useSavePayrollAgreement({
+    useCase: UseCase.ADD,
+    bussinesUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: saveData as ISaveDataRequest,
+    setSendData: setShowRequestProcessModal,
     setShowModal,
-  );
+  });
 
   return (
     <AddPayrollAgreementUI
@@ -87,6 +93,7 @@ function AddPayrollAgreement() {
           React.SetStateAction<IOrdinaryCyclesEntry[]>
         >
       }
+      setRegularDeleted={setRegularDeleted}
       isCurrentFormValid={formValid}
       showModal={showModal}
       onToggleModal={handleToggleModal}
@@ -99,8 +106,11 @@ function AddPayrollAgreement() {
       loading={loadingSendData}
       onFinishForm={handleSubmitClick}
       setCurrentStep={setCurrentStep}
+      setIncludeExtraPayDay={setIncludeExtraPayDay}
+      includeExtraPayDay={includeExtraPayDay}
+      onCloseProcess={handleCloseProcess}
     />
   );
-}
+};
 
 export { AddPayrollAgreement };

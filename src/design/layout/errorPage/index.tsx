@@ -4,6 +4,7 @@ import inubeLogo from "@assets/images/logo-inube.png";
 import errorImage from "@assets/images/errorPage.png";
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
+import { errorCodes } from "@config/errorCodes";
 import {
   StyledCompanyLogo,
   StyledContainer,
@@ -13,7 +14,6 @@ import {
   StyledList,
   StyledTextErrorContainer,
 } from "./styles";
-import { errorCodes } from "@src/config/errorCodes";
 
 interface IErrorPage {
   errorCode?: number;
@@ -69,9 +69,9 @@ const ErrorPage = (props: IErrorPage) => {
             {heading}
           </Text>
           <Tag
-            appearance="gray"
+            appearance={ComponentAppearance.GRAY}
             label={`Código de error: ${errorCode}`}
-            weight="strong"
+            displayIcon={false}
           />
         </Stack>
         <StyledErrorImage

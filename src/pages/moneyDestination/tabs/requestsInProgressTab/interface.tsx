@@ -1,35 +1,27 @@
-import { Input, Stack, useMediaQuery } from "@inubekit/inubekit";
+import { Searchfield, Stack, Text } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 
+import { IRequestsInProgressTabUI } from "@ptypes/moneyDestination/tabs/IRequestsInProgressTab/IRequestsInProgressTabUI";
 import {
   actionsConfig,
   breakPoints,
   titles,
 } from "@config/moneyDestination/requestsInProgressTab/table";
-
-import { IEntry } from "@design/data/table/types";
 import { Table } from "@design/data/table";
+import { tablabels } from "@config/moneyDestination/requestsInProgressTab/tabLabels";
+import { ComponentAppearance } from "@enum/appearances";
 import { StyledContainer } from "./styles";
 
-interface IRequestsInProgressTabUI {
-  entries: IEntry[];
-  loading: boolean;
-  searchrequestProgress: string;
-  setEntryCanceled: (value: string | number) => void;
-  onSearchrequestProgress: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-function RequestsInProgressTabUI(props: IRequestsInProgressTabUI) {
+const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
   const {
     entries,
     searchrequestProgress,
     loading,
+    smallScreen,
+    columnWidths,
     setEntryCanceled,
     onSearchrequestProgress,
   } = props;
-
-  const smallScreen = useMediaQuery("(max-width: 690px)");
-  const widthFirstColumn = smallScreen ? 60 : 10;
 
   return (
     <StyledContainer $smallScreen={smallScreen}>
@@ -42,28 +34,60 @@ function RequestsInProgressTabUI(props: IRequestsInProgressTabUI) {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s400} direction="column">
+        <Stack
+          gap={smallScreen ? tokens.spacing.s150 : tokens.spacing.s400}
+          direction="column"
+        >
+          {smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+                ellipsis
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
           <Stack
             justifyContent={smallScreen ? "center" : "start"}
             direction={smallScreen ? "column" : "row"}
             gap={
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
+            width="100%"
           >
-            <Stack justifyContent="center">
-              <Input
-                name="searchrequestProgress"
-                id="searchrequestProgress"
-                placeholder="Palabra clave..."
-                type="search"
+            <Stack
+              justifyContent="center"
+              width={smallScreen ? "100%" : "auto"}
+            >
+              <Searchfield
+                name="searchMoneyDestination"
+                id="searchMoneyDestination"
+                placeholder={tablabels.searchPlaceholder}
+                label={smallScreen ? "" : tablabels.searchLabel}
                 size="compact"
                 value={searchrequestProgress}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onSearchrequestProgress(e)
                 }
+                fullwidth={smallScreen}
               />
             </Stack>
           </Stack>
+
+          {!smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+              >
+                {tablabels.description}
+              </Text>
+            </Stack>
+          )}
 
           <Table
             id="portal"
@@ -72,16 +96,15 @@ function RequestsInProgressTabUI(props: IRequestsInProgressTabUI) {
             actions={actionsConfig(setEntryCanceled)}
             breakpoints={breakPoints}
             filter={searchrequestProgress}
-            isLoading={loading}
-            columnWidths={
-              smallScreen ? [10, 20, 23] : [widthFirstColumn, 55, 23]
-            }
+            loading={loading}
+            columnWidths={columnWidths}
             pageLength={8}
+            ellipsisCell={!smallScreen}
           />
         </Stack>
       </Stack>
     </StyledContainer>
   );
-}
+};
 
 export { RequestsInProgressTabUI };

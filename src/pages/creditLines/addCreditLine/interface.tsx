@@ -123,7 +123,7 @@ function AddCreditLinesUI(props: IAddCreditLinesUI) {
                 setDecisions={setDecisions}
                 revertModalDisplayData={revertModalDisplayData}
                 labelBusinessRules="MaximunFRCquota"
-                nameMoneyDestination={
+                nameRule={
                   initialValues.generalInformation.values.nameCreditLine
                 }
                 showAttentionModal={false}

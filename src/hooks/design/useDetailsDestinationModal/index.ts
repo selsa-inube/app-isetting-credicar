@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { IRuleDecision } from "@isettingkit/input";
+import { ICondition, IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { mediaQueryMobile } from "@config/environment";
-import { IDetailsTabsConfig } from "@design/modals/detailsDestinationModal/types";
-import { IEntry } from "@design/data/table/types";
 import { TransactionOperation } from "@enum/transactionOperation";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
 
 const useDetailsDestinationModal = (
   data: IEntry,
@@ -63,11 +63,23 @@ const useDetailsDestinationModal = (
     {} as IDetailsTabsConfig,
   );
 
-  const decisionDeleted = decisions.filter(
+  const filteredDecisions = decisions.map((decision: IRuleDecision) => {
+    return {
+      ...decision,
+      conditionsThatEstablishesTheDecision: (
+        decision.conditionsThatEstablishesTheDecision ?? []
+      ).filter(
+        (condition: ICondition) =>
+          condition.conditionName !== "MoneyDestination",
+      ),
+    };
+  });
+
+  const decisionDeleted = filteredDecisions.filter(
     (decision: IRuleDecision) =>
       decision.transactionOperation === TransactionOperation.DELETE,
   );
-  const decisionInserted = decisions.filter(
+  const decisionInserted = filteredDecisions.filter(
     (decision: IRuleDecision) =>
       decision.transactionOperation === TransactionOperation.INSERT,
   );
@@ -91,6 +103,7 @@ const useDetailsDestinationModal = (
     defaultSelectedTab,
     decisionDeleted,
     decisionInserted,
+    filteredDecisions,
     handleTabChange,
   };
 };

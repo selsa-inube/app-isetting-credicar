@@ -1,7 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn } from "@storybook/react";
-
-import { ComponentAppearance } from "@enum/appearances";
 import { IRequestProcessModal, RequestProcessModal } from "..";
 
 const meta: Meta<typeof RequestProcessModal> = {
@@ -27,7 +25,6 @@ const Template: StoryFn<IRequestProcessModal> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   portalId: "portal",
-  appearance: ComponentAppearance.SUCCESS,
   title: "Procesando solicitud",
   description:
     "Hemos recibido tu solicitud y se encuentra en proceso. Por favor, espera mientras la gestionamos.",
@@ -38,10 +35,22 @@ Default.args = {
   ],
 };
 
+export const Complete = Template.bind({});
+Complete.args = {
+  portalId: "portal",
+  title: "Procesando solicitud",
+  description:
+    "Hemos recibido tu solicitud y se encuentra en proceso. Por favor, espera mientras la gestionamos.",
+  requestSteps: [
+    { name: "Solicitud radicada", status: "completed" },
+    { name: "Agregando", status: "completed" },
+    { name: "Destino agregado", status: "completed" },
+  ],
+};
+
 export const WithError = Template.bind({});
 WithError.args = {
   portalId: "portal",
-  appearance: ComponentAppearance.DANGER,
   title: "Procesando solicitud",
   description:
     "Hemos recibido tu solicitud y se encuentra en proceso. Por favor, espera mientras la gestionamos.",

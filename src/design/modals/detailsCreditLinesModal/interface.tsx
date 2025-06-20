@@ -14,8 +14,7 @@ import {
 import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
 import { ComponentAppearance } from "@enum/appearances";
-import { IEntry } from "@design/data/table/types";
-
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { StyledContainerButton, StyledModal } from "./styles";
 import { IDetailsTabsConfig } from "./types";
 import { GeneralDataTab } from "./generalDataTab";

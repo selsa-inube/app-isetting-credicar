@@ -1,8 +1,9 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text } from "@inubekit/inubekit";
 import { ComponentAppearance } from "@enum/appearances";
-import { MoreDetails } from "@design/modals/moreDetails";
+import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IDetailsUI";
+import { moreDetailsRequestModal } from "@config/payrollAgreement/requestsInProgressTab/details/moreDetailsRequestModal";
 import { StyledContainerIcon } from "./styles";
 
 const DetailsUI = (props: IDetailsUI) => {
@@ -47,6 +48,7 @@ const DetailsUI = (props: IDetailsUI) => {
           isSelected={isSelected}
           defaultSelectedTab={defaultSelectedTab}
           filteredTabsConfig={filteredTabsConfig}
+          title={moreDetailsRequestModal.titleDetails}
           smallScreenTab={isMobile}
           detailsTabsConfig={detailsTabsConfig}
           data={data}
@@ -57,6 +59,7 @@ const DetailsUI = (props: IDetailsUI) => {
           extraordinaryPaymentData={extraordinaryPaymentData}
           onCloseModal={onToggleModal}
           onTabChange={onTabChange}
+          moreDetails={false}
         />
       )}
     </>

@@ -3,8 +3,8 @@ interface IRegularPaymentCycles {
   paymentDay: string;
   payrollForDeductionAgreementId: string;
   regularPaymentCycleName: string;
-  regularPaymentCycleNumber: string;
   schedule: string;
+  regularPaymentCycleNumber?: string;
 }
 
 export type { IRegularPaymentCycles };

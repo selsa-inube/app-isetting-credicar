@@ -1,19 +1,25 @@
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
+import { decisionsLabels } from "@config/decisions/decisionsLabels";
+import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 
-const useDecisionForm = (
-  initialValues: IRuleDecision[],
-  revertModalDisplayData: (
-    dataDecision: IRuleDecision,
-    originalDecision: IRuleDecision,
-  ) => void,
-  onButtonClick: () => void,
-  setCreditLineDecisions: (decisions: IRuleDecision[]) => void,
-  setShowAttentionModal: React.Dispatch<React.SetStateAction<boolean>>,
-  showAttentionModal: boolean,
-  normalizeEvaluateRuleData?: IRuleDecision[],
-  editDataOption?: boolean,
-) => {
+const useDecisionForm = (props: IUseDecisionForm) => {
+  const {
+    initialValues,
+    revertModalDisplayData,
+    onButtonClick,
+    setCreditLineDecisions,
+    showAttentionModal,
+    setShowAttentionModal,
+    normalizeEvaluateRuleData,
+    editDataOption,
+    disabledButton,
+    onPreviousStep,
+    attentionModal,
+    heightContentPage,
+  } = props;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
@@ -23,7 +29,7 @@ const useDecisionForm = (
   const [hasChanges, setHasChanges] = useState(false);
   const [savedDecisions, setSavedDecisions] = useState<IRuleDecision[]>([]);
 
-  const initialDecisions = useState(initialValues)[0];
+  const [initialDecisions] = useState<IRuleDecision[]>(initialValues);
 
   const handleOpenModal = () => {
     setSelectedDecision(null);
@@ -42,10 +48,10 @@ const useDecisionForm = (
     const isEditing = selectedDecision !== null;
 
     const updatedConditions =
-      decisionTemplate.conditionThatEstablishesTheDecision?.map(
+      decisionTemplate.conditionsThatEstablishesTheDecision?.map(
         (templateCondition) => {
           const existingCondition =
-            dataDecision.conditionThatEstablishesTheDecision?.find(
+            dataDecision.conditionsThatEstablishesTheDecision?.find(
               (condition) =>
                 condition.conditionName === templateCondition.conditionName,
             );
@@ -66,7 +72,7 @@ const useDecisionForm = (
       : {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,
-          conditionThatEstablishesTheDecision: updatedConditions,
+          conditionsThatEstablishesTheDecision: updatedConditions,
         };
 
     const updatedDecisions = isEditing
@@ -83,7 +89,7 @@ const useDecisionForm = (
   };
 
   const handleToggleAttentionModal = () => {
-    setShowAttentionModal(!showAttentionModal);
+    if (setShowAttentionModal) setShowAttentionModal(!showAttentionModal);
   };
 
   const handleToggleDeleteModal = (id: string) => {
@@ -129,7 +135,7 @@ const useDecisionForm = (
 
   useEffect(() => {
     if (
-      JSON.stringify(decisions) !== JSON.stringify(initialDecisions) ||
+      JSON.stringify(decisions) !== JSON.stringify(initialValues) ||
       JSON.stringify(normalizeEvaluateRuleData) !== JSON.stringify(decisions)
     ) {
       setHasChanges(true);
@@ -138,6 +144,34 @@ const useDecisionForm = (
     }
   }, [decisions, initialDecisions]);
 
+  const isMobile = useMediaQuery("(max-width: 990px)");
+
+  const saveButtonLabel = editDataOption
+    ? decisionsLabels.labelSaveButton
+    : decisionsLabels.labelNextButton;
+
+  const cancelButtonLabel = editDataOption
+    ? decisionsLabels.labelCancelButton
+    : decisionsLabels.labelPreviusButton;
+
+  const shouldShowAttentionModal = Boolean(
+    showAttentionModal && attentionModal,
+  );
+
+  const disabledNext = editDataOption ? !hasChanges : disabledButton;
+
+  const disabledPrevius = editDataOption ? !hasChanges : false;
+
+  const cancelButton = editDataOption ? handleReset : onPreviousStep;
+
+  const showDecisionModal =
+    shouldShowAttentionModal && attentionModal ? true : false;
+
+  const showFloatingAddButton = isMobile && decisions.length > 0;
+
+  const heightContent =
+    isMobile && editDataOption ? heightContentPage : isMobile ? "60vh" : "auto";
+
   return {
     isModalOpen,
     selectedDecision,
@@ -145,6 +179,16 @@ const useDecisionForm = (
     showDeleteModal,
     hasChanges,
     savedDecisions,
+    isMobile,
+    saveButtonLabel,
+    cancelButtonLabel,
+    shouldShowAttentionModal,
+    disabledNext,
+    disabledPrevius,
+    showDecisionModal,
+    showFloatingAddButton,
+    heightContent,
+    cancelButton,
     handleOpenModal,
     handleCloseModal,
     handleSubmitForm,

@@ -1,25 +1,19 @@
 import { MdAdd } from "react-icons/md";
-import { Stack, Input, Button, Text } from "@inubekit/inubekit";
+import { Stack, Button, Text, inube, Searchfield } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { ComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
-import { IEntry } from "@design/data/table/types";
 import {
   actionsConfig,
   breakPoints,
   titles,
 } from "@config/payrollAgreement/payrollAgreementTab/table";
-import { StyledContainer } from "./styles";
-
-interface IpayrollAgreementTabUI {
-  entries: IEntry[];
-  loading: boolean;
-  searchPayrollAgreement: string;
-  smallScreen: boolean;
-  setEntryDeleted: (id: string | number) => void;
-  onSearchPayrollAgreement: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
+import { IpayrollAgreementTabUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IpayrollAgreementTabUI";
+import { BoxContainer } from "@design/layout/boxContainer";
+import { useThemeData } from "@utils/theme";
+import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
 
 const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
   const {
@@ -27,12 +21,28 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
     entries,
     loading,
     smallScreen,
+    columnWidths,
+    pageLength,
+    emptyDataMessage,
     setEntryDeleted,
     onSearchPayrollAgreement,
   } = props;
 
+  const theme = useThemeData();
+
   return (
-    <StyledContainer $smallScreen={smallScreen}>
+    <BoxContainer
+      borderColor={
+        theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
+      }
+      borderRadius={tokens.spacing.s100}
+      padding={smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`}
+      backgroundColor={
+        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
+      }
+      boxSizing="initial"
+      overflowY="auto"
+    >
       <Stack
         width="-webkit-fill-available"
         direction="column"
@@ -42,46 +52,74 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
         }
         justifyContent={smallScreen ? "center" : "normal"}
       >
-        <Stack gap={tokens.spacing.s200} direction="column">
+        <Stack
+          gap={smallScreen ? tokens.spacing.s150 : tokens.spacing.s200}
+          direction="column"
+        >
+          {smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size="medium"
+                appearance={ComponentAppearance.DARK}
+                ellipsis
+              >
+                {payrollTabLabels.description}
+              </Text>
+            </Stack>
+          )}
           <Stack
             justifyContent={smallScreen ? "center" : "space-between"}
-            direction={smallScreen ? "column-reverse" : "row"}
+            direction={smallScreen ? "column" : "row"}
             gap={
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
+            width="100%"
           >
-            <Stack justifyContent="center">
-              <Input
+            <Stack
+              justifyContent="center"
+              width={smallScreen ? "100%" : "auto"}
+            >
+              <Searchfield
                 name="searchPayrollAgreement"
-                label="Buscar"
+                label={smallScreen ? "" : tabLabels.search}
                 id="searchPayrollAgreement"
-                placeholder="Palabra clave..."
-                type="search"
+                placeholder={tabLabels.placeholderSearch}
                 size="compact"
                 value={searchPayrollAgreement}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   onSearchPayrollAgreement(e)
                 }
+                fullwidth={smallScreen}
               />
             </Stack>
-            <Button
-              spacing="wide"
-              appearance={ComponentAppearance.PRIMARY}
-              variant="filled"
-              iconBefore={<MdAdd />}
-              type="link"
-              path="/payroll-agreement/add-payroll-agreement"
-              fullwidth={smallScreen}
-            >
-              Agregar nómina
-            </Button>
+            {!smallScreen && (
+              <Button
+                spacing="wide"
+                appearance={ComponentAppearance.PRIMARY}
+                variant="filled"
+                iconBefore={<MdAdd />}
+                type="link"
+                path="/payroll-agreement/add-payroll-agreement"
+                fullwidth={smallScreen}
+              >
+                {payrollTabLabels.buttonLabel}
+              </Button>
+            )}
           </Stack>
 
-          <Stack>
-            <Text type="title" size="medium" appearance="dark">
-              Consulta de las nóminas de convenio disponibles
-            </Text>
-          </Stack>
+          {!smallScreen && (
+            <Stack>
+              <Text
+                type="title"
+                size={smallScreen ? "small" : "medium"}
+                appearance={ComponentAppearance.DARK}
+                ellipsis
+              >
+                {payrollTabLabels.description}
+              </Text>
+            </Stack>
+          )}
 
           <Table
             id="portal"
@@ -90,14 +128,14 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
             actions={actionsConfig(setEntryDeleted)}
             breakpoints={breakPoints}
             filter={searchPayrollAgreement}
-            isLoading={loading}
-            columnWidths={[80]}
-            pageLength={8}
-            emptyDataMessage="Aún no hay nóminas de convenio registradas, presiona “+ Agregar nómina” para empezar."
+            loading={loading}
+            columnWidths={columnWidths}
+            pageLength={pageLength}
+            emptyDataMessage={emptyDataMessage}
           />
         </Stack>
       </Stack>
-    </StyledContainer>
+    </BoxContainer>
   );
 };
 

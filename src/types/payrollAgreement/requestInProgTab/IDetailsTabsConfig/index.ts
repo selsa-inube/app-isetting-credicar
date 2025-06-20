@@ -1,4 +1,4 @@
-import { ITabConfig } from "../ITabConfig";
+import { ITabConfig } from "../../../ITabConfig";
 
 interface IDetailsTabsConfig {
   ordinaryPayment?: ITabConfig;

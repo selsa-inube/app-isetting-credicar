@@ -1,17 +1,19 @@
-import { IAction, IEntry, ITitle } from "@design/data/table/types";
 import { Edit } from "@pages/moneyDestination/tabs/moneyDestinationTab/tools/edit";
 import { Delete } from "@pages/moneyDestination/tabs/moneyDestinationTab/tools/delete";
 import { Details } from "@pages/moneyDestination/tabs/moneyDestinationTab/tools/details";
+import { IAction } from "@ptypes/design/table/IAction";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const titles: ITitle[] = [
   {
     id: "abbreviatedName",
-    titleName: "Nombre",
+    titleName: "Nombre del destino",
     priority: 0,
   },
   {
     id: "descriptionUse",
-    titleName: "Descripción",
+    titleName: "Descripción del destino",
     priority: 1,
   },
 ];

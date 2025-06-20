@@ -6,6 +6,7 @@ const notCancelStatus = [
   RequestStatus.RejectedRequest,
   RequestStatus.RequestProcessed,
   RequestStatus.ProcessingRequest,
+  RequestStatus.RequestReadyToProcess,
 ];
 
 export { notCancelStatus };

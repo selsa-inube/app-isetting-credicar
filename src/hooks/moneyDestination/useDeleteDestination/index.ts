@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { IEntry } from "@design/data/table/types";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
+import { IUseDeleteDestination } from "@ptypes/hooks/moneyDestination/IUseDeleteDestination";
 
-const useDeleteDestination = (data: IEntry, appData: IAppData) => {
+const useDeleteDestination = (props: IUseDeleteDestination) => {
+  const { data, appData } = props;
   const [showModal, setShowModal] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [showPendingReq, setShowPendingReq] = useState(false);
@@ -28,9 +28,7 @@ const useDeleteDestination = (data: IEntry, appData: IAppData) => {
       configurationRequestData: {
         moneyDestinationId: data.id,
         abbreviatedName: data.name,
-        descriptionUse: data.descriptionUse,
-        iconReference: data.icon,
-        justification: `La eliminación del destino de dinero es solicitada por ${appData.user.userAccount}`,
+        removalJustification: `La eliminación del destino de dinero es solicitada por ${appData.user.userAccount}`,
       },
     });
     setShowRequestProcessModal(true);

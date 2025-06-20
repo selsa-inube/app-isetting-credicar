@@ -1,3 +1,8 @@
+import {
+  IStackAlignItem,
+  IStackDirectionAlignment,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 import { useEffect, useImperativeHandle, useState } from "react";
 import { MdOutlineFax } from "react-icons/md";
 import { FormikProps, useFormik } from "formik";
@@ -5,7 +10,7 @@ import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationDestination";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { normalizeNameDestination } from "@utils/destination/normalizeNameDestination";
@@ -14,6 +19,8 @@ import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { normalizeEditDestination } from "@utils/destination/normalizeEditDestination";
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
 import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
+import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
+import { tokens } from "@design/tokens";
 
 const useGeneralInformationForm = (
   enumData: IEnumerators[],
@@ -198,16 +205,40 @@ const useGeneralInformationForm = (
     }
   };
 
+  const labelButtonNext = editDataOption
+    ? generalInfoLabels.saveButton
+    : generalInfoLabels.nextButton;
+
+  const buttonDisabledState = editDataOption
+    ? isDisabledButton && !loading
+    : isDisabledButton;
+
+  const isMobile = useMediaQuery("(max-width: 990px)");
+
+  const directionStack: IStackDirectionAlignment = isMobile ? "column" : "row";
+  const widthStack = isMobile ? "100%" : "350px";
+  const alignItemsIcon: IStackAlignItem = isMobile ? "flex-start" : "center";
+  const paddingIcon = isMobile
+    ? `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s050} ${tokens.spacing.s250}`
+    : tokens.spacing.s0;
+
   return {
     autosuggestValue,
     optionsDestination,
     formik,
     isDisabledButton,
     icon,
+    labelButtonNext,
+    isMobile,
+    widthStack,
+    directionStack,
+    alignItemsIcon,
+    paddingIcon,
     handleChange,
     handleReset,
     valuesEqual,
     valuesEqualBoton,
+    buttonDisabledState,
   };
 };
 

@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { mediaQueryMobile } from "@config/environment";
-import { IEntry } from "@design/data/table/types";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
 import { IUseDetailsPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseDetailsPayrollAgreement";
 import { labelsOfRequest } from "@config/payrollAgreement/requestsInProgressTab/details/labelsOfRequest";
 import { detailsRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/details/detailsRequestInProgressModal";
 import { RequestType } from "@enum/requestType";
 import { IDetailsTabsConfig } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsTabsConfig";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { eventBus } from "@events/eventBus";
+import { getDayPayment } from "@utils/getDayPayment";
+import { dataTranslations } from "@utils/dataTranslations";
+import { getSourcesIncome } from "@utils/getSourcesIncome";
 
 const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
-  const { data, detailsTabsConfig } = props;
+  const { data, detailsTabsConfig, showModalReq } = props;
 
   const [isSelected, setIsSelected] = useState<string>();
   const [showModal, setShowModal] = useState(false);
@@ -19,9 +23,13 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
 
   const normalizeData = {
     id: data.id,
-    TypePayroll: data.payrollForDeductionAgreementType,
-    daysToDetermineDate: data.numberOfDaysForReceivingTheDiscounts,
-    company: data.legalPersonName,
+    TypePayroll:
+      dataTranslations[data.payrollForDeductionAgreementType] ??
+      data.payrollForDeductionAgreementType,
+    daysToDetermineDate:
+      data.numberOfDaysForReceivingTheDiscounts ?? data.applicationDaysPayroll,
+    company: data.payingEntityName,
+    paymentSources: getSourcesIncome(data.incomeTypes),
   };
 
   const handleToggleModal = () => {
@@ -36,7 +44,7 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     name: item.regularPaymentCycleName ?? item.nameCycle,
     periodicity:
       normalizeEnumName(item.schedule) ?? normalizeEnumName(item.periodicity),
-    dayPayment: item.paymentDay ?? item.payday,
+    dayPayment: getDayPayment(item.paymentDay ?? item.payday),
     numberDays: item.numberOfDaysBeforePaymentToBill ?? item.numberDaysUntilCut,
   });
 
@@ -75,7 +83,7 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     id: index,
     name: item.abbreviatedName,
     typePayment,
-    cuttingDay: item.paymentDay,
+    paymentDay: item.paymentDay,
     numberDays: item.numberOfDaysBeforePaymentToBill,
   });
 
@@ -229,6 +237,19 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
   }`;
 
   const screenTablet = useMediaQuery("(max-width: 1200px)");
+
+  useEffect(() => {
+    const emitEvent = (eventName: string) => {
+      eventBus.emit(eventName, showModal);
+    };
+    if (showModalReq && !showModal) {
+      emitEvent("secondModalState");
+    } else if (!showModalReq && !showModal) {
+      emitEvent("secondModalState");
+    } else if (!showModalReq && showModal) {
+      emitEvent("thirdModalState");
+    }
+  }, [showModal]);
 
   return {
     showModal,

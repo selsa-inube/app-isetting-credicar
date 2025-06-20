@@ -8,6 +8,7 @@ import { daysForApplicationData } from "./daysForApplication";
 import { typePayrollData } from "./typePayroll";
 import { sourcesOfIncomeData } from "./sourcesOfIncome";
 import { referenceDecisionData } from "./referenceDecision";
+import { citiesData } from "./cities";
 
 const domains: Record<string, IServerDomain[]> = {
   dateTraceability: dateTraceabilityData,
@@ -19,6 +20,7 @@ const domains: Record<string, IServerDomain[]> = {
   sourcesOfIncome: sourcesOfIncomeData,
   periodicity: periodicityData,
   referenceDecision: referenceDecisionData,
+  cities: citiesData,
 };
 
 function getDomainById(domainId: string) {

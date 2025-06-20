@@ -1,4 +1,4 @@
-import { IEntry } from "@design/data/table/types";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 interface IDetails {
   data: IEntry;

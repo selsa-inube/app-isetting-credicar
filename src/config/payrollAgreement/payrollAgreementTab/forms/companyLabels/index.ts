@@ -11,6 +11,22 @@ const companyLabels = {
   companyAddressRes: "Nomenclatura",
   companyCountry: "País de residencia fiscal",
   companyCountryIdent: "País emisor del documento",
+  labelbutton: "Siguiente",
+  placeholderCompanyName: "Nombre de la empresa",
+  placeholderCompanySelected: "Selecciona de la lista",
+  placeholderCompanyTypeIdent: "Selecciona de la lista",
+  placeholdercompanyNameCommerc: "Nombre comercial",
+  placeholderCompanyCountry: "Selecciona de la lista",
+  placeholderCompanyNumberIdent: "Número de identificacíon",
+  placeholderCompanyCountryIdent: "Selecciona de la lista",
+  placeholderCompanyAddressRes: "Ej: Calle 10 #2a - 34",
+  placeholderCompanyComplement: "Ej: Edificio rojo, oficina 202",
+  placeholderCompanyCity: "Nombre de la ciudad",
+  fieldsetAdress: "Dirección de la sede",
+  fieldsetIdentification: "Identificación",
+  maxLengthCompanyName: 100,
+  maxLengthcompanyNameCom: 30,
+  maxLengthcompanyComplem: 30,
 };
 
 export { companyLabels };

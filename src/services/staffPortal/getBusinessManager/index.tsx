@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { IBusinessManagers } from "@ptypes/staffPortal/IBusinessManagers";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { axiosInstance } from "@api/isaasQuery";
+import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { mapBusinessManagerApiToEntity } from "./mappers";
 
 const getBusinessManagers = async (
@@ -13,7 +13,7 @@ const getBusinessManagers = async (
     },
   };
   const data: IBusinessManagers = await getWithRetries<IBusinessManagers>(
-    axiosInstance,
+    isaasQueryAxiosInstance,
     `/business-managers/${businessManagerId}`,
     config,
   );

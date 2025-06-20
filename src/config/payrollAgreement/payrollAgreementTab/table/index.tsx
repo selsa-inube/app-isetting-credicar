@@ -1,13 +1,20 @@
-import { IAction, IEntry, ITitle } from "@design/data/table/types";
 import { Delete } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/delete";
 import { Edit } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/edit";
 import { Details } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/details";
+import { ITitle } from "@ptypes/design/table/ITitle";
+import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const titles: ITitle[] = [
   {
+    id: "payrollForDeductionAgreementCode",
+    titleName: "Código",
+    priority: 0,
+  },
+  {
     id: "abbreviatedName",
     titleName: "Nombre de nómina",
-    priority: 0,
+    priority: 1,
   },
 ];
 
@@ -34,7 +41,7 @@ const actionsConfig = (setEntryDeleted: (id: string | number) => void) => {
 
 const breakPoints = [
   { breakpoint: "(min-width: 745px)", totalColumns: 2 },
-  { breakpoint: "(max-width: 744px)", totalColumns: 1 },
+  { breakpoint: "(max-width: 744px)", totalColumns: 2 },
 ];
 
 export { titles, actionsConfig, breakPoints };

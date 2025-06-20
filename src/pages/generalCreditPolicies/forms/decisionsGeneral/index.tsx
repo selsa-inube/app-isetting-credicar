@@ -19,6 +19,10 @@ const DecisionsGeneralForm = forwardRef<
       loading = false,
       editDataOption = false,
       handleFormValidChange,
+      onReset,
+      initialValuesEdit,
+      setShowReciprocity,
+      setShowFactor,
     },
     ref,
   ) => {
@@ -38,6 +42,9 @@ const DecisionsGeneralForm = forwardRef<
       onSubmit,
       onFormValid,
       handleFormValidChange,
+      initialValuesEdit,
+      setShowReciprocity,
+      setShowFactor,
     });
 
     return (
@@ -53,6 +60,7 @@ const DecisionsGeneralForm = forwardRef<
         isMobile={isMobile}
         isDisabledButton={isDisabledButton}
         buttonLabel={buttonLabel}
+        onResetEdit={onReset}
       />
     );
   },

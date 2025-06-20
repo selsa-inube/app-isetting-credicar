@@ -1,6 +1,6 @@
 import { createContext } from "react";
 import { IAuthAndPortalData } from "@ptypes/context/authAndPortalDataProvider/IAuthAndPortalData";
-import { useValidatingLoginInformation } from "@src/hooks/context/useValidatingLoginInformation";
+import { useValidatingLoginInformation } from "@hooks/context/useValidatingLoginInformation";
 
 const AuthAndPortalData = createContext<IAuthAndPortalData>(
   {} as IAuthAndPortalData,

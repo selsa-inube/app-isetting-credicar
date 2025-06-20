@@ -3,20 +3,49 @@ import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 import { useMoneryDestinationPage } from "@hooks/moneyDestination/useMoneryDestinationPage";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ICardData } from "@ptypes/home/ICardData";
+import { menuOptionsMoneyDestination } from "@config/moneyDestination/moneyDestinationTab/generics/menuOptions";
 import { MoneyDestinationUI } from "./interface";
 
-function MoneyDestination() {
-  const { businessUnitSigla } = useContext(AuthAndPortalData);
-  const { isSelected, descriptionOptions, handleTabChange } =
-    useMoneryDestinationPage(businessUnitSigla);
+const MoneyDestination = () => {
+  const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
+  const {
+    isSelected,
+    descriptionOptions,
+    showModal,
+    showInfoModal,
+    smallScreen,
+    showMoneyTab,
+    showRequestsTab,
+    moneyDestinationTabs,
+    onCloseMenu,
+    onToggleModal,
+    onToggleInfoModal,
+    handleTabChange,
+  } = useMoneryDestinationPage({
+    businessUnitSigla,
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   return (
     <MoneyDestinationUI
-      isSelected={isSelected ?? moneyDestinationTabsConfig.moneyDestination.id}
+      isSelected={
+        isSelected ??
+        moneyDestinationTabsConfig(smallScreen).moneyDestination.id
+      }
       handleTabChange={handleTabChange}
       descriptionOptions={descriptionOptions as ICardData}
+      options={menuOptionsMoneyDestination}
+      showModal={showModal}
+      showInfoModal={showInfoModal}
+      onToggleInfoModal={onToggleInfoModal}
+      onCloseMenu={onCloseMenu}
+      onToggleModal={onToggleModal}
+      smallScreen={smallScreen}
+      showMoneyTab={showMoneyTab}
+      showRequestsTab={showRequestsTab}
+      moneyDestinationTabs={moneyDestinationTabs}
     />
   );
-}
+};
 
 export { MoneyDestination };
