@@ -1,23 +1,27 @@
 import { AxiosRequestConfig } from "axios";
+
 import { translateObject } from "@isettingkit/business-rules";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { credicarAxiosInstance } from "@api/isettingCredicar";
+import { IEnumerators } from "@ptypes/IEnumerators";
+import { queryProcessAxiosInstance } from "@api/isettingProcess";
+import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 import { configTranslate, enviroment } from "@config/environment";
-import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
-import { mapPayrollAgreementToEntities } from "./mappers/mapPayrollAgreementToEntities";
 
-const getPayrollAgreementData = async (
+const getEnumeratorsRequest = async (
+  enumRequest: string,
   bussinesUnits: string,
-): Promise<IPayrollAgreementData[]> => {
+): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "SearchAllPayrollForDeductionAgreement",
+      "X-Action": "GetEnum",
       "X-Business-unit": bussinesUnits,
     },
   };
-  const data: IPayrollAgreementData[] = await getWithRetries<
-    IPayrollAgreementData[]
-  >(credicarAxiosInstance, `/payroll-for-deduction-agreement`, config);
+  const data: IEnumerators[] = await getWithRetries<IEnumerators[]>(
+    queryProcessAxiosInstance,
+    `/enumerators/${enumRequest}`,
+    config,
+  );
 
   const translatedRaw = await translateObject(
     data,
@@ -30,7 +34,7 @@ const getPayrollAgreementData = async (
     ? translatedRaw
     : Object.values(translatedRaw);
 
-  return mapPayrollAgreementToEntities(translatedArray);
+  return mapEnumToEntities(translatedArray);
 };
 
-export { getPayrollAgreementData };
+export { getEnumeratorsRequest };

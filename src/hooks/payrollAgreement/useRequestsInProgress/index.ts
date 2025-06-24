@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
+import { useEnumRequest } from "@src/hooks/useEnumRequest";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const { bussinesUnits } = props;
@@ -15,14 +16,21 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     useState<string>("");
   const [loading, setLoading] = useState(true);
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
+  const { enumsRequests } = useEnumRequest({
+    bussinesUnits,
+    enumerator: "RequestStatus",
+  });
 
   useEffect(() => {
+    if (enumsRequests.length === 0) return;
+
     const fetchRequestsInProgressData = async () => {
       setLoading(true);
       try {
         const data = await getRequestsInProgress(
           bussinesUnits,
           "PayrollAgreement",
+          enumsRequests,
         );
         setRequestsInProgress(data);
       } catch (error) {
@@ -34,7 +42,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [enumsRequests]);
 
   useEffect(() => {
     if (entryCanceled) {
