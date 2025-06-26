@@ -13,7 +13,38 @@ const RenderDecisionsGenVerification = (
 ) => {
   const { values, isMobile } = props;
 
-  const showMethods = values.reciprocity || values.factor || values.calculation;
+  const renderMethodTags = (values: {
+    reciprocity: boolean;
+    factor: boolean;
+    calculation: boolean;
+  }) => {
+    const methods = [
+      { condition: values.reciprocity, label: verificationLabels.reciprocity },
+      { condition: values.factor, label: verificationLabels.factor },
+      { condition: values.calculation, label: verificationLabels.calculation },
+    ];
+
+    const activeMethods = methods.filter((method) => method.condition);
+
+    if (activeMethods.length === 0) {
+      return (
+        <Tag
+          appearance={ComponentAppearance.DANGER}
+          label={verificationLabels.noDefined}
+          displayIcon={false}
+        />
+      );
+    }
+
+    return activeMethods.map((method) => (
+      <Tag
+        key={method.label}
+        appearance={ComponentAppearance.GRAY}
+        label={method.label}
+        displayIcon={false}
+      />
+    ));
+  };
 
   return (
     <>
@@ -28,40 +59,19 @@ const RenderDecisionsGenVerification = (
           label={verificationLabels.reference}
           value={dataTranslations[values.reference] ?? values.reference}
         />
-        {showMethods && (
-          <BoxAttribute
-            direction="column"
-            label={verificationLabels.methods}
-            withTag
+
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.methods}
+          withTag
+        >
+          <Stack
+            gap={tokens.spacing.s100}
+            direction={isMobile ? "column" : "row"}
           >
-            <Stack
-              gap={tokens.spacing.s100}
-              direction={isMobile ? "column" : "row"}
-            >
-              {values.reciprocity && (
-                <Tag
-                  appearance={ComponentAppearance.GRAY}
-                  label={verificationLabels.reciprocity}
-                  displayIcon={false}
-                />
-              )}
-              {values.factor && (
-                <Tag
-                  appearance={ComponentAppearance.GRAY}
-                  label={verificationLabels.factor}
-                  displayIcon={false}
-                />
-              )}
-              {values.calculation && (
-                <Tag
-                  appearance={ComponentAppearance.GRAY}
-                  label={verificationLabels.calculation}
-                  displayIcon={false}
-                />
-              )}
-            </Stack>
-          </BoxAttribute>
-        )}
+            {renderMethodTags(values)}
+          </Stack>
+        </BoxAttribute>
 
         <BoxAttribute
           direction="column"

@@ -1,5 +1,6 @@
 import { ICondition, IRuleDecision } from "@isettingkit/input";
 import { formatDateDecision } from "../date/formatDateDecision";
+import { translationToEnum } from "../translationToEnum";
 
 const formatRuleDecisions = (
   rule: IRuleDecision[],
@@ -17,7 +18,9 @@ const formatRuleDecisions = (
           ?.filter((condition) => condition.value !== undefined)
           .map((condition) => ({
             labelName: condition.labelName,
-            conditionName: condition.conditionName,
+            conditionName:
+              translationToEnum[condition.conditionName] ??
+              condition.conditionName,
             value: condition.value,
           })) as ICondition[];
     }

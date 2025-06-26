@@ -13,6 +13,7 @@ const verificationLabels = {
   factor: "Factor de riesgo",
   reciprocity: "Reciprocidad de los aportes",
   calculation: "Cálculo por capacidad de pago",
+  noDefined: "No definida",
 };
 
 export { verificationLabels };

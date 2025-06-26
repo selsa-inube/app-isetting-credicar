@@ -28,12 +28,16 @@ const DecisionsGeneralForm = forwardRef<
   ) => {
     const {
       formik,
-      showModal,
+      showInfoRefModal,
+      showInfoMetModal,
+      showInfoObligModal,
       isMobile,
       isDisabledButton,
       buttonLabel,
       handleChange,
-      handleInfoModal,
+      handleInfoRefModal,
+      handleInfoObligModal,
+      handleInfoMethodsModal,
       handleToggleChange,
     } = useDecisionsGenForm({
       initialValues,
@@ -55,8 +59,12 @@ const DecisionsGeneralForm = forwardRef<
         onButtonClick={handleNextStep}
         onReferenceChange={handleChange}
         onToggle={handleToggleChange}
-        showModal={showModal}
-        onInfoModal={handleInfoModal}
+        showInfoRefModal={showInfoRefModal}
+        showInfoMetModal={showInfoMetModal}
+        showInfoObligModal={showInfoObligModal}
+        onInfoRefModal={handleInfoRefModal}
+        onInfoObligModal={handleInfoObligModal}
+        onInfoMethodsModal={handleInfoMethodsModal}
         isMobile={isMobile}
         isDisabledButton={isDisabledButton}
         buttonLabel={buttonLabel}
