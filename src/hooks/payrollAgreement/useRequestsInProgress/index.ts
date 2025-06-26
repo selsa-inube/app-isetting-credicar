@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
+import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const { bussinesUnits } = props;
@@ -22,7 +23,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       try {
         const data = await getRequestsInProgress(
           bussinesUnits,
-          "PayrollAgreement",
+          ERequestInProgress.payrollAgreement,
         );
         setRequestsInProgress(data);
       } catch (error) {
