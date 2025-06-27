@@ -31,9 +31,9 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     loading,
     editDataOption,
     isDisabledButton,
-    showInfoRefModal,
-    showInfoMetModal,
-    showInfoObligModal,
+    showInformationReferenceModal,
+    showInformationMethodModal,
+    showInformationObligationModal,
     isMobile,
     buttonLabel,
     onToggle,
@@ -183,7 +183,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           {buttonLabel}
         </Button>
       </Stack>
-      {showInfoRefModal && (
+      {showInformationReferenceModal && (
         <DecisionModal
           portalId={portalId}
           title={infoReferenceModal.title}
@@ -197,7 +197,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           onClick={onInfoRefModal}
         />
       )}
-      {showInfoMetModal && (
+      {showInformationMethodModal && (
         <DecisionModal
           portalId={portalId}
           title={infoMethodsModal.title}
@@ -211,7 +211,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           onClick={onInfoMethodsModal}
         />
       )}
-      {showInfoObligModal && (
+      {showInformationObligationModal && (
         <DecisionModal
           portalId={portalId}
           title={infoObligationModal.title}

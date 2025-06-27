@@ -5,9 +5,9 @@ interface IDecisionsGeneralFormUI {
   editDataOption: boolean;
   formik: FormikProps<IDecisionsGeneralEntry>;
   loading: boolean;
-  showInfoRefModal: boolean;
-  showInfoMetModal: boolean;
-  showInfoObligModal: boolean;
+  showInformationReferenceModal: boolean;
+  showInformationMethodModal: boolean;
+  showInformationObligationModal: boolean;
   isMobile: boolean;
   isDisabledButton: boolean;
   buttonLabel: string;
