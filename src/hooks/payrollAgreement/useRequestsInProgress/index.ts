@@ -23,7 +23,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       try {
         const data = await getRequestsInProgress(
           bussinesUnits,
-          ERequestInProgress.payrollAgreement,
+          ERequestInProgress.PAYROLL_AGREEMENT,
         );
         setRequestsInProgress(data);
       } catch (error) {

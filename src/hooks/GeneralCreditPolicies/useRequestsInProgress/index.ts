@@ -19,7 +19,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
   const { enumsRequests } = useEnumRequest({
     bussinesUnits,
-    enumerator: ERequestInProgress.requestStatus,
+    enumerator: ERequestInProgress.REQUEST_STATUS,
   });
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       try {
         const data = await getRequestsInProgress(
           bussinesUnits,
-          ERequestInProgress.generalCreditPolicies,
+          ERequestInProgress.GENERAL_CREDIT_POLICIES,
         );
         setRequestsInProgress(data);
       } catch (error) {
