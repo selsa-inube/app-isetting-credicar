@@ -1,8 +1,6 @@
 import { AxiosRequestConfig } from "axios";
-import { translateObject } from "@isettingkit/business-rules";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
-import { configTranslate, enviroment } from "@config/environment";
 import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { mapPayrollAgreementToEntities } from "./mappers/mapPayrollAgreementToEntities";
 
@@ -19,18 +17,7 @@ const getPayrollAgreementData = async (
     IPayrollAgreementData[]
   >(credicarAxiosInstance, `/payroll-for-deduction-agreement`, config);
 
-  const translatedRaw = await translateObject(
-    data,
-    enviroment.VITE_LANGUAGE,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    configTranslate! as any,
-  );
-
-  const translatedArray = Array.isArray(translatedRaw)
-    ? translatedRaw
-    : Object.values(translatedRaw);
-
-  return mapPayrollAgreementToEntities(translatedArray);
+  return mapPayrollAgreementToEntities(data);
 };
 
 export { getPayrollAgreementData };

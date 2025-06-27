@@ -64,7 +64,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
       width="-webkit-fill-available"
       padding={
         smallScreen
-          ? `${tokens.spacing.s100}`
+          ? `${tokens.spacing.s200}`
           : `${tokens.spacing.s300} ${tokens.spacing.s800}`
       }
     >

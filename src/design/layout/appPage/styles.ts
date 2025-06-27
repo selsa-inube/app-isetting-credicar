@@ -14,6 +14,7 @@ const StyledAppPage = styled.div`
 const StyledContainer = styled.div`
   display: inherit;
   overflow: hidden;
+  width: 100%;
 
   & > p {
     white-space: nowrap;
@@ -25,9 +26,19 @@ interface IStyledMain {
 }
 
 const StyledMain = styled.main<IStyledMain>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   box-sizing: border-box;
+  width: auto;
+  width: 100%;
   height: calc(100vh - 54px);
   overflow-y: auto;
+
+  & > div {
+    height: 100%;
+    max-width: 1064px;
+  }
 `;
 
 const StyledHeaderContainer = styled.div`

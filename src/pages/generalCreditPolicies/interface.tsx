@@ -9,6 +9,7 @@ import { loadingLabels } from "@config/loadingLabels";
 import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
 import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
 import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
+import { descriptionTitle } from "@config/generalCreditPolicies/descriptionTitle";
 
 const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
   const {
@@ -75,14 +76,14 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
               }
             >
               <Stack
-                gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s600}
+                gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s300}
                 direction="column"
               >
                 <Stack gap={tokens.spacing.s300} direction="column">
                   <Breadcrumbs crumbs={crumbsGeneralpolicies} />
                   <Title
                     title={descriptionOptions?.publicCode ?? ""}
-                    description={descriptionOptions?.description ?? ""}
+                    description={descriptionTitle}
                     sizeTitle="large"
                     navigatePage="/"
                   />

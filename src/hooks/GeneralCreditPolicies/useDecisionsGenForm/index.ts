@@ -46,11 +46,22 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   useImperativeHandle(ref, () => formik);
 
-  const [showModal, setShowModal] = useState(false);
+  const [showInformationReferenceModal, setShowInfoRefModal] = useState(false);
+  const [showInformationMethodModal, setShowInfoMetModal] = useState(false);
+  const [showInformationObligationModal, setShowInfoObligModal] =
+    useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
 
-  const handleInfoModal = () => {
-    setShowModal(!showModal);
+  const handleInformationReferenceModal = () => {
+    setShowInfoRefModal(!showInformationReferenceModal);
+  };
+
+  const handleInformationMethodsModal = () => {
+    setShowInfoMetModal(!showInformationMethodModal);
+  };
+
+  const handleInformationObligationModal = () => {
+    setShowInfoObligModal(!showInformationObligationModal);
   };
 
   const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,11 +130,15 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   return {
     formik,
-    showModal,
+    showInformationReferenceModal,
+    showInformationMethodModal,
+    showInformationObligationModal,
     isMobile,
     isDisabledButton,
     buttonLabel,
-    handleInfoModal,
+    handleInformationReferenceModal,
+    handleInformationObligationModal,
+    handleInformationMethodsModal,
     handleChange,
     handleToggleChange,
   };

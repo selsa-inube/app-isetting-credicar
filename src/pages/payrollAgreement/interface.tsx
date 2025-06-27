@@ -8,6 +8,7 @@ import { MenuAddButton } from "@design/feedback/menuAddButton";
 import { PayrollAgreementTab } from "./tabs/payrollAgreementTab";
 import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
 import { StyledMenuContainer } from "./styles";
+import { descriptionTitle } from "@config/payrollAgreement/descriptionTitle";
 
 const PayrollAgreementUI = (props: IPayrollAgreementUI) => {
   const {
@@ -37,7 +38,7 @@ const PayrollAgreementUI = (props: IPayrollAgreementUI) => {
       }
     >
       <Stack
-        gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s600}
+        gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s300}
         direction="column"
       >
         <Stack gap={tokens.spacing.s300} direction="column">
@@ -50,7 +51,7 @@ const PayrollAgreementUI = (props: IPayrollAgreementUI) => {
           >
             <Title
               title={descriptionOptions?.publicCode ?? ""}
-              description={descriptionOptions?.description ?? ""}
+              description={descriptionTitle}
               sizeTitle="large"
             />
             {smallScreen && (

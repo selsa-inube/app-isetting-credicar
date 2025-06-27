@@ -1,19 +1,28 @@
-import { Grid, Stack, Tag } from "@inubekit/inubekit";
+import { Grid, Stack } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
 import { IRenderDecisionsGenVerification } from "@ptypes/generalCredPolicies/forms/IRenderDecisionsGenVerification";
-import { ComponentAppearance } from "@enum/appearances";
 import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
 import { renderValue } from "@utils/renderValue";
 import { dataTranslations } from "@utils/dataTranslations";
+import { RenderMethodTags } from "./renderMethodTags";
 
 const RenderDecisionsGenVerification = (
   props: IRenderDecisionsGenVerification,
 ) => {
   const { values, isMobile } = props;
 
-  const showMethods = values.reciprocity || values.factor || values.calculation;
+  const {
+    reference,
+    additionalDebtors,
+    sourcesIncome,
+    financialObligations,
+    realGuarantees,
+    reciprocity,
+    factor,
+    calculation,
+  } = values;
 
   return (
     <>
@@ -26,62 +35,47 @@ const RenderDecisionsGenVerification = (
         <BoxAttribute
           direction="column"
           label={verificationLabels.reference}
-          value={dataTranslations[values.reference] ?? values.reference}
+          value={dataTranslations[reference] ?? reference}
         />
-        {showMethods && (
-          <BoxAttribute
-            direction="column"
-            label={verificationLabels.methods}
-            withTag
+
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.methods}
+          withTag
+        >
+          <Stack
+            gap={tokens.spacing.s100}
+            direction={isMobile ? "column" : "row"}
           >
-            <Stack
-              gap={tokens.spacing.s100}
-              direction={isMobile ? "column" : "row"}
-            >
-              {values.reciprocity && (
-                <Tag
-                  appearance={ComponentAppearance.GRAY}
-                  label={verificationLabels.reciprocity}
-                  displayIcon={false}
-                />
-              )}
-              {values.factor && (
-                <Tag
-                  appearance={ComponentAppearance.GRAY}
-                  label={verificationLabels.factor}
-                  displayIcon={false}
-                />
-              )}
-              {values.calculation && (
-                <Tag
-                  appearance={ComponentAppearance.GRAY}
-                  label={verificationLabels.calculation}
-                  displayIcon={false}
-                />
-              )}
-            </Stack>
-          </BoxAttribute>
-        )}
+            {
+              <RenderMethodTags
+                reciprocity={reciprocity}
+                factor={factor}
+                calculation={calculation}
+              />
+            }
+          </Stack>
+        </BoxAttribute>
 
         <BoxAttribute
           direction="column"
           label={verificationLabels.additionalDebtors}
-          value={renderValue(values.additionalDebtors)}
+          value={renderValue(additionalDebtors)}
         />
         <BoxAttribute
           direction="column"
           label={verificationLabels.sourcesIncome}
-          value={renderValue(values.sourcesIncome)}
+          value={renderValue(sourcesIncome)}
         />
         <BoxAttribute
           direction="column"
           label={verificationLabels.financialObligations}
-          value={renderValue(values.financialObligations)}
+          value={renderValue(financialObligations)}
         />
         <BoxAttribute
           direction="column"
           label={verificationLabels.realGuarantees}
-          value={renderValue(values.realGuarantees)}
+          value={renderValue(realGuarantees)}
         />
       </Grid>
     </>

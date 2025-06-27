@@ -1,11 +1,9 @@
-import { formatDateTable } from "@utils/date/formatDateTable";
-import { requestStatusDescription } from "@utils/requestStatusDescription";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
-import { IEnumerators } from "@ptypes/IEnumerators";
+import { ERequestStatus } from "@enum/requestStatus";
+import { formatDateTable } from "@utils/date/formatDateTable";
 
 const mapRequestsInProgressToEntity = (
   data: IRequestsInProgress,
-  enumsRequests?: IEnumerators[],
 ): IRequestsInProgress => {
   const request: IRequestsInProgress = {
     id: String(data.settingRequestId),
@@ -20,10 +18,9 @@ const mapRequestsInProgressToEntity = (
     entityName: String(data.entityName),
     requestDate: formatDateTable(new Date(String(data.requestDate))),
     requestNumber: String(data.requestNumber),
-    requestStatus: enumsRequests
-      ? requestStatusDescription(enumsRequests, data.requestStatus)
-      : String(data.requestStatus),
-    requestStatusCode: String(data.requestStatus),
+    requestStatus:
+      ERequestStatus[data.requestStatus as keyof typeof ERequestStatus] ??
+      data.requestStatus,
     settingRequestId: String(data.settingRequestId),
     useCaseName: String(data.useCaseName),
     userManagingConfigurationRequests: Object(

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
-import { useEnumRequest } from "@src/hooks/useEnumRequest";
+import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const { bussinesUnits } = props;
@@ -16,21 +16,14 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     useState<string>("");
   const [loading, setLoading] = useState(true);
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
-  const { enumsRequests } = useEnumRequest({
-    bussinesUnits,
-    enumerator: "RequestStatus",
-  });
 
   useEffect(() => {
-    if (enumsRequests.length === 0) return;
-
     const fetchRequestsInProgressData = async () => {
       setLoading(true);
       try {
         const data = await getRequestsInProgress(
           bussinesUnits,
-          "PayrollAgreement",
-          enumsRequests,
+          ERequestInProgress.PAYROLL_AGREEMENT,
         );
         setRequestsInProgress(data);
       } catch (error) {
@@ -42,7 +35,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     };
 
     fetchRequestsInProgressData();
-  }, [enumsRequests]);
+  }, []);
 
   useEffect(() => {
     if (entryCanceled) {
@@ -59,11 +52,9 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   };
 
   const smallScreen = useMediaQuery("(max-width: 690px)");
-  const widthFirstColumn = smallScreen ? 45 : 10;
+  const widthFirstColumn = smallScreen ? 60 : 10;
 
-  const columnWidths = smallScreen
-    ? [widthFirstColumn, 28]
-    : [widthFirstColumn, 55, 23];
+  const columnWidths = smallScreen ? [60, 20, 23] : [widthFirstColumn, 55, 23];
 
   return {
     requestsInProgress,

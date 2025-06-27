@@ -5,6 +5,7 @@ import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgre
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/IUseRequestsInProgress";
 import { useEnumRequest } from "@hooks/useEnumRequest";
+import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const { bussinesUnits } = props;
@@ -18,7 +19,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
   const { enumsRequests } = useEnumRequest({
     bussinesUnits,
-    enumerator: "RequestStatus",
+    enumerator: ERequestInProgress.REQUEST_STATUS,
   });
 
   useEffect(() => {
@@ -29,8 +30,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       try {
         const data = await getRequestsInProgress(
           bussinesUnits,
-          "MoneyDestination",
-          enumsRequests,
+          ERequestInProgress.MONEY_DESTINATION,
         );
         setRequestsInProgress(data);
       } catch (error) {

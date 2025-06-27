@@ -8,6 +8,7 @@ import { RequestsInProgressTab } from "@pages/moneyDestination/tabs/requestsInPr
 import { MenuAddButton } from "@design/feedback/menuAddButton";
 import { IMoneyDestinationUI } from "@ptypes/moneyDestination/tabs/IMoneyDestinationUI";
 import { StyledMenuContainer } from "./styles";
+import { descriptionTitle } from "@config/moneyDestination/descriptionTitle";
 
 const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
   const {
@@ -37,7 +38,7 @@ const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
       }
     >
       <Stack
-        gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s600}
+        gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s300}
         direction="column"
       >
         <Stack gap={tokens.spacing.s300} direction="column">
@@ -50,7 +51,7 @@ const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
           >
             <Title
               title={descriptionOptions?.publicCode ?? ""}
-              description={descriptionOptions?.description ?? ""}
+              description={descriptionTitle}
               sizeTitle="large"
             />
 
