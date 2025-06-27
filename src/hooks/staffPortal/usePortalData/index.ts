@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { staffPortalByBusinessManager } from "@services/staffPortal/getStaffPortalByBusinessManager";
 import { encrypt } from "@utils/crypto/encrypt";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
+import { enviroment } from "@config/environment";
 
 const usePortalData = (portalCode: string | null) => {
   const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
@@ -24,6 +25,15 @@ const usePortalData = (portalCode: string | null) => {
         if (!StaffPortalData) {
           setHasError(true);
           setErrorCode(1001);
+          return;
+        }
+
+        if (
+          StaffPortalData[0].staffPortalCatalogId !==
+          enviroment.PORTAL_CATALOG_ID
+        ) {
+          setHasError(true);
+          setErrorCode(1002);
           return;
         }
         const encryptedParamValue = encrypt(portalCode);
