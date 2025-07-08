@@ -1,11 +1,11 @@
 const enumsTranslation = [
   {
     code: "Biweekly",
-    name: "Quincenal",
+    name: "Bimensual",
   },
   {
     code: "Semimonthly",
-    name: "Bimensual",
+    name: "Quincenal",
   },
   {
     code: "Weekly",

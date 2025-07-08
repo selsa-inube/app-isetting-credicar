@@ -14,7 +14,6 @@ import { typePayrollForCyclesExtraord } from "@config/payrollAgreement/payrollAg
 import { compareObjects } from "@utils/compareObjects";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
-import { useEnumerators } from "@hooks/useEnumerators";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { ILegalPerson } from "@ptypes/payrollAgreement/payrollAgreementTab/ILegalPerson";
@@ -33,6 +32,10 @@ import { getUniquePaydays } from "@utils/getUniqueDays";
 import { getDaysInNumber } from "@utils/getDaysInNumber";
 import { getLastDayOfMonth } from "@utils/getLastDayOfMonth";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
+import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
+import { mediaQueryTablet } from "@config/environment";
+import { addPayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/addPayrollLabels";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;
@@ -112,18 +115,16 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     IServerDomain[]
   >([]);
 
-  const { enumData: incometype } = useEnumerators({
-    enumDestination: "incometype",
-    bussinesUnits: appData.businessUnit.publicCode,
-  });
-
   const { legalPersonData } = useLegalPerson({
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
+  const { enumData: incometype } = useEnumeratorsIncome({
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
   const navigate = useNavigate();
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const companyRef = useRef<FormikProps<ICompanyEntry>>(null);
   const generalInformationRef =
@@ -409,7 +410,9 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       ),
     };
 
-    if (formValues.company.values.companySelected !== "addCompany") {
+    if (
+      formValues.company.values.companySelected !== ECyclesPayroll.ADD_COMPANY
+    ) {
       configurationRequestData.payingEntityName =
         formValues.company.values.companySelected;
       if (legalPersonIdent) {
@@ -419,7 +422,8 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     }
 
     if (
-      formValues.company.values.companySelected === "addCompany" &&
+      formValues.company.values.companySelected ===
+        ECyclesPayroll.ADD_COMPANY &&
       company.identificationDocumentNumber
     ) {
       configurationRequestData.company = company as ILegalPerson;
@@ -443,7 +447,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: "Solicitud de creación de una nómina de convenio",
+      description: addPayrollLabels.descriptionSaveData,
       entityName: "PayrollAgreement",
       requestDate: formatDate(new Date()),
       useCaseName: "AddPayrollAgreement",

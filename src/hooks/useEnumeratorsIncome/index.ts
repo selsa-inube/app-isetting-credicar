@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 
-import { getEnumerators } from "@services/enums/getEnumerators";
 import { IEnumerators } from "@ptypes/IEnumerators";
-import { IUseEnumerators } from "@ptypes/hooks/IUseEnumerators";
+import { getEnumeratorsIncome } from "@services/enums/getEnumeratorsIncome";
+import { IUseEnumeratorsIncome } from "@ptypes/hooks/IUseEnumeratorsIncome";
 
-const useEnumerators = (props: IUseEnumerators) => {
-  const { enumDestination, bussinesUnits } = props;
+const useEnumeratorsIncome = (props: IUseEnumeratorsIncome) => {
+  const { bussinesUnits } = props;
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
   );
@@ -14,18 +14,17 @@ const useEnumerators = (props: IUseEnumerators) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumerators(enumDestination, bussinesUnits);
+        const data = await getEnumeratorsIncome(bussinesUnits);
         setEnumData(data);
       } catch (error) {
         console.info(error);
         setHasError(true);
       }
     };
-
     fetchEnumData();
   }, []);
 
   return { enumData, hasError };
 };
 
-export { useEnumerators };
+export { useEnumeratorsIncome };
