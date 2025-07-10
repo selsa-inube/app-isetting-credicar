@@ -8,7 +8,6 @@ import { validationMessages } from "@validations/validationMessages";
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { addLeadingZero } from "@utils/addLeadingZero";
 import { IServerDomain } from "@ptypes/IServerDomain";
-import { extraordinaryDaysOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/extraordinaryDay";
 import { monthExtraordinaryOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/monthExtraordinary";
 import { daysOfMonth } from "@utils/daysOfMonth";
 import { convertToOptions } from "@utils/convertToOptions";
@@ -21,8 +20,12 @@ import { compareObjects } from "@utils/compareObjects";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
+import { mediaQueryTablet } from "@config/environment";
 import { eventBus } from "@events/eventBus";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
+import { EModalState } from "@enum/modalState";
+import { useValuesSelect } from "../ordinaryCycles/useValuesSelect";
 
 const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const {
@@ -73,14 +76,16 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   );
   const [dayOptions, setDayOptions] = useState<IServerDomain[] | undefined>([]);
   const monthOptions = monthExtraordinaryOptions;
-  const numberDaysUntilCutOptions = extraordinaryDaysOptions;
+
+  const { montlyCourtDaysOptions: numberDaysUntilCutOptions } =
+    useValuesSelect();
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const isMobile = useMediaQuery(mediaQueryTablet);
 
   const { appData } = useContext(AuthAndPortalData);
   const { enumData } = useEnumerators({
-    enumDestination: "extraordinarypaymenttype",
+    enumDestination: ECyclesPayroll.EXTRAORDINARY_TYPE,
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
@@ -196,7 +201,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const columnWidths = isMobile ? [70, 12, 10, 14] : [40, 15, 15, 14];
 
   useEffect(() => {
-    eventBus.emit("secondModalState", showModal);
+    eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
 
   return {

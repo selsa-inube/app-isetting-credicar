@@ -7,7 +7,7 @@ import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
-import { ERulesOfDecisions } from "@src/enum/rulesOfDecisions";
+import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;

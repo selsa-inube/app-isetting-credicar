@@ -8,6 +8,8 @@ const maxRetriesDelete = 1;
 const fetchTimeoutServices = 6000;
 
 const mediaQueryMobile = "(max-width: 770px)";
+const mediaQueryTablet = "(max-width: 990px)";
+
 const stripLeadingSlash = (u?: string) => u?.replace(/^\/+/, "") ?? undefined;
 const configTranslate = {
   url: stripLeadingSlash(
@@ -42,6 +44,7 @@ const enviroment = {
 export {
   enviroment,
   mediaQueryMobile,
+  mediaQueryTablet,
   maxRetriesServices,
   maxRetriesPost,
   maxRetriesDelete,

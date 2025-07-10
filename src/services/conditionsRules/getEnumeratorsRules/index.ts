@@ -11,13 +11,17 @@ const getEnumeratorsRules = async (
 ): Promise<IDecision> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "GetByIdBusinessRuleCatalog",
+      "X-Action": "GetAllBusinessRuleCatalogCrediboard",
       "X-Business-unit": bussinesUnits,
     },
   };
+
+  const queryParams = new URLSearchParams({
+    ruleName: ruleName,
+  });
   const data: IDecision = await getWithRetries<IDecision>(
     credicarAxiosInstance,
-    `/enums/business-rules-catalog/${ruleName}`,
+    `/enums/business-rules-catalog/crediboard?${queryParams.toString()}`,
     config,
   );
   return mapEnumeratorsRulesApiToEntity(data);

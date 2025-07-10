@@ -1,4 +1,4 @@
-import { useContext, useEffect, useImperativeHandle, useState } from "react";
+import { useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { object } from "yup";
@@ -7,20 +7,16 @@ import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { IServerDomain } from "@ptypes/IServerDomain";
-import { payDayOrdinaryOptions } from "@utils/payDayOrdinary";
 import { addLeadingZero } from "@utils/addLeadingZero";
-import { courtDaysOrdinaryOptions } from "@utils/courtDaysOrdinary";
 import { payDayValues } from "@utils/payDayValues";
-import { useEnumerators } from "@hooks/useEnumerators";
-import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
 import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { getNextId } from "@utils/getNextId";
+import { useValuesSelect } from "../useValuesSelect";
 
 const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   const {
@@ -79,13 +75,11 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     IServerDomain[] | undefined
   >([]);
 
-  const { appData } = useContext(AuthAndPortalData);
-  const { enumData: periodicity } = useEnumerators({
-    enumDestination: "schedule",
-    bussinesUnits: appData.businessUnit.publicCode,
-  });
-
-  const periodicityOptions = optionsFromEnumerators(periodicity);
+  const {
+    periodicityOptions,
+    payDayOrdinaryOptions,
+    courtDaysOrdinaryOptions,
+  } = useValuesSelect();
 
   useImperativeHandle(ref, () => formik);
 
@@ -119,7 +113,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       const numberDaysUntilCut = courtDaysOrdinaryOptions(
         formik.values.periodicity,
       );
-      setNumberDaysUntilCutOptions(numberDaysUntilCut);
+      setNumberDaysUntilCutOptions(numberDaysUntilCut as IServerDomain[]);
     }
   }, [formik.values.periodicity]);
 

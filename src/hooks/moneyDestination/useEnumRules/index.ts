@@ -4,6 +4,7 @@ import { IRuleDecision } from "@isettingkit/input";
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRules";
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
 import { IDecision } from "@ptypes/decisions/IDecision";
+import { EConditionRules } from "@enum/conditionRules";
 
 const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
@@ -80,8 +81,9 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   }, [ruleData.listOfPossibleValues, hasFetchedListValuesDecision]);
 
   useEffect(() => {
-    if (ruleData.conditionsThatEstablishesTheDecision) {
-      ruleData.conditionsThatEstablishesTheDecision.forEach((condition) => {
+    const conditions = ruleData.conditionsThatEstablishesTheDecision;
+    if (Array.isArray(conditions)) {
+      conditions.forEach((condition) => {
         if (condition.listOfPossibleValues) {
           if (
             condition.listOfPossibleValues &&
@@ -104,7 +106,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
 
       setRuleData((prevRuleData) => ({
         ...prevRuleData,
-        howToSetTheDecision: "ListOfValues",
+        howToSetTheDecision: EConditionRules.LIST_OF_VALUES,
         listOfPossibleValues: { list: arrayListValues },
         value: "",
       }));
