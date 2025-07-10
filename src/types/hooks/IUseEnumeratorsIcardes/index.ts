@@ -1,6 +1,6 @@
-interface IUseEnumeratorsIcardes {
+interface IUseEnumeratorsICardes {
   enumCredicar: string;
   bussinesUnits: string;
 }
 
-export type { IUseEnumeratorsIcardes };
+export type { IUseEnumeratorsICardes };

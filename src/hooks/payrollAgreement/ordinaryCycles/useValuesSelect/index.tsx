@@ -1,33 +1,33 @@
 import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useEnumeratorsIcardes } from "@hooks/useEnumeratorsIcardes";
+import { useEnumeratorsICardes } from "@hooks/useEnumeratorsIcardes";
 import { optionsFromEnumsSpanish } from "@utils/optionsFromEnumsSpanish";
 import { withoutLastElements } from "@utils/withoutLastElements";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 
 const useValuesSelect = () => {
   const { appData } = useContext(AuthAndPortalData);
-  const { enumData: periodicity } = useEnumeratorsIcardes({
+  const { enumData: periodicity } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.PERIODICITY_ICARDES,
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
-  const { enumData: weekly } = useEnumeratorsIcardes({
+  const { enumData: weekly } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.WEEKLY_ICARDES,
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
-  const { enumData: everyTen } = useEnumeratorsIcardes({
+  const { enumData: everyTen } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.EVERY_TEN_ICARDES,
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
-  const { enumData: semimonthly } = useEnumeratorsIcardes({
+  const { enumData: semimonthly } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.SEMIMONTHLY_ICARDES,
     bussinesUnits: appData.businessUnit.publicCode,
   });
 
-  const { enumData: monthly } = useEnumeratorsIcardes({
+  const { enumData: monthly } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.MONTHLY_ICARDES,
     bussinesUnits: appData.businessUnit.publicCode,
   });

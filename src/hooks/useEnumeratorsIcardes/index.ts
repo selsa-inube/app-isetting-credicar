@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { getEnumeratorsIcardes } from "@services/enums/getEnumeratorsIcardes";
-import { IUseEnumeratorsIcardes } from "@ptypes/hooks/IUseEnumeratorsIcardes";
+import { IUseEnumeratorsICardes } from "@ptypes/hooks/IUseEnumeratorsIcardes";
 
-const useEnumeratorsIcardes = (props: IUseEnumeratorsIcardes) => {
+const useEnumeratorsICardes = (props: IUseEnumeratorsICardes) => {
   const { enumCredicar, bussinesUnits } = props;
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
@@ -28,4 +28,4 @@ const useEnumeratorsIcardes = (props: IUseEnumeratorsIcardes) => {
   return { enumData, hasError };
 };
 
-export { useEnumeratorsIcardes };
+export { useEnumeratorsICardes };
