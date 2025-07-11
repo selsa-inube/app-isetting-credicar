@@ -27,7 +27,7 @@ const TraceabilityCard = (props: ITraceabilityCard) => {
       padding={isMobile ? tokens.spacing.s150 : tokens.spacing.s200}
       gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s150}
       boxSizing="border-box"
-      boxShadow="1px 0px 3px 1px rgba(0, 0, 0, 0.15)"
+      boxShadow={EComponentAppearance.DARK}
     >
       <Stack
         gap={tokens.spacing.s100}

@@ -6,6 +6,7 @@ interface IStyledFlex {
   $boxSizing: string;
   $borderColor: IAppearenceBoxContainer;
   $backgroundColor: IAppearenceBoxContainer;
+  $boxShadow: IAppearenceBoxContainer;
   $justifyContent?: string;
   $alignItems?: string;
   $alignContent?: string;
@@ -20,7 +21,6 @@ interface IStyledFlex {
   $borderRadius?: string;
   $overflowY?: string;
   $overflowX?: string;
-  $boxShadow?: string;
   $minHeight?: string;
   $maxHeight?: string;
 }
@@ -46,7 +46,8 @@ const StyledFlex = styled.div<IStyledFlex>`
   border-radius: ${({ $borderRadius }) => $borderRadius};
   overflow-y: ${({ $overflowY }) => $overflowY};
   overflow-x: ${({ $overflowX }) => $overflowX};
-  box-shadow: ${({ $boxShadow }) => $boxShadow};
+  box-shadow: ${({ theme, $boxShadow }) =>
+    `1px 1px 4px 2px ${theme?.boxContainer?.[$boxShadow].border?.color ?? tokensBoxContainer[$boxShadow].border.color}`};
   min-height: ${({ $minHeight }) => $minHeight};
   max-height: ${({ $maxHeight }) => $maxHeight};
 `;

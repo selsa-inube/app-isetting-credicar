@@ -25,7 +25,7 @@ interface IBoxContainer {
   padding?: string;
   overflowY?: string;
   overflowX?: string;
-  boxShadow?: string;
+  boxShadow?: IAppearenceBoxContainer;
   minHeight?: string;
   maxHeight?: string;
 }

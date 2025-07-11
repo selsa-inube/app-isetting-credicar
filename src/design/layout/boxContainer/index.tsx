@@ -20,7 +20,7 @@ const BoxContainer = (props: IBoxContainer) => {
     borderColor = "light",
     overflowY,
     overflowX,
-    boxShadow,
+    boxShadow = "light",
     minHeight,
     maxHeight,
   } = props;

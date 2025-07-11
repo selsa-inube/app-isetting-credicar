@@ -1,24 +1,17 @@
 import { MdCurrencyExchange } from "react-icons/md";
-import {
-  Divider,
-  Icon,
-  inube,
-  Stack,
-  Text,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+import { Divider, Icon, Stack, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
 import { EComponentAppearance } from "@enum/appearances";
 import { IPaymentCycleCard } from "@ptypes/design/IPaymentCycleCard";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
+import { addCycleLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/addCycleLabels";
 
 const PaymentCycleCard = (props: IPaymentCycleCard) => {
   const { data, numberCard, labels } = props;
   const isMobile = useMediaQuery(mediaQueryMobile);
-  const theme = useThemeData();
+
   const isField = (field: { id: string }) => data[field.id];
 
   return (
@@ -31,7 +24,7 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
       padding={tokens.spacing.s200}
       gap={isMobile ? `${tokens.spacing.s050}` : `${tokens.spacing.s150}`}
       boxSizing="border-box"
-      boxShadow={`1px 1px 4px 2px ${theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40}`}
+      boxShadow={EComponentAppearance.DARK}
     >
       <Stack gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s150}>
         <Icon
@@ -45,7 +38,7 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
           appearance={EComponentAppearance.GRAY}
           weight="bold"
         >
-          {`Ciclo de pago -${numberCard}`}
+          {`${addCycleLabels.cycleDescription} -${numberCard}`}
         </Text>
       </Stack>
       <Divider dashed />

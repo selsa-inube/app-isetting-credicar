@@ -8,6 +8,9 @@ const tokensBoxContainer = {
     background: {
       color: inube.palette.neutral.N0,
     },
+    boxShadow: {
+      color: inube.palette.neutral.N0,
+    },
   },
   gray: {
     border: {
@@ -16,12 +19,18 @@ const tokensBoxContainer = {
     background: {
       color: inube.palette.neutral.N10,
     },
+    boxShadow: {
+      color: inube.palette.neutral.N10,
+    },
   },
   dark: {
     border: {
       color: inube.palette.neutral.N40,
     },
     background: {
+      color: inube.palette.neutral.N40,
+    },
+    boxShadow: {
       color: inube.palette.neutral.N40,
     },
   },
