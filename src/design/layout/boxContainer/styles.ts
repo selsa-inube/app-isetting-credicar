@@ -1,10 +1,12 @@
-import { inube } from "@inubekit/inubekit";
 import styled from "styled-components";
+import { tokensBoxContainer } from "./tokens";
+import { IAppearenceBoxContainer } from "@ptypes/IAppearenceBoxContainer";
 
 interface IStyledFlex {
   $boxSizing: string;
+  $borderColor: IAppearenceBoxContainer;
+  $backgroundColor: IAppearenceBoxContainer;
   $justifyContent?: string;
-  $backgroundColor?: string;
   $alignItems?: string;
   $alignContent?: string;
   $direction?: string;
@@ -16,7 +18,6 @@ interface IStyledFlex {
   $padding?: string;
   $border?: string;
   $borderRadius?: string;
-  $borderColor?: string;
   $overflowY?: string;
   $overflowX?: string;
   $boxShadow?: string;
@@ -37,11 +38,11 @@ const StyledFlex = styled.div<IStyledFlex>`
   margin: ${({ $margin }) => $margin};
   padding: ${({ $padding }) => $padding};
   box-sizing: ${({ $boxSizing }) => $boxSizing};
-  background-color: ${({ $backgroundColor, theme }) =>
-    $backgroundColor
-      ? $backgroundColor
-      : `${theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0}`};
-  border: ${({ $borderColor }) => `1px solid ${$borderColor}`};
+  background: ${({ $backgroundColor, theme }) =>
+    theme?.boxContainer?.[$backgroundColor].background?.color ??
+    tokensBoxContainer[$backgroundColor].background.color};
+  border: ${({ $borderColor, theme }) =>
+    `1px solid ${theme?.boxContainer?.[$borderColor].border?.color ?? tokensBoxContainer[$borderColor].border.color}`};
   border-radius: ${({ $borderRadius }) => $borderRadius};
   overflow-y: ${({ $overflowY }) => $overflowY};
   overflow-x: ${({ $overflowX }) => $overflowX};

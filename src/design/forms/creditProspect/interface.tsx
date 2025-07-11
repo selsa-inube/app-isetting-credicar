@@ -1,4 +1,3 @@
-import { FormikProps } from "formik";
 import {
   Button,
   Divider,
@@ -10,28 +9,17 @@ import {
 
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { OptionsPropectCredit } from "@design/data/optionsPropectCredit";
-import { IEntry } from "@design/data/optionsPropectCredit/types";
 import {
   StyledContainer,
   StyledContainerFields,
 } from "@design/forms/creditProspect/styles";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
-import { ICreditProspectEntry } from "@design/forms/creditProspect/types";
+import { EComponentAppearance } from "@enum/appearances";
+import { ICreditProspectFormUI } from "@ptypes/creditLines/addCreditLine/ICreditProspectFormUI";
+import { mediaQueryTablet } from "@config/environment";
+import { creditProspectLabels } from "@config/creditLines/addCreditLine/assisted/creditProspectLabels";
 
-interface ICreditProspectFormUI {
-  formik: FormikProps<ICreditProspectEntry>;
-  entries: IEntry[];
-  additionalDebtorsField: boolean;
-  onNextStep: () => void;
-  onPreviousStep: () => void;
-  onChange: (name: string, value: string) => void;
-  onToggle: (id: string) => void;
-  isFormValid: boolean;
-  loading?: boolean;
-}
-
-function CreditProspectFormUI(props: ICreditProspectFormUI) {
+const CreditProspectFormUI = (props: ICreditProspectFormUI) => {
   const {
     formik,
     loading,
@@ -44,7 +32,7 @@ function CreditProspectFormUI(props: ICreditProspectFormUI) {
     onToggle,
   } = props;
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const isMobile = useMediaQuery(mediaQueryTablet);
 
   return (
     <StyledContainer>
@@ -63,9 +51,7 @@ function CreditProspectFormUI(props: ICreditProspectFormUI) {
                 </Stack>
               ))}
 
-              <Text size="medium">
-                ¿Cuál es la cantidad máxima de deudores que se pueden registrar?
-              </Text>
+              <Text size="medium">{creditProspectLabels.description}</Text>
               <Select
                 fullwidth={isMobile ? true : false}
                 disabled={!additionalDebtorsField}
@@ -89,22 +75,22 @@ function CreditProspectFormUI(props: ICreditProspectFormUI) {
         <Button
           fullwidth={isMobile}
           onClick={onPreviousStep}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
         >
-          Anterior
+          {creditProspectLabels.previusButton}
         </Button>
 
         <Button
           fullwidth={isMobile}
           onClick={onNextStep}
           disabled={loading ?? !isFormValid}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
-          Siguiente
+          {creditProspectLabels.nextButton}
         </Button>
       </Stack>
     </StyledContainer>
   );
-}
+};
 
 export { CreditProspectFormUI };

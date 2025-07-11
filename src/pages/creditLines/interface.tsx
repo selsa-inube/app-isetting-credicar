@@ -3,28 +3,25 @@ import {
   Stack,
   useMediaQuery,
   Breadcrumbs,
-  Input,
   Button,
+  Searchfield,
 } from "@inubekit/inubekit";
 
 import { Table } from "@design/data/table";
 import { tokens } from "@design/tokens";
 import { Title } from "@design/data/title";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { dataCreditLines } from "@mocks/creditLines/creditLines.mock";
 import { crumbsCreditLines } from "@config/creditLines/navigation";
 import { actions, breakPoints, titles } from "@config/creditLines/table";
-import { ICardData } from "@ptypes/home/ICardData";
+import { ICreditLinesUI } from "@ptypes/creditLines/ICreditLinesUI";
+import { creditPageLabels } from "@config/creditLines/creditPageLabels";
+import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
+import { portalId } from "@config/portalId";
 import { StyledContent } from "./styles";
+import { mediaQueryTablet } from "@config/environment";
 
-interface ICreditLinesUI {
-  loading: boolean;
-  searchCreditLines: string;
-  descriptionOptions: ICardData;
-  onSearchCreditLines: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-function CreditLinesUI(props: ICreditLinesUI) {
+const CreditLinesUI = (props: ICreditLinesUI) => {
   const {
     loading,
     searchCreditLines,
@@ -32,7 +29,7 @@ function CreditLinesUI(props: ICreditLinesUI) {
     onSearchCreditLines,
   } = props;
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
   const widthFirstColumn = smallScreen ? 64 : 25;
 
   return (
@@ -76,11 +73,10 @@ function CreditLinesUI(props: ICreditLinesUI) {
                 }
               >
                 <Stack justifyContent="center">
-                  <Input
-                    name="searchCreditLines"
+                  <Searchfield
+                    name={tabLabels.search}
                     id="searchCreditLines"
-                    placeholder="Palabra clave..."
-                    type="search"
+                    placeholder={tabLabels.placeholderSearch}
                     size="compact"
                     value={searchCreditLines}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -90,18 +86,18 @@ function CreditLinesUI(props: ICreditLinesUI) {
                 </Stack>
                 <Button
                   spacing="wide"
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                   variant="filled"
                   iconBefore={<MdAdd />}
                   type="link"
                   path="/credit-lines/add-credit-line"
                 >
-                  Agregar línea de crédito
+                  {creditPageLabels.description}
                 </Button>
               </Stack>
 
               <Table
-                id="portal"
+                id={portalId}
                 titles={titles}
                 entries={dataCreditLines}
                 actions={actions}
@@ -116,6 +112,6 @@ function CreditLinesUI(props: ICreditLinesUI) {
       </Stack>
     </Stack>
   );
-}
+};
 
 export { CreditLinesUI };

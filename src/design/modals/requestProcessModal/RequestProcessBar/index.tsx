@@ -1,7 +1,7 @@
 import { MdCheckCircle } from "react-icons/md";
 import { Icon, ProgressBar, Stack, Text } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { countVerifiedRequests } from "@utils/countVerifiedRequests";
 import { verifiedErrorRequest } from "@utils/verifiedErrorRequest";
 
@@ -18,14 +18,14 @@ const RequestProcessBar = (props: IRequestProcess) => {
 
   const appearance =
     requestSteps[stepCurrentIndex].status === "error"
-      ? ComponentAppearance.DANGER
-      : ComponentAppearance.SUCCESS;
+      ? EComponentAppearance.DANGER
+      : EComponentAppearance.SUCCESS;
 
   const isError = requestSteps[stepCurrentIndex].status === "error";
 
   const appearanceProgressBar = verifiedErrorRequest(requestSteps)
-    ? ComponentAppearance.DANGER
-    : ComponentAppearance.SUCCESS;
+    ? EComponentAppearance.DANGER
+    : EComponentAppearance.SUCCESS;
 
   const numberOfSteps = `${stepCurrent}/${requestSteps.length}`;
 
@@ -61,7 +61,7 @@ const RequestProcessBar = (props: IRequestProcess) => {
 
           <Text
             size="medium"
-            appearance={ComponentAppearance.DARK}
+            appearance={EComponentAppearance.DARK}
             weight="bold"
             ellipsis
           >
@@ -70,7 +70,7 @@ const RequestProcessBar = (props: IRequestProcess) => {
         </Stack>
         <Stack width="100%" gap={tokens.spacing.s100} alignItems="center">
           <StyledContainerProgressBar
-            $appearance={ComponentAppearance.GRAY}
+            $appearance={EComponentAppearance.GRAY}
             $height="8px"
           >
             <ProgressBar
@@ -83,7 +83,7 @@ const RequestProcessBar = (props: IRequestProcess) => {
             {numberOfSteps}
           </Text>
         </Stack>
-        <Text type="label" size="large" appearance={ComponentAppearance.GRAY}>
+        <Text type="label" size="large" appearance={EComponentAppearance.GRAY}>
           {percentage}
         </Text>
       </Stack>

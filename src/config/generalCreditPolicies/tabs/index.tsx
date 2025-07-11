@@ -1,5 +1,5 @@
 import { MdOutlineReportProblem } from "react-icons/md";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 const generalPoliciesTabsConfig = (smallScreen: boolean) => {
   return {
@@ -17,7 +17,7 @@ const generalPoliciesTabsConfig = (smallScreen: boolean) => {
 
       icon: {
         icon: <MdOutlineReportProblem />,
-        appearance: ComponentAppearance.WARNING,
+        appearance: EComponentAppearance.WARNING,
       },
     },
   };

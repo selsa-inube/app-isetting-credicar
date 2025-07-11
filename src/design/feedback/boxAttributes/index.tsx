@@ -1,12 +1,12 @@
-import { Stack, Text, Grid, useMediaQuery, inube } from "@inubekit/inubekit";
+import { Stack, Text, Grid, useMediaQuery } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IBoxAttribute } from "@ptypes/design/IBoxAttribute";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { ButtonAttribute } from "./ButtonAttribute";
-import { useThemeData } from "@utils/theme";
 import { ContainerAttribute } from "./containerAttribute";
+import { mediaQueryTablet } from "@config/environment";
 
 const BoxAttribute = (props: IBoxAttribute) => {
   const {
@@ -21,8 +21,7 @@ const BoxAttribute = (props: IBoxAttribute) => {
     children,
   } = props;
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
-  const theme = useThemeData();
+  const isMobile = useMediaQuery(mediaQueryTablet);
 
   return (
     <BoxContainer
@@ -34,9 +33,7 @@ const BoxAttribute = (props: IBoxAttribute) => {
           : `${tokens.spacing.s075} ${tokens.spacing.s200}`
       }
       boxSizing="border-box"
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N10 : inube.palette.neutral.N10
-      }
+      backgroundColor={EComponentAppearance.GRAY}
     >
       <Grid
         templateColumns={direction === "column" ? "1fr" : "auto 1fr"}
@@ -50,7 +47,7 @@ const BoxAttribute = (props: IBoxAttribute) => {
         <Text
           type="label"
           size={isMobile ? "small" : "medium"}
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           weight="bold"
         >
           {label}

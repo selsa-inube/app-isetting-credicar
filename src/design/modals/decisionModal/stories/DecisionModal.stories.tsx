@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn } from "@storybook/react";
 import { Button } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "..";
 import { IDecisionModal } from "@ptypes/design/IDecisionModal";
 
@@ -58,7 +58,7 @@ WithIcon.args = {
   actionText: "Continuar aún así",
   withIcon: true,
   icon: <MdOutlineWarningAmber />,
-  appearance: ComponentAppearance.WARNING,
+  appearance: EComponentAppearance.WARNING,
 };
 
 export default meta;

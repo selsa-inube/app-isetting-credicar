@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import { Stack, Text, Blanket, Divider, Button } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { lastCompletedIndex } from "@utils/lastCompletedIndex";
 import { requestProcessLabels } from "@config/requestProcessLabels";
@@ -50,7 +50,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
           <Stack direction="column" justifyContent="center" alignItems="center">
             <Text
               size={isMobile ? "small" : "medium"}
-              appearance={ComponentAppearance.GRAY}
+              appearance={EComponentAppearance.GRAY}
             >
               {description}
             </Text>
@@ -68,7 +68,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
           <Stack justifyContent="end">
             <Button
               spacing="wide"
-              appearance={ComponentAppearance.SUCCESS}
+              appearance={EComponentAppearance.SUCCESS}
               onClick={onClose}
             >
               {requestProcessLabels.labelButton}

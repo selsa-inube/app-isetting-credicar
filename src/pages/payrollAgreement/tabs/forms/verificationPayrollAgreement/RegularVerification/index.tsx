@@ -1,4 +1,4 @@
-import { Grid, inube } from "@inubekit/inubekit";
+import { Grid } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
@@ -8,20 +8,17 @@ import { IEntry } from "@ptypes/design/table/IEntry";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { hasValues } from "@utils/hasValues";
 import { IRenderRegularVerification } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IRenderRegularVerification";
-import { useThemeData } from "@utils/theme";
+import { EComponentAppearance } from "@src/enum/appearances";
 
 const RenderRegularVerification = (props: IRenderRegularVerification) => {
   const { values, isMobile } = props;
-  const theme = useThemeData();
 
   return (
     <BoxContainer
       direction="column"
       borderRadius={tokens.spacing.s100}
       width="100%"
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
     >
       {hasValues(values) && (

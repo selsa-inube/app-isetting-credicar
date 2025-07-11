@@ -10,7 +10,7 @@ import {
 
 import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IPaymentCycleCard } from "@ptypes/design/IPaymentCycleCard";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { useThemeData } from "@utils/theme";
@@ -24,9 +24,7 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
   return (
     <BoxContainer
       direction="column"
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       width="290px"
       height="282px"
       borderRadius={tokens.spacing.s100}
@@ -38,13 +36,13 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
       <Stack gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s150}>
         <Icon
           icon={<MdCurrencyExchange />}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
           size="24px"
         />
         <Text
           type="title"
           size="medium"
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
           weight="bold"
         >
           {`Ciclo de pago -${numberCard}`}
@@ -66,7 +64,7 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
                 </Text>
                 <Text
                   size="large"
-                  appearance={ComponentAppearance.GRAY}
+                  appearance={EComponentAppearance.GRAY}
                   ellipsis
                 >
                   {data[field.id]}

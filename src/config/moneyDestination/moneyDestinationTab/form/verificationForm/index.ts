@@ -1,6 +1,6 @@
 const finishModal = {
-  title: "Finalizar",
-  description: "¿Realmente deseas finalizar esta solicitud?",
+  title: "Enviar",
+  description: "¿Realmente deseas enviar esta solicitud?",
   actionText: "Confirmar",
 };
 

@@ -6,13 +6,14 @@ import { useDeleteDestination } from "@hooks/moneyDestination/useDeleteDestinati
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { UseCase } from "@enum/useCase";
 import { IDelete } from "@ptypes/moneyDestination/tabs/IDelete";
+import { portalId } from "@config/portalId";
 
 const Delete = (props: IDelete) => {
   const { data, setEntryDeleted } = props;
@@ -63,19 +64,19 @@ const Delete = (props: IDelete) => {
       />
       {showRequestProcess && (
         <RequestProcess
-          portalId="portal"
+          portalId={portalId}
           saveData={saveMoneyDestination}
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
           requestProcessSteps={requestSteps}
-          appearance={ComponentAppearance.SUCCESS}
+          appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={handleCloseRequestStatus}
           onCloseProcess={handleCloseProcess}
         />
       )}
       {showRequestStatus && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(saveMoneyDestination.staffName).title}
           description={
             requestStatusMessage(saveMoneyDestination.staffName).description
@@ -87,7 +88,7 @@ const Delete = (props: IDelete) => {
           actionText={
             requestStatusMessage(saveMoneyDestination.staffName).actionText
           }
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         />
       )}
     </>

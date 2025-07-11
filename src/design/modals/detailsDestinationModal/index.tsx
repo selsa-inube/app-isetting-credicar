@@ -20,11 +20,24 @@ const DetailsDestinationModal = (props: IDetailsDestinationModal) => {
     onTabChange,
   } = props;
 
+  const showGeneraldata = isSelected === detailsTabsConfig.generalData.id;
+
+  const showCreditLineTab =
+    !isMoreDetails &&
+    isSelected === detailsTabsConfig.creditLine.id &&
+    decisions.length > 0;
+
+  const showCreditLinesIncluded =
+    isMoreDetails && isSelected === detailsTabsConfig.creditLineIncluded?.id;
+
+  const showCreditLinesRemoved =
+    isMoreDetails && isSelected === detailsTabsConfig.creditLineRemoved?.id;
+
+  const filteredTabs = Object.values(filteredTabsConfig);
+
   return (
     <DetailsDestinationModalUI
       data={data}
-      filteredTabsConfig={filteredTabsConfig}
-      detailsTabsConfig={detailsTabsConfig}
       isSelected={isSelected ?? defaultSelectedTab}
       onCloseModal={onCloseModal}
       onTabChange={onTabChange}
@@ -33,9 +46,13 @@ const DetailsDestinationModal = (props: IDetailsDestinationModal) => {
       decisionTemplate={decisionTemplate}
       textValues={textValues}
       decisions={decisions}
-      isMoreDetails={isMoreDetails}
       decisionDeleted={decisionDeleted}
       decisionInserted={decisionInserted}
+      showGeneraldata={showGeneraldata}
+      showCreditLineTab={showCreditLineTab}
+      showCreditLinesIncluded={showCreditLinesIncluded}
+      showCreditLinesRemoved={showCreditLinesRemoved}
+      filteredTabs={filteredTabs}
     />
   );
 };

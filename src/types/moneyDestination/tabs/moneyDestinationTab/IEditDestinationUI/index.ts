@@ -1,12 +1,11 @@
+import { ITab } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { FormikProps } from "formik";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
-import { IEditDestinationTabsConfig } from "../tabs/ITabConfig/IEditDestinationTabsConfig";
-
 interface IEditDestinationUI {
-  editDestinationTabsConfig: IEditDestinationTabsConfig;
+  editDestinationTabsConfig: ITab[];
   creditLineDecisions: IRuleDecision[];
   normalizeEvaluateRuleData: IRuleDecision[];
   generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;

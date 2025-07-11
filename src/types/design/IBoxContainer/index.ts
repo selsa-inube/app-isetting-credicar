@@ -5,12 +5,13 @@ import {
   IStackJustifyContent,
   IStackWrapControl,
 } from "@inubekit/inubekit";
+import { IAppearenceBoxContainer } from "@ptypes/IAppearenceBoxContainer";
 
 interface IBoxContainer {
   children: React.ReactNode;
   boxSizing: string;
-  borderColor?: string;
-  backgroundColor?: string;
+  borderColor?: IAppearenceBoxContainer;
+  backgroundColor?: IAppearenceBoxContainer;
   borderRadius?: string;
   wrap?: IStackWrapControl;
   direction?: IStackDirectionAlignment;

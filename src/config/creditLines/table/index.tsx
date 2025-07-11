@@ -1,7 +1,7 @@
 import { MdDeleteOutline, MdOutlineCreate } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { Details } from "@pages/creditLines/components/Details";
 import { ITitle } from "@ptypes/design/table/ITitle";
 import { IAction } from "@ptypes/design/table/IAction";
@@ -30,7 +30,7 @@ const actions: IAction[] = [
     id: "edit",
     content: () => (
       <Icon
-        appearance={ComponentAppearance.PRIMARY}
+        appearance={EComponentAppearance.PRIMARY}
         icon={<MdOutlineCreate />}
         size="16px"
         cursorHover
@@ -41,7 +41,7 @@ const actions: IAction[] = [
     id: "delete",
     content: () => (
       <Icon
-        appearance={ComponentAppearance.DANGER}
+        appearance={EComponentAppearance.DANGER}
         icon={<MdDeleteOutline />}
         size="16px"
         cursorHover

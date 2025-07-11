@@ -1,7 +1,7 @@
-import { Divider, inube, Stack, Text } from "@inubekit/inubekit";
+import { Divider, Stack, Text } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { RequestType } from "@enum/requestType";
 import { TraceabilityCard } from "@design/feedback/traceabilityCard";
 import { ModalWrapper } from "@design/modals/modalWrapper";
@@ -10,7 +10,6 @@ import { detailsRequestInProgressModal } from "@config/moneyDestination/requests
 import { DetailBox } from "@design/feedback/detailBox";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IRequestsInProcess } from "@ptypes/moneyDestination/tabs/IRequestsInProcess";
-import { useThemeData } from "@utils/theme";
 
 const RequestsInProcess = (props: IRequestsInProcess) => {
   const {
@@ -21,8 +20,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
     onCloseModal,
     onClick,
   } = props;
-
-  const theme = useThemeData();
 
   const labelsOfRequestDetails = labelsOfRequest.filter(
     (field) => data[field.id],
@@ -49,7 +46,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
       <BoxContainer
         direction="column"
         borderRadius={tokens.spacing.s100}
-        borderColor={theme.palette.neutral.N40 ?? inube.palette.neutral.N40}
+        borderColor={EComponentAppearance.DARK}
         boxSizing="border-box"
         width="auto"
         height={isMobile ? "400px" : "430px"}
@@ -72,7 +69,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
               type="title"
               size="medium"
               weight="bold"
-              appearance={ComponentAppearance.GRAY}
+              appearance={EComponentAppearance.GRAY}
             >
               {title}
             </Text>
@@ -99,9 +96,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
                 borderRadius={tokens.spacing.s100}
                 padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
                 width={isMobile ? "253px" : "240px"}
-                borderColor={
-                  theme.palette.neutral.N40 ?? inube.palette.neutral.N40
-                }
+                borderColor={EComponentAppearance.DARK}
                 ellipsis
               />
             ))}

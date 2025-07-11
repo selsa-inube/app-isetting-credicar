@@ -16,7 +16,6 @@ interface IMoreDetails {
   title: string;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
-  moreDetails?: boolean;
   ordinaryPaymentData?: IEntry[];
   extraordinaryPaymentData?: IEntry[];
   ordinaryIncludedData?: IEntry[];

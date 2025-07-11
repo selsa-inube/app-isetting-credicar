@@ -3,42 +3,18 @@ import { MdOutlineChevronRight } from "react-icons/md";
 import { Text, Icon, Label, Stack } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
+import { ISelectCheckUI } from "@ptypes/design/ISelectCheckUI";
 import { getTypo } from "@utils/getTypo";
 import { OptionList } from "./optionList";
-import { Size, Status } from "./types";
 import {
   StyledChevron,
   StyledContainer,
   StyledInput,
   StyledInputContainer,
 } from "./styles";
-import { IOptionItem, OptionItem } from "./optionItem";
+import { OptionItem } from "./optionItem";
 import { Message } from "./message";
-
-interface ISelectCheckUI {
-  id: string;
-  name: string;
-  options: IOptionItem[];
-  value: string | number;
-  displayList: boolean;
-  disabled?: boolean;
-  focused?: boolean;
-  fullwidth?: boolean;
-  label?: string;
-  message?: string;
-  placeholder?: string;
-  readonly?: boolean;
-  required?: boolean;
-  size?: Size;
-  invalid?: boolean;
-  status?: Status;
-  onBlur?: (event: FocusEvent) => void;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>, name: string) => void;
-  onChangeCheck?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onClick?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onFocus?: (event: FocusEvent) => void;
-}
 
 const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
   (props: ISelectCheckUI, ref) => {
@@ -62,9 +38,11 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
       placeholder,
       readonly,
       required,
-      size,
-      status,
+      size = "compact",
+      status = "pending",
     } = props;
+
+    const OptionListVisible = displayList && !disabled;
 
     return (
       <StyledContainer $fullwidth={fullwidth} disabled={disabled} ref={ref}>
@@ -80,7 +58,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
                 disabled={disabled}
                 focused={!readonly && focused}
                 invalid={status === "invalid" && !readonly}
-                size={getTypo(size!)}
+                size={getTypo(size)}
               >
                 {label}
               </Label>
@@ -90,7 +68,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
               <Text
                 type="body"
                 size="small"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
               >
                 (Requerido)
               </Text>
@@ -113,7 +91,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
             $disabled={disabled}
             required={required}
             $size={size}
-            $status={status!}
+            $status={status}
             $fullwidth={fullwidth}
             $focused={focused}
             onBlur={onBlur}
@@ -124,7 +102,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
           <Stack direction="row" gap={tokens.spacing.s100} alignItems="center">
             <StyledChevron $displayList={displayList}>
               <Icon
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 icon={<MdOutlineChevronRight />}
                 spacing="narrow"
                 disabled={disabled}
@@ -137,7 +115,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
           <Message disabled={disabled} status={status} message={message} />
         )}
 
-        {displayList && !disabled && (
+        {OptionListVisible && (
           <OptionList onClick={onChangeCheck}>
             {options?.map((optionItem) => (
               <OptionItem

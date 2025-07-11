@@ -1,18 +1,15 @@
 import { Stack, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import {
   StyledContainerDataName,
   StyledContainerDescription,
   StyledContainerName,
 } from "./styles";
 import { mediaQueryMobile } from "@config/environment";
-import { IEntry } from "@ptypes/design/table/IEntry";
-
-interface IGeneralDataTab {
-  data: IEntry;
-}
+import { IGeneralDataTab } from "@ptypes/design/IGeneralDataTab";
+import { generalDataTabLabels } from "@config/moneyDestination/moneyDestinationTab/generics/generalDataTabLabels";
 
 const GeneralDataTab = (props: IGeneralDataTab) => {
   const { data } = props;
@@ -29,10 +26,10 @@ const GeneralDataTab = (props: IGeneralDataTab) => {
           <Text
             type="label"
             size="medium"
-            appearance={ComponentAppearance.DARK}
+            appearance={EComponentAppearance.DARK}
             weight="bold"
           >
-            Nombre
+            {generalDataTabLabels.name}
           </Text>
           <StyledContainerDataName>
             {data.abbreviatedName}
@@ -45,12 +42,16 @@ const GeneralDataTab = (props: IGeneralDataTab) => {
           <Text
             type="label"
             size="medium"
-            appearance={ComponentAppearance.DARK}
+            appearance={EComponentAppearance.DARK}
             weight="bold"
           >
-            Descripción
+            {generalDataTabLabels.description}
           </Text>
-          <Text type="body" size="medium" appearance={ComponentAppearance.GRAY}>
+          <Text
+            type="body"
+            size="medium"
+            appearance={EComponentAppearance.GRAY}
+          >
             {data.descriptionUse}
           </Text>
         </StyledContainerDescription>

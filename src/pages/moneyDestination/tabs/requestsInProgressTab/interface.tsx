@@ -9,7 +9,7 @@ import {
 } from "@config/moneyDestination/requestsInProgressTab/table";
 import { Table } from "@design/data/table";
 import { tablabels } from "@config/moneyDestination/requestsInProgressTab/tabLabels";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { StyledContainer } from "./styles";
 
 const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
@@ -43,7 +43,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 ellipsis
               >
                 {tablabels.description}
@@ -82,7 +82,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
               >
                 {tablabels.description}
               </Text>

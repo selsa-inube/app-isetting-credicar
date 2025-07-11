@@ -57,10 +57,12 @@ const EditDestination = () => {
   const showRequestStatus =
     showPendingReqModal && saveMoneyDestination?.requestNumber;
 
+  const editDestinationTabs = Object.values(editDestinationTabsConfig);
+
   return (
     <EditDestinationUI
       creditLineDecisions={creditLineDecisions}
-      editDestinationTabsConfig={editDestinationTabsConfig}
+      editDestinationTabsConfig={editDestinationTabs}
       isSelected={isSelected}
       onTabChange={handleTabChange}
       generalInformationRef={generalInformationRef}

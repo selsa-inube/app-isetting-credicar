@@ -59,6 +59,10 @@ const Table = (props: ITable) => {
 
   const findCurrentMedia = findCurrentMediaQuery(media);
 
+  const hasEntries = entries.length > 0;
+
+  const isPaginated = filteredEntries.length > pageLength;
+
   return (
     <StyledContainerTable
       id={id}
@@ -82,7 +86,6 @@ const Table = (props: ITable) => {
             findCurrentMedia,
           )}
           mobileTitle={mobileTitle}
-          pageLength={pageLength}
           firstEntryInPage={firstEntry}
           lastEntryInPage={lastEntry}
           goToFirstPage={() => goToFirstPage(setCurrentPage)}
@@ -98,6 +101,8 @@ const Table = (props: ITable) => {
           ellipsisCell={ellipsisCell}
           withActionMobile={withActionMobile}
           withGeneralizedTitle={withGeneralizedTitle}
+          hasEntries={hasEntries}
+          isPaginated={isPaginated}
         />
       </Stack>
     </StyledContainerTable>

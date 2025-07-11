@@ -2,7 +2,7 @@ import { useContext } from "react";
 
 import { DeleteRecord } from "@design/feedback/DeleteRecord";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
@@ -13,6 +13,7 @@ import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreement
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { UseCase } from "@enum/useCase";
+import { portalId } from "@config/portalId";
 
 const Delete = (props: IDelete) => {
   const { data, setEntryDeleted } = props;
@@ -61,19 +62,19 @@ const Delete = (props: IDelete) => {
       />
       {showRequestProcess && (
         <RequestProcess
-          portalId="portal"
+          portalId={portalId}
           saveData={savePayrollAgreement}
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
           requestProcessSteps={requestSteps}
-          appearance={ComponentAppearance.SUCCESS}
+          appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={handleCloseRequestStatus}
           onCloseProcess={handleCloseProcess}
         />
       )}
       {showRequestStatus && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(savePayrollAgreement?.staffName).title}
           description={
             requestStatusMessage(savePayrollAgreement?.staffName).description
@@ -85,7 +86,7 @@ const Delete = (props: IDelete) => {
           actionText={
             requestStatusMessage(savePayrollAgreement?.staffName).actionText
           }
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         />
       )}
     </>

@@ -1,5 +1,5 @@
 import { IIconAppearance } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 interface IDecisionModal {
   actionText: string;
@@ -12,7 +12,7 @@ interface IDecisionModal {
   withCancelButton?: boolean;
   moreDetails?: string;
   sizeIcon?: string;
-  appearanceButton?: ComponentAppearance;
+  appearanceButton?: EComponentAppearance;
   icon?: React.JSX.Element;
   isDisabledButton?: boolean;
   withDate?: boolean;

@@ -1,16 +1,10 @@
-import { inube, Stack } from "@inubekit/inubekit";
+import { Stack } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { ILabel } from "@ptypes/ILabel";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { EComponentAppearance } from "@enum/appearances";
+import { ITraceabilityCard } from "@ptypes/design/ITraceabilityCard";
 import { RenderDetailBox } from "./renderDetailBox";
-
-interface ITraceabilityCard {
-  data: IEntry;
-  labels: ILabel[];
-  isMobile: boolean;
-}
 
 const TraceabilityCard = (props: ITraceabilityCard) => {
   const { data, labels, isMobile } = props;
@@ -26,7 +20,7 @@ const TraceabilityCard = (props: ITraceabilityCard) => {
   return (
     <BoxContainer
       direction="column"
-      backgroundColor={inube.palette.neutral.N0}
+      backgroundColor={EComponentAppearance.LIGHT}
       width={isMobile ? "244px" : "400px"}
       height="auto"
       borderRadius={tokens.spacing.s100}

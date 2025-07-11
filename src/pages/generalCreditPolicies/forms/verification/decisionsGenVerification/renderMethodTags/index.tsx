@@ -1,5 +1,5 @@
 import { Tag } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
 import { IRenderMethodTags } from "@ptypes/generalCredPolicies/forms/IRenderMethodTags";
 
@@ -16,7 +16,7 @@ const RenderMethodTags = (props: IRenderMethodTags) => {
   if (activeMethods.length === 0) {
     return (
       <Tag
-        appearance={ComponentAppearance.DANGER}
+        appearance={EComponentAppearance.DANGER}
         label={verificationLabels.noDefined}
         displayIcon={false}
       />
@@ -26,7 +26,7 @@ const RenderMethodTags = (props: IRenderMethodTags) => {
   return activeMethods.map((method) => (
     <Tag
       key={method.label}
-      appearance={ComponentAppearance.GRAY}
+      appearance={EComponentAppearance.GRAY}
       label={method.label}
       displayIcon={false}
     />

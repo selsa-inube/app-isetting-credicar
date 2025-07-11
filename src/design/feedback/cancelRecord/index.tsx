@@ -1,7 +1,7 @@
 import { MdOutlineCancel } from "react-icons/md";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { notCancelStatus } from "@config/status/notCancelStatus";
 import { StyledContainerIcon } from "./styles";
@@ -23,7 +23,7 @@ const CancelRecord = (props: ICancelRecord) => {
         $isTablet={screenTablet}
       >
         <Icon
-          appearance={ComponentAppearance.DANGER}
+          appearance={EComponentAppearance.DANGER}
           icon={<MdOutlineCancel />}
           size="16px"
           onClick={onToggleModal}
@@ -45,9 +45,9 @@ const CancelRecord = (props: ICancelRecord) => {
           description={messageCancel.description}
           onClick={onClick}
           onCloseModal={onToggleModal}
-          appearance={ComponentAppearance.DANGER}
+          appearance={EComponentAppearance.DANGER}
           loading={loading}
-          appearanceButton={ComponentAppearance.DANGER}
+          appearanceButton={EComponentAppearance.DANGER}
         />
       )}
     </>
