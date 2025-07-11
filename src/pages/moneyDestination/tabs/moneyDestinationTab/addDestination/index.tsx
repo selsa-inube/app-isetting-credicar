@@ -21,6 +21,10 @@ function AddDestination() {
     saveData,
     showAttentionModal,
     smallScreen,
+    showGoBackModal,
+    handleCloseModal,
+    handleGoBack,
+    handleOpenModal,
     handleNextStep,
     handlePreviousStep,
     handleSubmitClick,
@@ -80,6 +84,10 @@ function AddDestination() {
       setShowAttentionModal={setShowAttentionModal}
       smallScreen={smallScreen}
       onCloseProcess={handleCloseProcess}
+      onGoBack={handleGoBack}
+      showGoBackModal={showGoBackModal}
+      onCloseModal={handleCloseModal}
+      onOpenModal={handleOpenModal}
     />
   );
 }

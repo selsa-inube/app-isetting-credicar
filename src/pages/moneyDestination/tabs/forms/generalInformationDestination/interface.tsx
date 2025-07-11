@@ -1,4 +1,11 @@
-import { Autosuggest, Button, Stack, Text, Textarea } from "@inubekit/inubekit";
+import {
+  Autosuggest,
+  Button,
+  Stack,
+  Text,
+  Textarea,
+  Textfield,
+} from "@inubekit/inubekit";
 import { MdOutlineFax } from "react-icons/md";
 
 import { tokens } from "@design/tokens";
@@ -44,19 +51,36 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
               <Stack direction="column" width="100%" gap={tokens.spacing.s250}>
                 <Stack direction={directionStack} gap={tokens.spacing.s250}>
                   <Stack width={widthStack}>
-                    <Autosuggest
-                      label={generalInfoLabels.name}
-                      name="nameDestination"
-                      id="nameDestination"
-                      placeholder={generalInfoLabels.placeholderName}
-                      value={autosuggestValue}
-                      onChange={onChange}
-                      options={optionsDestination}
-                      onBlur={formik.handleBlur}
-                      size="compact"
-                      fullwidth
-                      invalid={isInvalid(formik, "nameDestination")}
-                    />
+                    {editDataOption ? (
+                      <Textfield
+                        name="nameDestination"
+                        id="nameDestination"
+                        label={generalInfoLabels.name}
+                        placeholder={generalInfoLabels.placeholderName}
+                        size="compact"
+                        value={autosuggestValue}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        status={getFieldState(formik, "nameDestination")}
+                        message={formik.errors.nameDestination}
+                        fullwidth
+                        required
+                      />
+                    ) : (
+                      <Autosuggest
+                        label={generalInfoLabels.name}
+                        name="nameDestination"
+                        id="nameDestination"
+                        placeholder={generalInfoLabels.placeholderName}
+                        value={autosuggestValue}
+                        onChange={onChange}
+                        options={optionsDestination}
+                        onBlur={formik.handleBlur}
+                        size="compact"
+                        fullwidth
+                        invalid={isInvalid(formik, "nameDestination")}
+                      />
+                    )}
                   </Stack>
                   <Stack
                     direction="column"

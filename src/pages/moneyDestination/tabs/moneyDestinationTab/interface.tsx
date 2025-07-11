@@ -21,6 +21,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
     loading,
     smallScreen,
     columnWidths,
+    emptyDataMessage,
     onSearchMoneyDestination,
     setEntryDeleted,
   } = props;
@@ -114,6 +115,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
             loading={loading}
             columnWidths={columnWidths}
             pageLength={8}
+            emptyDataMessage={emptyDataMessage}
           />
         </Stack>
       </Stack>

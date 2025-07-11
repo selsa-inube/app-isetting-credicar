@@ -86,7 +86,7 @@ const TableUI = (props: ITableUI) => {
                     type="label"
                     size={mediaActionOpen ? "medium" : "large"}
                     appearance={EComponentAppearance.DARK}
-                    ellipsis
+                    textAlign="center"
                   >
                     {emptyDataMessage
                       ? `${emptyDataMessage}`
