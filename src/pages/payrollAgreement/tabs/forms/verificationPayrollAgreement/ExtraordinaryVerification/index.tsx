@@ -8,7 +8,7 @@ import { rowsAttribute } from "@utils/rowsAttribute";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { hasValues } from "@utils/hasValues";
-import { EComponentAppearance } from "@src/enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 const RenderExtraordinaryVerification = (
   props: IRenderExtraordinaryVerification,

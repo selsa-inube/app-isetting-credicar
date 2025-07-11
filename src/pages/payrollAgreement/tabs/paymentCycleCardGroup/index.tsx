@@ -2,11 +2,10 @@ import { useMediaQuery, Stack } from "@inubekit/inubekit";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { mediaQueryMobile } from "@config/environment";
 import { IPaymentCycleCardGroup } from "@ptypes/design/IPaymentCycleCardGroup";
-
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { PaymentCycleCard } from "./paymentCycleCard";
-import { EComponentAppearance } from "@src/enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 const PaymentCycleCardGroup = (props: IPaymentCycleCardGroup) => {
   const { data, labelsPaymentCard } = props;
