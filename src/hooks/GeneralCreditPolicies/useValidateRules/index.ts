@@ -3,7 +3,7 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
 import { IConditionsEvaluateRule } from "@ptypes/decisions/IConditionsEvaluateRule";
 import { ENameRules } from "@enum/nameRules";
-import { EGeneralPolicies } from "@src/enum/generalPolicies";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 
 const useValidateRules = () => {
   const { appData } = useContext(AuthAndPortalData);
