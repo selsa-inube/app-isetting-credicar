@@ -21,7 +21,7 @@ const incomePortfLabels = {
         {` NO `}
       </Text>
       hay decisiones. Define # de veces los ingresos como cupo total de la
-      cartera.
+      cartera con el botón.
     </Text>
   ),
 };

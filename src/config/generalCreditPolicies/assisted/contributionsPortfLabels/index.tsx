@@ -20,8 +20,8 @@ const contributionsPortfLabels = {
       >
         {` NO `}
       </Text>
-      hay decisiones. Define # de veces los ingresos como cupo total de la
-      cartera con el botón.
+      hay decisiones. Define # de veces aportes como cupo total de la cartera
+      con el botón.
     </Text>
   ),
 };

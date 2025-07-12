@@ -23,6 +23,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     disabledButton,
     heightContentPage = "70vh",
     bottomAddButton = "55px",
+    ruleCatalog = "crediboard",
     decisionTemplateConfig,
     onButtonClick,
     onPreviousStep,
@@ -68,10 +69,11 @@ const DecisionsForm = (props: IDecisionsForm) => {
   });
 
   const { appData } = useContext(AuthAndPortalData);
-  const { ruleData } = useEnumRules(
-    labelBusinessRules,
-    appData.businessUnit.publicCode,
-  );
+  const { ruleData } = useEnumRules({
+    enumDestination: labelBusinessRules,
+    ruleCatalog,
+    bussinesUnits: appData.businessUnit.publicCode,
+  });
 
   return (
     <DecisionsFormUI

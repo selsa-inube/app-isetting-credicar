@@ -35,7 +35,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     isRequestStatusModal,
     showRequestProcessModal,
     smallScreen,
-    tabletScreen,
     contributionsPortfolio,
     formValues,
     incomePortfolio,
@@ -91,7 +90,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           tabs={filteredTabsConfig}
           selectedTab={isSelected}
           onChange={onTabChange}
-          scroll={tabletScreen}
+          scroll={filteredTabsConfig.length > 2}
         />
         <Stack direction="column">
           {showDecisionsGeneral && (

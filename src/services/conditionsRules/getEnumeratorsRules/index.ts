@@ -7,23 +7,22 @@ import { mapEnumeratorsRulesApiToEntity } from "./mappers";
 
 const getEnumeratorsRules = async (
   ruleName: string,
+  ruleCatalog: string,
   bussinesUnits: string,
 ): Promise<IDecision> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "GetAllBusinessRuleCatalogCrediboard",
+      "X-Action": "GetByIdBusinessRuleCatalog",
       "X-Business-unit": bussinesUnits,
     },
   };
 
-  const queryParams = new URLSearchParams({
-    ruleName: ruleName,
-  });
   const data: IDecision = await getWithRetries<IDecision>(
     credicarAxiosInstance,
-    `/enums/business-rules-catalog/crediboard?${queryParams.toString()}`,
+    `/enums/business-rules-catalog/${ruleCatalog}/${ruleName}`,
     config,
   );
+
   return mapEnumeratorsRulesApiToEntity(data);
 };
 

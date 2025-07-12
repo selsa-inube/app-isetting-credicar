@@ -8,6 +8,7 @@ const nameRules = {
   contributionsPortfolio: "ReciprocityFactorForCreditLimitGP",
   incomePortfolio: "RiskScoreFactorForCreditLimitGP",
   scoreModels: "CreditRiskScoringModelGp",
+  ruleCatalogIrisk: "irisk",
 };
 
 export { nameRules };

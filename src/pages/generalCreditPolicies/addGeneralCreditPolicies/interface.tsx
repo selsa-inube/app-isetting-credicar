@@ -16,10 +16,10 @@ import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/income
 import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
 import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
-import { VerificationForm } from "../forms/verification";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
+import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
+import { VerificationForm } from "../forms/verification";
 
 const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
   const {
@@ -150,6 +150,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 revertModalDisplayData={revertModalDisplayData}
                 labelBusinessRules={nameRules.scoreModels}
                 nameRule=""
+                ruleCatalog={nameRules.ruleCatalogIrisk}
                 titleContentAddCard={scoreModelsLabels.titleContentAddCard}
                 messageEmptyDecisions={
                   scoreModelsLabels.messageEmptyDecisions as unknown as string
