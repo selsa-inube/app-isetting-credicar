@@ -15,7 +15,7 @@ import {
   StyledTextErrorContainer,
 } from "./styles";
 import { errorPageLabels } from "@config/errorPageLabels";
-import { IErrorPage } from "@src/types/design/IErrorPage";
+import { IErrorPage } from "@ptypes/design/IErrorPage";
 
 const ErrorPage = (props: IErrorPage) => {
   const {
