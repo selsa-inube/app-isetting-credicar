@@ -114,7 +114,6 @@ const GeneralInformationPayrollFormUI = (
                     onBlur={formik.handleBlur}
                     status={getFieldState(formik, "abbreviatedName")}
                     message={formik.errors.abbreviatedName}
-                    counter
                     maxLength={generalInfLabels.maxLengthNamePayroll}
                     fullwidth
                     required
