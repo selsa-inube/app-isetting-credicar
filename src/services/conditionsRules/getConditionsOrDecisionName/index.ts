@@ -5,13 +5,13 @@ import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { ICondtionOrDecision } from "@ptypes/decisions/ICondtionOrDecision";
 
 const getConditionsOrDecisionName = async (
-  bussinesUnits: string,
+  businessUnits: string,
   condition: string,
 ): Promise<ICondtionOrDecision> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchPossibleValue",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
   const data: ICondtionOrDecision = await getWithRetries<ICondtionOrDecision>(

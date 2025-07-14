@@ -9,7 +9,7 @@ import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 
 const useEnumRules = (props: IUseEnumRules) => {
-  const { enumDestination, ruleCatalog, bussinesUnits } = props;
+  const { enumDestination, ruleCatalog, businessUnits } = props;
   const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
@@ -28,7 +28,7 @@ const useEnumRules = (props: IUseEnumRules) => {
         const data = await getEnumeratorsRules(
           enumDestination,
           ruleCatalog,
-          bussinesUnits,
+          businessUnits,
         );
         setEnumRuleData(data);
       } catch (error) {
@@ -37,7 +37,7 @@ const useEnumRules = (props: IUseEnumRules) => {
       }
     };
     fetchEnumData();
-  }, [enumDestination, ruleCatalog, bussinesUnits]);
+  }, [enumDestination, ruleCatalog, businessUnits]);
 
   useEffect(() => {
     setRuleData({ ...enumRuleData } as IRuleDecision);
@@ -46,7 +46,7 @@ const useEnumRules = (props: IUseEnumRules) => {
   const fetchListValuesDecision = async (conditionOrDecisionName: string) => {
     try {
       const data = await getConditionsOrDecisionName(
-        bussinesUnits,
+        businessUnits,
         conditionOrDecisionName,
       );
       setListValuesDecision(data.possibleValues);
@@ -64,7 +64,7 @@ const useEnumRules = (props: IUseEnumRules) => {
   ) => {
     try {
       const data = await getConditionsOrDecisionName(
-        bussinesUnits,
+        businessUnits,
         conditionOrDecisionName,
       );
       setListValuesCondition({ [conditionName]: data.possibleValues });

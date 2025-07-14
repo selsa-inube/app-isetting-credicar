@@ -1,6 +1,6 @@
 interface IUseEnumRequest {
   enumerator: string;
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseEnumRequest };

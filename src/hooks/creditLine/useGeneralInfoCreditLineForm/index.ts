@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useEffect, useImperativeHandle } from "react";
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
@@ -5,6 +6,7 @@ import { object } from "yup";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { IGeneralInformationEntry } from "@ptypes/creditLines/forms/IGeneralInformationEntry";
+import { mediaQueryTablet } from "@config/environment";
 
 const useGeneralInfoCreditLineForm = (
   initialValues: IGeneralInformationEntry,
@@ -42,8 +44,11 @@ const useGeneralInfoCreditLineForm = (
     }
   }, [formik.values, onFormValid]);
 
+  const isMobile = useMediaQuery(mediaQueryTablet);
+
   return {
     formik,
+    isMobile,
   };
 };
 

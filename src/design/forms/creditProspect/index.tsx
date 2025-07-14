@@ -35,15 +35,20 @@ const CreditProspectForm = forwardRef<
     },
     ref,
   ) => {
-    const { formik, additionalDebtorsField, handleChange, handleToggleEntry } =
-      useCreditProspectForm(
-        optionsProspect,
-        initialValues,
-        ref,
-        onSubmit,
-        onFormValid,
-        setOptionsProspect,
-      );
+    const {
+      formik,
+      additionalDebtorsField,
+      isMobile,
+      handleChange,
+      handleToggleEntry,
+    } = useCreditProspectForm(
+      optionsProspect,
+      initialValues,
+      ref,
+      onSubmit,
+      onFormValid,
+      setOptionsProspect,
+    );
 
     return (
       <CreditProspectFormUI
@@ -56,6 +61,7 @@ const CreditProspectForm = forwardRef<
         onToggle={handleToggleEntry}
         additionalDebtorsField={additionalDebtorsField}
         isFormValid={isFormValid}
+        isMobile={isMobile}
       />
     );
   },

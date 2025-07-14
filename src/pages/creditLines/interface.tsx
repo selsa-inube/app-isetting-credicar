@@ -1,11 +1,5 @@
 import { MdAdd } from "react-icons/md";
-import {
-  Stack,
-  useMediaQuery,
-  Breadcrumbs,
-  Button,
-  Searchfield,
-} from "@inubekit/inubekit";
+import { Stack, Breadcrumbs, Button, Searchfield } from "@inubekit/inubekit";
 
 import { Table } from "@design/data/table";
 import { tokens } from "@design/tokens";
@@ -19,18 +13,16 @@ import { creditPageLabels } from "@config/creditLines/creditPageLabels";
 import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
 import { portalId } from "@config/portalId";
 import { StyledContent } from "./styles";
-import { mediaQueryTablet } from "@config/environment";
 
 const CreditLinesUI = (props: ICreditLinesUI) => {
   const {
     loading,
     searchCreditLines,
     descriptionOptions,
+    smallScreen,
+    columnWidths,
     onSearchCreditLines,
   } = props;
-
-  const smallScreen = useMediaQuery(mediaQueryTablet);
-  const widthFirstColumn = smallScreen ? 64 : 25;
 
   return (
     <Stack
@@ -104,7 +96,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
                 breakpoints={breakPoints}
                 filter={searchCreditLines}
                 loading={loading}
-                columnWidths={[widthFirstColumn, 55]}
+                columnWidths={columnWidths}
               />
             </Stack>
           </Stack>

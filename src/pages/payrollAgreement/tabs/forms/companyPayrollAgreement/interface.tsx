@@ -18,6 +18,7 @@ import { companyLabels } from "@config/payrollAgreement/payrollAgreementTab/form
 import { DecisionModal } from "@design/modals/decisionModal";
 import { ICompanyFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyFormUI";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { portalId } from "@config/portalId";
 import { isInvalid } from "@utils/isInvalid";
 import { StyledFormContent } from "../styles";
 
@@ -289,7 +290,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
       </Stack>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           icon={<MdOutlineWarningAmber />}
           withIcon
           sizeIcon="75px"

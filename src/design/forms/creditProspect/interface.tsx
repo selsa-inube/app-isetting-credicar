@@ -1,11 +1,4 @@
-import {
-  Button,
-  Divider,
-  Select,
-  Stack,
-  Text,
-  useMediaQuery,
-} from "@inubekit/inubekit";
+import { Button, Divider, Select, Stack, Text } from "@inubekit/inubekit";
 
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { OptionsPropectCredit } from "@design/data/optionsPropectCredit";
@@ -16,7 +9,6 @@ import {
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { ICreditProspectFormUI } from "@ptypes/creditLines/addCreditLine/ICreditProspectFormUI";
-import { mediaQueryTablet } from "@config/environment";
 import { creditProspectLabels } from "@config/creditLines/addCreditLine/assisted/creditProspectLabels";
 
 const CreditProspectFormUI = (props: ICreditProspectFormUI) => {
@@ -26,13 +18,12 @@ const CreditProspectFormUI = (props: ICreditProspectFormUI) => {
     entries,
     additionalDebtorsField,
     isFormValid,
+    isMobile,
     onNextStep,
     onPreviousStep,
     onChange,
     onToggle,
   } = props;
-
-  const isMobile = useMediaQuery(mediaQueryTablet);
 
   return (
     <StyledContainer>
@@ -77,7 +68,7 @@ const CreditProspectFormUI = (props: ICreditProspectFormUI) => {
           onClick={onPreviousStep}
           appearance={EComponentAppearance.GRAY}
         >
-          {creditProspectLabels.previusButton}
+          {creditProspectLabels.previousButton}
         </Button>
 
         <Button

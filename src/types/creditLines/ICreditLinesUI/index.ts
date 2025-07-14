@@ -4,6 +4,8 @@ interface ICreditLinesUI {
   loading: boolean;
   searchCreditLines: string;
   descriptionOptions: ICardData;
+  columnWidths: number[];
+  smallScreen: boolean;
   onSearchCreditLines: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

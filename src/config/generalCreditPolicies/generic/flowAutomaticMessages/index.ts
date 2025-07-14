@@ -21,7 +21,7 @@ const flowAutomaticMessages = (action?: string) => {
       appearance: EComponentAppearance.DANGER,
       duration: 3000,
     },
-    SuccessfulCreateRequest: {
+    successfulCreateRequest: {
       title: `Politicas generales ${action} con éxito!`,
       description: `Politicas generales fue ${action} con éxito!`,
       appearance: EComponentAppearance.SUCCESS,

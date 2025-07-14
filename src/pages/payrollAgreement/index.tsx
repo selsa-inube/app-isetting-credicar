@@ -24,7 +24,7 @@ const PayrollAgreement = () => {
     handleTabChange,
   } = usePayrollAgreementPage({
     businessUnitSigla,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   return (

@@ -5,12 +5,12 @@ import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreement
 import { mapPayrollAgreementToEntities } from "./mappers/mapPayrollAgreementToEntities";
 
 const getPayrollAgreementData = async (
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<IPayrollAgreementData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllPayrollForDeductionAgreement",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
   const data: IPayrollAgreementData[] = await getWithRetries<

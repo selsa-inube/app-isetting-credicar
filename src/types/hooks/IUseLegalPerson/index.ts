@@ -1,5 +1,5 @@
 interface IUseLegalPerson {
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseLegalPerson };

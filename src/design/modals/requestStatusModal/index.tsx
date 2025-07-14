@@ -13,7 +13,7 @@ import {
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { IRequestStatusModal } from "@ptypes/design/IRequestStatusModal";
-import { closelLabels } from "@config/closelLabels";
+import { closeLabels } from "@config/closeLabels";
 import { StyledModal } from "./styles";
 
 const RequestStatusModal = (props: IRequestStatusModal) => {
@@ -65,7 +65,7 @@ const RequestStatusModal = (props: IRequestStatusModal) => {
                 />
               }
             >
-              {closelLabels.title}
+              {closeLabels.title}
             </Button>
           </Stack>
           <Divider />

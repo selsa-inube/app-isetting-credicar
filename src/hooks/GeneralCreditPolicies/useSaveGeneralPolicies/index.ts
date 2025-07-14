@@ -21,7 +21,7 @@ import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralP
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const {
-    bussinesUnits,
+    businessUnits,
     userAccount,
     data,
     setSendData,
@@ -89,7 +89,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     try {
       if (useCase === UseCase.ADD) {
         const newData = await postAddGeneralPolicies(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestGeneralPol,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
@@ -212,13 +212,13 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       if (isStatusRequestFinished()) {
         addFlag({
           title: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.title,
+            .successfulCreateRequest.title,
           description: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.description,
+            .successfulCreateRequest.description,
           appearance: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.appearance as IFlagAppearance,
+            .successfulCreateRequest.appearance as IFlagAppearance,
           duration: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.duration,
+            .successfulCreateRequest.duration,
         });
       }
     }

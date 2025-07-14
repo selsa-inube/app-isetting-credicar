@@ -5,12 +5,12 @@ import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { mapLegalPersonsToEntities } from "./mappers/mapLegalPersonsToEntities";
 
 const getLegalPersonsData = async (
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<ILegalPerson[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllLegalPerson",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
   const data: ILegalPerson[] = await getWithRetries<ILegalPerson[]>(

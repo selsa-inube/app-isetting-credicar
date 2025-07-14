@@ -1,6 +1,6 @@
 const decisionsLabels = {
   labelCancelButton: "Cancelar",
-  labelPreviusButton: "Anterior",
+  labelpreviousButton: "Anterior",
   labelNextButton: "Siguiente",
   labelSaveButton: "Guardar",
 };

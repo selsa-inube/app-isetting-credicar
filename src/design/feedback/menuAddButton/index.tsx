@@ -4,6 +4,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { disabledModal } from "@config/disabledModal";
 import { IMenuAddButton } from "@ptypes/design/IMenuAddButton";
+import { portalId } from "@config/portalId";
 import { Menu } from "../menu";
 
 const MenuAddButton = (props: IMenuAddButton) => {
@@ -33,14 +34,12 @@ const MenuAddButton = (props: IMenuAddButton) => {
       )}
       {showInfoModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={disabledModal.title}
           actionText={disabledModal.actionText}
           description={disabledModal.description}
           subtitle={disabledModal.subtitle}
           onCloseModal={onToggleInfoModal}
-          appearance={EComponentAppearance.PRIMARY}
-          appearanceButton={EComponentAppearance.PRIMARY}
           onClick={onToggleInfoModal}
           withCancelButton={false}
         />

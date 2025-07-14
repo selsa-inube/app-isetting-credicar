@@ -13,6 +13,7 @@ import { IRegularPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgr
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
+import { portalId } from "@config/portalId";
 import { StyledFormContent } from "./styles";
 import { AddCycleModal } from "../../addCycleModal";
 
@@ -143,12 +144,11 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
 
       {showInfoModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={infoModal.title}
           description={infoModal.description}
           actionText={infoModal.actionText}
           withCancelButton={false}
-          appearance={EComponentAppearance.PRIMARY}
           onCloseModal={onToggleInfoModal}
           onClick={onToggleInfoModal}
           moreDetails={infoModal.moreDetails}

@@ -18,6 +18,7 @@ import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreMo
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
+import { portalId } from "@config/portalId";
 import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
 import { VerificationForm } from "../forms/verification";
 
@@ -200,7 +201,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
       </Stack>
       {showGoBackModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={goBackModal.title}
           description={goBackModal.description}
           actionText={goBackModal.actionText}

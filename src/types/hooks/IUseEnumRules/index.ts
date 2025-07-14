@@ -1,7 +1,7 @@
 interface IUseEnumRules {
   enumDestination: string;
   ruleCatalog: string;
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseEnumRules };
