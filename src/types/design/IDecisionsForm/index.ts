@@ -30,6 +30,7 @@ interface IDecisionsForm {
   setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>;
   messageEmptyDecisions?: string;
   heightContentPage?: string;
+  ruleCatalog?: string;
 }
 
 export type { IDecisionsForm };

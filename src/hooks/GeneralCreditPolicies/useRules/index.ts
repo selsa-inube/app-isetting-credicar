@@ -1,5 +1,5 @@
 import { formatRuleDecisions } from "@utils/formatRuleDecisions";
-import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
+import { ENameRules } from "@enum/nameRules";
 import { IUseRules } from "@ptypes/hooks/IUseRules";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { EBooleanText } from "@enum/booleanText";
@@ -35,7 +35,7 @@ const useRules = (props: IUseRules) => {
   };
 
   const referenceValues = decisionWithoutConditions(
-    nameRules.reference,
+    ENameRules.REFERENCE,
     decisionGeneralData.reference,
   );
 
@@ -54,7 +54,7 @@ const useRules = (props: IUseRules) => {
       : ["No"];
 
   const methods = {
-    ruleName: nameRules.methods,
+    ruleName: ENameRules.METHODS,
     decisionsByRule: methodsArray.map((method) => ({
       effectiveFrom:
         dateVerification?.date && formatDateDecision(dateVerification?.date),
@@ -63,22 +63,22 @@ const useRules = (props: IUseRules) => {
   };
 
   const additionalDebtorsValues = decisionWithoutConditions(
-    nameRules.additionalDebtors,
+    ENameRules.ADDITIONAL_DEBTORS,
     decisionGeneralData.additionalDebtors,
   );
 
   const sourcesIncomeValues = decisionWithoutConditions(
-    nameRules.sourcesIncome,
+    ENameRules.SOURCES_INCOME,
     decisionGeneralData.sourcesIncome,
   );
 
   const financialObligationsValues = decisionWithoutConditions(
-    nameRules.financialObligations,
+    ENameRules.FINANCIAL_OBLIGATIONS,
     decisionGeneralData.financialObligations,
   );
 
   const realGuaranteesValues = decisionWithoutConditions(
-    nameRules.realGuarantees,
+    ENameRules.REAL_GUARANTEES,
     decisionGeneralData.realGuarantees,
   );
 

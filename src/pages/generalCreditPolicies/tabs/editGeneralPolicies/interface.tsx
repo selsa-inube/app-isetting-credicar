@@ -8,7 +8,7 @@ import { RequestProcess } from "@design/feedback/RequestProcess";
 import { EComponentAppearance } from "@enum/appearances";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
+import { ENameRules } from "@enum/nameRules";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
 import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
 import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
@@ -35,7 +35,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     isRequestStatusModal,
     showRequestProcessModal,
     smallScreen,
-    tabletScreen,
     contributionsPortfolio,
     formValues,
     incomePortfolio,
@@ -91,7 +90,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           tabs={filteredTabsConfig}
           selectedTab={isSelected}
           onChange={onTabChange}
-          scroll={tabletScreen}
+          scroll={filteredTabsConfig.length > 2}
         />
         <Stack direction="column">
           {showDecisionsGeneral && (
@@ -118,7 +117,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               initialValues={contributionsPortfolio}
               setDecisions={setContributionsPortfolio}
               revertModalDisplayData={revertModalDisplayData}
-              labelBusinessRules={nameRules.contributionsPortfolio}
+              labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
               nameRule=""
               titleContentAddCard={contributionsPortfLabels.titleContentAddCard}
               messageEmptyDecisions={
@@ -141,7 +140,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               initialValues={incomePortfolio}
               setDecisions={setIncomePortfolio}
               revertModalDisplayData={revertModalDisplayData}
-              labelBusinessRules={nameRules.incomePortfolio}
+              labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
               nameRule=""
               titleContentAddCard={incomePortfLabels.titleContentAddCard}
               messageEmptyDecisions={
@@ -164,8 +163,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               initialValues={scoreModels}
               setDecisions={setScoreModels}
               revertModalDisplayData={revertModalDisplayData}
-              labelBusinessRules={nameRules.scoreModels}
+              labelBusinessRules={ENameRules.SCORE_MODELS}
               nameRule=""
+              ruleCatalog={ENameRules.RULE_CATALOG_IRISK}
               titleContentAddCard={scoreModelsLabels.titleContentAddCard}
               messageEmptyDecisions={
                 scoreModelsLabels.messageEmptyDecisions as unknown as string

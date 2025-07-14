@@ -3,11 +3,12 @@ import { useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
 import { IEntry } from "@ptypes/design/table/IEntry";
-import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
+import { ENameRules } from "@enum/nameRules";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
@@ -26,27 +27,27 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   data.configurationRequestData.rules.map((rule: IEntry) => {
     if (rule === null) return;
     rule.decisionsByRule?.filter((decision: IRuleDecision) => {
-      if (rule.ruleName === nameRules.reference) {
+      if (rule.ruleName === ENameRules.REFERENCE) {
         reference = decision.value;
       }
 
-      if (rule.ruleName === nameRules.additionalDebtors) {
+      if (rule.ruleName === ENameRules.ADDITIONAL_DEBTORS) {
         additionalDebtors = decision.value;
       }
 
-      if (rule.ruleName === nameRules.sourcesIncome) {
+      if (rule.ruleName === ENameRules.SOURCES_INCOME) {
         sourcesIncome = decision.value;
       }
 
-      if (rule.ruleName === nameRules.financialObligations) {
+      if (rule.ruleName === ENameRules.FINANCIAL_OBLIGATIONS) {
         financialObligations = decision.value;
       }
 
-      if (rule.ruleName === nameRules.realGuarantees) {
+      if (rule.ruleName === ENameRules.REAL_GUARANTEES) {
         realGuarantees = decision.value;
       }
 
-      if (rule.ruleName === nameRules.methods) {
+      if (rule.ruleName === ENameRules.METHODS) {
         const calculation =
           decision.value ===
             ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY &&
@@ -75,21 +76,22 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
 
   const decisionsReciprocity = getDecisionsByRule(
     formatDetailsDecisions(data),
-    nameRules.contributionsPortfolio,
+    ENameRules.CONTRIBUTIONS_PORTFOLIO,
   );
   const decisionsIncomePortfolio = getDecisionsByRule(
     formatDetailsDecisions(data),
-    nameRules.incomePortfolio,
+    ENameRules.INCOME_PORTFOLIO,
   );
   const decisionsScoreModels = getDecisionsByRule(
     formatDetailsDecisions(data),
-    nameRules.scoreModels,
-    (condition: IEntry) => condition.conditionName !== "BusinessUnit",
+    ENameRules.SCORE_MODELS,
+    (condition: IEntry) =>
+      condition.conditionName !== EGeneralPolicies.CONDITION_BUSINESS_UNIT,
   );
 
   const isMoreDetails =
-    data.useCaseName === "DeleteGeneralCreditPolicies" ||
-    data.useCaseName === "ModifyGeneralCreditPolicies";
+    data.useCaseName === EGeneralPolicies.DELETE_GENERAL_POLICIES ||
+    data.useCaseName === EGeneralPolicies.MODIFY_GENERAL_POLICIES;
 
   return {
     showMoreDetailsModal,

@@ -81,7 +81,11 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
             {isAddingCompany && (
               <>
                 <Divider dashed />
-                <Stack direction="column" width="100%">
+                <Stack
+                  direction="column"
+                  width="100%"
+                  gap={tokens.spacing.s250}
+                >
                   <Textfield
                     name="companyName"
                     id="companyName"
@@ -94,7 +98,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                     onBlur={formik.handleBlur}
                     status={getFieldState(formik, "companyName")}
                     message={formik.errors.companyName}
-                    counter
                     maxLength={companyLabels.maxLengthCompanyName}
                     fullwidth
                     required
@@ -118,7 +121,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                       onBlur={formik.handleBlur}
                       status={getFieldState(formik, "companyNameCommercial")}
                       message={formik.errors.companyNameCommercial}
-                      counter
                       maxLength={companyLabels.maxLengthcompanyNameCom}
                       fullwidth
                       required
@@ -142,9 +144,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
 
                   <Fieldset
                     legend={companyLabels.fieldsetIdentification}
-                    type="body"
-                    size="medium"
-                    spacing="compact"
+                    spacing="wide"
                   >
                     <Stack
                       direction={isMobile ? "column" : "row"}
@@ -206,9 +206,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
 
                   <Fieldset
                     legend={companyLabels.fieldsetAdress}
-                    type="body"
-                    size="medium"
-                    spacing="compact"
+                    spacing="wide"
                   >
                     <Stack
                       direction="column"
@@ -264,7 +262,6 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                           onBlur={formik.handleBlur}
                           status={getFieldState(formik, "companyComplement")}
                           message={formik.errors.companyComplement}
-                          counter
                           maxLength={companyLabels.maxLengthcompanyComplem}
                           fullwidth
                           required

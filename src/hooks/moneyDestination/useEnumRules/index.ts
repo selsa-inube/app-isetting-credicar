@@ -5,8 +5,11 @@ import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRul
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
 import { IDecision } from "@ptypes/decisions/IDecision";
 import { EConditionRules } from "@enum/conditionRules";
+import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 
-const useEnumRules = (enumDestination: string, businessUnits: string) => {
+const useEnumRules = (props: IUseEnumRules) => {
+  const { enumDestination, ruleCatalog, businessUnits } = props;
   const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
@@ -22,7 +25,11 @@ const useEnumRules = (enumDestination: string, businessUnits: string) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumeratorsRules(enumDestination, businessUnits);
+        const data = await getEnumeratorsRules(
+          enumDestination,
+          ruleCatalog,
+          businessUnits,
+        );
         setEnumRuleData(data);
       } catch (error) {
         console.info(error);
@@ -30,7 +37,7 @@ const useEnumRules = (enumDestination: string, businessUnits: string) => {
       }
     };
     fetchEnumData();
-  }, [enumDestination, businessUnits]);
+  }, [enumDestination, ruleCatalog, businessUnits]);
 
   useEffect(() => {
     setRuleData({ ...enumRuleData } as IRuleDecision);
@@ -125,7 +132,7 @@ const useEnumRules = (enumDestination: string, businessUnits: string) => {
               if (condition.listOfPossibleValues) {
                 return {
                   ...condition,
-                  howToSetTheCondition: "ListOfValues",
+                  howToSetTheCondition: EGeneralPolicies.LISTOFVALUES,
                   listOfPossibleValues: { list: arrayListValues },
                   value: "",
                 };
