@@ -1,9 +1,10 @@
 import { MdOutlineMoreVert } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { disabledModal } from "@config/disabledModal";
 import { IMenuAddButton } from "@ptypes/design/IMenuAddButton";
+import { portalId } from "@config/portalId";
 import { Menu } from "../menu";
 
 const MenuAddButton = (props: IMenuAddButton) => {
@@ -20,7 +21,7 @@ const MenuAddButton = (props: IMenuAddButton) => {
     <>
       <Icon
         icon={<MdOutlineMoreVert />}
-        appearance={ComponentAppearance.DARK}
+        appearance={EComponentAppearance.DARK}
         onClick={onToggleModal}
         cursorHover
       />
@@ -33,14 +34,12 @@ const MenuAddButton = (props: IMenuAddButton) => {
       )}
       {showInfoModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={disabledModal.title}
           actionText={disabledModal.actionText}
           description={disabledModal.description}
           subtitle={disabledModal.subtitle}
           onCloseModal={onToggleInfoModal}
-          appearance={ComponentAppearance.PRIMARY}
-          appearanceButton={ComponentAppearance.PRIMARY}
           onClick={onToggleInfoModal}
           withCancelButton={false}
         />

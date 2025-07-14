@@ -1,7 +1,7 @@
 import { MdOutlineArrowBack } from "react-icons/md";
 import { Button, Stack } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { Accordion } from "@design/data/accordions";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
@@ -13,6 +13,7 @@ import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementT
 import { IVerificationForm } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IVerificationForm";
 import { useVerification } from "@hooks/payrollAgreement/useVerificationForm";
 import { verificationFormLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/verificationFormLabels";
+import { portalId } from "@config/portalId";
 import { VerificationBoxes } from "./verificationBoxes";
 
 const VerificationForm = (props: IVerificationForm) => {
@@ -68,7 +69,7 @@ const VerificationForm = (props: IVerificationForm) => {
             <Button
               iconBefore={<MdOutlineArrowBack />}
               onClick={() => handleStepChange(step.number)}
-              appearance={ComponentAppearance.DARK}
+              appearance={EComponentAppearance.DARK}
               variant="none"
             >
               {verificationFormLabels.returnStep}
@@ -80,7 +81,7 @@ const VerificationForm = (props: IVerificationForm) => {
         <Button
           fullwidth={isMobile}
           onClick={onPreviousStep}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
         >
           {verificationFormLabels.previous}
         </Button>
@@ -88,7 +89,7 @@ const VerificationForm = (props: IVerificationForm) => {
         <Button
           fullwidth={isMobile}
           onClick={onToggleModal}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {verificationFormLabels.finally}
         </Button>
@@ -112,14 +113,14 @@ const VerificationForm = (props: IVerificationForm) => {
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
           requestProcessSteps={requestSteps}
-          appearance={ComponentAppearance.SUCCESS}
+          appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
           onCloseProcess={onCloseProcess}
         />
       )}
       {canShowPendingRequest && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(savePayrollAgreement.staffName).title}
           description={
             requestStatusMessage(savePayrollAgreement.staffName).description
@@ -131,7 +132,7 @@ const VerificationForm = (props: IVerificationForm) => {
           actionText={
             requestStatusMessage(savePayrollAgreement.staffName).actionText
           }
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         />
       )}
     </Stack>

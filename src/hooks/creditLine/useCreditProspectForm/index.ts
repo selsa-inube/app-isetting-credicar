@@ -1,3 +1,4 @@
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useEffect, useImperativeHandle, useState } from "react";
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
@@ -8,6 +9,7 @@ import {
   ICreditProspectEntry,
   IOptionsProspect,
 } from "@design/forms/creditProspect/types";
+import { mediaQueryTablet } from "@config/environment";
 
 const useCreditProspectForm = (
   optionsProspect: IOptionsProspect[],
@@ -91,12 +93,14 @@ const useCreditProspectForm = (
     });
   };
 
+  const isMobile = useMediaQuery(mediaQueryTablet);
   return {
     formik,
     optionsProspect,
     additionalDebtorsField,
     handleChange,
     handleToggleEntry,
+    isMobile,
   };
 };
 

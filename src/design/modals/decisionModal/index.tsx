@@ -6,7 +6,7 @@ import {
   Text,
   useMediaQuery,
 } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { mediaQueryMobile } from "@config/environment";
 import { tokens } from "@design/tokens";
 import { IDecisionModal } from "@ptypes/design/IDecisionModal";
@@ -22,8 +22,8 @@ const DecisionModal = (props: IDecisionModal) => {
     sizeIcon = "60px",
     portalId = "portal",
     title,
-    appearance = ComponentAppearance.PRIMARY,
-    appearanceButton = ComponentAppearance.PRIMARY,
+    appearance = EComponentAppearance.PRIMARY,
+    appearanceButton = EComponentAppearance.PRIMARY,
     withCancelButton = true,
     moreDetails,
     withDate,
@@ -63,7 +63,7 @@ const DecisionModal = (props: IDecisionModal) => {
       )}
       {subtitle && (
         <Text
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           type="body"
           size="large"
           weight="bold"
@@ -72,7 +72,7 @@ const DecisionModal = (props: IDecisionModal) => {
         </Text>
       )}
 
-      <Text appearance={ComponentAppearance.DARK} type="body" size="medium">
+      <Text appearance={EComponentAppearance.DARK} type="body" size="medium">
         {description}
       </Text>
 
@@ -93,7 +93,7 @@ const DecisionModal = (props: IDecisionModal) => {
       {moreDetails && (
         <Stack direction="column" gap={tokens.spacing.s200}>
           <Divider dashed />
-          <Text size="medium" appearance="dark">
+          <Text size="medium" appearance={EComponentAppearance.DARK}>
             {moreDetails}
           </Text>
         </Stack>

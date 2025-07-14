@@ -2,7 +2,7 @@ import { MdInfoOutline, MdOutlineClear } from "react-icons/md";
 import { Icon, Stack, Text } from "@inubekit/inubekit";
 
 import { IMenuItem } from "@ptypes/design/IMenuItem";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { StyledMenuItemLink } from "./styles";
@@ -35,13 +35,13 @@ const MenuItem = (props: IMenuItem) => {
           <Icon
             icon={icon}
             size="18px"
-            appearance={ComponentAppearance.PRIMARY}
+            appearance={EComponentAppearance.PRIMARY}
             disabled={disabled}
           />
 
           <Text
             size="small"
-            appearance={ComponentAppearance.DARK}
+            appearance={EComponentAppearance.DARK}
             disabled={disabled}
           >
             {description}
@@ -51,7 +51,7 @@ const MenuItem = (props: IMenuItem) => {
             <Icon
               icon={<MdInfoOutline />}
               size="16px"
-              appearance={ComponentAppearance.PRIMARY}
+              appearance={EComponentAppearance.PRIMARY}
               onClick={onToggleInfoModal}
             />
           )}
@@ -61,7 +61,7 @@ const MenuItem = (props: IMenuItem) => {
         <Icon
           icon={<MdOutlineClear />}
           size="16px"
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           onClick={onClose}
         />
       )}

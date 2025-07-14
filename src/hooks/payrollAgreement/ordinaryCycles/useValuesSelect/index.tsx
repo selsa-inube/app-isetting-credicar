@@ -9,27 +9,27 @@ const useValuesSelect = () => {
   const { appData } = useContext(AuthAndPortalData);
   const { enumData: periodicity } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.PERIODICITY_ICARDES,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const { enumData: weekly } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.WEEKLY_ICARDES,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const { enumData: everyTen } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.EVERY_TEN_ICARDES,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const { enumData: semimonthly } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.SEMIMONTHLY_ICARDES,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const { enumData: monthly } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.MONTHLY_ICARDES,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const periodicityOptions = optionsFromEnumsSpanish(periodicity);

@@ -1,11 +1,11 @@
 import { forwardRef, useContext } from "react";
 import { FormikProps } from "formik";
 
-import { useEnumerators } from "@hooks/useEnumerators";
 import { useGeneralInformationForm } from "@hooks/moneyDestination/useGeneralInformationForm";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { IGeneralInformationForm } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationForm";
+import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
 import { GeneralInformationFormUI } from "./interface";
 
 const GeneralInformationForm = forwardRef<
@@ -26,9 +26,8 @@ const GeneralInformationForm = forwardRef<
   ) => {
     const { appData } = useContext(AuthAndPortalData);
 
-    const { enumData } = useEnumerators({
-      enumDestination: "moneydestination",
-      bussinesUnits: appData.businessUnit.publicCode,
+    const { enumData } = useEnumsMoneyDestination({
+      businessUnits: appData.businessUnit.publicCode,
     });
 
     const {

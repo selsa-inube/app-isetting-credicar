@@ -1,6 +1,6 @@
 interface IUseMoneryDestinationPage {
   businessUnitSigla: string;
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseMoneryDestinationPage };

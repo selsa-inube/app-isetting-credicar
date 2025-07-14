@@ -55,7 +55,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const { appData } = useContext(AuthAndPortalData);
   const { enumData: typePayroll } = useEnumerators({
     enumDestination: "deductionagreementtype",
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const typePayrollOptions = optionsFromEnumerators(typePayroll);

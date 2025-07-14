@@ -95,6 +95,8 @@ const SelectCheck = (props: ISelectCheck) => {
     setDisplayList(!displayList);
   };
 
+  const optionListVisible = displayList && !disabled;
+
   return (
     <SelectCheckUI
       displayList={displayList}
@@ -119,6 +121,7 @@ const SelectCheck = (props: ISelectCheck) => {
       size={size}
       status={status}
       invalid={invalid}
+      optionListVisible={optionListVisible}
     />
   );
 };

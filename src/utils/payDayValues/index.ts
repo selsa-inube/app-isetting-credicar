@@ -1,4 +1,4 @@
-import { ECyclesPayroll } from "@src/enum/cyclesPayroll";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { dataTranslations } from "../dataTranslations";
 
 const payDayValues = (periodicity: string, payDay: string) => {

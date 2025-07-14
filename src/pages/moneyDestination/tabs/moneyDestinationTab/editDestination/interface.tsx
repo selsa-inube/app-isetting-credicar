@@ -9,12 +9,13 @@ import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinati
 import { attentionModal, deleteModal } from "@config/decisions/messages";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
 import { RequestProcess } from "@design/feedback/RequestProcess";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { IEditDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IEditDestinationUI";
 import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
+import { portalId } from "@config/portalId";
 import { GeneralInformationForm } from "../../forms/generalInformationDestination";
 
 const EditDestinationUI = (props: IEditDestinationUI) => {
@@ -65,7 +66,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
         </Stack>
         <Stack gap={tokens.spacing.s300} direction="column">
           <Tabs
-            tabs={Object.values(editDestinationTabsConfig)}
+            tabs={editDestinationTabsConfig}
             selectedTab={isSelected}
             onChange={onTabChange}
           />
@@ -114,14 +115,14 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
           requestProcessSteps={requestSteps}
-          appearance={ComponentAppearance.SUCCESS}
+          appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
           onCloseProcess={onCloseProcess}
         />
       )}
       {showRequestStatus && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(saveMoneyDestination.staffName).title}
           description={
             requestStatusMessage(saveMoneyDestination.staffName).description
@@ -133,7 +134,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           actionText={
             requestStatusMessage(saveMoneyDestination.staffName).actionText
           }
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         />
       )}
     </Stack>

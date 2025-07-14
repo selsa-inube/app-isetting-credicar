@@ -1,20 +1,7 @@
-import { inube, Stack, Tag, Text } from "@inubekit/inubekit";
+import { Stack, Tag, Text } from "@inubekit/inubekit";
 import { BoxContainer } from "@design/layout/boxContainer";
-
-import { ComponentAppearance } from "@enum/appearances";
-import { IEntry } from "@ptypes/design/table/IEntry";
-import { useThemeData } from "@utils/theme";
-interface IDetailBox {
-  field: { id: string; titleName: string };
-  data: IEntry;
-  id: number;
-  width: string;
-  borderRadius?: string;
-  padding?: string;
-  borderColor?: string;
-  withTag?: boolean;
-  ellipsis?: boolean;
-}
+import { IDetailBox } from "@ptypes/design/IDetailBox";
+import { EComponentAppearance } from "@enum/appearances";
 
 const DetailBox = (props: IDetailBox) => {
   const {
@@ -29,16 +16,12 @@ const DetailBox = (props: IDetailBox) => {
     ellipsis = false,
   } = props;
 
-  const theme = useThemeData();
-
   return (
     <BoxContainer
       key={id}
       direction="column"
       width={width}
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N10 : inube.palette.neutral.N10
-      }
+      backgroundColor={EComponentAppearance.GRAY}
       borderRadius={borderRadius}
       borderColor={borderColor}
       boxSizing="border-box"
@@ -51,7 +34,7 @@ const DetailBox = (props: IDetailBox) => {
       {withTag ? (
         <Stack width="auto">
           <Tag
-            appearance={ComponentAppearance.GRAY}
+            appearance={EComponentAppearance.GRAY}
             label={data[field.id]}
             displayIcon={false}
           />
@@ -59,7 +42,7 @@ const DetailBox = (props: IDetailBox) => {
       ) : (
         <Text
           size="small"
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
           ellipsis={ellipsis}
         >
           {data[field.id]}

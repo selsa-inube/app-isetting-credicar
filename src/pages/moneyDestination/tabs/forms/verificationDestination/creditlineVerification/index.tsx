@@ -2,7 +2,7 @@ import { IRuleDecision } from "@isettingkit/input";
 import { Stack, Tag, Text } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { creditlineVerifLabels } from "@config/moneyDestination/moneyDestinationTab/form/creditlineVerifLabels";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { ICreditlineVerification } from "@ptypes/moneyDestination/tabs/ICreditlineVerification";
 import {
   StyledAttribute,
@@ -26,7 +26,7 @@ const RenderCreditlineVerification = (props: ICreditlineVerification) => {
       >
         <Text
           type="label"
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           weight="bold"
           size="small"
         >
@@ -39,7 +39,7 @@ const RenderCreditlineVerification = (props: ICreditlineVerification) => {
             {values.map((decision, index) => (
               <Tag
                 key={index}
-                appearance={ComponentAppearance.GRAY}
+                appearance={EComponentAppearance.GRAY}
                 label={labelTag(decision)}
                 displayIcon={false}
               />
@@ -47,7 +47,7 @@ const RenderCreditlineVerification = (props: ICreditlineVerification) => {
           </>
         ) : (
           <Tag
-            appearance={ComponentAppearance.DANGER}
+            appearance={EComponentAppearance.DANGER}
             label={creditlineVerifLabels.notCreditLine}
           />
         )}

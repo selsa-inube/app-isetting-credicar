@@ -1,6 +1,6 @@
 interface IUsePayrollAgreementPage {
   businessUnitSigla: string;
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUsePayrollAgreementPage };

@@ -3,7 +3,7 @@ import { Stack, Text, useMediaQueries, Button, Tag } from "@inubekit/inubekit";
 import inubeLogo from "@assets/images/logo-inube.png";
 import errorImage from "@assets/images/errorPage.png";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { errorCodes } from "@config/errorCodes";
 import {
   StyledCompanyLogo,
@@ -14,13 +14,8 @@ import {
   StyledList,
   StyledTextErrorContainer,
 } from "./styles";
-
-interface IErrorPage {
-  errorCode?: number;
-  heading?: string;
-  nameButton?: string;
-  onClick?: () => void;
-}
+import { errorPageLabels } from "@config/errorPageLabels";
+import { IErrorPage } from "@ptypes/design/IErrorPage";
 
 const ErrorPage = (props: IErrorPage) => {
   const {
@@ -64,12 +59,12 @@ const ErrorPage = (props: IErrorPage) => {
             type="headline"
             weight="bold"
             size={matches["(max-width: 770px)"] ? "medium" : "large"}
-            appearance={ComponentAppearance.DARK}
+            appearance={EComponentAppearance.DARK}
           >
             {heading}
           </Text>
           <Tag
-            appearance={ComponentAppearance.GRAY}
+            appearance={EComponentAppearance.GRAY}
             label={`Código de error: ${errorCode}`}
             displayIcon={false}
           />
@@ -85,9 +80,9 @@ const ErrorPage = (props: IErrorPage) => {
               type="title"
               size="large"
               weight="bold"
-              appearance={ComponentAppearance.DARK}
+              appearance={EComponentAppearance.DARK}
             >
-              ¿Qué salió mal?
+              {errorPageLabels.whatWentWrong}
             </Text>
             <StyledList>
               {DetailsErrors.descriptionError.map((item, index) => (
@@ -95,7 +90,7 @@ const ErrorPage = (props: IErrorPage) => {
                   <Text
                     type="title"
                     size="small"
-                    appearance={ComponentAppearance.GRAY}
+                    appearance={EComponentAppearance.GRAY}
                   >
                     {item}
                   </Text>
@@ -111,9 +106,9 @@ const ErrorPage = (props: IErrorPage) => {
               type="title"
               size="large"
               weight="bold"
-              appearance={ComponentAppearance.DARK}
+              appearance={EComponentAppearance.DARK}
             >
-              ¿Cómo solucionarlo?
+              {errorPageLabels.howToFixIt}
             </Text>
             <StyledList>
               {DetailsErrors.solutionError.map((item, index) => (
@@ -121,7 +116,7 @@ const ErrorPage = (props: IErrorPage) => {
                   <Text
                     type="title"
                     size="small"
-                    appearance={ComponentAppearance.GRAY}
+                    appearance={EComponentAppearance.GRAY}
                   >
                     {item}
                   </Text>
@@ -129,14 +124,22 @@ const ErrorPage = (props: IErrorPage) => {
               ))}
             </StyledList>
             <Stack alignContent="center" justifyContent="center">
-              <Button appearance="primary" onClick={onClick}>
+              <Button
+                appearance={EComponentAppearance.PRIMARY}
+                onClick={onClick}
+              >
                 {nameButton}
               </Button>
             </Stack>
           </Stack>
         </StyledTextErrorContainer>
-        <Text appearance="gray" textAlign="center" size="small" weight="bold">
-          © 2025 Inube
+        <Text
+          appearance={EComponentAppearance.GRAY}
+          textAlign="center"
+          size="small"
+          weight="bold"
+        >
+          {errorPageLabels.inube}
         </Text>
       </Stack>
     </StyledContainer>

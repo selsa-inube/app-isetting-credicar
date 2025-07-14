@@ -5,7 +5,6 @@ import {
   Checkpicker,
   Grid,
   Icon,
-  inube,
   Label,
   Select,
   Stack,
@@ -13,15 +12,15 @@ import {
 } from "@inubekit/inubekit";
 
 import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/getFieldState";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { IGeneralInformationPayrollFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollFormUI";
+import { portalId } from "@config/portalId";
 import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
-import { useThemeData } from "@utils/theme";
 import { isInvalid } from "@utils/isInvalid";
 import { StyledFormContent, StyledRow } from "./styles";
 
@@ -52,15 +51,11 @@ const GeneralInformationPayrollFormUI = (
     onPreviousStep,
   } = props;
 
-  const theme = useThemeData();
-
   return (
     <BoxContainer
       direction="column"
       gap={tokens.spacing.s150}
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
       minHeight="55vh"
     >
@@ -68,14 +63,10 @@ const GeneralInformationPayrollFormUI = (
         <form>
           <Stack direction="column">
             <BoxContainer
-              borderColor={
-                theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-              }
+              borderColor={EComponentAppearance.DARK}
               borderRadius={tokens.spacing.s100}
               width="100%"
-              backgroundColor={
-                theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-              }
+              backgroundColor={EComponentAppearance.LIGHT}
               boxSizing="border-box"
               padding={
                 isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`
@@ -171,7 +162,7 @@ const GeneralInformationPayrollFormUI = (
                     </Label>
                     <Icon
                       icon={<MdInfoOutline />}
-                      appearance={ComponentAppearance.PRIMARY}
+                      appearance={EComponentAppearance.PRIMARY}
                       onClick={onToggleInfoModalModal}
                       size="12px"
                       cursorHover
@@ -202,7 +193,7 @@ const GeneralInformationPayrollFormUI = (
         <Button
           onClick={editDataOption ? onResetEdit : onPreviousStep}
           variant="outlined"
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
         >
           {labelButtonPrevious}
         </Button>
@@ -211,19 +202,18 @@ const GeneralInformationPayrollFormUI = (
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {labelButtonNext}
         </Button>
       </Stack>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={infoModal.title}
           description={infoModal.description}
           actionText={infoModal.actionText}
           withCancelButton={false}
-          appearance={ComponentAppearance.PRIMARY}
           onCloseModal={onToggleInfoModalModal}
           onClick={onToggleInfoModalModal}
           moreDetails={infoModal.moreDetails}

@@ -5,7 +5,7 @@ import { Icon } from "@inubekit/inubekit";
 import { eventBus } from "@events/eventBus";
 import { ActionsModal } from "@design/modals/actionsModal";
 import { useOutsideClick } from "@hooks/useOutsideClick";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IActionMobile } from "@ptypes/design/IActionMobile";
 import { StyledContainer, StyledContainerIcon } from "./styles";
 
@@ -56,7 +56,7 @@ const ActionMobile = (props: IActionMobile) => {
     <StyledContainer>
       <StyledContainerIcon>
         <Icon
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
           icon={<MdPending />}
           size="20px"
           onClick={handleToggleModal}

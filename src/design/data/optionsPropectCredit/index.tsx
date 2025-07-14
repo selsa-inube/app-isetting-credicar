@@ -1,15 +1,10 @@
 import { Stack, Text, Toggle } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
-import { IEntry } from "@design/data/optionsPropectCredit/types";
+import { EComponentAppearance } from "@enum/appearances";
+import { IOptionsPropectCredit } from "@ptypes/design/IOptionsPropectCredit";
 
-interface IOptionsPropectCredit {
-  entry: IEntry;
-  onChange: (id: string) => void;
-}
-
-function OptionsPropectCredit(props: IOptionsPropectCredit) {
+const OptionsPropectCredit = (props: IOptionsPropectCredit) => {
   const { entry, onChange } = props;
   return (
     <Stack direction="column" gap={tokens.spacing.s200} width="100%">
@@ -29,8 +24,8 @@ function OptionsPropectCredit(props: IOptionsPropectCredit) {
           type="label"
           appearance={
             entry.isActive
-              ? ComponentAppearance.SUCCESS
-              : ComponentAppearance.DANGER
+              ? EComponentAppearance.SUCCESS
+              : EComponentAppearance.DANGER
           }
           weight="bold"
         >
@@ -39,6 +34,6 @@ function OptionsPropectCredit(props: IOptionsPropectCredit) {
       </Stack>
     </Stack>
   );
-}
+};
 
 export { OptionsPropectCredit };

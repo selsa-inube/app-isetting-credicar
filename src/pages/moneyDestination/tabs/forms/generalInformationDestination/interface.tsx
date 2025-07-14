@@ -2,7 +2,7 @@ import { Autosuggest, Button, Stack, Text, Textarea } from "@inubekit/inubekit";
 import { MdOutlineFax } from "react-icons/md";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/forms/getFieldState";
 import { IGeneralInformationFormUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationFormUI";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
@@ -98,7 +98,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
         {editDataOption && (
           <Button
             onClick={onReset}
-            appearance={ComponentAppearance.GRAY}
+            appearance={EComponentAppearance.GRAY}
             disabled={valuesEqual}
           >
             {generalInfoLabels.cancelButton}
@@ -109,7 +109,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
           onClick={onButtonClick}
           disabled={buttonDisabledState}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {labelButtonNext}
         </Button>

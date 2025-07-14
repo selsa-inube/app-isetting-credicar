@@ -1,5 +1,5 @@
 import { Text } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IContainerAttribute } from "@ptypes/design/IContainerAttribute";
 
 const ContainerAttribute = (props: IContainerAttribute) => {
@@ -17,7 +17,7 @@ const ContainerAttribute = (props: IContainerAttribute) => {
       ) : (
         <Text
           size={hasMobile}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
           textAlign={hasDirection}
         >
           {validationTransformation}

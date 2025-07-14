@@ -5,12 +5,12 @@ import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { mapMoneyDestinationToEntities } from "./mappers/mapDestinationToEntities";
 
 const getMoneyDestinationData = async (
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<IMoneyDestinationData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllMoneyDestination",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
   const data: IMoneyDestinationData[] = await getWithRetries<

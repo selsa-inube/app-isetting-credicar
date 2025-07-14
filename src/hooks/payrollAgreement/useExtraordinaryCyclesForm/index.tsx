@@ -86,7 +86,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const { appData } = useContext(AuthAndPortalData);
   const { enumData } = useEnumerators({
     enumDestination: ECyclesPayroll.EXTRAORDINARY_TYPE,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const typePaymentOptions = optionsFromEnumerators(enumData);

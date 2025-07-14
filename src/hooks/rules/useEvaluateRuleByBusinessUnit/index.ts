@@ -5,7 +5,7 @@ import { evaluateRuleByBusinessUnit } from "@services/conditionsRules/postEvalua
 import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
 
 const useEvaluateRuleByBusinessUnit = (
-  bussinesUnits: string,
+  businessUnits: string,
   rulesData: IEvaluateRuleRequest,
 ) => {
   const [evaluateRuleData, setEvaluateRuleData] = useState<
@@ -18,7 +18,7 @@ const useEvaluateRuleByBusinessUnit = (
     const fetchEvaluateRule = async () => {
       setLoading(true);
       try {
-        const data = await evaluateRuleByBusinessUnit(bussinesUnits, rulesData);
+        const data = await evaluateRuleByBusinessUnit(businessUnits, rulesData);
 
         setEvaluateRuleData(data);
         setHasError(false);

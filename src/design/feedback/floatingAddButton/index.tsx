@@ -1,7 +1,7 @@
 import { MdAddCircle } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 import { IFloatingAddButton } from "@ptypes/design/IFloatingAddButton";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { StyledFloatingButton } from "./styles";
 
 const FloatingAddButton = (props: IFloatingAddButton) => {
@@ -16,7 +16,7 @@ const FloatingAddButton = (props: IFloatingAddButton) => {
       <Icon
         icon={<MdAddCircle />}
         size={"60px"}
-        appearance={ComponentAppearance.PRIMARY}
+        appearance={EComponentAppearance.PRIMARY}
       />
     </StyledFloatingButton>
   );

@@ -1,4 +1,4 @@
-enum ComponentAppearance {
+enum EComponentAppearance {
   DANGER = "danger",
   DARK = "dark",
   GRAY = "gray",
@@ -9,4 +9,4 @@ enum ComponentAppearance {
   WARNING = "warning",
 }
 
-export { ComponentAppearance };
+export { EComponentAppearance };

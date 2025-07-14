@@ -1,7 +1,7 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IDetailsRequest } from "@ptypes/generalCredPolicies/IDetailsRequest";
 import { labelsOfTraceability } from "@config/generalCreditPolicies/requestsInProgressTab/details/labelsOfTraceability";
 import { labelsOfRequest } from "@config/generalCreditPolicies/requestsInProgressTab/details/labelsOfRequest";
@@ -44,7 +44,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     <>
       <StyledContainerIcon onClick={onToggleModal} $isTablet={screenTablet}>
         <Icon
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           icon={<MdOutlineRemoveRedEye />}
           size={screenTablet ? "20px" : "16px"}
           cursorHover

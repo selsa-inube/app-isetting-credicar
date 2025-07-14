@@ -1,7 +1,7 @@
 const verificationLabels = {
   returnStep: "Regresar a este paso",
   previus: "Anterior",
-  finish: "Finalizar",
+  finish: "Enviar",
 };
 
 export { verificationLabels };

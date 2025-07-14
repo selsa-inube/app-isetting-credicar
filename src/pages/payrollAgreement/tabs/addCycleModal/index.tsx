@@ -11,7 +11,7 @@ import {
 
 import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/getFieldState";
 import { IAddCycleModal } from "@ptypes/design/IAddCycleModal";
 import { addCycleLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/addCycleLabels";
@@ -101,7 +101,7 @@ const AddCycleModal = (props: IAddCycleModal) => {
                 </Label>
                 <Icon
                   icon={<MdInfoOutline />}
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                   onClick={onToggleInfoModal}
                   size="12px"
                   cursorHover

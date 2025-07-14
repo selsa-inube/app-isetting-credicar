@@ -2,7 +2,7 @@ import { MdAdd } from "react-icons/md";
 import { Stack, Button, Text, Searchfield } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
 import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
 import { tablabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
@@ -11,6 +11,7 @@ import {
   breakPoints,
   titles,
 } from "@config/moneyDestination/moneyDestinationTab/table";
+import { portalId } from "@config/portalId";
 import { StyledContainer } from "./styles";
 
 function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
@@ -44,7 +45,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 ellipsis
               >
                 {tablabels.description}
@@ -79,7 +80,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
             {!smallScreen && (
               <Button
                 spacing="wide"
-                appearance={ComponentAppearance.PRIMARY}
+                appearance={EComponentAppearance.PRIMARY}
                 variant="filled"
                 iconBefore={<MdAdd />}
                 type="link"
@@ -96,7 +97,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
               >
                 {tablabels.description}
               </Text>
@@ -104,7 +105,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryDeleted)}

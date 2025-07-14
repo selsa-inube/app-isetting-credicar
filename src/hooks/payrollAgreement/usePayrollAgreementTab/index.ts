@@ -6,7 +6,7 @@ import { IUsePayrollAgreementTab } from "@ptypes/hooks/payrollAgreement/IUsePayr
 import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
 
 const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
-  const { bussinesUnits } = props;
+  const { businessUnits } = props;
   const [payrollAgreement, setPayrollAgreement] = useState<
     IPayrollAgreementData[]
   >([]);
@@ -20,7 +20,7 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     const fetchPayrollAgreementData = async () => {
       setLoading(true);
       try {
-        const data = await getPayrollAgreementData(bussinesUnits);
+        const data = await getPayrollAgreementData(businessUnits);
         setPayrollAgreement(data);
       } catch (error) {
         console.info(error);

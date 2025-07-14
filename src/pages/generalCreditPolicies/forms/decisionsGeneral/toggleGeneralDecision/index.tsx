@@ -1,7 +1,7 @@
 import { MdInfoOutline } from "react-icons/md";
 import { Icon, Stack, Text, Toggle } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IToggleGeneralDecision } from "@ptypes/generalCredPolicies/forms/IToggleGeneralDecision";
 import { toggleDecisionsLabels } from "@config/generalCreditPolicies/assisted/toggleDecisionsLabels";
 
@@ -10,8 +10,8 @@ const ToggleGeneralDecision = (props: IToggleGeneralDecision) => {
 
   const text = isChecked ? toggleDecisionsLabels.yes : toggleDecisionsLabels.no;
   const appearance = isChecked
-    ? ComponentAppearance.SUCCESS
-    : ComponentAppearance.DANGER;
+    ? EComponentAppearance.SUCCESS
+    : EComponentAppearance.DANGER;
 
   return (
     <Stack direction="column" gap={tokens.spacing.s200}>
@@ -20,7 +20,7 @@ const ToggleGeneralDecision = (props: IToggleGeneralDecision) => {
         {showIcon && onInfoModal && (
           <Icon
             icon={<MdInfoOutline />}
-            appearance={ComponentAppearance.PRIMARY}
+            appearance={EComponentAppearance.PRIMARY}
             onClick={onInfoModal}
             size="12px"
             cursorHover

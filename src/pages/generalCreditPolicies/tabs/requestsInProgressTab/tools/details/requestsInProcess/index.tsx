@@ -1,9 +1,9 @@
-import { Divider, inube, Stack, Text } from "@inubekit/inubekit";
+import { Divider, Stack, Text } from "@inubekit/inubekit";
 
 import { detailsRequestInProgressModal } from "@config/generalCreditPolicies/requestsInProgressTab/details/detailsRequestInProgressModal";
 import { IRequestsInProcess } from "@ptypes/generalCredPolicies/IRequestsInProcess";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { RequestType } from "@enum/requestType";
 import { TraceabilityCard } from "@design/feedback/traceabilityCard";
 import { ModalWrapper } from "@design/modals/modalWrapper";
@@ -45,9 +45,9 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
     >
       <BoxContainer
         direction="column"
-        backgroundColor={inube.palette.neutral.N0}
+        backgroundColor={EComponentAppearance.LIGHT}
         borderRadius={tokens.spacing.s100}
-        borderColor={inube.palette.neutral.N40}
+        borderColor={EComponentAppearance.DARK}
         boxSizing="border-box"
         width="auto"
         height={isMobile ? "400px" : "430px"}
@@ -70,7 +70,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
               type="title"
               size="medium"
               weight="bold"
-              appearance={ComponentAppearance.GRAY}
+              appearance={EComponentAppearance.GRAY}
             >
               {title}
             </Text>
@@ -97,7 +97,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
                 borderRadius={tokens.spacing.s100}
                 padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
                 width={isMobile ? "253px" : "240px"}
-                borderColor={inube.palette.neutral.N40}
+                borderColor={EComponentAppearance.DARK}
                 ellipsis
               />
             ))}

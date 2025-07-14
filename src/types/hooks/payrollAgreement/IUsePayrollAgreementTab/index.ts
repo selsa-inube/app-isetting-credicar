@@ -1,5 +1,5 @@
 interface IUsePayrollAgreementTab {
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUsePayrollAgreementTab };

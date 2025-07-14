@@ -1,6 +1,6 @@
 interface IUseEnumerators {
   enumDestination: string;
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseEnumerators };

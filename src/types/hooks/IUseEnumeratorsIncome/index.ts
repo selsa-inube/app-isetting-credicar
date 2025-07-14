@@ -1,5 +1,5 @@
 interface IUseEnumeratorsIncome {
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseEnumeratorsIncome };

@@ -1,11 +1,11 @@
-import { inube, Stack, Tabs } from "@inubekit/inubekit";
+import { Stack, Tabs } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { DecisionsForm } from "@design/forms/decisions";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { deleteModal } from "@config/decisions/messages";
 import { RequestProcess } from "@design/feedback/RequestProcess";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
@@ -51,7 +51,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
-    theme,
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
@@ -77,9 +76,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       direction="column"
       width="auto"
       height="auto"
-      backgroundColor={theme.palette.neutral.N0 ?? inube.palette.neutral.N0}
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="border-box"
-      borderColor={theme.palette.neutral.N40 ?? inube.palette.neutral.N40}
+      borderColor={EComponentAppearance.DARK}
       borderRadius={tokens.spacing.s100}
       padding={
         smallScreen
@@ -209,7 +208,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
           requestProcessSteps={requestSteps}
-          appearance={ComponentAppearance.SUCCESS}
+          appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
           onCloseProcess={onCloseProcess}
         />
@@ -228,7 +227,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           actionText={
             requestStatusMessage(saveGeneralPolicies.staffName).actionText
           }
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         />
       )}
     </BoxContainer>

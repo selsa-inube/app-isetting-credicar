@@ -10,7 +10,7 @@ import { getRequestsInProgress } from "@services/requestInProgress/getRequestsIn
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
-  const { businessUnitSigla, bussinesUnits } = props;
+  const { businessUnitSigla, businessUnits } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
 
@@ -48,7 +48,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     const fetchRequestsInProgressData = async () => {
       try {
         const data = await getRequestsInProgress(
-          bussinesUnits,
+          businessUnits,
           "PayrollAgreement",
         );
         setRequestsInProgress(data);

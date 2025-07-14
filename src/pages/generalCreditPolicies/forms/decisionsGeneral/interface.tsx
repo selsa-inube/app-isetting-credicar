@@ -3,13 +3,12 @@ import {
   Button,
   Checkbox,
   Icon,
-  inube,
   Select,
   Stack,
   Text,
 } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
@@ -56,11 +55,11 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
         <Stack direction="column">
           <BoxContainer
             direction="column"
-            borderColor={inube.palette.neutral.N40}
+            borderColor={EComponentAppearance.DARK}
             borderRadius={tokens.spacing.s100}
             width="auto"
             gap={tokens.spacing.s300}
-            backgroundColor={inube.palette.neutral.N0}
+            backgroundColor={EComponentAppearance.LIGHT}
             boxSizing="border-box"
             padding={
               isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`
@@ -71,7 +70,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 <Text size="medium">{decisionsGenLabels.first}</Text>
                 <Icon
                   icon={<MdInfoOutline />}
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                   onClick={onInfoRefModal}
                   size="12px"
                   cursorHover
@@ -108,7 +107,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 <Text size="medium">{decisionsGenLabels.second}</Text>
                 <Icon
                   icon={<MdInfoOutline />}
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                   onClick={onInfoMethodsModal}
                   size="12px"
                   cursorHover
@@ -168,7 +167,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           <Button
             onClick={onResetEdit}
             variant="outlined"
-            appearance={ComponentAppearance.GRAY}
+            appearance={EComponentAppearance.GRAY}
           >
             {decisionsGenLabels.buttonCancelLabel}
           </Button>
@@ -178,7 +177,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {buttonLabel}
         </Button>
@@ -192,7 +191,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={ComponentAppearance.PRIMARY}
           onCloseModal={onInfoRefModal}
           onClick={onInfoRefModal}
         />
@@ -206,7 +204,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={ComponentAppearance.PRIMARY}
           onCloseModal={onInfoMethodsModal}
           onClick={onInfoMethodsModal}
         />
@@ -220,7 +217,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={ComponentAppearance.PRIMARY}
           onCloseModal={onInfoObligModal}
           onClick={onInfoObligModal}
         />

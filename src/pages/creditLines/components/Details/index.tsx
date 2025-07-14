@@ -2,15 +2,12 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { useState } from "react";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { detailsTabsConfig } from "@config/creditLines/details/tabs";
 import { DetailsCreditLinesModal } from "@design/modals/detailsCreditLinesModal";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { IDetails } from "@ptypes/creditLines/IDetails";
+import { detailLabels } from "@config/creditLines/details/detailLabels";
 import { StyledContainerIcon } from "./styles";
-
-interface IDetails {
-  data: IEntry;
-}
 
 const Details = (props: IDetails) => {
   const { data } = props;
@@ -26,7 +23,7 @@ const Details = (props: IDetails) => {
     <>
       <StyledContainerIcon onClick={handleToggleModal} $isTablet={screenTablet}>
         <Icon
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           icon={<MdOutlineRemoveRedEye />}
           size={screenTablet ? "20px" : "16px"}
           cursorHover
@@ -34,7 +31,7 @@ const Details = (props: IDetails) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            Detalles
+            {detailLabels.title}
           </Text>
         )}
       </StyledContainerIcon>

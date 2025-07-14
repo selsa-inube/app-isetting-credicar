@@ -5,26 +5,24 @@ import {
   Button,
   Divider,
   Fieldset,
-  inube,
   Numberfield,
   Select,
   Stack,
   Textfield,
 } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { getFieldState } from "@utils/getFieldState";
 import { companyLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/companyLabels";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { ICompanyFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyFormUI";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { portalId } from "@config/portalId";
 import { isInvalid } from "@utils/isInvalid";
-import { useThemeData } from "@utils/theme";
 import { StyledFormContent } from "../styles";
 
 const CompanyFormUI = (props: ICompanyFormUI) => {
-  const theme = useThemeData();
   const {
     formik,
     loading,
@@ -49,24 +47,18 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
       direction="column"
       gap={tokens.spacing.s300}
       minHeight="55vh"
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
     >
       <StyledFormContent>
         <BoxContainer
-          borderColor={
-            theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-          }
+          borderColor={EComponentAppearance.DARK}
           borderRadius={tokens.spacing.s100}
           gap={tokens.spacing.s300}
           padding={
             isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`
           }
-          backgroundColor={
-            theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-          }
+          backgroundColor={EComponentAppearance.LIGHT}
           boxSizing="initial"
         >
           <Stack gap={tokens.spacing.s300} direction="column" width="100%">
@@ -291,14 +283,14 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {companyLabels.labelbutton}
         </Button>
       </Stack>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           icon={<MdOutlineWarningAmber />}
           withIcon
           sizeIcon="75px"
@@ -309,7 +301,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
           onCloseModal={onToggleAlertModal}
           onClick={onToggleAlertModal}
           moreDetails={moreDetailsModal}
-          appearance={ComponentAppearance.WARNING}
+          appearance={EComponentAppearance.WARNING}
         />
       )}
     </BoxContainer>

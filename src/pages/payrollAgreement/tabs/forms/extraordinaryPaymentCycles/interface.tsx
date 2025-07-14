@@ -1,8 +1,8 @@
 import { MdOutlineAdd } from "react-icons/md";
-import { Button, inube, Stack } from "@inubekit/inubekit";
+import { Button, Stack } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { Table } from "@design/data/table";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import {
   breakPoints,
   titles,
@@ -11,15 +11,14 @@ import {
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { IExtraordinaryPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesFormUI";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
+import { portalId } from "@config/portalId";
 import { StyledFormContent } from "../styles";
 import { AddCycleModal } from "../../addCycleModal";
 
 const ExtraordinaryPaymentCyclesFormUI = (
   props: IExtraordinaryPaymentCyclesFormUI,
 ) => {
-  const theme = useThemeData();
   const {
     formik,
     loading,
@@ -48,26 +47,20 @@ const ExtraordinaryPaymentCyclesFormUI = (
       direction="column"
       gap={tokens.spacing.s300}
       minHeight="60vh"
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
     >
       <StyledFormContent>
         <Stack direction="column" gap={tokens.spacing.s300}>
           <BoxContainer
-            borderColor={
-              theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-            }
+            borderColor={EComponentAppearance.DARK}
             borderRadius={tokens.spacing.s100}
             gap={tokens.spacing.s300}
             width="auto"
             padding={
               isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`
             }
-            backgroundColor={
-              theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-            }
+            backgroundColor={EComponentAppearance.LIGHT}
             boxSizing="initial"
           >
             <Stack
@@ -80,14 +73,14 @@ const ExtraordinaryPaymentCyclesFormUI = (
                 <Button
                   iconBefore={<MdOutlineAdd />}
                   onClick={onToggleModal}
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                 >
                   {cyclespaymentLabels.titlePaymentCycle}
                 </Button>
               )}
 
               <Table
-                id="portal"
+                id={portalId}
                 titles={titles}
                 entries={entries}
                 actions={actionsConfig(setEntryDeleted, isMobile)}
@@ -113,7 +106,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
           onClick={onPreviousStep}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
           variant="outlined"
         >
           {labelButtonPrevious}
@@ -123,7 +116,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {labelButtonNext}
         </Button>

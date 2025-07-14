@@ -1,39 +1,20 @@
 import { MdOutlineArrowBack } from "react-icons/md";
 import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { Accordion } from "@design/data/accordions";
 import { tokens } from "@design/tokens";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { finishModal } from "@config/moneyDestination/moneyDestinationTab/form/verificationForm";
-import { IFormsUpdateData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IFormsUpdateData";
 import { DecisionModal } from "@design/modals/decisionModal";
-
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { verificationLabels } from "@config/moneyDestination/moneyDestinationTab/form/verificationLabels";
-import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { VerificationBoxes } from "./verificationBoxes";
-
-interface IVerificationForm {
-  requestSteps: IRequestSteps[];
-  showModal: boolean;
-  showRequestProcessModal: boolean;
-  updatedData: IFormsUpdateData;
-  saveMoneyDestination: ISaveDataResponse;
-  loading: boolean;
-  showPendingReqModal: boolean;
-  handleStepChange: (stepId: number) => void;
-  onFinishForm: () => void;
-  onPreviousStep: () => void;
-  onToggleModal: () => void;
-  onCloseRequestStatus: () => void;
-  onCloseProcess: () => void;
-  onClosePendingReqModal: () => void;
-}
+import { IVerificationForm } from "@ptypes/moneyDestination/IVerificationForm";
+import { portalId } from "@config/portalId";
 
 const VerificationForm = (props: IVerificationForm) => {
   const {
@@ -80,7 +61,7 @@ const VerificationForm = (props: IVerificationForm) => {
               <Button
                 iconBefore={<MdOutlineArrowBack />}
                 onClick={() => handleStepChange(step.number)}
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 variant="none"
               >
                 {verificationLabels.returnStep}
@@ -89,13 +70,13 @@ const VerificationForm = (props: IVerificationForm) => {
           </Accordion>
         ))}
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
-        <Button onClick={onPreviousStep} appearance={ComponentAppearance.GRAY}>
+        <Button onClick={onPreviousStep} appearance={EComponentAppearance.GRAY}>
           {verificationLabels.previus}
         </Button>
 
         <Button
           onClick={onToggleModal}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {verificationLabels.finish}
         </Button>
@@ -103,7 +84,7 @@ const VerificationForm = (props: IVerificationForm) => {
 
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={finishModal.title}
           description={finishModal.description}
           actionText={finishModal.actionText}
@@ -119,7 +100,7 @@ const VerificationForm = (props: IVerificationForm) => {
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
           requestProcessSteps={requestSteps}
-          appearance={ComponentAppearance.SUCCESS}
+          appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
           onCloseProcess={onCloseProcess}
         />
@@ -138,7 +119,7 @@ const VerificationForm = (props: IVerificationForm) => {
           actionText={
             requestStatusMessage(saveMoneyDestination.staffName).actionText
           }
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         />
       )}
     </Stack>

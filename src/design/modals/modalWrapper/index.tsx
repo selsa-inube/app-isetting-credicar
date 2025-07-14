@@ -6,19 +6,16 @@ import {
   Divider,
   Grid,
   Icon,
-  inube,
   Stack,
   Text,
 } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { IModalWrapper } from "@ptypes/design/IModalWrapper";
-import { useThemeData } from "@utils/theme";
 
 const ModalWrapper = (props: IModalWrapper) => {
-  const theme = useThemeData();
   const {
     appearanceButton,
     children,
@@ -55,9 +52,7 @@ const ModalWrapper = (props: IModalWrapper) => {
         width={width}
         height={height}
         direction="column"
-        backgroundColor={
-          theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0
-        }
+        backgroundColor={EComponentAppearance.LIGHT}
         borderRadius={tokens.spacing.s100}
         padding={padding}
         gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
@@ -70,19 +65,19 @@ const ModalWrapper = (props: IModalWrapper) => {
             <Text
               type="headline"
               size="small"
-              appearance={ComponentAppearance.DARK}
+              appearance={EComponentAppearance.DARK}
             >
               {title}
             </Text>
 
             <Button
               spacing="compact"
-              appearance={ComponentAppearance.DARK}
+              appearance={EComponentAppearance.DARK}
               variant="none"
               onClick={onCloseModal}
               iconAfter={
                 <Icon
-                  appearance={ComponentAppearance.DARK}
+                  appearance={EComponentAppearance.DARK}
                   icon={<MdClear />}
                 />
               }
@@ -106,7 +101,7 @@ const ModalWrapper = (props: IModalWrapper) => {
           {withCancelButton && (
             <Button
               spacing="wide"
-              appearance={ComponentAppearance.LIGHT}
+              appearance={EComponentAppearance.LIGHT}
               variant="filled"
               onClick={onCloseModal}
             >
@@ -116,7 +111,7 @@ const ModalWrapper = (props: IModalWrapper) => {
 
           <Button
             spacing="wide"
-            appearance={appearanceButton ?? ComponentAppearance.PRIMARY}
+            appearance={appearanceButton ?? EComponentAppearance.PRIMARY}
             variant="filled"
             onClick={onClick}
             loading={loading}

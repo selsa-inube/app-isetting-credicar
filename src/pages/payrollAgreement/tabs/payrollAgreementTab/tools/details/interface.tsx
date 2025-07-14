@@ -1,8 +1,9 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
 import { IDetailsUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IDetailsUI";
+import { detailsCyclesLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/detailsCyclesLabels";
 import { moreDetailsRequestModal } from "@config/payrollAgreement/requestsInProgressTab/details/moreDetailsRequestModal";
 import { StyledContainerIcon } from "./styles";
 
@@ -29,7 +30,7 @@ const DetailsUI = (props: IDetailsUI) => {
     <>
       <StyledContainerIcon onClick={onToggleModal} $isTablet={screenTablet}>
         <Icon
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           icon={<MdOutlineRemoveRedEye />}
           size={screenTablet ? "20px" : "16px"}
           cursorHover
@@ -37,7 +38,7 @@ const DetailsUI = (props: IDetailsUI) => {
         />
         {screenTablet && (
           <Text type="body" size="medium">
-            Detalles
+            {detailsCyclesLabels.title}
           </Text>
         )}
       </StyledContainerIcon>
@@ -59,7 +60,6 @@ const DetailsUI = (props: IDetailsUI) => {
           extraordinaryPaymentData={extraordinaryPaymentData}
           onCloseModal={onToggleModal}
           onTabChange={onTabChange}
-          moreDetails={false}
         />
       )}
     </>

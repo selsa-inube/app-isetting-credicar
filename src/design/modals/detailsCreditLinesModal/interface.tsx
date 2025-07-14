@@ -13,21 +13,11 @@ import {
 
 import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
-import { ComponentAppearance } from "@enum/appearances";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { EComponentAppearance } from "@enum/appearances";
+import { detailLabels } from "@config/creditLines/details/detailLabels";
 import { StyledContainerButton, StyledModal } from "./styles";
-import { IDetailsTabsConfig } from "./types";
 import { GeneralDataTab } from "./generalDataTab";
-
-interface IDetailsCreditLinesModalUI {
-  data: IEntry;
-  detailsTabsConfig: IDetailsTabsConfig;
-  isSelected: string;
-  portalId: string;
-  smallScreenTab: boolean;
-  onCloseModal: () => void;
-  onTabChange: (id: string) => void;
-}
+import { IDetailsCreditLinesModalUI } from "@ptypes/design/IDetailsCreditLinesModalUI";
 
 const DetailsCreditLinesModalUI = (props: IDetailsCreditLinesModalUI) => {
   const {
@@ -54,23 +44,27 @@ const DetailsCreditLinesModalUI = (props: IDetailsCreditLinesModalUI) => {
       <StyledModal $smallScreen={isMobile}>
         <Stack direction="column" gap={tokens.spacing.s200}>
           <Stack alignItems="center" justifyContent="space-between">
-            <Text type="headline" size="small" appearance="dark">
-              Detalles
+            <Text
+              type="headline"
+              size="small"
+              appearance={EComponentAppearance.DARK}
+            >
+              {detailLabels.title}
             </Text>
             <StyledContainerButton>
               <Button
                 spacing="compact"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 variant="none"
                 onClick={onCloseModal}
                 iconAfter={
                   <Icon
-                    appearance={ComponentAppearance.DARK}
+                    appearance={EComponentAppearance.DARK}
                     icon={<MdClear />}
                   />
                 }
               >
-                Cerrar
+                {detailLabels.close}
               </Button>
             </StyledContainerButton>
           </Stack>
@@ -92,11 +86,11 @@ const DetailsCreditLinesModalUI = (props: IDetailsCreditLinesModalUI) => {
         <Stack gap={tokens.spacing.s250} justifyContent="flex-end">
           <Button
             spacing="wide"
-            appearance={ComponentAppearance.PRIMARY}
+            appearance={EComponentAppearance.PRIMARY}
             variant="filled"
             onClick={onCloseModal}
           >
-            Cerrar
+            {detailLabels.close}
           </Button>
         </Stack>
       </StyledModal>
@@ -106,4 +100,3 @@ const DetailsCreditLinesModalUI = (props: IDetailsCreditLinesModalUI) => {
 };
 
 export { DetailsCreditLinesModalUI };
-export type { IDetailsCreditLinesModalUI };

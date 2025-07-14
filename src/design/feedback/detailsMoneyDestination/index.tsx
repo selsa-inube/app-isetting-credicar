@@ -1,29 +1,14 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { IRuleDecision } from "@isettingkit/input";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import {
   decisionTemplate,
   textValuesBusinessRules,
 } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
-import { IEntry } from "@ptypes/design/table/IEntry";
-import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
+import { IDetailsMoneyDestination } from "@ptypes/moneyDestination/tabs/IDetailsMoneyDestination";
 import { StyledContainerIcon } from "./styles";
-
-interface IDetailsMoneyDestination {
-  data: IEntry;
-  showModal: boolean;
-  evaluateRuleData: IRuleDecision[] | undefined;
-  handleToggleModal: () => void;
-  detailsTabsConfig: IDetailsTabsConfig;
-  defaultSelectedTab: string;
-  filteredTabsConfig: IDetailsTabsConfig;
-  isMobile: boolean;
-  isSelected: string;
-  onTabChange: (id: string) => void;
-}
 
 const DetailsMoneyDestination = (props: IDetailsMoneyDestination) => {
   const {
@@ -45,7 +30,7 @@ const DetailsMoneyDestination = (props: IDetailsMoneyDestination) => {
     <>
       <StyledContainerIcon onClick={handleToggleModal} $isTablet={screenTablet}>
         <Icon
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           icon={<MdOutlineRemoveRedEye />}
           size={screenTablet ? "20px" : "16px"}
           cursorHover

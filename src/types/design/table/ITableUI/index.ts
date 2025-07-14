@@ -10,12 +10,13 @@ interface ITableUI {
   firstEntryInPage: number;
   loading: boolean;
   lastEntryInPage: number;
-  pageLength: number;
   ellipsisCell: boolean;
   titles: ITitle[];
   withActionMobile: boolean;
   withGeneralizedTitle: boolean;
   mobileTitle?: string;
+  hasEntries: boolean;
+  isPaginated: boolean;
   widthPercentageTotalColumns?: number;
   tableLayout: "fixed" | "auto";
   columnWidths?: number[];
