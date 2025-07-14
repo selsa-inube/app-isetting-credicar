@@ -6,7 +6,7 @@ import { getConditionsOrDecisionName } from "@services/conditionsRules/getCondit
 import { IDecision } from "@ptypes/decisions/IDecision";
 import { EConditionRules } from "@enum/conditionRules";
 
-const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
+const useEnumRules = (enumDestination: string, businessUnits: string) => {
   const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
@@ -22,7 +22,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumeratorsRules(enumDestination, bussinesUnits);
+        const data = await getEnumeratorsRules(enumDestination, businessUnits);
         setEnumRuleData(data);
       } catch (error) {
         console.info(error);
@@ -30,7 +30,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
       }
     };
     fetchEnumData();
-  }, [enumDestination, bussinesUnits]);
+  }, [enumDestination, businessUnits]);
 
   useEffect(() => {
     setRuleData({ ...enumRuleData } as IRuleDecision);
@@ -39,7 +39,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   const fetchListValuesDecision = async (conditionOrDecisionName: string) => {
     try {
       const data = await getConditionsOrDecisionName(
-        bussinesUnits,
+        businessUnits,
         conditionOrDecisionName,
       );
       setListValuesDecision(data.possibleValues);
@@ -57,7 +57,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   ) => {
     try {
       const data = await getConditionsOrDecisionName(
-        bussinesUnits,
+        businessUnits,
         conditionOrDecisionName,
       );
       setListValuesCondition({ [conditionName]: data.possibleValues });

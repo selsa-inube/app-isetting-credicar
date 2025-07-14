@@ -5,7 +5,7 @@ import { getLegalPersonsData } from "@services/payrollAgreement/getLegalPersons"
 import { IUseLegalPerson } from "@ptypes/hooks/IUseLegalPerson";
 
 const useLegalPerson = (props: IUseLegalPerson) => {
-  const { bussinesUnits } = props;
+  const { businessUnits } = props;
   const [legalPersonData, setLegalPersonData] = useState<ILegalPerson[]>(
     [] as ILegalPerson[],
   );
@@ -14,7 +14,7 @@ const useLegalPerson = (props: IUseLegalPerson) => {
   useEffect(() => {
     const fetchLegalPersonData = async () => {
       try {
-        const data = await getLegalPersonsData(bussinesUnits);
+        const data = await getLegalPersonsData(businessUnits);
 
         setLegalPersonData(data);
       } catch (error) {

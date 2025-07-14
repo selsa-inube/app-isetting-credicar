@@ -8,7 +8,7 @@ import { useEnumRequest } from "@hooks/useEnumRequest";
 import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { bussinesUnits } = props;
+  const { businessUnits } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -18,7 +18,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const [loading, setLoading] = useState(true);
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
   const { enumsRequests } = useEnumRequest({
-    bussinesUnits,
+    businessUnits,
     enumerator: ERequestInProgress.REQUEST_STATUS,
   });
 
@@ -29,7 +29,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       setLoading(true);
       try {
         const data = await getRequestsInProgress(
-          bussinesUnits,
+          businessUnits,
           ERequestInProgress.GENERAL_CREDIT_POLICIES,
         );
         setRequestsInProgress(data);

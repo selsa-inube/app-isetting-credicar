@@ -1,5 +1,5 @@
 interface IUseEnumsMoneyDestination {
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseEnumsMoneyDestination };

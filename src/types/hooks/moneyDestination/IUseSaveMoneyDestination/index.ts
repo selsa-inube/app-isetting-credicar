@@ -2,7 +2,7 @@ import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 interface IUseSaveMoneyDestination {
   useCase: "add" | "edit" | "delete";
-  bussinesUnits: string;
+  businessUnits: string;
   userAccount: string;
   sendData: boolean;
   data: ISaveDataRequest;

@@ -17,7 +17,7 @@ const GeneralInformationForm = forwardRef<
   FormikProps<IGeneralInformationEntry>,
   IGeneralInformationForm
 >(({ initialValues, onFormValid, onSubmit, handleNextStep, loading }, ref) => {
-  const { formik } = useGeneralInfoCreditLineForm(
+  const { formik, isMobile } = useGeneralInfoCreditLineForm(
     initialValues,
     ref,
     onSubmit,
@@ -29,6 +29,7 @@ const GeneralInformationForm = forwardRef<
       loading={loading}
       formik={formik}
       onNextStep={handleNextStep}
+      isMobile={isMobile}
     />
   );
 });

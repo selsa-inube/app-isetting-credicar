@@ -41,7 +41,7 @@ const Delete = (props: IDelete) => {
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
     useCase: UseCase.DELETE,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
     data: saveData as ISaveDataRequest,

@@ -43,7 +43,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
 
   const { appData } = useContext(AuthAndPortalData);
   const { legalPersonOptions, legalPersonData } = useLegalPerson({
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
   const { optionsCountries } = useCountries();
   const { optionsCities } = useCities();

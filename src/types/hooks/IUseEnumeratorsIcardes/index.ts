@@ -1,6 +1,6 @@
 interface IUseEnumeratorsICardes {
   enumCredicar: string;
-  bussinesUnits: string;
+  businessUnits: string;
 }
 
 export type { IUseEnumeratorsICardes };

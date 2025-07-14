@@ -95,7 +95,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
         </Stack>
         {showDecisionModal && (
           <DecisionModal
-            portalId="portal"
+            portalId={portalId}
             title={attentionModal!.title}
             description={attentionModal!.description}
             actionText={attentionModal!.actionText}

@@ -23,7 +23,7 @@ import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   const {
     useCase,
-    bussinesUnits,
+    businessUnits,
     userAccount,
     sendData,
     data,
@@ -90,14 +90,14 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     try {
       if (useCase === UseCase.ADD) {
         const newData = await postAddMoneyDestination(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestMoneyDestination,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
       if (useCase === UseCase.EDIT) {
         const newData = await patchEditMoneyDestination(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestMoneyDestination,
         );
 
@@ -105,7 +105,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
       }
       if (useCase === UseCase.DELETE) {
         const newData = await deleteMoneyDestination(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestMoneyDestination,
         );
 
@@ -229,13 +229,13 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
       if (isStatusRequestFinished()) {
         addFlag({
           title: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.title,
+            .successfulCreateRequest.title,
           description: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.description,
+            .successfulCreateRequest.description,
           appearance: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.appearance as IFlagAppearance,
+            .successfulCreateRequest.appearance as IFlagAppearance,
           duration: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.duration,
+            .successfulCreateRequest.duration,
         });
       }
     }

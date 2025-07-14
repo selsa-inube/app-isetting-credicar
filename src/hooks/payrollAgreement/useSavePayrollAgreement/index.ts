@@ -25,7 +25,7 @@ import { UseCase } from "@enum/useCase";
 
 const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const {
-    bussinesUnits,
+    businessUnits,
     useCase,
     userAccount,
     sendData,
@@ -90,14 +90,14 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     try {
       if (useCase === UseCase.ADD) {
         const newData = await postAddPayrollAgre(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
       if (useCase === UseCase.EDIT) {
         const newData = await pacthEditPayrollAgre(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
 
@@ -105,7 +105,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       }
       if (useCase === UseCase.DELETE) {
         const newData = await deletePayrollAgre(
-          bussinesUnits,
+          businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
@@ -228,13 +228,13 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       if (isStatusRequestFinished()) {
         addFlag({
           title: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.title,
+            .successfulCreateRequest.title,
           description: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.description,
+            .successfulCreateRequest.description,
           appearance: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.appearance as IFlagAppearance,
+            .successfulCreateRequest.appearance as IFlagAppearance,
           duration: flowAutomaticMessages(operationTypes[useCase])
-            .SuccessfulCreateRequest.duration,
+            .successfulCreateRequest.duration,
         });
       }
     }

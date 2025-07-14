@@ -6,12 +6,12 @@ import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 import { IEnumeratorsIncome } from "@ptypes/hooks/IEnumeratorsIncome";
 
 const getEnumeratorsIncome = async (
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetAllEnumsIncomeType",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
   const data: IEnumeratorsIncome = await getWithRetries<IEnumeratorsIncome>(

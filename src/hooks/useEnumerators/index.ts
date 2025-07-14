@@ -5,7 +5,7 @@ import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseEnumerators } from "@ptypes/hooks/IUseEnumerators";
 
 const useEnumerators = (props: IUseEnumerators) => {
-  const { enumDestination, bussinesUnits } = props;
+  const { enumDestination, businessUnits } = props;
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
   );
@@ -14,7 +14,7 @@ const useEnumerators = (props: IUseEnumerators) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumerators(enumDestination, bussinesUnits);
+        const data = await getEnumerators(enumDestination, businessUnits);
         setEnumData(data);
       } catch (error) {
         console.info(error);

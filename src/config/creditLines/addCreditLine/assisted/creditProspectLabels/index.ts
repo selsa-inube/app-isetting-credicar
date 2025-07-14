@@ -1,7 +1,7 @@
 const creditProspectLabels = {
   description:
     "¿Cuál es la cantidad máxima de deudores que se pueden registrar?",
-  previusButton: "Anterior",
+  previousButton: "Anterior",
   nextButton: "Siguiente",
 };
 

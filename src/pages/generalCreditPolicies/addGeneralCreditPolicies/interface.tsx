@@ -20,6 +20,7 @@ import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
 import { VerificationForm } from "../forms/verification";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
+import { portalId } from "@config/portalId";
 
 const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
   const {
@@ -199,7 +200,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
       </Stack>
       {showGoBackModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={goBackModal.title}
           description={goBackModal.description}
           actionText={goBackModal.actionText}

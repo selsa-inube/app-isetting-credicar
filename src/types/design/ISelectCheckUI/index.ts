@@ -4,6 +4,7 @@ import { IOptionItem } from "@design/inputs/selectCheck/optionItem";
 interface ISelectCheckUI {
   id: string;
   name: string;
+  optionListVisible: boolean;
   options: IOptionItem[];
   value: string | number;
   displayList: boolean;

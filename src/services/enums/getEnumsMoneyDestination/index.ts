@@ -6,12 +6,12 @@ import { IEnumeratorsDestination } from "@ptypes/hooks/IEnumeratorsDestination";
 import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getEnumsMoneyDestination = async (
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetAllEnumsMoneyDestination",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
   const data: IEnumeratorsDestination =

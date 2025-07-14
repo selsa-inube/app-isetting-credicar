@@ -18,7 +18,7 @@ const PayrollAgreementTab = () => {
     setEntryDeleted,
     handleSearchPayrollAgreement,
   } = usePayrollAgreementTab({
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const pageLength = usePageLength();

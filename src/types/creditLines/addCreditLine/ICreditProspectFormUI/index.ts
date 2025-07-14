@@ -6,6 +6,7 @@ interface ICreditProspectFormUI {
   formik: FormikProps<ICreditProspectEntry>;
   entries: IEntry[];
   additionalDebtorsField: boolean;
+  isMobile: boolean;
   onNextStep: () => void;
   onPreviousStep: () => void;
   onChange: (name: string, value: string) => void;

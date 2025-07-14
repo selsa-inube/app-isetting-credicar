@@ -1,5 +1,6 @@
-import { StyledFlex } from "./styles";
+import { EComponentAppearance } from "@enum/appearances";
 import { IBoxContainer } from "@ptypes/design/IBoxContainer";
+import { StyledFlex } from "./styles";
 
 const BoxContainer = (props: IBoxContainer) => {
   const {
@@ -15,12 +16,12 @@ const BoxContainer = (props: IBoxContainer) => {
     gap,
     margin = "0px",
     padding = "0px",
-    backgroundColor = "light",
+    backgroundColor = EComponentAppearance.LIGHT,
     boxSizing,
-    borderColor = "light",
+    borderColor = EComponentAppearance.LIGHT,
     overflowY,
     overflowX,
-    boxShadow = "light",
+    boxShadow = EComponentAppearance.LIGHT,
     minHeight,
     maxHeight,
   } = props;

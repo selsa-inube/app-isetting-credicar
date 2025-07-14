@@ -30,6 +30,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
       label,
       message,
       invalid,
+      optionListVisible,
       onBlur,
       onChange,
       onChangeCheck,
@@ -41,8 +42,6 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
       size = "compact",
       status = "pending",
     } = props;
-
-    const OptionListVisible = displayList && !disabled;
 
     return (
       <StyledContainer $fullwidth={fullwidth} disabled={disabled} ref={ref}>
@@ -115,7 +114,7 @@ const SelectCheckUI = forwardRef<HTMLDivElement, ISelectCheckUI>(
           <Message disabled={disabled} status={status} message={message} />
         )}
 
-        {OptionListVisible && (
+        {optionListVisible && (
           <OptionList onClick={onChangeCheck}>
             {options?.map((optionItem) => (
               <OptionItem

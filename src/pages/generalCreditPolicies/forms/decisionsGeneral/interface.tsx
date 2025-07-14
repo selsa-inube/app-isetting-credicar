@@ -191,7 +191,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={EComponentAppearance.PRIMARY}
           onCloseModal={onInfoRefModal}
           onClick={onInfoRefModal}
         />
@@ -205,7 +204,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={EComponentAppearance.PRIMARY}
           onCloseModal={onInfoMethodsModal}
           onClick={onInfoMethodsModal}
         />
@@ -219,7 +217,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={EComponentAppearance.PRIMARY}
           onCloseModal={onInfoObligModal}
           onClick={onInfoObligModal}
         />

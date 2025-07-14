@@ -11,7 +11,7 @@ import { getRequestsInProgress } from "@services/requestInProgress/getRequestsIn
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
-  const { businessUnitSigla, bussinesUnits } = props;
+  const { businessUnitSigla, businessUnits } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
   const smallScreen = useMediaQuery("(max-width: 990px)");
@@ -51,7 +51,7 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
     const fetchRequestsInProgressData = async () => {
       try {
         const data = await getRequestsInProgress(
-          bussinesUnits,
+          businessUnits,
           "MoneyDestination",
         );
         setRequestsInProgress(data);

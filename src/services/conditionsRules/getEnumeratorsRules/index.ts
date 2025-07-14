@@ -7,12 +7,12 @@ import { mapEnumeratorsRulesApiToEntity } from "./mappers";
 
 const getEnumeratorsRules = async (
   ruleName: string,
-  bussinesUnits: string,
+  businessUnits: string,
 ): Promise<IDecision> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetAllBusinessRuleCatalogCrediboard",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
 

@@ -157,7 +157,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
 
   const { enumData: incometype } = useEnumerators({
     enumDestination: "incometype",
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
   });
 
   const { newRegularPayment, newExtraordinaryPayment, newSourcesIncome } =

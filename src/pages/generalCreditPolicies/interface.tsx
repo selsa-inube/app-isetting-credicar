@@ -10,6 +10,7 @@ import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCr
 import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
 import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
 import { descriptionTitle } from "@config/generalCreditPolicies/descriptionTitle";
+import { portalId } from "@config/portalId";
 
 const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
   const {
@@ -57,7 +58,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
             <>
               <AddGenCreditPolicies />
               <DecisionModal
-                portalId="portal"
+                portalId={portalId}
                 title={notPoliciesModal.title}
                 description={notPoliciesModal.description}
                 actionText={notPoliciesModal.actionText}

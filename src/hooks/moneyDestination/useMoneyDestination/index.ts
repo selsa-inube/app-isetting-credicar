@@ -5,7 +5,7 @@ import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDest
 import { IUseMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseMoneyDestination";
 
 const useMoneyDestination = (props: IUseMoneyDestination) => {
-  const { bussinesUnits } = props;
+  const { businessUnits } = props;
   const [moneyDestination, setMoneyDestination] = useState<
     IMoneyDestinationData[]
   >([]);
@@ -19,7 +19,7 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
     const fetchEnumData = async () => {
       setLoading(true);
       try {
-        const data = await getMoneyDestinationData(bussinesUnits);
+        const data = await getMoneyDestinationData(businessUnits);
         setMoneyDestination(data);
       } catch (error) {
         console.info(error);

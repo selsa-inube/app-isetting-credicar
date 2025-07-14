@@ -1,23 +1,14 @@
-import {
-  Stack,
-  useMediaQuery,
-  Textarea,
-  Input,
-  Button,
-} from "@inubekit/inubekit";
+import { Stack, Textarea, Input, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/forms/getFieldState";
-import { mediaQueryTablet } from "@config/environment";
 import { StyledContainer, StyledContainerFields } from "./styles";
 import { generalInfoLabels } from "@config/creditLines/addCreditLine/assisted/generalInfoLabels";
 import { IGeneralInformationFormUI } from "@ptypes/creditLines/addCreditLine/IGeneralInformationFormUI";
 
 const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
-  const { formik, loading, onNextStep } = props;
-
-  const isMobile = useMediaQuery(mediaQueryTablet);
+  const { formik, loading, isMobile, onNextStep } = props;
 
   return (
     <StyledContainer>

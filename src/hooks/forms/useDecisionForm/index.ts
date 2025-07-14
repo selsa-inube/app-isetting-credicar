@@ -152,7 +152,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
 
   const cancelButtonLabel = editDataOption
     ? decisionsLabels.labelCancelButton
-    : decisionsLabels.labelPreviusButton;
+    : decisionsLabels.labelpreviousButton;
 
   const shouldShowAttentionModal = Boolean(
     showAttentionModal && attentionModal,

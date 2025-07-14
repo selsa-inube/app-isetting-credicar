@@ -7,8 +7,13 @@ import { CreditLinesUI } from "./interface";
 
 function CreditLines() {
   const { businessUnitSigla } = useContext(AuthAndPortalData);
-  const { searchCreditLines, descriptionOptions, handleSearchCreditLines } =
-    useCreditLinePage(businessUnitSigla);
+  const {
+    searchCreditLines,
+    descriptionOptions,
+    smallScreen,
+    columnWidths,
+    handleSearchCreditLines,
+  } = useCreditLinePage(businessUnitSigla);
 
   return (
     <CreditLinesUI
@@ -16,6 +21,8 @@ function CreditLines() {
       searchCreditLines={searchCreditLines}
       onSearchCreditLines={handleSearchCreditLines}
       descriptionOptions={descriptionOptions as ICardData}
+      columnWidths={columnWidths}
+      smallScreen={smallScreen}
     />
   );
 }

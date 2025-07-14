@@ -23,7 +23,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
 
   const staffDisplayName = saveData?.staffName ?? noStaffName.label;
 
-  const withoutRrequestStatus = saveData && saveData.requestStatus !== "";
+  const withoutRequestStatus = saveData && saveData.requestStatus !== "";
 
   return (
     <Stack
@@ -32,7 +32,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
       justifyContent="center"
       alignContent="center"
     >
-      {withoutRrequestStatus &&
+      {withoutRequestStatus &&
         (statusFlowAutomatic.includes(saveData.requestStatus) ? (
           <RequestProcessModal
             portalId={portalId}

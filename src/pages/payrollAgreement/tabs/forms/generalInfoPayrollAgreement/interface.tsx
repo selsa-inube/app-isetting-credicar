@@ -19,6 +19,7 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { IGeneralInformationPayrollFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollFormUI";
+import { portalId } from "@config/portalId";
 import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
 import { isInvalid } from "@utils/isInvalid";
 import { StyledFormContent, StyledRow } from "./styles";
@@ -208,12 +209,11 @@ const GeneralInformationPayrollFormUI = (
       </Stack>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={infoModal.title}
           description={infoModal.description}
           actionText={infoModal.actionText}
           withCancelButton={false}
-          appearance={EComponentAppearance.PRIMARY}
           onCloseModal={onToggleInfoModalModal}
           onClick={onToggleInfoModalModal}
           moreDetails={infoModal.moreDetails}

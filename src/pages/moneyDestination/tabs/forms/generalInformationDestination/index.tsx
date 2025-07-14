@@ -27,7 +27,7 @@ const GeneralInformationForm = forwardRef<
     const { appData } = useContext(AuthAndPortalData);
 
     const { enumData } = useEnumsMoneyDestination({
-      bussinesUnits: appData.businessUnit.publicCode,
+      businessUnits: appData.businessUnit.publicCode,
     });
 
     const {

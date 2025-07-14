@@ -7,7 +7,7 @@ import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseReque
 import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { bussinesUnits } = props;
+  const { businessUnits } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -22,7 +22,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       setLoading(true);
       try {
         const data = await getRequestsInProgress(
-          bussinesUnits,
+          businessUnits,
           ERequestInProgress.PAYROLL_AGREEMENT,
         );
         setRequestsInProgress(data);
