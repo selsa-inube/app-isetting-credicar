@@ -16,7 +16,6 @@ const usePayrollAgreementData = (props: IUsePayrollAgreementData) => {
       setLoading(true);
       try {
         const data = await getPayrollAgreementData(businessUnits);
-        console.log({ data });
         setPayrollAgreement(data);
       } catch (error) {
         console.info(error);

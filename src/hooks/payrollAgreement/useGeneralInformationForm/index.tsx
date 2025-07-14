@@ -11,8 +11,10 @@ import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
 import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { usePayrollAgreementData } from "../usePayrollAgreementData";
 import { codeExistModal } from "@config/payrollAgreement/payrollAgreementTab/generic/codeExistModal";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { mediaQueryTablet } from "@config/environment";
+import { usePayrollAgreementData } from "../usePayrollAgreementData";
 
 const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const {
@@ -40,15 +42,17 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
 
   const createValidationSchema = () =>
     object().shape({
-      code: validationRules.string
-        .required(validationMessages.required)
-        .test(
-          "valid-code",
-          validationMessages.code,
-          (value) =>
-            codeExists(value)?.payrollForDeductionAgreementCode !==
-            String(value),
-        ),
+      code: editDataOption
+        ? validationRules.string.required(validationMessages.required)
+        : validationRules.string
+            .required(validationMessages.required)
+            .test(
+              "valid-code",
+              validationMessages.code,
+              (value) =>
+                codeExists(value ?? "")?.payrollForDeductionAgreementCode !==
+                String(value),
+            ),
       abbreviatedName: validationRules.string.required(
         validationMessages.required,
       ),
@@ -65,7 +69,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: validationSchema,
     validateOnBlur: true,
     onSubmit: onSubmit ?? (() => true),
   });
@@ -78,13 +82,13 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const [showCodeModal, setShowCodeModal] = useState(false);
 
   const { enumData: typePayroll } = useEnumerators({
-    enumDestination: "deductionagreementtype",
+    enumDestination: EPayrollAgreement.TYPE_PAYROLL,
     businessUnits: appData.businessUnit.publicCode,
   });
 
   const typePayrollOptions = optionsFromEnumerators(typePayroll);
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const isMobile = useMediaQuery(mediaQueryTablet);
 
   useImperativeHandle(ref, () => formik);
 
@@ -110,7 +114,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   };
 
   useEffect(() => {
-    if (payrollAgreement) {
+    if (payrollAgreement && !editDataOption) {
       codeExists(formik.values.code ?? "");
       const inter = setTimeout(() => {
         const codePayroll = codeExists(formik.values.code ?? "");

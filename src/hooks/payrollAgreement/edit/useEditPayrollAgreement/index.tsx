@@ -400,7 +400,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         applicationName: "ifac",
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
-        description: EPayrollAgreement.DESCRIPTION_SAVE_EDIT,
+        description: jsonLabels(appData.user.userAccount).modifyJustification,
         entityName: conditionRule,
         requestDate: formatDate(new Date()),
         useCaseName: "ModifyPayrollAgreement",
