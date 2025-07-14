@@ -11,6 +11,8 @@ import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
 import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { usePayrollAgreementData } from "../usePayrollAgreementData";
+import { codeExistModal } from "@config/payrollAgreement/payrollAgreementTab/generic/codeExistModal";
 
 const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const {
@@ -24,8 +26,29 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     sourcesOfIncomeValues,
     initialGeneralInfData,
   } = props;
+
+  const { appData } = useContext(AuthAndPortalData);
+  const { payrollAgreement } = usePayrollAgreementData({
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const codeExists = (code: string) => {
+    return payrollAgreement.find(
+      (item) => item.payrollForDeductionAgreementCode === String(code),
+    );
+  };
+
   const createValidationSchema = () =>
     object().shape({
+      code: validationRules.string
+        .required(validationMessages.required)
+        .test(
+          "valid-code",
+          validationMessages.code,
+          (value) =>
+            codeExists(value)?.payrollForDeductionAgreementCode !==
+            String(value),
+        ),
       abbreviatedName: validationRules.string.required(
         validationMessages.required,
       ),
@@ -52,7 +75,8 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   );
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const { appData } = useContext(AuthAndPortalData);
+  const [showCodeModal, setShowCodeModal] = useState(false);
+
   const { enumData: typePayroll } = useEnumerators({
     enumDestination: "deductionagreementtype",
     businessUnits: appData.businessUnit.publicCode,
@@ -84,6 +108,27 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       formik.setFieldValue(name, value);
     }
   };
+
+  useEffect(() => {
+    if (payrollAgreement) {
+      codeExists(formik.values.code ?? "");
+      const inter = setTimeout(() => {
+        const codePayroll = codeExists(formik.values.code ?? "");
+
+        if (codePayroll) {
+          setShowCodeModal(true);
+        } else {
+          setShowCodeModal(false);
+        }
+      }, 500);
+
+      return () => {
+        if (inter) {
+          clearTimeout(inter);
+        }
+      };
+    }
+  }, [formik.values.code]);
 
   const handleChangeSelect = (name: string, value: string) => {
     formik.setFieldValue(name, value);
@@ -122,6 +167,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     setShowModal(!showModal);
   };
 
+  const handleToggleCodeModal = () => {
+    setShowCodeModal(!showCodeModal);
+  };
+
   const handleReset = () => {
     formik.resetForm();
     setSourcesOfIncomeValues(getDomainById("sourcesOfIncome"));
@@ -132,8 +181,8 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       ? "repeat(5, auto)"
       : "repeat(3, auto)"
     : isMobile
-      ? "repeat(4, auto)"
-      : "repeat(2, 1fr)";
+      ? "repeat(5, auto)"
+      : "repeat(3, 1fr)";
 
   const labelButtonPrevious = editDataOption
     ? generalInfLabels.cancel
@@ -142,6 +191,13 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const labelButtonNext = editDataOption
     ? generalInfLabels.send
     : generalInfLabels.next;
+
+  const {
+    title: titleCodeModal,
+    description: descriptionCodeModal,
+    actionText: actionTextCodeModal,
+    moreDetails: moreDetailsCode,
+  } = codeExistModal;
 
   return {
     autosuggestValue,
@@ -155,7 +211,12 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     gridTemplateRows,
     labelButtonPrevious,
     labelButtonNext,
-
+    showCodeModal,
+    titleCodeModal,
+    descriptionCodeModal,
+    actionTextCodeModal,
+    moreDetailsCode,
+    handleToggleCodeModal,
     handleChangeSelect,
     handleChangeAutosuggest,
     handleChangeCheck,

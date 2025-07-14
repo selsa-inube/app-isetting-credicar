@@ -69,7 +69,6 @@ const AddCycleModal = (props: IAddCycleModal) => {
           onBlur={formik.handleBlur}
           status={getFieldState(formik, "nameCycle")}
           message={formik.errors.nameCycle}
-          counter
           maxLength={addCycleLabels.maxLengthNameCycle}
           fullwidth
           required

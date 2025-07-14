@@ -8,7 +8,6 @@ import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreem
 import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
-import { useEnumerators } from "@hooks/useEnumerators";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { compareObjects } from "@utils/compareObjects";
 import { formatDate } from "@utils/date/formatDate";
@@ -33,6 +32,8 @@ import { getDayPayment } from "@utils/getDayPayment";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 import { mediaQueryMobile } from "@config/environment";
 import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
+import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
@@ -96,6 +97,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     generalInformation: {
       isValid: false,
       values: {
+        code: data.payrollForDeductionAgreementCode,
         abbreviatedName: data.abbreviatedName ?? "",
         typePayroll:
           dataTranslations[data.payrollForDeductionAgreementType] ??
@@ -149,14 +151,13 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const initialValues = initialData.generalInformation.values;
 
   const navigate = useNavigate();
-  const conditionRule = "PayrollAgreement";
+  const conditionRule = EPayrollAgreement.CONDITION_RULE;
   const smallScreen = useMediaQuery(mediaQueryMobile);
 
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
 
-  const { enumData: incometype } = useEnumerators({
-    enumDestination: "incometype",
+  const { enumData: incometype } = useEnumeratorsIncome({
     businessUnits: appData.businessUnit.publicCode,
   });
 
@@ -399,7 +400,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         applicationName: "ifac",
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
-        description: "Solicitud de modificación de una nómina de convenio",
+        description: EPayrollAgreement.DESCRIPTION_SAVE_EDIT,
         entityName: conditionRule,
         requestDate: formatDate(new Date()),
         useCaseName: "ModifyPayrollAgreement",

@@ -17,6 +17,12 @@ interface IGeneralInformationPayrollFormUI {
   gridTemplateRows: string;
   labelButtonPrevious: string;
   labelButtonNext: string;
+  showCodeModal: boolean;
+  titleCodeModal: string;
+  descriptionCodeModal: string;
+  actionTextCodeModal: string;
+  moreDetailsCode: string;
+  onToggleCodeModal: () => void;
   onToggleInfoModalModal: () => void;
   onChangeCheck: (name: string, values: string) => void;
   onButtonClick: () => void;

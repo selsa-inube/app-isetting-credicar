@@ -54,6 +54,7 @@ const ModalWrapper = (props: IModalWrapper) => {
         direction="column"
         backgroundColor={EComponentAppearance.LIGHT}
         borderRadius={tokens.spacing.s100}
+        borderColor={EComponentAppearance.DARK}
         padding={padding}
         gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
         boxSizing="border-box"
