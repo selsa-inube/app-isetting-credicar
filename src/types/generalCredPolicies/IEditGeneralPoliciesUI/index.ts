@@ -17,7 +17,6 @@ interface IEditGeneralPoliciesUI {
   showRequestProcessModal: boolean;
   saveGeneralPolicies: ISaveDataResponse;
   smallScreen: boolean;
-  tabletScreen: boolean;
   formValues: IDecisionsGeneralEntry;
   initialDecisionsData: IDecisionsGeneralEntry;
   decisionsGeneralReference: React.RefObject<

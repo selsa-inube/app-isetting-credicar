@@ -18,7 +18,10 @@ import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/c
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { allConditionsRules } from "@utils/allConditionsRules";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
+import { mediaQueryTablet } from "@config/environment";
+import { editLabels } from "@config/editLabels";
 import { dataTranslations } from "@utils/dataTranslations";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
@@ -85,7 +88,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const normalizedIncome = normalizeEvaluateRuleData(incomeData);
   const normalizedScoreModels = normalizeEvaluateRuleData(
     scoreModelsData,
-    "BusinessUnit",
+    EGeneralPolicies.CONDITION_BUSINESS_UNIT,
   );
 
   const prevContributionsRef = useRef<IRuleDecision[]>([]);
@@ -190,7 +193,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
       rules?: IRuleDecision[];
     } = {
       moneyDestinationId: "",
-      modifyJustification: `La modificación del destino de dinero es solicitada por ${appData.user.userAccount}`,
+      modifyJustification: `${editLabels.title} ${appData.user.userAccount}`,
     };
 
     if (newDecisions && newDecisions.length > 0) {
@@ -201,8 +204,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description:
-        "Solicitud de modificación de politicas generales de crédito",
+      description: editLabels.title,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
       useCaseName: "ModifyGeneralCreditPolicies",
@@ -223,8 +225,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     navigate(-1);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
-  const tabletScreen = useMediaQuery("(max-width: 1530px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const showDecisionsGeneral =
     filteredTabs.decisionsGeneral &&
@@ -260,7 +261,6 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     incomePortfolio,
     scoreModels,
     filteredTabs,
-    tabletScreen,
     showDecisionsGeneral,
     showIncomePort,
     showContributions,
