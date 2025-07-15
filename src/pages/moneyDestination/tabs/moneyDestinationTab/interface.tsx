@@ -5,7 +5,7 @@ import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
 import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
-import { tablabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
+import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
 import {
   actionsConfig,
   breakPoints,
@@ -49,7 +49,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
                 appearance={EComponentAppearance.DARK}
                 ellipsis
               >
-                {tablabels.description}
+                {tabLabels.description}
               </Text>
             </Stack>
           )}
@@ -68,8 +68,8 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Searchfield
                 name="searchMoneyDestination"
                 id="searchMoneyDestination"
-                placeholder={tablabels.searchPlaceholder}
-                label={smallScreen ? "" : tablabels.searchLabel}
+                placeholder={tabLabels.searchPlaceholder}
+                label={smallScreen ? "" : tabLabels.searchLabel}
                 size="compact"
                 value={searchMoneyDestination}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -88,7 +88,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
                 path="/money-destination/add-destination"
                 fullwidth={smallScreen}
               >
-                {tablabels.addButton}
+                {tabLabels.addButton}
               </Button>
             )}
           </Stack>
@@ -100,7 +100,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
                 size="medium"
                 appearance={EComponentAppearance.DARK}
               >
-                {tablabels.description}
+                {tabLabels.description}
               </Text>
             </Stack>
           )}

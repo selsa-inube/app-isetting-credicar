@@ -1,4 +1,4 @@
-const tablabels = {
+const tabLabels = {
   searchLabel: "Buscar",
   searchPlaceholder: "Palabra clave...",
   addButton: " Agregar destino",
@@ -9,4 +9,4 @@ const tablabels = {
     "Aún no hay destinos de dinero registrados, presiona los 3 puntos y luego “+ Agregar destino para empezar.",
 };
 
-export { tablabels };
+export { tabLabels };

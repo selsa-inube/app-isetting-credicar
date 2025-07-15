@@ -15,8 +15,8 @@ import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinatio
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
 import { goBackModal } from "@config/goBackModal";
-import { GeneralInformationForm } from "../../forms/generalInformationDestination";
-import { VerificationForm } from "../../forms/verificationDestination";
+import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
+import { VerificationForm } from "@pages/moneyDestination/tabs/forms/verificationDestination";
 
 const AddDestinationUI = (props: IAddDestinationUI) => {
   const {

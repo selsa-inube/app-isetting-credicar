@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
 import { IUseMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseMoneyDestination";
-import { tablabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
+import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
 
 const useMoneyDestination = (props: IUseMoneyDestination) => {
   const { bussinesUnits } = props;
@@ -53,8 +53,8 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   const columnWidths = [widthFirstColumn, 55];
 
   const emptyDataMessage = smallScreen
-    ? tablabels.emptyDataMessageMobile
-    : tablabels.emptyDataMessageDesk;
+    ? tabLabels.emptyDataMessageMobile
+    : tabLabels.emptyDataMessageDesk;
 
   return {
     moneyDestination,
