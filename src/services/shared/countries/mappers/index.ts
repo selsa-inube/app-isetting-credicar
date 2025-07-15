@@ -2,9 +2,9 @@ import { ICountry } from "@ptypes/ICountry";
 
 const mapCountriesToEntity = (data: ICountry): ICountry => {
   const newData: ICountry = {
-    abbreviatedName: String(data.abbreviatedName),
-    countryCatalogId: String(data.countryCatalogId),
-    descriptionUse: String(data.descriptionUse),
+    abbreviatedName: String(data.name),
+    countryCatalogId: String(data.countryId),
+    descriptionUse: String(data.name),
     publicCode: String(data.publicCode),
   };
 

@@ -113,8 +113,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       onButtonClick();
       return decisions;
     } else {
+      onButtonClick();
       if (decisions && decisions.length > 0) {
-        onButtonClick();
         setSavedDecisions(decisions);
       } else {
         handleToggleAttentionModal();

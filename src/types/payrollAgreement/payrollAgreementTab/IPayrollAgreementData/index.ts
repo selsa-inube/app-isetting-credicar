@@ -16,6 +16,7 @@ interface IPayrollAgreementData {
   severancePaymentCycles: ISeverancePaymentCycles[];
   id?: string;
   incomeTypes?: IIncomeTypes[];
+  code?: string;
 }
 
 export type { IPayrollAgreementData };

@@ -1,5 +1,5 @@
 const detailsModalLabels = {
-  title: "Dettalles",
+  title: "Detalles",
   close: "Cerrar",
 };
 

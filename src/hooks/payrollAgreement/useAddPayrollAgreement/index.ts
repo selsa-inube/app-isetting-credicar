@@ -58,6 +58,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     generalInformation: {
       isValid: false,
       values: {
+        code: "",
         abbreviatedName: "",
         typePayroll: "",
         sourcesOfIncome: "",
@@ -388,6 +389,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     );
 
     const configurationRequestData: {
+      payrollForDeductionAgreementCode?: string;
       abbreviatedName?: string;
       numberOfDaysForReceivingTheDiscounts?: number;
       payrollForDeductionAgreementType?: string;
@@ -399,6 +401,8 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       severancePaymentCycles?: ISeverancePaymentCycles[];
       incomeTypes?: IIncomeTypes[];
     } = {
+      payrollForDeductionAgreementCode:
+        formValues.generalInformation.values.code,
       abbreviatedName: formValues.generalInformation.values.abbreviatedName,
       numberOfDaysForReceivingTheDiscounts: Number(
         formValues.generalInformation.values.applicationDaysPayroll,
