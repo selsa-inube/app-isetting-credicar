@@ -12,8 +12,11 @@ import { controlsAssisted } from "@config/controlsAssisted";
 import { lineCreditLabels } from "@config/moneyDestination/addDestination/assisted/lineCreditLabels";
 import { addDestinatrionLabels } from "@config/moneyDestination/moneyDestinationTab/addDestinationLabels";
 import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IAddDestinationUI";
-import { GeneralInformationForm } from "../../forms/generalInformationDestination";
-import { VerificationForm } from "../../forms/verificationDestination";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
+import { goBackModal } from "@config/goBackModal";
+import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
+import { VerificationForm } from "@pages/moneyDestination/tabs/forms/verificationDestination";
 
 const AddDestinationUI = (props: IAddDestinationUI) => {
   const {
@@ -31,6 +34,10 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     showPendingReqModal,
     showAttentionModal,
     smallScreen,
+    showGoBackModal,
+    onCloseModal,
+    onOpenModal,
+    onGoBack,
     onFinishForm,
     onNextStep,
     onPreviousStep,
@@ -61,6 +68,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
             title={addDestinatrionLabels.title}
             description={addDestinatrionLabels.description}
             sizeTitle="large"
+            onClick={onOpenModal}
           />
         </Stack>
         <Stack gap={tokens.spacing.s300} direction="column">
@@ -134,6 +142,16 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
           </Stack>
         </Stack>
       </Stack>
+      {showGoBackModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={goBackModal.title}
+          description={goBackModal.description}
+          actionText={goBackModal.actionText}
+          onCloseModal={onCloseModal}
+          onClick={onGoBack}
+        />
+      )}
     </Stack>
   );
 };
