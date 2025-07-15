@@ -9,11 +9,11 @@ import { useEnumerators } from "@hooks/useEnumerators";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
-import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { codeExistModal } from "@config/payrollAgreement/payrollAgreementTab/generic/codeExistModal";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { mediaQueryTablet } from "@config/environment";
+import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
 import { usePayrollAgreementData } from "../usePayrollAgreementData";
 
 const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
@@ -189,12 +189,12 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       : "repeat(3, 1fr)";
 
   const labelButtonPrevious = editDataOption
-    ? generalInfLabels.cancel
-    : generalInfLabels.previous;
+    ? generalInfoLabels.cancel
+    : generalInfoLabels.previous;
 
   const labelButtonNext = editDataOption
-    ? generalInfLabels.send
-    : generalInfLabels.next;
+    ? generalInfoLabels.send
+    : generalInfoLabels.next;
 
   const {
     title: titleCodeModal,

@@ -20,7 +20,6 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { IGeneralInformationPayrollFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollFormUI";
 import { portalId } from "@config/portalId";
-import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
 import { isInvalid } from "@utils/isInvalid";
 import { StyledFormContent } from "./styles";
 
@@ -111,7 +110,7 @@ const GeneralInformationPayrollFormUI = (
                     <Textfield
                       name="code"
                       id="code"
-                      label={generalInfLabels.codePayroll}
+                      label={generalInfoLabels.codePayroll}
                       size="compact"
                       readOnly
                       value={formik.values.code}
@@ -124,15 +123,15 @@ const GeneralInformationPayrollFormUI = (
                   <Textfield
                     name="code"
                     id="code"
-                    label={generalInfLabels.codePayroll}
-                    placeholder={generalInfLabels.placeholderCodePayroll}
+                    label={generalInfoLabels.codePayroll}
+                    placeholder={generalInfoLabels.placeholderCodePayroll}
                     size="compact"
                     value={formik.values.code}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     status={getFieldState(formik, "code")}
                     message={formik.errors.code}
-                    maxLength={generalInfLabels.maxLengthNamePayroll}
+                    maxLength={generalInfoLabels.maxLengthNamePayroll}
                     fullwidth
                     required
                   />
@@ -141,15 +140,15 @@ const GeneralInformationPayrollFormUI = (
                 <Textfield
                   name="abbreviatedName"
                   id="abbreviatedName"
-                  label={generalInfLabels.namePayroll}
-                  placeholder={generalInfLabels.placeholderNamePayroll}
+                  label={generalInfoLabels.namePayroll}
+                  placeholder={generalInfoLabels.placeholderNamePayroll}
                   size="compact"
                   value={formik.values.abbreviatedName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   status={getFieldState(formik, "abbreviatedName")}
                   message={formik.errors.abbreviatedName}
-                  maxLength={generalInfLabels.maxLengthNamePayroll}
+                  maxLength={generalInfoLabels.maxLengthNamePayroll}
                   fullwidth
                   required
                 />
@@ -159,8 +158,8 @@ const GeneralInformationPayrollFormUI = (
                     disabled={false}
                     id="typePayroll"
                     name="typePayroll"
-                    label={generalInfLabels.typePayroll}
-                    placeholder={generalInfLabels.placeholderTypePayroll}
+                    label={generalInfoLabels.typePayroll}
+                    placeholder={generalInfoLabels.placeholderTypePayroll}
                     onChange={onChangeSelect}
                     options={typePayrollOptions}
                     size="compact"
@@ -172,10 +171,10 @@ const GeneralInformationPayrollFormUI = (
                   />
                 )}
                 <Checkpicker
-                  label={generalInfLabels.sourcesOfIncome}
+                  label={generalInfoLabels.sourcesOfIncome}
                   name="sourcesOfIncome"
                   id="sourcesOfIncome"
-                  placeholder={generalInfLabels.placeholderSourcesOfIncome}
+                  placeholder={generalInfoLabels.placeholderSourcesOfIncome}
                   message={formik.errors.sourcesOfIncome}
                   invalid={isInvalid(formik, "sourcesOfIncome")}
                   fullwidth={true}
@@ -192,7 +191,7 @@ const GeneralInformationPayrollFormUI = (
                     margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s075} ${tokens.spacing.s200}`}
                   >
                     <Label htmlFor="applicationDaysPayroll" size="medium">
-                      {generalInfLabels.daysApplication}
+                      {generalInfoLabels.daysApplication}
                     </Label>
                     <Icon
                       icon={<MdInfoOutline />}
@@ -207,7 +206,7 @@ const GeneralInformationPayrollFormUI = (
                     label=""
                     name="applicationDaysPayroll"
                     id="applicationDaysPayroll"
-                    placeholder={generalInfLabels.placeholderDaysApplication}
+                    placeholder={generalInfoLabels.placeholderDaysApplication}
                     value={autosuggestValue}
                     onChange={onChangeAutosuggest}
                     options={getDomainById("daysForApplication")}
