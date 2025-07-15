@@ -1,17 +1,20 @@
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
+import { dataTranslations } from "../dataTranslations";
+
 const payDayValues = (periodicity: string, payDay: string) => {
   const everyTen = Number(payDay) + 10;
 
   switch (periodicity) {
-    case "Weekly":
-      return payDay;
-    case "Intervals_10_days":
+    case ECyclesPayroll.WEEKLY:
+      return dataTranslations[payDay] ?? payDay;
+    case ECyclesPayroll.EVERY_TEN:
       return `${payDay}, ${everyTen}, ${Number(everyTen) + 10}`;
-    case "Biweekly":
+    case ECyclesPayroll.SEMIMONTHLY:
       return `${payDay}, ${Number(payDay) + 15}`;
-    case "Monthly":
+    case ECyclesPayroll.MONTHLY:
       return payDay;
-    case "Semimonthly":
-      return payDay;
+    case ECyclesPayroll.BIWEEKLY:
+      return dataTranslations[payDay] ?? payDay;
     default:
       return payDay;
   }

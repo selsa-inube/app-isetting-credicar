@@ -1,8 +1,8 @@
 import { MdOutlineAdd } from "react-icons/md";
-import { Button, inube, Stack } from "@inubekit/inubekit";
+import { Button, Stack } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { Table } from "@design/data/table";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import {
   breakPoints,
   titles,
@@ -12,8 +12,8 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { IRegularPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IRegularPaymentCyclesFormUI";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
+import { portalId } from "@config/portalId";
 import { StyledFormContent } from "./styles";
 import { AddCycleModal } from "../../addCycleModal";
 
@@ -43,29 +43,21 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
     onPreviousStep,
   } = props;
 
-  const theme = useThemeData();
-
   return (
     <BoxContainer
       direction="column"
       gap={tokens.spacing.s300}
       minHeight="60vh"
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
     >
       <StyledFormContent>
         <Stack direction="column" gap={tokens.spacing.s300}>
           <BoxContainer
-            backgroundColor={
-              theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-            }
+            backgroundColor={EComponentAppearance.LIGHT}
             direction="column"
             boxSizing="initial"
-            borderColor={
-              theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-            }
+            borderColor={EComponentAppearance.DARK}
             borderRadius={tokens.spacing.s100}
             gap={tokens.spacing.s300}
             width="auto"
@@ -83,7 +75,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
                 <Button
                   iconBefore={<MdOutlineAdd />}
                   onClick={onToggleModal}
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                 >
                   {cyclespaymentLabels.titlePaymentCycle}
                 </Button>
@@ -116,7 +108,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
           onClick={onPreviousStep}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
           variant="outlined"
         >
           {labelButtonPrevious}
@@ -126,7 +118,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
           onClick={onButtonClick}
           disabled={disabledButtonNext}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {labelButtonNext}
         </Button>
@@ -152,12 +144,11 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
 
       {showInfoModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={infoModal.title}
           description={infoModal.description}
           actionText={infoModal.actionText}
           withCancelButton={false}
-          appearance={ComponentAppearance.PRIMARY}
           onCloseModal={onToggleInfoModal}
           onClick={onToggleInfoModal}
           moreDetails={infoModal.moreDetails}

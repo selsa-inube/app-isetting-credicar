@@ -1,4 +1,5 @@
 interface IGeneralInformationEntry {
+  code: string;
   abbreviatedName: string;
   typePayroll: string;
   sourcesOfIncome: string;

@@ -1,5 +1,5 @@
 import { Text } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 const incomePortfLabels = {
   titleContentAddCard: "Agregar decisión",
@@ -8,20 +8,20 @@ const incomePortfLabels = {
       as="span"
       type="label"
       size="large"
-      appearance={ComponentAppearance.GRAY}
+      appearance={EComponentAppearance.GRAY}
     >
       Aún
       <Text
         as="span"
         type="label"
         size="large"
-        appearance={ComponentAppearance.GRAY}
+        appearance={EComponentAppearance.GRAY}
         weight="bold"
       >
         {` NO `}
       </Text>
       hay decisiones. Define # de veces los ingresos como cupo total de la
-      cartera.
+      cartera con el botón.
     </Text>
   ),
 };

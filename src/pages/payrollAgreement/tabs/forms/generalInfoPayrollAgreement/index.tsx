@@ -40,6 +40,12 @@ const GeneralInformationPayrollForm = forwardRef<
       gridTemplateRows,
       labelButtonPrevious,
       labelButtonNext,
+      showCodeModal,
+      titleCodeModal,
+      descriptionCodeModal,
+      actionTextCodeModal,
+      moreDetailsCode,
+      handleToggleCodeModal,
       handleChangeSelect,
       handleChangeAutosuggest,
       handleReset,
@@ -82,6 +88,12 @@ const GeneralInformationPayrollForm = forwardRef<
         gridTemplateRows={gridTemplateRows}
         labelButtonPrevious={labelButtonPrevious}
         labelButtonNext={labelButtonNext}
+        showCodeModal={showCodeModal}
+        titleCodeModal={titleCodeModal}
+        descriptionCodeModal={descriptionCodeModal}
+        actionTextCodeModal={actionTextCodeModal}
+        onToggleCodeModal={handleToggleCodeModal}
+        moreDetailsCode={moreDetailsCode}
       />
     );
   },

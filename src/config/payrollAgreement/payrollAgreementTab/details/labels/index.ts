@@ -1,19 +1,19 @@
 const labelsDetails = [
   {
-    id: "TypePayroll",
-    titleName: "Tipo de nómina",
-  },
-  {
-    id: "daysToDetermineDate",
-    titleName: "Días para determinar la fecha de aplicación",
-  },
-  {
     id: "company",
-    titleName: "Empresa",
+    titleName: "Empresa con convenio",
+  },
+  {
+    id: "TypePayroll",
+    titleName: "Tipo de nómina de convenio",
   },
   {
     id: "paymentSources",
     titleName: "Fuentes de ingreso",
+  },
+  {
+    id: "daysToDetermineDate",
+    titleName: "Días para determinar la fecha de aplicación",
   },
 ];
 

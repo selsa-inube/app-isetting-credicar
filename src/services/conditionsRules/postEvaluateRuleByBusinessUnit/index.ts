@@ -6,13 +6,13 @@ import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { mapEvaluateRuleByBusinessEntities } from "./mappers";
 
 const evaluateRuleByBusinessUnit = async (
-  bussinesUnits: string,
+  businessUnits: string,
   rulesData: IEvaluateRuleRequest,
 ): Promise<IRuleDecision[] | undefined> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "EvaluteRuleByBusinessUnit",
-      "X-Business-unit": bussinesUnits,
+      "X-Business-unit": businessUnits,
     },
   };
 

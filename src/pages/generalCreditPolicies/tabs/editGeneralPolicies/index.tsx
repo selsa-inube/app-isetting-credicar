@@ -34,7 +34,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     incomePortfolio,
     scoreModels,
     filteredTabs,
-    tabletScreen,
     initialDecisionsGenData,
     showDecisionsGeneral,
     showIncomePort,
@@ -85,7 +84,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     handleClosePendingReqModal,
   } = useSaveGeneralPolicies({
     useCase: UseCase.EDIT,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
     data: saveData as ISaveDataRequest,
@@ -111,7 +110,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
       smallScreen={smallScreen}
-      tabletScreen={tabletScreen}
       contributionsPortfolio={contributionsPortfolio}
       setContributionsPortfolio={setContributionsPortfolio}
       decisionsGeneralReference={decisionsGeneralRef}

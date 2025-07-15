@@ -5,6 +5,7 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useDecisionForm } from "@hooks/forms/useDecisionForm";
 import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
+import { ENameRules } from "@enum/nameRules";
 import { DecisionsFormUI } from "./interface";
 
 const DecisionsForm = (props: IDecisionsForm) => {
@@ -23,6 +24,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     disabledButton,
     heightContentPage = "70vh",
     bottomAddButton = "55px",
+    ruleCatalog = ENameRules.RULE_CATALOG_CREDIBOARD,
     decisionTemplateConfig,
     onButtonClick,
     onPreviousStep,
@@ -68,10 +70,11 @@ const DecisionsForm = (props: IDecisionsForm) => {
   });
 
   const { appData } = useContext(AuthAndPortalData);
-  const { ruleData } = useEnumRules(
-    labelBusinessRules,
-    appData.businessUnit.publicCode,
-  );
+  const { ruleData } = useEnumRules({
+    enumDestination: labelBusinessRules,
+    ruleCatalog,
+    businessUnits: appData.businessUnit.publicCode,
+  });
 
   return (
     <DecisionsFormUI

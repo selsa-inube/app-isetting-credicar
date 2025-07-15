@@ -1,20 +1,32 @@
-import { Stack, Text, Toggle } from "@inubekit/inubekit";
+import { MdInfoOutline } from "react-icons/md";
+import { Icon, Stack, Text, Toggle } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { IToggleGeneralDecision } from "@ptypes/generalCredPolicies/forms/IToggleGeneralDecision";
 import { toggleDecisionsLabels } from "@config/generalCreditPolicies/assisted/toggleDecisionsLabels";
 
 const ToggleGeneralDecision = (props: IToggleGeneralDecision) => {
-  const { name, label, isChecked, onToggle } = props;
+  const { name, label, isChecked, showIcon, onInfoModal, onToggle } = props;
 
   const text = isChecked ? toggleDecisionsLabels.yes : toggleDecisionsLabels.no;
   const appearance = isChecked
-    ? ComponentAppearance.SUCCESS
-    : ComponentAppearance.DANGER;
+    ? EComponentAppearance.SUCCESS
+    : EComponentAppearance.DANGER;
 
   return (
     <Stack direction="column" gap={tokens.spacing.s200}>
-      <Text size="medium">{label}</Text>
+      <Stack alignItems="center" gap={tokens.spacing.s050}>
+        <Text size="medium">{label}</Text>
+        {showIcon && onInfoModal && (
+          <Icon
+            icon={<MdInfoOutline />}
+            appearance={EComponentAppearance.PRIMARY}
+            onClick={onInfoModal}
+            size="12px"
+            cursorHover
+          />
+        )}
+      </Stack>
       <Stack
         gap={tokens.spacing.s050}
         margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}

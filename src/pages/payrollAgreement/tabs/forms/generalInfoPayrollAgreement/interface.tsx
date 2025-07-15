@@ -1,11 +1,10 @@
-import { MdInfoOutline } from "react-icons/md";
+import { MdInfoOutline, MdOutlineWarningAmber } from "react-icons/md";
 import {
   Autosuggest,
   Button,
   Checkpicker,
   Grid,
   Icon,
-  inube,
   Label,
   Select,
   Stack,
@@ -13,17 +12,16 @@ import {
 } from "@inubekit/inubekit";
 
 import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/getFieldState";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { IGeneralInformationPayrollFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollFormUI";
-import { generalInfLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/generalInfLabels";
-import { useThemeData } from "@utils/theme";
+import { portalId } from "@config/portalId";
 import { isInvalid } from "@utils/isInvalid";
-import { StyledFormContent, StyledRow } from "./styles";
+import { StyledFormContent } from "./styles";
 
 const GeneralInformationPayrollFormUI = (
   props: IGeneralInformationPayrollFormUI,
@@ -43,6 +41,12 @@ const GeneralInformationPayrollFormUI = (
     gridTemplateRows,
     labelButtonPrevious,
     labelButtonNext,
+    showCodeModal,
+    titleCodeModal,
+    descriptionCodeModal,
+    actionTextCodeModal,
+    moreDetailsCode,
+    onToggleCodeModal,
     onChangeSelect,
     onChangeAutosuggest,
     onButtonClick,
@@ -52,15 +56,11 @@ const GeneralInformationPayrollFormUI = (
     onPreviousStep,
   } = props;
 
-  const theme = useThemeData();
-
   return (
     <BoxContainer
       direction="column"
       gap={tokens.spacing.s150}
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
       minHeight="55vh"
     >
@@ -68,14 +68,11 @@ const GeneralInformationPayrollFormUI = (
         <form>
           <Stack direction="column">
             <BoxContainer
-              borderColor={
-                theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-              }
+              borderColor={EComponentAppearance.DARK}
               borderRadius={tokens.spacing.s100}
               width="100%"
-              backgroundColor={
-                theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-              }
+              height="auto"
+              backgroundColor={EComponentAppearance.LIGHT}
               boxSizing="border-box"
               padding={
                 isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`
@@ -85,6 +82,7 @@ const GeneralInformationPayrollFormUI = (
                 templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
                 templateRows={gridTemplateRows}
                 width="100%"
+                height="100%"
                 gap={isMobile ? tokens.spacing.s150 : tokens.spacing.s250}
               >
                 {editDataOption && (
@@ -109,33 +107,59 @@ const GeneralInformationPayrollFormUI = (
                       fullwidth
                       disabled
                     />
+                    <Textfield
+                      name="code"
+                      id="code"
+                      label={generalInfoLabels.codePayroll}
+                      size="compact"
+                      readOnly
+                      value={formik.values.code}
+                      disabled
+                      fullwidth
+                    />
                   </>
                 )}
-                <StyledRow $isMobile={isMobile} $editOption={editDataOption}>
+                {!editDataOption && (
                   <Textfield
-                    name="abbreviatedName"
-                    id="abbreviatedName"
-                    label={generalInfLabels.namPayroll}
-                    placeholder={generalInfLabels.placeholderNamePayroll}
+                    name="code"
+                    id="code"
+                    label={generalInfoLabels.codePayroll}
+                    placeholder={generalInfoLabels.placeholderCodePayroll}
                     size="compact"
-                    value={formik.values.abbreviatedName}
+                    value={formik.values.code}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    status={getFieldState(formik, "abbreviatedName")}
-                    message={formik.errors.abbreviatedName}
-                    counter
-                    maxLength={generalInfLabels.maxLengthNamePayroll}
+                    status={getFieldState(formik, "code")}
+                    message={formik.errors.code}
+                    maxLength={generalInfoLabels.maxLengthNamePayroll}
                     fullwidth
                     required
                   />
-                </StyledRow>
+                )}
+
+                <Textfield
+                  name="abbreviatedName"
+                  id="abbreviatedName"
+                  label={generalInfoLabels.namePayroll}
+                  placeholder={generalInfoLabels.placeholderNamePayroll}
+                  size="compact"
+                  value={formik.values.abbreviatedName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  status={getFieldState(formik, "abbreviatedName")}
+                  message={formik.errors.abbreviatedName}
+                  maxLength={generalInfoLabels.maxLengthNamePayroll}
+                  fullwidth
+                  required
+                />
+
                 {!editDataOption && (
                   <Select
                     disabled={false}
                     id="typePayroll"
                     name="typePayroll"
-                    label={generalInfLabels.typePayroll}
-                    placeholder={generalInfLabels.placeholderTypePayroll}
+                    label={generalInfoLabels.typePayroll}
+                    placeholder={generalInfoLabels.placeholderTypePayroll}
                     onChange={onChangeSelect}
                     options={typePayrollOptions}
                     size="compact"
@@ -147,10 +171,10 @@ const GeneralInformationPayrollFormUI = (
                   />
                 )}
                 <Checkpicker
-                  label={generalInfLabels.sourcesOfIncome}
+                  label={generalInfoLabels.sourcesOfIncome}
                   name="sourcesOfIncome"
                   id="sourcesOfIncome"
-                  placeholder={generalInfLabels.placeholderSourcesOfIncome}
+                  placeholder={generalInfoLabels.placeholderSourcesOfIncome}
                   message={formik.errors.sourcesOfIncome}
                   invalid={isInvalid(formik, "sourcesOfIncome")}
                   fullwidth={true}
@@ -166,12 +190,12 @@ const GeneralInformationPayrollFormUI = (
                     gap={tokens.spacing.s050}
                     margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s075} ${tokens.spacing.s200}`}
                   >
-                    <Label htmlFor="applicationDaysPayroll" size="small">
-                      {generalInfLabels.daysApplication}
+                    <Label htmlFor="applicationDaysPayroll" size="medium">
+                      {generalInfoLabels.daysApplication}
                     </Label>
                     <Icon
                       icon={<MdInfoOutline />}
-                      appearance={ComponentAppearance.PRIMARY}
+                      appearance={EComponentAppearance.PRIMARY}
                       onClick={onToggleInfoModalModal}
                       size="12px"
                       cursorHover
@@ -182,7 +206,7 @@ const GeneralInformationPayrollFormUI = (
                     label=""
                     name="applicationDaysPayroll"
                     id="applicationDaysPayroll"
-                    placeholder={generalInfLabels.placeholderDaysApplication}
+                    placeholder={generalInfoLabels.placeholderDaysApplication}
                     value={autosuggestValue}
                     onChange={onChangeAutosuggest}
                     options={getDomainById("daysForApplication")}
@@ -202,7 +226,7 @@ const GeneralInformationPayrollFormUI = (
         <Button
           onClick={editDataOption ? onResetEdit : onPreviousStep}
           variant="outlined"
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
         >
           {labelButtonPrevious}
         </Button>
@@ -211,22 +235,38 @@ const GeneralInformationPayrollFormUI = (
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {labelButtonNext}
         </Button>
       </Stack>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={infoModal.title}
           description={infoModal.description}
           actionText={infoModal.actionText}
           withCancelButton={false}
-          appearance={ComponentAppearance.PRIMARY}
           onCloseModal={onToggleInfoModalModal}
           onClick={onToggleInfoModalModal}
           moreDetails={infoModal.moreDetails}
+        />
+      )}
+
+      {showCodeModal && (
+        <DecisionModal
+          portalId={portalId}
+          icon={<MdOutlineWarningAmber />}
+          withIcon
+          sizeIcon="75px"
+          withCancelButton={false}
+          title={titleCodeModal}
+          description={descriptionCodeModal}
+          actionText={actionTextCodeModal}
+          moreDetails={moreDetailsCode}
+          onCloseModal={onToggleCodeModal}
+          onClick={onToggleCodeModal}
+          appearance={EComponentAppearance.WARNING}
         />
       )}
     </BoxContainer>

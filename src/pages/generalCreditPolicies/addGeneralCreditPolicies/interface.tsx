@@ -13,13 +13,14 @@ import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempInc
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
 import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
-import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
+import { ENameRules } from "@enum/nameRules";
 import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
-import { VerificationForm } from "../forms/verification";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
+import { portalId } from "@config/portalId";
+import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
+import { VerificationForm } from "../forms/verification";
 
 const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
   const {
@@ -64,7 +65,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
       width="-webkit-fill-available"
       padding={
         smallScreen
-          ? `${tokens.spacing.s100}`
+          ? `${tokens.spacing.s200}`
           : `${tokens.spacing.s300} ${tokens.spacing.s800}`
       }
     >
@@ -110,7 +111,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 initialValues={contributionsPortfolio}
                 setDecisions={setContributionsPortfolio}
                 revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules={nameRules.contributionsPortfolio}
+                labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
                 nameRule=""
                 titleContentAddCard={
                   contributionsPortfLabels.titleContentAddCard
@@ -130,7 +131,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 initialValues={incomePortfolio}
                 setDecisions={setIncomePortfolio}
                 revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules={nameRules.incomePortfolio}
+                labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
                 nameRule=""
                 titleContentAddCard={incomePortfLabels.titleContentAddCard}
                 messageEmptyDecisions={
@@ -148,8 +149,9 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 initialValues={scoreModels}
                 setDecisions={setScoreModels}
                 revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules={nameRules.scoreModels}
+                labelBusinessRules={ENameRules.SCORE_MODELS}
                 nameRule=""
+                ruleCatalog={ENameRules.RULE_CATALOG_IRISK}
                 titleContentAddCard={scoreModelsLabels.titleContentAddCard}
                 messageEmptyDecisions={
                   scoreModelsLabels.messageEmptyDecisions as unknown as string
@@ -199,7 +201,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
       </Stack>
       {showGoBackModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={goBackModal.title}
           description={goBackModal.description}
           actionText={goBackModal.actionText}

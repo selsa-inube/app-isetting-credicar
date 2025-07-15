@@ -1,22 +1,12 @@
 import { MdOutlineCancel } from "react-icons/md";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
-import { IMessageModal } from "@ptypes/decisions/IMessageModal";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { notCancelStatus } from "@config/status/notCancelStatus";
-import { RequestStatus } from "@enum/requestStatus";
 import { StyledContainerIcon } from "./styles";
 import { cancelLabels } from "@config/cancelLabels";
-
-interface ICancelRecord {
-  showModal: boolean;
-  messageCancel: IMessageModal;
-  loading: boolean;
-  status: RequestStatus;
-  onToggleModal: () => void;
-  onClick: () => void;
-}
+import { ICancelRecord } from "@ptypes/design/ICancelRecord";
 
 const CancelRecord = (props: ICancelRecord) => {
   const { showModal, status, messageCancel, loading, onToggleModal, onClick } =
@@ -33,7 +23,7 @@ const CancelRecord = (props: ICancelRecord) => {
         $isTablet={screenTablet}
       >
         <Icon
-          appearance={ComponentAppearance.DANGER}
+          appearance={EComponentAppearance.DANGER}
           icon={<MdOutlineCancel />}
           size="16px"
           onClick={onToggleModal}
@@ -55,9 +45,9 @@ const CancelRecord = (props: ICancelRecord) => {
           description={messageCancel.description}
           onClick={onClick}
           onCloseModal={onToggleModal}
-          appearance={ComponentAppearance.DANGER}
+          appearance={EComponentAppearance.DANGER}
           loading={loading}
-          appearanceButton={ComponentAppearance.DANGER}
+          appearanceButton={EComponentAppearance.DANGER}
         />
       )}
     </>

@@ -4,6 +4,7 @@ import { FormikProps } from "formik";
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { useExtraordinaryCyclesForm } from "@hooks/payrollAgreement/useExtraordinaryCyclesForm";
 import { IExtraordinaryPaymentCyclesForm } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesForm";
+import { IServerDomain } from "@ptypes/IServerDomain";
 import { ExtraordinaryPaymentCyclesFormUI } from "./interface";
 
 const ExtraordinaryPaymentCyclesForm = forwardRef<
@@ -73,7 +74,9 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
         onPreviousStep={onPreviousStep}
         isMobile={isMobile}
         typePaymentOptions={typePaymentOptions}
-        numberDaysUntilCutOptions={numberDaysUntilCutOptions}
+        numberDaysUntilCutOptions={
+          numberDaysUntilCutOptions as unknown as IServerDomain[]
+        }
         monthOptions={monthOptions}
         dayOptions={dayOptions ?? []}
         setEntryDeleted={setEntryDeleted}

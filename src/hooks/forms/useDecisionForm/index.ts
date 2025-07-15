@@ -113,8 +113,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       onButtonClick();
       return decisions;
     } else {
+      onButtonClick();
       if (decisions && decisions.length > 0) {
-        onButtonClick();
         setSavedDecisions(decisions);
       } else {
         handleToggleAttentionModal();
@@ -152,7 +152,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
 
   const cancelButtonLabel = editDataOption
     ? decisionsLabels.labelCancelButton
-    : decisionsLabels.labelPreviusButton;
+    : decisionsLabels.labelpreviousButton;
 
   const shouldShowAttentionModal = Boolean(
     showAttentionModal && attentionModal,

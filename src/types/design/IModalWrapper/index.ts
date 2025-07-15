@@ -1,4 +1,4 @@
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 interface IModalWrapper {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ interface IModalWrapper {
   portalId: string;
   title: string;
   onClick: () => void;
-  appearanceButton?: ComponentAppearance;
+  appearanceButton?: EComponentAppearance;
   iconBeforeButton?: React.ReactElement;
   labelCloseButton?: string;
   height?: string;

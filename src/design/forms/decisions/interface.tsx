@@ -3,10 +3,11 @@ import { BusinessRules } from "@isettingkit/business-rules";
 import { Stack, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
+import { portalId } from "@config/portalId";
 import { StyledContainer, StyledFormContent } from "./styles";
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
@@ -78,7 +79,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
         <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
           <Button
             onClick={cancelButton}
-            appearance={ComponentAppearance.GRAY}
+            appearance={EComponentAppearance.GRAY}
             disabled={disabledPrevius}
           >
             {cancelButtonLabel}
@@ -86,7 +87,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
 
           <Button
             onClick={onSave}
-            appearance={ComponentAppearance.PRIMARY}
+            appearance={EComponentAppearance.PRIMARY}
             disabled={disabledNext}
           >
             {saveButtonLabel}
@@ -94,20 +95,20 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
         </Stack>
         {showDecisionModal && (
           <DecisionModal
-            portalId="portal"
+            portalId={portalId}
             title={attentionModal!.title}
             description={attentionModal!.description}
             actionText={attentionModal!.actionText}
             withIcon
             icon={<MdOutlineWarningAmber />}
-            appearance={ComponentAppearance.WARNING}
+            appearance={EComponentAppearance.WARNING}
             onCloseModal={onToggleAttentionModal}
             onClick={onButtonClick}
           />
         )}
         {showDeleteModal && (
           <DecisionModal
-            portalId="portal"
+            portalId={portalId}
             title={deleteModal.title}
             description={deleteModal.description}
             actionText={deleteModal.actionText}

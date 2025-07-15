@@ -1,23 +1,22 @@
-import { Grid, inube } from "@inubekit/inubekit";
+import { Grid } from "@inubekit/inubekit";
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
 import { columnsAttribute } from "@utils/columnsAttribute";
 import { rowsAttribute } from "@utils/rowsAttribute";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
 import { IRenderContributionsVerification } from "@ptypes/generalCredPolicies/forms/IRenderContributionsVerification";
+import { EComponentAppearance } from "@enum/appearances";
 
 const RenderIncomeVerification = (props: IRenderContributionsVerification) => {
   const { values, isMobile } = props;
-  const theme = useThemeData();
 
   return (
     <BoxContainer
       direction="column"
       borderRadius={tokens.spacing.s100}
       width="100%"
-      backgroundColor={theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0}
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
     >
       {values && (

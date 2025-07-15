@@ -1,9 +1,10 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { detailsCyclesLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/detailsCyclesLabels";
 import { useDetailsCycle } from "@hooks/payrollAgreement/useDetailsCycle";
 import { IDetailsCycles } from "@ptypes/design/IDetailsCycles";
+import { portalId } from "@config/portalId";
 import { DetailsCyclesModal } from "../../../detailsCyclesModal";
 
 const DetailsCycles = (props: IDetailsCycles) => {
@@ -14,7 +15,7 @@ const DetailsCycles = (props: IDetailsCycles) => {
   return (
     <>
       <Icon
-        appearance={ComponentAppearance.DARK}
+        appearance={EComponentAppearance.DARK}
         icon={<MdOutlineRemoveRedEye />}
         size="16px"
         cursorHover
@@ -27,7 +28,7 @@ const DetailsCycles = (props: IDetailsCycles) => {
           data={data}
           labelsDetails={detailsCycle}
           actionText={detailsCyclesLabels.actionText}
-          portalId="portal"
+          portalId={portalId}
           title={detailsCyclesLabels.title}
           onCloseModal={handleCloseModal}
           onClick={handleCloseModal}

@@ -4,8 +4,12 @@ import { IRuleDecision } from "@isettingkit/input";
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRules";
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
 import { IDecision } from "@ptypes/decisions/IDecision";
+import { EConditionRules } from "@enum/conditionRules";
+import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 
-const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
+const useEnumRules = (props: IUseEnumRules) => {
+  const { enumDestination, ruleCatalog, businessUnits } = props;
   const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
@@ -21,7 +25,11 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumeratorsRules(enumDestination, bussinesUnits);
+        const data = await getEnumeratorsRules(
+          enumDestination,
+          ruleCatalog,
+          businessUnits,
+        );
         setEnumRuleData(data);
       } catch (error) {
         console.info(error);
@@ -29,7 +37,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
       }
     };
     fetchEnumData();
-  }, [enumDestination, bussinesUnits]);
+  }, [enumDestination, ruleCatalog, businessUnits]);
 
   useEffect(() => {
     setRuleData({ ...enumRuleData } as IRuleDecision);
@@ -38,7 +46,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   const fetchListValuesDecision = async (conditionOrDecisionName: string) => {
     try {
       const data = await getConditionsOrDecisionName(
-        bussinesUnits,
+        businessUnits,
         conditionOrDecisionName,
       );
       setListValuesDecision(data.possibleValues);
@@ -56,7 +64,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   ) => {
     try {
       const data = await getConditionsOrDecisionName(
-        bussinesUnits,
+        businessUnits,
         conditionOrDecisionName,
       );
       setListValuesCondition({ [conditionName]: data.possibleValues });
@@ -80,8 +88,9 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
   }, [ruleData.listOfPossibleValues, hasFetchedListValuesDecision]);
 
   useEffect(() => {
-    if (ruleData.conditionsThatEstablishesTheDecision) {
-      ruleData.conditionsThatEstablishesTheDecision.forEach((condition) => {
+    const conditions = ruleData.conditionsThatEstablishesTheDecision;
+    if (Array.isArray(conditions)) {
+      conditions.forEach((condition) => {
         if (condition.listOfPossibleValues) {
           if (
             condition.listOfPossibleValues &&
@@ -104,7 +113,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
 
       setRuleData((prevRuleData) => ({
         ...prevRuleData,
-        howToSetTheDecision: "ListOfValues",
+        howToSetTheDecision: EConditionRules.LIST_OF_VALUES,
         listOfPossibleValues: { list: arrayListValues },
         value: "",
       }));
@@ -123,7 +132,7 @@ const useEnumRules = (enumDestination: string, bussinesUnits: string) => {
               if (condition.listOfPossibleValues) {
                 return {
                   ...condition,
-                  howToSetTheCondition: "ListOfValues",
+                  howToSetTheCondition: EGeneralPolicies.LISTOFVALUES,
                   listOfPossibleValues: { list: arrayListValues },
                   value: "",
                 };

@@ -14,12 +14,12 @@ import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDes
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { normalizeNameDestination } from "@utils/destination/normalizeNameDestination";
-import { normalizeCodeDestination } from "@utils/destination/normalizeCodeDestination";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { normalizeEditDestination } from "@utils/destination/normalizeEditDestination";
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
 import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { tokens } from "@design/tokens";
 
 const useGeneralInformationForm = (
@@ -68,7 +68,7 @@ const useGeneralInformationForm = (
     return {
       id: item.code,
       label: name,
-      value: name,
+      value: item.code,
     };
   });
 
@@ -90,13 +90,13 @@ const useGeneralInformationForm = (
   const handleChange = (name: string, value: string) => {
     setAutosuggestValue(value);
     formik.setFieldValue(name, value);
+    const equalValueName = value === formik.values.nameDestination;
 
-    if (name === "nameDestination") {
-      const normalizeData = normalizeCodeDestination(value)?.code ?? "";
+    if (name === EMoneyDestination.MONEY_DESTINATION) {
       const description =
-        normalizeDestination(enumData, normalizeData)?.description ?? "";
+        normalizeDestination(enumData, value)?.description ?? "";
 
-      if (value === "") {
+      if (equalValueName || value === "") {
         formik.setFieldValue("description", "");
       } else {
         const currentDescription = formik.values.description ?? "";
@@ -111,9 +111,9 @@ const useGeneralInformationForm = (
     }
   };
 
-  const nameEnum =
-    normalizeCodeDestination(formik.values.nameDestination ?? "")?.code ?? "";
-  const addData = normalizeDestination(enumData, nameEnum);
+  const addData = enumData.find(
+    (item) => item.value === formik.values.nameDestination,
+  )?.type;
 
   const valuesEqual =
     JSON.stringify(initialValues) === JSON.stringify(formik.values);
@@ -155,30 +155,28 @@ const useGeneralInformationForm = (
       let iconData = getNormalizedIcon(initialValues.icon);
 
       if (editDataOption && formik.values.nameDestination) {
-        const editData = normalizeEditDestination(
-          enumData,
-          formik.values.icon ?? "",
-        );
+        const editData = normalizeEditDestination(enumData, formik.values.icon);
 
         iconData =
           editData && isNameDestinationEqual ? (
             getNormalizedIcon(editData?.value)
           ) : addData ? (
-            getNormalizedIcon(addData?.value)
+            getNormalizedIcon(addData)
           ) : (
             <MdOutlineFax size={24} />
           );
 
         iconData ??= getNormalizedIcon(initialValues.icon);
       } else {
-        iconData = getNormalizedIcon(addData?.value);
+        iconData = getNormalizedIcon(addData);
       }
 
       if (editDataOption && valuesEqual) {
         formik.setFieldValue("icon", initialValues.icon);
       } else {
         const normalizedIconValue =
-          normalizeIconTextDestination(iconData)?.value ?? "MdOutlineFax";
+          normalizeIconTextDestination(iconData)?.value ??
+          EMoneyDestination.ICON_DEFAULT;
         formik.setFieldValue("icon", normalizedIconValue);
       }
 

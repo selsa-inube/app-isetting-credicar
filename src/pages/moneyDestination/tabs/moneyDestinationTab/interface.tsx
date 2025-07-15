@@ -2,15 +2,16 @@ import { MdAdd } from "react-icons/md";
 import { Stack, Button, Text, Searchfield } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
 import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
-import { tablabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
+import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
 import {
   actionsConfig,
   breakPoints,
   titles,
 } from "@config/moneyDestination/moneyDestinationTab/table";
+import { portalId } from "@config/portalId";
 import { StyledContainer } from "./styles";
 
 function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
@@ -20,6 +21,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
     loading,
     smallScreen,
     columnWidths,
+    emptyDataMessage,
     onSearchMoneyDestination,
     setEntryDeleted,
   } = props;
@@ -44,10 +46,10 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 ellipsis
               >
-                {tablabels.description}
+                {tabLabels.description}
               </Text>
             </Stack>
           )}
@@ -66,8 +68,8 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Searchfield
                 name="searchMoneyDestination"
                 id="searchMoneyDestination"
-                placeholder={tablabels.searchPlaceholder}
-                label={smallScreen ? "" : tablabels.searchLabel}
+                placeholder={tabLabels.searchPlaceholder}
+                label={smallScreen ? "" : tabLabels.searchLabel}
                 size="compact"
                 value={searchMoneyDestination}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -79,14 +81,14 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
             {!smallScreen && (
               <Button
                 spacing="wide"
-                appearance={ComponentAppearance.PRIMARY}
+                appearance={EComponentAppearance.PRIMARY}
                 variant="filled"
                 iconBefore={<MdAdd />}
                 type="link"
                 path="/money-destination/add-destination"
                 fullwidth={smallScreen}
               >
-                {tablabels.addButton}
+                {tabLabels.addButton}
               </Button>
             )}
           </Stack>
@@ -96,15 +98,15 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
               >
-                {tablabels.description}
+                {tabLabels.description}
               </Text>
             </Stack>
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryDeleted)}
@@ -113,6 +115,7 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
             loading={loading}
             columnWidths={columnWidths}
             pageLength={8}
+            emptyDataMessage={emptyDataMessage}
           />
         </Stack>
       </Stack>

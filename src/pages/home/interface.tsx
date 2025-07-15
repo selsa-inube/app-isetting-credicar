@@ -1,17 +1,16 @@
 import { MdOutlineChevronRight, MdOutlineDoorFront } from "react-icons/md";
-import { Icon, Header, Text, inube } from "@inubekit/inubekit";
+import { Icon, Header, Text } from "@inubekit/inubekit";
 
 import { AppCard } from "@design/feedback/appCard";
 import { Title } from "@design/data/title";
 import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
 import { userMenu } from "@config/menuMainConfiguration";
 import { IHomeUI } from "@ptypes/home/IHomeUI";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { RenderLogo } from "@design/feedback/renderLogo";
 import { homeLabels } from "@config/home/homeLabels";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
-import { useThemeData } from "@utils/theme";
 import {
   StyledCollapse,
   StyledCollapseIcon,
@@ -22,7 +21,6 @@ import {
 } from "./styles";
 
 const HomeUI = (props: IHomeUI) => {
-  const theme = useThemeData();
   const {
     data,
     appData,
@@ -51,9 +49,7 @@ const HomeUI = (props: IHomeUI) => {
         padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`}
         height="100vh"
         overflowY="auto"
-        backgroundColor={
-          theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-        }
+        backgroundColor={EComponentAppearance.LIGHT}
       >
         <StyledHeaderContainer>
           <Header
@@ -75,7 +71,7 @@ const HomeUI = (props: IHomeUI) => {
               >
                 <Icon
                   icon={<MdOutlineChevronRight />}
-                  appearance={ComponentAppearance.PRIMARY}
+                  appearance={EComponentAppearance.PRIMARY}
                   size="24px"
                   cursorHover
                 />
@@ -98,9 +94,7 @@ const HomeUI = (props: IHomeUI) => {
             screenMobile ? `${tokens.spacing.s200}` : `${tokens.spacing.s0}`
           }
           gap={screenMobile ? `${tokens.spacing.s300}` : `${tokens.spacing.s0}`}
-          backgroundColor={
-            theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-          }
+          backgroundColor={EComponentAppearance.LIGHT}
           boxSizing="initial"
         >
           <StyledTitle $isTablet={screenTablet}>
@@ -122,9 +116,7 @@ const HomeUI = (props: IHomeUI) => {
             justifyContent={screenTablet ? "center" : "flex-start"}
             wrap="wrap"
             gap={tokens.spacing.s400}
-            backgroundColor={
-              theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-            }
+            backgroundColor={EComponentAppearance.LIGHT}
           >
             {dataExists ? (
               data?.map((card) => (

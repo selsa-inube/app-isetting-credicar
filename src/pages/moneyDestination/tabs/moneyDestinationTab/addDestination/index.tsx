@@ -21,6 +21,10 @@ function AddDestination() {
     saveData,
     showAttentionModal,
     smallScreen,
+    showGoBackModal,
+    handleCloseModal,
+    handleGoBack,
+    handleOpenModal,
     handleNextStep,
     handlePreviousStep,
     handleSubmitClick,
@@ -45,7 +49,7 @@ function AddDestination() {
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
     useCase: UseCase.ADD,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
     data: saveData as ISaveDataRequest,
@@ -80,6 +84,10 @@ function AddDestination() {
       setShowAttentionModal={setShowAttentionModal}
       smallScreen={smallScreen}
       onCloseProcess={handleCloseProcess}
+      onGoBack={handleGoBack}
+      showGoBackModal={showGoBackModal}
+      onCloseModal={handleCloseModal}
+      onOpenModal={handleOpenModal}
     />
   );
 }

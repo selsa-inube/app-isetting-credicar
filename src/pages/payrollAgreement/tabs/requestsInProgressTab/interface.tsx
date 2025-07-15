@@ -1,4 +1,4 @@
-import { inube, Searchfield, Stack, Text } from "@inubekit/inubekit";
+import { Searchfield, Stack, Text } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { IRequestsInProgressTabUI } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgressTabUI";
 import {
@@ -8,9 +8,9 @@ import {
 } from "@config/payrollAgreement/requestsInProgressTab/table";
 import { Table } from "@design/data/table";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
 import { tabLabels } from "@config/payrollAgreement/requestsInProgressTab/tabLabels";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
+import { portalId } from "@config/portalId";
 
 const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
   const {
@@ -24,17 +24,11 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
     onSearchrequestProgress,
   } = props;
 
-  const theme = useThemeData();
-
   return (
     <BoxContainer
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
-      borderColor={
-        theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-      }
+      borderColor={EComponentAppearance.DARK}
       borderRadius={tokens.spacing.s100}
       padding={smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`}
     >
@@ -57,7 +51,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 ellipsis
               >
                 {tabLabels.description}
@@ -80,7 +74,6 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
                 id="searchrequestProgress"
                 label={smallScreen ? "" : tabLabels.search}
                 placeholder={tabLabels.placeholderSearch}
-                type="search"
                 size="compact"
                 value={searchrequestProgress}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -96,7 +89,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
               >
                 {tabLabels.description}
               </Text>
@@ -104,7 +97,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryCanceled)}

@@ -1,14 +1,14 @@
-enum RequestStatus {
-  RequestProcessed = "Solicitud procesada",
-  RequestCanceled = "Solicitud cancelada",
-  RequestProcessedWithError = "Solicitud procesada con error",
-  PendingApproval = "Pendiente de aprobación",
-  InTheProcessOfValidation = "En proceso de validación",
-  InTheProcessOfComplementationAndValidation = "En proceso de complementación y validación",
-  ProcessingRequest = "Procesando solicitud",
-  RejectedRequest = "Solicitud rechazada",
-  RequestReadyToProcess = "Solicitud lista para procesar",
-  RequestPendingProcessing = "Solicitud pendiente de procesamiento",
+enum ERequestStatus {
+  REQUEST_PROCESSED = "Solicitud procesada",
+  REQUEST_CANCELED = "Solicitud cancelada",
+  REQUEST_PROCESSED_WITH_ERROR = "Solicitud procesada con error",
+  PENDING_APPROVAL = "Pendiente de aprobación",
+  IN_THE_PROCESS_OF_VALIDATION = "En proceso de validación",
+  IN_THE_PROCESS_COMPLEMENTATION_VALIDATION = "En proceso de complementación y validación",
+  PROCESSING_REQUEST = "Procesando solicitud",
+  REJECTED_REQUEST = "Solicitud rechazada",
+  REQUEST_READY_TO_PROCESS = "Solicitud lista para procesar",
+  REQUEST_PENDING_PROCESSING = "Solicitud pendiente de procesamiento",
 }
 
-export { RequestStatus };
+export { ERequestStatus };

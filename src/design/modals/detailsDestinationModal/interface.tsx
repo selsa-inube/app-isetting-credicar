@@ -10,45 +10,28 @@ import {
   Tabs,
   Button,
 } from "@inubekit/inubekit";
-import { IRuleDecision } from "@isettingkit/input";
 
 import { tokens } from "@design/tokens";
 import { mediaQueryMobile } from "@config/environment";
-import { ComponentAppearance } from "@enum/appearances";
-import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
+import { EComponentAppearance } from "@enum/appearances";
+import { detailsModalLabels } from "@config/moneyDestination/moneyDestinationTab/generics/detailsModalLabels";
+import { IDetailsDestinationModalUI } from "@ptypes/moneyDestination/tabs/IDetailsDestinationModalUI";
 import { StyledContainerButton, StyledModal } from "./styles";
 import { GeneralDataTab } from "./tabs/GeneralDataTab";
 import { CreditLineTab } from "./tabs/creditLineTab";
 import { CreditLinesIncluded } from "./tabs/creditLinesIncluded";
 import { CreditLinesRemoved } from "./tabs/creditLinesRemoved";
-import { IEntry } from "@ptypes/design/table/IEntry";
-
-interface IDetailsDestinationModalUI {
-  data: IEntry;
-  decisionTemplate: IRuleDecision;
-  filteredTabsConfig: IDetailsTabsConfig;
-  detailsTabsConfig: IDetailsTabsConfig;
-  isSelected: string;
-  portalId: string;
-  smallScreenTab: boolean;
-  textValues: IRulesFormTextValues;
-  decisions: IRuleDecision[];
-  isMoreDetails: boolean;
-  onCloseModal: () => void;
-  onTabChange: (id: string) => void;
-  decisionDeleted?: IRuleDecision[];
-  decisionInserted?: IRuleDecision[];
-}
 
 const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
   const {
     isSelected,
-    filteredTabsConfig,
     smallScreenTab,
-    detailsTabsConfig,
-    isMoreDetails,
+    showGeneraldata,
+    showCreditLineTab,
+    showCreditLinesIncluded,
+    showCreditLinesRemoved,
     data,
+    filteredTabs,
     portalId,
     textValues,
     decisionTemplate,
@@ -74,23 +57,27 @@ const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
       <StyledModal $smallScreen={isMobile}>
         <Stack direction="column" gap={tokens.spacing.s200}>
           <Stack alignItems="center" justifyContent="space-between">
-            <Text type="headline" size="small" appearance="dark">
-              Detalles
+            <Text
+              type="headline"
+              size="small"
+              appearance={EComponentAppearance.DARK}
+            >
+              {detailsModalLabels.title}
             </Text>
             <StyledContainerButton>
               <Button
                 spacing="compact"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 variant="none"
                 onClick={onCloseModal}
                 iconAfter={
                   <Icon
-                    appearance={ComponentAppearance.DARK}
+                    appearance={EComponentAppearance.DARK}
                     icon={<MdClear />}
                   />
                 }
               >
-                Cerrar
+                {detailsModalLabels.close}
               </Button>
             </StyledContainerButton>
           </Stack>
@@ -98,49 +85,43 @@ const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
         </Stack>
         <Stack gap={tokens.spacing.s150} direction="column" height="100%">
           <Tabs
-            tabs={Object.values(filteredTabsConfig)}
+            tabs={filteredTabs}
             selectedTab={isSelected}
             onChange={onTabChange}
             scroll={smallScreenTab ? true : false}
           />
-          {isSelected === detailsTabsConfig.generalData.id && (
-            <GeneralDataTab data={data} />
+          {showGeneraldata && <GeneralDataTab data={data} />}
+          {showCreditLineTab && (
+            <CreditLineTab
+              data={decisions}
+              textValues={textValues}
+              decisionTemplate={decisionTemplate}
+            />
           )}
-          {!isMoreDetails &&
-            isSelected === detailsTabsConfig.creditLine.id &&
-            decisions.length > 0 && (
-              <CreditLineTab
-                data={decisions}
-                textValues={textValues}
-                decisionTemplate={decisionTemplate}
-              />
-            )}
-          {isMoreDetails &&
-            isSelected === detailsTabsConfig.creditLineIncluded?.id && (
-              <CreditLinesIncluded
-                data={decisionInserted ?? []}
-                textValues={textValues}
-                decisionTemplate={decisionTemplate}
-              />
-            )}
-          {isMoreDetails &&
-            isSelected === detailsTabsConfig.creditLineRemoved?.id && (
-              <CreditLinesRemoved
-                data={decisionDeleted ?? []}
-                textValues={textValues}
-                decisionTemplate={decisionTemplate}
-              />
-            )}
+          {showCreditLinesIncluded && (
+            <CreditLinesIncluded
+              data={decisionInserted ?? []}
+              textValues={textValues}
+              decisionTemplate={decisionTemplate}
+            />
+          )}
+          {showCreditLinesRemoved && (
+            <CreditLinesRemoved
+              data={decisionDeleted ?? []}
+              textValues={textValues}
+              decisionTemplate={decisionTemplate}
+            />
+          )}
           <Divider />
         </Stack>
         <Stack gap={tokens.spacing.s250} justifyContent="flex-end">
           <Button
             spacing="wide"
-            appearance={ComponentAppearance.PRIMARY}
+            appearance={EComponentAppearance.PRIMARY}
             variant="filled"
             onClick={onCloseModal}
           >
-            Cerrar
+            {detailsModalLabels.close}
           </Button>
         </Stack>
       </StyledModal>
@@ -150,4 +131,3 @@ const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
 };
 
 export { DetailsDestinationModalUI };
-export type { IDetailsDestinationModalUI };

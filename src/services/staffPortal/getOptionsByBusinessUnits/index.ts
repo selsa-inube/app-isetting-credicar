@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from "axios";
-
 import { getWithRetries } from "@services/core/getWithRetries";
 import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
@@ -27,7 +26,7 @@ const getOptionsByBusinessUnit = async (
     config,
   );
 
-  return Array.isArray(data) ? mapOptionsByBusinessUnitsToEntities(data) : [];
+  return mapOptionsByBusinessUnitsToEntities(data);
 };
 
 export { getOptionsByBusinessUnit };

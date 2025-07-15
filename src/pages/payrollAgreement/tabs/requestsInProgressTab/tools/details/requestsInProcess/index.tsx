@@ -1,7 +1,7 @@
-import { Divider, inube, Stack, Text } from "@inubekit/inubekit";
+import { Divider, Stack, Text } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { detailsRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/details/detailsRequestInProgressModal";
 import { TraceabilityCard } from "@design/feedback/traceabilityCard";
 import { ModalWrapper } from "@design/modals/modalWrapper";
@@ -9,7 +9,6 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { DetailBox } from "@design/feedback/detailBox";
 import { IRequestsInProcess } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProcess";
 import { IEntry } from "@ptypes/design/table/IEntry";
-import { useThemeData } from "@utils/theme";
 
 const RequestsInProcess = (props: IRequestsInProcess) => {
   const {
@@ -21,8 +20,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
     onCloseModal,
     onClick,
   } = props;
-
-  const theme = useThemeData();
 
   return (
     <ModalWrapper
@@ -40,11 +37,9 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
     >
       <BoxContainer
         direction="column"
-        backgroundColor={
-          theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0
-        }
+        backgroundColor={EComponentAppearance.LIGHT}
         borderRadius={tokens.spacing.s100}
-        borderColor={theme?.palette?.neutral?.N40 ?? inube.palette.neutral.N40}
+        borderColor={EComponentAppearance.DARK}
         boxSizing="border-box"
         width="100%"
         height={isMobile ? "400px" : "430px"}
@@ -67,7 +62,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
               type="title"
               size="medium"
               weight="bold"
-              appearance={ComponentAppearance.GRAY}
+              appearance={EComponentAppearance.GRAY}
             >
               {title}
             </Text>
@@ -75,9 +70,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
           </Stack>
         </Stack>
         <BoxContainer
-          backgroundColor={
-            theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0
-          }
+          backgroundColor={EComponentAppearance.LIGHT}
           overflowY="auto"
           boxSizing="border-box"
           wrap="wrap"
@@ -97,11 +90,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
                 borderRadius={tokens.spacing.s100}
                 padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
                 width={isMobile ? "253px" : "240px"}
-                borderColor={
-                  theme
-                    ? theme?.palette?.neutral?.N40
-                    : inube.palette.neutral.N40
-                }
+                borderColor={EComponentAppearance.DARK}
                 ellipsis
               />
             ))}

@@ -1,33 +1,14 @@
-import { FormikProps } from "formik";
-import {
-  Stack,
-  useMediaQuery,
-  Textarea,
-  Input,
-  Button,
-} from "@inubekit/inubekit";
+import { Stack, Textarea, Input, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/forms/getFieldState";
-import { IGeneralInformationEntry } from "@ptypes/creditLines/forms/IGeneralInformationEntry";
 import { StyledContainer, StyledContainerFields } from "./styles";
+import { generalInfoLabels } from "@config/creditLines/addCreditLine/assisted/generalInfoLabels";
+import { IGeneralInformationFormUI } from "@ptypes/creditLines/addCreditLine/IGeneralInformationFormUI";
 
-interface IGeneralInformationFormUI {
-  formik: FormikProps<IGeneralInformationEntry>;
-  onNextStep: () => void;
-  loading?: boolean;
-}
-
-function GeneralInformationFormUI(props: IGeneralInformationFormUI) {
-  const {
-    formik,
-    loading,
-
-    onNextStep,
-  } = props;
-
-  const isMobile = useMediaQuery("(max-width: 990px)");
+const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
+  const { formik, loading, isMobile, onNextStep } = props;
 
   return (
     <StyledContainer>
@@ -43,8 +24,8 @@ function GeneralInformationFormUI(props: IGeneralInformationFormUI) {
                   <Input
                     name="nameCreditLine"
                     id="nameCreditLine"
-                    label="Nombre"
-                    placeholder="Nombre de la línea de crédito"
+                    label={generalInfoLabels.nameCreditLine}
+                    placeholder={generalInfoLabels.nameCredLinePlaceholder}
                     type="text"
                     size="compact"
                     value={formik.values.nameCreditLine}
@@ -58,8 +39,8 @@ function GeneralInformationFormUI(props: IGeneralInformationFormUI) {
               </Stack>
 
               <Textarea
-                label="descripción"
-                placeholder="Describe la línea de crédito."
+                label={generalInfoLabels.description}
+                placeholder={generalInfoLabels.descriptionPlaceholder}
                 name="descriptionCreditLine"
                 id="descriptionCreditLine"
                 value={formik.values.descriptionCreditLine}
@@ -79,22 +60,22 @@ function GeneralInformationFormUI(props: IGeneralInformationFormUI) {
         <Button
           fullwidth={isMobile}
           onClick={() => formik.resetForm()}
-          appearance={ComponentAppearance.GRAY}
+          appearance={EComponentAppearance.GRAY}
         >
-          Cancelar
+          {generalInfoLabels.closeButton}
         </Button>
 
         <Button
           fullwidth={isMobile}
           onClick={onNextStep}
           disabled={loading ?? !formik.isValid}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
-          Siguiente
+          {generalInfoLabels.nextButton}
         </Button>
       </Stack>
     </StyledContainer>
   );
-}
+};
 
 export { GeneralInformationFormUI };

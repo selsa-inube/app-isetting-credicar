@@ -1,6 +1,6 @@
 import { Stack, useMediaQuery } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { tokens } from "@design/tokens";
@@ -23,6 +23,8 @@ const RequestProcess = (props: IRequestProcessContent) => {
 
   const staffDisplayName = saveData?.staffName ?? noStaffName.label;
 
+  const withoutRequestStatus = saveData && saveData.requestStatus !== "";
+
   return (
     <Stack
       direction="column"
@@ -30,8 +32,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
       justifyContent="center"
       alignContent="center"
     >
-      {saveData &&
-        saveData.requestStatus !== "" &&
+      {withoutRequestStatus &&
         (statusFlowAutomatic.includes(saveData.requestStatus) ? (
           <RequestProcessModal
             portalId={portalId}
@@ -52,7 +53,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
             onCloseModal={onCloseRequestStatus}
             loading={false}
             actionText={descriptionRequestStatus(staffDisplayName).actionText}
-            appearance={ComponentAppearance.PRIMARY}
+            appearance={EComponentAppearance.PRIMARY}
           />
         ))}
     </Stack>

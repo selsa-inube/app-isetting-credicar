@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import { FormikProps } from "formik";
 
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
-import { useOrdinaryCyclesForm } from "@hooks/payrollAgreement/useOrdinaryCyclesForm";
+import { useOrdinaryCyclesForm } from "@hooks/payrollAgreement/ordinaryCycles/useOrdinaryCyclesForm";
 import { infoPeriodicityModal } from "@config/payrollAgreement/payrollAgreementTab/generic/infoPeriodicityModal";
 import { IRegularPaymentCyclesForm } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IRegularPaymentCyclesForm";
 import { RegularPaymentCyclesFormUI } from "./interface";

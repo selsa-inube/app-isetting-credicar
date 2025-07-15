@@ -3,6 +3,7 @@ const validationMessages = {
   numbers: "Este campo solo acepta números",
   required: "Este campo no puede estar vacío",
   identification: "Ya existe una empresa con esta identificación.",
+  code: "Ya existe este codigo",
 };
 
 export { validationMessages };

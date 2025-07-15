@@ -1,19 +1,17 @@
-import { Stack, Text, Divider, Tabs, Grid, inube } from "@inubekit/inubekit";
+import { Stack, Text, Divider, Tabs, Grid } from "@inubekit/inubekit";
 
 import { moreDetailsRequestModal } from "@config/payrollAgreement/requestsInProgressTab/details/moreDetailsRequestModal";
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { ModalWrapper } from "@design/modals/modalWrapper";
 import { IMoreDetails } from "@ptypes/payrollAgreement/requestInProgTab/IMoreDetails";
-import { useThemeData } from "@utils/theme";
 import { ILabel } from "@ptypes/ILabel";
 import { useMoreDetails } from "@hooks/payrollAgreement/useMoreDetails";
 import { OrdinaryPaymentCycles } from "./tabs/ordinaryPaymentCycles";
 import { ExtraordinaryPaymentCycles } from "./tabs/extraordinaryPaymentCycles";
 
 const MoreDetails = (props: IMoreDetails) => {
-  const theme = useThemeData();
   const {
     isSelected,
     abbreviatedName,
@@ -32,7 +30,6 @@ const MoreDetails = (props: IMoreDetails) => {
     extraordinaryIncludedData,
     extraordinaryEliminatedData,
     title,
-    moreDetails = true,
     onCloseModal,
     onTabChange,
   } = props;
@@ -68,6 +65,8 @@ const MoreDetails = (props: IMoreDetails) => {
 
   const subtitle = `${moreDetailsRequestModal.subtitle} ${abbreviatedName}`;
 
+  const filteredTabs = Object.values(filteredTabsConfig);
+
   return (
     <ModalWrapper
       width={isMobile ? "335px" : "700px"}
@@ -85,33 +84,27 @@ const MoreDetails = (props: IMoreDetails) => {
       <BoxContainer
         gap={tokens.spacing.s100}
         direction="column"
-        borderColor={
-          theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-        }
+        borderColor={EComponentAppearance.DARK}
         borderRadius={tokens.spacing.s100}
         width="100%"
         maxHeight={isMobile ? "410px" : "auto"}
         padding={isMobile ? `${tokens.spacing.s050}` : `${tokens.spacing.s200}`}
-        backgroundColor={
-          theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-        }
+        backgroundColor={EComponentAppearance.LIGHT}
         boxSizing="border-box"
         overflowY="auto"
         overflowX="hidden"
       >
-        {moreDetails && (
-          <Stack gap={tokens.spacing.s100} direction="column">
-            <Text
-              type="title"
-              size={isMobile ? "small" : "medium"}
-              appearance={ComponentAppearance.GRAY}
-              weight="bold"
-            >
-              {subtitle}
-            </Text>
-            <Divider dashed />
-          </Stack>
-        )}
+        <Stack gap={tokens.spacing.s100} direction="column">
+          <Text
+            type="title"
+            size={isMobile ? "small" : "medium"}
+            appearance={EComponentAppearance.GRAY}
+            weight="bold"
+          >
+            {subtitle}
+          </Text>
+          <Divider dashed />
+        </Stack>
 
         <Grid
           templateColumns={isMobile ? "auto" : "repeat(2,auto)"}
@@ -132,16 +125,14 @@ const MoreDetails = (props: IMoreDetails) => {
               borderRadius={tokens.spacing.s100}
               padding={`${tokens.spacing.s075} ${tokens.spacing.s200}`}
               boxSizing="border-box"
-              backgroundColor={
-                theme ? theme?.palette?.neutral?.N10 : inube.palette.neutral.N10
-              }
+              backgroundColor={EComponentAppearance.GRAY}
             >
               <Text size="medium" type="label" weight="bold">
                 {field.titleName}
               </Text>
               <Text
                 size="medium"
-                appearance={ComponentAppearance.GRAY}
+                appearance={EComponentAppearance.GRAY}
                 ellipsis
               >
                 {data[field.id]}
@@ -157,7 +148,7 @@ const MoreDetails = (props: IMoreDetails) => {
           {hasAnyPaymentData && (
             <>
               <Tabs
-                tabs={Object.values(filteredTabsConfig)}
+                tabs={filteredTabs}
                 selectedTab={isSelected ?? defaultSelectedTab}
                 onChange={onTabChange}
                 scroll={scroll}

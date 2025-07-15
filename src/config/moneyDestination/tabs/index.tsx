@@ -1,5 +1,5 @@
 import { MdOutlineReportProblem } from "react-icons/md";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 
 const moneyDestinationTabsConfig = (smallScreen: boolean) => {
   return {
@@ -14,7 +14,7 @@ const moneyDestinationTabsConfig = (smallScreen: boolean) => {
       label: smallScreen ? "En trámite" : "Solicitudes en trámite",
       icon: {
         icon: <MdOutlineReportProblem />,
-        appearance: ComponentAppearance.WARNING,
+        appearance: EComponentAppearance.WARNING,
       },
     },
   };

@@ -1,8 +1,9 @@
 import { useContext, useState, useEffect } from "react";
-import { nameRules } from "@config/generalCreditPolicies/assisted/nameRules";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
 import { IConditionsEvaluateRule } from "@ptypes/decisions/IConditionsEvaluateRule";
+import { ENameRules } from "@enum/nameRules";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 
 const useValidateRules = () => {
   const { appData } = useContext(AuthAndPortalData);
@@ -19,56 +20,56 @@ const useValidateRules = () => {
     evaluateRuleData: referenceData,
     loading: referenceLoadding,
     hasError: referenceError,
-  } = getRule(nameRules.reference);
+  } = getRule(ENameRules.REFERENCE);
   const {
     evaluateRuleData: methodsData,
     loading: methodsLoadding,
     hasError: methodsError,
-  } = getRule(nameRules.methods);
+  } = getRule(ENameRules.METHODS);
 
   const {
     evaluateRuleData: additionalDebtorsData,
     loading: additionalLoadding,
     hasError: additionalError,
-  } = getRule(nameRules.additionalDebtors);
+  } = getRule(ENameRules.ADDITIONAL_DEBTORS);
 
   const {
     evaluateRuleData: sourcesIncomeData,
     loading: sourcesIncLoadding,
     hasError: sourcesIncomeError,
-  } = getRule(nameRules.sourcesIncome);
+  } = getRule(ENameRules.SOURCES_INCOME);
 
   const {
     evaluateRuleData: financialObligData,
     loading: financialLoadding,
     hasError: obligationError,
-  } = getRule(nameRules.financialObligations);
+  } = getRule(ENameRules.FINANCIAL_OBLIGATIONS);
 
   const {
     evaluateRuleData: realGuaranteesData,
     loading: realGuaLoadding,
     hasError: GuaranteesError,
-  } = getRule(nameRules.realGuarantees);
+  } = getRule(ENameRules.REAL_GUARANTEES);
 
   const {
     evaluateRuleData: contributionsData,
     loading: contributionsLoadding,
     hasError: contributionsError,
-  } = getRule(nameRules.contributionsPortfolio);
+  } = getRule(ENameRules.CONTRIBUTIONS_PORTFOLIO);
 
   const {
     evaluateRuleData: incomeData,
     loading: incomeLoadding,
     hasError: incomeError,
-  } = getRule(nameRules.incomePortfolio);
+  } = getRule(ENameRules.INCOME_PORTFOLIO);
 
   const {
     evaluateRuleData: scoreModelsData,
     loading: scoreLoadding,
     hasError: scoreModelsError,
-  } = getRule(nameRules.scoreModels, [
+  } = getRule(ENameRules.SCORE_MODELS, [
     {
-      condition: "BusinessUnit",
+      condition: EGeneralPolicies.CONDITION_BUSINESS_UNIT,
       value: appData.businessUnit.publicCode,
     },
   ]);

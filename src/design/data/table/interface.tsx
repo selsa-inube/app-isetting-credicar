@@ -10,7 +10,7 @@ import {
   Thead,
   Tr,
 } from "@inubekit/inubekit";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { getAlignment } from "@utils/getAlignment/index.";
 import { ITableUI } from "@ptypes/design/table/ITableUI";
 import { tableLabels } from "@config/tableLabels";
@@ -28,7 +28,8 @@ const TableUI = (props: ITableUI) => {
     firstEntryInPage,
     loading,
     lastEntryInPage,
-    pageLength,
+    hasEntries,
+    isPaginated,
     titles,
     widthPercentageTotalColumns,
     columnWidths,
@@ -84,8 +85,8 @@ const TableUI = (props: ITableUI) => {
                   <Text
                     type="label"
                     size={mediaActionOpen ? "medium" : "large"}
-                    appearance={ComponentAppearance.DARK}
-                    ellipsis
+                    appearance={EComponentAppearance.DARK}
+                    textAlign="center"
                   >
                     {emptyDataMessage
                       ? `${emptyDataMessage}`
@@ -95,7 +96,7 @@ const TableUI = (props: ITableUI) => {
               </Tr>
             ) : (
               <>
-                {entries.length > 0 ? (
+                {hasEntries ? (
                   entries.map((entry, index) => (
                     <Tr key={index} zebra={index % 2 === 1}>
                       {TitleColumns.map((title, index) => (
@@ -123,7 +124,7 @@ const TableUI = (props: ITableUI) => {
                       <Text
                         type="label"
                         size="large"
-                        appearance={ComponentAppearance.DARK}
+                        appearance={EComponentAppearance.DARK}
                         ellipsis
                       >
                         {tableLabels.emptySearch}
@@ -137,7 +138,7 @@ const TableUI = (props: ITableUI) => {
         )}
       </Tbody>
 
-      {filteredEntries.length > pageLength && (
+      {isPaginated && (
         <Tfoot>
           <Tr border="bottom">
             <Td

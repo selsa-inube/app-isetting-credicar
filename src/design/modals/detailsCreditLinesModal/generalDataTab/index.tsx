@@ -1,13 +1,10 @@
 import { Stack, Text, Divider } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { IEntry } from "@ptypes/design/table/IEntry";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
+import { generalTabLabels } from "@config/creditLines/addCreditLine/assisted/generalTabLabels";
+import { IGeneralDataTab } from "@ptypes/design/IGeneralDataTab";
 import { StyledContainerDescription, StyledContainerName } from "./styles";
-
-interface IGeneralDataTab {
-  data: IEntry;
-}
 
 function GeneralDataTab(props: IGeneralDataTab) {
   const { data } = props;
@@ -17,10 +14,10 @@ function GeneralDataTab(props: IGeneralDataTab) {
         <Text
           type="label"
           size="medium"
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           weight="bold"
         >
-          Nombre
+          {generalTabLabels.name}
         </Text>
         <Text size="medium">{data.name}</Text>
       </StyledContainerName>
@@ -28,12 +25,12 @@ function GeneralDataTab(props: IGeneralDataTab) {
         <Text
           type="label"
           size="medium"
-          appearance={ComponentAppearance.DARK}
+          appearance={EComponentAppearance.DARK}
           weight="bold"
         >
-          Descripción
+          {generalTabLabels.description}
         </Text>
-        <Text type="body" size="medium" appearance={ComponentAppearance.GRAY}>
+        <Text type="body" size="medium" appearance={EComponentAppearance.GRAY}>
           {data.description}
         </Text>
       </StyledContainerDescription>

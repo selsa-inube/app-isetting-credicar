@@ -4,9 +4,11 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/IUseRequestsInProgress";
+import { useEnumRequest } from "@hooks/useEnumRequest";
+import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { bussinesUnits } = props;
+  const { businessUnits } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -15,14 +17,20 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     useState<string>("");
   const [loading, setLoading] = useState(true);
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
+  const { enumsRequests } = useEnumRequest({
+    businessUnits,
+    enumerator: ERequestInProgress.REQUEST_STATUS,
+  });
 
   useEffect(() => {
+    if (enumsRequests.length === 0) return;
+
     const fetchRequestsInProgressData = async () => {
       setLoading(true);
       try {
         const data = await getRequestsInProgress(
-          bussinesUnits,
-          "MoneyDestination",
+          businessUnits,
+          ERequestInProgress.MONEY_DESTINATION,
         );
         setRequestsInProgress(data);
       } catch (error) {
@@ -34,7 +42,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [enumsRequests]);
 
   useEffect(() => {
     if (entryCanceled) {

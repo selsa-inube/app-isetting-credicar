@@ -1,8 +1,8 @@
 import { MdAdd } from "react-icons/md";
-import { Stack, Button, Text, inube, Searchfield } from "@inubekit/inubekit";
+import { Stack, Button, Text, Searchfield } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
 import {
   actionsConfig,
@@ -12,7 +12,6 @@ import {
 import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
 import { IpayrollAgreementTabUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IpayrollAgreementTabUI";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { useThemeData } from "@utils/theme";
 import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
 
 const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
@@ -28,18 +27,12 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
     onSearchPayrollAgreement,
   } = props;
 
-  const theme = useThemeData();
-
   return (
     <BoxContainer
-      borderColor={
-        theme ? theme?.palette?.neutral?.N40 : inube.palette.neutral.N40
-      }
+      borderColor={EComponentAppearance.DARK}
       borderRadius={tokens.spacing.s100}
       padding={smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`}
-      backgroundColor={
-        theme ? theme?.palette?.neutral?.N0 : inube.palette.neutral.N0
-      }
+      backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="initial"
       overflowY="auto"
     >
@@ -61,7 +54,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
               <Text
                 type="title"
                 size="medium"
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 ellipsis
               >
                 {payrollTabLabels.description}
@@ -96,7 +89,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
             {!smallScreen && (
               <Button
                 spacing="wide"
-                appearance={ComponentAppearance.PRIMARY}
+                appearance={EComponentAppearance.PRIMARY}
                 variant="filled"
                 iconBefore={<MdAdd />}
                 type="link"
@@ -113,7 +106,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
               <Text
                 type="title"
                 size={smallScreen ? "small" : "medium"}
-                appearance={ComponentAppearance.DARK}
+                appearance={EComponentAppearance.DARK}
                 ellipsis
               >
                 {payrollTabLabels.description}

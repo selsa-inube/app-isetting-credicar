@@ -14,9 +14,10 @@ function MoneyDestinationTab() {
     loading,
     smallScreen,
     columnWidths,
+    emptyDataMessage,
     handleSearchMoneyDestination,
     setEntryDeleted,
-  } = useMoneyDestination({ bussinesUnits: appData.businessUnit.publicCode });
+  } = useMoneyDestination({ businessUnits: appData.businessUnit.publicCode });
 
   return (
     <MoneyDestinationTabUI
@@ -27,6 +28,7 @@ function MoneyDestinationTab() {
       setEntryDeleted={setEntryDeleted}
       smallScreen={smallScreen}
       columnWidths={columnWidths}
+      emptyDataMessage={emptyDataMessage}
     />
   );
 }

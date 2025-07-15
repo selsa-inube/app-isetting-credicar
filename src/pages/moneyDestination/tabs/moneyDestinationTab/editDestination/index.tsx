@@ -46,7 +46,7 @@ const EditDestination = () => {
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
     useCase: UseCase.EDIT,
-    bussinesUnits: appData.businessUnit.publicCode,
+    businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
     data: saveData as ISaveDataRequest,
@@ -57,10 +57,12 @@ const EditDestination = () => {
   const showRequestStatus =
     showPendingReqModal && saveMoneyDestination?.requestNumber;
 
+  const editDestinationTabs = Object.values(editDestinationTabsConfig);
+
   return (
     <EditDestinationUI
       creditLineDecisions={creditLineDecisions}
-      editDestinationTabsConfig={editDestinationTabsConfig}
+      editDestinationTabsConfig={editDestinationTabs}
       isSelected={isSelected}
       onTabChange={handleTabChange}
       generalInformationRef={generalInformationRef}

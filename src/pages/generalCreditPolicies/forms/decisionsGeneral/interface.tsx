@@ -3,13 +3,12 @@ import {
   Button,
   Checkbox,
   Icon,
-  inube,
   Select,
   Stack,
   Text,
 } from "@inubekit/inubekit";
 
-import { ComponentAppearance } from "@enum/appearances";
+import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
@@ -17,10 +16,13 @@ import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decis
 import { IDecisionsGeneralFormUI } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralFormUI";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { methodsOfCalculation } from "@config/generalCreditPolicies/assisted/methodsOfCalculation";
-import { infoModal } from "@config/generalCreditPolicies/generic/infoModal";
 import { isInvalid } from "@utils/isInvalid";
-import { ToggleGeneralDecision } from "./toggleGeneralDecision";
+import { infoObligationModal } from "@config/generalCreditPolicies/generic/infoObligationModal";
+import { infoReferenceModal } from "@config/generalCreditPolicies/generic/infoReferenceModal";
+import { infoMethodsModal } from "@config/generalCreditPolicies/generic/infoMethodsModal";
+import { portalId } from "@config/portalId";
 import { StyledFormContent } from "./styles";
+import { ToggleGeneralDecision } from "./toggleGeneralDecision";
 
 const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
   const {
@@ -28,14 +30,18 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     loading,
     editDataOption,
     isDisabledButton,
-    showModal,
+    showInformationReferenceModal,
+    showInformationMethodModal,
+    showInformationObligationModal,
     isMobile,
     buttonLabel,
     onToggle,
     onReferenceChange,
     onButtonClick,
     onResetEdit,
-    onInfoModal,
+    onInfoRefModal,
+    onInfoObligModal,
+    onInfoMethodsModal,
   } = props;
 
   return (
@@ -43,18 +49,17 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
       direction="column"
       gap={tokens.spacing.s250}
       minHeight="55vh"
-      backgroundColor={inube.palette.neutral.N0}
       boxSizing="initial"
     >
       <StyledFormContent>
         <Stack direction="column">
           <BoxContainer
             direction="column"
-            borderColor={inube.palette.neutral.N40}
+            borderColor={EComponentAppearance.DARK}
             borderRadius={tokens.spacing.s100}
             width="auto"
             gap={tokens.spacing.s300}
-            backgroundColor={inube.palette.neutral.N0}
+            backgroundColor={EComponentAppearance.LIGHT}
             boxSizing="border-box"
             padding={
               isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`
@@ -65,26 +70,36 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 <Text size="medium">{decisionsGenLabels.first}</Text>
                 <Icon
                   icon={<MdInfoOutline />}
-                  appearance={ComponentAppearance.PRIMARY}
-                  onClick={onInfoModal}
+                  appearance={EComponentAppearance.PRIMARY}
+                  onClick={onInfoRefModal}
                   size="12px"
                   cursorHover
                 />
               </Stack>
-              <Select
-                fullwidth
-                id="reference"
-                name="reference"
-                label=""
-                placeholder={decisionsGenLabels.placeholderReference}
-                onChange={onReferenceChange}
-                options={getDomainById("referenceDecision")}
-                size="compact"
-                onBlur={formik.handleBlur}
-                value={formik.values.reference ?? ""}
-                message={formik.errors.reference}
-                invalid={isInvalid(formik, "reference")}
-              />
+              <Stack
+                direction="column"
+                width={isMobile ? "100%" : "45%"}
+                padding={
+                  isMobile
+                    ? `${tokens.spacing.s0}`
+                    : `${tokens.spacing.s0} ${tokens.spacing.s150} ${tokens.spacing.s0}`
+                }
+              >
+                <Select
+                  fullwidth
+                  id="reference"
+                  name="reference"
+                  label=""
+                  placeholder={decisionsGenLabels.placeholderReference}
+                  onChange={onReferenceChange}
+                  options={getDomainById("referenceDecision")}
+                  size="compact"
+                  onBlur={formik.handleBlur}
+                  value={formik.values.reference ?? ""}
+                  message={formik.errors.reference}
+                  invalid={isInvalid(formik, "reference")}
+                />
+              </Stack>
             </Stack>
 
             <Stack direction="column" gap={tokens.spacing.s200}>
@@ -92,8 +107,8 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 <Text size="medium">{decisionsGenLabels.second}</Text>
                 <Icon
                   icon={<MdInfoOutline />}
-                  appearance={ComponentAppearance.PRIMARY}
-                  onClick={onInfoModal}
+                  appearance={EComponentAppearance.PRIMARY}
+                  onClick={onInfoMethodsModal}
                   size="12px"
                   cursorHover
                 />
@@ -141,6 +156,8 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
               label={decisionsGenLabels.sixth}
               isChecked={formik.values.realGuarantees}
               onToggle={onToggle}
+              showIcon
+              onInfoModal={onInfoObligModal}
             />
           </BoxContainer>
         </Stack>
@@ -150,7 +167,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           <Button
             onClick={onResetEdit}
             variant="outlined"
-            appearance={ComponentAppearance.GRAY}
+            appearance={EComponentAppearance.GRAY}
           >
             {decisionsGenLabels.buttonCancelLabel}
           </Button>
@@ -160,23 +177,48 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
-          appearance={ComponentAppearance.PRIMARY}
+          appearance={EComponentAppearance.PRIMARY}
         >
           {buttonLabel}
         </Button>
       </Stack>
-      {showModal && (
+      {showInformationReferenceModal && (
         <DecisionModal
-          portalId="portal"
-          title={infoModal.title}
-          description={infoModal.description}
-          actionText={infoModal.actionText}
+          portalId={portalId}
+          title={infoReferenceModal.title}
+          description={infoReferenceModal.description}
+          actionText={infoReferenceModal.actionText}
           withIcon
           withCancelButton={false}
           icon={<MdInfoOutline />}
-          appearance={ComponentAppearance.PRIMARY}
-          onCloseModal={onInfoModal}
-          onClick={onInfoModal}
+          onCloseModal={onInfoRefModal}
+          onClick={onInfoRefModal}
+        />
+      )}
+      {showInformationMethodModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={infoMethodsModal.title}
+          description={infoMethodsModal.description}
+          actionText={infoMethodsModal.actionText}
+          withIcon
+          withCancelButton={false}
+          icon={<MdInfoOutline />}
+          onCloseModal={onInfoMethodsModal}
+          onClick={onInfoMethodsModal}
+        />
+      )}
+      {showInformationObligationModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={infoObligationModal.title}
+          description={infoObligationModal.description}
+          actionText={infoObligationModal.actionText}
+          withIcon
+          withCancelButton={false}
+          icon={<MdInfoOutline />}
+          onCloseModal={onInfoObligModal}
+          onClick={onInfoObligModal}
         />
       )}
     </BoxContainer>
