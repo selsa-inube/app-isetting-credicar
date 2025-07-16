@@ -5,10 +5,12 @@ const usePageLength = () => {
 
   useEffect(() => {
     const updatePageRecord = () => {
-      if (window.innerWidth < 1600) {
+      if (window.innerWidth <= 1600) {
         setPageLength(4);
-      } else if (window.innerWidth > 1600) {
-        setPageLength(10);
+      } else if (window.innerWidth > 1600 && window.innerWidth <= 1750) {
+        setPageLength(5);
+      } else if (window.innerWidth > 1750) {
+        setPageLength(8);
       } else {
         setPageLength(1);
       }

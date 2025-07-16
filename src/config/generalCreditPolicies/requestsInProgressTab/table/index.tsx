@@ -6,7 +6,7 @@ import { Details } from "@pages/generalCreditPolicies/tabs/requestsInProgressTab
 const titles: ITitle[] = [
   {
     id: "requestDate",
-    titleName: "Fecha",
+    titleName: "Fecha de solicitud",
     priority: 2,
   },
   {

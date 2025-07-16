@@ -4,6 +4,8 @@ import { getPayrollAgreementData } from "@services/payrollAgreement/getPayrollAg
 import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { IUsePayrollAgreementTab } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementTab";
 import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 
 const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   const { businessUnits } = props;
@@ -15,6 +17,11 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     useState<string>("");
   const [loading, setLoading] = useState(true);
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+
+  const { disabledButton } = useValidateUseCase({
+    useCase: EPayrollAgreement.USE_CASE_ADD,
+  });
 
   useEffect(() => {
     const fetchPayrollAgreementData = async () => {
@@ -41,6 +48,10 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     }
   }, [entryDeleted]);
 
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
+
   const handleSearchPayrollAgreement = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -62,6 +73,9 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     smallScreen,
     columnWidths,
     emptyDataMessage,
+    disabledButton,
+    showInfoModal,
+    handleToggleInfoModal,
     setEntryDeleted,
     handleSearchPayrollAgreement,
   };

@@ -34,13 +34,18 @@ const defaultContextValue = {
       userAccount: "Angie Pinilla",
       userName: "Angie Pinilla",
     },
+    useCasesByStaff: [],
   },
   setBusinessUnitSigla: (value: React.SetStateAction<string>) => {
     console.log(
       `Business unit sigla set to: ${typeof value === "function" ? value("") : value}`,
     );
   },
+  setUseCases: () => {
+    console.log(`Business unit sigla set to:`);
+  },
   businessUnitSigla: "",
+  useCases: "",
   businessUnitsToTheStaff: [],
   setAppData: () => {
     console.log("");

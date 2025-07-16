@@ -1,4 +1,6 @@
 interface IEditRecord {
+  showInfoModal: boolean;
+  onToggleInfoModal: () => void;
   onEdit: () => void;
 }
 

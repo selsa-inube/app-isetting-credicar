@@ -37,6 +37,7 @@ const useContext = {
       languageId: "es",
       urlLogo: selsaLogo,
     },
+    useCasesByStaff: [],
   },
   businessUnitSigla: "IProcess",
   setAppData: () => {
@@ -45,6 +46,10 @@ const useContext = {
   setBusinessUnitSigla: () => {
     console.log("");
   },
+  setUseCases: () => {
+    console.log("");
+  },
+  useCases: "",
   businessUnitsToTheStaff: [],
   setBusinessUnitsToTheStaff: () => {
     console.log("");

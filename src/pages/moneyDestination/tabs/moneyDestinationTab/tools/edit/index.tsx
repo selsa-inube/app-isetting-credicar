@@ -6,7 +6,13 @@ const Edit = (props: IEdit) => {
   const { data } = props;
 
   const { handleEdit } = useEditDestinationConsultation(data);
-  return <EditRecord onEdit={handleEdit} />;
+  return (
+    <EditRecord
+      onEdit={handleEdit}
+      showInfoModal={false}
+      onToggleInfoModal={() => void 0}
+    />
+  );
 };
 
 export { Edit };
