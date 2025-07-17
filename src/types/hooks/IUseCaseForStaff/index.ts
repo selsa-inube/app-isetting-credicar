@@ -1,4 +1,5 @@
 interface IUseCaseForStaff {
+  businessUnitPrevious: string;
   useCasesByStaff: string[];
   businessUnit: string;
   userAccount: string;

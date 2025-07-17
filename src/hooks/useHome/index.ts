@@ -38,6 +38,7 @@ const useHome = () => {
   }, [appData]);
 
   const { useCases } = useCaseForStaff({
+    businessUnitPrevious: appData.businessUnit.publicCode,
     useCasesByStaff: appData.useCasesByStaff,
     businessUnit: businessUnitSigla,
     userAccount: appData.user.userAccount,
