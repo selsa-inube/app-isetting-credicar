@@ -8,6 +8,10 @@ import { IUsePayrollAgreementPage } from "@ptypes/hooks/payrollAgreement/IUsePay
 import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { menuOptionsPayroll } from "@config/payrollAgreement/payrollAgreementTab/menuOptions";
+import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   const { businessUnitSigla, businessUnits } = props;
@@ -26,11 +30,31 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   );
   const [showModal, setShowModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [options, setOptions] = useState<IMenuOptions[]>(menuOptionsPayroll);
+
+  const { disabledButton: disabledAdd } = useValidateUseCase({
+    useCase: EPayrollAgreement.USE_CASE_ADD,
+  });
+
+  useEffect(() => {
+    const menuOptions = menuOptionsPayroll.map((option) => {
+      if (option.description === EPayrollAgreement.MENU_OPTION_ADD) {
+        return {
+          ...option,
+          disabled: disabledAdd,
+        };
+      } else {
+        return option;
+      }
+    });
+
+    setOptions(menuOptions);
+  }, [disabledAdd]);
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
-    optionName: "Nóminas de convenio",
+    optionName: EPayrollAgreement.OPTION_NAME,
   });
 
   const onToggleModal = () => {
@@ -38,7 +62,9 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   };
 
   const onToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
+    if (disabledAdd) {
+      setShowInfoModal(!showInfoModal);
+    }
   };
   const onCloseMenu = () => {
     setShowModal(!showModal);
@@ -111,6 +137,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     filteredTabsConfig,
     showModal,
     showInfoModal,
+    options,
     onToggleInfoModal,
     onCloseMenu,
     onToggleModal,
