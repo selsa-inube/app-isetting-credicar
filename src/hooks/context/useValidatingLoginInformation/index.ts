@@ -4,8 +4,8 @@ import { decrypt } from "@utils/crypto/decrypt";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { validateAndTrimString } from "@utils/validateAndTrimString";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
-import { usePortalData } from "../../staffPortal/usePortalData";
-import { useBusinessManagers } from "../../staffPortal/useBusinessManagers";
+import { usePortalData } from "@hooks/staffPortal/usePortalData";
+import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
 
 const useValidatingLoginInformation = () => {
   const { user } = useAuth0();
@@ -16,6 +16,11 @@ const useValidatingLoginInformation = () => {
   const [businessUnitSigla, setBusinessUnitSigla] = useState(
     localStorage.getItem("businessUnitSigla") ?? "",
   );
+
+  const [useCases, setUseCases] = useState<string>(
+    localStorage.getItem("useCasesByStaff") ?? "",
+  );
+
   const [businessUnitsToTheStaff, setBusinessUnitsToTheStaff] = useState<
     IBusinessUnitsPortalStaff[]
   >(() => {
@@ -31,6 +36,13 @@ const useValidatingLoginInformation = () => {
     ) as IBusinessUnitsPortalStaff;
   } catch (error) {
     console.error("Error parsing businessUnitSigla:", error);
+  }
+
+  let useCasesData: string[] = [];
+  try {
+    useCasesData = JSON.parse(useCases || "[]") as string[];
+  } catch (error) {
+    console.error("Error parsing useCases:", error);
   }
 
   const [appData, setAppData] = useState<IAppData>({
@@ -56,6 +68,7 @@ const useValidatingLoginInformation = () => {
       userAccount: validateAndTrimString(user?.email ?? "") ?? "",
       userName: user?.name ?? "",
     },
+    useCasesByStaff: useCasesData ?? [],
   });
 
   useEffect(() => {
@@ -100,19 +113,38 @@ const useValidatingLoginInformation = () => {
   }, [businessUnitSigla, businessUnitsToTheStaff]);
 
   useEffect(() => {
+    localStorage.setItem("useCasesByStaff", useCases);
+
+    if (useCases) {
+      const businessUnit = JSON.parse(useCases);
+
+      setAppData((prev) => ({
+        ...prev,
+        useCasesByStaff: businessUnit,
+      }));
+    }
+  }, [useCases]);
+
+  useEffect(() => {
     localStorage.setItem(
       "businessUnitsToTheStaff",
       JSON.stringify(businessUnitsToTheStaff),
     );
   }, [businessUnitsToTheStaff]);
 
+  useEffect(() => {
+    localStorage.setItem("useCasesByStaff", useCases);
+  }, [useCases]);
+
   const authAndPortalDataContainer = useMemo(
     () => ({
       appData,
       businessUnitSigla,
       businessUnitsToTheStaff,
+      useCases,
       setAppData,
       setBusinessUnitSigla,
+      setUseCases,
       setBusinessUnitsToTheStaff,
     }),
     [appData, businessUnitSigla, businessUnitsToTheStaff],

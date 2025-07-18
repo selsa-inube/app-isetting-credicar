@@ -6,13 +6,32 @@ import { ICancelReqInProcRequest } from "@ptypes/payrollAgreement/requestInProgT
 import { cancelRequestInProgress } from "@services/requestInProgress/cancelRequestInProgress";
 import { IUseCancelRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseCancelRequestInProgress";
 import { cancelRequestInProgMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgMessage";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { cancelPayrollLabels } from "@config/payrollAgreement/requestsInProgressTab/cancelPayrollLabels";
+import { EModalState } from "@enum/modalState";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
-  const { businessUnit, data, userAccount, setEntryCanceled } = props;
+  const { businessUnit, data, userAccount, useCaseCancel, setEntryCanceled } =
+    props;
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const { addFlag } = useFlag();
+
+  const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
+
+  const handleToggleModal = () => {
+    if (disabledButton) {
+      setShowInfoModal(!showInfoModal);
+    } else {
+      setShowModal(!showModal);
+    }
+  };
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
 
   const fetchCancelRequestData = async (data: ICancelReqInProcRequest) => {
     setLoading(true);
@@ -44,24 +63,22 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const handleClick = () => {
     fetchCancelRequestData({
-      removalJustification: `La cancelación de la solicitud  es requerida por ${userAccount}`,
+      removalJustification: `${cancelPayrollLabels.removalJustification} ${userAccount}`,
       requestNumber: data.requestNumber,
       settingRequestId: data.settingRequestId,
     });
   };
 
-  const handleToggleModal = () => {
-    setShowModal(!showModal);
-  };
-
   useEffect(() => {
-    eventBus.emit("secondModalState", showModal);
+    eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
 
   return {
     showModal,
     loading,
     hasError,
+    showInfoModal,
+    handleToggleInfoModal,
     handleToggleModal,
     handleClick,
   };

@@ -4,7 +4,6 @@ import { ICardData } from "@ptypes/home/ICardData";
 import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
 import { usePayrollAgreementPage } from "@hooks/payrollAgreement/usePayrollAgreementPage";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { menuOptionsPayroll } from "@config/payrollAgreement/payrollAgreementTab/menuOptions";
 import { PayrollAgreementUI } from "./interface";
 
 const PayrollAgreement = () => {
@@ -18,6 +17,7 @@ const PayrollAgreement = () => {
     payrollAgreementTabs,
     showModal,
     showInfoModal,
+    options,
     onToggleInfoModal,
     onCloseMenu,
     onToggleModal,
@@ -41,7 +41,7 @@ const PayrollAgreement = () => {
       payrollAgreementTabs={payrollAgreementTabs}
       showModal={showModal}
       showInfoModal={showInfoModal}
-      options={menuOptionsPayroll}
+      options={options}
       onToggleInfoModal={onToggleInfoModal}
       onCloseMenu={onCloseMenu}
       onToggleModal={onToggleModal}

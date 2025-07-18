@@ -1,5 +1,5 @@
-import { MdAdd } from "react-icons/md";
-import { Stack, Button, Text, Searchfield } from "@inubekit/inubekit";
+import { MdAdd, MdOutlineInfo } from "react-icons/md";
+import { Stack, Button, Text, Searchfield, Icon } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
@@ -13,6 +13,9 @@ import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/g
 import { IpayrollAgreementTabUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IpayrollAgreementTabUI";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
+import { disabledModal } from "@config/disabledModal";
 
 const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
   const {
@@ -23,6 +26,9 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
     columnWidths,
     pageLength,
     emptyDataMessage,
+    showInfoModal,
+    disabledButton,
+    onToggleInfoModal,
     setEntryDeleted,
     onSearchPayrollAgreement,
   } = props;
@@ -87,17 +93,30 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
               />
             </Stack>
             {!smallScreen && (
-              <Button
-                spacing="wide"
-                appearance={EComponentAppearance.PRIMARY}
-                variant="filled"
-                iconBefore={<MdAdd />}
-                type="link"
-                path="/payroll-agreement/add-payroll-agreement"
-                fullwidth={smallScreen}
-              >
-                {payrollTabLabels.buttonLabel}
-              </Button>
+              <Stack gap={tokens.spacing.s025} alignItems="center">
+                <Button
+                  spacing="wide"
+                  appearance={EComponentAppearance.PRIMARY}
+                  variant="filled"
+                  iconBefore={<MdAdd />}
+                  type="link"
+                  path="/payroll-agreement/add-payroll-agreement"
+                  fullwidth={smallScreen}
+                  disabled={disabledButton}
+                >
+                  {payrollTabLabels.buttonLabel}
+                </Button>
+
+                {disabledButton && (
+                  <Icon
+                    appearance={EComponentAppearance.PRIMARY}
+                    icon={<MdOutlineInfo />}
+                    onClick={onToggleInfoModal}
+                    cursorHover
+                    size="14px"
+                  />
+                )}
+              </Stack>
             )}
           </Stack>
 
@@ -128,6 +147,18 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
           />
         </Stack>
       </Stack>
+      {showInfoModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={disabledModal.title}
+          actionText={disabledModal.actionText}
+          description={disabledModal.description}
+          subtitle={disabledModal.subtitle}
+          onCloseModal={onToggleInfoModal}
+          onClick={onToggleInfoModal}
+          withCancelButton={false}
+        />
+      )}
     </BoxContainer>
   );
 };

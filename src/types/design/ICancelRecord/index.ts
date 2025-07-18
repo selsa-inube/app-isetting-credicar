@@ -6,6 +6,8 @@ interface ICancelRecord {
   messageCancel: IMessageModal;
   loading: boolean;
   status: ERequestStatus;
+  showInfoModal: boolean;
+  onToggleInfoModal: () => void;
   onToggleModal: () => void;
   onClick: () => void;
 }

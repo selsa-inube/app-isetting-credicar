@@ -10,6 +10,7 @@ import {
 import { Table } from "@design/data/table";
 import { tablabels } from "@config/moneyDestination/requestsInProgressTab/tabLabels";
 import { EComponentAppearance } from "@enum/appearances";
+import { portalId } from "@config/portalId";
 import { StyledContainer } from "./styles";
 
 const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
@@ -19,6 +20,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
     loading,
     smallScreen,
     columnWidths,
+    pageLength,
     setEntryCanceled,
     onSearchrequestProgress,
   } = props;
@@ -90,7 +92,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryCanceled)}
@@ -98,7 +100,7 @@ const RequestsInProgressTabUI = (props: IRequestsInProgressTabUI) => {
             filter={searchrequestProgress}
             loading={loading}
             columnWidths={columnWidths}
-            pageLength={8}
+            pageLength={pageLength}
             ellipsisCell={!smallScreen}
           />
         </Stack>

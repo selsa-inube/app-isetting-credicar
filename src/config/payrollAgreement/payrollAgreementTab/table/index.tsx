@@ -4,6 +4,7 @@ import { Details } from "@pages/payrollAgreement/tabs/payrollAgreementTab/tools/
 import { ITitle } from "@ptypes/design/table/ITitle";
 import { IAction } from "@ptypes/design/table/IAction";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 
 const titles: ITitle[] = [
   {
@@ -26,7 +27,9 @@ const actionsConfig = (setEntryDeleted: (id: string | number) => void) => {
     },
     {
       id: "edit",
-      content: (entry: IEntry) => <Edit data={entry} />,
+      content: (entry: IEntry) => (
+        <Edit data={entry} useCaseEdit={EPayrollAgreement.USE_CASE_EDIT} />
+      ),
     },
     {
       id: "delete",

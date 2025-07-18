@@ -3,17 +3,34 @@ import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
 import { IUseDeletePayroll } from "@ptypes/hooks/IUseDeletePayroll";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { EModalState } from "@enum/modalState";
+import { deletePayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/deletePayrollLabels";
 
 const useDeletePayroll = (props: IUseDeletePayroll) => {
   const { data, appData } = props;
   const [showModal, setShowModal] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [showPendingReq, setShowPendingReq] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+
+  const { disabledButton } = useValidateUseCase({
+    useCase: EPayrollAgreement.USE_CASE_DELETE,
+  });
 
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
 
   const handleToggleModal = () => {
-    setShowModal(!showModal);
+    if (disabledButton) {
+      setShowInfoModal(!showInfoModal);
+    } else {
+      setShowModal(!showModal);
+    }
+  };
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
   };
 
   const handleClick = () => {
@@ -21,7 +38,7 @@ const useDeletePayroll = (props: IUseDeletePayroll) => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: "Solicitud de eliminación de una nomina de convenio",
+      description: deletePayrollLabels.descriptionSaveData,
       entityName: "PayrollAgreement",
       requestDate: formatDate(new Date()),
       useCaseName: "DeletePayrollAgreement",
@@ -33,7 +50,7 @@ const useDeletePayroll = (props: IUseDeletePayroll) => {
           data.numberOfDaysForReceivingTheDiscounts,
         ),
         payrollForDeductionAgreementType: data.payrollForDeductionAgreementType,
-        removalJustification: `La eliminación de la nomina de convenio es solicitada por ${appData.user.userAccount}`,
+        removalJustification: `${deletePayrollLabels.removalJustification} ${appData.user.userAccount}`,
       },
     });
     setShowRequestProcessModal(true);
@@ -45,11 +62,11 @@ const useDeletePayroll = (props: IUseDeletePayroll) => {
     };
 
     if (showModal && !showRequestProcessModal) {
-      emitEvent("secondModalState");
+      emitEvent(EModalState.SECOND_MODAL_STATE);
     } else if (!showModal && !showRequestProcessModal && !showPendingReq) {
-      emitEvent("secondModalState");
+      emitEvent(EModalState.SECOND_MODAL_STATE);
     } else if (!showModal && showRequestProcessModal) {
-      emitEvent("thirdModalState");
+      emitEvent(EModalState.THIRD_MODAL_STATE);
     }
   }, [showModal, showRequestProcessModal, showPendingReq]);
 
@@ -57,6 +74,8 @@ const useDeletePayroll = (props: IUseDeletePayroll) => {
     showModal,
     saveData,
     showRequestProcessModal,
+    showInfoModal,
+    handleToggleInfoModal,
     setShowPendingReq,
     handleToggleModal,
     handleClick,

@@ -5,6 +5,7 @@ import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusines
 import { decrypt } from "@utils/crypto/decrypt";
 import { mainNavigation } from "@config/mainNavigation";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
 
 const useHome = () => {
   const {
@@ -12,6 +13,7 @@ const useHome = () => {
     businessUnitsToTheStaff,
     businessUnitSigla,
     setBusinessUnitSigla,
+    setUseCases,
   } = useContext(AuthAndPortalData);
 
   const portalId = localStorage.getItem("portalCode");
@@ -35,12 +37,27 @@ const useHome = () => {
     }
   }, [appData]);
 
+  const { useCases } = useCaseForStaff({
+    businessUnitPrevious: appData.businessUnit.publicCode,
+    useCasesByStaff: appData.useCasesByStaff,
+    businessUnit: businessUnitSigla,
+    userAccount: appData.user.userAccount,
+    businessManagerCode: appData.businessManager.publicCode,
+  });
+
   const handleLogoClick = (businessUnit: IBusinessUnitsPortalStaff) => {
     const selectJSON = JSON.stringify(businessUnit);
     setBusinessUnitSigla(selectJSON);
     setSelectedClient(businessUnit.abbreviatedName);
     setCollapse(false);
   };
+
+  useEffect(() => {
+    if (useCases.length > 0) {
+      const useCasesJSON = JSON.stringify(useCases);
+      setUseCases(useCasesJSON);
+    }
+  }, [useCases]);
 
   const username = appData.user.userName.split(" ")[0];
 

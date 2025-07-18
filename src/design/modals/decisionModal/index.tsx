@@ -62,12 +62,7 @@ const DecisionModal = (props: IDecisionModal) => {
         </Stack>
       )}
       {subtitle && (
-        <Text
-          appearance={EComponentAppearance.DARK}
-          type="body"
-          size="large"
-          weight="bold"
-        >
+        <Text appearance={EComponentAppearance.DARK} size="large">
           {subtitle}
         </Text>
       )}

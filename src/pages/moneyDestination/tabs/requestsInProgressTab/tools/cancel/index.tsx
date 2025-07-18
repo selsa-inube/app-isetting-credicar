@@ -25,6 +25,8 @@ const Cancel = (props: ICancel) => {
       onClick={handleClick}
       loading={loading}
       status={data.requestStatusCode}
+      showInfoModal={false}
+      onToggleInfoModal={() => void 0}
     />
   );
 };
