@@ -1,20 +1,22 @@
-import { MdAdd } from "react-icons/md";
-import { Stack, Button, Text, Searchfield } from "@inubekit/inubekit";
+import { MdAdd, MdOutlineInfo } from "react-icons/md";
+import { Stack, Button, Text, Searchfield, Icon } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { EComponentAppearance } from "@enum/appearances";
 import { Table } from "@design/data/table";
-import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { EComponentAppearance } from "@enum/appearances";
+import { portalId } from "@config/portalId";
 import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
 import {
   actionsConfig,
   breakPoints,
   titles,
 } from "@config/moneyDestination/moneyDestinationTab/table";
-import { portalId } from "@config/portalId";
+import { disabledModal } from "@config/disabledModal";
+import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
 import { StyledContainer } from "./styles";
 
-function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
+const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
   const {
     searchMoneyDestination,
     entries,
@@ -22,6 +24,9 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
     smallScreen,
     columnWidths,
     emptyDataMessage,
+    showInfoModal,
+    disabledButton,
+    onToggleInfoModal,
     onSearchMoneyDestination,
     setEntryDeleted,
   } = props;
@@ -79,17 +84,29 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
               />
             </Stack>
             {!smallScreen && (
-              <Button
-                spacing="wide"
-                appearance={EComponentAppearance.PRIMARY}
-                variant="filled"
-                iconBefore={<MdAdd />}
-                type="link"
-                path="/money-destination/add-destination"
-                fullwidth={smallScreen}
-              >
-                {tabLabels.addButton}
-              </Button>
+              <Stack gap={tokens.spacing.s025} alignItems="center">
+                <Button
+                  spacing="wide"
+                  appearance={EComponentAppearance.PRIMARY}
+                  variant="filled"
+                  iconBefore={<MdAdd />}
+                  type="link"
+                  path="/money-destination/add-destination"
+                  fullwidth={smallScreen}
+                  disabled={disabledButton}
+                >
+                  {tabLabels.addButton}
+                </Button>
+                {disabledButton && (
+                  <Icon
+                    appearance={EComponentAppearance.PRIMARY}
+                    icon={<MdOutlineInfo />}
+                    onClick={onToggleInfoModal}
+                    cursorHover
+                    size="14px"
+                  />
+                )}
+              </Stack>
             )}
           </Stack>
 
@@ -119,8 +136,20 @@ function MoneyDestinationTabUI(props: IMoneyDestinationTabUI) {
           />
         </Stack>
       </Stack>
+      {showInfoModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={disabledModal.title}
+          actionText={disabledModal.actionText}
+          description={disabledModal.description}
+          subtitle={disabledModal.subtitle}
+          onCloseModal={onToggleInfoModal}
+          onClick={onToggleInfoModal}
+          withCancelButton={false}
+        />
+      )}
     </StyledContainer>
   );
-}
+};
 
 export { MoneyDestinationTabUI };

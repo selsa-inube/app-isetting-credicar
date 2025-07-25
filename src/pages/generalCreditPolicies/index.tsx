@@ -1,5 +1,4 @@
 import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/useGeneralCreditPolicies";
-import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
 import { ICardData } from "@ptypes/home/ICardData";
 import { GeneralCreditPoliciesUI } from "./interface";
 
@@ -24,6 +23,7 @@ const GeneralCreditPolicies = () => {
     loadingPolicies,
     showAddPolicies,
     showrequestTab,
+    withoutPrivilegesAdd,
     handleTabChange,
     handleCloseModal,
     handlePolicies,
@@ -33,9 +33,7 @@ const GeneralCreditPolicies = () => {
     <GeneralCreditPoliciesUI
       policiesTabs={policiesTabs}
       descriptionOptions={descriptionOptions as ICardData}
-      isSelected={
-        isSelected ?? generalPoliciesTabsConfig(smallScreen).generalPolicies.id
-      }
+      isSelected={isSelected}
       onTabChange={handleTabChange}
       smallScreenTab={smallScreenTab}
       showPoliciesTab={showPoliciesTab}
@@ -55,6 +53,7 @@ const GeneralCreditPolicies = () => {
       withoutPolicies={withoutPolicies}
       loadingPolicies={loadingPolicies ?? true}
       showAddPolicies={showAddPolicies ?? false}
+      withoutPrivilegesAdd={withoutPrivilegesAdd}
     />
   );
 };

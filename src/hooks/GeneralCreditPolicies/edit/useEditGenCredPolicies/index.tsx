@@ -4,24 +4,25 @@ import { FormikProps } from "formik";
 import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { formatDate } from "@utils/date/formatDate";
-import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
-import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { EGeneralPolicies } from "@enum/generalPolicies";
+import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
+import { dataTranslations } from "@utils/dataTranslations";
+import { allConditionsRules } from "@utils/allConditionsRules";
+import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
+import { editLabels } from "@config/editLabels";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
-import { allConditionsRules } from "@utils/allConditionsRules";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
-import { editLabels } from "@config/editLabels";
-import { dataTranslations } from "@utils/dataTranslations";
-import { EGeneralPolicies } from "@enum/generalPolicies";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
+import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
+import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
@@ -37,6 +38,22 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     realGuaranteesData,
   } = props;
   const { appData } = useContext(AuthAndPortalData);
+
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
+    useCase: EGeneralPolicies.USE_CASE_EDIT,
+  });
+
+  useEffect(() => {
+    if (withoutPrivilegesEdit) {
+      setShowInfoModal(!showInfoModal);
+    }
+  }, [withoutPrivilegesEdit]);
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+    navigate("/");
+  };
 
   const initialMethodsData = () => {
     const hasReciprocity = allConditionsRules(methodsData).some((condition) =>
@@ -207,7 +224,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
       description: editLabels.title,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
-      useCaseName: "ModifyGeneralCreditPolicies",
+      useCaseName: EGeneralPolicies.MODIFY_GENERAL_POLICIES,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);
@@ -274,6 +291,8 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
+    showInfoModal,
+    handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,

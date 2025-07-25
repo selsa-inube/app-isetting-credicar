@@ -23,6 +23,8 @@ const Delete = (props: IDelete) => {
     showModal,
     saveData,
     showRequestProcessModal,
+    showInfoModal,
+    handleToggleInfoModal,
     handleToggleModal,
     handleClick,
     setShowRequestProcessModal,
@@ -61,8 +63,8 @@ const Delete = (props: IDelete) => {
         onToggleModal={handleToggleModal}
         onClick={handleClick}
         loading={loadingSendData}
-        showInfoModal={false}
-        onToggleInfoModal={() => void 0}
+        showInfoModal={showInfoModal}
+        onToggleInfoModal={handleToggleInfoModal}
       />
       {showRequestProcess && (
         <RequestProcess

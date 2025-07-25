@@ -1,19 +1,34 @@
 import { useEffect, useState } from "react";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
+import { EMoneyDestination } from "@enum/moneyDestination";
+import { deleteDestinationLabels } from "@config/moneyDestination/deleteDestination/deleteDestinationLabels";
 import { IUseDeleteDestination } from "@ptypes/hooks/moneyDestination/IUseDeleteDestination";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 const useDeleteDestination = (props: IUseDeleteDestination) => {
   const { data, appData } = props;
   const [showModal, setShowModal] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [showPendingReq, setShowPendingReq] = useState(false);
-
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+
+  const { disabledButton } = useValidateUseCase({
+    useCase: EMoneyDestination.USE_CASE_DELETE,
+  });
 
   const handleToggleModal = () => {
-    setShowModal(!showModal);
+    if (disabledButton) {
+      setShowInfoModal(!showInfoModal);
+    } else {
+      setShowModal(!showModal);
+    }
+  };
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
   };
 
   const handleClick = () => {
@@ -21,14 +36,14 @@ const useDeleteDestination = (props: IUseDeleteDestination) => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: "Solicitud de eliminación de un destino de dinero",
+      description: deleteDestinationLabels.descriptionSave,
       entityName: "MoneyDestination",
       requestDate: formatDate(new Date()),
-      useCaseName: "DeleteMoneyDestination",
+      useCaseName: EMoneyDestination.USE_CASE_NAME_DELETE,
       configurationRequestData: {
         moneyDestinationId: data.id,
         abbreviatedName: data.name,
-        removalJustification: `La eliminación del destino de dinero es solicitada por ${appData.user.userAccount}`,
+        removalJustification: `${deleteDestinationLabels.removalJustification} ${appData.user.userAccount}`,
       },
     });
     setShowRequestProcessModal(true);
@@ -52,6 +67,8 @@ const useDeleteDestination = (props: IUseDeleteDestination) => {
     showModal,
     saveData,
     showRequestProcessModal,
+    showInfoModal,
+    handleToggleInfoModal,
     setShowPendingReq,
     handleToggleModal,
     handleClick,

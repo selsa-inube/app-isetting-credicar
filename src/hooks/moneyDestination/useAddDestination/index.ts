@@ -4,14 +4,17 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { IRuleDecision, ICondition } from "@isettingkit/input";
 
-import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { stepsKeysMoneyDest } from "@enum/stepsKeysMoneyDest";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { compareObjects } from "@utils/compareObjects";
+import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
+import { addMoneyLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/addMoneyLabels";
 import { mediaQueryTablet } from "@config/environment";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 const useAddDestination = () => {
   const initialValues = {
@@ -50,7 +53,7 @@ const useAddDestination = () => {
 
   const handleNextStep = () => {
     if (
-      currentStep === 2 &&
+      currentStep === stepsKeysMoneyDest.LINE_CREDIT &&
       creditLineDecisions.length === 0 &&
       !showAttentionModal
     ) {
@@ -58,7 +61,7 @@ const useAddDestination = () => {
       return;
     }
 
-    if (currentStep === 2 && showAttentionModal) {
+    if (currentStep === stepsKeysMoneyDest.LINE_CREDIT && showAttentionModal) {
       setShowAttentionModal(false);
     }
 
@@ -83,7 +86,9 @@ const useAddDestination = () => {
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      const hasUnsavedChanges = !compareObjects(initialValues, formValues);
+      const hasUnsavedChanges = generalInformationRef.current
+        ? !compareObjects(initialValues, generalInformationRef.current.values)
+        : false;
 
       if (hasUnsavedChanges) {
         event.preventDefault();
@@ -100,7 +105,9 @@ const useAddDestination = () => {
   }, [formValues, initialValues, canRefresh]);
 
   const handleOpenModal = () => {
-    const compare = compareObjects(initialValues, formValues);
+    const compare = generalInformationRef.current
+      ? compareObjects(initialValues, generalInformationRef.current.values)
+      : true;
 
     if (!compare) {
       setShowGoBackModal(true);
@@ -151,10 +158,10 @@ const useAddDestination = () => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: "Solicitud de creación de un destino de dinero",
+      description: addMoneyLabels.description,
       entityName: "MoneyDestination",
       requestDate: formatDate(new Date()),
-      useCaseName: "AddMoneyDestination",
+      useCaseName: EMoneyDestination.USE_CASE_NAME_ADD,
       configurationRequestData: {
         abbreviatedName: formValues.nameDestination,
         descriptionUse: formValues.description,

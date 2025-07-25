@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { IUseEditDestinationConsult } from "@ptypes/hooks/IUseEditDestinationConsult";
 
-const useEditDestinationConsultation = (data: IEntry) => {
+const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
+  const { data, useCase } = props;
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const navigate = useNavigate();
+
+  const { disabledButton } = useValidateUseCase({ useCase });
 
   const destinationData = {
     id: data.id,
@@ -12,12 +18,27 @@ const useEditDestinationConsultation = (data: IEntry) => {
   };
 
   const handleEdit = () => {
-    navigate(`/money-destination/edit-destination`, {
-      state: { data: destinationData },
-    });
+    if (disabledButton) {
+      setShowInfoModal(!showInfoModal);
+    } else {
+      if (!data) {
+        console.error("destination data is undefined or null");
+        return;
+      }
+
+      navigate(`/money-destination/edit-destination`, {
+        state: { data: destinationData },
+      });
+    }
+  };
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
   };
 
   return {
+    showInfoModal,
+    handleToggleInfoModal,
     handleEdit,
   };
 };

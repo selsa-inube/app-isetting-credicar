@@ -1,16 +1,17 @@
-import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
-import { DecisionModal } from "@design/modals/decisionModal";
-import { AddGenCreditPolicies } from "./addGeneralCreditPolicies";
 import { Breadcrumbs, Spinner, Stack, Tabs, Text } from "@inubekit/inubekit";
 import { Title } from "@design/data/title";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
 import { crumbsGeneralpolicies } from "@config/generalCreditPolicies/navigation";
 import { loadingLabels } from "@config/loadingLabels";
-import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
-import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
-import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
+import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
 import { descriptionTitle } from "@config/generalCreditPolicies/descriptionTitle";
 import { portalId } from "@config/portalId";
+import { disabledModal } from "@config/disabledModal";
+import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
+import { AddGenCreditPolicies } from "./addGeneralCreditPolicies";
+import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
+import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
 
 const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
   const {
@@ -31,6 +32,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
+    withoutPrivilegesAdd,
     onTabChange,
     onCloseModal,
     onPolicies,
@@ -57,14 +59,27 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
           {showAddPolicies ? (
             <>
               <AddGenCreditPolicies />
-              <DecisionModal
-                portalId={portalId}
-                title={notPoliciesModal.title}
-                description={notPoliciesModal.description}
-                actionText={notPoliciesModal.actionText}
-                onCloseModal={onCloseModal}
-                onClick={onPolicies}
-              />
+              {withoutPrivilegesAdd ? (
+                <DecisionModal
+                  portalId={portalId}
+                  title={disabledModal.title}
+                  actionText={disabledModal.actionText}
+                  description={disabledModal.description}
+                  subtitle={disabledModal.subtitle}
+                  onCloseModal={onCloseModal}
+                  onClick={onCloseModal}
+                  withCancelButton={false}
+                />
+              ) : (
+                <DecisionModal
+                  portalId={portalId}
+                  title={notPoliciesModal.title}
+                  description={notPoliciesModal.description}
+                  actionText={notPoliciesModal.actionText}
+                  onCloseModal={onCloseModal}
+                  onClick={onPolicies}
+                />
+              )}
             </>
           ) : (
             <Stack

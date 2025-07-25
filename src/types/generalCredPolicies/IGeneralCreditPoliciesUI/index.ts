@@ -13,6 +13,7 @@ interface IGeneralCreditPoliciesUI {
   isSelected: string;
   loadingPolicies: boolean;
   showAddPolicies: boolean;
+  withoutPrivilegesAdd: boolean;
   onTabChange: (id: string) => void;
   onCloseModal: () => void;
   onPolicies: () => void;

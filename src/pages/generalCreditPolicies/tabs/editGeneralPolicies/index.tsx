@@ -47,6 +47,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
+    showInfoModal,
+    handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,
     handleFinishForm,
@@ -139,6 +141,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       heightContPageIncome={heightContPageIncome}
       heightContPageScoreModels={heightContPageScoreModels}
       onCloseProcess={handleCloseProcess}
+      onCloseInfoModal={handleToggleInfoModal}
+      showInfoModal={showInfoModal}
     />
   );
 };

@@ -34,6 +34,8 @@ interface IEditGeneralPoliciesUI {
   heightContPageContribut: string;
   heightContPageIncome: string;
   heightContPageScoreModels: string;
+  showInfoModal: boolean;
+  onCloseInfoModal: () => void;
   onFinishForm: () => void;
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
