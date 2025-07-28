@@ -4,6 +4,7 @@ interface IUseCancelRequestInProgress {
   businessUnit: string;
   data: IEntry;
   userAccount: string;
+  useCaseCancel: string;
   setEntryCanceled: (id: string | number) => void;
 }
 
