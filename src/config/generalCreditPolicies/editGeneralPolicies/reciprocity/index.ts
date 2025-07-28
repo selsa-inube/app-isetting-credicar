@@ -1,3 +1,3 @@
-const reciprocity = ["Reciprocity"];
+const reciprocity = ["Reciprocity", "ReciprocityOfContributions"];
 
 export { reciprocity };

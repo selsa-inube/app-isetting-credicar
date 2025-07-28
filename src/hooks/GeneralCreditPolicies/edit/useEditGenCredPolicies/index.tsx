@@ -4,24 +4,23 @@ import { FormikProps } from "formik";
 import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { formatDate } from "@utils/date/formatDate";
-import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
-import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
+import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
+import { dataTranslations } from "@utils/dataTranslations";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
+import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
-import { allConditionsRules } from "@utils/allConditionsRules";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/editLabels";
-import { dataTranslations } from "@utils/dataTranslations";
-import { EGeneralPolicies } from "@enum/generalPolicies";
+import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
+import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
+import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
@@ -39,34 +38,34 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const { appData } = useContext(AuthAndPortalData);
 
   const initialMethodsData = () => {
-    const hasReciprocity = allConditionsRules(methodsData).some((condition) =>
-      reciprocity.includes(condition.conditionName),
+    const hasReciprocity = methodsData?.some((condition) =>
+      reciprocity.includes(condition.value as string),
     );
 
-    const hasCalculation = allConditionsRules(methodsData).some((condition) =>
-      calculation.includes(condition.conditionName),
+    const hasCalculation = methodsData?.some((condition) =>
+      calculation.includes(condition.value as string),
     );
-    const hasFactor = allConditionsRules(methodsData).some((condition) =>
-      factor.includes(condition.conditionName),
+    const hasFactor = methodsData?.some((condition) =>
+      factor.includes(condition.value as string),
     );
     return { hasReciprocity, hasCalculation, hasFactor };
   };
 
   const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
 
-  const hasReference = allConditionsRules(referenceData).find((condition) =>
-    referencePolicies.includes(condition.conditionName),
-  )?.conditionName;
+  const hasReference = referenceData?.find((condition) =>
+    referencePolicies.includes(condition.value as string),
+  )?.value;
 
   const initialDecisionsGenData = {
-    reference: hasReference ? dataTranslations[hasReference] : "",
+    reference: hasReference ? dataTranslations[hasReference as string] : "",
     additionalDebtors: hasValuesRule(additionalDebtorsData),
     sourcesIncome: hasValuesRule(sourcesIncomeData),
     financialObligations: hasValuesRule(financialObligData),
     realGuarantees: hasValuesRule(realGuaranteesData),
-    calculation: hasCalculation,
-    reciprocity: hasReciprocity,
-    factor: hasFactor,
+    calculation: hasCalculation ?? false,
+    reciprocity: hasReciprocity ?? false,
+    factor: hasFactor ?? false,
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(
@@ -103,7 +102,6 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const {
     showRequestProcessModal,
     contributionsPortfolio,
-    showModal,
     isCurrentFormValid,
     incomePortfolio,
     scoreModels,
@@ -119,7 +117,6 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     setContributionsPortfolio,
     setIsCurrentFormValid,
     setShowRequestProcessModal,
-    setShowModal,
   } = useNewDecisions({
     contributionsData,
     incomeData,
@@ -181,6 +178,10 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
 
   const handleToggleDateModal = () => {
     setShowDateModal(!showDateModal);
+  };
+
+  const handleEditedModal = () => {
+    handleFinishForm();
   };
 
   const handleFinishForm = () => {
@@ -256,7 +257,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     showRequestProcessModal,
     smallScreen,
     contributionsPortfolio,
-    showModal,
+    showDateModal,
     isCurrentFormValid,
     incomePortfolio,
     scoreModels,
@@ -266,7 +267,6 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     showContributions,
     showScoreModels,
     showGoBackModal,
-    showDateModal,
     dateDecisions,
     normalizedContributions,
     normalizedIncome,
@@ -278,6 +278,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     setShowFactor,
     setDateDecisions,
     handleFinishForm,
+    handleEditedModal,
     handleToggleDateModal,
     handleGoBack,
     handleCloseGoBackModal,
@@ -289,7 +290,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,
-    setShowModal,
+    setShowDateModal,
   };
 };
 

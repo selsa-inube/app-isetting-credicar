@@ -2,21 +2,22 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
-import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
+import { pacthEditGeneralPolicies } from "@services/generalPolicies/pacthEditGeneralPolicies";
+import { UseCase } from "@enum/useCase";
+import { RequestStepsStatus } from "@enum/requestStepsStatus";
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
-import { UseCase } from "@enum/useCase";
 import { operationTypes } from "@config/useCase";
-import { RequestStepsStatus } from "@enum/requestStepsStatus";
-import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
-import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { IUseSaveGeneralPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseSaveGeneralPolicies";
 import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
-import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { requestStepsInitial } from "@config/requestSteps";
-import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
+import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IUseSaveGeneralPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseSaveGeneralPolicies";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
@@ -43,23 +44,17 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
   const navigate = useNavigate();
-  const navigatePage = "/general-credit-policies";
+  const navigatePage = "/";
 
   const fetchSaveMoneyDestinationData = async () => {
     setLoadingSendData(true);
     try {
       const saveData = await postSaveRequest(userAccount, data);
       setSaveGeneralPolicies(saveData);
-      setRequestSteps((prev) =>
-        updateRequestSteps(
-          prev,
-          requestStepsInitial[0].name,
-          RequestStepsStatus.PENDING,
-        ),
-      );
     } catch (error) {
       console.info(error);
       setSendData(false);
+      // navigate(navigatePage);
       addFlag({
         title: flowAutomaticMessages().errorSendingData.title,
         description: flowAutomaticMessages().errorSendingData.description,
@@ -90,8 +85,18 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       if (useCase === UseCase.ADD) {
         const newData = await postAddGeneralPolicies(
           businessUnits,
+          userAccount,
           requestConfiguration as IRequestGeneralPol,
         );
+        setStatusRequest(newData.settingRequest?.requestStatus);
+      }
+      if (useCase === UseCase.EDIT) {
+        const newData = await pacthEditGeneralPolicies(
+          businessUnits,
+          userAccount,
+          requestConfiguration as IRequestGeneralPol,
+        );
+
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
     } catch (error) {
@@ -105,7 +110,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
           .appearance as IFlagAppearance,
         duration: flowAutomaticMessages().errorQueryingData.duration,
       });
-      setShowModal(false);
     }
   };
 

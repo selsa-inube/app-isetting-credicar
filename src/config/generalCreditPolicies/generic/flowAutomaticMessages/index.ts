@@ -4,7 +4,7 @@ const flowAutomaticMessages = (action?: string) => {
   const flowAutomatic = {
     errorSendingData: {
       title: "¡Ups! Algo salió mal",
-      description: "La solicitud se envio correctamente",
+      description: "La solicitud NO se envio correctamente",
       appearance: EComponentAppearance.DANGER,
       duration: 3000,
     },

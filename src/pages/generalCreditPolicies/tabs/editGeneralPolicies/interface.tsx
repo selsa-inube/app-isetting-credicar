@@ -1,28 +1,28 @@
 import { Stack, Tabs } from "@inubekit/inubekit";
 
-import { tokens } from "@design/tokens";
-import { DecisionsForm } from "@design/forms/decisions";
-import { revertModalDisplayData } from "@utils/revertModalDisplayData";
-import { deleteModal } from "@config/decisions/messages";
-import { RequestProcess } from "@design/feedback/RequestProcess";
-import { EComponentAppearance } from "@enum/appearances";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
+import { tokens } from "@design/tokens";
+import { RequestProcess } from "@design/feedback/RequestProcess";
+import { DecisionsForm } from "@design/forms/decisions";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { revertModalDisplayData } from "@utils/revertModalDisplayData";
+import { EComponentAppearance } from "@enum/appearances";
 import { ENameRules } from "@enum/nameRules";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
 import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
 import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
+import { deleteModal } from "@config/decisions/messages";
 import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
 import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-import { DecisionModal } from "@design/modals/decisionModal";
 import { goBackModal } from "@config/goBackModal";
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
 import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
 import { portalId } from "@config/portalId";
+import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
 import { DecisionsGeneralForm } from "../../forms/decisionsGeneral";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
@@ -55,7 +55,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     heightContPageScoreModels,
     setShowFactor,
     setShowReciprocity,
-    onFinishForm,
+    onEditedModal,
     onToggleDateModal,
     onGoBack,
     onCloseGoBackModal,
@@ -99,7 +99,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               initialValues={formValues}
               handleNextStep={onToggleDateModal}
               onReset={onReset}
-              loading={loading}
               onFormValid={setIsCurrentFormValid}
               editDataOption
               initialValuesEdit={initialDecisionsData}
@@ -197,7 +196,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           description={sendEditedModal.description}
           actionText={sendEditedModal.actionText}
           onCloseModal={onToggleDateModal}
-          onClick={onFinishForm}
+          onClick={onEditedModal}
+          loading={loading}
         />
       )}
 

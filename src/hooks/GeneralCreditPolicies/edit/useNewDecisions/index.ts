@@ -4,9 +4,9 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
 import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
+import { formatDate } from "@utils/date/formatDate";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { IUseNewDecisions } from "@ptypes/hooks/IUseNewDecisions";
-import { formatDate } from "@utils/date/formatDate";
 
 const useNewDecisions = (props: IUseNewDecisions) => {
   const {
@@ -24,7 +24,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const { appData } = useContext(AuthAndPortalData);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [contributionsPortfolio, setContributionsPortfolio] = useState<
     IRuleDecision[]
   >(contributionsData ?? []);
@@ -125,7 +124,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   return {
     showRequestProcessModal,
     contributionsPortfolio,
-    showModal,
     isCurrentFormValid,
     incomePortfolio,
     scoreModels,
@@ -142,7 +140,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     setContributionsPortfolio,
     setIsCurrentFormValid,
     setShowRequestProcessModal,
-    setShowModal,
   };
 };
 

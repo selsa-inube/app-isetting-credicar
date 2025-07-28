@@ -1,3 +1,3 @@
-const referencePolicies = ["Amount", "Net"];
+const referencePolicies = ["Amount", "amount", "Net", "net"];
 
 export { referencePolicies };
