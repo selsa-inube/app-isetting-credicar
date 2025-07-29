@@ -1,13 +1,15 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
-import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { decrypt } from "@utils/crypto/decrypt";
-import { useValidateRules } from "../useValidateRules";
-import { IGeneralPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IGeneralPoliciesTabsConfig";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { useValidateRules } from "@hooks/GeneralCreditPolicies/useValidateRules";
+import { EGeneralPolicies } from "@enum/generalPolicies";
+import { decrypt } from "@utils/crypto/decrypt";
+import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
+import { mediaQueryMobileSmall, mediaQueryTablet } from "@config/environment";
+import { IGeneralPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IGeneralPoliciesTabsConfig";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useGeneralCreditPolicies = () => {
@@ -35,8 +37,8 @@ const useGeneralCreditPolicies = () => {
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
-  const smallScreen = useMediaQuery("(max-width: 990px)");
-  const smallScreenTab = useMediaQuery("(max-width: 450px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
+  const smallScreenTab = useMediaQuery(mediaQueryMobileSmall);
 
   const tabs = generalPoliciesTabsConfig(smallScreen);
 
@@ -70,8 +72,9 @@ const useGeneralCreditPolicies = () => {
     const fetchRequestsInProgressData = async () => {
       try {
         const data = await getRequestsInProgress(
+          appData.businessManager.publicCode,
           appData.businessUnit.publicCode,
-          "GeneralCreditPolicies",
+          EGeneralPolicies.ENTITY,
         );
         setRequestsInProgress(data);
       } catch (error) {
@@ -85,7 +88,7 @@ const useGeneralCreditPolicies = () => {
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
-    optionName: "Políticas generales de crédito",
+    optionName: EGeneralPolicies.OPTION_NAME,
   });
 
   const handleTabChange = (tabId: string) => {

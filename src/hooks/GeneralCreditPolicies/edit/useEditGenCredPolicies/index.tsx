@@ -53,8 +53,10 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
 
   const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
 
-  const hasReference = referenceData?.find((condition) =>
-    referencePolicies.includes(condition.value as string),
+  const hasReference = referenceData?.find(
+    (condition) =>
+      referencePolicies.includes(condition.value as string) &&
+      condition.validUntil === undefined,
   )?.value;
 
   const initialDecisionsGenData = {
@@ -118,6 +120,8 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     setIsCurrentFormValid,
     setShowRequestProcessModal,
   } = useNewDecisions({
+    formValues,
+    initialGeneralData: initialDecisionsGenData,
     contributionsData,
     incomeData,
     scoreModelsData,
@@ -127,10 +131,11 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     prevContributionsRef,
     prevIncomesRef,
     prevScoreModelsRef,
+    user: appData.user.userAccount,
   });
 
   const filteredTabs = useMemo(() => {
-    return Object.keys(editGeneralPoliciesTabsConfig).reduce((acc, key) => {
+    return Object.keys(editGeneralPoliciesTabsConfig).reduce((tabs, key) => {
       const tab =
         editGeneralPoliciesTabsConfig[
           key as keyof typeof editGeneralPoliciesTabsConfig
@@ -140,20 +145,20 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
         key === editGeneralPoliciesTabsConfig.contributionsPortfolio.id &&
         !showReciprocity
       ) {
-        return acc;
+        return tabs;
       }
 
       if (
         key === editGeneralPoliciesTabsConfig.incomePortfolio.id &&
         !showFactor
       ) {
-        return acc;
+        return tabs;
       }
 
       if (tab !== undefined) {
-        acc[key as keyof IEditPoliciesTabsConfig] = tab;
+        tabs[key as keyof IEditPoliciesTabsConfig] = tab;
       }
-      return acc;
+      return tabs;
     }, {} as IEditPoliciesTabsConfig);
   }, [showReciprocity, showFactor]);
 

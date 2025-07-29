@@ -11,7 +11,7 @@ import { formatDate } from "@utils/date/formatDate";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { arraysEqual } from "@utils/destination/arraysEqual";
 import { findDecision } from "@utils/destination/findDecision";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { IUseEditDestination } from "@ptypes/hooks/moneyDestination/IUseEditDestination";
 
 const useEditDestination = (props: IUseEditDestination) => {
@@ -110,7 +110,7 @@ const useEditDestination = (props: IUseEditDestination) => {
               ) as ICondition[],
             effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             value: decision.value,
-            transactionOperation: TransactionOperation.INSERT,
+            transactionOperation: ETransactionOperation.INSERT,
           };
 
           if (decision.validUntil) {
@@ -146,7 +146,7 @@ const useEditDestination = (props: IUseEditDestination) => {
               ) as ICondition[],
             effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             value: decision.value,
-            transactionOperation: TransactionOperation.DELETE,
+            transactionOperation: ETransactionOperation.DELETE,
           };
 
           if (decision.validUntil) {

@@ -1,7 +1,11 @@
 import { IRuleDecision } from "@isettingkit/input";
+import { EBooleanText } from "@enum/booleanText";
 
-const hasValuesRule = (rule?: IRuleDecision[]) => {
-  return rule && rule.length > 0 ? true : false;
+const hasValuesRule = (rule?: IRuleDecision[]): boolean => {
+  if (rule && rule.length > 0) {
+    return rule.some((entry) => entry.value === EBooleanText.YES);
+  }
+  return false;
 };
 
 export { hasValuesRule };

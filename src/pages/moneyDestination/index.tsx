@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
-import { useMoneryDestinationPage } from "@hooks/moneyDestination/useMoneryDestinationPage";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { ICardData } from "@ptypes/home/ICardData";
+import { useMoneryDestinationPage } from "@hooks/moneyDestination/useMoneryDestinationPage";
+import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 import { menuOptionsMoneyDestination } from "@config/moneyDestination/moneyDestinationTab/generics/menuOptions";
+import { ICardData } from "@ptypes/home/ICardData";
 import { MoneyDestinationUI } from "./interface";
 
 const MoneyDestination = () => {
@@ -23,6 +23,7 @@ const MoneyDestination = () => {
     handleTabChange,
   } = useMoneryDestinationPage({
     businessUnitSigla,
+    businessManager: appData.businessManager.publicCode,
     businessUnits: appData.businessUnit.publicCode,
   });
 

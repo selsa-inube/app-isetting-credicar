@@ -7,18 +7,13 @@ import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
 import { pacthEditGeneralPolicies } from "@services/generalPolicies/pacthEditGeneralPolicies";
 import { UseCase } from "@enum/useCase";
-import { RequestStepsStatus } from "@enum/requestStepsStatus";
-import { statusCloseModal } from "@config/status/statusCloseModal";
-import { statusRequestFinished } from "@config/status/statusRequestFinished";
-import { operationTypes } from "@config/useCase";
+
 import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
-import { requestStepsInitial } from "@config/requestSteps";
-import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IUseSaveGeneralPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseSaveGeneralPolicies";
-import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
+import { useRequest } from "../useRequest";
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const {
@@ -35,8 +30,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     useState<ISaveDataResponse>();
   const [statusRequest, setStatusRequest] = useState<string>();
   const { addFlag } = useFlag();
-  const [requestSteps, setRequestSteps] =
-    useState<IRequestSteps[]>(requestStepsInitial);
   const [showPendingReqModal, setShowPendingReqModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
@@ -46,7 +39,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const navigate = useNavigate();
   const navigatePage = "/";
 
-  const fetchSaveMoneyDestinationData = async () => {
+  const fetchSaveGeneralData = async () => {
     setLoadingSendData(true);
     try {
       const saveData = await postSaveRequest(userAccount, data);
@@ -54,7 +47,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     } catch (error) {
       console.info(error);
       setSendData(false);
-      // navigate(navigatePage);
+      navigate(navigatePage);
       addFlag({
         title: flowAutomaticMessages().errorSendingData.title,
         description: flowAutomaticMessages().errorSendingData.description,
@@ -68,9 +61,20 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     }
   };
 
-  const isStatusIntAutomatic = (status: string | undefined): boolean => {
-    return status ? statusFlowAutomatic.includes(status) : false;
-  };
+  const {
+    requestSteps,
+    changeRequestSteps,
+    handleStatusChange,
+    isStatusCloseModal,
+    isStatusRequestFinished,
+    isStatusIntAutomatic,
+  } = useRequest({
+    setSendData,
+    useCase,
+    statusRequest: statusRequest || "",
+    saveGeneralPolicies: saveGeneralPolicies as ISaveDataResponse,
+    errorFetchRequest,
+  });
 
   const requestConfiguration = {
     ...data?.configurationRequestData,
@@ -103,6 +107,9 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       console.info(error);
       setErrorFetchRequest(true);
       setSendData(false);
+      setTimeout(() => {
+        navigate(navigatePage);
+      }, 3000);
       addFlag({
         title: flowAutomaticMessages().errorQueryingData.title,
         description: flowAutomaticMessages().errorQueryingData.description,
@@ -110,121 +117,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
           .appearance as IFlagAppearance,
         duration: flowAutomaticMessages().errorQueryingData.duration,
       });
-    }
-  };
-
-  const updateRequestSteps = (
-    steps: IRequestSteps[],
-    stepName: string,
-    newStatus: "pending" | "completed" | "error",
-  ): IRequestSteps[] => {
-    return steps.map((step) => {
-      if (step.name === stepName) {
-        return {
-          ...step,
-          status: newStatus,
-        };
-      }
-      return step;
-    });
-  };
-
-  const isStatusCloseModal = (): boolean => {
-    return statusRequest ? statusCloseModal.includes(statusRequest) : false;
-  };
-
-  const isStatusRequestFinished = (): boolean => {
-    return statusRequest
-      ? statusRequestFinished.includes(statusRequest)
-      : false;
-  };
-
-  const changeRequestSteps = () => {
-    setTimeout(() => {
-      if (errorFetchRequest) {
-        setRequestSteps((prev) =>
-          updateRequestSteps(
-            prev,
-            requestStepsInitial[0].name,
-            RequestStepsStatus.ERROR,
-          ),
-        );
-        setSendData(false);
-      } else {
-        setRequestSteps((prev) =>
-          updateRequestSteps(
-            prev,
-            requestStepsInitial[0].name,
-            RequestStepsStatus.COMPLETED,
-          ),
-        );
-      }
-    }, 1000);
-    setTimeout(() => {
-      if (isStatusIntAutomatic(statusRequest)) {
-        setRequestSteps((prev) =>
-          updateRequestSteps(
-            prev,
-            requestStepsInitial[1].name,
-            RequestStepsStatus.COMPLETED,
-          ),
-        );
-      }
-
-      if (isStatusRequestFinished()) {
-        setRequestSteps((prev) =>
-          updateRequestSteps(
-            prev,
-            requestStepsInitial[1].name,
-            RequestStepsStatus.COMPLETED,
-          ),
-        );
-        setRequestSteps((prev) =>
-          updateRequestSteps(
-            prev,
-            requestStepsInitial[2].name,
-            RequestStepsStatus.COMPLETED,
-          ),
-        );
-      }
-
-      if (isStatusCloseModal()) {
-        setRequestSteps((prev) =>
-          updateRequestSteps(
-            prev,
-            requestStepsInitial[1].name,
-            RequestStepsStatus.ERROR,
-          ),
-        );
-      }
-    }, 2000);
-  };
-
-  const handleStatusChange = () => {
-    if (isStatusIntAutomatic(saveGeneralPolicies?.requestStatus)) {
-      if (isStatusCloseModal()) {
-        setChangeTab(true);
-        addFlag({
-          title: flowAutomaticMessages().errorCreateRequest.title,
-          description: flowAutomaticMessages().errorCreateRequest.description,
-          appearance: flowAutomaticMessages().errorCreateRequest
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorCreateRequest.duration,
-        });
-      }
-
-      if (isStatusRequestFinished()) {
-        addFlag({
-          title: flowAutomaticMessages(operationTypes[useCase])
-            .successfulCreateRequest.title,
-          description: flowAutomaticMessages(operationTypes[useCase])
-            .successfulCreateRequest.description,
-          appearance: flowAutomaticMessages(operationTypes[useCase])
-            .successfulCreateRequest.appearance as IFlagAppearance,
-          duration: flowAutomaticMessages(operationTypes[useCase])
-            .successfulCreateRequest.duration,
-        });
-      }
+      setShowModal(false);
     }
   };
 
@@ -233,11 +126,16 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     if (isStatusCloseModal() || isStatusRequestFinished()) {
       handleStatusChange();
     }
+    if (useCase !== UseCase.DELETE) {
+      setTimeout(() => {
+        navigate(navigatePage);
+      }, 3000);
+    }
   };
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSaveMoneyDestinationData();
+    fetchSaveGeneralData();
   }, [sendData]);
 
   useEffect(() => {
@@ -251,8 +149,8 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   }, [statusRequest]);
 
   const handleCloseRequestStatus = () => {
-    setChangeTab(true);
     setSendData(false);
+    setChangeTab(true);
     navigate(navigatePage);
     addFlag({
       title: interventionHumanMessage.SuccessfulCreateRequestIntHuman.title,
@@ -266,8 +164,8 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   };
 
   const handleClosePendingReqModal = () => {
-    setChangeTab(true);
     setShowPendingReqModal(false);
+    setChangeTab(true);
     navigate(navigatePage);
   };
 

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { useRequestsInProgress } from "@hooks/payrollAgreement/useRequestsInProgress";
-import { IEntry } from "@ptypes/design/table/IEntry";
-import { usePageLength } from "@hooks/usePageLength";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useRequestsInProgress } from "@hooks/payrollAgreement/useRequestsInProgress";
+import { usePageLength } from "@hooks/usePageLength";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { RequestsInProgressTabUI } from "./interface";
 
 const RequestsInProgressTab = () => {
@@ -16,7 +16,10 @@ const RequestsInProgressTab = () => {
     columnWidths,
     handleSearchRequestsInProgress,
     setEntryCanceled,
-  } = useRequestsInProgress({ businessUnits: appData.businessUnit.publicCode });
+  } = useRequestsInProgress({
+    businessUnits: appData.businessUnit.publicCode,
+    businessManager: appData.businessManager.publicCode,
+  });
 
   const pageLength = usePageLength();
 

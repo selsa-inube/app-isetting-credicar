@@ -1,5 +1,6 @@
 interface IUseMoneryDestinationPage {
   businessUnitSigla: string;
+  businessManager: string;
   businessUnits: string;
 }
 
