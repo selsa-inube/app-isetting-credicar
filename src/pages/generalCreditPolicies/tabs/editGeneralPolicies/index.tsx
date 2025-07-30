@@ -1,12 +1,12 @@
 import { useContext } from "react";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/useSaveGeneralPolicies";
 import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
 import { UseCase } from "@enum/useCase";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useThemeData } from "@utils/theme";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { EditGeneralPoliciesUI } from "./interface";
 
 const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
@@ -39,7 +39,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showIncomePort,
     showContributions,
     showScoreModels,
-    showGoBackModal,
     showDateModal,
     normalizedContributions,
     normalizedIncome,
@@ -47,14 +46,10 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
-    showInfoModal,
-    handleToggleInfoModal,
+    modalData,
     setShowReciprocity,
     setShowFactor,
-    handleFinishForm,
     handleToggleDateModal,
-    handleGoBack,
-    handleCloseGoBackModal,
     setIncomePortfolio,
     setScoreModels,
     setContributionsPortfolio,
@@ -63,6 +58,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowModal,
+    showDecision,
   } = useEditGenCredPolicies({
     contributionsData,
     incomeData,
@@ -94,8 +90,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setShowModal: setShowModal,
   });
 
-  const theme = useThemeData();
-
   return (
     <EditGeneralPoliciesUI
       formValues={formValues}
@@ -124,11 +118,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       showIncomePort={showIncomePort}
       showContributions={showContributions}
       showScoreModels={showScoreModels}
-      showGoBackModal={showGoBackModal}
-      onGoBack={handleGoBack}
-      onCloseGoBackModal={handleCloseGoBackModal}
       showDateModal={showDateModal}
-      onFinishForm={handleFinishForm}
       onToggleDateModal={handleToggleDateModal}
       normalizedContributions={normalizedContributions}
       normalizedIncome={normalizedIncome}
@@ -136,13 +126,12 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       isRequestStatusModal={isRequestStatusModal}
       setShowReciprocity={setShowReciprocity}
       setShowFactor={setShowFactor}
-      theme={theme}
       heightContPageContribut={heightContPageContribut}
       heightContPageIncome={heightContPageIncome}
       heightContPageScoreModels={heightContPageScoreModels}
       onCloseProcess={handleCloseProcess}
-      onCloseInfoModal={handleToggleInfoModal}
-      showInfoModal={showInfoModal}
+      modalData={modalData as IModalData}
+      showDecision={showDecision}
     />
   );
 };

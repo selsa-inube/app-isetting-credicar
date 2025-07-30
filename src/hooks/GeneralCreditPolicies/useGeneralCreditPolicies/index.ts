@@ -9,6 +9,8 @@ import { EGeneralPolicies } from "@enum/generalPolicies";
 import { decrypt } from "@utils/crypto/decrypt";
 import { mediaQueryMobileSmall, mediaQueryTablet } from "@config/environment";
 import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
+import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
+import { disabledModal } from "@config/disabledModal";
 import { IGeneralPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IGeneralPoliciesTabsConfig";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { useValidateRules } from "../useValidateRules";
@@ -120,6 +122,20 @@ const useGeneralCreditPolicies = () => {
     setIsSelected(tabId);
   };
 
+  const modalData = withoutPrivilegesAdd
+    ? {
+        ...disabledModal,
+        withCancelButton: false,
+        onCloseModal: handleCloseModal,
+        onClick: handleCloseModal,
+      }
+    : {
+        ...notPoliciesModal,
+        withCancelButton: true,
+        onCloseModal: handleCloseModal,
+        onClick: handlePolicies,
+      };
+
   const showPoliciesTab = isSelected === tabs.generalPolicies.id;
 
   const showrequestTab = isSelected === tabs.requestsInProgress.id;
@@ -146,10 +162,8 @@ const useGeneralCreditPolicies = () => {
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
-    withoutPrivilegesAdd,
+    modalData,
     handleTabChange,
-    handleCloseModal,
-    handlePolicies,
   };
 };
 

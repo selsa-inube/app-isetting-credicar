@@ -1,4 +1,5 @@
 import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/useGeneralCreditPolicies";
+import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
 import { ICardData } from "@ptypes/home/ICardData";
 import { GeneralCreditPoliciesUI } from "./interface";
 
@@ -23,11 +24,26 @@ const GeneralCreditPolicies = () => {
     loadingPolicies,
     showAddPolicies,
     showrequestTab,
-    withoutPrivilegesAdd,
+    modalData,
     handleTabChange,
-    handleCloseModal,
-    handlePolicies,
   } = useGeneralCreditPolicies();
+
+  const {
+    showGoBackModal,
+    handleCloseGoBackModal,
+    handleGoBack,
+    handleOpenModal,
+  } = useEditGenCredPolicies({
+    contributionsData,
+    incomeData,
+    scoreModelsData,
+    referenceData,
+    methodsData,
+    additionalDebtorsData,
+    sourcesIncomeData,
+    financialObligData,
+    realGuaranteesData,
+  });
 
   return (
     <GeneralCreditPoliciesUI
@@ -39,8 +55,6 @@ const GeneralCreditPolicies = () => {
       showPoliciesTab={showPoliciesTab}
       showrequestTab={showrequestTab}
       smallScreen={smallScreen}
-      onCloseModal={handleCloseModal}
-      onPolicies={handlePolicies}
       referenceData={referenceData}
       contributionsData={contributionsData}
       incomeData={incomeData}
@@ -53,7 +67,11 @@ const GeneralCreditPolicies = () => {
       withoutPolicies={withoutPolicies}
       loadingPolicies={loadingPolicies ?? true}
       showAddPolicies={showAddPolicies ?? false}
-      withoutPrivilegesAdd={withoutPrivilegesAdd}
+      modalData={modalData}
+      handleOpenModal={handleOpenModal}
+      showGoBackModal={showGoBackModal}
+      onCloseGoBackModal={handleCloseGoBackModal}
+      onGoBack={handleGoBack}
     />
   );
 };

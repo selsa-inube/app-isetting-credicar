@@ -12,6 +12,7 @@ import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { dataTranslations } from "@utils/dataTranslations";
 import { allConditionsRules } from "@utils/allConditionsRules";
+import { compareObjects } from "@utils/compareObjects";
 import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { editLabels } from "@config/editLabels";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
@@ -19,6 +20,8 @@ import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/c
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
+import { disabledModal } from "@config/disabledModal";
+import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
 import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
@@ -40,6 +43,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const { appData } = useContext(AuthAndPortalData);
 
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [showDecision, setShowDecision] = useState<boolean>(false);
   const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
     useCase: EGeneralPolicies.USE_CASE_EDIT,
   });
@@ -97,6 +101,8 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
+  const [canRefresh, setCanRefresh] = useState(false);
+
   const decisionsGeneralRef = useRef<FormikProps<IDecisionsGeneralEntry>>(null);
 
   const navigate = useNavigate();
@@ -239,8 +245,73 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   };
 
   const handleGoBack = () => {
+    setCanRefresh(true);
     navigate(-1);
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const hasUnsavedChanges =
+        !compareObjects(initialDecisionsGenData, formValues) ||
+        (decisionsGeneralRef.current &&
+          !compareObjects(
+            decisionsGeneralRef.current.initialValues,
+            decisionsGeneralRef.current.values,
+          ));
+
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        setShowGoBackModal(!showGoBackModal);
+
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [formValues, initialDecisionsGenData, decisionsGeneralRef, canRefresh]);
+
+  const handleOpenModal = () => {
+    const compare = compareObjects(initialDecisionsGenData, formValues);
+    const compareGeneral = compareObjects(
+      initialDecisionsGenData,
+      decisionsGeneralRef.current?.values,
+    );
+    if (!compare || !compareGeneral) {
+      setShowGoBackModal(true);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const modal = () => {
+    if (showInfoModal) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+      };
+    }
+
+    if (showDateModal) {
+      return {
+        ...sendEditedModal,
+        onCloseModal: handleToggleDateModal,
+        onClick: handleFinishForm,
+        withCancelButton: false,
+      };
+    }
+  };
+
+  useEffect(() => {
+    const decision = showInfoModal || showDateModal;
+    setShowDecision(decision);
+  }, [showInfoModal, showDateModal]);
+
+  const modalData = modal();
 
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
@@ -292,6 +363,9 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     heightContPageIncome,
     heightContPageScoreModels,
     showInfoModal,
+    modalData,
+    showDecision,
+    handleOpenModal,
     handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,

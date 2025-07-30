@@ -1,6 +1,7 @@
 import { ITab } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { ICardData } from "@ptypes/home/ICardData";
+import { IModalData } from "../IModalData";
 
 interface IGeneralCreditPoliciesUI {
   withoutPolicies: boolean;
@@ -13,10 +14,12 @@ interface IGeneralCreditPoliciesUI {
   isSelected: string;
   loadingPolicies: boolean;
   showAddPolicies: boolean;
-  withoutPrivilegesAdd: boolean;
+  showGoBackModal: boolean;
+  modalData: IModalData;
   onTabChange: (id: string) => void;
-  onCloseModal: () => void;
-  onPolicies: () => void;
+  handleOpenModal: () => void;
+  onCloseGoBackModal: () => void;
+  onGoBack: () => void;
   referenceData?: IRuleDecision[];
   contributionsData?: IRuleDecision[];
   incomeData?: IRuleDecision[];

@@ -4,10 +4,9 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
 import { crumbsGeneralpolicies } from "@config/generalCreditPolicies/navigation";
 import { loadingLabels } from "@config/loadingLabels";
-import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
 import { descriptionTitle } from "@config/generalCreditPolicies/descriptionTitle";
+import { goBackModal } from "@config/goBackModal";
 import { portalId } from "@config/portalId";
-import { disabledModal } from "@config/disabledModal";
 import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
 import { AddGenCreditPolicies } from "./addGeneralCreditPolicies";
 import { EditGeneralPolicies } from "./tabs/editGeneralPolicies";
@@ -32,10 +31,12 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
-    withoutPrivilegesAdd,
+    modalData,
+    showGoBackModal,
+    onCloseGoBackModal,
+    onGoBack,
+    handleOpenModal,
     onTabChange,
-    onCloseModal,
-    onPolicies,
   } = props;
 
   return (
@@ -59,27 +60,16 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
           {showAddPolicies ? (
             <>
               <AddGenCreditPolicies />
-              {withoutPrivilegesAdd ? (
-                <DecisionModal
-                  portalId={portalId}
-                  title={disabledModal.title}
-                  actionText={disabledModal.actionText}
-                  description={disabledModal.description}
-                  subtitle={disabledModal.subtitle}
-                  onCloseModal={onCloseModal}
-                  onClick={onCloseModal}
-                  withCancelButton={false}
-                />
-              ) : (
-                <DecisionModal
-                  portalId={portalId}
-                  title={notPoliciesModal.title}
-                  description={notPoliciesModal.description}
-                  actionText={notPoliciesModal.actionText}
-                  onCloseModal={onCloseModal}
-                  onClick={onPolicies}
-                />
-              )}
+              <DecisionModal
+                portalId={portalId}
+                title={modalData.title}
+                actionText={modalData.actionText}
+                description={modalData.description}
+                subtitle={modalData?.subtitle ? modalData.subtitle : ""}
+                onCloseModal={modalData.onCloseModal}
+                onClick={modalData.onClick}
+                withCancelButton={modalData.withCancelButton}
+              />
             </>
           ) : (
             <Stack
@@ -102,6 +92,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                     description={descriptionTitle}
                     sizeTitle="large"
                     navigatePage="/"
+                    onClick={handleOpenModal}
                   />
                 </Stack>
                 <Stack
@@ -131,6 +122,16 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                   {showrequestTab && <RequestsInProgressTab />}
                 </Stack>
               </Stack>
+              {showGoBackModal && (
+                <DecisionModal
+                  portalId={portalId}
+                  title={goBackModal.title}
+                  description={goBackModal.description}
+                  actionText={goBackModal.actionText}
+                  onCloseModal={onCloseGoBackModal}
+                  onClick={onGoBack}
+                />
+              )}
             </Stack>
           )}
         </>

@@ -12,16 +12,13 @@ import { ENameRules } from "@enum/nameRules";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
 import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-import { goBackModal } from "@config/goBackModal";
 import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
 import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
 import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
 import { deleteModal } from "@config/decisions/messages";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
-import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
-import { disabledModal } from "@config/disabledModal";
 import { portalId } from "@config/portalId";
 import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
 import { DecisionsGeneralForm } from "../../forms/decisionsGeneral";
@@ -46,22 +43,17 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showIncomePort,
     showContributions,
     showScoreModels,
-    showGoBackModal,
-    showDateModal,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
-    showInfoModal,
-    onCloseInfoModal,
+    modalData,
+    showDecision,
     setShowFactor,
     setShowReciprocity,
-    onFinishForm,
     onToggleDateModal,
-    onGoBack,
-    onCloseGoBackModal,
     setIncomePortfolio,
     setScoreModels,
     setContributionsPortfolio,
@@ -182,38 +174,16 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           )}
         </Stack>
       </Stack>
-
-      {showInfoModal && (
+      {showDecision && (
         <DecisionModal
           portalId={portalId}
-          title={disabledModal.title}
-          actionText={disabledModal.actionText}
-          description={disabledModal.description}
-          subtitle={disabledModal.subtitle}
-          onCloseModal={onCloseInfoModal}
-          onClick={onCloseInfoModal}
-          withCancelButton={false}
-        />
-      )}
-      {showGoBackModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={goBackModal.title}
-          description={goBackModal.description}
-          actionText={goBackModal.actionText}
-          onCloseModal={onCloseGoBackModal}
-          onClick={onGoBack}
-        />
-      )}
-
-      {showDateModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={sendEditedModal.title}
-          description={sendEditedModal.description}
-          actionText={sendEditedModal.actionText}
-          onCloseModal={onToggleDateModal}
-          onClick={onFinishForm}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          subtitle={modalData.subtitle}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
         />
       )}
 
