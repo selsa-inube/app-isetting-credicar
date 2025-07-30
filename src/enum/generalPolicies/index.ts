@@ -2,7 +2,7 @@ enum EGeneralPolicies {
   ENTITY = "GeneralCreditPolicies",
   OPTION_NAME = "Políticas generales de crédito",
   CONDITION_BUSINESS_UNIT = "BusinessUnit",
-  LISTOFVALUES = "ListOfValues",
+  LIST_OF_VALUES = "ListOfValues",
   DELETE_GENERAL_POLICIES = "DeleteGeneralCreditPolicies",
   MODIFY_GENERAL_POLICIES = "ModifyGeneralCreditPolicies",
 }

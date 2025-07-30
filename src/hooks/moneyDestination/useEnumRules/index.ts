@@ -133,7 +133,7 @@ const useEnumRules = (props: IUseEnumRules) => {
               if (condition.listOfPossibleValues) {
                 return {
                   ...condition,
-                  howToSetTheCondition: EGeneralPolicies.LISTOFVALUES,
+                  howToSetTheCondition: EGeneralPolicies.LIST_OF_VALUES,
                   listOfPossibleValues: { list: arrayListValues },
                   value: "",
                 };
