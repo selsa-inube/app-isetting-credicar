@@ -8,7 +8,7 @@ import { EModalState } from "@enum/modalState";
 import { cancelRequestInProgMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgMessage";
 import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
 import { IUseCancelRequestInProgress } from "@ptypes/generalCredPolicies/IUseCancelRequestInProgress";
-import { ICancelReqInProcRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
+import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   const { businessUnit, data, userAccount, useCaseCancel, setEntryCanceled } =
@@ -21,7 +21,9 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
 
-  const fetchCancelRequestData = async (data: ICancelReqInProcRequest) => {
+  const fetchCancelRequestData = async (
+    data: ICancelRequestInProgressRequest,
+  ) => {
     setLoading(true);
     try {
       await cancelRequestInProgress(businessUnit, data);

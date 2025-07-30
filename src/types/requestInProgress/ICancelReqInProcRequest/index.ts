@@ -1,7 +1,7 @@
-interface ICancelReqInProcRequest {
+interface ICancelRequestInProgressRequest {
   removalJustification: string;
   requestNumber: string;
   settingRequestId: string;
 }
 
-export type { ICancelReqInProcRequest };
+export type { ICancelRequestInProgressRequest };

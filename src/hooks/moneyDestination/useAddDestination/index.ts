@@ -5,7 +5,7 @@ import { FormikProps } from "formik";
 import { IRuleDecision, ICondition } from "@isettingkit/input";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { stepsKeysMoneyDest } from "@enum/stepsKeysMoneyDest";
+import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
@@ -53,7 +53,7 @@ const useAddDestination = () => {
 
   const handleNextStep = () => {
     if (
-      currentStep === stepsKeysMoneyDest.LINE_CREDIT &&
+      currentStep === EStepsKeysMoneyDestination.LINE_CREDIT &&
       creditLineDecisions.length === 0 &&
       !showAttentionModal
     ) {
@@ -61,7 +61,10 @@ const useAddDestination = () => {
       return;
     }
 
-    if (currentStep === stepsKeysMoneyDest.LINE_CREDIT && showAttentionModal) {
+    if (
+      currentStep === EStepsKeysMoneyDestination.LINE_CREDIT &&
+      showAttentionModal
+    ) {
       setShowAttentionModal(false);
     }
 

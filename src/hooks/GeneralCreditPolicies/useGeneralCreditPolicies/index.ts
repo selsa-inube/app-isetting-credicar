@@ -80,9 +80,9 @@ const useGeneralCreditPolicies = () => {
 
   const policiesTabs = Object.values(filteredTabsConfig);
 
-  const prueba = policiesTabs[policiesTabs.length - 1].id;
+  const tab = policiesTabs[policiesTabs.length - 1].id;
 
-  const [isSelected, setIsSelected] = useState<string>(prueba);
+  const [isSelected, setIsSelected] = useState<string>(tab);
 
   const handlePolicies = () => {
     setShowModal(false);

@@ -5,9 +5,9 @@ import { cancelRequestInProgress } from "@services/requestInProgress/cancelReque
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
-import { cancelRequestInProgMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
+import { cancelRequestInProgressMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
 import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
-import { ICancelReqInProcRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
+import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
 import { IUseCancelRequestInProgress } from "@ptypes/generalCredPolicies/IUseCancelRequestInProgress";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
@@ -21,27 +21,29 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
 
-  const fetchCancelRequestData = async (data: ICancelReqInProcRequest) => {
+  const fetchCancelRequestData = async (
+    data: ICancelRequestInProgressRequest,
+  ) => {
     setLoading(true);
     try {
       await cancelRequestInProgress(businessUnit, data);
       setEntryCanceled(data.settingRequestId);
       addFlag({
-        title: cancelRequestInProgMessage.success.title,
-        description: cancelRequestInProgMessage.success.description,
-        appearance: cancelRequestInProgMessage.success
+        title: cancelRequestInProgressMessage.success.title,
+        description: cancelRequestInProgressMessage.success.description,
+        appearance: cancelRequestInProgressMessage.success
           .appearance as IFlagAppearance,
-        duration: cancelRequestInProgMessage.success.duration,
+        duration: cancelRequestInProgressMessage.success.duration,
       });
     } catch (error) {
       console.info(error);
       setHasError(true);
       addFlag({
-        title: cancelRequestInProgMessage.error.title,
-        description: cancelRequestInProgMessage.error.description,
-        appearance: cancelRequestInProgMessage.error
+        title: cancelRequestInProgressMessage.error.title,
+        description: cancelRequestInProgressMessage.error.description,
+        appearance: cancelRequestInProgressMessage.error
           .appearance as IFlagAppearance,
-        duration: cancelRequestInProgMessage.error.duration,
+        duration: cancelRequestInProgressMessage.error.duration,
       });
     } finally {
       setLoading(false);
