@@ -6,7 +6,7 @@ const decisionWithoutConditions = (
   ruleName: string,
   value: string | boolean,
   prevValue: string | boolean,
-  TransactionOperation: string,
+  transactionOperation: string,
   user: string,
 ) => {
   if (prevValue !== value) {
@@ -18,7 +18,7 @@ const decisionWithoutConditions = (
             : EBooleanText.NO
           : value,
       effectiveFrom: String(formatDate(new Date())),
-      transactionOperation: TransactionOperation,
+      transactionOperation: transactionOperation,
     };
     return {
       ruleName: ruleName,

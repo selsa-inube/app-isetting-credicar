@@ -5,7 +5,7 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
-import { pacthEditGeneralPolicies } from "@services/generalPolicies/pacthEditGeneralPolicies";
+import { patchEditGeneralPolicies } from "@services/generalPolicies/patchEditGeneralPolicies";
 import { UseCase } from "@enum/useCase";
 
 import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
@@ -67,7 +67,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     handleStatusChange,
     isStatusCloseModal,
     isStatusRequestFinished,
-    isStatusIntAutomatic,
+    isStatusInAutomatic,
   } = useRequest({
     setSendData,
     useCase,
@@ -95,7 +95,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
       if (useCase === UseCase.EDIT) {
-        const newData = await pacthEditGeneralPolicies(
+        const newData = await patchEditGeneralPolicies(
           businessUnits,
           userAccount,
           requestConfiguration as IRequestGeneralPol,
@@ -139,7 +139,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   }, [sendData]);
 
   useEffect(() => {
-    if (isStatusIntAutomatic(saveGeneralPolicies?.requestStatus)) {
+    if (isStatusInAutomatic(saveGeneralPolicies?.requestStatus)) {
       fetchRequestData();
     }
   }, [saveGeneralPolicies]);

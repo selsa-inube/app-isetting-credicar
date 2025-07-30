@@ -157,7 +157,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsNames.requestFiled,
+            requestStepsNames.requestFilled,
             RequestStepsStatus.ERROR,
           ),
         );
@@ -166,7 +166,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsNames.requestFiled,
+            requestStepsNames.requestFilled,
             RequestStepsStatus.COMPLETED,
           ),
         );

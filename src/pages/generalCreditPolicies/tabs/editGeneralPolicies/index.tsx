@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useSaveGeneralPolicies } from "@src/hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
+import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
 import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
 import { UseCase } from "@enum/useCase";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";

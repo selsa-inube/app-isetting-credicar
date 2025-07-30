@@ -4,7 +4,7 @@ import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
 import { mapEditGeneralPoliciesToApi } from "./mappers";
 
-const pacthEditGeneralPolicies = async (
+const patchEditGeneralPolicies = async (
   businessUnit: string,
   user: string,
   data: IRequestGeneralPol,
@@ -27,4 +27,4 @@ const pacthEditGeneralPolicies = async (
   return newData;
 };
 
-export { pacthEditGeneralPolicies };
+export { patchEditGeneralPolicies };

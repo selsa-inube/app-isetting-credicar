@@ -26,7 +26,7 @@ const useRequest = (props: IUseRequest) => {
     useState<IRequestSteps[]>(requestStepsInitial);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
-  const isStatusIntAutomatic = (status: string | undefined): boolean => {
+  const isStatusInAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
   };
 
@@ -62,7 +62,7 @@ const useRequest = (props: IUseRequest) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsNames.requestFiled,
+            requestStepsNames.requestFilled,
             RequestStepsStatus.ERROR,
           ),
         );
@@ -71,14 +71,14 @@ const useRequest = (props: IUseRequest) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsNames.requestFiled,
+            requestStepsNames.requestFilled,
             RequestStepsStatus.COMPLETED,
           ),
         );
       }
     }, 1500);
     setTimeout(() => {
-      if (isStatusIntAutomatic(statusRequest)) {
+      if (isStatusInAutomatic(statusRequest)) {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
@@ -118,7 +118,7 @@ const useRequest = (props: IUseRequest) => {
   };
 
   const handleStatusChange = () => {
-    if (isStatusIntAutomatic(saveGeneralPolicies?.requestStatus)) {
+    if (isStatusInAutomatic(saveGeneralPolicies?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
         addFlag({
@@ -149,7 +149,7 @@ const useRequest = (props: IUseRequest) => {
     requestSteps,
     changeRequestSteps,
     handleStatusChange,
-    isStatusIntAutomatic,
+    isStatusInAutomatic,
     isStatusCloseModal,
     isStatusRequestFinished,
   };
