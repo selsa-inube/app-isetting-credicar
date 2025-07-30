@@ -10,14 +10,14 @@ import {
 } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { mediaQueryMobile } from "@config/environment";
+import { ModalWrapper } from "@design/modals/modalWrapper";
 import { EComponentAppearance } from "@enum/appearances";
 import { getFieldState } from "@utils/getFieldState";
-import { IAddCycleModal } from "@ptypes/design/IAddCycleModal";
-import { addCycleLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/addCycleLabels";
-import { ModalWrapper } from "@design/modals/modalWrapper";
 import { isInvalid } from "@utils/isInvalid";
-import { StyledSelectConatiner } from "./styles";
+import { mediaQueryMobile } from "@config/environment";
+import { addCycleLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/addCycleLabels";
+import { IAddCycleModal } from "@ptypes/design/IAddCycleModal";
+import { StyledSelectContainer } from "./styles";
 
 const AddCycleModal = (props: IAddCycleModal) => {
   const {
@@ -57,38 +57,45 @@ const AddCycleModal = (props: IAddCycleModal) => {
       loading={loading}
       disabledActionButton={comparisonData || !formik.isValid}
     >
-      <Stack gap={tokens.spacing.s200} direction="column" width="100%">
-        <Textfield
-          name="nameCycle"
-          id="nameCycle"
-          label={addCycleLabels.nameCycle}
-          placeholder={addCycleLabels.placeholderNameCycle}
-          size="compact"
-          value={formik.values.nameCycle}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          status={getFieldState(formik, "nameCycle")}
-          message={formik.errors.nameCycle}
-          maxLength={addCycleLabels.maxLengthNameCycle}
-          fullwidth
-          required
-        />
+      <Stack
+        gap={isMobile ? tokens.spacing.s250 : tokens.spacing.s200}
+        direction="column"
+      >
+        <Stack height={tokens.spacing.s800} width="100%">
+          <Textfield
+            name="nameCycle"
+            id="nameCycle"
+            label={addCycleLabels.nameCycle}
+            placeholder={addCycleLabels.placeholderNameCycle}
+            size="compact"
+            value={formik.values.nameCycle}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            status={getFieldState(formik, "nameCycle")}
+            message={formik.errors.nameCycle}
+            maxLength={addCycleLabels.maxLengthNameCycle}
+            fullwidth
+            required
+          />
+        </Stack>
         {isOrdinary && (
           <>
-            <Select
-              id="periodicity"
-              name="periodicity"
-              label={addCycleLabels.periodicity}
-              placeholder={addCycleLabels.placeholderPeriodicity}
-              onChange={onChange}
-              options={periodicityOptions ?? []}
-              size="compact"
-              value={formik.values.periodicity ?? ""}
-              fullwidth
-              onBlur={formik.handleBlur}
-              message={formik.errors.periodicity}
-              invalid={isInvalid(formik, "periodicity")}
-            />
+            <Stack height={tokens.spacing.s800} width="100%">
+              <Select
+                id="periodicity"
+                name="periodicity"
+                label={addCycleLabels.periodicity}
+                placeholder={addCycleLabels.placeholderPeriodicity}
+                onChange={onChange}
+                options={periodicityOptions ?? []}
+                size="compact"
+                value={formik.values.periodicity ?? ""}
+                fullwidth
+                onBlur={formik.handleBlur}
+                message={formik.errors.periodicity}
+                invalid={isInvalid(formik, "periodicity")}
+              />
+            </Stack>
             <Stack direction="column">
               <Stack
                 alignItems="center"
@@ -106,40 +113,44 @@ const AddCycleModal = (props: IAddCycleModal) => {
                   cursorHover
                 />
               </Stack>
-              <Select
-                id="payday"
-                name="payday"
-                placeholder={addCycleLabels.placeholderPayday}
-                onChange={onChange}
-                options={paydayOptions ?? []}
-                disabled={!formik.values.periodicity}
-                size="compact"
-                value={formik.values.payday ?? ""}
-                fullwidth
-                message={formik.errors.payday}
-                invalid={isInvalid(formik, "payday")}
-                onBlur={formik.handleBlur}
-              />
+              <Stack height={tokens.spacing.s600} width="100%">
+                <Select
+                  id="payday"
+                  name="payday"
+                  placeholder={addCycleLabels.placeholderPayday}
+                  onChange={onChange}
+                  options={paydayOptions ?? []}
+                  disabled={!formik.values.periodicity}
+                  size="compact"
+                  value={formik.values.payday ?? ""}
+                  fullwidth
+                  message={formik.errors.payday}
+                  invalid={isInvalid(formik, "payday")}
+                  onBlur={formik.handleBlur}
+                />
+              </Stack>
             </Stack>
           </>
         )}
 
         {isExtraordinary && (
           <>
-            <Select
-              id="typePayment"
-              name="typePayment"
-              label={addCycleLabels.typePayment}
-              placeholder={addCycleLabels.placeholderTypePayment}
-              onChange={onChange}
-              options={typePaymentOptions ?? []}
-              size="compact"
-              value={formik.values.typePayment ?? ""}
-              fullwidth
-              message={formik.errors.typePayment}
-              onBlur={formik.handleBlur}
-              invalid={isInvalid(formik, "typePayment")}
-            />
+            <Stack height={tokens.spacing.s800} width="100%">
+              <Select
+                id="typePayment"
+                name="typePayment"
+                label={addCycleLabels.typePayment}
+                placeholder={addCycleLabels.placeholderTypePayment}
+                onChange={onChange}
+                options={typePaymentOptions ?? []}
+                size="compact"
+                value={formik.values.typePayment ?? ""}
+                fullwidth
+                message={formik.errors.typePayment}
+                onBlur={formik.handleBlur}
+                invalid={isInvalid(formik, "typePayment")}
+              />
+            </Stack>
             <Stack direction="column" width="100%">
               <Stack
                 margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s075} ${tokens.spacing.s200}`}
@@ -154,7 +165,7 @@ const AddCycleModal = (props: IAddCycleModal) => {
                 autoRows="auto"
                 width="100%"
               >
-                <StyledSelectConatiner>
+                <StyledSelectContainer $isMobile={isMobile}>
                   <Select
                     id="month"
                     name="month"
@@ -168,8 +179,8 @@ const AddCycleModal = (props: IAddCycleModal) => {
                     invalid={isInvalid(formik, "month")}
                     onBlur={formik.handleBlur}
                   />
-                </StyledSelectConatiner>
-                <StyledSelectConatiner>
+                </StyledSelectContainer>
+                <StyledSelectContainer $isMobile={isMobile}>
                   <Select
                     id="day"
                     name="day"
@@ -184,27 +195,31 @@ const AddCycleModal = (props: IAddCycleModal) => {
                     invalid={isInvalid(formik, "day")}
                     onBlur={formik.handleBlur}
                   />
-                </StyledSelectConatiner>
+                </StyledSelectContainer>
               </Grid>
             </Stack>
           </>
         )}
-
-        <Select
-          id="numberDaysUntilCut"
-          name="numberDaysUntilCut"
-          label={addCycleLabels.numberDaysUntilCut}
-          placeholder={addCycleLabels.placeholderNumberDaysUntilCut}
-          onChange={onChange}
-          options={numberDaysUntilCutOptions}
-          size="compact"
-          value={formik.values.numberDaysUntilCut ?? ""}
-          fullwidth
-          message={formik.errors.numberDaysUntilCut}
-          disabled={formik.values.periodicity && !formik.values.periodicity}
-          invalid={isInvalid(formik, "numberDaysUntilCut")}
-          onBlur={formik.handleBlur}
-        />
+        <Stack
+          height={isMobile ? tokens.spacing.s850 : tokens.spacing.s800}
+          width="100%"
+        >
+          <Select
+            id="numberDaysUntilCut"
+            name="numberDaysUntilCut"
+            label={addCycleLabels.numberDaysUntilCut}
+            placeholder={addCycleLabels.placeholderNumberDaysUntilCut}
+            onChange={onChange}
+            options={numberDaysUntilCutOptions}
+            size="compact"
+            value={formik.values.numberDaysUntilCut ?? ""}
+            fullwidth
+            message={formik.errors.numberDaysUntilCut}
+            disabled={formik.values.periodicity && !formik.values.periodicity}
+            invalid={isInvalid(formik, "numberDaysUntilCut")}
+            onBlur={formik.handleBlur}
+          />
+        </Stack>
       </Stack>
     </ModalWrapper>
   );

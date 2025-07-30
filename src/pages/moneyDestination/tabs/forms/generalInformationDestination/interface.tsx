@@ -10,10 +10,10 @@ import { MdOutlineFax } from "react-icons/md";
 
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
-import { getFieldState } from "@utils/forms/getFieldState";
-import { IGeneralInformationFormUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationFormUI";
-import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
 import { isInvalid } from "@utils/isInvalid";
+import { getFieldState } from "@utils/forms/getFieldState";
+import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
+import { IGeneralInformationFormUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationFormUI";
 import {
   StyledContainer,
   StyledContainerFields,
@@ -52,34 +52,39 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                 <Stack direction={directionStack} gap={tokens.spacing.s250}>
                   <Stack width={widthStack}>
                     {editDataOption ? (
-                      <Textfield
-                        name="nameDestination"
-                        id="nameDestination"
-                        label={generalInfoLabels.name}
-                        placeholder={generalInfoLabels.placeholderName}
-                        size="compact"
-                        value={autosuggestValue}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        status={getFieldState(formik, "nameDestination")}
-                        message={formik.errors.nameDestination}
-                        fullwidth
-                        required
-                      />
+                      <Stack height={tokens.spacing.s850} width="100%">
+                        <Textfield
+                          name="nameDestination"
+                          id="nameDestination"
+                          label={generalInfoLabels.name}
+                          placeholder={generalInfoLabels.placeholderName}
+                          size="compact"
+                          value={autosuggestValue}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          status={getFieldState(formik, "nameDestination")}
+                          message={formik.errors.nameDestination}
+                          fullwidth
+                          required
+                        />
+                      </Stack>
                     ) : (
-                      <Autosuggest
-                        label={generalInfoLabels.name}
-                        name="nameDestination"
-                        id="nameDestination"
-                        placeholder={generalInfoLabels.placeholderName}
-                        value={autosuggestValue}
-                        onChange={onChange}
-                        options={optionsDestination}
-                        onBlur={formik.handleBlur}
-                        size="compact"
-                        fullwidth
-                        invalid={isInvalid(formik, "nameDestination")}
-                      />
+                      <Stack height={tokens.spacing.s850} width="100%">
+                        <Autosuggest
+                          label={generalInfoLabels.name}
+                          name="nameDestination"
+                          id="nameDestination"
+                          placeholder={generalInfoLabels.placeholderName}
+                          value={autosuggestValue}
+                          onChange={onChange}
+                          options={optionsDestination}
+                          onBlur={formik.handleBlur}
+                          size="compact"
+                          fullwidth
+                          invalid={isInvalid(formik, "nameDestination")}
+                          message={formik.errors.nameDestination}
+                        />
+                      </Stack>
                     )}
                   </Stack>
                   <Stack
