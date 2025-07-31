@@ -24,11 +24,11 @@ import { disabledModal } from "@config/disabledModal";
 import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
+import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { useNewDecisions } from "../useNewDecisions";
 
-const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
+const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const {
     contributionsData,
     incomeData,
@@ -386,4 +386,4 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   };
 };
 
-export { useEditGenCredPolicies };
+export { useEditGeneralPolicies };

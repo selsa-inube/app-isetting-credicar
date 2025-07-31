@@ -1,5 +1,5 @@
 import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/useGeneralCreditPolicies";
-import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
+import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
 import { ICardData } from "@ptypes/home/ICardData";
 import { GeneralCreditPoliciesUI } from "./interface";
 
@@ -33,7 +33,7 @@ const GeneralCreditPolicies = () => {
     handleCloseGoBackModal,
     handleGoBack,
     handleOpenModal,
-  } = useEditGenCredPolicies({
+  } = useEditGeneralPolicies({
     contributionsData,
     incomeData,
     scoreModelsData,

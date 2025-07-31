@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/useSaveGeneralPolicies";
-import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
+import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
 import { UseCase } from "@enum/useCase";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -59,7 +59,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setShowRequestProcessModal,
     setShowModal,
     showDecision,
-  } = useEditGenCredPolicies({
+  } = useEditGeneralPolicies({
     contributionsData,
     incomeData,
     scoreModelsData,
