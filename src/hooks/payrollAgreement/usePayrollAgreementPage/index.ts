@@ -1,24 +1,25 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useState } from "react";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { decrypt } from "@utils/crypto/decrypt";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
-import { IUsePayrollAgreementPage } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementPage";
-import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
-import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { decrypt } from "@utils/crypto/decrypt";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
 import { menuOptionsPayroll } from "@config/payrollAgreement/payrollAgreementTab/menuOptions";
+import { mediaQueryTablet } from "@config/environment";
+import { IUsePayrollAgreementPage } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementPage";
+import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
+import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig";
 import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
-  const { businessUnitSigla, businessUnits } = props;
+  const { businessUnitSigla, businessUnits, businessManager } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const tabs = payrollAgreementTabsConfig(smallScreen);
 
@@ -74,8 +75,9 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     const fetchRequestsInProgressData = async () => {
       try {
         const data = await getRequestsInProgress(
+          businessManager,
           businessUnits,
-          "PayrollAgreement",
+          EPayrollAgreement.CONDITION_RULE,
         );
         setRequestsInProgress(data);
       } catch (error) {

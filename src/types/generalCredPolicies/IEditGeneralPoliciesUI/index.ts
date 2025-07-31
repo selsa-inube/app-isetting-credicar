@@ -28,12 +28,14 @@ interface IEditGeneralPoliciesUI {
   showIncomePort: boolean;
   showContributions: boolean;
   showScoreModels: boolean;
+  showGoBackModal: boolean;
   isRequestStatusModal: boolean;
   heightContPageContribut: string;
   heightContPageIncome: string;
   heightContPageScoreModels: string;
   modalData: IModalData;
   showDecision: boolean;
+  onEditedModal: () => void;
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
   onToggleDateModal: () => void;

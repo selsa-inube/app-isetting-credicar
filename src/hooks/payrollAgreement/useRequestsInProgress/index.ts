@@ -2,12 +2,13 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
 
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { ERequestInProgress } from "@enum/requestInProgress";
+import { mediaQueryTablet } from "@config/environment";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
-import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessUnits } = props;
+  const { businessUnits, businessManager } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -22,6 +23,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
       setLoading(true);
       try {
         const data = await getRequestsInProgress(
+          businessManager,
           businessUnits,
           ERequestInProgress.PAYROLL_AGREEMENT,
         );
@@ -51,7 +53,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     setSearchRequestsInProgress(e.target.value);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 690px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
   const widthFirstColumn = smallScreen ? 60 : 15;
 
   const columnWidths = smallScreen ? [60, 20, 23] : [widthFirstColumn, 50, 23];

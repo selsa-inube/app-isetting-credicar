@@ -1,3 +1,3 @@
-const calculation = ["Calculation"];
+const calculation = ["Calculation", "CalculationByPaymentCapacity"];
 
 export { calculation };

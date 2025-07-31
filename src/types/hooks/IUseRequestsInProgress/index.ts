@@ -1,4 +1,5 @@
 interface IUseRequestsInProgress {
+  businessManager: string;
   businessUnits: string;
 }
 

@@ -1,9 +1,9 @@
-import { formatRuleDecisions } from "@utils/formatRuleDecisions";
 import { ENameRules } from "@enum/nameRules";
-import { IUseRules } from "@ptypes/hooks/IUseRules";
-import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { EBooleanText } from "@enum/booleanText";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
+import { formatRuleDecisions } from "@utils/formatRuleDecisions";
+import { IUseRules } from "@ptypes/hooks/IUseRules";
 
 const useRules = (props: IUseRules) => {
   const {
@@ -42,11 +42,11 @@ const useRules = (props: IUseRules) => {
   const calculation =
     decisionGeneralData.calculation &&
     ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY;
-  const factor =
-    decisionGeneralData.factor &&
-    ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
+  const factor = decisionGeneralData.factor && ERulesOfDecisions.RISK_FACTOR;
+
   const reciprocity =
-    decisionGeneralData.reciprocity && ERulesOfDecisions.RISK_FACTOR;
+    decisionGeneralData.reciprocity &&
+    ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
 
   const methodsArray =
     calculation || factor || reciprocity

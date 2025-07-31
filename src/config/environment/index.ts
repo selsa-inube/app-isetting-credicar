@@ -1,7 +1,7 @@
 const IS_PRODUCTION = import.meta.env.PROD;
 const AUTH_REDIRECT_URI = import.meta.env.VITE_AUTH0_REDIRECT_URI as string;
 
-const maxRetriesServices = 6;
+const maxRetriesServices = 3;
 const maxRetriesPost = 1;
 const maxRetriesDelete = 1;
 

@@ -1,3 +1,3 @@
-const factor = ["Factor"];
+const factor = ["Factor", "RiskFactor"];
 
 export { factor };

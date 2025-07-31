@@ -5,27 +5,25 @@ import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
-import { EGeneralPolicies } from "@enum/generalPolicies";
 import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { dataTranslations } from "@utils/dataTranslations";
-import { allConditionsRules } from "@utils/allConditionsRules";
 import { compareObjects } from "@utils/compareObjects";
-import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
-import { editLabels } from "@config/editLabels";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
+import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
 import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { editLabels } from "@config/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
@@ -42,52 +40,37 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   } = props;
   const { appData } = useContext(AuthAndPortalData);
 
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
-  const [showDecision, setShowDecision] = useState<boolean>(false);
-  const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
-    useCase: EGeneralPolicies.USE_CASE_EDIT,
-  });
-
-  useEffect(() => {
-    if (withoutPrivilegesEdit) {
-      setShowInfoModal(!showInfoModal);
-    }
-  }, [withoutPrivilegesEdit]);
-
-  const handleToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
-    navigate("/");
-  };
-
   const initialMethodsData = () => {
-    const hasReciprocity = allConditionsRules(methodsData).some((condition) =>
-      reciprocity.includes(condition.conditionName),
+    const hasReciprocity = methodsData?.some((condition) =>
+      reciprocity.includes(condition.value as string),
     );
 
-    const hasCalculation = allConditionsRules(methodsData).some((condition) =>
-      calculation.includes(condition.conditionName),
+    const hasCalculation = methodsData?.some((condition) =>
+      calculation.includes(condition.value as string),
     );
-    const hasFactor = allConditionsRules(methodsData).some((condition) =>
-      factor.includes(condition.conditionName),
+    const hasFactor = methodsData?.some((condition) =>
+      factor.includes(condition.value as string),
     );
     return { hasReciprocity, hasCalculation, hasFactor };
   };
 
   const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
 
-  const hasReference = allConditionsRules(referenceData).find((condition) =>
-    referencePolicies.includes(condition.conditionName),
-  )?.conditionName;
+  const hasReference = referenceData?.find(
+    (condition) =>
+      referencePolicies.includes(condition.value as string) &&
+      condition.validUntil === undefined,
+  )?.value;
 
   const initialDecisionsGenData = {
-    reference: hasReference ? dataTranslations[hasReference] : "",
+    reference: hasReference ? dataTranslations[hasReference as string] : "",
     additionalDebtors: hasValuesRule(additionalDebtorsData),
     sourcesIncome: hasValuesRule(sourcesIncomeData),
     financialObligations: hasValuesRule(financialObligData),
     realGuarantees: hasValuesRule(realGuaranteesData),
-    calculation: hasCalculation,
-    reciprocity: hasReciprocity,
-    factor: hasFactor,
+    calculation: hasCalculation ?? false,
+    reciprocity: hasReciprocity ?? false,
+    factor: hasFactor ?? false,
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(
@@ -95,14 +78,14 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   );
 
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
-
+  const [showDecision, setShowDecision] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
+  const [canRefresh, setCanRefresh] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
-  const [canRefresh, setCanRefresh] = useState(false);
-
   const decisionsGeneralRef = useRef<FormikProps<IDecisionsGeneralEntry>>(null);
 
   const navigate = useNavigate();
@@ -126,7 +109,6 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const {
     showRequestProcessModal,
     contributionsPortfolio,
-    showModal,
     isCurrentFormValid,
     incomePortfolio,
     scoreModels,
@@ -142,8 +124,9 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     setContributionsPortfolio,
     setIsCurrentFormValid,
     setShowRequestProcessModal,
-    setShowModal,
   } = useNewDecisions({
+    formValues,
+    initialGeneralData: initialDecisionsGenData,
     contributionsData,
     incomeData,
     scoreModelsData,
@@ -153,10 +136,11 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevContributionsRef,
     prevIncomesRef,
     prevScoreModelsRef,
+    user: appData.user.userAccount,
   });
 
   const filteredTabs = useMemo(() => {
-    return Object.keys(editGeneralPoliciesTabsConfig).reduce((acc, key) => {
+    return Object.keys(editGeneralPoliciesTabsConfig).reduce((tabs, key) => {
       const tab =
         editGeneralPoliciesTabsConfig[
           key as keyof typeof editGeneralPoliciesTabsConfig
@@ -166,22 +150,27 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
         key === editGeneralPoliciesTabsConfig.contributionsPortfolio.id &&
         !showReciprocity
       ) {
-        return acc;
+        return tabs;
       }
 
       if (
         key === editGeneralPoliciesTabsConfig.incomePortfolio.id &&
         !showFactor
       ) {
-        return acc;
+        return tabs;
       }
 
       if (tab !== undefined) {
-        acc[key as keyof IEditPoliciesTabsConfig] = tab;
+        tabs[key as keyof IEditPoliciesTabsConfig] = tab;
       }
-      return acc;
+      return tabs;
     }, {} as IEditPoliciesTabsConfig);
   }, [showReciprocity, showFactor]);
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+    navigate("/");
+  };
 
   const handleTabChange = (tabId: string) => {
     if (decisionsGeneralRef.current?.values) {
@@ -204,6 +193,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const handleToggleDateModal = () => {
     setShowDateModal(!showDateModal);
+  };
+
+  const handleEditedModal = () => {
+    handleFinishForm();
   };
 
   const handleFinishForm = () => {
@@ -287,6 +280,16 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   };
 
   const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+    };
+
     if (showInfoModal) {
       return {
         ...disabledModal,
@@ -304,6 +307,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
         withCancelButton: false,
       };
     }
+
+    return initial;
   };
 
   useEffect(() => {
@@ -344,7 +349,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     showRequestProcessModal,
     smallScreen,
     contributionsPortfolio,
-    showModal,
+    showDateModal,
     isCurrentFormValid,
     incomePortfolio,
     scoreModels,
@@ -354,7 +359,6 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     showContributions,
     showScoreModels,
     showGoBackModal,
-    showDateModal,
     dateDecisions,
     normalizedContributions,
     normalizedIncome,
@@ -362,15 +366,14 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
-    showInfoModal,
-    modalData,
     showDecision,
+    modalData,
     handleOpenModal,
-    handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
     handleFinishForm,
+    handleEditedModal,
     handleToggleDateModal,
     handleGoBack,
     handleCloseGoBackModal,
@@ -382,7 +385,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,
-    setShowModal,
+    setShowDateModal,
   };
 };
 

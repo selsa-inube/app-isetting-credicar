@@ -1,30 +1,30 @@
 import { AxiosRequestConfig } from "axios";
-import { postWithRetries } from "@services/core/postWithRetries";
+import { patchWithRetries } from "@services/core/patchWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
-import { mapAddPayrollnEntityToApi } from "./mappers";
+import { mapEditGeneralPoliciesToApi } from "./mappers";
 
-const postAddGeneralPolicies = async (
+const patchEditGeneralPolicies = async (
   businessUnit: string,
   user: string,
   data: IRequestGeneralPol,
 ): Promise<IRequestGeneralPol> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "AddGeneralPortfolioPolicess",
+      "X-Action": "ModifyGeneralPortfolioPolicess",
       "X-Business-Unit": businessUnit,
       "X-User-Name": user,
     },
   };
 
-  const newData = await postWithRetries<IRequestGeneralPol>(
+  const newData = await patchWithRetries<IRequestGeneralPol>(
     `/portfolio-policess`,
     config,
-    mapAddPayrollnEntityToApi(data) as unknown as string[],
+    mapEditGeneralPoliciesToApi(data) as unknown as string[],
     credicarAxiosInstance,
   );
 
   return newData;
 };
 
-export { postAddGeneralPolicies };
+export { patchEditGeneralPolicies };

@@ -1,12 +1,13 @@
 import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/useSaveGeneralPolicies";
+
 import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
 import { UseCase } from "@enum/useCase";
-import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
+import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { EditGeneralPoliciesUI } from "./interface";
 
 const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
@@ -39,6 +40,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showIncomePort,
     showContributions,
     showScoreModels,
+    showGoBackModal,
     showDateModal,
     normalizedContributions,
     normalizedIncome,
@@ -47,8 +49,10 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageIncome,
     heightContPageScoreModels,
     modalData,
+    showDecision,
     setShowReciprocity,
     setShowFactor,
+    handleEditedModal,
     handleToggleDateModal,
     setIncomePortfolio,
     setScoreModels,
@@ -57,8 +61,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,
-    setShowModal,
-    showDecision,
+    setShowDateModal,
   } = useEditGeneralPolicies({
     contributionsData,
     incomeData,
@@ -87,7 +90,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     sendData: showRequestProcessModal,
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
-    setShowModal: setShowModal,
+    setShowModal: setShowDateModal,
   });
 
   return (
@@ -118,7 +121,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       showIncomePort={showIncomePort}
       showContributions={showContributions}
       showScoreModels={showScoreModels}
+      showGoBackModal={showGoBackModal}
       showDateModal={showDateModal}
+      onEditedModal={handleEditedModal}
       onToggleDateModal={handleToggleDateModal}
       normalizedContributions={normalizedContributions}
       normalizedIncome={normalizedIncome}

@@ -4,8 +4,9 @@ import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useDecisionForm } from "@hooks/forms/useDecisionForm";
-import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
+import { capitalizeText } from "@utils/capitalizeText";
 import { ENameRules } from "@enum/nameRules";
+import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
 import { DecisionsFormUI } from "./interface";
 
 const DecisionsForm = (props: IDecisionsForm) => {
@@ -73,6 +74,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
   const { ruleData } = useEnumRules({
     enumDestination: labelBusinessRules,
     ruleCatalog,
+    catalogAction: capitalizeText(ruleCatalog),
     businessUnits: appData.businessUnit.publicCode,
   });
 

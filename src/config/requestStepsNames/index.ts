@@ -1,5 +1,5 @@
 const requestStepsNames = {
-  requestFiled: "Solicitud radicada",
+  requestFilled: "Solicitud radicada",
   adding: "Agregando",
   requestAdded: "Solicitud agregada",
 };

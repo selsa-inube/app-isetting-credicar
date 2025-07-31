@@ -100,6 +100,7 @@ const useGeneralCreditPolicies = () => {
     const fetchRequestsInProgressData = async () => {
       try {
         const data = await getRequestsInProgress(
+          appData.businessManager.publicCode,
           appData.businessUnit.publicCode,
           EGeneralPolicies.ENTITY,
         );

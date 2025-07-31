@@ -94,7 +94,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               initialValues={formValues}
               handleNextStep={onToggleDateModal}
               onReset={onReset}
-              loading={loading}
               onFormValid={setIsCurrentFormValid}
               editDataOption
               initialValuesEdit={initialDecisionsData}
@@ -184,6 +183,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           onCloseModal={modalData.onCloseModal}
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
+          loading={loading}
         />
       )}
 

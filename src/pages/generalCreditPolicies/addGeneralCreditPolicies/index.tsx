@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useAddGenCredPolicies } from "@hooks/GeneralCreditPolicies/useAddGenCredPolicies";
 import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
-import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/useSaveGeneralPolicies";
+import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
 import { UseCase } from "@enum/useCase";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";

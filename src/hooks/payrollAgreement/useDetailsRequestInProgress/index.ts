@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { eventBus } from "@events/eventBus";
+import { ETransactionOperation } from "@enum/transactionOperation";
+import { EModalState } from "@enum/modalState";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { formatDateTable } from "@utils/date/formatDateTable";
-import { mediaQueryMobile } from "@config/environment";
-import { TransactionOperation } from "@enum/transactionOperation";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
+import { mediaQueryMobile } from "@config/environment";
 import { IUseDetailsRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseDetailsRequestInProgress";
 import { IEntry } from "@ptypes/design/table/IEntry";
 
@@ -52,7 +54,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   };
 
   if (
-    data.useCaseName === "AddPayrollAgreement" &&
+    data.useCaseName === EPayrollAgreement.USE_CASE_NAME &&
     data.configurationRequestData.regularPaymentCycles
   ) {
     normalizeData.regularPaymentCycles =
@@ -60,22 +62,22 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   }
 
   if (
-    data.useCaseName !== "AddPayrollAgreement" &&
+    data.useCaseName !== EPayrollAgreement.USE_CASE_NAME &&
     data.configurationRequestData.regularPaymentCycles
   ) {
     normalizeData.regularCyclesIncluded =
       data.configurationRequestData.regularPaymentCycles.filter(
         (item: IEntry) =>
-          item.transactionOperation === TransactionOperation.INSERT,
+          item.transactionOperation === ETransactionOperation.INSERT,
       );
     normalizeData.regularCyclesEliminated =
       data.configurationRequestData.regularPaymentCycles.filter(
         (item: IEntry) =>
-          item.transactionOperation === TransactionOperation.DELETE,
+          item.transactionOperation === ETransactionOperation.DELETE,
       );
   }
   if (
-    data.useCaseName === "AddPayrollAgreement" &&
+    data.useCaseName === EPayrollAgreement.USE_CASE_NAME &&
     data.configurationRequestData.payrollSpecialBenefitPaymentCycles
   ) {
     normalizeData.payrollSpecialBenefitPaymentCycles =
@@ -86,17 +88,17 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     normalizeData.payrollSpecialBenCyclesIncluded =
       data.configurationRequestData.payrollSpecialBenefitPaymentCycles.filter(
         (item: IEntry) =>
-          item.transactionOperation === TransactionOperation.INSERT,
+          item.transactionOperation === ETransactionOperation.INSERT,
       );
     normalizeData.payrollSpecialBenCyclesEliminated =
       data.configurationRequestData.payrollSpecialBenefitPaymentCycles.filter(
         (item: IEntry) =>
-          item.transactionOperation === TransactionOperation.DELETE,
+          item.transactionOperation === ETransactionOperation.DELETE,
       );
   }
 
   if (
-    data.useCaseName === "AddPayrollAgreement" &&
+    data.useCaseName === EPayrollAgreement.USE_CASE_NAME &&
     data.configurationRequestData.severancePaymentCycles
   ) {
     normalizeData.severancePaymentCycles =
@@ -107,18 +109,18 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     normalizeData.severanceCyclesIncluded =
       data.configurationRequestData.severancePaymentCycles.filter(
         (item: IEntry) =>
-          item.transactionOperation === TransactionOperation.INSERT,
+          item.transactionOperation === ETransactionOperation.INSERT,
       );
 
     normalizeData.severanceCyclesEliminated =
       data.configurationRequestData.severancePaymentCycles.filter(
         (item: IEntry) =>
-          item.transactionOperation === TransactionOperation.DELETE,
+          item.transactionOperation === ETransactionOperation.DELETE,
       );
   }
 
   useEffect(() => {
-    eventBus.emit("secondModalState", showModal);
+    eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
 
   const screenTablet = useMediaQuery("(max-width: 1200px)");
