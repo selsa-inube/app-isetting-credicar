@@ -1,44 +1,49 @@
 import { useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
-import { ICancelReqInProcRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
-import { cancelRequestInProgMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
 import { cancelRequestInProgress } from "@services/requestInProgress/cancelRequestInProgress";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { eventBus } from "@events/eventBus";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { EModalState } from "@enum/modalState";
+import { cancelRequestInProgressMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
+import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
+import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProgressRequest";
+import { IUseCancelRequestInProgress } from "@ptypes/generalCredPolicies/IUseCancelRequestInProgress";
 
-const useCancelRequestInProgress = (
-  businessUnit: string,
-  data: IEntry,
-  userAccount: string,
-  setEntryCanceled: (id: string | number) => void,
-) => {
+const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
+  const { businessUnit, data, userAccount, useCaseCancel, setEntryCanceled } =
+    props;
   const [showModal, setShowModal] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const { addFlag } = useFlag();
 
-  const fetchCancelRequestData = async (data: ICancelReqInProcRequest) => {
+  const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
+
+  const fetchCancelRequestData = async (
+    data: ICancelRequestInProgressRequest,
+  ) => {
     setLoading(true);
     try {
       await cancelRequestInProgress(businessUnit, data);
       setEntryCanceled(data.settingRequestId);
       addFlag({
-        title: cancelRequestInProgMessage.success.title,
-        description: cancelRequestInProgMessage.success.description,
-        appearance: cancelRequestInProgMessage.success
+        title: cancelRequestInProgressMessage.success.title,
+        description: cancelRequestInProgressMessage.success.description,
+        appearance: cancelRequestInProgressMessage.success
           .appearance as IFlagAppearance,
-        duration: cancelRequestInProgMessage.success.duration,
+        duration: cancelRequestInProgressMessage.success.duration,
       });
     } catch (error) {
       console.info(error);
       setHasError(true);
       addFlag({
-        title: cancelRequestInProgMessage.error.title,
-        description: cancelRequestInProgMessage.error.description,
-        appearance: cancelRequestInProgMessage.error
+        title: cancelRequestInProgressMessage.error.title,
+        description: cancelRequestInProgressMessage.error.description,
+        appearance: cancelRequestInProgressMessage.error
           .appearance as IFlagAppearance,
-        duration: cancelRequestInProgMessage.error.duration,
+        duration: cancelRequestInProgressMessage.error.duration,
       });
     } finally {
       setLoading(false);
@@ -48,24 +53,33 @@ const useCancelRequestInProgress = (
 
   const handleClick = () => {
     fetchCancelRequestData({
-      removalJustification: `La cancelación de la solicitud  es requerida por ${userAccount}`,
+      removalJustification: `${cancelLabels.removalJustification} ${userAccount}`,
       requestNumber: data.requestNumber,
       settingRequestId: data.settingRequestId,
     });
   };
 
   const handleToggleModal = () => {
-    setShowModal(!showModal);
+    if (disabledButton) {
+      setShowInfoModal(!showInfoModal);
+    } else {
+      setShowModal(!showModal);
+    }
   };
 
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
   useEffect(() => {
-    eventBus.emit("secondModalState", showModal);
+    eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
 
   return {
     showModal,
     loading,
     hasError,
+    showInfoModal,
+    handleToggleInfoModal,
     handleToggleModal,
     handleClick,
   };

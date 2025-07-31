@@ -2,9 +2,9 @@ import { FormikProps } from "formik";
 import { ITab } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { IDecisionsGeneralEntry } from "../forms/IDecisionsGeneralEntry";
-import { DefaultTheme } from "styled-components/dist/types";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { IDecisionsGeneralEntry } from "../forms/IDecisionsGeneralEntry";
+import { IModalData } from "../IModalData";
 
 interface IEditGeneralPoliciesUI {
   filteredTabsConfig: ITab[];
@@ -28,18 +28,15 @@ interface IEditGeneralPoliciesUI {
   showIncomePort: boolean;
   showContributions: boolean;
   showScoreModels: boolean;
-  theme: DefaultTheme;
-  showGoBackModal: boolean;
   isRequestStatusModal: boolean;
   heightContPageContribut: string;
   heightContPageIncome: string;
   heightContPageScoreModels: string;
-  onFinishForm: () => void;
+  modalData: IModalData;
+  showDecision: boolean;
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
   onToggleDateModal: () => void;
-  onGoBack: () => void;
-  onCloseGoBackModal: () => void;
   setIncomePortfolio: (decisions: IRuleDecision[]) => void;
   setScoreModels: (decisions: IRuleDecision[]) => void;
   onTabChange: (id: string) => void;

@@ -1,5 +1,5 @@
 import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/useGeneralCreditPolicies";
-import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
+import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
 import { ICardData } from "@ptypes/home/ICardData";
 import { GeneralCreditPoliciesUI } from "./interface";
 
@@ -24,25 +24,37 @@ const GeneralCreditPolicies = () => {
     loadingPolicies,
     showAddPolicies,
     showrequestTab,
+    modalData,
     handleTabChange,
-    handleCloseModal,
-    handlePolicies,
   } = useGeneralCreditPolicies();
+
+  const {
+    showGoBackModal,
+    handleCloseGoBackModal,
+    handleGoBack,
+    handleOpenModal,
+  } = useEditGeneralPolicies({
+    contributionsData,
+    incomeData,
+    scoreModelsData,
+    referenceData,
+    methodsData,
+    additionalDebtorsData,
+    sourcesIncomeData,
+    financialObligData,
+    realGuaranteesData,
+  });
 
   return (
     <GeneralCreditPoliciesUI
       policiesTabs={policiesTabs}
       descriptionOptions={descriptionOptions as ICardData}
-      isSelected={
-        isSelected ?? generalPoliciesTabsConfig(smallScreen).generalPolicies.id
-      }
+      isSelected={isSelected}
       onTabChange={handleTabChange}
       smallScreenTab={smallScreenTab}
       showPoliciesTab={showPoliciesTab}
       showrequestTab={showrequestTab}
       smallScreen={smallScreen}
-      onCloseModal={handleCloseModal}
-      onPolicies={handlePolicies}
       referenceData={referenceData}
       contributionsData={contributionsData}
       incomeData={incomeData}
@@ -55,6 +67,11 @@ const GeneralCreditPolicies = () => {
       withoutPolicies={withoutPolicies}
       loadingPolicies={loadingPolicies ?? true}
       showAddPolicies={showAddPolicies ?? false}
+      modalData={modalData}
+      handleOpenModal={handleOpenModal}
+      showGoBackModal={showGoBackModal}
+      onCloseGoBackModal={handleCloseGoBackModal}
+      onGoBack={handleGoBack}
     />
   );
 };

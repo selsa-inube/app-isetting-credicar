@@ -6,7 +6,7 @@ enum EPayrollAgreement {
   USE_CASE_ADD = "Agregar nomina de convenio",
   USE_CASE_EDIT = "Modificar nomina de convenio",
   USE_CASE_DELETE = "Eliminar nominas de convenio",
-  USE_CASE_CANCEL_REQUEST = "CancelRequestPayrollAgreement",
+  USE_CASE_CANCEL_REQUEST = "Eliminar solicitud de configuracion",
 }
 
 export { EPayrollAgreement };

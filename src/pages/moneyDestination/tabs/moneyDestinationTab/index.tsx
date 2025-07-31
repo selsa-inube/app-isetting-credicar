@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
-import { useMoneyDestination } from "@hooks/moneyDestination/useMoneyDestination";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useMoneyDestination } from "@hooks/moneyDestination/useMoneyDestination";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { MoneyDestinationTabUI } from "./interface";
 
@@ -15,6 +15,9 @@ function MoneyDestinationTab() {
     smallScreen,
     columnWidths,
     emptyDataMessage,
+    disabledButton,
+    showInfoModal,
+    handleToggleInfoModal,
     handleSearchMoneyDestination,
     setEntryDeleted,
   } = useMoneyDestination({ businessUnits: appData.businessUnit.publicCode });
@@ -29,6 +32,9 @@ function MoneyDestinationTab() {
       smallScreen={smallScreen}
       columnWidths={columnWidths}
       emptyDataMessage={emptyDataMessage}
+      showInfoModal={showInfoModal}
+      onToggleInfoModal={handleToggleInfoModal}
+      disabledButton={disabledButton}
     />
   );
 }

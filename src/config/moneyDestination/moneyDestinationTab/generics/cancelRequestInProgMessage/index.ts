@@ -1,6 +1,6 @@
 import { EComponentAppearance } from "@enum/appearances";
 
-const cancelRequestInProgMessage = {
+const cancelRequestInProgressMessage = {
   success: {
     title: "Solicitud cancelada",
     description: "La solicitud se canceló correctamente.",
@@ -16,4 +16,4 @@ const cancelRequestInProgMessage = {
   },
 };
 
-export { cancelRequestInProgMessage };
+export { cancelRequestInProgressMessage };

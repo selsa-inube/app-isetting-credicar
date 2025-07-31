@@ -4,27 +4,31 @@ import { FormikProps } from "formik";
 import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { formatDate } from "@utils/date/formatDate";
-import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
-import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { EGeneralPolicies } from "@enum/generalPolicies";
+import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
+import { dataTranslations } from "@utils/dataTranslations";
+import { allConditionsRules } from "@utils/allConditionsRules";
+import { compareObjects } from "@utils/compareObjects";
+import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
+import { editLabels } from "@config/editLabels";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
-import { allConditionsRules } from "@utils/allConditionsRules";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
-import { editLabels } from "@config/editLabels";
-import { dataTranslations } from "@utils/dataTranslations";
-import { EGeneralPolicies } from "@enum/generalPolicies";
+import { disabledModal } from "@config/disabledModal";
+import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
+import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
+import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { useNewDecisions } from "../useNewDecisions";
 
-const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
+const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const {
     contributionsData,
     incomeData,
@@ -37,6 +41,23 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     realGuaranteesData,
   } = props;
   const { appData } = useContext(AuthAndPortalData);
+
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [showDecision, setShowDecision] = useState<boolean>(false);
+  const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
+    useCase: EGeneralPolicies.USE_CASE_EDIT,
+  });
+
+  useEffect(() => {
+    if (withoutPrivilegesEdit) {
+      setShowInfoModal(!showInfoModal);
+    }
+  }, [withoutPrivilegesEdit]);
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+    navigate("/");
+  };
 
   const initialMethodsData = () => {
     const hasReciprocity = allConditionsRules(methodsData).some((condition) =>
@@ -80,6 +101,8 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
+  const [canRefresh, setCanRefresh] = useState(false);
+
   const decisionsGeneralRef = useRef<FormikProps<IDecisionsGeneralEntry>>(null);
 
   const navigate = useNavigate();
@@ -207,7 +230,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
       description: editLabels.title,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
-      useCaseName: "ModifyGeneralCreditPolicies",
+      useCaseName: EGeneralPolicies.MODIFY_GENERAL_POLICIES,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);
@@ -222,8 +245,73 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   };
 
   const handleGoBack = () => {
+    setCanRefresh(true);
     navigate(-1);
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const hasUnsavedChanges =
+        !compareObjects(initialDecisionsGenData, formValues) ||
+        (decisionsGeneralRef.current &&
+          !compareObjects(
+            decisionsGeneralRef.current.initialValues,
+            decisionsGeneralRef.current.values,
+          ));
+
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        setShowGoBackModal(!showGoBackModal);
+
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [formValues, initialDecisionsGenData, decisionsGeneralRef, canRefresh]);
+
+  const handleOpenModal = () => {
+    const compare = compareObjects(initialDecisionsGenData, formValues);
+    const compareGeneral = compareObjects(
+      initialDecisionsGenData,
+      decisionsGeneralRef.current?.values,
+    );
+    if (!compare || !compareGeneral) {
+      setShowGoBackModal(true);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const modal = () => {
+    if (showInfoModal) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+      };
+    }
+
+    if (showDateModal) {
+      return {
+        ...sendEditedModal,
+        onCloseModal: handleToggleDateModal,
+        onClick: handleFinishForm,
+        withCancelButton: false,
+      };
+    }
+  };
+
+  useEffect(() => {
+    const decision = showInfoModal || showDateModal;
+    setShowDecision(decision);
+  }, [showInfoModal, showDateModal]);
+
+  const modalData = modal();
 
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
@@ -274,6 +362,11 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
+    showInfoModal,
+    modalData,
+    showDecision,
+    handleOpenModal,
+    handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
@@ -293,4 +386,4 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   };
 };
 
-export { useEditGenCredPolicies };
+export { useEditGeneralPolicies };

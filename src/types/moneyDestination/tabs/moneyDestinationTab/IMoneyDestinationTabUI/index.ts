@@ -6,6 +6,9 @@ interface IMoneyDestinationTabUI {
   smallScreen: boolean;
   columnWidths: number[];
   emptyDataMessage: string;
+  showInfoModal: boolean;
+  disabledButton: boolean;
+  onToggleInfoModal: () => void;
   onSearchMoneyDestination: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setEntryDeleted: (value: string | number) => void;
 }

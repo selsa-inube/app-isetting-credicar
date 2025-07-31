@@ -1,7 +1,7 @@
 import { IEnumerators } from "@ptypes/IEnumerators";
 
 interface IEnumeratorsDestination {
-  moneyDestination: IEnumerators[];
+  moneydestination: IEnumerators[];
 }
 
 export type { IEnumeratorsDestination };
