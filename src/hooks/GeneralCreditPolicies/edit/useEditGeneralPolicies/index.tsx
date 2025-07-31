@@ -5,6 +5,7 @@ import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
@@ -138,6 +139,16 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevScoreModelsRef,
     user: appData.user.userAccount,
   });
+
+  const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
+    useCase: EGeneralPolicies.USE_CASE_EDIT,
+  });
+
+  useEffect(() => {
+    if (withoutPrivilegesEdit) {
+      setShowInfoModal(!showInfoModal);
+    }
+  }, [withoutPrivilegesEdit]);
 
   const filteredTabs = useMemo(() => {
     return Object.keys(editGeneralPoliciesTabsConfig).reduce((tabs, key) => {

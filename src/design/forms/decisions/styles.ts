@@ -17,7 +17,7 @@ const StyledContainer = styled.div<IStyledContainer>`
     ` 1px solid ${theme.palette.neutral.N40 ?? inube.palette.neutral.N40}`};
   border-radius: ${tokens.spacing.s100};
   width: auto;
-  height: 50vh;
+  height: auto;
   padding: ${({ $isMobile }) =>
     $isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`};
   gap: ${tokens.spacing.s250};
