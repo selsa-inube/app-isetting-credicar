@@ -9,6 +9,7 @@ import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { dataTranslations } from "@utils/dataTranslations";
+import { compareObjects } from "@utils/compareObjects";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
 import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
@@ -16,14 +17,16 @@ import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/c
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
+import { disabledModal } from "@config/disabledModal";
+import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { editLabels } from "@config/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { IUseEditGenCredPolicies } from "@ptypes/hooks/IUseEditGenCredPolicies";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { useNewDecisions } from "../useNewDecisions";
 
-const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
+const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const {
     contributionsData,
     incomeData,
@@ -75,9 +78,11 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   );
 
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
-
+  const [showDecision, setShowDecision] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
+  const [canRefresh, setCanRefresh] = useState(false);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
@@ -162,6 +167,11 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     }, {} as IEditPoliciesTabsConfig);
   }, [showReciprocity, showFactor]);
 
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+    navigate("/");
+  };
+
   const handleTabChange = (tabId: string) => {
     if (decisionsGeneralRef.current?.values) {
       setFormValues((prev) => ({
@@ -213,7 +223,7 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
       description: editLabels.title,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
-      useCaseName: "ModifyGeneralCreditPolicies",
+      useCaseName: EGeneralPolicies.MODIFY_GENERAL_POLICIES,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);
@@ -228,8 +238,85 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   };
 
   const handleGoBack = () => {
+    setCanRefresh(true);
     navigate(-1);
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const hasUnsavedChanges =
+        !compareObjects(initialDecisionsGenData, formValues) ||
+        (decisionsGeneralRef.current &&
+          !compareObjects(
+            decisionsGeneralRef.current.initialValues,
+            decisionsGeneralRef.current.values,
+          ));
+
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        setShowGoBackModal(!showGoBackModal);
+
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [formValues, initialDecisionsGenData, decisionsGeneralRef, canRefresh]);
+
+  const handleOpenModal = () => {
+    const compare = compareObjects(initialDecisionsGenData, formValues);
+    const compareGeneral = compareObjects(
+      initialDecisionsGenData,
+      decisionsGeneralRef.current?.values,
+    );
+    if (!compare || !compareGeneral) {
+      setShowGoBackModal(true);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+    };
+
+    if (showInfoModal) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+      };
+    }
+
+    if (showDateModal) {
+      return {
+        ...sendEditedModal,
+        onCloseModal: handleToggleDateModal,
+        onClick: handleFinishForm,
+        withCancelButton: false,
+      };
+    }
+
+    return initial;
+  };
+
+  useEffect(() => {
+    const decision = showInfoModal || showDateModal;
+    setShowDecision(decision);
+  }, [showInfoModal, showDateModal]);
+
+  const modalData = modal();
 
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
@@ -279,6 +366,9 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
+    showDecision,
+    modalData,
+    handleOpenModal,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
@@ -299,4 +389,4 @@ const useEditGenCredPolicies = (props: IUseEditGenCredPolicies) => {
   };
 };
 
-export { useEditGenCredPolicies };
+export { useEditGeneralPolicies };

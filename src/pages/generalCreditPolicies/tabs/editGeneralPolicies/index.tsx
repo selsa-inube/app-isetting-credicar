@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
-import { useEditGenCredPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGenCredPolicies";
+
+import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
 import { UseCase } from "@enum/useCase";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
 import { EditGeneralPoliciesUI } from "./interface";
 
@@ -46,12 +48,12 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
+    modalData,
+    showDecision,
     setShowReciprocity,
     setShowFactor,
     handleEditedModal,
     handleToggleDateModal,
-    handleGoBack,
-    handleCloseGoBackModal,
     setIncomePortfolio,
     setScoreModels,
     setContributionsPortfolio,
@@ -60,7 +62,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowDateModal,
-  } = useEditGenCredPolicies({
+  } = useEditGeneralPolicies({
     contributionsData,
     incomeData,
     scoreModelsData,
@@ -120,8 +122,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       showContributions={showContributions}
       showScoreModels={showScoreModels}
       showGoBackModal={showGoBackModal}
-      onGoBack={handleGoBack}
-      onCloseGoBackModal={handleCloseGoBackModal}
       showDateModal={showDateModal}
       onEditedModal={handleEditedModal}
       onToggleDateModal={handleToggleDateModal}
@@ -135,6 +135,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       heightContPageIncome={heightContPageIncome}
       heightContPageScoreModels={heightContPageScoreModels}
       onCloseProcess={handleCloseProcess}
+      modalData={modalData as IModalData}
+      showDecision={showDecision}
     />
   );
 };

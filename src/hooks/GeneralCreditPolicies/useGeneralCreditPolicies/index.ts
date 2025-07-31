@@ -4,13 +4,16 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { useValidateRules } from "@hooks/GeneralCreditPolicies/useValidateRules";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { decrypt } from "@utils/crypto/decrypt";
-import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
 import { mediaQueryMobileSmall, mediaQueryTablet } from "@config/environment";
+import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
+import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
+import { disabledModal } from "@config/disabledModal";
 import { IGeneralPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IGeneralPoliciesTabsConfig";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
+import { useValidateRules } from "../useValidateRules";
 
 const useGeneralCreditPolicies = () => {
   const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
@@ -42,9 +45,11 @@ const useGeneralCreditPolicies = () => {
 
   const tabs = generalPoliciesTabsConfig(smallScreen);
 
-  const [isSelected, setIsSelected] = useState<string>(tabs.generalPolicies.id);
-
   const navigate = useNavigate();
+
+  const { disabledButton: withoutPrivilegesAdd } = useValidateUseCase({
+    useCase: EGeneralPolicies.USE_CASE_ADD,
+  });
 
   useEffect(() => {
     if (withoutPolicies !== undefined) {
@@ -57,6 +62,29 @@ const useGeneralCreditPolicies = () => {
       setShowModal(true);
     }
   }, [withoutPoliciesData]);
+
+  const filteredTabsConfig = Object.keys(tabs).reduce((tabOption, key) => {
+    const tab = tabs[key as keyof typeof tabs];
+
+    if (
+      key === tabs.requestsInProgress.id &&
+      requestsInProgress &&
+      requestsInProgress.length === 0
+    ) {
+      return tabOption;
+    }
+
+    if (tab !== undefined) {
+      tabOption[key as keyof IGeneralPoliciesTabsConfig] = tab;
+    }
+    return tabOption;
+  }, {} as IGeneralPoliciesTabsConfig);
+
+  const policiesTabs = Object.values(filteredTabsConfig);
+
+  const tab = policiesTabs[policiesTabs.length - 1].id;
+
+  const [isSelected, setIsSelected] = useState<string>(tab);
 
   const handlePolicies = () => {
     setShowModal(false);
@@ -95,28 +123,23 @@ const useGeneralCreditPolicies = () => {
     setIsSelected(tabId);
   };
 
-  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
-    const tab = tabs[key as keyof typeof tabs];
-
-    if (
-      key === tabs.requestsInProgress.id &&
-      requestsInProgress &&
-      requestsInProgress.length === 0
-    ) {
-      return acc;
-    }
-
-    if (tab !== undefined) {
-      acc[key as keyof IGeneralPoliciesTabsConfig] = tab;
-    }
-    return acc;
-  }, {} as IGeneralPoliciesTabsConfig);
+  const modalData = withoutPrivilegesAdd
+    ? {
+        ...disabledModal,
+        withCancelButton: false,
+        onCloseModal: handleCloseModal,
+        onClick: handleCloseModal,
+      }
+    : {
+        ...notPoliciesModal,
+        withCancelButton: true,
+        onCloseModal: handleCloseModal,
+        onClick: handlePolicies,
+      };
 
   const showPoliciesTab = isSelected === tabs.generalPolicies.id;
 
   const showrequestTab = isSelected === tabs.requestsInProgress.id;
-
-  const policiesTabs = Object.values(filteredTabsConfig);
 
   const showAddPolicies = withoutPoliciesData && showModal;
 
@@ -140,9 +163,8 @@ const useGeneralCreditPolicies = () => {
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
+    modalData,
     handleTabChange,
-    handleCloseModal,
-    handlePolicies,
   };
 };
 
