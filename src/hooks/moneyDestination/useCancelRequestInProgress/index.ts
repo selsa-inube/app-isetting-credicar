@@ -7,7 +7,7 @@ import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
 import { cancelRequestInProgressMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
 import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
-import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
+import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProgressRequest";
 import { IUseCancelRequestInProgress } from "@ptypes/generalCredPolicies/IUseCancelRequestInProgress";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {

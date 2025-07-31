@@ -5,10 +5,10 @@ import { cancelRequestInProgress } from "@services/requestInProgress/cancelReque
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
-import { cancelRequestInProgMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgMessage";
+import { cancelRequestInProgressMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgressMessage";
 import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
 import { IUseCancelRequestInProgress } from "@ptypes/generalCredPolicies/IUseCancelRequestInProgress";
-import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProcRequest";
+import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProgressRequest";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   const { businessUnit, data, userAccount, useCaseCancel, setEntryCanceled } =
@@ -29,21 +29,21 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       await cancelRequestInProgress(businessUnit, data);
       setEntryCanceled(data.settingRequestId);
       addFlag({
-        title: cancelRequestInProgMessage.success.title,
-        description: cancelRequestInProgMessage.success.description,
-        appearance: cancelRequestInProgMessage.success
+        title: cancelRequestInProgressMessage.success.title,
+        description: cancelRequestInProgressMessage.success.description,
+        appearance: cancelRequestInProgressMessage.success
           .appearance as IFlagAppearance,
-        duration: cancelRequestInProgMessage.success.duration,
+        duration: cancelRequestInProgressMessage.success.duration,
       });
     } catch (error) {
       console.info(error);
       setHasError(true);
       addFlag({
-        title: cancelRequestInProgMessage.error.title,
-        description: cancelRequestInProgMessage.error.description,
-        appearance: cancelRequestInProgMessage.error
+        title: cancelRequestInProgressMessage.error.title,
+        description: cancelRequestInProgressMessage.error.description,
+        appearance: cancelRequestInProgressMessage.error
           .appearance as IFlagAppearance,
-        duration: cancelRequestInProgMessage.error.duration,
+        duration: cancelRequestInProgressMessage.error.duration,
       });
     } finally {
       setLoading(false);
