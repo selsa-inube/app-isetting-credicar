@@ -27,6 +27,7 @@ const getNewDeletedDecisions = (
                 value: condition.value,
               };
             }) as ICondition[],
+          decisionId: decision.decisionId,
           effectiveFrom: dateFrom
             ? formatDateDecision(dateFrom)
             : formatDateDecision(decision.effectiveFrom as string),

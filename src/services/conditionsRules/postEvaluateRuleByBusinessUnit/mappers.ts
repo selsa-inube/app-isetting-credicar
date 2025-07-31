@@ -1,7 +1,8 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
 import { formatDate } from "@utils/date/formatDate";
 import { dataTranslations } from "@utils/dataTranslations";
+import { transformKeysToLowerFirst } from "@utils/transformKeysToLowerFirst";
+import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
 
 const mapEvaluateRuleByBusinessEntityToApi = (
   ruleData: IEvaluateRuleRequest,
@@ -38,6 +39,7 @@ const mapEvaluateRuleByBusinessEntities = (
           condition.labelName && dataTranslations[condition.labelName]
             ? dataTranslations[condition.labelName]
             : condition.labelName,
+        value: transformKeysToLowerFirst(condition.value),
       })),
   }));
 };
