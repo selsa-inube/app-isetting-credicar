@@ -13,13 +13,13 @@ import {
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
-import { getFieldState } from "@utils/getFieldState";
-import { companyLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/companyLabels";
-import { DecisionModal } from "@design/modals/decisionModal";
-import { ICompanyFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyFormUI";
-import { BoxContainer } from "@design/layout/boxContainer";
-import { portalId } from "@config/portalId";
 import { isInvalid } from "@utils/isInvalid";
+import { getFieldState } from "@utils/getFieldState";
+import { BoxContainer } from "@design/layout/boxContainer";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
+import { companyLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/companyLabels";
+import { ICompanyFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyFormUI";
 import { StyledFormContent } from "../styles";
 
 const CompanyFormUI = (props: ICompanyFormUI) => {
@@ -81,11 +81,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
             {isAddingCompany && (
               <>
                 <Divider dashed />
-                <Stack
-                  direction="column"
-                  width="100%"
-                  gap={tokens.spacing.s250}
-                >
+                <Stack height={tokens.spacing.s600} width="100%">
                   <Textfield
                     name="companyName"
                     id="companyName"
@@ -102,6 +98,12 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                     fullwidth
                     required
                   />
+                </Stack>
+                <Stack
+                  direction="column"
+                  width="100%"
+                  gap={tokens.spacing.s250}
+                >
                   <Stack
                     direction={isMobile ? "column" : "row"}
                     gap={tokens.spacing.s250}
@@ -110,36 +112,42 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                     alignItems="center"
                     padding={`${tokens.spacing.s200} ${tokens.spacing.s0} ${tokens.spacing.s0}`}
                   >
-                    <Textfield
-                      name="companyNameCommercial"
-                      id="companyNameCommercial"
-                      label={companyLabels.companyNameCommercial}
-                      placeholder={companyLabels.placeholdercompanyNameCommerc}
-                      size="compact"
-                      value={formik.values.companyNameCommercial}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      status={getFieldState(formik, "companyNameCommercial")}
-                      message={formik.errors.companyNameCommercial}
-                      maxLength={companyLabels.maxLengthcompanyNameCom}
-                      fullwidth
-                      required
-                    />
-                    <Select
-                      disabled={false}
-                      id="companyCountry"
-                      name="companyCountry"
-                      label={companyLabels.companyCountry}
-                      placeholder={companyLabels.placeholderCompanyCountry}
-                      onChange={onChange}
-                      options={optionsCountries}
-                      size="compact"
-                      value={formik.values.companyCountry ?? ""}
-                      onBlur={formik.handleBlur}
-                      message={formik.errors.companyCountry}
-                      invalid={isInvalid(formik, "companyCountry")}
-                      fullwidth
-                    />
+                    <Stack height={tokens.spacing.s800} width="100%">
+                      <Textfield
+                        name="companyNameCommercial"
+                        id="companyNameCommercial"
+                        label={companyLabels.companyNameCommercial}
+                        placeholder={
+                          companyLabels.placeholdercompanyNameCommerc
+                        }
+                        size="compact"
+                        value={formik.values.companyNameCommercial}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        status={getFieldState(formik, "companyNameCommercial")}
+                        message={formik.errors.companyNameCommercial}
+                        maxLength={companyLabels.maxLengthcompanyNameCom}
+                        fullwidth
+                        required
+                      />
+                    </Stack>
+                    <Stack height={tokens.spacing.s800} width="100%">
+                      <Select
+                        disabled={false}
+                        id="companyCountry"
+                        name="companyCountry"
+                        label={companyLabels.companyCountry}
+                        placeholder={companyLabels.placeholderCompanyCountry}
+                        onChange={onChange}
+                        options={optionsCountries}
+                        size="compact"
+                        value={formik.values.companyCountry ?? ""}
+                        onBlur={formik.handleBlur}
+                        message={formik.errors.companyCountry}
+                        invalid={isInvalid(formik, "companyCountry")}
+                        fullwidth
+                      />
+                    </Stack>
                   </Stack>
 
                   <Fieldset
@@ -153,54 +161,62 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                       justifyContent="space-between"
                       alignItems="center"
                     >
-                      <Select
-                        disabled={false}
-                        id="companyTypeIdent"
-                        name="companyTypeIdent"
-                        label={companyLabels.companyTypeIdent}
-                        placeholder={companyLabels.placeholderCompanyTypeIdent}
-                        onChange={onChange}
-                        options={getDomainById("typeIdentCompany")}
-                        onBlur={formik.handleBlur}
-                        size="compact"
-                        value={formik.values.companyTypeIdent ?? ""}
-                        fullwidth
-                        message={formik.errors.companyTypeIdent}
-                        invalid={isInvalid(formik, "companyTypeIdent")}
-                      />
-                      <Numberfield
-                        name="companyNumberIdent"
-                        id="companyNumberIdent"
-                        label={companyLabels.companyNumberIdent}
-                        placeholder={
-                          companyLabels.placeholderCompanyNumberIdent
-                        }
-                        size="compact"
-                        value={formik.values.companyNumberIdent}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        status={getFieldState(formik, "companyNumberIdent")}
-                        message={formik.errors.companyNumberIdent}
-                        fullwidth
-                        required
-                      />
-                      <Select
-                        disabled={false}
-                        id="companyCountryIdent"
-                        name="companyCountryIdent"
-                        label={companyLabels.companyCountryIdent}
-                        placeholder={
-                          companyLabels.placeholderCompanyCountryIdent
-                        }
-                        onChange={onChange}
-                        options={optionsCountries}
-                        size="compact"
-                        value={formik.values.companyCountryIdent ?? ""}
-                        message={formik.errors.companyCountryIdent}
-                        onBlur={formik.handleBlur}
-                        invalid={isInvalid(formik, "companyCountryIdent")}
-                        fullwidth
-                      />
+                      <Stack height={tokens.spacing.s800} width="100%">
+                        <Select
+                          disabled={false}
+                          id="companyTypeIdent"
+                          name="companyTypeIdent"
+                          label={companyLabels.companyTypeIdent}
+                          placeholder={
+                            companyLabels.placeholderCompanyTypeIdent
+                          }
+                          onChange={onChange}
+                          options={getDomainById("typeIdentCompany")}
+                          onBlur={formik.handleBlur}
+                          size="compact"
+                          value={formik.values.companyTypeIdent ?? ""}
+                          fullwidth
+                          message={formik.errors.companyTypeIdent}
+                          invalid={isInvalid(formik, "companyTypeIdent")}
+                        />
+                      </Stack>
+                      <Stack height={tokens.spacing.s800} width="100%">
+                        <Numberfield
+                          name="companyNumberIdent"
+                          id="companyNumberIdent"
+                          label={companyLabels.companyNumberIdent}
+                          placeholder={
+                            companyLabels.placeholderCompanyNumberIdent
+                          }
+                          size="compact"
+                          value={formik.values.companyNumberIdent}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          status={getFieldState(formik, "companyNumberIdent")}
+                          message={formik.errors.companyNumberIdent}
+                          fullwidth
+                          required
+                        />
+                      </Stack>
+                      <Stack height={tokens.spacing.s800} width="100%">
+                        <Select
+                          disabled={false}
+                          id="companyCountryIdent"
+                          name="companyCountryIdent"
+                          label={companyLabels.companyCountryIdent}
+                          placeholder={
+                            companyLabels.placeholderCompanyCountryIdent
+                          }
+                          onChange={onChange}
+                          options={optionsCountries}
+                          size="compact"
+                          value={formik.values.companyCountryIdent ?? ""}
+                          message={formik.errors.companyCountryIdent}
+                          onBlur={formik.handleBlur}
+                          invalid={isInvalid(formik, "companyCountryIdent")}
+                          fullwidth
+                        />
+                      </Stack>
                     </Stack>
                   </Fieldset>
 
@@ -213,59 +229,65 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                       width="100%"
                       gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s200}
                     >
-                      <Autocomplete
-                        disabled={false}
-                        id="companyCity"
-                        name="companyCity"
-                        label={companyLabels.companyCity}
-                        placeholder={companyLabels.placeholderCompanyCity}
-                        onChange={onChange}
-                        options={getDomainById("cities")}
-                        size="compact"
-                        onBlur={formik.handleBlur}
-                        value={formik.values.companyCity ?? ""}
-                        message={formik.errors.companyCity}
-                        invalid={isInvalid(formik, "companyCity")}
-                        fullwidth
-                      />
+                      <Stack height={tokens.spacing.s800} width="100%">
+                        <Autocomplete
+                          disabled={false}
+                          id="companyCity"
+                          name="companyCity"
+                          label={companyLabels.companyCity}
+                          placeholder={companyLabels.placeholderCompanyCity}
+                          onChange={onChange}
+                          options={getDomainById("cities")}
+                          size="compact"
+                          onBlur={formik.handleBlur}
+                          value={formik.values.companyCity ?? ""}
+                          message={formik.errors.companyCity}
+                          invalid={isInvalid(formik, "companyCity")}
+                          fullwidth
+                        />
+                      </Stack>
                       <Stack
                         direction={isMobile ? "column" : "row"}
                         gap={tokens.spacing.s250}
                         width="100%"
                       >
-                        <Textfield
-                          name="companyAddressRes"
-                          id="companyAddressRes"
-                          label={companyLabels.companyAddressRes}
-                          placeholder={
-                            companyLabels.placeholderCompanyAddressRes
-                          }
-                          size="compact"
-                          value={formik.values.companyAddressRes}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          status={getFieldState(formik, "companyAddressRes")}
-                          message={formik.errors.companyAddressRes}
-                          fullwidth
-                          required
-                        />
-                        <Textfield
-                          name="companyComplement"
-                          id="companyComplement"
-                          label={companyLabels.companyComplement}
-                          placeholder={
-                            companyLabels.placeholderCompanyComplement
-                          }
-                          size="compact"
-                          value={formik.values.companyComplement}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          status={getFieldState(formik, "companyComplement")}
-                          message={formik.errors.companyComplement}
-                          maxLength={companyLabels.maxLengthcompanyComplem}
-                          fullwidth
-                          required
-                        />
+                        <Stack height={tokens.spacing.s800} width="100%">
+                          <Textfield
+                            name="companyAddressRes"
+                            id="companyAddressRes"
+                            label={companyLabels.companyAddressRes}
+                            placeholder={
+                              companyLabels.placeholderCompanyAddressRes
+                            }
+                            size="compact"
+                            value={formik.values.companyAddressRes}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            status={getFieldState(formik, "companyAddressRes")}
+                            message={formik.errors.companyAddressRes}
+                            fullwidth
+                            required
+                          />
+                        </Stack>
+                        <Stack height={tokens.spacing.s800} width="100%">
+                          <Textfield
+                            name="companyComplement"
+                            id="companyComplement"
+                            label={companyLabels.companyComplement}
+                            placeholder={
+                              companyLabels.placeholderCompanyComplement
+                            }
+                            size="compact"
+                            value={formik.values.companyComplement}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            status={getFieldState(formik, "companyComplement")}
+                            message={formik.errors.companyComplement}
+                            maxLength={companyLabels.maxLengthcompanyComplem}
+                            fullwidth
+                            required
+                          />
+                        </Stack>
                       </Stack>
                     </Stack>
                   </Fieldset>

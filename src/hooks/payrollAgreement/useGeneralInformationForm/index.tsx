@@ -182,7 +182,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
 
   const gridTemplateRows = editDataOption
     ? isMobile
-      ? "repeat(5, auto)"
+      ? "repeat(6, auto)"
       : "repeat(3, auto)"
     : isMobile
       ? "repeat(5, auto)"
