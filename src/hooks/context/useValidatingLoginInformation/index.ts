@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { decrypt } from "@utils/crypto/decrypt";
-import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
-import { validateAndTrimString } from "@utils/validateAndTrimString";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import { usePortalData } from "@hooks/staffPortal/usePortalData";
 import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
+import { validateAndTrimString } from "@utils/validateAndTrimString";
+import { decrypt } from "@utils/crypto/decrypt";
+import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
+import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 
 const useValidatingLoginInformation = () => {
   const { user } = useAuth0();
@@ -78,20 +78,33 @@ const useValidatingLoginInformation = () => {
       ...prev,
       portal: {
         ...prev.portal,
-        abbreviatedName: portalData?.abbreviatedName ?? "",
-        staffPortalCatalogId: portalData?.staffPortalId ?? "",
-        businessManagerId: portalData?.businessManagerId ?? "",
-        publicCode: portalData?.publicCode ?? "",
-      },
-      businessManager: {
-        ...prev.businessManager,
-        publicCode: businessManagersData.publicCode ?? "",
-        abbreviatedName: businessManagersData.abbreviatedName ?? "",
-        urlBrand: businessManagersData.urlBrand ?? "",
-        urlLogo: businessManagersData.urlLogo ?? "",
+        abbreviatedName: portalData?.abbreviatedName || "",
+        staffPortalCatalogId: portalData?.staffPortalId || "",
+        businessManagerId: portalData?.businessManagerId || "",
+        publicCode: portalData?.publicCode || "",
       },
     }));
   }, [businessManagersData, portalData, portalCode]);
+
+  useEffect(() => {
+    if (!businessManagersData) return;
+
+    if (
+      businessManagersData.publicCode &&
+      businessManagersData.publicCode.length > 0
+    ) {
+      setAppData((prev) => ({
+        ...prev,
+        businessManager: {
+          ...prev.businessManager,
+          publicCode: businessManagersData.publicCode,
+          abbreviatedName: businessManagersData.abbreviatedName,
+          urlBrand: businessManagersData.urlBrand,
+          urlLogo: businessManagersData.urlLogo,
+        },
+      }));
+    }
+  }, [businessManagersData]);
 
   useEffect(() => {
     localStorage.setItem("businessUnitSigla", businessUnitSigla);

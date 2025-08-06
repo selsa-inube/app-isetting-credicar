@@ -99,19 +99,21 @@ const useGeneralCreditPolicies = () => {
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
       try {
-        const data = await getRequestsInProgress(
-          appData.businessManager.publicCode,
-          appData.businessUnit.publicCode,
-          EGeneralPolicies.ENTITY,
-        );
-        setRequestsInProgress(data);
+        if (appData.businessManager.publicCode.length > 0) {
+          const data = await getRequestsInProgress(
+            appData.businessManager.publicCode,
+            appData.businessUnit.publicCode,
+            EGeneralPolicies.ENTITY,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
       }
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [appData.businessManager.publicCode, appData.businessUnit.publicCode]);
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,

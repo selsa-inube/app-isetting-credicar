@@ -29,12 +29,14 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     const fetchRequestsInProgressData = async () => {
       setLoading(true);
       try {
-        const data = await getRequestsInProgress(
-          businessManager,
-          businessUnits,
-          ERequestInProgress.GENERAL_CREDIT_POLICIES,
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            ERequestInProgress.GENERAL_CREDIT_POLICIES,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
         setHasError(true);
@@ -44,7 +46,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     };
 
     fetchRequestsInProgressData();
-  }, [enumsRequests]);
+  }, [enumsRequests, businessManager]);
 
   useEffect(() => {
     if (entryCanceled) {
