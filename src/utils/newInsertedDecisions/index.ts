@@ -1,10 +1,10 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { ETransactionOperation } from "@enum/transactionOperation";
 
 const newInserted = (decisions: IRuleDecision[]) =>
   decisions.filter(
     (decision: IRuleDecision) =>
-      decision.transactionOperation === TransactionOperation.INSERT,
+      decision.transactionOperation === ETransactionOperation.INSERT,
   );
 
 export { newInserted };

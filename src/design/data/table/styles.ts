@@ -31,7 +31,7 @@ const StyledContainerTable = styled.div<IStyledContainer>`
     }
 
     & > div > div {
-    min-height: 320px;
+     overflow: auto;
   }
   `}
 `;

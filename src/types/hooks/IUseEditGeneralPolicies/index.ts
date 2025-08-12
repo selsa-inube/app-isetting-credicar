@@ -1,6 +1,6 @@
 import { IRuleDecision } from "@isettingkit/input";
 
-interface IUseEditGenCredPolicies {
+interface IUseEditGeneralPolicies {
   referenceData?: IRuleDecision[];
   contributionsData?: IRuleDecision[];
   incomeData?: IRuleDecision[];
@@ -12,4 +12,4 @@ interface IUseEditGenCredPolicies {
   realGuaranteesData?: IRuleDecision[];
 }
 
-export type { IUseEditGenCredPolicies };
+export type { IUseEditGeneralPolicies };

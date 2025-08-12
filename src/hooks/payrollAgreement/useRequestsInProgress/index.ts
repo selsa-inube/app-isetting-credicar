@@ -2,12 +2,13 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
 
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { ERequestInProgress } from "@enum/requestInProgress";
+import { mediaQueryTablet } from "@config/environment";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
-import { ERequestInProgress } from "@enum/requestInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessUnits } = props;
+  const { businessUnits, businessManager } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -21,11 +22,14 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     const fetchRequestsInProgressData = async () => {
       setLoading(true);
       try {
-        const data = await getRequestsInProgress(
-          businessUnits,
-          ERequestInProgress.PAYROLL_AGREEMENT,
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            ERequestInProgress.PAYROLL_AGREEMENT,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
         setHasError(true);
@@ -35,7 +39,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [businessManager, businessUnits]);
 
   useEffect(() => {
     if (entryCanceled) {
@@ -51,10 +55,10 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     setSearchRequestsInProgress(e.target.value);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 690px)");
-  const widthFirstColumn = smallScreen ? 60 : 10;
+  const smallScreen = useMediaQuery(mediaQueryTablet);
+  const widthFirstColumn = smallScreen ? 60 : 15;
 
-  const columnWidths = smallScreen ? [60, 20, 23] : [widthFirstColumn, 55, 23];
+  const columnWidths = smallScreen ? [60, 20, 23] : [widthFirstColumn, 50, 23];
 
   return {
     requestsInProgress,

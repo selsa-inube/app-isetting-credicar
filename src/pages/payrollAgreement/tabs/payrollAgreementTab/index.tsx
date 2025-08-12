@@ -15,6 +15,9 @@ const PayrollAgreementTab = () => {
     smallScreen,
     columnWidths,
     emptyDataMessage,
+    disabledButton,
+    showInfoModal,
+    handleToggleInfoModal,
     setEntryDeleted,
     handleSearchPayrollAgreement,
   } = usePayrollAgreementTab({
@@ -34,6 +37,9 @@ const PayrollAgreementTab = () => {
       columnWidths={columnWidths}
       pageLength={pageLength}
       emptyDataMessage={emptyDataMessage}
+      showInfoModal={showInfoModal}
+      onToggleInfoModal={handleToggleInfoModal}
+      disabledButton={disabledButton}
     />
   );
 };

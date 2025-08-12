@@ -20,6 +20,8 @@ const DeleteCyclePayment = (props: IDeleteCyclePayment) => {
       onClick={handleClick}
       loading={false}
       withActionMobile={false}
+      showInfoModal={false}
+      onToggleInfoModal={() => void 0}
     />
   );
 };

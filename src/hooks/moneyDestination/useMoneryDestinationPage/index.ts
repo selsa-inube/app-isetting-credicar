@@ -1,20 +1,22 @@
 import { useContext, useEffect, useState } from "react";
-import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { decrypt } from "@utils/crypto/decrypt";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { decrypt } from "@utils/crypto/decrypt";
+import { EMoneyDestination } from "@enum/moneyDestination";
+import { mediaQueryTablet } from "@config/environment";
+import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 import { IUseMoneryDestinationPage } from "@ptypes/hooks/moneyDestination/IUseMoneryDestinationPage";
 import { IDestinationTabsConfig } from "@ptypes/moneyDestination/tabs/IDestinationTabsConfig";
-import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
-  const { businessUnitSigla, businessUnits } = props;
+  const { businessUnitSigla, businessUnits, businessManager } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
   const tabs = moneyDestinationTabsConfig(smallScreen);
   const [isSelected, setIsSelected] = useState<string>(
     tabs.moneyDestination.id,
@@ -28,7 +30,7 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
-    optionName: "Destinos de dinero",
+    optionName: EMoneyDestination.OPTION_NAME,
   });
 
   const handleTabChange = (tabId: string) => {
@@ -50,18 +52,21 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
       try {
-        const data = await getRequestsInProgress(
-          businessUnits,
-          "MoneyDestination",
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            EMoneyDestination.ENTITY,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
       }
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [businessManager, businessUnits]);
 
   useEffect(() => {
     if (changeTab) {
@@ -76,7 +81,7 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
     }
   }, [isSelected]);
 
-  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
+  const filteredTabsConfig = Object.keys(tabs).reduce((tabOption, key) => {
     const tab = tabs[key as keyof typeof tabs];
 
     if (
@@ -84,13 +89,13 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
       requestsInProgress &&
       requestsInProgress.length === 0
     ) {
-      return acc;
+      return tabOption;
     }
 
     if (tab !== undefined) {
-      acc[key as keyof IDestinationTabsConfig] = tab;
+      tabOption[key as keyof IDestinationTabsConfig] = tab;
     }
-    return acc;
+    return tabOption;
   }, {} as IDestinationTabsConfig);
 
   const showMoneyTab = isSelected === tabs.moneyDestination.id;

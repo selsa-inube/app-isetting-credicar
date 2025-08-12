@@ -3,28 +3,28 @@ import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { object } from "yup";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEnumerators } from "@hooks/useEnumerators";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
+import { eventBus } from "@events/eventBus";
 import { addLeadingZero } from "@utils/addLeadingZero";
-import { IServerDomain } from "@ptypes/IServerDomain";
-import { monthExtraordinaryOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/monthExtraordinary";
 import { daysOfMonth } from "@utils/daysOfMonth";
-import { convertToOptions } from "@utils/convertToOptions";
-import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
-import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
-import { useEnumerators } from "@hooks/useEnumerators";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
-import { IEntry } from "@ptypes/design/table/IEntry";
-import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
-import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { mediaQueryTablet } from "@config/environment";
-import { eventBus } from "@events/eventBus";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { convertToOptions } from "@utils/convertToOptions";
+import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
+import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
+import { mediaQueryTablet } from "@config/environment";
+import { monthExtraordinaryOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/monthExtraordinary";
+import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
+import { IServerDomain } from "@ptypes/IServerDomain";
+import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { useValuesSelect } from "../ordinaryCycles/useValuesSelect";
 
 const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
@@ -45,8 +45,8 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     object().shape({
       nameCycle: validationRules.string.required(validationMessages.required),
       typePayment: validationRules.string.required(validationMessages.required),
-      day: validationRules.number.required(validationMessages.required),
-      month: validationRules.string.required(validationMessages.required),
+      day: validationRules.number.required(validationMessages.requiredShort),
+      month: validationRules.string.required(validationMessages.requiredShort),
       numberDaysUntilCut: validationRules.string.required(
         validationMessages.required,
       ),

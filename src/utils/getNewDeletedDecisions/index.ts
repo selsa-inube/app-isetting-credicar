@@ -1,8 +1,10 @@
 import { ICondition, IRuleDecision } from "@isettingkit/input";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { ETransactionOperation } from "@enum/transactionOperation";
+import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { arraysEqual } from "../destination/arraysEqual";
 import { findDecision } from "../destination/findDecision";
+import { translationToEnum } from "../translationToEnum";
 
 const getNewDeletedDecisions = (
   user: string,
@@ -18,16 +20,19 @@ const getNewDeletedDecisions = (
           conditionsThatEstablishesTheDecision:
             decision.conditionsThatEstablishesTheDecision?.map((condition) => {
               return {
-                conditionName: condition.conditionName,
+                conditionName:
+                  translationToEnum[condition.conditionName] ??
+                  condition.conditionName,
                 labelName: condition.labelName,
                 value: condition.value,
               };
             }) as ICondition[],
+          decisionId: decision.decisionId,
           effectiveFrom: dateFrom
             ? formatDateDecision(dateFrom)
             : formatDateDecision(decision.effectiveFrom as string),
           value: decision.value,
-          transactionOperation: TransactionOperation.DELETE,
+          transactionOperation: ETransactionOperation.DELETE,
         };
 
         if (decision.validUntil) {
@@ -37,7 +42,7 @@ const getNewDeletedDecisions = (
         }
 
         return {
-          modifyJustification: `La modificación de la decisión es solicitada por ${user}`,
+          modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
           ruleName: decision.ruleName,
           decisionsByRule: [decisionsByRule],
         };

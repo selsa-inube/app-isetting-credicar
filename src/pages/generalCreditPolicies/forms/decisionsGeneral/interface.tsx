@@ -85,20 +85,22 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     : `${tokens.spacing.s0} ${tokens.spacing.s150} ${tokens.spacing.s0}`
                 }
               >
-                <Select
-                  fullwidth
-                  id="reference"
-                  name="reference"
-                  label=""
-                  placeholder={decisionsGenLabels.placeholderReference}
-                  onChange={onReferenceChange}
-                  options={getDomainById("referenceDecision")}
-                  size="compact"
-                  onBlur={formik.handleBlur}
-                  value={formik.values.reference ?? ""}
-                  message={formik.errors.reference}
-                  invalid={isInvalid(formik, "reference")}
-                />
+                <Stack height={tokens.spacing.s550} width="100%">
+                  <Select
+                    fullwidth
+                    id="reference"
+                    name="reference"
+                    label=""
+                    placeholder={decisionsGenLabels.placeholderReference}
+                    onChange={onReferenceChange}
+                    options={getDomainById("referenceDecision")}
+                    size="compact"
+                    onBlur={formik.handleBlur}
+                    value={formik.values.reference ?? ""}
+                    message={formik.errors.reference}
+                    invalid={isInvalid(formik, "reference")}
+                  />
+                </Stack>
               </Stack>
             </Stack>
 

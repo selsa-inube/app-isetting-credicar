@@ -11,16 +11,16 @@ import {
   Textfield,
 } from "@inubekit/inubekit";
 
-import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
-import { EComponentAppearance } from "@enum/appearances";
-import { getFieldState } from "@utils/getFieldState";
-import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { tokens } from "@design/tokens";
-import { IGeneralInformationPayrollFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollFormUI";
-import { portalId } from "@config/portalId";
+import { getFieldState } from "@utils/getFieldState";
 import { isInvalid } from "@utils/isInvalid";
+import { EComponentAppearance } from "@enum/appearances";
+import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
+import { portalId } from "@config/portalId";
+import { IGeneralInformationPayrollFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollFormUI";
 import { StyledFormContent } from "./styles";
 
 const GeneralInformationPayrollFormUI = (
@@ -83,107 +83,133 @@ const GeneralInformationPayrollFormUI = (
                 templateRows={gridTemplateRows}
                 width="100%"
                 height="100%"
-                gap={isMobile ? tokens.spacing.s150 : tokens.spacing.s250}
+                gap={isMobile ? tokens.spacing.s450 : tokens.spacing.s200}
               >
                 {editDataOption && (
                   <>
-                    <Textfield
-                      name="companyAgreement"
-                      id="companyAgreement"
-                      label={generalInfoLabels.companyAgreement}
-                      readOnly
-                      size="compact"
-                      value={companyAgreement}
-                      fullwidth
-                      disabled
-                    />
-                    <Textfield
-                      name="typePayrollSelected"
-                      id="typePayrollSelected"
-                      label={generalInfoLabels.typePayrollSelected}
-                      readOnly
-                      size="compact"
-                      value={formik.values.typePayroll}
-                      fullwidth
-                      disabled
-                    />
+                    <Stack
+                      height={
+                        isMobile ? tokens.spacing.s550 : tokens.spacing.s850
+                      }
+                      width="100%"
+                    >
+                      <Textfield
+                        name="companyAgreement"
+                        id="companyAgreement"
+                        label={generalInfoLabels.companyAgreement}
+                        readOnly
+                        size="compact"
+                        value={companyAgreement}
+                        fullwidth
+                        disabled
+                      />
+                    </Stack>
+                    <Stack
+                      height={
+                        isMobile ? tokens.spacing.s550 : tokens.spacing.s850
+                      }
+                      width="100%"
+                    >
+                      <Textfield
+                        name="typePayrollSelected"
+                        id="typePayrollSelected"
+                        label={generalInfoLabels.typePayrollSelected}
+                        readOnly
+                        size="compact"
+                        value={formik.values.typePayroll}
+                        fullwidth
+                        disabled
+                      />
+                    </Stack>
+                    <Stack
+                      height={
+                        isMobile ? tokens.spacing.s550 : tokens.spacing.s850
+                      }
+                      width="100%"
+                    >
+                      <Textfield
+                        name="code"
+                        id="code"
+                        label={generalInfoLabels.codePayroll}
+                        size="compact"
+                        readOnly
+                        value={formik.values.code}
+                        disabled
+                        fullwidth
+                      />
+                    </Stack>
+                  </>
+                )}
+                {!editDataOption && (
+                  <Stack height={tokens.spacing.s600} width="100%">
                     <Textfield
                       name="code"
                       id="code"
                       label={generalInfoLabels.codePayroll}
+                      placeholder={generalInfoLabels.placeholderCodePayroll}
                       size="compact"
-                      readOnly
                       value={formik.values.code}
-                      disabled
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      status={getFieldState(formik, "code")}
+                      message={formik.errors.code}
+                      maxLength={generalInfoLabels.maxLengthNamePayroll}
                       fullwidth
+                      required
                     />
-                  </>
+                  </Stack>
                 )}
-                {!editDataOption && (
+                <Stack height={tokens.spacing.s600} width="100%">
                   <Textfield
-                    name="code"
-                    id="code"
-                    label={generalInfoLabels.codePayroll}
-                    placeholder={generalInfoLabels.placeholderCodePayroll}
+                    name="abbreviatedName"
+                    id="abbreviatedName"
+                    label={generalInfoLabels.namePayroll}
+                    placeholder={generalInfoLabels.placeholderNamePayroll}
                     size="compact"
-                    value={formik.values.code}
+                    value={formik.values.abbreviatedName}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    status={getFieldState(formik, "code")}
-                    message={formik.errors.code}
+                    status={getFieldState(formik, "abbreviatedName")}
+                    message={formik.errors.abbreviatedName}
                     maxLength={generalInfoLabels.maxLengthNamePayroll}
                     fullwidth
                     required
                   />
-                )}
-
-                <Textfield
-                  name="abbreviatedName"
-                  id="abbreviatedName"
-                  label={generalInfoLabels.namePayroll}
-                  placeholder={generalInfoLabels.placeholderNamePayroll}
-                  size="compact"
-                  value={formik.values.abbreviatedName}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  status={getFieldState(formik, "abbreviatedName")}
-                  message={formik.errors.abbreviatedName}
-                  maxLength={generalInfoLabels.maxLengthNamePayroll}
-                  fullwidth
-                  required
-                />
-
+                </Stack>
                 {!editDataOption && (
-                  <Select
-                    disabled={false}
-                    id="typePayroll"
-                    name="typePayroll"
-                    label={generalInfoLabels.typePayroll}
-                    placeholder={generalInfoLabels.placeholderTypePayroll}
-                    onChange={onChangeSelect}
-                    options={typePayrollOptions}
-                    size="compact"
-                    value={formik.values.typePayroll ?? ""}
-                    fullwidth
-                    message={formik.errors.typePayroll}
-                    invalid={isInvalid(formik, "typePayroll")}
-                    onBlur={formik.handleBlur}
-                  />
+                  <Stack height={tokens.spacing.s600} width="100%">
+                    <Select
+                      disabled={false}
+                      id="typePayroll"
+                      name="typePayroll"
+                      label={generalInfoLabels.typePayroll}
+                      placeholder={generalInfoLabels.placeholderTypePayroll}
+                      onChange={onChangeSelect}
+                      options={typePayrollOptions}
+                      size="compact"
+                      value={formik.values.typePayroll ?? ""}
+                      fullwidth
+                      message={formik.errors.typePayroll}
+                      invalid={isInvalid(formik, "typePayroll")}
+                      onBlur={formik.handleBlur}
+                    />
+                  </Stack>
                 )}
-                <Checkpicker
-                  label={generalInfoLabels.sourcesOfIncome}
-                  name="sourcesOfIncome"
-                  id="sourcesOfIncome"
-                  placeholder={generalInfoLabels.placeholderSourcesOfIncome}
-                  message={formik.errors.sourcesOfIncome}
-                  invalid={isInvalid(formik, "sourcesOfIncome")}
-                  fullwidth={true}
-                  options={sourcesOfIncomeValues}
-                  values={formik.values.sourcesOfIncome}
-                  onChange={onChangeCheck}
-                  size="compact"
-                />
-
+                <Stack height={tokens.spacing.s600} width="100%">
+                  <Checkpicker
+                    label={generalInfoLabels.sourcesOfIncome}
+                    name="sourcesOfIncome"
+                    id="sourcesOfIncome"
+                    placeholder={generalInfoLabels.placeholderSourcesOfIncome}
+                    message={formik.errors.sourcesOfIncome}
+                    invalid={isInvalid(formik, "sourcesOfIncome")}
+                    fullwidth={true}
+                    options={sourcesOfIncomeValues}
+                    values={formik.values.sourcesOfIncome}
+                    onChange={onChangeCheck}
+                    size="compact"
+                  />
+                </Stack>
                 <Stack direction="column">
                   <Stack
                     alignItems="center"
@@ -201,21 +227,22 @@ const GeneralInformationPayrollFormUI = (
                       cursorHover
                     />
                   </Stack>
-
-                  <Autosuggest
-                    label=""
-                    name="applicationDaysPayroll"
-                    id="applicationDaysPayroll"
-                    placeholder={generalInfoLabels.placeholderDaysApplication}
-                    value={autosuggestValue}
-                    onChange={onChangeAutosuggest}
-                    options={getDomainById("daysForApplication")}
-                    onBlur={formik.handleBlur}
-                    size="compact"
-                    fullwidth
-                    message={formik.errors.applicationDaysPayroll}
-                    invalid={isInvalid(formik, "applicationDaysPayroll")}
-                  />
+                  <Stack height={tokens.spacing.s600} width="100%">
+                    <Autosuggest
+                      label=""
+                      name="applicationDaysPayroll"
+                      id="applicationDaysPayroll"
+                      placeholder={generalInfoLabels.placeholderDaysApplication}
+                      value={autosuggestValue}
+                      onChange={onChangeAutosuggest}
+                      options={getDomainById("daysForApplication")}
+                      onBlur={formik.handleBlur}
+                      size="compact"
+                      fullwidth
+                      message={formik.errors.applicationDaysPayroll}
+                      invalid={isInvalid(formik, "applicationDaysPayroll")}
+                    />
+                  </Stack>
                 </Stack>
               </Grid>
             </BoxContainer>

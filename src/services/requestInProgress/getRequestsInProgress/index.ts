@@ -5,17 +5,19 @@ import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgre
 import { mapRequestsInProgressToEntities } from "./mappers/mapRequestsToEntities";
 
 const getRequestsInProgress = async (
-  businessUnits: string,
+  businessManagerCode: string,
+  businessUnit: string,
   entity: string,
 ): Promise<IRequestsInProgress[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchPendingConfigurationRequest",
-      "X-Business-unit": businessUnits,
     },
   };
 
   const queryParams = new URLSearchParams({
+    businessManagerCode: businessManagerCode,
+    businessUnitCode: businessUnit,
     applicationName: "ifac",
     entityName: entity,
     page: ".1",
@@ -24,7 +26,7 @@ const getRequestsInProgress = async (
   });
   const data = await getWithRetries<IRequestsInProgress[]>(
     queryProcessAxiosInstance,
-    `/requests/business-unit/${businessUnits}?${queryParams.toString()}`,
+    `/requests?${queryParams.toString()}`,
     config,
   );
   return Array.isArray(data) ? mapRequestsInProgressToEntities(data) : [];

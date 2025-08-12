@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-
 import { IRuleDecision } from "@isettingkit/input";
+
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRules";
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
-import { IDecision } from "@ptypes/decisions/IDecision";
 import { EConditionRules } from "@enum/conditionRules";
-import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
+import { IDecision } from "@ptypes/decisions/IDecision";
+import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 
 const useEnumRules = (props: IUseEnumRules) => {
-  const { enumDestination, ruleCatalog, businessUnits } = props;
+  const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
   const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
@@ -28,6 +28,7 @@ const useEnumRules = (props: IUseEnumRules) => {
         const data = await getEnumeratorsRules(
           enumDestination,
           ruleCatalog,
+          catalogAction,
           businessUnits,
         );
         setEnumRuleData(data);
@@ -109,7 +110,7 @@ const useEnumRules = (props: IUseEnumRules) => {
 
   useEffect(() => {
     if (listValuesDecision) {
-      const arrayListValues = listValuesDecision.map((obj) => obj.value);
+      const arrayListValues = listValuesDecision.map((list) => list.value);
 
       setRuleData((prevRuleData) => ({
         ...prevRuleData,
@@ -122,7 +123,7 @@ const useEnumRules = (props: IUseEnumRules) => {
     if (listValuesCondition) {
       const arrayListValues = Object.values(listValuesCondition)
         .flat()
-        .map((obj) => obj.value);
+        .map((list) => list.value);
 
       setRuleData((prevRuleData) => ({
         ...prevRuleData,
@@ -132,7 +133,7 @@ const useEnumRules = (props: IUseEnumRules) => {
               if (condition.listOfPossibleValues) {
                 return {
                   ...condition,
-                  howToSetTheCondition: EGeneralPolicies.LISTOFVALUES,
+                  howToSetTheCondition: EGeneralPolicies.LIST_OF_VALUES,
                   listOfPossibleValues: { list: arrayListValues },
                   value: "",
                 };

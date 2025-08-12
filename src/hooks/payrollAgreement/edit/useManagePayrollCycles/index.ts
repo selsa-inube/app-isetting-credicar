@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/IRegularPaymentCycles";
@@ -133,8 +133,11 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
     );
 
     const regularPayment = [
-      ...newObjRegularPayment(newValues, TransactionOperation.INSERT),
-      ...newObjRegularPayment(deleteValuesRegular, TransactionOperation.DELETE),
+      ...newObjRegularPayment(newValues, ETransactionOperation.INSERT),
+      ...newObjRegularPayment(
+        deleteValuesRegular,
+        ETransactionOperation.DELETE,
+      ),
     ];
 
     return regularPayment;
@@ -177,21 +180,21 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
       severancePayment: [
         ...newObjExtraordinaryPayment(
           newValSeverance,
-          TransactionOperation.INSERT,
+          ETransactionOperation.INSERT,
         ),
         ...newObjExtraordinaryPayment(
           newDelSeverance,
-          TransactionOperation.DELETE,
+          ETransactionOperation.DELETE,
         ),
       ],
       payrollSpeBenPayment: [
         ...newObjExtraordinaryPayment(
           newValSpecialBenefit,
-          TransactionOperation.INSERT,
+          ETransactionOperation.INSERT,
         ),
         ...newObjExtraordinaryPayment(
           newDelSpecialBenefit,
-          TransactionOperation.DELETE,
+          ETransactionOperation.DELETE,
         ),
       ],
     };
@@ -222,12 +225,12 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
         ...getIncomeTypesEditData(
           newValues,
           payrollId,
-          TransactionOperation.INSERT,
+          ETransactionOperation.INSERT,
         ),
         ...getIncomeTypesEditData(
           deleteValues,
           payrollId,
-          TransactionOperation.DELETE,
+          ETransactionOperation.DELETE,
         ),
       ],
     };

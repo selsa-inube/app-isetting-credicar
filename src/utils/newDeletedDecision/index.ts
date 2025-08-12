@@ -1,10 +1,10 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { ETransactionOperation } from "@enum/transactionOperation";
 
 const newDeleted = (decisions: IRuleDecision[]) =>
   decisions.filter(
     (decision: IRuleDecision) =>
-      decision.transactionOperation === TransactionOperation.DELETE,
+      decision.transactionOperation === ETransactionOperation.DELETE,
   );
 
 export { newDeleted };

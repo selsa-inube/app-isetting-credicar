@@ -6,12 +6,14 @@ import { mapAddPayrollnEntityToApi } from "./mappers";
 
 const postAddGeneralPolicies = async (
   businessUnit: string,
+  user: string,
   data: IRequestGeneralPol,
 ): Promise<IRequestGeneralPol> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "AddGeneralPortfolioPolicess",
       "X-Business-Unit": businessUnit,
+      "X-User-Name": user,
     },
   };
 

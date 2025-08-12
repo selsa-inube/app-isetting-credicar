@@ -1,6 +1,7 @@
 import { useContext } from "react";
-import { useRequestsInProgress } from "@hooks/moneyDestination/useRequestsInProgress";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useRequestsInProgress } from "@hooks/moneyDestination/useRequestsInProgress";
+import { usePageLength } from "@hooks/usePageLength";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { RequestsInProgressTabUI } from "./interface";
 
@@ -15,7 +16,12 @@ const RequestsInProgressTab = () => {
     columnWidths,
     handleSearchRequestsInProgress,
     setEntryCanceled,
-  } = useRequestsInProgress({ businessUnits: appData.businessUnit.publicCode });
+  } = useRequestsInProgress({
+    businessUnits: appData.businessUnit.publicCode,
+    businessManager: appData.businessManager.publicCode,
+  });
+
+  const pageLength = usePageLength();
 
   return (
     <RequestsInProgressTabUI
@@ -26,6 +32,7 @@ const RequestsInProgressTab = () => {
       setEntryCanceled={setEntryCanceled}
       smallScreen={smallScreen}
       columnWidths={columnWidths}
+      pageLength={pageLength}
     />
   );
 };

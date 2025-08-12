@@ -1,9 +1,12 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
-import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
-import { IUseMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseMoneyDestination";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
+import { mediaQueryTablet } from "@config/environment";
+import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
+import { IUseMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseMoneyDestination";
 
 const useMoneyDestination = (props: IUseMoneyDestination) => {
   const { businessUnits } = props;
@@ -14,7 +17,12 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   const [searchMoneyDestination, setSearchMoneyDestination] =
     useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
+
+  const { disabledButton } = useValidateUseCase({
+    useCase: EMoneyDestination.USE_CASE_ADD,
+  });
 
   useEffect(() => {
     const fetchEnumData = async () => {
@@ -47,7 +55,11 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
     setSearchMoneyDestination(e.target.value);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
+
+  const smallScreen = useMediaQuery(mediaQueryTablet);
   const widthFirstColumn = smallScreen ? 72 : 25;
 
   const columnWidths = [widthFirstColumn, 55];
@@ -64,6 +76,9 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
     smallScreen,
     columnWidths,
     emptyDataMessage,
+    disabledButton,
+    showInfoModal,
+    handleToggleInfoModal,
     handleSearchMoneyDestination,
     setEntryDeleted,
   };

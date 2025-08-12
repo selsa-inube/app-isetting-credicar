@@ -6,6 +6,9 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { IDelete } from "@ptypes/design/IDelete";
 import { deleteRecordLabels } from "@config/deleteRecordLabels";
 import { StyledContainerIcon } from "./styles";
+import { portalId } from "@config/portalId";
+import { disabledModal } from "@config/disabledModal";
+import { mediaQueryTablet } from "@config/environment";
 
 const DeleteRecord = (props: IDelete) => {
   const {
@@ -13,11 +16,13 @@ const DeleteRecord = (props: IDelete) => {
     messageDelete,
     loading,
     withActionMobile = true,
+    showInfoModal,
+    onToggleInfoModal,
     onToggleModal,
     onClick,
   } = props;
 
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   const showTitle = screenTablet && withActionMobile;
 
@@ -40,7 +45,7 @@ const DeleteRecord = (props: IDelete) => {
       </StyledContainerIcon>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={messageDelete.title}
           actionText={messageDelete.actionText}
           description={messageDelete.description}
@@ -49,6 +54,19 @@ const DeleteRecord = (props: IDelete) => {
           appearance={EComponentAppearance.DANGER}
           loading={loading}
           appearanceButton={EComponentAppearance.DANGER}
+        />
+      )}
+
+      {showInfoModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={disabledModal.title}
+          actionText={disabledModal.actionText}
+          description={disabledModal.description}
+          subtitle={disabledModal.subtitle}
+          onCloseModal={onToggleInfoModal}
+          onClick={onToggleInfoModal}
+          withCancelButton={false}
         />
       )}
     </>

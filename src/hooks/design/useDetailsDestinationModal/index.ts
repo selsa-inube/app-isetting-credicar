@@ -3,7 +3,7 @@ import { ICondition, IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { mediaQueryMobile } from "@config/environment";
-import { TransactionOperation } from "@enum/transactionOperation";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
 
@@ -40,7 +40,7 @@ const useDetailsDestinationModal = (
       if (
         !decisions.some(
           (decision) =>
-            decision.transactionOperation === TransactionOperation.INSERT,
+            decision.transactionOperation === ETransactionOperation.INSERT,
         ) &&
         tab?.id === detailsTabsConfig.creditLineIncluded?.id
       ) {
@@ -49,7 +49,7 @@ const useDetailsDestinationModal = (
       if (
         !decisions.some(
           (decision) =>
-            decision.transactionOperation === TransactionOperation.DELETE,
+            decision.transactionOperation === ETransactionOperation.DELETE,
         ) &&
         tab?.id === detailsTabsConfig.creditLineRemoved?.id
       ) {
@@ -77,11 +77,11 @@ const useDetailsDestinationModal = (
 
   const decisionDeleted = filteredDecisions.filter(
     (decision: IRuleDecision) =>
-      decision.transactionOperation === TransactionOperation.DELETE,
+      decision.transactionOperation === ETransactionOperation.DELETE,
   );
   const decisionInserted = filteredDecisions.filter(
     (decision: IRuleDecision) =>
-      decision.transactionOperation === TransactionOperation.INSERT,
+      decision.transactionOperation === ETransactionOperation.INSERT,
   );
 
   const getFirstFilteredTab = (filteredTabsConfig: IDetailsTabsConfig) => {

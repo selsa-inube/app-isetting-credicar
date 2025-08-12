@@ -4,15 +4,26 @@ import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { notCancelStatus } from "@config/status/notCancelStatus";
-import { StyledContainerIcon } from "./styles";
 import { cancelLabels } from "@config/cancelLabels";
 import { ICancelRecord } from "@ptypes/design/ICancelRecord";
+import { disabledModal } from "@config/disabledModal";
+import { portalId } from "@config/portalId";
+import { mediaQueryTablet } from "@config/environment";
+import { StyledContainerIcon } from "./styles";
 
 const CancelRecord = (props: ICancelRecord) => {
-  const { showModal, status, messageCancel, loading, onToggleModal, onClick } =
-    props;
+  const {
+    showModal,
+    status,
+    messageCancel,
+    loading,
+    showInfoModal,
+    onToggleInfoModal,
+    onToggleModal,
+    onClick,
+  } = props;
 
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   const notCancel = notCancelStatus.includes(status);
 
@@ -39,7 +50,7 @@ const CancelRecord = (props: ICancelRecord) => {
       </StyledContainerIcon>
       {showModal && (
         <DecisionModal
-          portalId="portal"
+          portalId={portalId}
           title={messageCancel.title}
           actionText={messageCancel.actionText}
           description={messageCancel.description}
@@ -48,6 +59,19 @@ const CancelRecord = (props: ICancelRecord) => {
           appearance={EComponentAppearance.DANGER}
           loading={loading}
           appearanceButton={EComponentAppearance.DANGER}
+        />
+      )}
+
+      {showInfoModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={disabledModal.title}
+          actionText={disabledModal.actionText}
+          description={disabledModal.description}
+          subtitle={disabledModal.subtitle}
+          onCloseModal={onToggleInfoModal}
+          onClick={onToggleInfoModal}
+          withCancelButton={false}
         />
       )}
     </>

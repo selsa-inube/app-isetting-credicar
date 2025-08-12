@@ -143,7 +143,9 @@ const TableUI = (props: ITableUI) => {
           <Tr border="bottom">
             <Td
               colSpan={
-                mediaActionOpen ? titles.length : titles.length + actions.length
+                mediaActionOpen
+                  ? titles.length + 1
+                  : titles.length + actions.length
               }
               type="custom"
               align="left"

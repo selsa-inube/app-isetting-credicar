@@ -8,6 +8,9 @@ interface IpayrollAgreementTabUI {
   columnWidths: number[];
   pageLength: number;
   emptyDataMessage: string;
+  showInfoModal: boolean;
+  disabledButton: boolean;
+  onToggleInfoModal: () => void;
   setEntryDeleted: (id: string | number) => void;
   onSearchPayrollAgreement: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }

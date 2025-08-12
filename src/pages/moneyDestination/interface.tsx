@@ -2,13 +2,13 @@ import { Stack, Tabs, Breadcrumbs, Grid } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { Title } from "@design/data/title";
-import { crumbsMoneyDestination } from "@config/moneyDestination/navigation";
 import { MoneyDestinationTab } from "@pages/moneyDestination/tabs/moneyDestinationTab";
 import { RequestsInProgressTab } from "@pages/moneyDestination/tabs/requestsInProgressTab";
 import { MenuAddButton } from "@design/feedback/menuAddButton";
+import { crumbsMoneyDestination } from "@config/moneyDestination/navigation";
+import { descriptionTitle } from "@config/moneyDestination/descriptionTitle";
 import { IMoneyDestinationUI } from "@ptypes/moneyDestination/tabs/IMoneyDestinationUI";
 import { StyledMenuContainer } from "./styles";
-import { descriptionTitle } from "@config/moneyDestination/descriptionTitle";
 
 const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
   const {
@@ -53,6 +53,7 @@ const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
               title={descriptionOptions?.publicCode ?? ""}
               description={descriptionTitle}
               sizeTitle="large"
+              navigatePage="/"
             />
 
             {smallScreen && (

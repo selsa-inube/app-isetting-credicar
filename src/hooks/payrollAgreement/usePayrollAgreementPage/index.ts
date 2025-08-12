@@ -1,20 +1,25 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useState } from "react";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { decrypt } from "@utils/crypto/decrypt";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
-import { IUsePayrollAgreementPage } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementPage";
-import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { decrypt } from "@utils/crypto/decrypt";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
+import { menuOptionsPayroll } from "@config/payrollAgreement/payrollAgreementTab/menuOptions";
+import { mediaQueryTablet } from "@config/environment";
+import { IUsePayrollAgreementPage } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementPage";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
+import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig";
+import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
-  const { businessUnitSigla, businessUnits } = props;
+  const { businessUnitSigla, businessUnits, businessManager } = props;
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const tabs = payrollAgreementTabsConfig(smallScreen);
 
@@ -26,11 +31,31 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   );
   const [showModal, setShowModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
+  const [options, setOptions] = useState<IMenuOptions[]>(menuOptionsPayroll);
+
+  const { disabledButton: disabledAdd } = useValidateUseCase({
+    useCase: EPayrollAgreement.USE_CASE_ADD,
+  });
+
+  useEffect(() => {
+    const menuOptions = menuOptionsPayroll.map((option) => {
+      if (option.description === EPayrollAgreement.MENU_OPTION_ADD) {
+        return {
+          ...option,
+          disabled: disabledAdd,
+        };
+      } else {
+        return option;
+      }
+    });
+
+    setOptions(menuOptions);
+  }, [disabledAdd]);
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
-    optionName: "Nóminas de convenio",
+    optionName: EPayrollAgreement.OPTION_NAME,
   });
 
   const onToggleModal = () => {
@@ -38,7 +63,9 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   };
 
   const onToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
+    if (disabledAdd) {
+      setShowInfoModal(!showInfoModal);
+    }
   };
   const onCloseMenu = () => {
     setShowModal(!showModal);
@@ -47,18 +74,21 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
       try {
-        const data = await getRequestsInProgress(
-          businessUnits,
-          "PayrollAgreement",
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            EPayrollAgreement.CONDITION_RULE,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
       }
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [businessManager, businessUnits]);
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
@@ -111,6 +141,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     filteredTabsConfig,
     showModal,
     showInfoModal,
+    options,
     onToggleInfoModal,
     onCloseMenu,
     onToggleModal,
