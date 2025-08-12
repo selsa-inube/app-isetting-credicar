@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { getBusinessManagers } from "@services/staffPortal/getBusinessManager";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 import { IBusinessManagers } from "@ptypes/staffPortal/IBusinessManagers";
-import { getBusinessManagers } from "@services/staffPortal/getBusinessManager";
 
 const useBusinessManagers = (
   portalPublicCode: IStaffPortalByBusinessManager,
@@ -19,10 +19,12 @@ const useBusinessManagers = (
         return;
       }
       try {
-        const newData = await getBusinessManagers(
-          portalPublicCode.businessManagerId,
-        );
-        setBusinessManagersData(newData);
+        if (portalPublicCode.businessManagerId.length > 0) {
+          const newData = await getBusinessManagers(
+            portalPublicCode.businessManagerId,
+          );
+          setBusinessManagersData(newData);
+        }
       } catch (error) {
         console.info(error);
         setHasError(true);

@@ -22,12 +22,14 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     const fetchRequestsInProgressData = async () => {
       setLoading(true);
       try {
-        const data = await getRequestsInProgress(
-          businessManager,
-          businessUnits,
-          ERequestInProgress.PAYROLL_AGREEMENT,
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            ERequestInProgress.PAYROLL_AGREEMENT,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
         setHasError(true);
@@ -37,7 +39,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [businessManager, businessUnits]);
 
   useEffect(() => {
     if (entryCanceled) {

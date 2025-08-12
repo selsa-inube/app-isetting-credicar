@@ -1,8 +1,8 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useState } from "react";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { decrypt } from "@utils/crypto/decrypt";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
@@ -74,19 +74,21 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
       try {
-        const data = await getRequestsInProgress(
-          businessManager,
-          businessUnits,
-          EPayrollAgreement.CONDITION_RULE,
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            EPayrollAgreement.CONDITION_RULE,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
       }
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [businessManager, businessUnits]);
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);

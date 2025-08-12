@@ -52,19 +52,21 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
       try {
-        const data = await getRequestsInProgress(
-          businessManager,
-          businessUnits,
-          EMoneyDestination.ENTITY,
-        );
-        setRequestsInProgress(data);
+        if (businessManager.length > 0) {
+          const data = await getRequestsInProgress(
+            businessManager,
+            businessUnits,
+            EMoneyDestination.ENTITY,
+          );
+          setRequestsInProgress(data);
+        }
       } catch (error) {
         console.info(error);
       }
     };
 
     fetchRequestsInProgressData();
-  }, []);
+  }, [businessManager, businessUnits]);
 
   useEffect(() => {
     if (changeTab) {
