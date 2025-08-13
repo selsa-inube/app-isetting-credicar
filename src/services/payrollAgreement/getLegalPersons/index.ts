@@ -9,13 +9,13 @@ const getLegalPersonsData = async (
 ): Promise<ILegalPerson[]> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "SearchAllLegalPerson",
+      "X-Action": "SearchAllPayingEntity",
       "X-Business-unit": businessUnits,
     },
   };
   const data: ILegalPerson[] = await getWithRetries<ILegalPerson[]>(
     credicarAxiosInstance,
-    `/legal-persons`,
+    `/paying-entities`,
     config,
   );
   return Array.isArray(data) ? mapLegalPersonsToEntities(data) : [];
