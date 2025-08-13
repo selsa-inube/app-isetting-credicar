@@ -74,6 +74,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
               smallScreen ? `${tokens.spacing.s150}` : `${tokens.spacing.s0}`
             }
             width="100%"
+            alignItems="flex-end"
           >
             <Stack
               justifyContent="center"
