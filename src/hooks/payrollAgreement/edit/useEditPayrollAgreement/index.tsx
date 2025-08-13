@@ -35,62 +35,48 @@ import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/t
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
+import { transformToArray } from "@utils/transformToArray";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const { data } = props;
 
   const regularPaymentValues = () => {
-    if (data.regularPaymentCycles) {
-      return data.regularPaymentCycles.map((entry, index) => ({
-        id: String(index + 1),
-        cycleId: `cycle-${addLeadingZero(index + 1).toString()}`,
-        nameCycle: entry.regularPaymentCycleName,
-        periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
-        payday: getDayPayment(entry.paymentDay),
-        numberDaysUntilCut: Number(entry.numberOfDaysBeforePaymentToBill),
-      }));
-    } else {
-      return [];
-    }
+    const cycles = transformToArray<IRegularPaymentCycles>(
+      data.regularPaymentCycles,
+    );
+
+    return cycles.map((entry, index) => ({
+      id: String(index + 1),
+      cycleId: `cycle-${addLeadingZero(index + 1).toString()}`,
+      nameCycle: entry.regularPaymentCycleName,
+      periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
+      payday: getDayPayment(entry.paymentDay),
+      numberDaysUntilCut: Number(entry.numberOfDaysBeforePaymentToBill),
+    }));
   };
 
   const extraordinaryPaymentValues = () => {
-    let extraordinary: IExtraordinaryCyclesEntry[] = [];
-    if (data.payrollSpecialBenefitPaymentCycles) {
-      extraordinary = extraordinary.concat(
-        Object.entries(data.payrollSpecialBenefitPaymentCycles).length > 0
-          ? data.payrollSpecialBenefitPaymentCycles.map((entry, index) => {
-              return {
-                id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
-                nameCycle: entry.abbreviatedName,
-                typePayment: specialBenefitPayment[0],
-                payday: getDayPayment(entry.paymentDay),
-                numberDaysUntilCut: String(
-                  entry.numberOfDaysBeforePaymentToBill,
-                ),
-              };
-            })
-          : [],
-      );
-    }
-    if (data.severancePaymentCycles) {
-      extraordinary = extraordinary.concat(
-        Object.entries(data.severancePaymentCycles).length > 0
-          ? data.severancePaymentCycles.map((entry, index) => {
-              return {
-                id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
-                nameCycle: entry.abbreviatedName,
-                typePayment: severancePay[0],
-                payday: getDayPayment(entry.paymentDay),
-                numberDaysUntilCut: String(
-                  entry.numberOfDaysBeforePaymentToBill,
-                ),
-              };
-            })
-          : [],
-      );
-    }
-    return extraordinary;
+    const specials = transformToArray<IPayrollSpecialBenefit>(
+      data.payrollSpecialBenefitPaymentCycles,
+    ).map((entry, index) => ({
+      id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
+      nameCycle: entry.abbreviatedName,
+      typePayment: specialBenefitPayment[0],
+      payday: getDayPayment(entry.paymentDay),
+      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+    }));
+
+    const severances = transformToArray<ISeverancePaymentCycles>(
+      data.severancePaymentCycles,
+    ).map((entry, index) => ({
+      id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
+      nameCycle: entry.abbreviatedName,
+      typePayment: severancePay[0],
+      payday: getDayPayment(entry.paymentDay),
+      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+    }));
+
+    return [...specials, ...severances];
   };
 
   const initialData = {
