@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { mediaQueryMobile } from "@config/environment";
-import { normalizeEnumName } from "@utils/normalizeEnumName";
-import { IUseDetailsPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseDetailsPayrollAgreement";
-import { labelsOfRequest } from "@config/payrollAgreement/requestsInProgressTab/details/labelsOfRequest";
-import { detailsRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/details/detailsRequestInProgressModal";
-import { RequestType } from "@enum/requestType";
-import { IDetailsTabsConfig } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsTabsConfig";
-import { IEntry } from "@ptypes/design/table/IEntry";
 import { eventBus } from "@events/eventBus";
+import { RequestType } from "@enum/requestType";
+import { EModalState } from "@enum/modalState";
+import { EpayrollDetails } from "@enum/payrollDetails";
+import { normalizeEnumName } from "@utils/normalizeEnumName";
 import { getDayPayment } from "@utils/getDayPayment";
 import { dataTranslations } from "@utils/dataTranslations";
-import { getSourcesIncome } from "@utils/getSourcesIncome";
+import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
+import { mediaQueryMobile, mediaQueryTablet } from "@config/environment";
+import { labelsOfRequest } from "@config/payrollAgreement/requestsInProgressTab/details/labelsOfRequest";
+import { detailsRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/details/detailsRequestInProgressModal";
+import { IUseDetailsPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseDetailsPayrollAgreement";
+import { IDetailsTabsConfig } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsTabsConfig";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
   const { data, detailsTabsConfig, showModalReq } = props;
@@ -21,6 +23,18 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
   const [showModal, setShowModal] = useState(false);
   const isMobile = useMediaQuery(mediaQueryMobile);
 
+  const dataSourcesOfIncome = (income: IEntry) => {
+    return income
+      ? Object.values(income)
+          .filter((item: IEntry) => item.incomeType)
+          .map(
+            (item: IEntry) =>
+              normalizeEnumTranslation(item.incomeType)?.name ??
+              item.incomeType,
+          )
+          .join(", ")
+      : undefined;
+  };
   const normalizeData = {
     id: data.id,
     TypePayroll:
@@ -29,7 +43,7 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     daysToDetermineDate:
       data.numberOfDaysForReceivingTheDiscounts ?? data.applicationDaysPayroll,
     company: data.payingEntityName,
-    paymentSources: getSourcesIncome(data.incomeTypes),
+    paymentSources: dataSourcesOfIncome(data.incomeTypes),
   };
 
   const handleToggleModal = () => {
@@ -94,7 +108,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
         Object.entries(data.payrollSpecialBenefitPaymentCycles).length > 0
           ? data.payrollSpecialBenefitPaymentCycles.map(
               (item: IEntry, index: string) => {
-                return createExtraOrdinaryCycle(item, index, "Prima");
+                return createExtraOrdinaryCycle(
+                  item,
+                  index,
+                  EpayrollDetails.BONUS,
+                );
               },
             )
           : [],
@@ -105,7 +123,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
       extraordinary = extraordinary.concat(
         Object.entries(data.severancePaymentCycles).length > 0
           ? data.severancePaymentCycles.map((item: IEntry, index: string) => {
-              return createExtraOrdinaryCycle(item, index, "Cesantias");
+              return createExtraOrdinaryCycle(
+                item,
+                index,
+                EpayrollDetails.SEVERANCE_PAY,
+              );
             })
           : [],
       );
@@ -120,7 +142,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
         Object.entries(data.payrollSpecialBenCyclesIncluded).length > 0
           ? data.payrollSpecialBenCyclesIncluded.map(
               (item: IEntry, index: string) => {
-                return createExtraOrdinaryCycle(item, index, "Prima");
+                return createExtraOrdinaryCycle(
+                  item,
+                  index,
+                  EpayrollDetails.BONUS,
+                );
               },
             )
           : [],
@@ -131,7 +157,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
       extraordinary = extraordinary.concat(
         Object.entries(data.severanceCyclesIncluded).length > 0
           ? data.severanceCyclesIncluded.map((item: IEntry, index: string) => {
-              return createExtraOrdinaryCycle(item, index, "Cesantias");
+              return createExtraOrdinaryCycle(
+                item,
+                index,
+                EpayrollDetails.SEVERANCE_PAY,
+              );
             })
           : [],
       );
@@ -146,7 +176,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
         Object.entries(data.payrollSpecialBenCyclesEliminated).length > 0
           ? data.payrollSpecialBenCyclesEliminated.map(
               (item: IEntry, index: string) => {
-                return createExtraOrdinaryCycle(item, index, "Prima");
+                return createExtraOrdinaryCycle(
+                  item,
+                  index,
+                  EpayrollDetails.BONUS,
+                );
               },
             )
           : [],
@@ -158,7 +192,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
         Object.entries(data.severanceCyclesEliminated).length > 0
           ? data.severanceCyclesEliminated.map(
               (item: IEntry, index: string) => {
-                return createExtraOrdinaryCycle(item, index, "Cesantias");
+                return createExtraOrdinaryCycle(
+                  item,
+                  index,
+                  EpayrollDetails.SEVERANCE_PAY,
+                );
               },
             )
           : [],
@@ -175,37 +213,43 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
       const extraordinaryData = extraordinaryPaymentData();
       const ordinaryIncludedPayData = ordinaryIncludedData();
       const ordinaryPayEliminatedData = ordinaryEliminatedData();
-      const extraordinaryPayIncludedData = extraordinaryIncludedData();
-      const extraordinaryPayEliminatedData = extraordinaryEliminatedData();
+      const extraordinaryPayrollIncludedData = extraordinaryIncludedData();
+      const extraordinaryPayrollEliminatedData = extraordinaryEliminatedData();
 
-      if (key === "ordinaryPayment" && ordinaryData.length === 0) {
+      if (
+        key === EpayrollDetails.ORDINARY_PAYMENT &&
+        ordinaryData.length === 0
+      ) {
         return acc;
       }
 
-      if (key === "extraordinaryPayment" && extraordinaryData.length === 0) {
+      if (
+        key === EpayrollDetails.EXTRAORDINARY_PAYMENT &&
+        extraordinaryData.length === 0
+      ) {
         return acc;
       }
       if (
-        key === "ordinaryPaymentIncluded" &&
+        key === EpayrollDetails.ORDINARY_PAYMENT_INCLUDED &&
         ordinaryIncludedPayData.length === 0
       ) {
         return acc;
       }
       if (
-        key === "ordinaryPaymentRemoved" &&
+        key === EpayrollDetails.ORDINARY_PAYMENT_REMOVED &&
         ordinaryPayEliminatedData.length === 0
       ) {
         return acc;
       }
       if (
-        key === "extraordinaryPaymentIncluded" &&
-        extraordinaryPayIncludedData.length === 0
+        key === EpayrollDetails.EXTRAORDINARY_PAYMENT_INCLUDED &&
+        extraordinaryPayrollIncludedData.length === 0
       ) {
         return acc;
       }
       if (
-        key === "extraordinaryPaymentRemoved" &&
-        extraordinaryPayEliminatedData.length === 0
+        key === EpayrollDetails.EXTRAORDINARY_PAYMENT_REMOVED &&
+        extraordinaryPayrollEliminatedData.length === 0
       ) {
         return acc;
       }
@@ -236,18 +280,18 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     RequestType[data.request as keyof typeof RequestType] ?? data.request
   }`;
 
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   useEffect(() => {
     const emitEvent = (eventName: string) => {
       eventBus.emit(eventName, showModal);
     };
     if (showModalReq && !showModal) {
-      emitEvent("secondModalState");
+      emitEvent(EModalState.SECOND_MODAL_STATE);
     } else if (!showModalReq && !showModal) {
-      emitEvent("secondModalState");
+      emitEvent(EModalState.SECOND_MODAL_STATE);
     } else if (!showModalReq && showModal) {
-      emitEvent("thirdModalState");
+      emitEvent(EModalState.THIRD_MODAL_STATE);
     }
   }, [showModal]);
 

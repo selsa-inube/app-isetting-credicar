@@ -83,6 +83,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                           fullwidth
                           invalid={isInvalid(formik, "nameDestination")}
                           message={formik.errors.nameDestination}
+                          required
                         />
                       </Stack>
                     )}

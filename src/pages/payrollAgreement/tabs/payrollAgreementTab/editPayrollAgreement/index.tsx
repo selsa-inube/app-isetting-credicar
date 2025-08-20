@@ -1,12 +1,12 @@
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditPayrollAgreement } from "@hooks/payrollAgreement/edit/useEditPayrollAgreement";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
+import { EUseCase } from "@enum/useCase";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
-import { UseCase } from "@enum/useCase";
 import { EditPayrollAgreementUI } from "./interface";
 
 const EditPayrollAgreement = () => {
@@ -68,7 +68,7 @@ const EditPayrollAgreement = () => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
-    useCase: UseCase.EDIT,
+    useCase: EUseCase.EDIT,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

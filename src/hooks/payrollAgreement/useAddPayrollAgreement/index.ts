@@ -404,15 +404,17 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       payrollForDeductionAgreementCode:
         formValues.generalInformation.values.code,
       abbreviatedName: formValues.generalInformation.values.abbreviatedName,
-      numberOfDaysForReceivingTheDiscounts: Number(
-        formValues.generalInformation.values.applicationDaysPayroll,
-      ),
       payrollForDeductionAgreementType:
         formValues.generalInformation.values.typePayroll,
       incomeTypes: getIncomeTypesData(
         formValues.generalInformation.values.sourcesOfIncome,
       ),
     };
+    if (formValues.generalInformation.values.applicationDaysPayroll) {
+      configurationRequestData.numberOfDaysForReceivingTheDiscounts = Number(
+        formValues.generalInformation.values.applicationDaysPayroll,
+      );
+    }
 
     if (
       formValues.company.values.companySelected !== ECyclesPayroll.ADD_COMPANY
@@ -457,7 +459,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       useCaseName: "AddPayrollAgreement",
       configurationRequestData,
     });
-    setShowRequestProcessModal(!showRequestProcessModal);
+    setShowRequestProcessModal(true);
   };
 
   return {

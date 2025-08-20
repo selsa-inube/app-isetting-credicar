@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
 import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
-import { UseCase } from "@enum/useCase";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
+import { EUseCase } from "@enum/useCase";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IEditGeneralPolicies } from "@ptypes/generalCredPolicies/IEditGeneralPolicies";
@@ -84,7 +84,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveGeneralPolicies({
-    useCase: UseCase.EDIT,
+    useCase: EUseCase.EDIT,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

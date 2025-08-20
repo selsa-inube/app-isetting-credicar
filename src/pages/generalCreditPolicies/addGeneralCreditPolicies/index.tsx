@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useAddGenCredPolicies } from "@hooks/GeneralCreditPolicies/useAddGenCredPolicies";
 import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
-import { UseCase } from "@enum/useCase";
+import { EUseCase } from "@enum/useCase";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -52,7 +52,7 @@ const AddGenCreditPolicies = () => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveGeneralPolicies({
-    useCase: UseCase.ADD,
+    useCase: EUseCase.ADD,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

@@ -1,10 +1,10 @@
 import { AxiosRequestConfig } from "axios";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
-import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre/index.ts";
 import { deleteWithRetries } from "@services/core/deleteWithRetries";
+import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre/index.ts";
 import { mapDeletePayrollnEntityToApi } from "./mappers";
 
-const deletePayrollAgre = async (
+const deletePayrollAgreement = async (
   businessUnit: string,
   data: IRequestPayrollAgre,
 ): Promise<IRequestPayrollAgre> => {
@@ -25,4 +25,4 @@ const deletePayrollAgre = async (
   return newData;
 };
 
-export { deletePayrollAgre };
+export { deletePayrollAgreement };

@@ -1,13 +1,13 @@
 import { Stack, Text, Divider, Tabs, Grid } from "@inubekit/inubekit";
 
-import { moreDetailsRequestModal } from "@config/payrollAgreement/requestsInProgressTab/details/moreDetailsRequestModal";
-import { tokens } from "@design/tokens";
+import { useMoreDetails } from "@hooks/payrollAgreement/useMoreDetails";
 import { EComponentAppearance } from "@enum/appearances";
+import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { ModalWrapper } from "@design/modals/modalWrapper";
+import { moreDetailsRequestModal } from "@config/payrollAgreement/requestsInProgressTab/details/moreDetailsRequestModal";
 import { IMoreDetails } from "@ptypes/payrollAgreement/requestInProgTab/IMoreDetails";
 import { ILabel } from "@ptypes/ILabel";
-import { useMoreDetails } from "@hooks/payrollAgreement/useMoreDetails";
 import { OrdinaryPaymentCycles } from "./tabs/ordinaryPaymentCycles";
 import { ExtraordinaryPaymentCycles } from "./tabs/extraordinaryPaymentCycles";
 
@@ -130,11 +130,7 @@ const MoreDetails = (props: IMoreDetails) => {
               <Text size="medium" type="label" weight="bold">
                 {field.titleName}
               </Text>
-              <Text
-                size="medium"
-                appearance={EComponentAppearance.GRAY}
-                ellipsis
-              >
+              <Text size="medium" appearance={EComponentAppearance.GRAY}>
                 {data[field.id]}
               </Text>
             </BoxContainer>
