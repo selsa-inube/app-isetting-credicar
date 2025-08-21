@@ -286,7 +286,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     if (!compare || !compareGeneral) {
       setShowGoBackModal(true);
     } else {
-      navigate(-1);
+      navigate("/");
     }
   };
 
