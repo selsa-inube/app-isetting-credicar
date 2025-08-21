@@ -47,7 +47,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
 
     return cycles.map((entry, index) => ({
       id: String(index + 1),
-      cycleId: `cycle-${addLeadingZero(index + 1).toString()}`,
+      cycleId: `${addLeadingZero(index + 1).toString()}`,
       nameCycle: entry.regularPaymentCycleName,
       periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
       payday: getDayPayment(entry.paymentDay),
@@ -169,13 +169,25 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     );
   }, []);
 
+  const extraordinaryData = extraordinaryPaymentValues();
+
+  const shouldHideExtraordinaryTab = useMemo(() => {
+    const hasValidPeriodicity = regularPaymentCycles.some((cycle) => {
+      const isValidPeriodicity =
+        cycle.periodicity !== undefined &&
+        includedPeriodicity.includes(cycle.periodicity);
+      return isValidPeriodicity;
+    });
+
+    return !hasValidPeriodicity && extraordinaryData.length === 0;
+  }, [extraordinaryData, regularPaymentCycles, includedPeriodicity]);
+
   const filteredTabsConfig = useMemo(() => {
     return Object.keys(editPayrollAgTabsConfig).reduce((acc, key) => {
       const tab =
         editPayrollAgTabsConfig[key as keyof typeof editPayrollAgTabsConfig];
 
       const ordinaryData = regularPaymentValues();
-
       if (
         key === editPayrollAgTabsConfig.regularPaymentCycles.id &&
         ordinaryData.length === 0
@@ -184,11 +196,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       }
       if (
         key === editPayrollAgTabsConfig.extraordinaryPaymentCycles.id &&
-        !regularPaymentCycles.some(
-          (e) =>
-            e.periodicity !== undefined &&
-            includedPeriodicity.includes(e.periodicity),
-        )
+        shouldHideExtraordinaryTab
       ) {
         return acc;
       }
@@ -198,7 +206,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       }
       return acc;
     }, {} as IEditPayrollTabsConfig);
-  }, [regularPaymentValues]);
+  }, [regularPaymentValues, extraordinaryPaymentValues, regularPaymentCycles]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
