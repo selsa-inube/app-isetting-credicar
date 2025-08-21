@@ -4,7 +4,7 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
-import { postAddPayrollAgreement } from "@src/services/payrollAgreement/postAddPayrollAgreement";
+import { postAddPayrollAgreement } from "@services/payrollAgreement/postAddPayrollAgreement";
 import { pacthEditPayrollAgreement } from "@services/payrollAgreement/pacthEditPayrollAgre";
 import { deletePayrollAgreement } from "@services/payrollAgreement/deletePayrollAgre";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
@@ -91,6 +91,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     try {
       if (useCase === EUseCase.ADD) {
         const newData = await postAddPayrollAgreement(
+          userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
@@ -98,6 +99,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       }
       if (useCase === EUseCase.EDIT) {
         const newData = await pacthEditPayrollAgreement(
+          userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
@@ -105,6 +107,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       }
       if (useCase === EUseCase.DELETE) {
         const newData = await deletePayrollAgreement(
+          userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );

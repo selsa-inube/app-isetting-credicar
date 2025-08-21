@@ -5,6 +5,11 @@ import { cancelRequestInProgress } from "@services/requestInProgress/cancelReque
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
+import { EComponentAppearance } from "@enum/appearances";
+import { disabledModal } from "@config/disabledModal";
+import { notCancelStatus } from "@config/status/notCancelStatus";
+import { cannotCancelledModal } from "@config/moneyDestination/moneyDestinationTab/generics/cannotCancelledModal";
+import { cancelRequestInProgressModal } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgressModal";
 import { cancelRequestInProgressMessage } from "@config/moneyDestination/moneyDestinationTab/generics/cancelRequestInProgMessage";
 import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
 import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICancelReqInProgressRequest";
@@ -17,9 +22,40 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showDecision, setShowDecision] = useState(false);
+  const [cannotCancelled, setCannotCancelled] = useState(false);
+
   const { addFlag } = useFlag();
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
+
+  const notCancel = notCancelStatus.includes(data.requestStatus);
+
+  const handleToggleModal = () => {
+    if (disabledButton) {
+      setShowInfoModal(!showInfoModal);
+    }
+    if (!disabledButton) {
+      if (notCancel) {
+        setCannotCancelled(true);
+      } else {
+        setShowModal(!showModal);
+      }
+    }
+  };
+
+  const handleToggleCancelledModal = () => {
+    setCannotCancelled(!notCancel);
+  };
+
+  const handleToggleInfoModal = () => {
+    setShowInfoModal(!showInfoModal);
+  };
+
+  useEffect(() => {
+    const decision = showInfoModal || showModal || cannotCancelled;
+    setShowDecision(decision);
+  }, [showInfoModal, showModal, cannotCancelled]);
 
   const fetchCancelRequestData = async (
     data: ICancelRequestInProgressRequest,
@@ -59,17 +95,57 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     });
   };
 
-  const handleToggleModal = () => {
-    if (disabledButton) {
-      setShowInfoModal(!showInfoModal);
-    } else {
-      setShowModal(!showModal);
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
+    };
+
+    if (showInfoModal) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
+      };
     }
+
+    if (showModal) {
+      return {
+        ...cancelRequestInProgressModal,
+        onCloseModal: handleToggleModal,
+        onClick: handleClick,
+        withCancelButton: true,
+        appearance: EComponentAppearance.DANGER,
+        appearanceButton: EComponentAppearance.DANGER,
+      };
+    }
+
+    if (cannotCancelled) {
+      return {
+        ...cannotCancelledModal,
+        onCloseModal: handleToggleCancelledModal,
+        onClick: handleToggleModal,
+        withCancelButton: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    return initial;
   };
 
-  const handleToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
-  };
+  const modalData = modal();
+
   useEffect(() => {
     eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
@@ -79,6 +155,8 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     loading,
     hasError,
     showInfoModal,
+    modalData,
+    showDecision,
     handleToggleInfoModal,
     handleToggleModal,
     handleClick,
