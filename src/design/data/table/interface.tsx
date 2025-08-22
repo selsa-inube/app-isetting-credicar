@@ -140,7 +140,7 @@ const TableUI = (props: ITableUI) => {
 
       {isPaginated && (
         <Tfoot>
-          <Tr border="bottom">
+          <Tr>
             <Td
               colSpan={
                 mediaActionOpen
