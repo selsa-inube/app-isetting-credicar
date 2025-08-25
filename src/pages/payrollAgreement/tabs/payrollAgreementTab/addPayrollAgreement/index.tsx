@@ -1,13 +1,13 @@
 import { useContext } from "react";
-import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
 import { useAddPayrollAgreement } from "@hooks/payrollAgreement/useAddPayrollAgreement";
-import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
+import { EUseCase } from "@enum/useCase";
+import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { IServerDomain } from "@ptypes/IServerDomain";
-import { UseCase } from "@enum/useCase";
 import { AddPayrollAgreementUI } from "./interface";
 
 const AddPayrollAgreement = () => {
@@ -54,7 +54,7 @@ const AddPayrollAgreement = () => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
-    useCase: UseCase.ADD,
+    useCase: EUseCase.ADD,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

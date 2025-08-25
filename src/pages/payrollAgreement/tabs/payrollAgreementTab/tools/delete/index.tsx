@@ -1,19 +1,19 @@
 import { useContext } from "react";
 
-import { DeleteRecord } from "@design/feedback/DeleteRecord";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { EComponentAppearance } from "@enum/appearances";
-import { RequestStatusModal } from "@design/modals/requestStatusModal";
-import { RequestProcess } from "@design/feedback/RequestProcess";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
-import { deletePayrollAgreModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletePayrollAgreModal";
 import { useDeletePayroll } from "@hooks/payrollAgreement/useDeletePayroll";
-import { IDelete } from "@ptypes/payrollAgreement/IDelete";
+import { RequestProcess } from "@design/feedback/RequestProcess";
+import { DeleteRecord } from "@design/feedback/DeleteRecord";
+import { RequestStatusModal } from "@design/modals/requestStatusModal";
+import { EUseCase } from "@enum/useCase";
+import { EComponentAppearance } from "@enum/appearances";
+import { deletePayrollAgreModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletePayrollAgreModal";
 import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestProcessMessage";
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { UseCase } from "@enum/useCase";
 import { portalId } from "@config/portalId";
+import { IDelete } from "@ptypes/payrollAgreement/IDelete";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 const Delete = (props: IDelete) => {
   const { data, setEntryDeleted } = props;
@@ -42,7 +42,7 @@ const Delete = (props: IDelete) => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSavePayrollAgreement({
-    useCase: UseCase.DELETE,
+    useCase: EUseCase.DELETE,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

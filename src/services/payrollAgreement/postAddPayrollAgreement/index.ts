@@ -1,10 +1,10 @@
 import { AxiosRequestConfig } from "axios";
-import { postWithRetries } from "@services/core/postWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
+import { postWithRetries } from "@services/core/postWithRetries";
 import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre/index.ts";
 import { mapAddPayrollnEntityToApi } from "./mappers";
 
-const postAddPayrollAgre = async (
+const postAddPayrollAgreement = async (
   businessUnit: string,
   data: IRequestPayrollAgre,
 ): Promise<IRequestPayrollAgre> => {
@@ -21,8 +21,7 @@ const postAddPayrollAgre = async (
     mapAddPayrollnEntityToApi(data) as unknown as string[],
     credicarAxiosInstance,
   );
-
   return newData;
 };
 
-export { postAddPayrollAgre };
+export { postAddPayrollAgreement };

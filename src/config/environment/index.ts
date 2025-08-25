@@ -8,7 +8,7 @@ const maxRetriesDelete = 1;
 const fetchTimeoutServices = 6000;
 
 const mediaQueryMobile = "(max-width: 770px)";
-const mediaQueryTablet = "(max-width: 990px)";
+const mediaQueryTablet = "(max-width: 1200px)";
 const mediaQueryMobileSmall = "(max-width: 450px)";
 
 const stripLeadingSlash = (u?: string) => u?.replace(/^\/+/, "") ?? undefined;

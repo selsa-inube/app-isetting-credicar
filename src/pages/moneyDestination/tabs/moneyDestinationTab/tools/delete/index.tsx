@@ -1,19 +1,19 @@
 import { useContext } from "react";
 
-import { deleteMoneyDestinationModal } from "@config/moneyDestination/moneyDestinationTab/generics/deleteMoneyDestinationModal";
-import { DeleteRecord } from "@design/feedback/DeleteRecord";
-import { useDeleteDestination } from "@hooks/moneyDestination/useDeleteDestination";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useDeleteDestination } from "@hooks/moneyDestination/useDeleteDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { EUseCase } from "@enum/useCase";
 import { EComponentAppearance } from "@enum/appearances";
-import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
-import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
-import { UseCase } from "@enum/useCase";
-import { IDelete } from "@ptypes/moneyDestination/tabs/IDelete";
+import { DeleteRecord } from "@design/feedback/DeleteRecord";
+import { deleteMoneyDestinationModal } from "@config/moneyDestination/moneyDestinationTab/generics/deleteMoneyDestinationModal";
 import { portalId } from "@config/portalId";
+import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
+import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IDelete } from "@ptypes/moneyDestination/tabs/IDelete";
 
 const Delete = (props: IDelete) => {
   const { data, setEntryDeleted } = props;
@@ -40,7 +40,7 @@ const Delete = (props: IDelete) => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
-    useCase: UseCase.DELETE,
+    useCase: EUseCase.DELETE,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

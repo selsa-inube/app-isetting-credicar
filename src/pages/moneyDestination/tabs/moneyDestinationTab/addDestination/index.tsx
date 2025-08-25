@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { useAddDestination } from "@hooks/moneyDestination/useAddDestination";
-import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { EUseCase } from "@enum/useCase";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { UseCase } from "@enum/useCase";
 import { AddDestinationUI } from "./interface";
 
 function AddDestination() {
@@ -48,7 +48,7 @@ function AddDestination() {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
-    useCase: UseCase.ADD,
+    useCase: EUseCase.ADD,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

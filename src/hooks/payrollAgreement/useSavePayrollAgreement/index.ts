@@ -2,26 +2,26 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { postAddPayrollAgreement } from "@services/payrollAgreement/postAddPayrollAgreement";
+import { pacthEditPayrollAgreement } from "@services/payrollAgreement/pacthEditPayrollAgre";
+import { deletePayrollAgreement } from "@services/payrollAgreement/deletePayrollAgre";
+import { ERequestStepsStatus } from "@enum/requestStepsStatus";
+import { EUseCase } from "@enum/useCase";
 import { interventionHumanMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/interventionHumanMessage";
 import { flowAutomaticMessages } from "@config/payrollAgreement/payrollAgreementTab/generic/flowAutomaticMessages";
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
-import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre";
-import { IUseSavePayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseSavePayrollAgreement";
-import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { statusCloseModal } from "@config/status/statusCloseModal";
-import { statusRequestFinished } from "@config/status/statusRequestFinished";
-import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
-import { postAddPayrollAgre } from "@services/payrollAgreement/postAddPayrollAgre";
-import { pacthEditPayrollAgre } from "@services/payrollAgreement/pacthEditPayrollAgre";
-import { deletePayrollAgre } from "@services/payrollAgreement/deletePayrollAgre";
-import { RequestStepsStatus } from "@enum/requestStepsStatus";
-import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { requestStepsInitial } from "@config/requestSteps";
 import { operationTypes } from "@config/useCase";
 import { requestStepsNames } from "@config/requestStepsNames";
-import { UseCase } from "@enum/useCase";
+import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
+import { statusCloseModal } from "@config/status/statusCloseModal";
+import { statusRequestFinished } from "@config/status/statusRequestFinished";
+import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre";
+import { IUseSavePayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseSavePayrollAgreement";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 
 const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const {
@@ -45,12 +45,13 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const [showPendingReqModal, setShowPendingReqModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
+  const [networkError, setNetworkError] = useState<string>("");
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
   const navigate = useNavigate();
   const navigatePage = "/payroll-agreement";
 
-  const fetchSavePayrollAgData = async () => {
+  const fetchSavePayrollData = async () => {
     setLoadingSendData(true);
     try {
       const saveData = await postSaveRequest(userAccount, data);
@@ -88,23 +89,22 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
 
   const fetchRequestData = async () => {
     try {
-      if (useCase === UseCase.ADD) {
-        const newData = await postAddPayrollAgre(
+      if (useCase === EUseCase.ADD) {
+        const newData = await postAddPayrollAgreement(
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
-      if (useCase === UseCase.EDIT) {
-        const newData = await pacthEditPayrollAgre(
+      if (useCase === EUseCase.EDIT) {
+        const newData = await pacthEditPayrollAgreement(
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
-
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
-      if (useCase === UseCase.DELETE) {
-        const newData = await deletePayrollAgre(
+      if (useCase === EUseCase.DELETE) {
+        const newData = await deletePayrollAgreement(
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
@@ -113,14 +113,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
-      setSendData(false);
-      addFlag({
-        title: flowAutomaticMessages().errorQueryingData.title,
-        description: flowAutomaticMessages().errorQueryingData.description,
-        appearance: flowAutomaticMessages().errorQueryingData
-          .appearance as IFlagAppearance,
-        duration: flowAutomaticMessages().errorQueryingData.duration,
-      });
+      setNetworkError(String(error));
       setShowModal(false);
     }
   };
@@ -128,7 +121,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const updateRequestSteps = (
     steps: IRequestSteps[],
     stepName: string,
-    newStatus: "pending" | "completed" | "error",
+    newStatus: ERequestStepsStatus,
   ): IRequestSteps[] => {
     return steps.map((step) => {
       if (step.name === stepName) {
@@ -158,27 +151,30 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           updateRequestSteps(
             prev,
             requestStepsNames.requestFilled,
-            RequestStepsStatus.ERROR,
+            ERequestStepsStatus.ERROR,
           ),
         );
-        setSendData(false);
+        setTimeout(() => {
+          setSendData(false);
+          navigate(navigatePage);
+        }, 3000);
       } else {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
             requestStepsNames.requestFilled,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
-    }, 1000);
+    }, 1500);
     setTimeout(() => {
       if (isStatusIntAutomatic(statusRequest)) {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
             requestStepsNames.adding,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -188,14 +184,14 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           updateRequestSteps(
             prev,
             requestStepsNames.adding,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
             requestStepsNames.requestAdded,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -205,12 +201,35 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           updateRequestSteps(
             prev,
             requestStepsNames.adding,
-            RequestStepsStatus.ERROR,
+            ERequestStepsStatus.ERROR,
           ),
         );
       }
     }, 2000);
   };
+
+  useEffect(() => {
+    if (networkError.length > 0) {
+      setRequestSteps((prev) =>
+        updateRequestSteps(
+          prev,
+          requestStepsNames.adding,
+          ERequestStepsStatus.ERROR,
+        ),
+      );
+      setTimeout(() => {
+        setSendData(false);
+        navigate(navigatePage);
+        addFlag({
+          title: flowAutomaticMessages().errorQueryingData.title,
+          description: networkError,
+          appearance: flowAutomaticMessages().errorQueryingData
+            .appearance as IFlagAppearance,
+          duration: flowAutomaticMessages().errorQueryingData.duration,
+        });
+      }, 3000);
+    }
+  }, [networkError]);
 
   const handleStatusChange = () => {
     if (isStatusIntAutomatic(savePayrollAgreement?.requestStatus)) {
@@ -245,7 +264,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     if (isStatusCloseModal() || isStatusRequestFinished()) {
       handleStatusChange();
     }
-    if (useCase !== UseCase.DELETE) {
+    if (useCase !== EUseCase.DELETE) {
       setTimeout(() => {
         navigate(navigatePage);
       }, 3000);
@@ -266,7 +285,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSavePayrollAgData();
+    fetchSavePayrollData();
   }, [sendData]);
 
   useEffect(() => {

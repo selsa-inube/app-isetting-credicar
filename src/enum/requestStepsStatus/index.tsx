@@ -1,7 +1,7 @@
-enum RequestStepsStatus {
+enum ERequestStepsStatus {
   PENDING = "pending",
   COMPLETED = "completed",
   ERROR = "error",
 }
 
-export { RequestStepsStatus };
+export { ERequestStepsStatus };
