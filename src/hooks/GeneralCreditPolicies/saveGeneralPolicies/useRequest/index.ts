@@ -1,7 +1,8 @@
-import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { RequestStepsStatus } from "@enum/requestStepsStatus";
+import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
 import { operationTypes } from "@config/useCase";
@@ -19,6 +20,7 @@ const useRequest = (props: IUseRequest) => {
     statusRequest,
     errorFetchRequest,
     saveGeneralPolicies,
+    networkError,
   } = props;
 
   const { addFlag } = useFlag();
@@ -26,6 +28,8 @@ const useRequest = (props: IUseRequest) => {
     useState<IRequestSteps[]>(requestStepsInitial);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
+  const navigate = useNavigate();
+  const navigatePage = "/payroll-agreement";
   const isStatusInAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
   };
@@ -33,7 +37,7 @@ const useRequest = (props: IUseRequest) => {
   const updateRequestSteps = (
     steps: IRequestSteps[],
     stepName: string,
-    newStatus: "pending" | "completed" | "error",
+    newStatus: ERequestStepsStatus,
   ): IRequestSteps[] => {
     return steps.map((step) => {
       if (step.name === stepName) {
@@ -63,7 +67,7 @@ const useRequest = (props: IUseRequest) => {
           updateRequestSteps(
             prev,
             requestStepsNames.requestFilled,
-            RequestStepsStatus.ERROR,
+            ERequestStepsStatus.ERROR,
           ),
         );
         setSendData(false);
@@ -72,7 +76,7 @@ const useRequest = (props: IUseRequest) => {
           updateRequestSteps(
             prev,
             requestStepsNames.requestFilled,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -83,7 +87,7 @@ const useRequest = (props: IUseRequest) => {
           updateRequestSteps(
             prev,
             requestStepsNames.adding,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -93,14 +97,14 @@ const useRequest = (props: IUseRequest) => {
           updateRequestSteps(
             prev,
             requestStepsNames.adding,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
             requestStepsNames.requestAdded,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -110,12 +114,35 @@ const useRequest = (props: IUseRequest) => {
           updateRequestSteps(
             prev,
             requestStepsNames.adding,
-            RequestStepsStatus.ERROR,
+            ERequestStepsStatus.ERROR,
           ),
         );
       }
     }, 2000);
   };
+
+  useEffect(() => {
+    if (networkError.length > 0) {
+      setRequestSteps((prev) =>
+        updateRequestSteps(
+          prev,
+          requestStepsNames.adding,
+          ERequestStepsStatus.ERROR,
+        ),
+      );
+      setTimeout(() => {
+        setSendData(false);
+        navigate(navigatePage);
+        addFlag({
+          title: flowAutomaticMessages().errorQueryingData.title,
+          description: networkError,
+          appearance: flowAutomaticMessages().errorQueryingData
+            .appearance as IFlagAppearance,
+          duration: flowAutomaticMessages().errorQueryingData.duration,
+        });
+      }, 3000);
+    }
+  }, [networkError]);
 
   const handleStatusChange = () => {
     if (isStatusInAutomatic(saveGeneralPolicies?.requestStatus)) {

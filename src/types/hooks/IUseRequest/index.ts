@@ -7,6 +7,7 @@ interface IUseRequest {
   statusRequest: string;
   saveGeneralPolicies: ISaveDataResponse;
   errorFetchRequest: boolean;
+  networkError: string;
 }
 
 export type { IUseRequest };

@@ -1,4 +1,5 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import { getErrorMessage } from "@utils/getErrorMessage";
 import { maxRetriesPost } from "@config/environment";
 
 const postWithRetries = async <T>(
@@ -8,6 +9,7 @@ const postWithRetries = async <T>(
   axiosInstance: AxiosInstance,
 ): Promise<T> => {
   const maxRetries = maxRetriesPost;
+  let lastError: unknown = null;
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -18,17 +20,22 @@ const postWithRetries = async <T>(
       );
       return response.data;
     } catch (error) {
+      lastError = error;
+
       if (error instanceof Error) {
         console.error(`Attempt ${attempt} failed: ${error.message}`);
       } else {
         console.error(`Attempt ${attempt} failed: ${String(error)}`);
       }
+
       if (attempt === maxRetries) {
-        throw error;
+        break;
       }
     }
   }
-  throw new Error("Error al obtener los de las unidades de negocio.");
+
+  const errorMessage = getErrorMessage(lastError);
+  throw new Error(errorMessage);
 };
 
 export { postWithRetries };

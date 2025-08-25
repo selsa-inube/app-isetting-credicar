@@ -6,8 +6,7 @@ import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest"
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
 import { patchEditGeneralPolicies } from "@services/generalPolicies/patchEditGeneralPolicies";
-import { UseCase } from "@enum/useCase";
-
+import { EUseCase } from "@enum/useCase";
 import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -33,6 +32,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const [showPendingReqModal, setShowPendingReqModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
+  const [networkError, setNetworkError] = useState<string>("");
 
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
@@ -74,6 +74,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     statusRequest: statusRequest || "",
     saveGeneralPolicies: saveGeneralPolicies as ISaveDataResponse,
     errorFetchRequest,
+    networkError,
   });
 
   const requestConfiguration = {
@@ -86,7 +87,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   const fetchRequestData = async () => {
     try {
-      if (useCase === UseCase.ADD) {
+      if (useCase === EUseCase.ADD) {
         const newData = await postAddGeneralPolicies(
           businessUnits,
           userAccount,
@@ -94,7 +95,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
-      if (useCase === UseCase.EDIT) {
+      if (useCase === EUseCase.EDIT) {
         const newData = await patchEditGeneralPolicies(
           businessUnits,
           userAccount,
@@ -106,17 +107,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
-      setSendData(false);
-      setTimeout(() => {
-        navigate(navigatePage);
-      }, 3000);
-      addFlag({
-        title: flowAutomaticMessages().errorQueryingData.title,
-        description: flowAutomaticMessages().errorQueryingData.description,
-        appearance: flowAutomaticMessages().errorQueryingData
-          .appearance as IFlagAppearance,
-        duration: flowAutomaticMessages().errorQueryingData.duration,
-      });
+      setNetworkError(String(error));
       setShowModal(false);
     }
   };
@@ -126,7 +117,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     if (isStatusCloseModal() || isStatusRequestFinished()) {
       handleStatusChange();
     }
-    if (useCase !== UseCase.DELETE) {
+    if (useCase !== EUseCase.DELETE) {
       setTimeout(() => {
         navigate(navigatePage);
       }, 3000);

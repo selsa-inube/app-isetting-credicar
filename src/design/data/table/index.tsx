@@ -1,4 +1,4 @@
-import { Stack, useMediaQueries, useMediaQuery } from "@inubekit/inubekit";
+import { useMediaQueries, useMediaQuery } from "@inubekit/inubekit";
 
 import { useMemo, useState } from "react";
 import { filterEntries } from "@utils/table/filterEntries";
@@ -13,7 +13,7 @@ import { titleColumns } from "@utils/table/titleColumns";
 import { findCurrentMediaQuery } from "@utils/table/breakpoint/findCurrentMediaQuery";
 import { ITable } from "@ptypes/design/table/ITable";
 import { TableUI } from "./interface";
-import { StyledContainerTable } from "./styles";
+import { StyledContainerTable, StyledTableOverflow } from "./styles";
 
 const Table = (props: ITable) => {
   const {
@@ -70,7 +70,7 @@ const Table = (props: ITable) => {
       $entriesLength={entries.length}
       $isTablet={screenTablet}
     >
-      <Stack direction="column">
+      <StyledTableOverflow>
         <TableUI
           titles={titles}
           actions={actions}
@@ -104,7 +104,7 @@ const Table = (props: ITable) => {
           hasEntries={hasEntries}
           isPaginated={isPaginated}
         />
-      </Stack>
+      </StyledTableOverflow>
     </StyledContainerTable>
   );
 };
