@@ -1,23 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
+
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { patchEditMoneyDestination } from "@services/moneyDestination/patchEditMoneyDestination";
+import { deleteMoneyDestination } from "@services/moneyDestination/deleteMoneyDestination";
+import { postAddMoneyDestination } from "@services/moneyDestination/postAddMoneyDestination";
+import { EUseCase } from "@enum/useCase";
+import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
-import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { flowAutomaticMessages } from "@config/moneyDestination/moneyDestinationTab/generics/flowAutomaticMessages";
 import { interventionHumanMessage } from "@config/moneyDestination/moneyDestinationTab/generics/interventionHumanMessage";
 import { statusCloseModal } from "@config/status/statusCloseModal";
-import { statusRequestFinished } from "@config/status/statusRequestFinished";
-import { postAddMoneyDestination } from "@services/moneyDestination/postAddMoneyDestination";
-import { IRequestMoneyDestination } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IRequestMoneyDestination";
-import { patchEditMoneyDestination } from "@services/moneyDestination/patchEditMoneyDestination";
-import { deleteMoneyDestination } from "@services/moneyDestination/deleteMoneyDestination";
-import { IUseSaveMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseSaveMoneyDestination";
-import { UseCase } from "@enum/useCase";
 import { operationTypes } from "@config/useCase";
-import { RequestStepsStatus } from "@enum/requestStepsStatus";
-import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
-import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { requestStepsInitial } from "@config/requestSteps";
+import { statusRequestFinished } from "@config/status/statusRequestFinished";
+import { IRequestMoneyDestination } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IRequestMoneyDestination";
+import { IUseSaveMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseSaveMoneyDestination";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 
 const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
@@ -40,6 +41,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   const [showPendingReqModal, setShowPendingReqModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
+  const [networkError, setNetworkError] = useState<string>("");
 
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
@@ -55,7 +57,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         updateRequestSteps(
           prev,
           requestStepsInitial[0].name,
-          RequestStepsStatus.PENDING,
+          ERequestStepsStatus.PENDING,
         ),
       );
     } catch (error) {
@@ -88,14 +90,14 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
   const fetchRequestData = async () => {
     try {
-      if (useCase === UseCase.ADD) {
+      if (useCase === EUseCase.ADD) {
         const newData = await postAddMoneyDestination(
           businessUnits,
           requestConfiguration as IRequestMoneyDestination,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
-      if (useCase === UseCase.EDIT) {
+      if (useCase === EUseCase.EDIT) {
         const newData = await patchEditMoneyDestination(
           businessUnits,
           requestConfiguration as IRequestMoneyDestination,
@@ -103,7 +105,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
-      if (useCase === UseCase.DELETE) {
+      if (useCase === EUseCase.DELETE) {
         const newData = await deleteMoneyDestination(
           businessUnits,
           requestConfiguration as IRequestMoneyDestination,
@@ -114,14 +116,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
-      setSendData(false);
-      addFlag({
-        title: flowAutomaticMessages().errorQueryingData.title,
-        description: flowAutomaticMessages().errorQueryingData.description,
-        appearance: flowAutomaticMessages().errorQueryingData
-          .appearance as IFlagAppearance,
-        duration: flowAutomaticMessages().errorQueryingData.duration,
-      });
+      setNetworkError(String(error));
       setShowModal(false);
     }
   };
@@ -159,7 +154,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
           updateRequestSteps(
             prev,
             requestStepsInitial[0].name,
-            RequestStepsStatus.ERROR,
+            ERequestStepsStatus.ERROR,
           ),
         );
         setSendData(false);
@@ -168,7 +163,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
           updateRequestSteps(
             prev,
             requestStepsInitial[0].name,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -179,7 +174,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
           updateRequestSteps(
             prev,
             requestStepsInitial[1].name,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -189,14 +184,14 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
           updateRequestSteps(
             prev,
             requestStepsInitial[1].name,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
             requestStepsInitial[2].name,
-            RequestStepsStatus.COMPLETED,
+            ERequestStepsStatus.COMPLETED,
           ),
         );
       }
@@ -206,12 +201,35 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
           updateRequestSteps(
             prev,
             requestStepsInitial[1].name,
-            RequestStepsStatus.ERROR,
+            ERequestStepsStatus.ERROR,
           ),
         );
       }
     }, 2000);
   };
+
+  useEffect(() => {
+    if (networkError.length > 0) {
+      setRequestSteps((prev) =>
+        updateRequestSteps(
+          prev,
+          requestStepsInitial[1].name,
+          ERequestStepsStatus.ERROR,
+        ),
+      );
+      setTimeout(() => {
+        setSendData(false);
+        navigate(navigatePage);
+        addFlag({
+          title: flowAutomaticMessages().errorQueryingData.title,
+          description: networkError,
+          appearance: flowAutomaticMessages().errorQueryingData
+            .appearance as IFlagAppearance,
+          duration: flowAutomaticMessages().errorQueryingData.duration,
+        });
+      }, 3000);
+    }
+  }, [networkError]);
 
   const handleStatusChange = () => {
     if (isStatusIntAutomatic(saveMoneyDestination?.requestStatus)) {
@@ -248,7 +266,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
       handleStatusChange();
     }
 
-    if (useCase !== UseCase.DELETE) {
+    if (useCase !== EUseCase.DELETE) {
       setTimeout(() => {
         navigate(navigatePage);
       }, 3000);

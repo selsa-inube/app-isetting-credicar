@@ -1,7 +1,7 @@
-enum UseCase {
+enum EUseCase {
   ADD = "add",
   EDIT = "edit",
   DELETE = "delete",
 }
 
-export { UseCase };
+export { EUseCase };

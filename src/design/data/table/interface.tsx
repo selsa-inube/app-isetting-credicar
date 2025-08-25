@@ -12,8 +12,8 @@ import {
 } from "@inubekit/inubekit";
 import { EComponentAppearance } from "@enum/appearances";
 import { getAlignment } from "@utils/getAlignment/index.";
-import { ITableUI } from "@ptypes/design/table/ITableUI";
 import { tableLabels } from "@config/tableLabels";
+import { ITableUI } from "@ptypes/design/table/ITableUI";
 import { WidthColmnsData } from "./widthColumns";
 import { ShowActionTitle } from "./showActionTitle";
 import { ShowAction } from "./showAction";
@@ -98,7 +98,7 @@ const TableUI = (props: ITableUI) => {
               <>
                 {hasEntries ? (
                   entries.map((entry, index) => (
-                    <Tr key={index} zebra={index % 2 === 1}>
+                    <Tr key={index} zebra={index % 2 === 1} border="top">
                       {TitleColumns.map((title, index) => (
                         <Td
                           key={`${index}-${entry[title.id]}`}
@@ -140,7 +140,7 @@ const TableUI = (props: ITableUI) => {
 
       {isPaginated && (
         <Tfoot>
-          <Tr border="bottom">
+          <Tr>
             <Td
               colSpan={
                 mediaActionOpen

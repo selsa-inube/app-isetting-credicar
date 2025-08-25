@@ -4,7 +4,7 @@ import { patchWithRetries } from "@services/core/patchWithRetries";
 import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre/index.ts";
 import { mapEditPayrollnEntityToApi } from "./mappers";
 
-const pacthEditPayrollAgre = async (
+const pacthEditPayrollAgreement = async (
   businessUnit: string,
   data: IRequestPayrollAgre,
 ): Promise<IRequestPayrollAgre> => {
@@ -25,4 +25,4 @@ const pacthEditPayrollAgre = async (
   return newData;
 };
 
-export { pacthEditPayrollAgre };
+export { pacthEditPayrollAgreement };

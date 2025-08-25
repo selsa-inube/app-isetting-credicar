@@ -2,12 +2,12 @@ import { useContext } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { useLocation } from "react-router-dom";
 import { useEditDestination } from "@hooks/moneyDestination/useEditDestination";
-import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { EUseCase } from "@enum/useCase";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { UseCase } from "@enum/useCase";
 import { EditDestinationUI } from "./interface";
 
 const EditDestination = () => {
@@ -45,7 +45,7 @@ const EditDestination = () => {
     handleCloseProcess,
     handleClosePendingReqModal,
   } = useSaveMoneyDestination({
-    useCase: UseCase.EDIT,
+    useCase: EUseCase.EDIT,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,

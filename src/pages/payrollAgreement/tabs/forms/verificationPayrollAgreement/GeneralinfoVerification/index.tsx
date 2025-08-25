@@ -10,6 +10,15 @@ const RenderGeneralinfoVerification = (
   props: IRenderGeneralInfoVerification,
 ) => {
   const { values, isMobile } = props;
+
+  const dataSourcesOfIncome = values.sourcesOfIncome
+    .split(",")
+    .map((item) => {
+      const normalized = normalizeEnumTranslation(item.trim());
+      return normalized ? normalized.name : item.trim();
+    })
+    .join(", ");
+
   return (
     <>
       <Grid
@@ -31,7 +40,7 @@ const RenderGeneralinfoVerification = (
         <BoxAttribute
           direction="column"
           label={verificationLabels.SourcesIncome}
-          value={values.sourcesOfIncome}
+          value={dataSourcesOfIncome}
         />
         <BoxAttribute
           direction="column"

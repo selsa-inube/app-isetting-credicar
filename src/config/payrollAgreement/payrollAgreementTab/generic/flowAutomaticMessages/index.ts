@@ -9,9 +9,9 @@ const flowAutomaticMessages = (action?: string) => {
       duration: 3000,
     },
     errorQueryingData: {
-      title: "Error al consultar la creacion solicitud",
+      title: "Error al agregar nomina de convenio",
       description:
-        "No fue posible consultar la creacion solicitud por favor intenta más tarde",
+        "No fue posible la creacion de la nomina por favor intenta más tarde",
       appearance: EComponentAppearance.DANGER,
       duration: 3000,
     },
