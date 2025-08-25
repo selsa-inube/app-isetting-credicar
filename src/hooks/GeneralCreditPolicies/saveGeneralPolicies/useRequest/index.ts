@@ -29,7 +29,7 @@ const useRequest = (props: IUseRequest) => {
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
   const navigate = useNavigate();
-  const navigatePage = "/payroll-agreement";
+  const navigatePage = "/";
   const isStatusInAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
   };
