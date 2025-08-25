@@ -60,9 +60,9 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   };
 
   const smallScreen = useMediaQuery(mediaQueryTablet);
-  const widthFirstColumn = smallScreen ? 72 : 25;
+  const widthFirstColumn = smallScreen ? 72 : 80;
 
-  const columnWidths = [widthFirstColumn, 55];
+  const columnWidths = [widthFirstColumn];
 
   const emptyDataMessage = smallScreen
     ? tabLabels.emptyDataMessageMobile

@@ -10,6 +10,7 @@ import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { compareObjects } from "@utils/compareObjects";
+import { normalizeNameDestination } from "@utils/destination/normalizeNameDestination";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { addMoneyLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/addMoneyLabels";
 import { mediaQueryTablet } from "@config/environment";
@@ -166,7 +167,9 @@ const useAddDestination = () => {
       requestDate: formatDate(new Date()),
       useCaseName: EMoneyDestination.USE_CASE_NAME_ADD,
       configurationRequestData: {
-        abbreviatedName: formValues.nameDestination,
+        abbreviatedName:
+          normalizeNameDestination(formValues.nameDestination)?.name ??
+          formValues.nameDestination,
         descriptionUse: formValues.description,
         iconReference: formValues.icon ?? "",
         rules: decisionsData,
