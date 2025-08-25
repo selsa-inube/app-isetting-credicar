@@ -37,7 +37,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     }
     if (!disabledButton) {
       if (notCancel) {
-        setCannotCancelled(true);
+        setCannotCancelled(!cannotCancelled);
       } else {
         setShowModal(!showModal);
       }
