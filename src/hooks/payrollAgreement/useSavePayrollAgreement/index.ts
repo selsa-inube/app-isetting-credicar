@@ -4,7 +4,7 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
-import { postAddPayrollAgreement } from "@src/services/payrollAgreement/postAddPayrollAgreement";
+import { postAddPayrollAgreement } from "@services/payrollAgreement/postAddPayrollAgreement";
 import { pacthEditPayrollAgreement } from "@services/payrollAgreement/pacthEditPayrollAgre";
 import { deletePayrollAgreement } from "@services/payrollAgreement/deletePayrollAgre";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
