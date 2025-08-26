@@ -37,7 +37,7 @@ const useGeneralInformationForm = (
     object().shape({
       nameDestination: validationRules.string
         .required(validationMessages.required)
-        .max(36, "El nombre no puede superar los 36 caracteres"),
+        .max(36, generalInfoLabels.maxLengthName),
       description: validationRules.string.required(validationMessages.required),
       icon: validationRules.string,
     });
@@ -118,11 +118,6 @@ const useGeneralInformationForm = (
     (item) => item.value === formik.values.nameDestination,
   )?.type;
 
-  console.log({
-    addData,
-    enumData,
-    formikValues: formik.values.nameDestination,
-  });
   const valuesEqual =
     JSON.stringify(initialValues) === JSON.stringify(formik.values);
 
