@@ -5,6 +5,7 @@ import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre
 import { mapDeletePayrollnEntityToApi } from "./mappers";
 
 const deletePayrollAgreement = async (
+  userAcount: string,
   businessUnit: string,
   data: IRequestPayrollAgre,
 ): Promise<IRequestPayrollAgre> => {
@@ -12,6 +13,7 @@ const deletePayrollAgreement = async (
     headers: {
       "X-Action": "RemovePayrollForDeductionAgreement",
       "X-Business-Unit": businessUnit,
+      "X-User-Name": userAcount,
     },
   };
 

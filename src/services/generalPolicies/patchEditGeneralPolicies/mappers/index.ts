@@ -11,13 +11,17 @@ const mapEditGeneralPoliciesToApi = (
     decisionsByRule: rule.decisionsByRule.map((decision: any) => ({
       ...decision,
       conditionsThatEstablishesTheDecision:
-        decision.conditionsThatEstablishesTheDecision.map((condition: any) => ({
-          ...condition,
-          value: formatValueDecision(condition.value),
-          conditionName:
-            translationToEnum[condition.conditionName] ||
-            condition.conditionName,
-        })),
+        decision.conditionsThatEstablishesTheDecision
+          ? decision.conditionsThatEstablishesTheDecision.map(
+              (condition: any) => ({
+                ...condition,
+                value: formatValueDecision(condition.value),
+                conditionName:
+                  translationToEnum[condition.conditionName] ||
+                  condition.conditionName,
+              }),
+            )
+          : undefined,
     })),
   }));
 
