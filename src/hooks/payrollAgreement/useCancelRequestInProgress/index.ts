@@ -11,7 +11,7 @@ import { cancelRequestInProgressMessage } from "@config/generalCreditPolicies/re
 import { notCancelStatus } from "@config/status/notCancelStatus";
 import { cancelRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/generic/cancelRequestInProgressModal";
 import { disabledModal } from "@config/disabledModal";
-import { cannotCancelledModal } from "@config/payrollAgreement/requestsInProgressTab/generic/cannotCancelledModal";
+import { cannotCancelledModal } from "@config/cannotCancelledModal";
 import { ICancelReqInProcRequest } from "@ptypes/payrollAgreement/requestInProgTab/ICancelReqInProcRequest";
 import { IUseCancelRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseCancelRequestInProgress";
 

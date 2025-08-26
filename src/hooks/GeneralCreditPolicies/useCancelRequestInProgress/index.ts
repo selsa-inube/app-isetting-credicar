@@ -8,7 +8,7 @@ import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
 import { cancelRequestInProgressMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgressMessage";
 import { cancelRequestInProgressModal } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgressModal";
-import { cannotCancelledModal } from "@config/generalCreditPolicies/generic/cannotCancelledModal";
+import { cannotCancelledModal } from "@config/cannotCancelledModal";
 import { notCancelStatus } from "@config/status/notCancelStatus";
 import { cancelLabels } from "@config/generalCreditPolicies/requestsInProgressTab/cancelLabels";
 import { disabledModal } from "@config/disabledModal";
