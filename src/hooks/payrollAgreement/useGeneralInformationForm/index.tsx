@@ -60,9 +60,12 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       sourcesOfIncome: validationRules.string.required(
         validationMessages.required,
       ),
-      applicationDaysPayroll: validationRules.number.required(
-        validationMessages.required,
-      ),
+      applicationDaysPayroll: validationRules.number
+        .required(validationMessages.required)
+        .test("exact-digits", validationMessages.maxCharacters(2), (value) => {
+          if (!value) return false;
+          return value.toString().length <= 2;
+        }),
     });
 
   const validationSchema = createValidationSchema();

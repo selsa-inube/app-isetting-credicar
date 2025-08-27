@@ -1,6 +1,6 @@
 import { MdInfoOutline, MdOutlineWarningAmber } from "react-icons/md";
 import {
-  Autosuggest,
+  Autocomplete,
   Button,
   Checkpicker,
   Grid,
@@ -232,7 +232,7 @@ const GeneralInformationPayrollFormUI = (
                     />
                   </Stack>
                   <Stack height={tokens.spacing.s600} width="100%">
-                    <Autosuggest
+                    <Autocomplete
                       label=""
                       name="applicationDaysPayroll"
                       id="applicationDaysPayroll"
