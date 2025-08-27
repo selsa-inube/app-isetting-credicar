@@ -3,17 +3,17 @@ import { useFormik } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { object } from "yup";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { useEnumerators } from "@hooks/useEnumerators";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
-import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { codeExistModal } from "@config/payrollAgreement/payrollAgreementTab/generic/codeExistModal";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { mediaQueryTablet } from "@config/environment";
 import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
+import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
 import { usePayrollAgreementData } from "../usePayrollAgreementData";
 
 const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
