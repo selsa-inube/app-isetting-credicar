@@ -3,37 +3,37 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 
-import { transformToArray } from "@utils/transformToArray";
-import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { compareObjects } from "@utils/compareObjects";
 import { formatDate } from "@utils/date/formatDate";
+import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
+import { addLeadingZero } from "@utils/addLeadingZero";
+import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/IRegularPaymentCycles";
+import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { dataTranslations } from "@utils/dataTranslations";
+import { getDayPayment } from "@utils/getDayPayment";
+import { transformToArray } from "@utils/transformToArray";
+import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
+import { getSourcesIncome } from "@utils/getSourcesIncome";
+import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
+import { mediaQueryMobile } from "@config/environment";
+import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
+import { typePayrollForCyclesExtraord } from "@config/payrollAgreement/payrollAgreementTab/assisted/typePayrollForCyclesExtraord";
+import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
+import { IUseEditPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseEditPayrollAgreement";
+import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
+import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
+import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
+import { IEditPayrollTabsConfig } from "@ptypes/payrollAgreement/payrollAgreementTab/IEditPayrollTabsConfig";
+import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollSpecialBenefit";
+import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
 import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
-import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
-import { addLeadingZero } from "@utils/addLeadingZero";
-import { typePayrollForCyclesExtraord } from "@config/payrollAgreement/payrollAgreementTab/assisted/typePayrollForCyclesExtraord";
-import { IEditPayrollTabsConfig } from "@ptypes/payrollAgreement/payrollAgreementTab/IEditPayrollTabsConfig";
-import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollSpecialBenefit";
-import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
-import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/IRegularPaymentCycles";
-import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
-import { IUseEditPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseEditPayrollAgreement";
-import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { dataTranslations } from "@utils/dataTranslations";
-import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
-import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
-import { getSourcesIncome } from "@utils/getSourcesIncome";
-import { getDayPayment } from "@utils/getDayPayment";
-import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
-import { mediaQueryMobile } from "@config/environment";
-import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
-import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
@@ -46,7 +46,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
 
     return cycles.map((entry, index) => ({
       id: String(index + 1),
-      cycleId: `cycle-${addLeadingZero(index + 1).toString()}`,
+      cycleId: `${addLeadingZero(index + 1).toString()}`,
       nameCycle: entry.regularPaymentCycleName,
       periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
       payday: getDayPayment(entry.paymentDay),
@@ -168,13 +168,25 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     );
   }, []);
 
+  const extraordinaryData = extraordinaryPaymentValues();
+
+  const shouldHideExtraordinaryTab = useMemo(() => {
+    const hasValidPeriodicity = regularPaymentCycles.some((cycle) => {
+      const isValidPeriodicity =
+        cycle.periodicity !== undefined &&
+        includedPeriodicity.includes(cycle.periodicity);
+      return isValidPeriodicity;
+    });
+
+    return !hasValidPeriodicity && extraordinaryData.length === 0;
+  }, [extraordinaryData, regularPaymentCycles, includedPeriodicity]);
+
   const filteredTabsConfig = useMemo(() => {
     return Object.keys(editPayrollAgTabsConfig).reduce((acc, key) => {
       const tab =
         editPayrollAgTabsConfig[key as keyof typeof editPayrollAgTabsConfig];
 
       const ordinaryData = regularPaymentValues();
-
       if (
         key === editPayrollAgTabsConfig.regularPaymentCycles.id &&
         ordinaryData.length === 0
@@ -183,11 +195,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       }
       if (
         key === editPayrollAgTabsConfig.extraordinaryPaymentCycles.id &&
-        !regularPaymentCycles.some(
-          (e) =>
-            e.periodicity !== undefined &&
-            includedPeriodicity.includes(e.periodicity),
-        )
+        shouldHideExtraordinaryTab
       ) {
         return acc;
       }
@@ -197,7 +205,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       }
       return acc;
     }, {} as IEditPayrollTabsConfig);
-  }, [regularPaymentValues]);
+  }, [regularPaymentValues, extraordinaryPaymentValues, regularPaymentCycles]);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {

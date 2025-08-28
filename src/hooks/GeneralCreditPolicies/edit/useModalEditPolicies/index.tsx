@@ -33,7 +33,7 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
     const decision =
       showGoBackModal || showInfoModal || showDateModal || hasError;
     setShowDecision(decision);
-  }, [showInfoModal, showInfoModal, showGoBackModal, hasError]);
+  }, [showInfoModal, showDateModal, showGoBackModal, hasError]);
 
   const modal = () => {
     const initial = {

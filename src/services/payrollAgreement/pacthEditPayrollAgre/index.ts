@@ -5,6 +5,7 @@ import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre
 import { mapEditPayrollnEntityToApi } from "./mappers";
 
 const pacthEditPayrollAgreement = async (
+  userAcount: string,
   businessUnit: string,
   data: IRequestPayrollAgre,
 ): Promise<IRequestPayrollAgre> => {
@@ -12,6 +13,7 @@ const pacthEditPayrollAgreement = async (
     headers: {
       "X-Action": "ModifyPayrollForDeductionAgreement",
       "X-Business-Unit": businessUnit,
+      "X-User-Name": userAcount,
     },
   };
 
