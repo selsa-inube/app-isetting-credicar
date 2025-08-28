@@ -6,7 +6,7 @@ const generalInfoLabels = {
   placeholderdescription: "Describe el destino",
   maxLengthDescrip: 1000,
   cancelButton: "Cancelar",
-  saveButton: "Guardar",
+  saveButton: "Enviar",
   nextButton: "Siguiente",
 };
 
