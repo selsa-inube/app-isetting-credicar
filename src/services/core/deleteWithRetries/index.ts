@@ -1,5 +1,4 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getErrorMessage } from "@utils/getErrorMessage";
 import { maxRetriesDelete } from "@config/environment";
 
 const deleteWithRetries = async <T>(
@@ -33,8 +32,7 @@ const deleteWithRetries = async <T>(
     }
   }
 
-  const errorMessage = getErrorMessage(lastError);
-  throw new Error(errorMessage);
+  throw new Error(lastError as string);
 };
 
 export { deleteWithRetries };

@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { useLocation } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditPayrollAgreement } from "@hooks/payrollAgreement/edit/useEditPayrollAgreement";
-import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
+import { useModalEditPayroll } from "@hooks/payrollAgreement/edit/useModalEditPayroll";
+import { useSavePayrollAgreement } from "@hooks/payrollAgreement/savePayrollAgreement/useSavePayrollAgreement";
 import { EUseCase } from "@enum/useCase";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -20,6 +21,7 @@ const EditPayrollAgreement = () => {
     generalInformationRef,
     isSelected,
     saveData,
+    typePayroll,
     showGoBackModal,
     showModal,
     showRequestProcessModal,
@@ -34,10 +36,6 @@ const EditPayrollAgreement = () => {
     showRegularPaymentCyclesForm,
     showExtraPaymentCyclesForm,
     filteredTabs,
-    title,
-    description,
-    actionText,
-    moreDetails,
     setIncludeExtraPayDay,
     setRegularDeleted,
     handleToggleDeletedAlertModal,
@@ -64,9 +62,14 @@ const EditPayrollAgreement = () => {
     titleRequest,
     descriptionRequest,
     actionTextRequest,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
     handleCloseRequestStatus,
     handleCloseProcess,
-    handleClosePendingReqModal,
+    handleClosePendingRequestModal,
+    handleToggleErrorModal,
   } = useSavePayrollAgreement({
     useCase: EUseCase.EDIT,
     businessUnits: appData.businessUnit.publicCode,
@@ -75,6 +78,25 @@ const EditPayrollAgreement = () => {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
+  });
+
+  const { modalData, showDecision } = useModalEditPayroll({
+    showGoBackModal,
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    showEditedModal: showModal,
+    loadingSendData,
+    showDeletedAlertModal,
+    typePayroll,
+    handleToggleDeletedAlertModal,
+    handleCloseGoBackModal,
+    handleEditedModal,
+    handleGoBack,
+    handleToggleErrorModal,
+    handleToggleEditedModal,
   });
 
   return (
@@ -95,30 +117,18 @@ const EditPayrollAgreement = () => {
       savePayrollAgreement={savePayrollAgreement as ISaveDataResponse}
       requestSteps={requestSteps}
       onCloseRequestStatus={handleCloseRequestStatus}
-      onClosePendingReqModal={handleClosePendingReqModal}
-      onGoBack={handleGoBack}
-      onCloseGoBackModal={handleCloseGoBackModal}
-      showEditedModal={showModal}
+      onClosePendingRequestModal={handleClosePendingRequestModal}
       onToggleEditedModal={handleToggleEditedModal}
-      onEditedModal={handleEditedModal}
-      showGoBackModal={showGoBackModal}
-      loadingSendData={loadingSendData}
       typeRegularPayroll={typeRegularPayroll}
       regularPaymentCycles={regularPaymentCycles}
       extraordinaryPayment={extraordinaryPayment}
       setExtraordinaryPayment={setExtraordinaryPayment}
       setRegularPaymentCycles={setRegularPaymentCycles}
-      showDeletedAlertModal={showDeletedAlertModal}
-      onToggleDeletedAlertModal={handleToggleDeletedAlertModal}
       showGeneralInfPayrollForm={showGeneralInfPayrollForm}
       showRegularPaymentCyclesForm={showRegularPaymentCyclesForm}
       showExtraPaymentCyclesForm={showExtraPaymentCyclesForm}
       showRequestStatus={showRequestStatus}
       filteredTabs={filteredTabs}
-      title={title}
-      description={description}
-      actionText={actionText}
-      moreDetails={moreDetails}
       titleRequest={titleRequest}
       descriptionRequest={descriptionRequest}
       actionTextRequest={actionTextRequest}
@@ -129,6 +139,8 @@ const EditPayrollAgreement = () => {
       }
       setRegularDeleted={setRegularDeleted}
       onCloseProcess={handleCloseProcess}
+      modalData={modalData}
+      showDecision={showDecision}
     />
   );
 };

@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 import { useLocation } from "react-router-dom";
-import { useEditDestination } from "@hooks/moneyDestination/useEditDestination";
-import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
-import { EUseCase } from "@enum/useCase";
+import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEditDestination } from "@hooks/moneyDestination/edit/useEditDestination";
+import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { useModalEditDestination } from "@hooks/moneyDestination/edit/useModalEditDestination";
+import { EUseCase } from "@enum/useCase";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -27,6 +28,13 @@ const EditDestination = () => {
     smallScreen,
     showGeneralInformation,
     showDecisionsForm,
+    showModal,
+    showGoBackModal,
+    handleOpenModal,
+    handleCloseGoBackModal,
+    handleEditedModal,
+    handleGoBack,
+    handleToggleEditedModal,
     onSubmit,
     handleReset,
     setCreditLineDecisions,
@@ -41,6 +49,11 @@ const EditDestination = () => {
     requestSteps,
     loadingSendData,
     showPendingReqModal,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingReqModal,
@@ -51,7 +64,22 @@ const EditDestination = () => {
     sendData: showRequestProcessModal,
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
-    setShowModal: setShowModal,
+    setShowModal,
+  });
+
+  const { modalData, showDecision } = useModalEditDestination({
+    showGoBackModal,
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    showEditedModal: showModal,
+    handleCloseGoBackModal,
+    handleEditedModal,
+    handleGoBack,
+    handleToggleErrorModal,
+    handleToggleEditedModal,
   });
 
   const showRequestStatus =
@@ -73,7 +101,6 @@ const EditDestination = () => {
       setIsCurrentFormValid={setIsCurrentFormValid}
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}
       requestSteps={requestSteps}
-      loading={loadingSendData}
       showRequestProcessModal={showRequestProcessModal}
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
@@ -84,6 +111,10 @@ const EditDestination = () => {
       showDecisionsForm={showDecisionsForm}
       showRequestStatus={showRequestStatus}
       onCloseProcess={handleCloseProcess}
+      modalData={modalData}
+      showDecision={showDecision}
+      onOpenModal={handleOpenModal}
+      onToggleEditedModal={handleToggleEditedModal}
     />
   );
 };

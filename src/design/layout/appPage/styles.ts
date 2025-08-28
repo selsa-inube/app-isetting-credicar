@@ -49,7 +49,7 @@ const StyledContentImg = styled(Link)`
 `;
 
 const StyledLogo = styled.img`
-  max-width: 100px;
+  max-width: 80px;
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
@@ -65,6 +65,7 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
 const StyledCollapse = styled.div`
   position: absolute;
   margin-top: 55px;
+  z-index: 2;
 `;
 
 export {

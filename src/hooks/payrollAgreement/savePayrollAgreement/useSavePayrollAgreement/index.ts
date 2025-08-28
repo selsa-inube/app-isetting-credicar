@@ -9,19 +9,21 @@ import { pacthEditPayrollAgreement } from "@services/payrollAgreement/pacthEditP
 import { deletePayrollAgreement } from "@services/payrollAgreement/deletePayrollAgre";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { EUseCase } from "@enum/useCase";
+import { errorObject } from "@utils/errorObject";
 import { interventionHumanMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/interventionHumanMessage";
 import { flowAutomaticMessages } from "@config/payrollAgreement/payrollAgreementTab/generic/flowAutomaticMessages";
-import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
 import { requestStepsInitial } from "@config/requestSteps";
 import { operationTypes } from "@config/useCase";
 import { requestStepsNames } from "@config/requestStepsNames";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { statusCloseModal } from "@config/status/statusCloseModal";
+import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
 import { IRequestPayrollAgre } from "@ptypes/payrollAgreement/RequestPayrollAgre/IRequestPayrollAgre";
 import { IUseSavePayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseSavePayrollAgreement";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { IErrors } from "@ptypes/IErrors";
 
 const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const {
@@ -42,10 +44,12 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const { addFlag } = useFlag();
   const [requestSteps, setRequestSteps] =
     useState<IRequestSteps[]>(requestStepsInitial);
-  const [showPendingReqModal, setShowPendingReqModal] = useState(false);
+  const [showPendingRequestModal, setShowPendingRequestModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
-  const [networkError, setNetworkError] = useState<string>("");
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [hasError, setHasError] = useState(false);
+  const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
   const navigate = useNavigate();
@@ -62,14 +66,8 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         setErrorFetchSaveData(true);
       }
       setSendData(false);
-      navigate(navigatePage);
-      addFlag({
-        title: flowAutomaticMessages().errorSendingData.title,
-        description: flowAutomaticMessages().errorSendingData.description,
-        appearance: flowAutomaticMessages().errorSendingData
-          .appearance as IFlagAppearance,
-        duration: flowAutomaticMessages().errorSendingData.duration,
-      });
+      setHasError(true);
+      setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
       setShowModal(false);
@@ -113,7 +111,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
-      setNetworkError(String(error));
+      setNetworkError(errorObject(error));
       setShowModal(false);
     }
   };
@@ -156,7 +154,8 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
         );
         setTimeout(() => {
           setSendData(false);
-          navigate(navigatePage);
+          setHasError(true);
+          setChangeTab(true);
         }, 3000);
       } else {
         setRequestSteps((prev) =>
@@ -209,7 +208,18 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   };
 
   useEffect(() => {
-    if (networkError.length > 0) {
+    if (!networkError?.code?.length) {
+      return;
+    }
+    setRequestSteps((prev) =>
+      updateRequestSteps(
+        prev,
+        requestStepsNames.requestFilled,
+        ERequestStepsStatus.COMPLETED,
+      ),
+    );
+
+    const timeout1 = setTimeout(() => {
       setRequestSteps((prev) =>
         updateRequestSteps(
           prev,
@@ -217,31 +227,24 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           ERequestStepsStatus.ERROR,
         ),
       );
-      setTimeout(() => {
-        setSendData(false);
-        navigate(navigatePage);
-        addFlag({
-          title: flowAutomaticMessages().errorQueryingData.title,
-          description: networkError,
-          appearance: flowAutomaticMessages().errorQueryingData
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorQueryingData.duration,
-        });
-      }, 3000);
-    }
+    }, 1000);
+
+    const timeout2 = setTimeout(() => {
+      setSendData(false);
+      setHasError(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+    };
   }, [networkError]);
 
   const handleStatusChange = () => {
     if (isStatusIntAutomatic(savePayrollAgreement?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
-        addFlag({
-          title: flowAutomaticMessages().errorCreateRequest.title,
-          description: flowAutomaticMessages().errorCreateRequest.description,
-          appearance: flowAutomaticMessages().errorCreateRequest
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorCreateRequest.duration,
-        });
+        setHasError(true);
       }
 
       if (isStatusRequestFinished()) {
@@ -303,25 +306,35 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     setChangeTab(true);
     navigate(navigatePage);
     addFlag({
-      title: interventionHumanMessage.SuccessfulCreateRequestIntHuman.title,
+      title: interventionHumanMessage.successfulCreateRequestIntHuman.title,
       description:
-        interventionHumanMessage.SuccessfulCreateRequestIntHuman.description,
-      appearance: interventionHumanMessage.SuccessfulCreateRequestIntHuman
+        interventionHumanMessage.successfulCreateRequestIntHuman.description,
+      appearance: interventionHumanMessage.successfulCreateRequestIntHuman
         .appearance as IFlagAppearance,
       duration:
-        interventionHumanMessage.SuccessfulCreateRequestIntHuman.duration,
+        interventionHumanMessage.successfulCreateRequestIntHuman.duration,
     });
   };
 
-  const handleClosePendingReqModal = () => {
-    setShowPendingReqModal(false);
+  const handleClosePendingRequestModal = () => {
+    setShowPendingRequestModal(false);
     setChangeTab(true);
     navigate(navigatePage);
   };
 
   const showRequestProcess = sendData && savePayrollAgreement;
   const showRequestStatus =
-    showPendingReqModal && savePayrollAgreement?.requestNumber;
+    showPendingRequestModal && savePayrollAgreement?.requestNumber;
+
+  const handleToggleErrorModal = () => {
+    setHasError(!hasError);
+    if (errorFetchRequest && hasError) {
+      setChangeTab(true);
+    }
+    if (useCase !== EUseCase.DELETE) {
+      navigate(navigatePage);
+    }
+  };
 
   const {
     title: titleRequest,
@@ -332,16 +345,21 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   return {
     savePayrollAgreement,
     requestSteps,
-    showPendingReqModal,
+    showPendingRequestModal,
     loadingSendData,
     showRequestProcess,
     showRequestStatus,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
     titleRequest,
     descriptionRequest,
     actionTextRequest,
+    handleToggleErrorModal,
     handleCloseProcess,
     handleCloseRequestStatus,
-    handleClosePendingReqModal,
+    handleClosePendingRequestModal,
   };
 };
 

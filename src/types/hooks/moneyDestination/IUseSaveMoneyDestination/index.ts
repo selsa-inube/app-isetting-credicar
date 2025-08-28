@@ -1,7 +1,8 @@
+import { EUseCase } from "@enum/useCase";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 interface IUseSaveMoneyDestination {
-  useCase: "add" | "edit" | "delete";
+  useCase: EUseCase;
   businessUnits: string;
   userAccount: string;
   sendData: boolean;

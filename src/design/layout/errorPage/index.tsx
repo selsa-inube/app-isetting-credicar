@@ -39,7 +39,7 @@ const ErrorPage = (props: IErrorPage) => {
 
   return (
     <StyledContainer $isTablet={matches["(max-width: 1000px)"]}>
-      <Stack direction="column" gap={tokens.spacing.s500} height="100%">
+      <Stack direction="column" gap={tokens.spacing.s300} height="100%">
         <Stack justifyContent="left" alignItems="start">
           <StyledCompanyLogo
             src={inubeLogo}

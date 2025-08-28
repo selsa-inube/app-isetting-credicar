@@ -7,11 +7,12 @@ import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
 import { patchEditGeneralPolicies } from "@services/generalPolicies/patchEditGeneralPolicies";
 import { EUseCase } from "@enum/useCase";
-import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
+import { errorObject } from "@utils/errorObject";
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IUseSaveGeneralPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseSaveGeneralPolicies";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
+import { IErrors } from "@ptypes/IErrors";
 import { useRequest } from "../useRequest";
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
@@ -32,8 +33,9 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const [showPendingReqModal, setShowPendingReqModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
-  const [networkError, setNetworkError] = useState<string>("");
-
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [hasError, setHasError] = useState(false);
+  const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
   const navigate = useNavigate();
@@ -47,14 +49,8 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     } catch (error) {
       console.info(error);
       setSendData(false);
-      navigate(navigatePage);
-      addFlag({
-        title: flowAutomaticMessages().errorSendingData.title,
-        description: flowAutomaticMessages().errorSendingData.description,
-        appearance: flowAutomaticMessages().errorSendingData
-          .appearance as IFlagAppearance,
-        duration: flowAutomaticMessages().errorSendingData.duration,
-      });
+      setHasError(true);
+      setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
       setShowModal(false);
@@ -75,6 +71,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     saveGeneralPolicies: saveGeneralPolicies as ISaveDataResponse,
     errorFetchRequest,
     networkError,
+    setHasError,
   });
 
   const requestConfiguration = {
@@ -107,7 +104,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
-      setNetworkError(String(error));
+      setNetworkError(errorObject(error));
       setShowModal(false);
     }
   };
@@ -160,6 +157,16 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     navigate(navigatePage);
   };
 
+  const handleToggleErrorModal = () => {
+    setHasError(!hasError);
+    if (errorFetchRequest && hasError) {
+      setChangeTab(true);
+    }
+    if (useCase !== EUseCase.DELETE) {
+      navigate(navigatePage);
+    }
+  };
+
   const isRequestStatusModal =
     showPendingReqModal && saveGeneralPolicies?.requestNumber ? true : false;
 
@@ -169,6 +176,11 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     showPendingReqModal,
     loadingSendData,
     isRequestStatusModal,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseProcess,
     handleCloseRequestStatus,
     handleClosePendingReqModal,

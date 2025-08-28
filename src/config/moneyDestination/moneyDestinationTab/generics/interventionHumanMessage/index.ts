@@ -1,7 +1,7 @@
 import { EComponentAppearance } from "@enum/appearances";
 
 const interventionHumanMessage = {
-  SuccessfulCreateRequestIntHuman: {
+  successfulCreateRequestIntHuman: {
     title: "Solicitud agregada con éxito",
     description: "Tu solicitud ha sido agregada a las solicitudes en trámite.",
     appearance: EComponentAppearance.SUCCESS,

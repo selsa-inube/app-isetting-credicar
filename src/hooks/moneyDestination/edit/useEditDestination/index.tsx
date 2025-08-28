@@ -1,18 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { ICondition, IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { formatDate } from "@utils/date/formatDate";
+import { compareObjects } from "@utils/compareObjects";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { arraysEqual } from "@utils/destination/arraysEqual";
 import { findDecision } from "@utils/destination/findDecision";
 import { ETransactionOperation } from "@enum/transactionOperation";
+import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
+import { mediaQueryTablet } from "@config/environment";
+import { editLabels } from "@config/moneyDestination/editDestination/editLabels";
 import { IUseEditDestination } from "@ptypes/hooks/moneyDestination/IUseEditDestination";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 const useEditDestination = (props: IUseEditDestination) => {
   const { data, appData } = props;
@@ -30,7 +34,8 @@ const useEditDestination = (props: IUseEditDestination) => {
     initialGeneralInfData,
   );
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
+  const [showGoBackModal, setShowGoBackModal] = useState(false);
+  const [canRefresh, setCanRefresh] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [showModal, setShowModal] = useState(false);
@@ -45,6 +50,8 @@ const useEditDestination = (props: IUseEditDestination) => {
     generalInformationRef.current?.values?.nameDestination ??
       data.nameDestination,
   );
+
+  const navigate = useNavigate();
 
   const ruleName = "LineOfCredit";
   const conditionRule = "MoneyDestination";
@@ -120,7 +127,7 @@ const useEditDestination = (props: IUseEditDestination) => {
           }
 
           return {
-            modifyJustification: `La modificación de la decisión es solicitada por ${appData.user.userAccount}`,
+            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
             ruleName: decision.ruleName,
             decisionsByRule: [decisionsByRule],
           };
@@ -156,7 +163,7 @@ const useEditDestination = (props: IUseEditDestination) => {
           }
 
           return {
-            modifyJustification: `La modificación de la decisión es solicitada por ${appData.user.userAccount}`,
+            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
             ruleName: decision.ruleName,
             decisionsByRule: [decisionsByRule],
           };
@@ -190,7 +197,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       rules?: IRuleDecision[];
     } = {
       moneyDestinationId: data.id,
-      modifyJustification: `La modificación del destino de dinero es solicitada por ${appData.user.userAccount}`,
+      modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
     };
 
     if (currentValues?.nameDestination !== undefined && valuesUpdatedName) {
@@ -221,7 +228,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: "Solicitud de modificación de un destino de dinero",
+      description: editLabels.description,
       entityName: conditionRule,
       requestDate: formatDate(new Date()),
       useCaseName: "ModifyMoneyDestination",
@@ -249,11 +256,65 @@ const useEditDestination = (props: IUseEditDestination) => {
     setIsSelected(tabId);
   };
 
-  const handleReset = () => {
-    setCreditLineDecisions(normalizeEvaluateRuleData ?? []);
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      const hasUnsavedChanges =
+        !compareObjects(initialGeneralInfData, formValues) ||
+        (generalInformationRef.current &&
+          !compareObjects(
+            generalInformationRef.current.initialValues,
+            generalInformationRef.current.values,
+          ));
+
+      if (hasUnsavedChanges) {
+        event.preventDefault();
+        setShowGoBackModal(!showGoBackModal);
+
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [formValues, initialGeneralInfData, generalInformationRef, canRefresh]);
+
+  const handleToggleEditedModal = () => {
+    setShowModal(!showModal);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const handleOpenModal = () => {
+    const compare = compareObjects(initialGeneralInfData, formValues);
+    const compareCompany = compareObjects(
+      generalInformationRef.current?.initialValues,
+      generalInformationRef.current?.values,
+    );
+    if (!compare || !compareCompany) {
+      setShowGoBackModal(true);
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleReset = () => {
+    setShowGoBackModal(true);
+  };
+
+  const handleCloseGoBackModal = () => {
+    setShowGoBackModal(false);
+  };
+
+  const handleGoBack = () => {
+    setCanRefresh(true);
+    navigate(-1);
+  };
+
+  const handleEditedModal = () => {
+    setShowModal(false);
+    onSubmit();
+  };
+  const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const showGeneralInformation =
     isSelected === editDestinationTabsConfig.generalInformation.id;
@@ -276,6 +337,12 @@ const useEditDestination = (props: IUseEditDestination) => {
     smallScreen,
     showGeneralInformation,
     showDecisionsForm,
+    showGoBackModal,
+    handleOpenModal,
+    handleCloseGoBackModal,
+    handleEditedModal,
+    handleGoBack,
+    handleToggleEditedModal,
     handleReset,
     onSubmit,
     setCreditLineDecisions,

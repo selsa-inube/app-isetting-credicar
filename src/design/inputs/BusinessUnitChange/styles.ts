@@ -9,7 +9,6 @@ const StyledContainer = styled.div`
   background-color: ${({ theme }) =>
     theme?.palette?.neutral?.N0 ?? inube.palette.neutral.N0};
   margin-left: 10px;
-  z-index: 3;
 `;
 
 const StyledUl = styled.ul`

@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
@@ -21,15 +20,13 @@ const useRequest = (props: IUseRequest) => {
     errorFetchRequest,
     saveGeneralPolicies,
     networkError,
+    setHasError,
   } = props;
 
   const { addFlag } = useFlag();
   const [requestSteps, setRequestSteps] =
     useState<IRequestSteps[]>(requestStepsInitial);
   const { setChangeTab } = useContext(ChangeToRequestTab);
-
-  const navigate = useNavigate();
-  const navigatePage = "/payroll-agreement";
   const isStatusInAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
   };
@@ -122,7 +119,18 @@ const useRequest = (props: IUseRequest) => {
   };
 
   useEffect(() => {
-    if (networkError.length > 0) {
+    if (!networkError?.code?.length) {
+      return;
+    }
+    setRequestSteps((prev) =>
+      updateRequestSteps(
+        prev,
+        requestStepsNames.requestFilled,
+        ERequestStepsStatus.COMPLETED,
+      ),
+    );
+
+    const timeout1 = setTimeout(() => {
       setRequestSteps((prev) =>
         updateRequestSteps(
           prev,
@@ -130,18 +138,17 @@ const useRequest = (props: IUseRequest) => {
           ERequestStepsStatus.ERROR,
         ),
       );
-      setTimeout(() => {
-        setSendData(false);
-        navigate(navigatePage);
-        addFlag({
-          title: flowAutomaticMessages().errorQueryingData.title,
-          description: networkError,
-          appearance: flowAutomaticMessages().errorQueryingData
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorQueryingData.duration,
-        });
-      }, 3000);
-    }
+    }, 1000);
+
+    const timeout2 = setTimeout(() => {
+      setSendData(false);
+      setHasError(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+    };
   }, [networkError]);
 
   const handleStatusChange = () => {

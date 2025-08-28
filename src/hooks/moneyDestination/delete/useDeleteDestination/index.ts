@@ -3,6 +3,7 @@ import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
 import { EMoneyDestination } from "@enum/moneyDestination";
+import { EModalState } from "@enum/modalState";
 import { deleteDestinationLabels } from "@config/moneyDestination/deleteDestination/deleteDestinationLabels";
 import { IUseDeleteDestination } from "@ptypes/hooks/moneyDestination/IUseDeleteDestination";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -55,11 +56,11 @@ const useDeleteDestination = (props: IUseDeleteDestination) => {
     };
 
     if (showModal && !showRequestProcessModal) {
-      emitEvent("secondModalState");
+      emitEvent(EModalState.SECOND_MODAL_STATE);
     } else if (!showModal && !showRequestProcessModal && !showPendingReq) {
-      emitEvent("secondModalState");
+      emitEvent(EModalState.SECOND_MODAL_STATE);
     } else if (!showModal && showRequestProcessModal) {
-      emitEvent("thirdModalState");
+      emitEvent(EModalState.THIRD_MODAL_STATE);
     }
   }, [showModal, showRequestProcessModal, showPendingReq]);
 

@@ -15,7 +15,14 @@ portalStaffAxiosInstance.interceptors.response.use(
     if (error.code === "ECONNABORTED") {
       console.error("Request timed out");
     }
-    return Promise.reject(new Error(error.message));
+    const messageError = {
+      code: error.code,
+      description: error.message,
+      status: error.request.status,
+      response: error.request.response,
+    };
+
+    return Promise.reject(new Error(JSON.stringify(messageError)));
   },
 );
 

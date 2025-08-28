@@ -1,8 +1,9 @@
 import { useContext } from "react";
-import { useAddDestination } from "@hooks/moneyDestination/useAddDestination";
-import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
-import { EUseCase } from "@enum/useCase";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useAddDestination } from "@hooks/moneyDestination/add/useAddDestination";
+import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { useModalAddDestination } from "@hooks/moneyDestination/add/useModalAddDestination";
+import { EUseCase } from "@enum/useCase";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -44,6 +45,11 @@ function AddDestination() {
     requestSteps,
     loadingSendData,
     showPendingReqModal,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingReqModal,
@@ -55,6 +61,18 @@ function AddDestination() {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
+  });
+
+  const { modalData, showDecision } = useModalAddDestination({
+    showGoBackModal,
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleCloseModal,
+    handleGoBack,
+    handleToggleErrorModal,
   });
 
   return (
@@ -84,10 +102,9 @@ function AddDestination() {
       setShowAttentionModal={setShowAttentionModal}
       smallScreen={smallScreen}
       onCloseProcess={handleCloseProcess}
-      onGoBack={handleGoBack}
-      showGoBackModal={showGoBackModal}
-      onCloseModal={handleCloseModal}
       onOpenModal={handleOpenModal}
+      modalData={modalData}
+      showDecision={showDecision}
     />
   );
 }

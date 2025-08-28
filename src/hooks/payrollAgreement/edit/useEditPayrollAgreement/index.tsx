@@ -3,14 +3,15 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { FormikProps } from "formik";
 
+import { transformToArray } from "@utils/transformToArray";
+import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
+import { compareObjects } from "@utils/compareObjects";
+import { formatDate } from "@utils/date/formatDate";
 import { editPayrollAgTabsConfig } from "@config/payrollAgreement/payrollAgreementTab/edit/tab";
 import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
 import { IServerDomain } from "@ptypes/IServerDomain";
-import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
-import { compareObjects } from "@utils/compareObjects";
-import { formatDate } from "@utils/date/formatDate";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { addLeadingZero } from "@utils/addLeadingZero";
@@ -23,7 +24,6 @@ import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assis
 import { IUseEditPayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseEditPayrollAgreement";
 import { specialBenefitPayment } from "@config/payrollAgreement/payrollAgreementTab/assisted/specialBenefitPaymentCycles";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
 import { dataTranslations } from "@utils/dataTranslations";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
@@ -35,7 +35,6 @@ import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/t
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
-import { transformToArray } from "@utils/transformToArray";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const { data } = props;
@@ -412,13 +411,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
 
   const filteredTabs = Object.values(filteredTabsConfig);
 
-  const { title, description, actionText, moreDetails } =
-    deletedAlertModal(typePayroll);
-
   return {
-    actionText,
     companyAgreement,
-    description,
     extraordinaryPayment,
     filteredTabs,
     filteredTabsConfig,
@@ -426,9 +420,9 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     generalInformationRef,
     includeExtraPayDay,
     initialData,
+    typePayroll,
     isCurrentFormValid,
     isSelected,
-    moreDetails,
     regularDeleted,
     regularPaymentCycles,
     saveData,
@@ -441,8 +435,6 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     showRequestProcessModal,
     smallScreen,
     sourcesOfIncomeValues,
-    title,
-    typePayroll,
     typeRegularPayroll,
     setIncludeExtraPayDay,
     setRegularDeleted,

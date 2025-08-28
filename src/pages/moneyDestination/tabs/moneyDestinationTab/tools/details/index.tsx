@@ -1,10 +1,10 @@
 import { useContext } from "react";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { DetailsMoneyDestination } from "@design/feedback/detailsMoneyDestination";
 import { useDetailsDestination } from "@hooks/moneyDestination/useDetailsDestination";
-import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/generics/detailsTabsConfig";
 import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
+import { DetailsMoneyDestination } from "@design/feedback/detailsMoneyDestination";
+import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/generics/detailsTabsConfig";
 import { IDetails } from "@ptypes/moneyDestination/tabs/IDetails";
 
 const Details = (props: IDetails) => {

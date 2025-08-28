@@ -1,22 +1,23 @@
 import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 
+import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { DecisionsForm } from "@design/forms/decisions";
+import { RequestProcess } from "@design/feedback/RequestProcess";
+import { RequestStatusModal } from "@design/modals/requestStatusModal";
+import { EComponentAppearance } from "@enum/appearances";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { attentionModal, deleteModal } from "@config/decisions/messages";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
-import { RequestProcess } from "@design/feedback/RequestProcess";
-import { EComponentAppearance } from "@enum/appearances";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
-import { RequestStatusModal } from "@design/modals/requestStatusModal";
-import { IEditDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IEditDestinationUI";
 import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
 import { portalId } from "@config/portalId";
-import { GeneralInformationForm } from "../../forms/generalInformationDestination";
+import { IEditDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IEditDestinationUI";
 
 const EditDestinationUI = (props: IEditDestinationUI) => {
   const {
@@ -29,12 +30,15 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     isSelected,
     saveMoneyDestination,
     requestSteps,
-    loading,
     showRequestStatus,
     showRequestProcessModal,
     smallScreen,
     showGeneralInformation,
     showDecisionsForm,
+    modalData,
+    showDecision,
+    onToggleEditedModal,
+    onOpenModal,
     onTabChange,
     onButtonClick,
     onReset,
@@ -62,6 +66,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
             title={editDestinationLabels.title}
             description={editDestinationLabels.description}
             sizeTitle="large"
+            onClick={onOpenModal}
           />
         </Stack>
         <Stack gap={tokens.spacing.s300} direction="column">
@@ -76,9 +81,9 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
                 onFormValid={setIsCurrentFormValid}
-                onButtonClick={onButtonClick}
+                onButtonClick={onToggleEditedModal}
                 editDataOption
-                loading={loading}
+                onReset={onReset}
                 initialGeneralInfData={initialGeneralInfData}
               />
             )}
@@ -108,9 +113,21 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           </Stack>
         </Stack>
       </Stack>
+      {showDecision && (
+        <DecisionModal
+          portalId={portalId}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          withCancelButton={modalData.withCancelButton}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          loading={modalData.loading}
+        />
+      )}
       {showRequestProcessModal && (
         <RequestProcess
-          portalId="portal"
+          portalId={portalId}
           saveData={saveMoneyDestination}
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}

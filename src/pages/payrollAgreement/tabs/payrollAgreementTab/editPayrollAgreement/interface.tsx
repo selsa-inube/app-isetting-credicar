@@ -1,23 +1,20 @@
-import { MdOutlineWarningAmber } from "react-icons/md";
 import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 
-import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
-import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestProcessMessage";
-import { crumbsEditPayrollAgreement } from "@config/payrollAgreement/payrollAgreementTab/edit/navigation";
-import { goBackModal } from "@config/goBackModal";
-import { RequestStatusModal } from "@design/modals/requestStatusModal";
-import { RequestProcess } from "@design/feedback/RequestProcess";
-import { DecisionModal } from "@design/modals/decisionModal";
-import { EComponentAppearance } from "@enum/appearances";
-import { Title } from "@design/data/title";
-import { tokens } from "@design/tokens";
-import { sendEditedModal } from "@config/payrollAgreement/payrollAgreementTab/generic/sendEditModal";
-import { IEditPayrollAgreementUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IEditPayrollAgreementUI";
 import { GeneralInformationPayrollForm } from "@pages/payrollAgreement/tabs/forms/generalInfoPayrollAgreement";
 import { RegularPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/regularPaymentCycles";
 import { ExtraordinaryPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/extraordinaryPaymentCycles";
+import { RequestStatusModal } from "@design/modals/requestStatusModal";
+import { RequestProcess } from "@design/feedback/RequestProcess";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { Title } from "@design/data/title";
+import { tokens } from "@design/tokens";
+import { EComponentAppearance } from "@enum/appearances";
+import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
+import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestProcessMessage";
+import { crumbsEditPayrollAgreement } from "@config/payrollAgreement/payrollAgreementTab/edit/navigation";
 import { editPayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/editPayrollLabels";
 import { portalId } from "@config/portalId";
+import { IEditPayrollAgreementUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IEditPayrollAgreementUI";
 
 const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
   const {
@@ -28,28 +25,22 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     smallScreen,
     sourcesOfIncomeValues,
     companyAgreement,
-    showGoBackModal,
     showRequestProcessModal,
     savePayrollAgreement,
     showRequestStatus,
     requestSteps,
-    showEditedModal,
-    loadingSendData,
     regularPaymentCycles,
     typeRegularPayroll,
     extraordinaryPayment,
-    showDeletedAlertModal,
     showGeneralInfPayrollForm,
     showRegularPaymentCyclesForm,
     showExtraPaymentCyclesForm,
     filteredTabs,
-    title,
-    description,
-    actionText,
-    moreDetails,
+    modalData,
     titleRequest,
     descriptionRequest,
     actionTextRequest,
+    showDecision,
     setIncludeExtraPayDay,
     setRegularDeleted,
     setExtraordinaryPayment,
@@ -59,13 +50,9 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     onReset,
     setIsCurrentFormValid,
     setSourcesOfIncomeValues,
-    onCloseGoBackModal,
-    onGoBack,
     onCloseRequestStatus,
-    onClosePendingReqModal,
+    onClosePendingRequestModal,
     onToggleEditedModal,
-    onEditedModal,
-    onToggleDeletedAlertModal,
     onCloseProcess,
   } = props;
 
@@ -142,42 +129,20 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
         </Stack>
       </Stack>
 
-      {showEditedModal && (
+      {showDecision && (
         <DecisionModal
           portalId={portalId}
-          title={sendEditedModal.title}
-          description={sendEditedModal.description}
-          actionText={sendEditedModal.actionText}
-          onCloseModal={onToggleEditedModal}
-          onClick={onEditedModal}
-          loading={loadingSendData}
-        />
-      )}
-
-      {showGoBackModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={goBackModal.title}
-          description={goBackModal.description}
-          actionText={goBackModal.actionText}
-          onCloseModal={onCloseGoBackModal}
-          onClick={onGoBack}
-        />
-      )}
-      {showDeletedAlertModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={title}
-          description={description}
-          actionText={actionText}
-          withIcon
-          withCancelButton={false}
-          icon={<MdOutlineWarningAmber />}
-          appearance={EComponentAppearance.WARNING}
-          onCloseModal={onToggleDeletedAlertModal}
-          onClick={onToggleDeletedAlertModal}
-          moreDetails={moreDetails}
-          appearanceButton={EComponentAppearance.WARNING}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          withIcon={modalData.withIcon}
+          withCancelButton={modalData.withCancelButton}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
+          icon={modalData.icon}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          moreDetails={modalData.moreDetails}
         />
       )}
       {showRequestProcessModal && (
@@ -198,8 +163,8 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
           title={titleRequest}
           description={descriptionRequest}
           requestNumber={savePayrollAgreement.requestNumber}
-          onClick={onClosePendingReqModal}
-          onCloseModal={onClosePendingReqModal}
+          onClick={onClosePendingRequestModal}
+          onCloseModal={onClosePendingRequestModal}
           loading={false}
           actionText={actionTextRequest}
           appearance={EComponentAppearance.PRIMARY}

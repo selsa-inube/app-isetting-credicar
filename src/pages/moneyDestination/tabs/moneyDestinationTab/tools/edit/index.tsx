@@ -1,5 +1,5 @@
 import { EditRecord } from "@design/feedback/editRecord";
-import { useEditDestinationConsultation } from "@hooks/moneyDestination/useEditDestinationConsultation";
+import { useEditDestinationConsultation } from "@hooks/moneyDestination/edit/useEditDestinationConsultation";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { IEdit } from "@ptypes/moneyDestination/tabs/IEdit";
 

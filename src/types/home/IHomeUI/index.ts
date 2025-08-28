@@ -22,6 +22,7 @@ interface IHomeUI {
   };
   hasMultipleBusinessUnits: boolean;
   handleLogoClick: (businessUnit: IBusinessUnitsPortalStaff) => void;
+  onlogout: () => void;
   setCollapse: (value: boolean) => void;
   loading: boolean;
   data: ICardData[];

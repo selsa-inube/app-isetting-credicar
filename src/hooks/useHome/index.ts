@@ -1,11 +1,13 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useMediaQueries } from "@inubekit/inubekit";
 import { useContext, useEffect, useRef, useState } from "react";
-import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { decrypt } from "@utils/crypto/decrypt";
-import { mainNavigation } from "@config/mainNavigation";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
+import { decrypt } from "@utils/crypto/decrypt";
+import { enviroment } from "@config/environment";
+import { mainNavigation } from "@config/mainNavigation";
+import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 
 const useHome = () => {
   const {
@@ -15,6 +17,8 @@ const useHome = () => {
     setBusinessUnitSigla,
     setUseCases,
   } = useContext(AuthAndPortalData);
+
+  const { logout } = useAuth0();
 
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
@@ -71,6 +75,10 @@ const useHome = () => {
     "(max-width: 944px)",
   ]);
 
+  const handlelogout = () => {
+    logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+  };
+
   const hasMultipleBusinessUnits = businessUnitsToTheStaff.length > 1;
 
   const dataExists = optionsCards && optionsCards?.length > 0;
@@ -91,6 +99,7 @@ const useHome = () => {
     hasMultipleBusinessUnits,
     dataExists,
     optionsHeader,
+    handlelogout,
     setCollapse,
     handleLogoClick,
   };
