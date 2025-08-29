@@ -396,7 +396,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         description: jsonLabels(appData.user.userAccount).modifyJustification,
         entityName: conditionRule,
         requestDate: formatDate(new Date()),
-        useCaseName: "ModifyPayrollAgreement",
+        useCaseName: EPayrollAgreement.USE_CASE_EDIT,
         configurationRequestData: changedFields,
       });
       setShowRequestProcessModal(true);

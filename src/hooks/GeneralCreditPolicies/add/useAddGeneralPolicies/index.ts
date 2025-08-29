@@ -7,6 +7,7 @@ import { FormikProps } from "formik";
 import { useRules } from "@hooks/GeneralCreditPolicies/useRules";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
 import { IAddGenCredPoliciesForms } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesForms";
 import { IAddGenCredPoliciesRef } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesRef";
@@ -133,7 +134,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
       description: "Solicitud de creación de politicas generales de credito",
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
-      useCaseName: "AddGeneralCreditPolicies",
+      useCaseName: EGeneralPolicies.USE_CASE_ADD,
       configurationRequestData: {
         rules: rules,
       },

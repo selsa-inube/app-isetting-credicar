@@ -5,6 +5,7 @@ import { FormikProps } from "formik";
 
 import { useLegalPerson } from "@hooks/payrollAgreement/useLegalPerson";
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { checkDayWeek } from "@utils/checkDayWeek";
@@ -36,6 +37,7 @@ import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreemen
 import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
 import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
+import { stepKeysPayroll } from "@src/enum/stepsKeysPayroll";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;
@@ -243,7 +245,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
         setCurrentStep(currentStep + 1);
       }
 
-      if (currentStep === 3) {
+      if (currentStep === stepKeysPayroll.REGULAR_CYCLES) {
         setFormValues((prevValues) => ({
           ...prevValues,
           ordinaryCycles: {
@@ -252,11 +254,20 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
           },
         }));
         const step = includeExtraPayDay.length === 0 ? 5 : currentStep + 1;
+
+        if (
+          formValues.generalInformation.values.typePayroll ===
+            EPayrollAgreement.ORDINARY_REMUNERATION &&
+          regularPaymentCycles.length === 0 &&
+          extraordinaryPayment.length > 0
+        ) {
+          setExtraordinaryPayment([]);
+        }
         setIsCurrentFormValid(true);
         setCurrentStep(step);
       }
 
-      if (currentStep === 4) {
+      if (currentStep === stepKeysPayroll.EXTRAORDINARY_CYCLES) {
         setFormValues((prevValues) => ({
           ...prevValues,
           extraordinaryCycles: {
@@ -275,14 +286,14 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       setCurrentStep(currentStep - 1);
     }
 
-    if (currentStep === 4) {
+    if (currentStep === stepKeysPayroll.EXTRAORDINARY_CYCLES) {
       const stepOrdinaryCycles = typeRegularPayroll ? currentStep - 1 : 2;
       setCurrentStep(stepOrdinaryCycles);
     }
 
-    if (currentStep === 5) {
+    if (currentStep === stepKeysPayroll.VERIFICATION) {
       const stepOrdinaryCycles =
-        includeExtraPayDay.length === 0 ? 3 : currentStep - 1;
+        extraordinaryPayment.length === 0 ? 3 : currentStep - 1;
       setCurrentStep(stepOrdinaryCycles);
     }
   };
@@ -338,8 +349,11 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   }, [formValues, initialValues, companyRef, canRefresh]);
 
   const formValid =
-    (regularPaymentCycles && regularPaymentCycles.length > 0) ||
-    (extraordinaryPayment && extraordinaryPayment.length > 0)
+    (currentStep === stepKeysPayroll.REGULAR_CYCLES &&
+      regularPaymentCycles.length > 0) ||
+    (currentStep === stepKeysPayroll.EXTRAORDINARY_CYCLES &&
+      regularPaymentCycles.length === 0 &&
+      extraordinaryPayment.length > 0)
       ? false
       : !isCurrentFormValid;
 
@@ -456,7 +470,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       description: addPayrollLabels.descriptionSaveData,
       entityName: "PayrollAgreement",
       requestDate: formatDate(new Date()),
-      useCaseName: "AddPayrollAgreement",
+      useCaseName: EPayrollAgreement.USE_CASE_ADD,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);

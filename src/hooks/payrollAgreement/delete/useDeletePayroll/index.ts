@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
-import { IUseDeletePayroll } from "@ptypes/hooks/IUseDeletePayroll";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EModalState } from "@enum/modalState";
 import { deletePayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/deletePayrollLabels";
+import { IUseDeletePayroll } from "@ptypes/hooks/IUseDeletePayroll";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 
 const useDeletePayroll = (props: IUseDeletePayroll) => {
   const { data, appData } = props;
@@ -41,7 +41,7 @@ const useDeletePayroll = (props: IUseDeletePayroll) => {
       description: deletePayrollLabels.descriptionSaveData,
       entityName: "PayrollAgreement",
       requestDate: formatDate(new Date()),
-      useCaseName: "DeletePayrollAgreement",
+      useCaseName: EPayrollAgreement.USE_CASE_DELETE,
       configurationRequestData: {
         abbreviatedName: data.abbreviatedName,
         payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,

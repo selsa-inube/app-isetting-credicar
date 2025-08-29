@@ -89,9 +89,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
       condition.conditionName !== EGeneralPolicies.CONDITION_BUSINESS_UNIT,
   );
 
-  const isMoreDetails =
-    data.useCaseName === EGeneralPolicies.DELETE_GENERAL_POLICIES ||
-    data.useCaseName === EGeneralPolicies.MODIFY_GENERAL_POLICIES;
+  const isMoreDetails = data.useCaseName === EGeneralPolicies.USE_CASE_EDIT;
 
   return {
     showMoreDetailsModal,

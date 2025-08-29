@@ -231,7 +231,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       description: editLabels.title,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
-      useCaseName: EGeneralPolicies.MODIFY_GENERAL_POLICIES,
+      useCaseName: EGeneralPolicies.USE_CASE_EDIT,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);

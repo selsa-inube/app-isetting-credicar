@@ -40,7 +40,7 @@ const useDeleteDestination = (props: IUseDeleteDestination) => {
       description: deleteDestinationLabels.descriptionSave,
       entityName: "MoneyDestination",
       requestDate: formatDate(new Date()),
-      useCaseName: EMoneyDestination.USE_CASE_NAME_DELETE,
+      useCaseName: EMoneyDestination.USE_CASE_DELETE,
       configurationRequestData: {
         moneyDestinationId: data.id,
         abbreviatedName: data.name,

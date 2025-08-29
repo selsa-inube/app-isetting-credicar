@@ -11,6 +11,7 @@ import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { arraysEqual } from "@utils/destination/arraysEqual";
 import { findDecision } from "@utils/destination/findDecision";
 import { ETransactionOperation } from "@enum/transactionOperation";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/moneyDestination/editDestination/editLabels";
@@ -231,7 +232,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       description: editLabels.description,
       entityName: conditionRule,
       requestDate: formatDate(new Date()),
-      useCaseName: "ModifyMoneyDestination",
+      useCaseName: EMoneyDestination.USE_CASE_EDIT,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);

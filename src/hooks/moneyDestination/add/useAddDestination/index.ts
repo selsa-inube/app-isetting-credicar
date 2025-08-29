@@ -164,7 +164,7 @@ const useAddDestination = () => {
       description: addMoneyLabels.description,
       entityName: "MoneyDestination",
       requestDate: formatDate(new Date()),
-      useCaseName: EMoneyDestination.USE_CASE_NAME_ADD,
+      useCaseName: EMoneyDestination.USE_CASE_ADD,
       configurationRequestData: {
         abbreviatedName: formValues.nameDestination,
         descriptionUse: formValues.description,
