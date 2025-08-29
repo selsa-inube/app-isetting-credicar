@@ -1,6 +1,7 @@
 import { FormikProps } from "formik";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { ICompanyEntry } from "../ICompanyEntry";
+import { IOption } from "@inubekit/inubekit";
 
 interface ICompanyFormUI {
   formik: FormikProps<ICompanyEntry>;
@@ -15,6 +16,7 @@ interface ICompanyFormUI {
   actionTextModal: string;
   moreDetailsModal?: string;
   isAddingCompany?: boolean;
+  optionsIdentification: IOption[];
   onToggleAlertModal: () => void;
   onChange: (name: string, value: string) => void;
   onCompanyChange: (name: string, value: string) => void;

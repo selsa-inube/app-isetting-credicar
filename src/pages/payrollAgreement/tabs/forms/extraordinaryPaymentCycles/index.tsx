@@ -1,5 +1,6 @@
 import { forwardRef } from "react";
 import { FormikProps } from "formik";
+import { IOption } from "@inubekit/inubekit";
 
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
 import { useExtraordinaryCyclesForm } from "@hooks/payrollAgreement/useExtraordinaryCyclesForm";
@@ -77,7 +78,7 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
         numberDaysUntilCutOptions={
           numberDaysUntilCutOptions as unknown as IServerDomain[]
         }
-        monthOptions={monthOptions}
+        monthOptions={monthOptions as IOption[]}
         dayOptions={dayOptions ?? []}
         setEntryDeleted={setEntryDeleted}
         labelButtonPrevious={labelButtonPrevious}

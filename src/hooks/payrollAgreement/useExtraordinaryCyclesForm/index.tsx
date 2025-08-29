@@ -12,19 +12,20 @@ import { addLeadingZero } from "@utils/addLeadingZero";
 import { daysOfMonth } from "@utils/daysOfMonth";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
+import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
 import { compareObjects } from "@utils/compareObjects";
 import { convertToOptions } from "@utils/convertToOptions";
 import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { mediaQueryTablet } from "@config/environment";
-import { monthExtraordinaryOptions } from "@config/payrollAgreement/payrollAgreementTab/assisted/monthExtraordinary";
+import { enviroment, mediaQueryTablet } from "@config/environment";
 import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
+import { ILanguage } from "@ptypes/i18n";
 import { useValuesSelect } from "../ordinaryCycles/useValuesSelect";
 
 const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
@@ -68,14 +69,12 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     validateOnBlur: false,
     onSubmit: onSubmit ?? (() => true),
   });
-
+  const { appData } = useContext(AuthAndPortalData);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [entries, setEntries] = useState<IEntry[]>(
     extraordinaryPayment as IEntry[],
   );
-  const [dayOptions, setDayOptions] = useState<IServerDomain[] | undefined>([]);
-  const monthOptions = monthExtraordinaryOptions;
 
   const { montlyCourtDaysOptions: numberDaysUntilCutOptions } =
     useValuesSelect();
@@ -83,7 +82,18 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
 
   const isMobile = useMediaQuery(mediaQueryTablet);
 
-  const { appData } = useContext(AuthAndPortalData);
+  const [dayOptions, setDayOptions] = useState<IServerDomain[] | undefined>([]);
+
+  const { enumData: months } = useEnumerators({
+    enumDestination: ECyclesPayroll.MONTHS,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+  const monthOptions = optionsFromEnumI18n(
+    enviroment.VITE_LANGUAGE as ILanguage,
+    months,
+    true,
+  );
+
   const { enumData } = useEnumerators({
     enumDestination: ECyclesPayroll.EXTRAORDINARY_TYPE,
     businessUnits: appData.businessUnit.publicCode,
