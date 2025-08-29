@@ -244,6 +244,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                           message={formik.errors.companyCity}
                           invalid={isInvalid(formik, "companyCity")}
                           fullwidth
+                          required
                         />
                       </Stack>
                       <Stack

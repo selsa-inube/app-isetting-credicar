@@ -1,6 +1,6 @@
 import { MdInfoOutline, MdOutlineWarningAmber } from "react-icons/md";
 import {
-  Autosuggest,
+  Autocomplete,
   Button,
   Checkpicker,
   Grid,
@@ -8,13 +8,14 @@ import {
   Label,
   Select,
   Stack,
+  Text,
   Textfield,
 } from "@inubekit/inubekit";
 
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
-import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { tokens } from "@design/tokens";
+import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { getFieldState } from "@utils/getFieldState";
 import { isInvalid } from "@utils/isInvalid";
 import { EComponentAppearance } from "@enum/appearances";
@@ -219,6 +220,9 @@ const GeneralInformationPayrollFormUI = (
                     <Label htmlFor="applicationDaysPayroll" size="medium">
                       {generalInfoLabels.daysApplication}
                     </Label>
+                    <Text appearance={EComponentAppearance.DANGER} size="small">
+                      {generalInfoLabels.required}
+                    </Text>
                     <Icon
                       icon={<MdInfoOutline />}
                       appearance={EComponentAppearance.PRIMARY}
@@ -228,7 +232,7 @@ const GeneralInformationPayrollFormUI = (
                     />
                   </Stack>
                   <Stack height={tokens.spacing.s600} width="100%">
-                    <Autosuggest
+                    <Autocomplete
                       label=""
                       name="applicationDaysPayroll"
                       id="applicationDaysPayroll"
