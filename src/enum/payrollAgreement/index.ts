@@ -8,6 +8,9 @@ enum EPayrollAgreement {
   USE_CASE_EDIT = "Modificar nomina de convenio",
   USE_CASE_DELETE = "Eliminar nominas de convenio",
   USE_CASE_CANCEL_REQUEST = "Eliminar solicitud de configuracion",
+  COMPANY_SELECTED = "companySelected",
+  ADD_COMPANY = "addCompany",
+  COUNTRY = "Colombia",
 }
 
 export { EPayrollAgreement };

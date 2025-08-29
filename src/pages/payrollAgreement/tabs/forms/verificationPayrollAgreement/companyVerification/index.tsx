@@ -1,14 +1,22 @@
 import { Grid, Stack } from "@inubekit/inubekit";
 
+import { useEnumeratorsIsaas } from "@hooks/useEnumeratorsIsaas";
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
+import { normalizeDestination } from "@utils/destination/normalizeDestination";
+import { enviroment } from "@config/environment";
 import { verificationLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/verificationLabels";
 import { IRenderCompanyVerification } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IRenderCompanyVerification";
+import { ILanguage } from "@ptypes/i18n";
 
 const RenderCompanyVerification = (props: IRenderCompanyVerification) => {
   const { values, isMobile } = props;
 
   const isCompanySelected = values.companySelected !== "addCompany";
+  const { enumData: typeIdentification } = useEnumeratorsIsaas({
+    enumIsaas: ECyclesPayroll.TYPE_IDENTIFICATION_COMPANY,
+  });
 
   return (
     <>
@@ -48,7 +56,7 @@ const RenderCompanyVerification = (props: IRenderCompanyVerification) => {
             <BoxAttribute
               direction="column"
               label={verificationLabels.companyId}
-              value={`${values.companyTypeIdent} - ${values.companyNumberIdent} - ${values.companyCountry}`}
+              value={`${normalizeDestination(typeIdentification, values.companyTypeIdent ?? "")?.i18n?.[enviroment.VITE_LANGUAGE as ILanguage]} - ${values.companyNumberIdent} - ${values.companyCountry}`}
             />
             <BoxAttribute
               direction="column"

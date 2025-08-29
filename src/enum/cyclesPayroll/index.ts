@@ -12,6 +12,8 @@ enum ECyclesPayroll {
   BIWEEKLY = "Biweekly",
   ADD_COMPANY = "addCompany",
   EXTRAORDINARY_TYPE = "extraordinarypaymenttype",
+  TYPE_IDENTIFICATION_COMPANY = "identificationtypelegalperson",
+  MONTHS = "emonthofyear",
 }
 
 export { ECyclesPayroll };
