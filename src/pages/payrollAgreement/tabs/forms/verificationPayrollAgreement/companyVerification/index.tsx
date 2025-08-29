@@ -17,7 +17,7 @@ const RenderCompanyVerification = (props: IRenderCompanyVerification) => {
   const { enumData: typeIdentification } = useEnumeratorsIsaas({
     enumIsaas: ECyclesPayroll.TYPE_IDENTIFICATION_COMPANY,
   });
-
+  const value = `${normalizeDestination(typeIdentification, values.companyTypeIdent ?? "")?.i18n?.[enviroment.VITE_LANGUAGE as ILanguage]} - ${values.companyNumberIdent} - ${values.companyCountry}`;
   return (
     <>
       {isCompanySelected ? (
@@ -56,7 +56,7 @@ const RenderCompanyVerification = (props: IRenderCompanyVerification) => {
             <BoxAttribute
               direction="column"
               label={verificationLabels.companyId}
-              value={`${normalizeDestination(typeIdentification, values.companyTypeIdent ?? "")?.i18n?.[enviroment.VITE_LANGUAGE as ILanguage]} - ${values.companyNumberIdent} - ${values.companyCountry}`}
+              value={value}
             />
             <BoxAttribute
               direction="column"

@@ -6,6 +6,7 @@ import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getEnumeratorsIsaas = async (
   enumerator: string,
+  country: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
@@ -14,7 +15,7 @@ const getEnumeratorsIsaas = async (
   };
 
   const queryParams = new URLSearchParams({
-    country: "colombia",
+    country: country,
   });
 
   const data: IEnumerators[] = await getWithRetries<IEnumerators[]>(

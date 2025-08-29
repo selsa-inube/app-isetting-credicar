@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getEnumeratorsIsaas } from "@services/enums/getEnumeratorsIsaas";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseEnumeratorsIsaas } from "@ptypes/hooks/IUseEnumeratorsIsaas";
 
@@ -13,7 +14,10 @@ const useEnumeratorsIsaas = (props: IUseEnumeratorsIsaas) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumeratorsIsaas(enumIsaas);
+        const data = await getEnumeratorsIsaas(
+          enumIsaas,
+          EPayrollAgreement.COUNTRY_IDENTIFICATION,
+        );
         setEnumData(data);
       } catch (error) {
         console.info(error);

@@ -11,6 +11,7 @@ enum EPayrollAgreement {
   COMPANY_SELECTED = "companySelected",
   ADD_COMPANY = "addCompany",
   COUNTRY = "Colombia",
+  COUNTRY_IDENTIFICATION = "colombia",
 }
 
 export { EPayrollAgreement };
