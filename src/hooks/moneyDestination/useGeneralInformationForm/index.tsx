@@ -10,17 +10,18 @@ import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
-import { IServerDomain } from "@ptypes/IServerDomain";
-import { IEnumerators } from "@ptypes/IEnumerators";
-import { normalizeNameDestination } from "@utils/destination/normalizeNameDestination";
+import { tokens } from "@design/tokens";
+import { EMoneyDestination } from "@enum/moneyDestination";
+import { normalizeCodeDestination } from "@utils/destination/normalizeCodeDestination";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { normalizeEditDestination } from "@utils/destination/normalizeEditDestination";
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
 import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
+import { mediaQueryTablet } from "@config/environment";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
-import { EMoneyDestination } from "@enum/moneyDestination";
-import { tokens } from "@design/tokens";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
+import { IServerDomain } from "@ptypes/IServerDomain";
+import { IEnumerators } from "@ptypes/IEnumerators";
 
 const useGeneralInformationForm = (
   enumData: IEnumerators[],
@@ -34,9 +35,9 @@ const useGeneralInformationForm = (
 ) => {
   const createValidationSchema = () =>
     object().shape({
-      nameDestination: validationRules.string.required(
-        validationMessages.required,
-      ),
+      nameDestination: validationRules.string
+        .required(validationMessages.required)
+        .max(36, generalInfoLabels.maxLengthName),
       description: validationRules.string.required(validationMessages.required),
       icon: validationRules.string,
     });
@@ -64,7 +65,7 @@ const useGeneralInformationForm = (
   );
 
   const optionsDestination: IServerDomain[] = enumData.map((item) => {
-    const name = normalizeNameDestination(item.code)?.name as unknown as string;
+    const name = normalizeCodeDestination(item.code)?.name as unknown as string;
     return {
       id: item.code,
       label: name,
@@ -90,19 +91,21 @@ const useGeneralInformationForm = (
   const handleChange = (name: string, value: string) => {
     setAutosuggestValue(value);
     formik.setFieldValue(name, value);
-    const equalValueName = value === formik.values.nameDestination;
 
     if (name === EMoneyDestination.MONEY_DESTINATION) {
+      const equalValueName = value !== formik.values.nameDestination;
       const description =
         normalizeDestination(enumData, value)?.description ?? "";
 
-      if (equalValueName || value === "") {
+      if (value === "") {
         formik.setFieldValue("description", "");
       } else {
         const currentDescription = formik.values.description ?? "";
         const descriptionToAdd = description.trim();
 
-        if (!currentDescription.includes(descriptionToAdd)) {
+        if (equalValueName) {
+          formik.setFieldValue("description", descriptionToAdd);
+        } else {
           const newDescription =
             `${currentDescription} ${descriptionToAdd}`.trim();
           formik.setFieldValue("description", newDescription);
@@ -211,7 +214,7 @@ const useGeneralInformationForm = (
     ? isDisabledButton && !loading
     : isDisabledButton;
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const isMobile = useMediaQuery(mediaQueryTablet);
 
   const directionStack: IStackDirectionAlignment = isMobile ? "column" : "row";
   const widthStack = isMobile ? "100%" : "350px";

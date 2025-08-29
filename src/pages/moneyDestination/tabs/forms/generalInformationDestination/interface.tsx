@@ -1,5 +1,5 @@
 import {
-  Autosuggest,
+  Autocomplete,
   Button,
   Stack,
   Text,
@@ -69,12 +69,12 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                       </Stack>
                     ) : (
                       <Stack height={tokens.spacing.s850} width="100%">
-                        <Autosuggest
+                        <Autocomplete
                           label={generalInfoLabels.name}
                           name="nameDestination"
                           id="nameDestination"
                           placeholder={generalInfoLabels.placeholderName}
-                          value={autosuggestValue}
+                          value={formik.values.nameDestination}
                           onChange={onChange}
                           options={optionsDestination}
                           onBlur={formik.handleBlur}

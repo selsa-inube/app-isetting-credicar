@@ -11,11 +11,6 @@ const titles: ITitle[] = [
     titleName: "Nombre del destino",
     priority: 0,
   },
-  {
-    id: "descriptionUse",
-    titleName: "Descripción del destino",
-    priority: 1,
-  },
 ];
 
 const actionsConfig = (setEntryDeleted: (value: string | number) => void) => {
