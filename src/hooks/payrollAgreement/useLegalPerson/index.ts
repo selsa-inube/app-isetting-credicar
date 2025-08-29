@@ -32,7 +32,7 @@ const useLegalPerson = (props: IUseLegalPerson) => {
     value: item.payingEntityName,
   }));
 
-  legalPersonOptions.push({
+  legalPersonOptions.unshift({
     id: "addCompany",
     label: "(+) Agregar otra empresa",
     value: "addCompany",

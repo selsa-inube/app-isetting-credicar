@@ -91,6 +91,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     try {
       if (useCase === EUseCase.ADD) {
         const newData = await postAddPayrollAgreement(
+          userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
@@ -98,6 +99,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       }
       if (useCase === EUseCase.EDIT) {
         const newData = await pacthEditPayrollAgreement(
+          userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );
@@ -105,6 +107,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       }
       if (useCase === EUseCase.DELETE) {
         const newData = await deletePayrollAgreement(
+          userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
         );

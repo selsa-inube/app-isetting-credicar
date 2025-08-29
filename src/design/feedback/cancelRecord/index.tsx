@@ -1,38 +1,22 @@
 import { MdOutlineCancel } from "react-icons/md";
-import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
+import { Icon, IIconAppearance, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { notCancelStatus } from "@config/status/notCancelStatus";
 import { cancelLabels } from "@config/cancelLabels";
 import { ICancelRecord } from "@ptypes/design/ICancelRecord";
-import { disabledModal } from "@config/disabledModal";
 import { portalId } from "@config/portalId";
 import { mediaQueryTablet } from "@config/environment";
 import { StyledContainerIcon } from "./styles";
 
 const CancelRecord = (props: ICancelRecord) => {
-  const {
-    showModal,
-    status,
-    messageCancel,
-    loading,
-    showInfoModal,
-    onToggleInfoModal,
-    onToggleModal,
-    onClick,
-  } = props;
+  const { showModal, modalData, loading, onToggleModal } = props;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 
-  const notCancel = notCancelStatus.includes(status);
-
   return (
     <>
-      <StyledContainerIcon
-        onClick={!notCancel ? onToggleModal : undefined}
-        $isTablet={screenTablet}
-      >
+      <StyledContainerIcon onClick={onToggleModal} $isTablet={screenTablet}>
         <Icon
           appearance={EComponentAppearance.DANGER}
           icon={<MdOutlineCancel />}
@@ -40,7 +24,6 @@ const CancelRecord = (props: ICancelRecord) => {
           onClick={onToggleModal}
           cursorHover
           spacing="narrow"
-          disabled={notCancel}
         />
         {screenTablet && (
           <Text type="body" size="medium">
@@ -51,27 +34,21 @@ const CancelRecord = (props: ICancelRecord) => {
       {showModal && (
         <DecisionModal
           portalId={portalId}
-          title={messageCancel.title}
-          actionText={messageCancel.actionText}
-          description={messageCancel.description}
-          onClick={onClick}
-          onCloseModal={onToggleModal}
-          appearance={EComponentAppearance.DANGER}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          onClick={modalData.onClick}
+          onCloseModal={modalData.onCloseModal}
+          withCancelButton={modalData.withCancelButton}
+          appearance={
+            modalData.appearance ||
+            (EComponentAppearance.PRIMARY as IIconAppearance)
+          }
           loading={loading}
-          appearanceButton={EComponentAppearance.DANGER}
-        />
-      )}
-
-      {showInfoModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={disabledModal.title}
-          actionText={disabledModal.actionText}
-          description={disabledModal.description}
-          subtitle={disabledModal.subtitle}
-          onCloseModal={onToggleInfoModal}
-          onClick={onToggleInfoModal}
-          withCancelButton={false}
+          appearanceButton={
+            modalData.appearanceButton ||
+            (EComponentAppearance.PRIMARY as EComponentAppearance)
+          }
         />
       )}
     </>
