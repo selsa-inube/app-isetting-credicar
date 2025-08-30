@@ -11,6 +11,10 @@ interface IModalData {
   subtitle?: string;
   appearance?: IIconAppearance;
   appearanceButton?: EComponentAppearance;
+  withIcon?: boolean;
+  icon?: React.JSX.Element;
+  moreDetails?: string;
+  loading?: boolean;
 }
 
 export type { IModalData };

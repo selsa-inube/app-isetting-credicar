@@ -18,7 +18,7 @@ const errorCodes: Record<number, IDetailsErrors> = {
     ],
     solutionError: [
       "Inicia sesión con una cuenta válida.",
-      "Si el problema persiste, contacta al soporte.",
+      "Si el problema persiste, contacta a soporte.",
     ],
   },
   403: {
@@ -47,8 +47,8 @@ const errorCodes: Record<number, IDetailsErrors> = {
       "Puede que haya un error temporal en el sistema.",
     ],
     solutionError: [
-      "Intenta nuevamente más tarde o contacta al soporte.",
-      "Proporciona detalles del error si es posible.",
+      "Verifica tu conexión a Internet",
+      "Intenta nuevamente más tarde o contacta a soporte.",
     ],
   },
   1000: {
@@ -77,14 +77,14 @@ const errorCodes: Record<number, IDetailsErrors> = {
   },
   1004: {
     descriptionError: ["Su usuario no tiene unidades de negocio relacionados."],
-    solutionError: ["consulte con su administrador."],
+    solutionError: ["consulta con tu operador."],
   },
   1005: {
     descriptionError: ["No se encuentra disponible la página."],
     solutionError: [
       "Confirma que estés usando la url adecuada.",
       "Puede que no tengas los privilegios necesarios.",
-      "Intenta nuevamente mas tarde.",
+      "Intenta nuevamente más tarde.",
     ],
   },
 };

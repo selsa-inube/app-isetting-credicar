@@ -1,14 +1,14 @@
 import { useContext } from "react";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useDeleteDestination } from "@hooks/moneyDestination/useDeleteDestination";
+import { useDeleteDestination } from "@hooks/moneyDestination/delete/useDeleteDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { useModalDeleteDestination } from "@hooks/moneyDestination/delete/useModalDeleteDestination";
 import { EUseCase } from "@enum/useCase";
 import { EComponentAppearance } from "@enum/appearances";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { DeleteRecord } from "@design/feedback/DeleteRecord";
-import { deleteMoneyDestinationModal } from "@config/moneyDestination/moneyDestinationTab/generics/deleteMoneyDestinationModal";
 import { portalId } from "@config/portalId";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
@@ -36,6 +36,11 @@ const Delete = (props: IDelete) => {
     requestSteps,
     showPendingReqModal,
     loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingReqModal,
@@ -50,6 +55,20 @@ const Delete = (props: IDelete) => {
     setEntryDeleted,
   });
 
+  const { modalData, showDecision } = useModalDeleteDestination({
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    showInfoModal,
+    showModal,
+    handleToggleInfoModal,
+    handleClick,
+    handleToggleModal,
+    handleToggleErrorModal,
+  });
+
   const showRequestProcess = showRequestProcessModal && saveMoneyDestination;
 
   const showRequestStatus =
@@ -58,13 +77,10 @@ const Delete = (props: IDelete) => {
   return (
     <>
       <DeleteRecord
-        messageDelete={deleteMoneyDestinationModal}
-        showModal={showModal}
+        modalData={modalData}
+        showDecision={showDecision}
         onToggleModal={handleToggleModal}
-        onClick={handleClick}
         loading={loadingSendData}
-        showInfoModal={showInfoModal}
-        onToggleInfoModal={handleToggleInfoModal}
       />
       {showRequestProcess && (
         <RequestProcess

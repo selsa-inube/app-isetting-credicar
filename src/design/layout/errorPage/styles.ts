@@ -20,6 +20,7 @@ const StyledContainer = styled.div<IStyledContainer>`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  width: 100%;
   height: 90vh;
   padding: ${({ $isTablet }) =>
     $isTablet

@@ -25,13 +25,13 @@ const VerificationForm = (props: IVerificationForm) => {
     savePayrollAgreement,
     loading,
     typeRegularPayroll,
-    showPendingReqModal,
+    showPendingRequestModal,
     handleStepChange,
     onFinishForm,
     onPreviousStep,
     onToggleModal,
     onCloseRequestStatus,
-    onClosePendingReqModal,
+    onClosePendingRequestModal,
     onCloseProcess,
   } = props;
 
@@ -46,7 +46,7 @@ const VerificationForm = (props: IVerificationForm) => {
     showRequestProcessModal,
     savePayrollAgreement,
     typeRegularPayroll,
-    showPendingReqModal,
+    showPendingRequestModal,
   });
 
   return (
@@ -126,8 +126,8 @@ const VerificationForm = (props: IVerificationForm) => {
             requestStatusMessage(savePayrollAgreement.staffName).description
           }
           requestNumber={savePayrollAgreement.requestNumber}
-          onClick={onClosePendingReqModal}
-          onCloseModal={onClosePendingReqModal}
+          onClick={onClosePendingRequestModal}
+          onCloseModal={onClosePendingRequestModal}
           loading={false}
           actionText={
             requestStatusMessage(savePayrollAgreement.staffName).actionText

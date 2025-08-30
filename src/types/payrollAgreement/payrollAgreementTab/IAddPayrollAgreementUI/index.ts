@@ -2,6 +2,7 @@ import { IAssistedStep } from "@inubekit/inubekit";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IOrdinaryCyclesEntry } from "../forms/IOrdinaryCyclesEntry";
 import { IAddPayrollAgreementForms } from "../forms/IAddPayrollAgreementForms";
 import { IExtraordinaryCyclesEntry } from "../forms/IExtraordinaryCyclesEntry";
@@ -18,22 +19,21 @@ interface IAddPayrollAgreementUI {
   regularPaymentCycles: IOrdinaryCyclesEntry[];
   requestSteps: IRequestSteps[];
   savePayrollAgreement: ISaveDataResponse;
-  showGoBackModal: boolean;
   showModal: boolean;
-  showPendingReqModal: boolean;
+  showPendingRequestModal: boolean;
   showRequestProcessModal: boolean;
   smallScreen: boolean;
   sourcesOfIncomeValues: IServerDomain[];
   steps: IAssistedStep[];
   typeRegularPayroll: boolean;
   includeExtraPayDay: IOrdinaryCyclesEntry[];
+  showDecision: boolean;
+  modalData: IModalData;
   onToggleModal: () => void;
   setSourcesOfIncomeValues: React.Dispatch<
     React.SetStateAction<IServerDomain[]>
   >;
   onOpenModal: () => void;
-  onCloseModal: () => void;
-  onGoBack: () => void;
   onNextStep: () => void;
   onPreviousStep: () => void;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
@@ -50,7 +50,7 @@ interface IAddPayrollAgreementUI {
     React.SetStateAction<IOrdinaryCyclesEntry[]>
   >;
   onCloseRequestStatus: () => void;
-  onClosePendingReqModal: () => void;
+  onClosePendingRequestModal: () => void;
   onFinishForm: () => void;
   setCurrentStep: (step: number) => void;
   onCloseProcess: () => void;

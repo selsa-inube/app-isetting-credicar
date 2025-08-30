@@ -3,23 +3,18 @@ import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { IDelete } from "@ptypes/design/IDelete";
 import { deleteRecordLabels } from "@config/deleteRecordLabels";
 import { StyledContainerIcon } from "./styles";
 import { portalId } from "@config/portalId";
-import { disabledModal } from "@config/disabledModal";
 import { mediaQueryTablet } from "@config/environment";
+import { IDelete } from "@ptypes/design/IDelete";
 
 const DeleteRecord = (props: IDelete) => {
   const {
-    showModal,
-    messageDelete,
-    loading,
     withActionMobile = true,
-    showInfoModal,
-    onToggleInfoModal,
+    modalData,
+    showDecision,
     onToggleModal,
-    onClick,
   } = props;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
@@ -43,30 +38,19 @@ const DeleteRecord = (props: IDelete) => {
           </Text>
         )}
       </StyledContainerIcon>
-      {showModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={messageDelete.title}
-          actionText={messageDelete.actionText}
-          description={messageDelete.description}
-          onClick={onClick}
-          onCloseModal={onToggleModal}
-          appearance={EComponentAppearance.DANGER}
-          loading={loading}
-          appearanceButton={EComponentAppearance.DANGER}
-        />
-      )}
 
-      {showInfoModal && (
+      {showDecision && (
         <DecisionModal
           portalId={portalId}
-          title={disabledModal.title}
-          actionText={disabledModal.actionText}
-          description={disabledModal.description}
-          subtitle={disabledModal.subtitle}
-          onCloseModal={onToggleInfoModal}
-          onClick={onToggleInfoModal}
-          withCancelButton={false}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          onClick={modalData.onClick}
+          onCloseModal={modalData.onCloseModal}
+          appearance={modalData.appearance}
+          loading={modalData.loading}
+          appearanceButton={modalData.appearanceButton}
+          withCancelButton={modalData.withCancelButton}
         />
       )}
     </>

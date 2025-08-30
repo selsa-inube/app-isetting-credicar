@@ -19,6 +19,7 @@ const Home = () => {
     hasMultipleBusinessUnits,
     dataExists,
     optionsHeader,
+    handlelogout,
     setCollapse,
     handleLogoClick,
   } = useHome();
@@ -42,6 +43,7 @@ const Home = () => {
       hasMultipleBusinessUnits={hasMultipleBusinessUnits}
       dataExists={dataExists}
       optionsHeader={optionsHeader}
+      onlogout={handlelogout}
     />
   );
 };

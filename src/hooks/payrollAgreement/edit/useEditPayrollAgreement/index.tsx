@@ -17,7 +17,6 @@ import { getDayPayment } from "@utils/getDayPayment";
 import { transformToArray } from "@utils/transformToArray";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { getSourcesIncome } from "@utils/getSourcesIncome";
-import { deletedAlertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedAlertModal";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 import { mediaQueryMobile } from "@config/environment";
 import { payrollType } from "@config/payrollAgreement/payrollAgreementTab/edit/typePayroll";
@@ -397,7 +396,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         description: jsonLabels(appData.user.userAccount).modifyJustification,
         entityName: conditionRule,
         requestDate: formatDate(new Date()),
-        useCaseName: "ModifyPayrollAgreement",
+        useCaseName: EPayrollAgreement.USE_CASE_EDIT,
         configurationRequestData: changedFields,
       });
       setShowRequestProcessModal(true);
@@ -420,13 +419,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
 
   const filteredTabs = Object.values(filteredTabsConfig);
 
-  const { title, description, actionText, moreDetails } =
-    deletedAlertModal(typePayroll);
-
   return {
-    actionText,
     companyAgreement,
-    description,
     extraordinaryPayment,
     filteredTabs,
     filteredTabsConfig,
@@ -434,9 +428,9 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     generalInformationRef,
     includeExtraPayDay,
     initialData,
+    typePayroll,
     isCurrentFormValid,
     isSelected,
-    moreDetails,
     regularDeleted,
     regularPaymentCycles,
     saveData,
@@ -449,8 +443,6 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     showRequestProcessModal,
     smallScreen,
     sourcesOfIncomeValues,
-    title,
-    typePayroll,
     typeRegularPayroll,
     setIncludeExtraPayDay,
     setRegularDeleted,

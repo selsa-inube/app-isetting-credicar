@@ -37,7 +37,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     onChange,
     onButtonClick,
     onReset,
-    valuesEqual,
     autosuggestValue,
     buttonDisabledState,
   } = props;
@@ -126,11 +125,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         {editDataOption && (
-          <Button
-            onClick={onReset}
-            appearance={EComponentAppearance.GRAY}
-            disabled={valuesEqual}
-          >
+          <Button onClick={onReset} appearance={EComponentAppearance.GRAY}>
             {generalInfoLabels.cancelButton}
           </Button>
         )}

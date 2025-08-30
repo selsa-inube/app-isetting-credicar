@@ -7,6 +7,7 @@ import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { patchEditMoneyDestination } from "@services/moneyDestination/patchEditMoneyDestination";
 import { deleteMoneyDestination } from "@services/moneyDestination/deleteMoneyDestination";
 import { postAddMoneyDestination } from "@services/moneyDestination/postAddMoneyDestination";
+import { errorObject } from "@utils/errorObject";
 import { EUseCase } from "@enum/useCase";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
@@ -15,11 +16,13 @@ import { interventionHumanMessage } from "@config/moneyDestination/moneyDestinat
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { operationTypes } from "@config/useCase";
 import { requestStepsInitial } from "@config/requestSteps";
+import { requestStepsNames } from "@config/requestStepsNames";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
 import { IRequestMoneyDestination } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IRequestMoneyDestination";
 import { IUseSaveMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseSaveMoneyDestination";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { IErrors } from "@ptypes/IErrors";
 
 const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   const {
@@ -41,7 +44,9 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   const [showPendingReqModal, setShowPendingReqModal] = useState(false);
   const [loadingSendData, setLoadingSendData] = useState(false);
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
-  const [networkError, setNetworkError] = useState<string>("");
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [hasError, setHasError] = useState(false);
+  const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
 
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
@@ -53,23 +58,11 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     try {
       const saveData = await postSaveRequest(userAccount, data);
       setSaveMoneyDestination(saveData);
-      setRequestSteps((prev) =>
-        updateRequestSteps(
-          prev,
-          requestStepsInitial[0].name,
-          ERequestStepsStatus.PENDING,
-        ),
-      );
     } catch (error) {
       console.info(error);
       setSendData(false);
-      addFlag({
-        title: flowAutomaticMessages().errorSendingData.title,
-        description: flowAutomaticMessages().errorSendingData.description,
-        appearance: flowAutomaticMessages().errorSendingData
-          .appearance as IFlagAppearance,
-        duration: flowAutomaticMessages().errorSendingData.duration,
-      });
+      setHasError(true);
+      setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
       setShowModal(false);
@@ -116,7 +109,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
-      setNetworkError(String(error));
+      setNetworkError(errorObject(error));
       setShowModal(false);
     }
   };
@@ -124,7 +117,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   const updateRequestSteps = (
     steps: IRequestSteps[],
     stepName: string,
-    newStatus: "pending" | "completed" | "error",
+    newStatus: ERequestStepsStatus,
   ): IRequestSteps[] => {
     return steps.map((step) => {
       if (step.name === stepName) {
@@ -153,27 +146,31 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[0].name,
+            requestStepsNames.requestFilled,
             ERequestStepsStatus.ERROR,
           ),
         );
-        setSendData(false);
+        setTimeout(() => {
+          setSendData(false);
+          setHasError(true);
+          setChangeTab(true);
+        }, 1500);
       } else {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[0].name,
+            requestStepsNames.requestFilled,
             ERequestStepsStatus.COMPLETED,
           ),
         );
       }
-    }, 1000);
+    }, 1500);
     setTimeout(() => {
       if (isStatusIntAutomatic(statusRequest)) {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[1].name,
+            requestStepsNames.adding,
             ERequestStepsStatus.COMPLETED,
           ),
         );
@@ -183,14 +180,14 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[1].name,
+            requestStepsNames.adding,
             ERequestStepsStatus.COMPLETED,
           ),
         );
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[2].name,
+            requestStepsNames.requestAdded,
             ERequestStepsStatus.COMPLETED,
           ),
         );
@@ -200,7 +197,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         setRequestSteps((prev) =>
           updateRequestSteps(
             prev,
-            requestStepsInitial[1].name,
+            requestStepsNames.adding,
             ERequestStepsStatus.ERROR,
           ),
         );
@@ -209,39 +206,43 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   };
 
   useEffect(() => {
-    if (networkError.length > 0) {
+    if (!networkError?.code?.length) {
+      return;
+    }
+    setRequestSteps((prev) =>
+      updateRequestSteps(
+        prev,
+        requestStepsNames.requestFilled,
+        ERequestStepsStatus.COMPLETED,
+      ),
+    );
+
+    const timeout1 = setTimeout(() => {
       setRequestSteps((prev) =>
         updateRequestSteps(
           prev,
-          requestStepsInitial[1].name,
+          requestStepsNames.adding,
           ERequestStepsStatus.ERROR,
         ),
       );
-      setTimeout(() => {
-        setSendData(false);
-        navigate(navigatePage);
-        addFlag({
-          title: flowAutomaticMessages().errorQueryingData.title,
-          description: networkError,
-          appearance: flowAutomaticMessages().errorQueryingData
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorQueryingData.duration,
-        });
-      }, 3000);
-    }
+    }, 1000);
+
+    const timeout2 = setTimeout(() => {
+      setSendData(false);
+      setHasError(true);
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout1);
+      clearTimeout(timeout2);
+    };
   }, [networkError]);
 
   const handleStatusChange = () => {
     if (isStatusIntAutomatic(saveMoneyDestination?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
-        addFlag({
-          title: flowAutomaticMessages().errorCreateRequest.title,
-          description: flowAutomaticMessages().errorCreateRequest.description,
-          appearance: flowAutomaticMessages().errorCreateRequest
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorCreateRequest.duration,
-        });
+        setHasError(true);
       }
 
       if (isStatusRequestFinished()) {
@@ -304,13 +305,13 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     setSendData(false);
     navigate(navigatePage);
     addFlag({
-      title: interventionHumanMessage.SuccessfulCreateRequestIntHuman.title,
+      title: interventionHumanMessage.successfulCreateRequestIntHuman.title,
       description:
-        interventionHumanMessage.SuccessfulCreateRequestIntHuman.description,
-      appearance: interventionHumanMessage.SuccessfulCreateRequestIntHuman
+        interventionHumanMessage.successfulCreateRequestIntHuman.description,
+      appearance: interventionHumanMessage.successfulCreateRequestIntHuman
         .appearance as IFlagAppearance,
       duration:
-        interventionHumanMessage.SuccessfulCreateRequestIntHuman.duration,
+        interventionHumanMessage.successfulCreateRequestIntHuman.duration,
     });
   };
 
@@ -320,11 +321,26 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     navigate(navigatePage);
   };
 
+  const handleToggleErrorModal = () => {
+    setHasError(!hasError);
+    if (errorFetchRequest && hasError) {
+      setChangeTab(true);
+    }
+    if (useCase !== EUseCase.DELETE) {
+      navigate(navigatePage);
+    }
+  };
+
   return {
     saveMoneyDestination,
     requestSteps,
     showPendingReqModal,
     loadingSendData,
+    errorData,
+    hasError,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingReqModal,

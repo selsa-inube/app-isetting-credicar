@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { getPayrollAgreementData } from "@services/payrollAgreement/getPayrollAgreement";
+import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { errorObject } from "@utils/errorObject";
+import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
+import { mediaQueryMobile } from "@config/environment";
+import { disabledModal } from "@config/disabledModal";
+import { errorModal } from "@config/errorModal";
+import { IEntry } from "@ptypes/design/table/IEntry";
+import { IErrors } from "@ptypes/IErrors";
 import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { IUsePayrollAgreementTab } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementTab";
-import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
 
 const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   const { businessUnits } = props;
@@ -13,6 +21,8 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     IPayrollAgreementData[]
   >([]);
   const [hasError, setHasError] = useState(false);
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [showDecision, setShowDecision] = useState(false);
   const [searchPayrollAgreement, setSearchPayrollAgreement] =
     useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -32,6 +42,7 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
       } catch (error) {
         console.info(error);
         setHasError(true);
+        setErrorData(errorObject(error));
       } finally {
         setLoading(false);
       }
@@ -49,7 +60,13 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   }, [entryDeleted]);
 
   const handleToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
+    if (disabledButton && !hasError) {
+      setShowInfoModal(!showInfoModal);
+    }
+  };
+
+  const handleToggleErrorModal = () => {
+    setHasError(!hasError);
   };
 
   const handleSearchPayrollAgreement = (
@@ -58,12 +75,55 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     setSearchPayrollAgreement(e.target.value);
   };
 
-  const smallScreen = useMediaQuery("(max-width: 690px)");
+  useEffect(() => {
+    const decision = showInfoModal || hasError;
+    setShowDecision(decision);
+  }, [showInfoModal, hasError]);
+
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+    };
+
+    if (!loading && hasError) {
+      return {
+        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+      };
+    }
+
+    if (showInfoModal && !hasError) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+      };
+    }
+
+    return initial;
+  };
+
+  const modalData = modal();
+
+  const smallScreen = useMediaQuery(mediaQueryMobile);
   const columnWidths = smallScreen ? [20, 53] : [20, 60];
 
-  const emptyDataMessage = smallScreen
-    ? payrollTabLabels.emptyDataMessageMobile
-    : payrollTabLabels.emptyDataMessageDesk;
+  const emptyDataMessage = useEmptyDataMessage({
+    loading,
+    errorData,
+    data: payrollAgreement as Omit<IEntry[], "id">,
+    smallScreen,
+    message: payrollTabLabels,
+  });
 
   return {
     payrollAgreement,
@@ -75,6 +135,8 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     emptyDataMessage,
     disabledButton,
     showInfoModal,
+    modalData,
+    showDecision,
     handleToggleInfoModal,
     setEntryDeleted,
     handleSearchPayrollAgreement,

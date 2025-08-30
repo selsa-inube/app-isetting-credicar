@@ -98,7 +98,7 @@ const TableUI = (props: ITableUI) => {
               <>
                 {hasEntries ? (
                   entries.map((entry, index) => (
-                    <Tr key={index} zebra={index % 2 === 1} border="top">
+                    <Tr key={index} zebra={index % 2 === 1} border="bottom">
                       {TitleColumns.map((title, index) => (
                         <Td
                           key={`${index}-${entry[title.id]}`}

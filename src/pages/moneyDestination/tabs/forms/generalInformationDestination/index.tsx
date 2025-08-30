@@ -18,6 +18,7 @@ const GeneralInformationForm = forwardRef<
       initialGeneralInfData,
       onFormValid,
       onSubmit,
+      onReset,
       onButtonClick,
       loading = false,
       editDataOption = false,
@@ -43,8 +44,6 @@ const GeneralInformationForm = forwardRef<
       alignItemsIcon,
       paddingIcon,
       handleChange,
-      handleReset,
-      valuesEqualBoton,
     } = useGeneralInformationForm(
       enumData,
       initialValues,
@@ -67,8 +66,7 @@ const GeneralInformationForm = forwardRef<
         editDataOption={editDataOption}
         buttonDisabledState={buttonDisabledState}
         icon={icon}
-        valuesEqual={valuesEqualBoton}
-        onReset={handleReset}
+        onReset={onReset}
         labelButtonNext={labelButtonNext}
         isMobile={isMobile}
         widthStack={widthStack}

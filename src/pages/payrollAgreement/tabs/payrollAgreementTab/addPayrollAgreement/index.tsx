@@ -1,7 +1,8 @@
 import { useContext } from "react";
-import { useAddPayrollAgreement } from "@hooks/payrollAgreement/useAddPayrollAgreement";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
+import { useAddPayrollAgreement } from "@hooks/payrollAgreement/add/useAddPayrollAgreement";
+import { useModalAddPayroll } from "@hooks/payrollAgreement/add/useModalAddPayroll";
+import { useSavePayrollAgreement } from "@hooks/payrollAgreement/savePayrollAgreement/useSavePayrollAgreement";
 import { EUseCase } from "@enum/useCase";
 import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -49,10 +50,15 @@ const AddPayrollAgreement = () => {
     savePayrollAgreement,
     requestSteps,
     loadingSendData,
-    showPendingReqModal,
+    showPendingRequestModal,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
-    handleClosePendingReqModal,
+    handleClosePendingRequestModal,
   } = useSavePayrollAgreement({
     useCase: EUseCase.ADD,
     businessUnits: appData.businessUnit.publicCode,
@@ -61,6 +67,18 @@ const AddPayrollAgreement = () => {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
+  });
+
+  const { modalData, showDecision } = useModalAddPayroll({
+    showGoBackModal,
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleCloseModal,
+    handleGoBack,
+    handleToggleErrorModal,
   });
 
   return (
@@ -79,10 +97,8 @@ const AddPayrollAgreement = () => {
           React.SetStateAction<IServerDomain[]>
         >
       }
-      onGoBack={handleGoBack}
-      showGoBackModal={showGoBackModal}
+      showDecision={showDecision}
       onOpenModal={handleOpenModal}
-      onCloseModal={handleCloseModal}
       smallScreen={smallScreen}
       setExtraordinaryPayment={setExtraordinaryPayment}
       extraordinaryPayment={extraordinaryPayment}
@@ -98,8 +114,8 @@ const AddPayrollAgreement = () => {
       showModal={showModal}
       onToggleModal={handleToggleModal}
       onCloseRequestStatus={handleCloseRequestStatus}
-      onClosePendingReqModal={handleClosePendingReqModal}
-      showPendingReqModal={showPendingReqModal}
+      onClosePendingRequestModal={handleClosePendingRequestModal}
+      showPendingRequestModal={showPendingRequestModal}
       showRequestProcessModal={showRequestProcessModal}
       requestSteps={requestSteps}
       savePayrollAgreement={savePayrollAgreement as ISaveDataResponse}
@@ -109,6 +125,7 @@ const AddPayrollAgreement = () => {
       setIncludeExtraPayDay={setIncludeExtraPayDay}
       includeExtraPayDay={includeExtraPayDay}
       onCloseProcess={handleCloseProcess}
+      modalData={modalData}
     />
   );
 };

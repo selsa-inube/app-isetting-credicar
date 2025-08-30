@@ -1,5 +1,4 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getErrorMessage } from "@utils/getErrorMessage";
 import { maxRetriesServices } from "@config/environment";
 
 const getWithRetries = async <T>(
@@ -19,7 +18,6 @@ const getWithRetries = async <T>(
       return response.data;
     } catch (error) {
       lastError = error;
-
       if (error instanceof Error) {
         console.error(`Attempt ${attempt} failed: ${error.message}`);
       } else {
@@ -31,8 +29,7 @@ const getWithRetries = async <T>(
       }
     }
   }
-  const errorMessage = getErrorMessage(lastError);
-  throw new Error(errorMessage);
+  throw new Error(lastError as string);
 };
 
 export { getWithRetries };

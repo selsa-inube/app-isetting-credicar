@@ -3,6 +3,7 @@ import { FormikProps } from "formik";
 import { IRuleDecision } from "@isettingkit/input";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 
 interface IAddDestinationUI {
@@ -20,10 +21,9 @@ interface IAddDestinationUI {
   showPendingReqModal: boolean;
   showAttentionModal: boolean;
   smallScreen: boolean;
-  showGoBackModal: boolean;
-  onCloseModal: () => void;
+  modalData: IModalData;
+  showDecision: boolean;
   onOpenModal: () => void;
-  onGoBack: () => void;
   onFinishForm: () => void;
   onNextStep: () => void;
   onPreviousStep: () => void;

@@ -18,8 +18,6 @@ import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/c
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
 import { mediaQueryTablet } from "@config/environment";
-import { disabledModal } from "@config/disabledModal";
-import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { editLabels } from "@config/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
@@ -79,7 +77,6 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   );
 
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
-  const [showDecision, setShowDecision] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
@@ -234,7 +231,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       description: editLabels.title,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
-      useCaseName: EGeneralPolicies.MODIFY_GENERAL_POLICIES,
+      useCaseName: EGeneralPolicies.USE_CASE_EDIT,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);
@@ -290,45 +287,6 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     }
   };
 
-  const modal = () => {
-    const initial = {
-      title: "",
-      subtitle: "",
-      description: "",
-      actionText: "",
-      onCloseModal: () => void 0,
-      onClick: () => void 0,
-      withCancelButton: false,
-    };
-
-    if (showInfoModal) {
-      return {
-        ...disabledModal,
-        onCloseModal: handleToggleInfoModal,
-        onClick: handleToggleInfoModal,
-        withCancelButton: false,
-      };
-    }
-
-    if (showDateModal) {
-      return {
-        ...sendEditedModal,
-        onCloseModal: handleToggleDateModal,
-        onClick: handleFinishForm,
-        withCancelButton: false,
-      };
-    }
-
-    return initial;
-  };
-
-  useEffect(() => {
-    const decision = showInfoModal || showDateModal;
-    setShowDecision(decision);
-  }, [showInfoModal, showDateModal]);
-
-  const modalData = modal();
-
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const showDecisionsGeneral =
@@ -376,9 +334,9 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     normalizedScoreModels,
     heightContPageContribut,
     heightContPageIncome,
+    showInfoModal,
     heightContPageScoreModels,
-    showDecision,
-    modalData,
+    handleToggleInfoModal,
     handleOpenModal,
     setShowReciprocity,
     setShowFactor,

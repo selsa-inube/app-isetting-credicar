@@ -9,14 +9,14 @@ interface IVerificationForm {
   updatedData: IFormsUpdateData;
   savePayrollAgreement: ISaveDataResponse;
   loading: boolean;
-  showPendingReqModal: boolean;
+  showPendingRequestModal: boolean;
   typeRegularPayroll: boolean;
   handleStepChange: (stepId: number) => void;
   onFinishForm: () => void;
   onPreviousStep: () => void;
   onToggleModal: () => void;
   onCloseRequestStatus: () => void;
-  onClosePendingReqModal: () => void;
+  onClosePendingRequestModal: () => void;
   onCloseProcess: () => void;
 }
 

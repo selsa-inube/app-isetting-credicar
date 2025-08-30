@@ -100,6 +100,7 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
 const StyledCollapse = styled.div`
   position: absolute;
   margin-top: 10px;
+  z-index: 1;
 `;
 
 export {

@@ -9,7 +9,6 @@ interface IGeneralInformationFormUI {
   autosuggestValue: string;
   editDataOption: boolean;
   icon: JSX.Element | undefined;
-  valuesEqual: boolean;
   loading: boolean;
   labelButtonNext: string;
   buttonDisabledState: boolean;
@@ -19,8 +18,8 @@ interface IGeneralInformationFormUI {
   alignItemsIcon: IStackAlignItem;
   paddingIcon: string;
   onButtonClick: () => void;
-  onReset: () => void;
   onChange: (name: string, value: string) => void;
+  onReset?: () => void;
 }
 
 export type { IGeneralInformationFormUI };

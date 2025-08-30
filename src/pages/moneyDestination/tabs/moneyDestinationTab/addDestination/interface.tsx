@@ -1,8 +1,12 @@
 import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 
+import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
+import { VerificationForm } from "@pages/moneyDestination/tabs/forms/verificationDestination";
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { DecisionsForm } from "@design/forms/decisions";
+import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsAddDestination } from "@config/moneyDestination/addDestination/navigation";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
@@ -11,12 +15,8 @@ import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestin
 import { controlsAssisted } from "@config/controlsAssisted";
 import { lineCreditLabels } from "@config/moneyDestination/addDestination/assisted/lineCreditLabels";
 import { addDestinatrionLabels } from "@config/moneyDestination/moneyDestinationTab/addDestinationLabels";
-import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IAddDestinationUI";
-import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
-import { goBackModal } from "@config/goBackModal";
-import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
-import { VerificationForm } from "@pages/moneyDestination/tabs/forms/verificationDestination";
+import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IAddDestinationUI";
 
 const AddDestinationUI = (props: IAddDestinationUI) => {
   const {
@@ -34,10 +34,9 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     showPendingReqModal,
     showAttentionModal,
     smallScreen,
-    showGoBackModal,
-    onCloseModal,
+    modalData,
+    showDecision,
     onOpenModal,
-    onGoBack,
     onFinishForm,
     onNextStep,
     onPreviousStep,
@@ -83,7 +82,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
             size={smallScreen ? "small" : "large"}
           />
           <Stack direction="column">
-            {currentStep === 1 && (
+            {currentStep === EStepsKeysMoneyDestination.GENERAL_DATA && (
               <GeneralInformationForm
                 ref={generalInformationRef}
                 initialValues={initialGeneralInformationValues}
@@ -91,7 +90,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                 onButtonClick={onNextStep}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === EStepsKeysMoneyDestination.LINE_CREDIT && (
               <DecisionsForm
                 attentionModal={attentionModal}
                 deleteModal={deleteModal}
@@ -112,7 +111,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                 }
               />
             )}
-            {currentStep === 3 && (
+            {currentStep === EStepsKeysMoneyDestination.VERIFICATION && (
               <VerificationForm
                 updatedData={{
                   personalInformation: {
@@ -142,14 +141,14 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
           </Stack>
         </Stack>
       </Stack>
-      {showGoBackModal && (
+      {showDecision && (
         <DecisionModal
           portalId={portalId}
-          title={goBackModal.title}
-          description={goBackModal.description}
-          actionText={goBackModal.actionText}
-          onCloseModal={onCloseModal}
-          onClick={onGoBack}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
         />
       )}
     </Stack>
