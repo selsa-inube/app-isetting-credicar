@@ -1,69 +1,65 @@
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
-import { useState, useEffect } from "react";
-import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { getCreditLinesData } from "@services/creditLines/getCreditLinesData";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
-import { EMoneyDestination } from "@enum/moneyDestination";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
-import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
+import { ECreditLines } from "@enum/creditLines";
+import { mediaQueryMobile } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
 import { errorModal } from "@config/errorModal";
-import { mediaQueryTablet } from "@config/environment";
-import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
-import { IUseMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseMoneyDestination";
-import { IErrors } from "@ptypes/IErrors";
+import { creditTabLabels } from "@config/creditLines/creditLinesTab/generic/creditTabLabels";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IErrors } from "@ptypes/IErrors";
+import { ICreditLinesData } from "@ptypes/creditLines/ICreditLinesData";
+import { IUseCreditLinesTab } from "@ptypes/hooks/creditLines/IUseCreditLinesTab";
 
-const useMoneyDestination = (props: IUseMoneyDestination) => {
+const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const { businessUnits } = props;
-  const [moneyDestination, setMoneyDestination] = useState<
-    IMoneyDestinationData[]
-  >([]);
+  const [businessRules] = useState<string[]>([]);
+  const [creditLines, setPayrollAgreement] = useState<ICreditLinesData[]>([]);
+  const [loadingRules] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [showDecision, setShowDecision] = useState(false);
-  const [searchMoneyDestination, setSearchMoneyDestination] =
-    useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [searchCreditLines, setSearchCreditLines] = useState<string>("");
+  const [loadingCreditLines, setLoadingCreditLines] = useState<boolean>(true);
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
+  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
 
   const { disabledButton } = useValidateUseCase({
-    useCase: EMoneyDestination.USE_CASE_ADD,
+    useCase: ECreditLines.USE_CASE_ADD,
   });
 
   useEffect(() => {
-    const fetchEnumData = async () => {
-      setLoading(true);
+    if (!loadingRules && businessRules && businessRules.length > 0) {
+      return;
+    }
+    const fetchPayrollAgreementData = async () => {
+      setLoadingCreditLines(true);
       try {
-        const data = await getMoneyDestinationData(businessUnits);
-        setMoneyDestination(data);
+        const data = await getCreditLinesData(businessUnits);
+        setPayrollAgreement(data);
       } catch (error) {
         console.info(error);
         setHasError(true);
         setErrorData(errorObject(error));
       } finally {
-        setLoading(false);
+        setLoadingCreditLines(false);
       }
     };
 
-    fetchEnumData();
-  }, []);
+    fetchPayrollAgreementData();
+  }, [businessRules]);
 
   useEffect(() => {
     if (entryDeleted) {
-      setMoneyDestination((prev) =>
+      setPayrollAgreement((prev) =>
         prev.filter((entry) => entry.id !== entryDeleted),
       );
     }
   }, [entryDeleted]);
-
-  const handleSearchMoneyDestination = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSearchMoneyDestination(e.target.value);
-  };
 
   const handleToggleInfoModal = () => {
     if (disabledButton && !hasError) {
@@ -75,6 +71,10 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+  };
+
+  const handleSearchCreditLines = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchCreditLines(e.target.value);
   };
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
       withCancelButton: false,
     };
 
-    if (!loading && hasError) {
+    if (!loadingCreditLines && hasError) {
       return {
         ...errorModal(messageErrorStatusConsultation(errorData.status)),
         onCloseModal: handleToggleInfoModal,
@@ -116,35 +116,45 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
 
   const modalData = modal();
 
-  const smallScreen = useMediaQuery(mediaQueryTablet);
-  const widthFirstColumn = smallScreen ? 72 : 80;
-
-  const columnWidths = [widthFirstColumn];
+  const smallScreen = useMediaQuery(mediaQueryMobile);
 
   const emptyDataMessage = useEmptyDataMessage({
-    loading,
+    loading: loadingCreditLines,
     errorData,
-    data: moneyDestination as Omit<IEntry[], "id">,
-    smallScreen,
-    message: tabLabels,
+    data: creditLines as Omit<IEntry[], "id">,
+    smallScreen: false,
+    message: creditTabLabels,
   });
 
+  const widthFirstColumn = smallScreen ? 70 : 80;
+  const columnWidths = [widthFirstColumn];
+
+  const validateMissingRules = !loadingRules && businessRules.length === 0;
+
+  const showIcon = !validateMissingRules || disabledButton;
+
+  const hasBusinessRules = businessRules && businessRules.length > 0;
+
   return {
-    moneyDestination,
+    creditLines,
+    loadingCreditLines,
     hasError,
-    searchMoneyDestination,
-    loading,
     smallScreen,
     columnWidths,
     emptyDataMessage,
     disabledButton,
-    showInfoModal,
-    showDecision,
     modalData,
+    showDecision,
+    searchCreditLines,
+    businessRules,
+    loadingRules,
+    validateMissingRules,
+    showIcon,
+    hasBusinessRules,
+    handleSearchCreditLines,
     handleToggleInfoModal,
-    handleSearchMoneyDestination,
     setEntryDeleted,
   };
 };
 
-export { useMoneyDestination };
+export { useCreditLinesTab };

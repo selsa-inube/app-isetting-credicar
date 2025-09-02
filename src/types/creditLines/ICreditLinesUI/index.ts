@@ -1,12 +1,15 @@
+import { ITab } from "@inubekit/inubekit";
 import { ICardData } from "@ptypes/home/ICardData";
 
 interface ICreditLinesUI {
-  loading: boolean;
-  searchCreditLines: string;
+  creditLinesTabs: ITab[];
   descriptionOptions: ICardData;
-  columnWidths: number[];
+  isSelected: string;
+  showCreditLinesTab: boolean;
+  showLinesUnderConstructionTab: boolean;
+  showRequestsInProgressTab: boolean;
   smallScreen: boolean;
-  onSearchCreditLines: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTabChange: (tabId: string) => void;
 }
 
 export type { ICreditLinesUI };

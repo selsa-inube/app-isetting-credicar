@@ -5,7 +5,10 @@ const columnsMapping: Record<number, string> = {
   2: "1fr 1fr",
 };
 
-const columnsAttribute = (values: IEntry[], isMobile?: boolean): string => {
+const columnsAttribute = (
+  values: IEntry[] | string[],
+  isMobile?: boolean,
+): string => {
   if (isMobile) {
     return "1fr";
   }

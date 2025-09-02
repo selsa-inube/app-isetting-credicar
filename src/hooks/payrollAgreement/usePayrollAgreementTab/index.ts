@@ -62,6 +62,8 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   const handleToggleInfoModal = () => {
     if (disabledButton && !hasError) {
       setShowInfoModal(!showInfoModal);
+    } else {
+      setHasError(!hasError);
     }
   };
 

@@ -6,6 +6,7 @@ import { FormikProps } from "formik";
 import { useLegalPerson } from "@hooks/payrollAgreement/useLegalPerson";
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { stepKeysPayroll } from "@enum/stepsKeysPayroll";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { checkDayWeek } from "@utils/checkDayWeek";
@@ -37,7 +38,6 @@ import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreemen
 import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
 import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
-import { stepKeysPayroll } from "@src/enum/stepsKeysPayroll";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;

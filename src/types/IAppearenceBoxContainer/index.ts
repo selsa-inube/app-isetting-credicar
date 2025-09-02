@@ -1,4 +1,10 @@
-const appearenceBoxContainer = ["light", "gray", "dark"] as const;
+const appearenceBoxContainer = [
+  "light",
+  "gray",
+  "dark",
+  "help",
+  "warning",
+] as const;
 
 type IAppearenceBoxContainer = (typeof appearenceBoxContainer)[number];
 
