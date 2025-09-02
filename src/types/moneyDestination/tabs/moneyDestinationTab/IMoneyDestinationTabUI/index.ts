@@ -11,6 +11,7 @@ interface IMoneyDestinationTabUI {
   disabledButton: boolean;
   modalData: IModalData;
   onToggleInfoModal: () => void;
+  pageLength: number;
   onSearchMoneyDestination: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setEntryDeleted: (value: string | number) => void;
 }

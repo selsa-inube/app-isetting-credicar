@@ -32,6 +32,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
     showIcon,
     validateMissingRules,
     hasBusinessRules,
+    pageLength,
     onToggleInfoModal,
     onSearchCreditLines,
   } = props;
@@ -142,6 +143,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
                       entries={entries}
                       loadingCreditLines={loadingCreditLines}
                       searchCreditLines={searchCreditLines}
+                      pageLength={pageLength}
                     />
                   )}
                 </>

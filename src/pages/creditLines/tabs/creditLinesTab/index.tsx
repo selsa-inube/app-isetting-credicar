@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { useCreditLinesTab } from "@hooks/creditLine/useCreditLinesTab";
+import { usePageLength } from "@hooks/usePageLength";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { CreditLinesTabUI } from "./interface";
@@ -26,6 +27,8 @@ const CreditLinesTab = () => {
     setEntryDeleted,
   } = useCreditLinesTab({ businessUnits: appData.businessUnit.publicCode });
 
+  const pageLength = usePageLength();
+
   return (
     <CreditLinesTabUI
       loadingRules={loadingRules}
@@ -45,6 +48,7 @@ const CreditLinesTab = () => {
       showIcon={showIcon}
       validateMissingRules={validateMissingRules}
       hasBusinessRules={hasBusinessRules}
+      pageLength={pageLength}
     />
   );
 };

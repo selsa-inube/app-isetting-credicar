@@ -135,7 +135,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryDeleted)}

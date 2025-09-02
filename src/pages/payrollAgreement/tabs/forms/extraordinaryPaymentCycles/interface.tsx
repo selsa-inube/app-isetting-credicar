@@ -34,6 +34,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
     labelButtonNext,
     labelButtonPrevious,
     columnWidths,
+    pageLength,
     onChange,
     onAddCycle,
     onButtonClick,
@@ -91,6 +92,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
                 emptyDataMessage={cyclespaymentLabels.emptyDataMessage}
                 withActionMobile={false}
                 withGeneralizedTitle={true}
+                pageLength={pageLength}
               />
             </Stack>
             {isMobile && (

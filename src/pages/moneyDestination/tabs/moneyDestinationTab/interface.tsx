@@ -26,6 +26,7 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
     showInfoModal,
     disabledButton,
     modalData,
+    pageLength,
     onToggleInfoModal,
     onSearchMoneyDestination,
     setEntryDeleted,
@@ -131,7 +132,7 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
             filter={searchMoneyDestination}
             loading={loading}
             columnWidths={columnWidths}
-            pageLength={8}
+            pageLength={pageLength}
             emptyDataMessage={emptyDataMessage}
           />
         </Stack>

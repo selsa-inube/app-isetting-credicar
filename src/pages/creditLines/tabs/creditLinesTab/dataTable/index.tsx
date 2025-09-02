@@ -18,6 +18,7 @@ const DataTable = (props: IDataTable) => {
     entries,
     loadingCreditLines,
     searchCreditLines,
+    pageLength,
   } = props;
 
   return (
@@ -43,6 +44,7 @@ const DataTable = (props: IDataTable) => {
             filter={searchCreditLines}
             loading={loadingCreditLines}
             columnWidths={columnWidths}
+            pageLength={pageLength}
           />
         ) : (
           <InformationBox

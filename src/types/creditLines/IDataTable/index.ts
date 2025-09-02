@@ -6,6 +6,7 @@ interface IDataTable {
   entries: IEntry[];
   loadingCreditLines: boolean;
   searchCreditLines: string;
+  pageLength: number;
 }
 
 export type { IDataTable };

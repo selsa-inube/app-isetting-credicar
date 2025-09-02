@@ -16,6 +16,7 @@ interface ICreditLinesTabUI {
   showIcon: boolean;
   validateMissingRules: boolean;
   hasBusinessRules: boolean;
+  pageLength: number;
   setEntryDeleted: React.Dispatch<React.SetStateAction<string | number>>;
   onToggleInfoModal: () => void;
   onSearchCreditLines: (e: React.ChangeEvent<HTMLInputElement>) => void;

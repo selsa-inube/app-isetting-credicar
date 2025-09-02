@@ -18,6 +18,7 @@ interface IExtraordinaryPaymentCyclesFormUI {
   labelButtonNext: string;
   labelButtonPrevious: string;
   columnWidths: number[];
+  pageLength: number;
   onAddCycle: () => void;
   onToggleModal: () => void;
   onButtonClick: () => void;
