@@ -1,4 +1,8 @@
-import { MdDeleteOutline, MdOutlineCreate } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdOutlineCreate,
+  MdOutlineRemoveRedEye,
+} from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 
 import { EComponentAppearance } from "@enum/appearances";
@@ -10,8 +14,8 @@ const actions: IAction[] = [
 
     content: () => (
       <Icon
-        appearance={EComponentAppearance.PRIMARY}
-        icon={<MdOutlineCreate />}
+        appearance={EComponentAppearance.DARK}
+        icon={<MdOutlineRemoveRedEye />}
         size="16px"
         cursorHover
       />
