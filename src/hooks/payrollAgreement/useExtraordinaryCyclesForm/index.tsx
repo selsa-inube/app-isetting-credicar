@@ -127,12 +127,14 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       formik.setFieldValue("day", "");
     }
 
+    const codeMonth = monthOptions.find(
+      (month) => month.value === formik.values.month,
+    )?.id;
+
     if (formik.values.month && !typeRegularPayroll) {
       formik.setFieldValue("day", "");
       const options: IServerDomain[] = convertToOptions(
-        daysOfMonth(
-          monthsInNumber[formik.values.month as keyof typeof monthsInNumber],
-        ),
+        daysOfMonth(monthsInNumber[codeMonth as keyof typeof monthsInNumber]),
       );
       setDayOptions(options);
     }
@@ -142,7 +144,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       const options: IServerDomain[] = convertToOptions(
         generateExtraOrdPayDays(
           regularPaymentCycles,
-          monthsInNumber[formik.values.month as keyof typeof monthsInNumber],
+          monthsInNumber[codeMonth as keyof typeof monthsInNumber],
         ),
       );
       setDayOptions(options);

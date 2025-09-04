@@ -4,6 +4,7 @@ import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDest
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { EMoneyDestination } from "@enum/moneyDestination";
+import { EComponentAppearance } from "@enum/appearances";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
@@ -68,6 +69,8 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   const handleToggleInfoModal = () => {
     if (disabledButton && !hasError) {
       setShowInfoModal(!showInfoModal);
+    } else {
+      setHasError(!hasError);
     }
   };
 
@@ -86,9 +89,13 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && hasError) {
@@ -97,6 +104,9 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -106,6 +116,9 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

@@ -1,8 +1,11 @@
+import { MdOutlineReportProblem } from "react-icons/md";
+
 const errorModal = (description: string) => {
   return {
-    title: "información",
+    title: "Importante",
     description: description,
     actionText: "Entendido",
+    icon: <MdOutlineReportProblem />,
   };
 };
 export { errorModal };

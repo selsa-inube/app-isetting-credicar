@@ -1,0 +1,15 @@
+import { IIconAppearance, ITextSize } from "@inubekit/inubekit";
+import { IAppearenceBoxContainer } from "../IAppearenceBoxContainer";
+
+interface IInformationBox {
+  description: string;
+  boxPadding: string;
+  boxColor: IAppearenceBoxContainer;
+  icon: React.ReactNode;
+  sizeIcon: string;
+  sizeDescription: ITextSize;
+  appearanceIcon: IIconAppearance;
+  widthBox?: string;
+}
+
+export type { IInformationBox };

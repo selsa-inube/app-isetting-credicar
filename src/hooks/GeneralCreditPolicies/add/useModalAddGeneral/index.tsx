@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { EMoneyDestination } from "@enum/moneyDestination";
+import { EGeneralPolicies } from "@enum/generalPolicies";
+import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
-import { IUseModalAddDestination } from "@ptypes/hooks/moneyDestination/IUseModalAddDestination";
+import { IUseModalAddPayroll } from "@ptypes/hooks/payrollAgreement/IUseModalAddPayroll";
 
-const useModalAddDestination = (props: IUseModalAddDestination) => {
+const useModalAddGeneral = (props: IUseModalAddPayroll) => {
   const {
     showGoBackModal,
     loading,
@@ -32,9 +33,13 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && !errorFetchRequest && hasError) {
@@ -52,12 +57,15 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
           messageErrorUseCases(
             networkError.status,
             operationTypes.addError,
-            EMoneyDestination.OPTION_NAME,
+            EGeneralPolicies.OPTION_NAME,
           ),
         ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -67,6 +75,9 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
@@ -78,4 +89,4 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
   return { modalData, showDecision };
 };
 
-export { useModalAddDestination };
+export { useModalAddGeneral };

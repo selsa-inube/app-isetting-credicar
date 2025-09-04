@@ -3,8 +3,9 @@ import { FormikProps } from "formik";
 import { IOption } from "@inubekit/inubekit";
 
 import { IExtraordinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryCyclesEntry";
-import { useExtraordinaryCyclesForm } from "@hooks/payrollAgreement/useExtraordinaryCyclesForm";
+import { usePageLength } from "@hooks/usePageLength";
 import { IExtraordinaryPaymentCyclesForm } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesForm";
+import { useExtraordinaryCyclesForm } from "@hooks/payrollAgreement/useExtraordinaryCyclesForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { ExtraordinaryPaymentCyclesFormUI } from "./interface";
 
@@ -59,6 +60,8 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
       initialData,
     });
 
+    const pageLength = usePageLength();
+
     return (
       <ExtraordinaryPaymentCyclesFormUI
         loading={loading}
@@ -84,6 +87,7 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
         labelButtonPrevious={labelButtonPrevious}
         labelButtonNext={labelButtonNext}
         columnWidths={columnWidths}
+        pageLength={pageLength}
       />
     );
   },

@@ -1,6 +1,9 @@
 import { IEntry } from "@ptypes/design/table/IEntry";
 
-const rowsAttribute = (values: IEntry[], isMobile?: boolean): string => {
+const rowsAttribute = (
+  values: IEntry[] | string[],
+  isMobile?: boolean,
+): string => {
   if (!isMobile) {
     if (values.length <= 2) {
       return "1fr";

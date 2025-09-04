@@ -8,7 +8,7 @@ import { ICardData } from "@ptypes/home/ICardData";
 
 const mainCards: ICardData[] = [
   {
-    publicCode: "Lineas de Credito",
+    publicCode: "Líneas de Crédito",
     icon: <MdOutlinePayments />,
     url: "/credit-lines",
   },

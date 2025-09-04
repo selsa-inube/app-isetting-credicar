@@ -8,7 +8,7 @@ const useEmptyDataMessage = (props: IUseEmptyDataMessage) => {
       return "";
     }
 
-    if (!errorData && data.length === 0) {
+    if (Object.values(errorData).length === 0 && data.length === 0) {
       return smallScreen
         ? message.emptyDataMessageMobile
         : message.emptyDataMessageDesk;

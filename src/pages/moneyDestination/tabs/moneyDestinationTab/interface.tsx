@@ -26,6 +26,7 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
     showInfoModal,
     disabledButton,
     modalData,
+    pageLength,
     onToggleInfoModal,
     onSearchMoneyDestination,
     setEntryDeleted,
@@ -131,7 +132,7 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
             filter={searchMoneyDestination}
             loading={loading}
             columnWidths={columnWidths}
-            pageLength={8}
+            pageLength={pageLength}
             emptyDataMessage={emptyDataMessage}
           />
         </Stack>
@@ -145,7 +146,11 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
           subtitle={modalData.subtitle}
           onCloseModal={modalData.onCloseModal}
           onClick={modalData.onClick}
-          withCancelButton={false}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </StyledContainer>

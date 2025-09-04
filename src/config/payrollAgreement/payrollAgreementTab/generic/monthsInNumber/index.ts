@@ -1,16 +1,16 @@
 const monthsInNumber = {
-  Enero: 0,
-  Febrero: 1,
-  Marzo: 2,
-  Abril: 3,
-  Mayo: 4,
-  Junio: 5,
-  Julio: 6,
-  Agosto: 7,
-  Septiembre: 8,
-  Octubre: 9,
-  Noviembre: 10,
-  Diciembre: 11,
+  January: 0,
+  February: 1,
+  March: 2,
+  April: 3,
+  May: 4,
+  June: 5,
+  July: 6,
+  August: 7,
+  September: 8,
+  October: 9,
+  November: 10,
+  December: 11,
 };
 
 export { monthsInNumber };

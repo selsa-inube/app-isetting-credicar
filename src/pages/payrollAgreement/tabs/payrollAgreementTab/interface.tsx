@@ -135,7 +135,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryDeleted)}
@@ -157,7 +157,11 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
           subtitle={modalData.subtitle}
           onCloseModal={modalData.onCloseModal}
           onClick={modalData.onClick}
-          withCancelButton={false}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </BoxContainer>
