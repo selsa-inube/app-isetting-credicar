@@ -12,6 +12,8 @@ import { ICreditTabsConfig } from "@ptypes/creditLines/ICreditTabsConfig";
 const useCreditLinePage = (businessUnitSigla: string) => {
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";
+  const [showUnderConstruction, setShowUnderConstruction] =
+    useState<boolean>(false);
   const [requestsInProgress] = useState<IRequestsInProgress[]>([]);
 
   const tabs = creditLinesTabsConfig;
@@ -31,7 +33,13 @@ const useCreditLinePage = (businessUnitSigla: string) => {
 
   useEffect(() => {
     if (changeTab) {
-      setIsSelected(tabs.requestsInProgress.id);
+      if (!showUnderConstruction) {
+        setIsSelected(tabs.requestsInProgress.id);
+      }
+
+      if (showUnderConstruction) {
+        setIsSelected(tabs.linesUnderConstruction.id);
+      }
     }
   }, [changeTab]);
 
@@ -39,6 +47,11 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     if (isSelected === tabs.requestsInProgress.id) {
       setChangeTab(false);
       setIsSelected(tabs.requestsInProgress.id);
+    }
+
+    if (isSelected === tabs.linesUnderConstruction.id) {
+      setChangeTab(false);
+      setIsSelected(tabs.linesUnderConstruction.id);
     }
   }, [isSelected]);
 
@@ -79,6 +92,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     showLinesUnderConstructionTab,
     creditLinesTabs,
     handleTabChange,
+    setShowUnderConstruction,
   };
 };
 

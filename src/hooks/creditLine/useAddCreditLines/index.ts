@@ -1,95 +1,158 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { FormikProps } from "formik";
-import { IRuleDecision } from "@isettingkit/input";
 
-import { ICreditProspectEntry } from "@design/forms/creditProspect/types";
-import { optionsProspectConfig } from "@design/forms/creditProspect/config/optionsProspect.config";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { postAddRequestInConstruction } from "@services/requestInProgress/postAddRequestInConstruction";
+import { errorObject } from "@utils/errorObject";
+import { formatDate } from "@utils/date/formatDate";
+import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { errorModal } from "@config/errorModal";
+import { addCreditLinesLabels } from "@config/creditLines/creditLinesTab/generic/addCreditLinesLabels";
+import { IErrors } from "@ptypes/IErrors";
+import { IInformationEntry } from "@ptypes/creditLines/forms/IInformationEntry";
+import { IFormsCreditLine } from "@ptypes/creditLines/forms/IFormsCreditLine";
+import { IUseAddCreditlines } from "@ptypes/hooks/creditLines/IUseAddCreditlines";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { ChangeToRequestTab } from "@src/context/changeToRequestTab/changeToRequest";
 
-import { addCreditLinesSteps } from "@config/creditLines/addCreditLine/assisted";
-import { IFormsCreditlines } from "@ptypes/creditLines/addCreditLine/IFormsCreditlines";
-import { IGeneralInformationEntry } from "@ptypes/creditLines/forms/IGeneralInformationEntry";
-import { IFormsCreditlinesRefs } from "@ptypes/creditLines/addCreditLine/IFormsCreditlinesRefs";
-
-const useAddCreditlines = () => {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [decisions, setDecisions] = useState<IRuleDecision[]>([]);
-  const [formValues, setFormValues] = useState<IFormsCreditlines>({
-    generalInformation: {
+const useAddCreditlines = (props: IUseAddCreditlines) => {
+  const { setShowAddModal, setShowUnderConstruction } = props;
+  const { appData } = useContext(AuthAndPortalData);
+  const [loading, setLoading] = useState(false);
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const { setChangeTab } = useContext(ChangeToRequestTab);
+  const [saveLine, setSaveLine] = useState<ISaveDataResponse>();
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [showLineInitiatedModal, setShowLineInitiatedModal] =
+    useState<boolean>(false);
+  const [formValues] = useState<IFormsCreditLine>({
+    information: {
       isValid: false,
       values: {
-        nameCreditLine: "",
-        descriptionCreditLine: "",
-      },
-    },
-    creditProspect: {
-      isValid: false,
-      values: {
-        additionalDebtors: "",
+        nameLine: "",
+        aliasLine: "",
+        descriptionLine: "",
       },
     },
   });
 
-  const [optionsProspect, setOptionsProspect] = useState(optionsProspectConfig);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
-  const generalInformationRef =
-    useRef<FormikProps<IGeneralInformationEntry>>(null);
+  const generalInformationRef = useRef<FormikProps<IInformationEntry>>(null);
 
-  const creditProspectRef = useRef<FormikProps<ICreditProspectEntry>>(null);
-
-  const formReferences: IFormsCreditlinesRefs = {
-    generalInformation: generalInformationRef,
-    creditProspect: creditProspectRef,
-  };
-
-  const handleNextStep = () => {
-    if (currentStep < addCreditLinesSteps.length) {
-      if (generalInformationRef.current) {
-        setFormValues((prev) => ({
-          ...prev,
-          generalInformation: {
-            ...prev.generalInformation,
-            values: generalInformationRef.current
-              ? generalInformationRef.current.values
-              : ({} as IGeneralInformationEntry),
-          },
-        }));
-        setIsCurrentFormValid(generalInformationRef.current.isValid);
-      }
-      if (creditProspectRef.current) {
-        setFormValues((prev) => ({
-          ...prev,
-          creditProspect: {
-            ...prev.creditProspect,
-            values: creditProspectRef.current
-              ? creditProspectRef.current.values
-              : ({} as ICreditProspectEntry),
-          },
-        }));
-        setIsCurrentFormValid(creditProspectRef.current.isValid);
-      }
-      setCurrentStep(currentStep + 1);
+  const fetchSaveData = async (data: ISaveDataRequest) => {
+    setLoading(true);
+    try {
+      const result = await postAddRequestInConstruction(
+        appData.user.userAccount,
+        data,
+      );
+      setSaveLine(result);
+      setShowLineInitiatedModal(!showLineInitiatedModal);
+    } catch (error) {
+      console.info(error);
+      setHasError(true);
+      setErrorData(errorObject(error));
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handlePreviousStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+  const handleAddModal = () => {
+    const currentValues =
+      generalInformationRef.current?.values || ({} as IInformationEntry);
+
+    const updatedFormValues = {
+      ...formValues,
+      information: {
+        ...formValues.information,
+        values: currentValues,
+        isValid: generalInformationRef.current?.isValid || false,
+      },
+    };
+
+    const data = {
+      applicationName: "ifac",
+      businessManagerCode: appData.businessManager.publicCode,
+      businessUnitCode: appData.businessUnit.publicCode,
+      description: addCreditLinesLabels.descriptionSaveData,
+      entityName: "CreditLines",
+      requestDate: formatDate(new Date()),
+      useCaseName: "",
+      configurationRequestData: {
+        abbreviatedName: updatedFormValues.information.values.nameLine,
+        alias: updatedFormValues.information.values.aliasLine,
+        descriptionUse: updatedFormValues.information.values.descriptionLine,
+      },
+    };
+
+    fetchSaveData(data);
+  };
+
+  const handleCloseModal = () => {
+    setShowAddModal(false);
+  };
+
+  const handleToggleErrorModal = () => {
+    setHasError(!hasError);
+    if (hasError) {
+      setShowAddModal(false);
     }
+  };
+
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+    };
+
+    if (!loading && hasError) {
+      return {
+        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+      };
+    }
+
+    return initial;
+  };
+
+  const modalData = modal();
+
+  const handleGoBack = () => {
+    setShowLineInitiatedModal(!showLineInitiatedModal);
+    setShowAddModal(false);
+    setChangeTab(true);
+    setShowUnderConstruction(true);
+  };
+
+  const handleGoContinue = () => {
+    setShowLineInitiatedModal(!showLineInitiatedModal);
+    setShowAddModal(false);
   };
 
   return {
-    currentStep,
-    decisions,
-    formReferences,
     formValues,
     isCurrentFormValid,
-    optionsProspect,
-    handleNextStep,
-    handlePreviousStep,
-    setDecisions,
+    generalInformationRef,
+    loading,
+    errorData,
+    hasError,
+    saveLine,
+    modalData,
+    showLineInitiatedModal,
+    handleGoBack,
+    handleGoContinue,
+    handleAddModal,
+    handleCloseModal,
     setIsCurrentFormValid,
-    setOptionsProspect,
   };
 };
 

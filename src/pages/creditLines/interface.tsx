@@ -14,6 +14,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
     showCreditLinesTab,
     showRequestsInProgressTab,
     showLinesUnderConstructionTab,
+    setShowUnderConstruction,
     handleTabChange,
   } = props;
 
@@ -43,7 +44,11 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
             selectedTab={isSelected}
             onChange={handleTabChange}
           />
-          {showCreditLinesTab && <CreditLinesTab />}
+          {showCreditLinesTab && (
+            <CreditLinesTab
+              setShowUnderConstruction={setShowUnderConstruction}
+            />
+          )}
           {showRequestsInProgressTab && <></>}
           {showLinesUnderConstructionTab && <></>}
         </Stack>

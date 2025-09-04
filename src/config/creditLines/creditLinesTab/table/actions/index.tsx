@@ -1,46 +1,23 @@
-import {
-  MdDeleteOutline,
-  MdOutlineCreate,
-  MdOutlineRemoveRedEye,
-} from "react-icons/md";
-import { Icon } from "@inubekit/inubekit";
-
-import { EComponentAppearance } from "@enum/appearances";
+import { Details } from "@pages/creditLines/tabs/creditLinesTab/tools/details";
+import { Edit } from "@pages/creditLines/tabs/creditLinesTab/tools/edit";
+import { Delete } from "@pages/creditLines/tabs/creditLinesTab/tools/delete";
 import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const actions: IAction[] = [
   {
     id: "Details",
 
-    content: () => (
-      <Icon
-        appearance={EComponentAppearance.DARK}
-        icon={<MdOutlineRemoveRedEye />}
-        size="16px"
-        cursorHover
-      />
-    ),
+    content: (entry: IEntry) => <Details data={entry} />,
   },
   {
     id: "edit",
-    content: () => (
-      <Icon
-        appearance={EComponentAppearance.PRIMARY}
-        icon={<MdOutlineCreate />}
-        size="16px"
-        cursorHover
-      />
-    ),
+    content: (entry: IEntry) => <Edit data={entry} />,
   },
   {
     id: "delete",
-    content: () => (
-      <Icon
-        appearance={EComponentAppearance.DANGER}
-        icon={<MdDeleteOutline />}
-        size="16px"
-        cursorHover
-      />
+    content: (entry: IEntry) => (
+      <Delete data={entry} setEntryDeleted={() => void 0} />
     ),
   },
 ];

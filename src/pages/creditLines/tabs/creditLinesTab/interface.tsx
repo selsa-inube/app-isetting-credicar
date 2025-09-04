@@ -15,6 +15,7 @@ import { creditTabLabels } from "@config/creditLines/creditLinesTab/generic/cred
 import { ICreditLinesTabUI } from "@ptypes/creditLines/CreditLinesTabUI";
 import { EvaluateRules } from "./evaluateRules";
 import { DataTable } from "./dataTable";
+import { AddCreditLine } from "./addCreditLine";
 
 const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
   const {
@@ -33,6 +34,10 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
     validateMissingRules,
     hasBusinessRules,
     pageLength,
+    showAddModal,
+    setShowUnderConstruction,
+    setShowAddModal,
+    onToggleAddModal,
     onToggleInfoModal,
     onSearchCreditLines,
   } = props;
@@ -96,7 +101,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
                     variant="filled"
                     iconBefore={<MdAdd />}
                     type="link"
-                    path="/credit-lines/add-credit-line"
+                    onClick={onToggleAddModal}
                     fullwidth={smallScreen}
                     disabled={disabledButton}
                   >
@@ -161,6 +166,12 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
             onCloseModal={modalData.onCloseModal}
             onClick={modalData.onClick}
             withCancelButton={false}
+          />
+        )}
+        {showAddModal && (
+          <AddCreditLine
+            setShowAddModal={setShowAddModal}
+            setShowUnderConstruction={setShowUnderConstruction}
           />
         )}
       </BoxContainer>

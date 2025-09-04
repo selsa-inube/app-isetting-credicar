@@ -17,23 +17,29 @@ import { IModalWrapper } from "@ptypes/design/IModalWrapper";
 
 const ModalWrapper = (props: IModalWrapper) => {
   const {
-    appearanceButton,
+    appearanceButton = EComponentAppearance.PRIMARY,
+    borderRadius = tokens.spacing.s100,
     children,
+    dashed = false,
+    disabledActionButton = false,
     height = "auto",
     iconBeforeButton,
     isMobile = false,
     labelActionButton,
     labelCloseButton,
     labelCloseModal,
+    loading = false,
+    maxHeight,
+    minHeight,
+    padding = tokens.spacing.s300,
     portalId,
+    sizeTitle = "small",
+    subtitle,
     title,
+    typeTitle = "headline",
+    weightTitle = "normal",
     width = "auto",
     withCancelButton,
-    loading = false,
-    disabledActionButton = false,
-    minHeight,
-    maxHeight,
-    padding = tokens.spacing.s300,
     onClick,
     onCloseModal,
   } = props;
@@ -53,7 +59,7 @@ const ModalWrapper = (props: IModalWrapper) => {
         height={height}
         direction="column"
         backgroundColor={EComponentAppearance.LIGHT}
-        borderRadius={tokens.spacing.s100}
+        borderRadius={borderRadius}
         borderColor={EComponentAppearance.DARK}
         padding={padding}
         gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
@@ -64,9 +70,10 @@ const ModalWrapper = (props: IModalWrapper) => {
         <Stack direction="column" gap={tokens.spacing.s150}>
           <Grid templateColumns="1fr auto" templateRows="1fr">
             <Text
-              type="headline"
-              size="small"
+              type={typeTitle}
+              size={sizeTitle}
               appearance={EComponentAppearance.DARK}
+              weight={weightTitle}
             >
               {title}
             </Text>
@@ -86,7 +93,12 @@ const ModalWrapper = (props: IModalWrapper) => {
               {labelCloseModal}
             </Button>
           </Grid>
-          <Divider />
+          {subtitle && (
+            <Text size="medium" appearance={EComponentAppearance.GRAY}>
+              {subtitle}
+            </Text>
+          )}
+          <Divider dashed={dashed} />
         </Stack>
 
         <Stack
@@ -112,7 +124,7 @@ const ModalWrapper = (props: IModalWrapper) => {
 
           <Button
             spacing="wide"
-            appearance={appearanceButton ?? EComponentAppearance.PRIMARY}
+            appearance={appearanceButton}
             variant="filled"
             onClick={onClick}
             loading={loading}

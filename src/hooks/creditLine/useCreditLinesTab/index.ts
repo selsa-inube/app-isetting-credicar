@@ -22,7 +22,8 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const [loadingRules] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
-  const [showDecision, setShowDecision] = useState(false);
+  const [showDecision, setShowDecision] = useState<boolean>(false);
+  const [showAddModal, setShowAddModal] = useState<boolean>(false);
   const [searchCreditLines, setSearchCreditLines] = useState<string>("");
   const [loadingCreditLines, setLoadingCreditLines] = useState<boolean>(true);
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
@@ -126,6 +127,10 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     message: creditTabLabels,
   });
 
+  const handleToggleAddModal = () => {
+    setShowAddModal(!showAddModal);
+  };
+
   const widthFirstColumn = smallScreen ? 70 : 80;
   const columnWidths = [widthFirstColumn];
 
@@ -151,6 +156,9 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     validateMissingRules,
     showIcon,
     hasBusinessRules,
+    showAddModal,
+    setShowAddModal,
+    handleToggleAddModal,
     handleSearchCreditLines,
     handleToggleInfoModal,
     setEntryDeleted,
