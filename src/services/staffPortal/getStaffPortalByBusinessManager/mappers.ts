@@ -9,12 +9,15 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
 ): IStaffPortalByBusinessManager => {
   const buildResend: IStaffPortalByBusinessManager = {
     abbreviatedName: String(resend.abbreviatedName),
-    businessManagerId: String(resend.businessManagerId),
+    businessManagerCode: String(resend.businessManagerCode),
+    businessManagerName: String(resend.businessManagerName),
+
     descriptionUse: String(resend.descriptionUse),
     publicCode: String(resend.publicCode),
-    staffPortalCatalogId: String(resend.staffPortalCatalogId),
+    staffPortalCatalogCode: String(resend.staffPortalCatalogCode),
     staffPortalId: String(resend.staffPortalId),
     url: String(resend.url),
+    brandImageUrl: String(resend.brandImageUrl), //// se renderiza esta o del operador
   };
   return buildResend;
 };

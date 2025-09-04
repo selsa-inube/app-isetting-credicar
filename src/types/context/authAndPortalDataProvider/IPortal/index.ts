@@ -1,8 +1,8 @@
 interface IPortal {
-    abbreviatedName: string;
-    staffPortalCatalogId: string;
-    businessManagerId: string;
-    publicCode: string;
+  abbreviatedName: string;
+  staffPortalCatalogCode: string;
+  businessManagerCode: string;
+  publicCode: string;
 }
 
 export type { IPortal };

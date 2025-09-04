@@ -1,9 +1,7 @@
 interface IOptionsByStaffPortalBusinessManager {
   optionStaffId: string;
-  staffPortalCatalogId: string;
+  staffPortalCatalogCode: string;
   staffPortalId: string;
 }
 
-export type {
-  IOptionsByStaffPortalBusinessManager,
-};
+export type { IOptionsByStaffPortalBusinessManager };
