@@ -16,6 +16,7 @@ import { IFormsCreditLine } from "@ptypes/creditLines/forms/IFormsCreditLine";
 import { IUseAddCreditlines } from "@ptypes/hooks/creditLines/IUseAddCreditlines";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { ECreditLines } from "@src/enum/creditLines";
 
 const useAddCreditlines = (props: IUseAddCreditlines) => {
   const { setShowAddModal, setShowUnderConstruction } = props;
@@ -80,7 +81,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       description: addCreditLinesLabels.descriptionSaveData,
       entityName: "CreditLines",
       requestDate: formatDate(new Date()),
-      useCaseName: "",
+      useCaseName: ECreditLines.USE_CASE_ADD,
       configurationRequestData: {
         abbreviatedName: updatedFormValues.information.values.nameLine,
         alias: updatedFormValues.information.values.aliasLine,
