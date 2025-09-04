@@ -184,6 +184,10 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
           loading={loading}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
 

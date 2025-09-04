@@ -8,6 +8,7 @@ import { DecisionsForm } from "@design/forms/decisions";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { EComponentAppearance } from "@enum/appearances";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
 import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
@@ -98,7 +99,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 initialValues={creditLineDecisions}
                 setDecisions={setCreditLineDecisions}
                 revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules="LineOfCredit"
+                labelBusinessRules={EMoneyDestination.LINE_OF_CREDIT}
                 nameRule={initialGeneralInformationValues.nameDestination}
                 editDataOption
                 showAttentionModal={false}
@@ -123,6 +124,10 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           onCloseModal={modalData.onCloseModal}
           onClick={modalData.onClick}
           loading={modalData.loading}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
       {showRequestProcessModal && (

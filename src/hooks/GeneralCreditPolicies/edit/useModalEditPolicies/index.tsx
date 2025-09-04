@@ -41,9 +41,11 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
       loading: false,
       appearance: EComponentAppearance.PRIMARY,
       appearanceButton: EComponentAppearance.PRIMARY,
@@ -55,6 +57,9 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -70,6 +75,9 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -79,6 +87,9 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         onCloseModal: handleCloseGoBackModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
@@ -88,6 +99,9 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

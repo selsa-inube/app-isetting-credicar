@@ -6,6 +6,7 @@ import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { EComponentAppearance } from "@enum/appearances";
 import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
 import { mediaQueryMobile } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
@@ -88,9 +89,13 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && hasError) {
@@ -99,6 +104,9 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -108,6 +116,9 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

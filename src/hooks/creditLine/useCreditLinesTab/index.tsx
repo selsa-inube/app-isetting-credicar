@@ -5,8 +5,8 @@ import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
-import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
+import { ECreditLines } from "@enum/creditLines";
 import { mediaQueryMobile } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
 import { errorModal } from "@config/errorModal";
@@ -90,11 +90,11 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
       withIcon: false,
-      icon: <></>,
       appearance: EComponentAppearance.PRIMARY,
       appearanceButton: EComponentAppearance.PRIMARY,
     };

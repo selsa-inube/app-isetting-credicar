@@ -36,10 +36,12 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       loading: false,
       withCancelButton: false,
+      withIcon: false,
       appearance: EComponentAppearance.PRIMARY,
       appearanceButton: EComponentAppearance.PRIMARY,
     };
@@ -50,8 +52,9 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -67,8 +70,9 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -78,6 +82,7 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
       };
@@ -90,6 +95,7 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
         onClick: handleClick,
         withCancelButton: true,
         loading: loading,
+        withIcon: false,
         appearance: EComponentAppearance.DANGER,
         appearanceButton: EComponentAppearance.DANGER,
       };
