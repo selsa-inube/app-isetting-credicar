@@ -42,7 +42,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     }
   }, [isSelected]);
 
-  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
+  const filteredTabsConfig = Object.keys(tabs).reduce((tabs, key) => {
     const tab = tabs[key as keyof typeof creditLinesTabsConfig];
 
     if (
@@ -50,13 +50,13 @@ const useCreditLinePage = (businessUnitSigla: string) => {
       requestsInProgress &&
       requestsInProgress.length === 0
     ) {
-      return acc;
+      return tabs;
     }
 
     if (tab !== undefined) {
-      acc[key as keyof ICreditTabsConfig] = tab;
+      tabs[key as keyof ICreditTabsConfig] = tab;
     }
-    return acc;
+    return tabs;
   }, {} as ICreditTabsConfig);
 
   const showCreditLinesTab = isSelected === tabs.creditLines.id;
