@@ -43,6 +43,11 @@ const AddCreditLine = (props: IAddCreditLine) => {
           description={modalData.description}
           onClick={modalData.onClick}
           onCloseModal={modalData.onCloseModal}
+          withIcon={modalData.withIcon}
+          withCancelButton={modalData.withCancelButton}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
 

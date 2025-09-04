@@ -1,4 +1,4 @@
-import { ITextSize, ITextType } from "@inubekit/inubekit";
+import { IButtonVariant, ITextSize, ITextType } from "@inubekit/inubekit";
 import { EComponentAppearance } from "@enum/appearances";
 
 interface IModalWrapper {
@@ -25,6 +25,7 @@ interface IModalWrapper {
   sizeTitle?: ITextSize;
   borderRadius?: string;
   dashed?: boolean;
+  variantCancel?: IButtonVariant;
   weightTitle?: "normal" | "bold";
   onCloseModal?: () => void;
 }

@@ -6,6 +6,7 @@ import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { ECreditLines } from "@enum/creditLines";
+import { EComponentAppearance } from "@enum/appearances";
 import { mediaQueryMobile } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
 import { errorModal } from "@config/errorModal";
@@ -92,6 +93,10 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      icon: <></>,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loadingCreditLines && hasError) {
@@ -100,6 +105,9 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -109,6 +117,9 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

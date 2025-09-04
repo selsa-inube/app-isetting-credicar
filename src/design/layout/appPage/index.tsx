@@ -56,7 +56,7 @@ function AppPage() {
             navigation={optionsHeader}
             user={{
               username: appData.user.userName,
-              breakpoint: "848px",
+              breakpoint: "1281px",
             }}
             logoURL={renderLogo(appData.businessUnit.urlLogo)}
             menu={userMenu}

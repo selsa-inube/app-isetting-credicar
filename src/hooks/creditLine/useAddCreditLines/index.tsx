@@ -2,7 +2,9 @@ import { useContext, useRef, useState } from "react";
 import { FormikProps } from "formik";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postAddRequestInConstruction } from "@services/requestInProgress/postAddRequestInConstruction";
+import { EComponentAppearance } from "@enum/appearances";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
@@ -14,7 +16,6 @@ import { IFormsCreditLine } from "@ptypes/creditLines/forms/IFormsCreditLine";
 import { IUseAddCreditlines } from "@ptypes/hooks/creditLines/IUseAddCreditlines";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { ChangeToRequestTab } from "@src/context/changeToRequestTab/changeToRequest";
 
 const useAddCreditlines = (props: IUseAddCreditlines) => {
   const { setShowAddModal, setShowUnderConstruction } = props;
@@ -107,9 +108,13 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && hasError) {
@@ -118,6 +123,9 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 

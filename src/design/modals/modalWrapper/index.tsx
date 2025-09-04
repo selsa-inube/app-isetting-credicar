@@ -37,6 +37,7 @@ const ModalWrapper = (props: IModalWrapper) => {
     subtitle,
     title,
     typeTitle = "headline",
+    variantCancel = "filled",
     weightTitle = "normal",
     width = "auto",
     withCancelButton,
@@ -114,8 +115,8 @@ const ModalWrapper = (props: IModalWrapper) => {
           {withCancelButton && (
             <Button
               spacing="wide"
-              appearance={EComponentAppearance.LIGHT}
-              variant="filled"
+              appearance={EComponentAppearance.GRAY}
+              variant={variantCancel}
               onClick={onCloseModal}
             >
               {labelCloseButton}

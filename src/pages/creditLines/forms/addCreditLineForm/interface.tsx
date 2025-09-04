@@ -17,6 +17,7 @@ const AddCreditLineFormUI = (props: IAddCreditLineFormUI) => {
       typeTitle="title"
       sizeTitle="medium"
       withCancelButton
+      variantCancel="outlined"
       labelActionButton={addLineModal.labelActionButton}
       labelCloseButton={addLineModal.labelCloseButton}
       labelCloseModal={addLineModal.labelCloseModal}
