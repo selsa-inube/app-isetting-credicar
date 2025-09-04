@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorModal } from "@config/errorModal";
@@ -32,9 +33,13 @@ const useModalAddPayroll = (props: IUseModalAddPayroll) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && !errorFetchRequest && hasError) {
@@ -43,6 +48,9 @@ const useModalAddPayroll = (props: IUseModalAddPayroll) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -58,6 +66,9 @@ const useModalAddPayroll = (props: IUseModalAddPayroll) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -67,6 +78,9 @@ const useModalAddPayroll = (props: IUseModalAddPayroll) => {
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

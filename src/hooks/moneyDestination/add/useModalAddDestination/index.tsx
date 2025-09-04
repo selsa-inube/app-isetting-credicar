@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
-import { EGeneralPolicies } from "@enum/generalPolicies";
+import { EMoneyDestination } from "@enum/moneyDestination";
+import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
-import { IUseModalAddPayroll } from "@ptypes/hooks/payrollAgreement/IUseModalAddPayroll";
+import { IUseModalAddDestination } from "@ptypes/hooks/moneyDestination/IUseModalAddDestination";
 
-const useModalAddGeneral = (props: IUseModalAddPayroll) => {
+const useModalAddDestination = (props: IUseModalAddDestination) => {
   const {
     showGoBackModal,
     loading,
@@ -32,9 +33,13 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && !errorFetchRequest && hasError) {
@@ -43,6 +48,9 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -52,12 +60,15 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
           messageErrorUseCases(
             networkError.status,
             operationTypes.addError,
-            EGeneralPolicies.OPTION_NAME,
+            EMoneyDestination.OPTION_NAME,
           ),
         ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -67,6 +78,9 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
@@ -78,4 +92,4 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
   return { modalData, showDecision };
 };
 
-export { useModalAddGeneral };
+export { useModalAddDestination };

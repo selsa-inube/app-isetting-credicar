@@ -149,6 +149,11 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
           actionText={modalData.actionText}
           onCloseModal={modalData.onCloseModal}
           onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </Stack>

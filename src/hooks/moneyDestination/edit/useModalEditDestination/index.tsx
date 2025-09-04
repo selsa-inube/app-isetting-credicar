@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { EComponentAppearance } from "@enum/appearances";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
@@ -36,11 +37,15 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
       loading: false,
       moreDetails: "",
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
     if (!loading && !errorFetchRequest && hasError) {
@@ -49,6 +54,9 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -64,6 +72,9 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -73,6 +84,9 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         onCloseModal: handleCloseGoBackModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
@@ -83,6 +97,9 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         onClick: handleEditedModal,
         withCancelButton: true,
         loading: loading,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

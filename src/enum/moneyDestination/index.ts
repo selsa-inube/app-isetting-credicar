@@ -1,6 +1,7 @@
 enum EMoneyDestination {
   OPTION_NAME = "Destinos de dinero",
   ENTITY = "MoneyDestination",
+  LINE_OF_CREDIT = "LineOfCredit",
   MONEY_DESTINATION = "nameDestination",
   ICON_DEFAULT = "MdOutlineFax",
   USE_CASE_ADD = "Agregar destino de dinero para simulación de créditos",

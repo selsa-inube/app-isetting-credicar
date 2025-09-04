@@ -1,55 +1,58 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
-import { getPayrollAgreementData } from "@services/payrollAgreement/getPayrollAgreement";
+import { getCreditLinesData } from "@services/creditLines/getCreditLinesData";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
-import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
+import { EComponentAppearance } from "@enum/appearances";
+import { ECreditLines } from "@enum/creditLines";
 import { mediaQueryMobile } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
 import { errorModal } from "@config/errorModal";
+import { creditTabLabels } from "@config/creditLines/creditLinesTab/generic/creditTabLabels";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IErrors } from "@ptypes/IErrors";
-import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
-import { IUsePayrollAgreementTab } from "@ptypes/hooks/payrollAgreement/IUsePayrollAgreementTab";
+import { ICreditLinesData } from "@ptypes/creditLines/ICreditLinesData";
+import { IUseCreditLinesTab } from "@ptypes/hooks/creditLines/IUseCreditLinesTab";
 
-const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
+const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const { businessUnits } = props;
-  const [payrollAgreement, setPayrollAgreement] = useState<
-    IPayrollAgreementData[]
-  >([]);
-  const [hasError, setHasError] = useState(false);
+  const [businessRules] = useState<string[]>([]);
+  const [creditLines, setPayrollAgreement] = useState<ICreditLinesData[]>([]);
+  const [loadingRules] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [showDecision, setShowDecision] = useState(false);
-  const [searchPayrollAgreement, setSearchPayrollAgreement] =
-    useState<string>("");
-  const [loading, setLoading] = useState(true);
+  const [searchCreditLines, setSearchCreditLines] = useState<string>("");
+  const [loadingCreditLines, setLoadingCreditLines] = useState<boolean>(true);
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
 
   const { disabledButton } = useValidateUseCase({
-    useCase: EPayrollAgreement.USE_CASE_ADD,
+    useCase: ECreditLines.USE_CASE_ADD,
   });
 
   useEffect(() => {
+    if (!loadingRules && businessRules && businessRules.length > 0) {
+      return;
+    }
     const fetchPayrollAgreementData = async () => {
-      setLoading(true);
+      setLoadingCreditLines(true);
       try {
-        const data = await getPayrollAgreementData(businessUnits);
+        const data = await getCreditLinesData(businessUnits);
         setPayrollAgreement(data);
       } catch (error) {
         console.info(error);
         setHasError(true);
         setErrorData(errorObject(error));
       } finally {
-        setLoading(false);
+        setLoadingCreditLines(false);
       }
     };
 
     fetchPayrollAgreementData();
-  }, []);
+  }, [businessRules]);
 
   useEffect(() => {
     if (entryDeleted) {
@@ -71,10 +74,8 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
     setHasError(!hasError);
   };
 
-  const handleSearchPayrollAgreement = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSearchPayrollAgreement(e.target.value);
+  const handleSearchCreditLines = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchCreditLines(e.target.value);
   };
 
   useEffect(() => {
@@ -88,17 +89,24 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
     };
 
-    if (!loading && hasError) {
+    if (!loadingCreditLines && hasError) {
       return {
         ...errorModal(messageErrorStatusConsultation(errorData.status)),
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -108,6 +116,9 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
@@ -117,32 +128,44 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
   const modalData = modal();
 
   const smallScreen = useMediaQuery(mediaQueryMobile);
-  const columnWidths = smallScreen ? [20, 53] : [20, 60];
 
   const emptyDataMessage = useEmptyDataMessage({
-    loading,
+    loading: loadingCreditLines,
     errorData,
-    data: payrollAgreement as Omit<IEntry[], "id">,
-    smallScreen,
-    message: payrollTabLabels,
+    data: creditLines as Omit<IEntry[], "id">,
+    smallScreen: false,
+    message: creditTabLabels,
   });
 
+  const widthFirstColumn = smallScreen ? 70 : 80;
+  const columnWidths = [widthFirstColumn];
+
+  const validateMissingRules = !loadingRules && businessRules.length === 0;
+
+  const showIcon = !validateMissingRules || disabledButton;
+
+  const hasBusinessRules = businessRules && businessRules.length > 0;
+
   return {
-    payrollAgreement,
-    searchPayrollAgreement,
-    loading,
+    creditLines,
+    loadingCreditLines,
     hasError,
     smallScreen,
     columnWidths,
     emptyDataMessage,
     disabledButton,
-    showInfoModal,
     modalData,
     showDecision,
+    searchCreditLines,
+    businessRules,
+    loadingRules,
+    validateMissingRules,
+    showIcon,
+    hasBusinessRules,
+    handleSearchCreditLines,
     handleToggleInfoModal,
     setEntryDeleted,
-    handleSearchPayrollAgreement,
   };
 };
 
-export { usePayrollAgreementTab };
+export { useCreditLinesTab };

@@ -36,9 +36,11 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
       subtitle: "",
       description: "",
       actionText: "",
+      icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       loading: false,
+      withIcon: false,
       withCancelButton: false,
       appearance: EComponentAppearance.PRIMARY,
       appearanceButton: EComponentAppearance.PRIMARY,
@@ -50,8 +52,9 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -67,8 +70,9 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -78,6 +82,7 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
         appearance: EComponentAppearance.DANGER,
         appearanceButton: EComponentAppearance.DANGER,
       };
@@ -90,6 +95,7 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         onClick: handleClick,
         withCancelButton: true,
         loading: loading,
+        withIcon: false,
         appearance: EComponentAppearance.DANGER,
         appearanceButton: EComponentAppearance.DANGER,
       };

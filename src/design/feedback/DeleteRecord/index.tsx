@@ -49,8 +49,10 @@ const DeleteRecord = (props: IDelete) => {
           onCloseModal={modalData.onCloseModal}
           appearance={modalData.appearance}
           loading={modalData.loading}
-          appearanceButton={modalData.appearanceButton}
           withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </>

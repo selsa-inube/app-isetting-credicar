@@ -160,7 +160,11 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
             subtitle={modalData.subtitle}
             onCloseModal={modalData.onCloseModal}
             onClick={modalData.onClick}
-            withCancelButton={false}
+            withCancelButton={modalData.withCancelButton}
+            withIcon={modalData.withIcon}
+            icon={modalData.icon}
+            appearance={modalData.appearance}
+            appearanceButton={modalData.appearanceButton}
           />
         )}
       </BoxContainer>
