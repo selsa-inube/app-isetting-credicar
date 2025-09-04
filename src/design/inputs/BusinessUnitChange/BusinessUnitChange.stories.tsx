@@ -47,12 +47,9 @@ const defaultContextValue = {
   businessUnitSigla: "",
   useCases: "",
   businessUnitsToTheStaff: [],
-  setAppData: () => {
-    console.log("");
-  },
-  setBusinessUnitsToTheStaff: () => {
-    console.log("");
-  },
+  setAppData: () => void 0,
+
+  setBusinessUnitsToTheStaff: () => void 0,
 };
 
 const Default = () => {

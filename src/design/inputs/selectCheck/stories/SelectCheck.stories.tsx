@@ -29,15 +29,9 @@ const Default: Story = {
     message: "SelectCheck",
     fullwidth: true,
     options: options,
-    onBlur: () => {
-      console.log("");
-    },
-    onFocus: () => {
-      console.log("");
-    },
-    onClick: () => {
-      console.log("");
-    },
+    onBlur: () => () => void 0,
+    onFocus: () => () => void 0,
+    onClick: () => () => void 0,
   },
 };
 
