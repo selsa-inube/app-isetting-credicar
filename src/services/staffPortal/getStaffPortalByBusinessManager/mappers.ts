@@ -17,7 +17,7 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
     staffPortalCatalogCode: String(resend.staffPortalCatalogCode),
     staffPortalId: String(resend.staffPortalId),
     url: String(resend.url),
-    brandImageUrl: String(resend.brandImageUrl), //// se renderiza esta o del operador
+    brandImageUrl: String(resend.brandImageUrl),
   };
   return buildResend;
 };

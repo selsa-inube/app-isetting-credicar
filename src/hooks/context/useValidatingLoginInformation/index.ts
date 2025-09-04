@@ -99,7 +99,7 @@ const useValidatingLoginInformation = () => {
           ...prev.businessManager,
           publicCode: businessManagersData.publicCode,
           abbreviatedName: businessManagersData.abbreviatedName,
-          urlBrand: businessManagersData.urlBrand,
+          urlBrand: portalData.brandImageUrl ?? businessManagersData.urlBrand,
           urlLogo: businessManagersData.urlLogo,
         },
       }));
