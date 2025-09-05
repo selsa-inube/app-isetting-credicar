@@ -87,8 +87,8 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
                       placeholder={tabLabels.placeholderSearch}
                       size="compact"
                       value={searchCreditLines}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        onSearchCreditLines(e)
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        onSearchCreditLines(event)
                       }
                     />
                   </Stack>
