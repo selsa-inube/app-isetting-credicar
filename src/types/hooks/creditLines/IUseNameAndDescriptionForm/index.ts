@@ -1,5 +1,5 @@
 import { FormikProps } from "formik";
-import { INameAndDescriptionEntry } from "../../../creditLines/forms/INameAndDescriptionEntry";
+import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 
 interface IUseNameAndDescriptionForm {
   initialValues: INameAndDescriptionEntry;

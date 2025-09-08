@@ -78,7 +78,9 @@ const useCreditLinePage = (businessUnitSigla: string) => {
 
     if (tab !== undefined) {
       data[key as keyof ICreditTabsConfig] = tab;
+      data[key as keyof ICreditTabsConfig] = tab;
     }
+    return data;
     return data;
   }, {} as ICreditTabsConfig);
 
