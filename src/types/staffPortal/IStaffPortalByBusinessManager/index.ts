@@ -2,12 +2,14 @@ import { IOptionsByStaffPortalBusinessManager } from "@ptypes/staffPortal/IOptio
 
 interface IStaffPortalByBusinessManager {
   abbreviatedName: string;
-  businessManagerId: string;
+  businessManagerCode: string;
+  businessManagerName: string;
   descriptionUse: string;
   publicCode: string;
-  staffPortalCatalogId: string;
+  staffPortalCatalogCode: string;
   staffPortalId: string;
   url: string;
+  brandImageUrl: string;
   optionsByStaffPortalBusinessManager?: IOptionsByStaffPortalBusinessManager[];
   [key: string]: string | IOptionsByStaffPortalBusinessManager[] | undefined;
 }

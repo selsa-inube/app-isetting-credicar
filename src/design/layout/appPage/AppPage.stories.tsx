@@ -16,8 +16,8 @@ const useContext = {
   appData: {
     portal: {
       abbreviatedName: "",
-      staffPortalCatalogId: "",
-      businessManagerId: "",
+      staffPortalCatalogCode: "",
+      businessManagerCode: "",
       publicCode: "",
     },
     businessManager: {

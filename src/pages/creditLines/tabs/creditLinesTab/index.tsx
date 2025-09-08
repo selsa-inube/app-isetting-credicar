@@ -3,9 +3,11 @@ import { useCreditLinesTab } from "@hooks/creditLine/useCreditLinesTab";
 import { usePageLength } from "@hooks/usePageLength";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { ICreditLinesTab } from "@ptypes/creditLines/ICreditLinesTab";
 import { CreditLinesTabUI } from "./interface";
 
-const CreditLinesTab = () => {
+const CreditLinesTab = (props: ICreditLinesTab) => {
+  const { setShowUnderConstruction } = props;
   const { appData } = useContext(AuthAndPortalData);
   const {
     creditLines,
@@ -22,6 +24,9 @@ const CreditLinesTab = () => {
     showIcon,
     validateMissingRules,
     hasBusinessRules,
+    showAddModal,
+    setShowAddModal,
+    handleToggleAddModal,
     handleSearchCreditLines,
     handleToggleInfoModal,
     setEntryDeleted,
@@ -49,6 +54,10 @@ const CreditLinesTab = () => {
       validateMissingRules={validateMissingRules}
       hasBusinessRules={hasBusinessRules}
       pageLength={pageLength}
+      showAddModal={showAddModal}
+      onToggleAddModal={handleToggleAddModal}
+      setShowAddModal={setShowAddModal}
+      setShowUnderConstruction={setShowUnderConstruction}
     />
   );
 };

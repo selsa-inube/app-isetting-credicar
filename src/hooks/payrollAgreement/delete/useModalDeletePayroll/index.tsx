@@ -82,9 +82,8 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
-        withIcon: false,
-        appearance: EComponentAppearance.DANGER,
-        appearanceButton: EComponentAppearance.DANGER,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

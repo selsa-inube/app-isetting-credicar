@@ -48,8 +48,8 @@ const useValidatingLoginInformation = () => {
   const [appData, setAppData] = useState<IAppData>({
     portal: {
       abbreviatedName: "",
-      staffPortalCatalogId: "",
-      businessManagerId: "",
+      staffPortalCatalogCode: "",
+      businessManagerCode: "",
       publicCode: "",
     },
     businessManager: {
@@ -79,8 +79,8 @@ const useValidatingLoginInformation = () => {
       portal: {
         ...prev.portal,
         abbreviatedName: portalData?.abbreviatedName || "",
-        staffPortalCatalogId: portalData?.staffPortalId || "",
-        businessManagerId: portalData?.businessManagerId || "",
+        staffPortalCatalogCode: portalData?.staffPortalCatalogCode || "",
+        businessManagerCode: portalData?.businessManagerCode || "",
         publicCode: portalData?.publicCode || "",
       },
     }));
@@ -99,7 +99,7 @@ const useValidatingLoginInformation = () => {
           ...prev.businessManager,
           publicCode: businessManagersData.publicCode,
           abbreviatedName: businessManagersData.abbreviatedName,
-          urlBrand: businessManagersData.urlBrand,
+          urlBrand: portalData.brandImageUrl ?? businessManagersData.urlBrand,
           urlLogo: businessManagersData.urlLogo,
         },
       }));

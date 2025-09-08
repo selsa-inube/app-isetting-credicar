@@ -17,6 +17,7 @@ function CreditLines() {
     showLinesUnderConstructionTab,
     creditLinesTabs,
     handleTabChange,
+    setShowUnderConstruction,
   } = useCreditLinePage(businessUnitSigla);
 
   return (
@@ -29,6 +30,7 @@ function CreditLines() {
       showRequestsInProgressTab={showLinesRequestTab}
       showLinesUnderConstructionTab={showLinesUnderConstructionTab}
       creditLinesTabs={creditLinesTabs}
+      setShowUnderConstruction={setShowUnderConstruction}
     />
   );
 }

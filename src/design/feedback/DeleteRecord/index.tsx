@@ -45,6 +45,7 @@ const DeleteRecord = (props: IDelete) => {
           title={modalData.title}
           actionText={modalData.actionText}
           description={modalData.description}
+          subtitle={modalData.subtitle}
           onClick={modalData.onClick}
           onCloseModal={modalData.onCloseModal}
           appearance={modalData.appearance}

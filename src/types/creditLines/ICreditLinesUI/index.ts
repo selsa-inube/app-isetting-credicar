@@ -10,6 +10,7 @@ interface ICreditLinesUI {
   showRequestsInProgressTab: boolean;
   smallScreen: boolean;
   handleTabChange: (tabId: string) => void;
+  setShowUnderConstruction: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type { ICreditLinesUI };

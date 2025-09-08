@@ -1,7 +1,7 @@
-import { IEntry } from "@ptypes/design/table/IEntry";
-
 interface IDetails {
-  data: IEntry;
+  showModal: boolean;
+  screenTablet: boolean;
+  onToggleModal: () => void;
 }
 
 export type { IDetails };

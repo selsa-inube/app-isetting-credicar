@@ -44,7 +44,7 @@ const useAppPage = (
     navigate("/");
   };
 
-  const isTablet = useMediaQuery("(max-width: 849px)");
+  const isTablet = useMediaQuery("(max-width: 1281px)");
   const isTabletMain = useMediaQuery("(max-width: 1000px)");
 
   return {

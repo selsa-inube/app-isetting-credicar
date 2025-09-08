@@ -46,7 +46,7 @@ const mainNavigation = (optionsCards: ICardData[], location?: Location) => {
       ],
       actions: actionsConfig(),
     },
-    breakpoint: "848px",
+    breakpoint: "1281px",
   };
 
   const optionsNav = {
