@@ -14,7 +14,6 @@ import { breakPoints } from "@config/creditLines/lineUnderConstructionTab/table/
 import { constructionLabels } from "@config/creditLines/lineUnderConstructionTab/generic/constructionLabels";
 import { ILinesUnderConstructionTabUI } from "@ptypes/creditLines/ILinesUnderConstructionTabUI";
 import { InformationBox } from "../creditLinesTab/InformationBox";
-import { ConfigurationLines } from "../creditLinesTab/ConfigurationLines";
 
 const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
   const {
@@ -101,7 +100,6 @@ const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
                 )}
               </Stack>
             </Stack>
-            <ConfigurationLines />
           </Stack>
         </Stack>
         {showModal && (
