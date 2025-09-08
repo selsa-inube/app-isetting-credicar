@@ -8,6 +8,7 @@ import { mediaQueryTablet } from "@config/environment";
 import { creditLinesTabsConfig } from "@config/creditLines/tabs";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { ICreditTabsConfig } from "@ptypes/creditLines/ICreditTabsConfig";
+import { useLineInconstructionData } from "../useLineInconstructionData";
 
 const useCreditLinePage = (businessUnitSigla: string) => {
   const portalId = localStorage.getItem("portalCode");
@@ -25,6 +26,8 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     staffPortalId,
     optionName: ECreditLines.OPTION_NAME,
   });
+
+  const { lineUnderConstruction } = useLineInconstructionData();
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
@@ -55,7 +58,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     }
   }, [isSelected]);
 
-  const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
+  const filteredTabsConfig = Object.keys(tabs).reduce((data, key) => {
     const tab = tabs[key as keyof typeof creditLinesTabsConfig];
 
     if (
@@ -63,13 +66,20 @@ const useCreditLinePage = (businessUnitSigla: string) => {
       requestsInProgress &&
       requestsInProgress.length === 0
     ) {
-      return acc;
+      return data;
+    }
+
+    if (
+      key === tabs.linesUnderConstruction.id &&
+      (!lineUnderConstruction || lineUnderConstruction.length === 0)
+    ) {
+      return data;
     }
 
     if (tab !== undefined) {
-      acc[key as keyof ICreditTabsConfig] = tab;
+      data[key as keyof ICreditTabsConfig] = tab;
     }
-    return acc;
+    return data;
   }, {} as ICreditTabsConfig);
 
   const showCreditLinesTab = isSelected === tabs.creditLines.id;

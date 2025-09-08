@@ -6,7 +6,7 @@ import { creditLinesTabsConfig } from "@config/creditLines/tabs";
 import { ICardData } from "@ptypes/home/ICardData";
 import { CreditLinesUI } from "./interface";
 
-function CreditLines() {
+const CreditLines = () => {
   const { businessUnitSigla } = useContext(AuthAndPortalData);
   const {
     descriptionOptions,
@@ -33,6 +33,6 @@ function CreditLines() {
       setShowUnderConstruction={setShowUnderConstruction}
     />
   );
-}
+};
 
 export { CreditLines };

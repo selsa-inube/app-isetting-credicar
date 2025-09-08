@@ -5,6 +5,7 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postAddRequestInConstruction } from "@services/requestInProgress/postAddRequestInConstruction";
 import { EComponentAppearance } from "@enum/appearances";
+import { ECreditLines } from "@enum/creditLines";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
@@ -16,7 +17,6 @@ import { IFormsCreditLine } from "@ptypes/creditLines/forms/IFormsCreditLine";
 import { IUseAddCreditlines } from "@ptypes/hooks/creditLines/IUseAddCreditlines";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { ECreditLines } from "@src/enum/creditLines";
 
 const useAddCreditlines = (props: IUseAddCreditlines) => {
   const { setShowAddModal, setShowUnderConstruction } = props;
@@ -81,7 +81,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       description: addCreditLinesLabels.descriptionSaveData,
       entityName: "CreditLines",
       requestDate: formatDate(new Date()),
-      useCaseName: ECreditLines.USE_CASE_ADD,
+      useCaseName: ECreditLines.USE_CASE_NAME_ADD,
       configurationRequestData: {
         abbreviatedName: updatedFormValues.information.values.nameLine,
         alias: updatedFormValues.information.values.aliasLine,

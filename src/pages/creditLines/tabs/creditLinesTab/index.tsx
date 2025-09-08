@@ -16,7 +16,7 @@ const CreditLinesTab = (props: ICreditLinesTab) => {
     smallScreen,
     columnWidths,
     emptyDataMessage,
-    disabledButton,
+    disabledAdd,
     modalData,
     showDecision,
     searchCreditLines,
@@ -46,7 +46,7 @@ const CreditLinesTab = (props: ICreditLinesTab) => {
       emptyDataMessage={emptyDataMessage}
       showModal={showDecision}
       modalData={modalData}
-      disabledButton={disabledButton}
+      disabledButton={disabledAdd}
       onToggleInfoModal={handleToggleInfoModal}
       setEntryDeleted={setEntryDeleted}
       businessRules={businessRules}
