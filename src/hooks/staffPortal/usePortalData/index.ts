@@ -30,7 +30,7 @@ const usePortalData = (portalCode: string | null) => {
 
         if (
           StaffPortalData[0].staffPortalCatalogCode !==
-          enviroment.PORTAL_CATALOG_ID
+          enviroment.PORTAL_CATALOG_CODE
         ) {
           setHasError(true);
           setErrorCode(1002);
