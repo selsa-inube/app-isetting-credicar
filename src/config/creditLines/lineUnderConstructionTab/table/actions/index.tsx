@@ -1,10 +1,10 @@
 import { Icon } from "@inubekit/inubekit";
 import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
+import { EditConstruction } from "@pages/creditLines/tabs/creditLinesTab/infoConfigurationModal/tools/edit";
 import { EComponentAppearance } from "@enum/appearances";
+import { ECreditLines } from "@enum/creditLines";
 import { IAction } from "@ptypes/design/table/IAction";
-import { EditConstruction } from "@src/pages/creditLines/tabs/creditLinesTab/infoConfigurationModal/tools/edit";
-import { IEntry } from "@src/types/design/table/IEntry";
-import { ECreditLines } from "@src/enum/creditLines";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const actions: IAction[] = [
   {

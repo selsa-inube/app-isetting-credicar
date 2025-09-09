@@ -8,8 +8,8 @@ import { EComponentAppearance } from "@enum/appearances";
 import { portalId } from "@config/portalId";
 import { groups } from "@config/creditLines/configuration/mainOptions";
 import { IConfigurationLinesUI } from "@ptypes/creditLines/IConfigurationLinesUI";
-import { LineInformation } from "./lineInformation";
 import { DropdownMenuContainer } from "@src/usePathname";
+import { LineInformation } from "./lineInformation";
 
 const ConfigurationLinesUI = (props: IConfigurationLinesUI) => {
   const {
@@ -21,12 +21,9 @@ const ConfigurationLinesUI = (props: IConfigurationLinesUI) => {
     showModal,
     modalData,
     showInfoModal,
-    getActiveId,
     onToggleInfoModal,
     onOpenModal,
   } = props;
-  console.log(getActiveId(groups[0].links), location.pathname);
-  console.log({ groups });
 
   return (
     <Stack
