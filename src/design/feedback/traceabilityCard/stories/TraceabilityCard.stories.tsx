@@ -6,10 +6,8 @@ const meta: Meta<typeof TraceabilityCard> = {
   title: "feedback/TraceabilityCard",
   component: TraceabilityCard,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

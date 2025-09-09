@@ -1,6 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import { Meta, StoryFn } from "@storybook/react";
-
+import { Meta } from "@storybook/react";
 import selsaLogo from "@assets/images/selsa.png";
 import { AppPage } from ".";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
@@ -60,7 +59,7 @@ const meta: Meta<typeof AppPage> = {
   title: "layout/appPage",
   component: AppPage,
   decorators: [
-    (Story: StoryFn) => (
+    (Story) => (
       <BrowserRouter>
         <AuthAndPortalData.Provider value={useContext}>
           <Story />

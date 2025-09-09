@@ -12,10 +12,8 @@ const meta: Meta<typeof DetailsDestinationModal> = {
   title: "modals/DetailsDestinationModal",
   component: DetailsDestinationModal,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

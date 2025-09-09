@@ -1,7 +1,7 @@
 interface IAccordion {
   title: string;
   defaultOpen?: boolean;
-  children?: JSX.Element | JSX.Element[];
+  children?: React.ReactNode | React.ReactNode[];
 }
 
 export type { IAccordion };

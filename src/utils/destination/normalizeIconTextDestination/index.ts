@@ -1,6 +1,6 @@
 import { iconDestination } from "@config/destination/iconDestination";
 
-const normalizeIconTextDestination = (icon?: JSX.Element) =>
+const normalizeIconTextDestination = (icon?: React.ReactNode) =>
   iconDestination.find((element) => element.icon === icon);
 
 export { normalizeIconTextDestination };

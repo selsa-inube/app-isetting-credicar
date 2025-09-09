@@ -8,10 +8,8 @@ const meta: Meta<typeof MenuItem> = {
   title: "feedback/MenuItem",
   component: MenuItem,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

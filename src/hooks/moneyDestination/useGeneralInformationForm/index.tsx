@@ -56,7 +56,7 @@ const useGeneralInformationForm = (
   );
 
   const [isDisabledButton, setIsDisabledButton] = useState(false);
-  const [icon, setIcon] = useState<JSX.Element | undefined>(
+  const [icon, setIcon] = useState<React.ReactNode | undefined>(
     editDataOption && normalizeIconDestination(initialValues.icon)?.icon ? (
       normalizeIconDestination(initialValues.icon)?.icon
     ) : (

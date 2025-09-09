@@ -1,3 +1,4 @@
+import React from "react";
 import { MdOutlineStart } from "react-icons/md";
 import { Location } from "react-router-dom";
 import { ILinkNav } from "@inubekit/inubekit";
@@ -6,7 +7,7 @@ import { actionsConfig } from "../mainActionLogout";
 
 const createNavLink = (
   option: ICardData,
-  defaultIcon: JSX.Element,
+  defaultIcon: React.ReactNode,
   location?: Location,
 ) => ({
   id: option?.id ?? "",

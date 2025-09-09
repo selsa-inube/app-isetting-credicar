@@ -1,14 +1,15 @@
-import { Breadcrumbs, Stack } from "@inubekit/inubekit";
+import { IDropdownMenuGroup } from "@isettingkit/business-rules";
+import { Grid, Stack } from "@inubekit/inubekit";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/creditLinesTab/infoConfigurationModal";
-import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { crumbsConfiguration } from "@config/creditLines/configuration/navigation";
+import { BoxContainer } from "@design/layout/boxContainer";
+import { EComponentAppearance } from "@enum/appearances";
 import { portalId } from "@config/portalId";
-import { configurationLabels } from "@config/creditLines/configurationLabels";
+import { groups } from "@config/creditLines/configuration/mainOptions";
 import { IConfigurationLinesUI } from "@ptypes/creditLines/IConfigurationLinesUI";
-import { LoadingForm } from "../../forms/loadingForm";
 import { LineInformation } from "./lineInformation";
+import { DropdownMenuContainer } from "@src/usePathname";
 
 const ConfigurationLinesUI = (props: IConfigurationLinesUI) => {
   const {
@@ -20,44 +21,61 @@ const ConfigurationLinesUI = (props: IConfigurationLinesUI) => {
     showModal,
     modalData,
     showInfoModal,
+    getActiveId,
     onToggleInfoModal,
     onOpenModal,
   } = props;
+  console.log(getActiveId(groups[0].links), location.pathname);
+  console.log({ groups });
+
   return (
     <Stack
       direction="column"
       width="-webkit-fill-available"
       padding={`${tokens.spacing.s400} ${tokens.spacing.s800}`}
     >
-      <Stack gap={tokens.spacing.s600} direction="column">
-        <Stack gap={tokens.spacing.s300} direction="column">
-          <Breadcrumbs crumbs={crumbsConfiguration} />
-          <Title
-            title={configurationLabels.title}
-            description={configurationLabels.description}
-            sizeTitle="large"
-            onClick={onOpenModal}
+      <Grid templateColumns={"auto 1fr"} alignContent="unset" height={"95vh"}>
+        <BoxContainer
+          direction="column"
+          width="334px"
+          backgroundColor={EComponentAppearance.DARK}
+          borderColor={EComponentAppearance.GRAY}
+          boxSizing="border-box"
+          padding={`${tokens.spacing.s100} ${tokens.spacing.s200}`}
+        >
+          <Stack direction="column" gap={tokens.spacing.s100}>
+            <DropdownMenuContainer
+              groups={groups as unknown as IDropdownMenuGroup[]}
+              defaultOpenId={null}
+            />
+            {/* {groups.map((group) => (
+              <DropdownMenu
+                key={group.id}
+                activeId={getActiveId(group.links)}
+                isOpen={openId === group.id}
+                links={group.links}
+                onClick={() =>
+                  setOpenId((prev) => (prev === group.id ? null : group.id))
+                }
+                title={group.title}
+              />
+            ))} */}
+          </Stack>
+        </BoxContainer>
+        <Stack gap={tokens.spacing.s600} direction="column">
+          <LineInformation
+            lineName={data.lineName}
+            lineType={data.LineType}
+            updateData={updateData}
+            loading={loading}
+            withDecisions={withDecisions}
+            withoutDecisions={withoutDecisions}
+            onToggleInfoModal={onToggleInfoModal}
+            onOpenModal={onOpenModal}
           />
         </Stack>
+      </Grid>
 
-        <Stack gap={tokens.spacing.s300} direction="column" width="100%">
-          {loading ? (
-            <LoadingForm
-              withDecisions={withDecisions}
-              withoutDecisions={withoutDecisions}
-            />
-          ) : (
-            <>
-              <LineInformation
-                lineName={data.lineName}
-                LineType={data.lineType}
-                updateData={updateData}
-                onToggleInfoModal={onToggleInfoModal}
-              />
-            </>
-          )}
-        </Stack>
-      </Stack>
       {showModal && (
         <DecisionModal
           portalId={portalId}
