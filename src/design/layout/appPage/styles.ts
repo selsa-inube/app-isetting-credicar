@@ -23,6 +23,7 @@ const StyledContainer = styled.div`
 
 interface IStyledMain {
   $isMobile: boolean;
+  $maxWidthPage: string;
 }
 
 const StyledMain = styled.main<IStyledMain>`
@@ -37,7 +38,7 @@ const StyledMain = styled.main<IStyledMain>`
 
   & > div {
     height: 100%;
-    max-width: 1064px;
+    max-width: ${({ $maxWidthPage }) => $maxWidthPage};
   }
 `;
 

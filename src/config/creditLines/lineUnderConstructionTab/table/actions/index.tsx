@@ -1,6 +1,6 @@
 import { Icon } from "@inubekit/inubekit";
 import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
-import { EditConstruction } from "@pages/creditLines/tabs/creditLinesTab/infoConfigurationModal/tools/edit";
+import { EditConstruction } from "@pages/creditLines/tabs/linesUnderConstructionTab/edit";
 import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { IAction } from "@ptypes/design/table/IAction";

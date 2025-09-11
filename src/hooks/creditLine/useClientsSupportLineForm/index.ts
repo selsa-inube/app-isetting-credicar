@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { IOptionClient } from "@ptypes/creditLines/forms/IOptionClient";
-import { IUseClientsSupportLineForm } from "@ptypes/hooks/creditLines/IUseClientsSupportLineForm";
+import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
 
-const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
+const useClientsSupportLineForm = () => {
   const {
-    optionsIncluded,
+    showInfoModal,
+    updateData,
     optionsExcluded,
+    optionsIncluded,
+    loading,
     setOptionsIncluded,
     setOptionsExcluded,
-  } = props;
+    handleToggleInfoModal,
+    handleOpenModal,
+  } = useConfigurationLines();
 
   const [selectedConditionId, setSelectedConditionId] = useState<string | null>(
     null,
@@ -49,6 +54,13 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
 
   return {
     selectedConditionId,
+    optionsExcluded,
+    optionsIncluded,
+    showInfoModal,
+    loading,
+    updateData,
+    handleOpenModal,
+    handleToggleInfoModal,
     setSelectedConditionId,
     handleClickIncluded,
     handleClickExcluded,

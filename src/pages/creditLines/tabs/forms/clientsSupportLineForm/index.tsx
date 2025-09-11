@@ -1,35 +1,34 @@
 import { useClientsSupportLineForm } from "@hooks/creditLine/useClientsSupportLineForm";
-import { IClientsSupportLineForm } from "@ptypes/creditLines/forms/IClientsSupportLineForm";
 import { ClientsSupportLineFormUI } from "./interface";
 
-const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
-  const {
-    optionsIncluded,
-    optionsExcluded,
-    setOptionsIncluded,
-    setOptionsExcluded,
-  } = props;
-
+const ClientsSupportLineForm = () => {
   const {
     selectedConditionId,
+    optionsExcluded,
+    optionsIncluded,
+    showInfoModal,
+    loading,
+    updateData,
+    handleOpenModal,
+    handleToggleInfoModal,
     setSelectedConditionId,
     handleClickIncluded,
     handleClickExcluded,
-  } = useClientsSupportLineForm({
-    optionsIncluded,
-    optionsExcluded,
-    setOptionsIncluded,
-    setOptionsExcluded,
-  });
+  } = useClientsSupportLineForm();
 
   return (
     <ClientsSupportLineFormUI
+      showInfoModal={showInfoModal}
+      onToggleInfoModal={handleToggleInfoModal}
       optionsExcluded={optionsExcluded}
       optionsIncluded={optionsIncluded}
       selectedConditionId={selectedConditionId}
       setSelectedConditionId={setSelectedConditionId}
       onClickIncluded={handleClickIncluded}
       onClickExcluded={handleClickExcluded}
+      updateData={updateData}
+      loading={loading}
+      onOpenModal={handleOpenModal}
     />
   );
 };
