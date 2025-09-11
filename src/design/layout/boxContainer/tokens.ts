@@ -28,7 +28,7 @@ const tokensBoxContainer = {
       color: inube.palette.neutral.N40,
     },
     background: {
-      color: inube.palette.neutral.N40,
+      color: inube.palette.neutral.N20,
     },
     boxShadow: {
       color: inube.palette.neutral.N40,

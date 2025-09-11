@@ -9,10 +9,8 @@ const meta: Meta<typeof Accordion> = {
   title: "data/Accordion",
   component: Accordion,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

@@ -8,6 +8,7 @@ import { mediaQueryTablet } from "@config/environment";
 import { creditLinesTabsConfig } from "@config/creditLines/tabs";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { ICreditTabsConfig } from "@ptypes/creditLines/ICreditTabsConfig";
+import { useLineInconstructionData } from "../useLineInconstructionData";
 
 const useCreditLinePage = (businessUnitSigla: string) => {
   const portalId = localStorage.getItem("portalCode");
@@ -25,6 +26,8 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     staffPortalId,
     optionName: ECreditLines.OPTION_NAME,
   });
+
+  const { lineUnderConstruction } = useLineInconstructionData();
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
@@ -66,9 +69,18 @@ const useCreditLinePage = (businessUnitSigla: string) => {
       return data;
     }
 
+    if (
+      key === tabs.linesUnderConstruction.id &&
+      (!lineUnderConstruction || lineUnderConstruction.length === 0)
+    ) {
+      return data;
+    }
+
     if (tab !== undefined) {
       data[key as keyof ICreditTabsConfig] = tab;
+      data[key as keyof ICreditTabsConfig] = tab;
     }
+    return data;
     return data;
   }, {} as ICreditTabsConfig);
 

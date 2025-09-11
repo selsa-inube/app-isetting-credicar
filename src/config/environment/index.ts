@@ -8,8 +8,12 @@ const maxRetriesDelete = 1;
 const fetchTimeoutServices = 6000;
 
 const mediaQueryMobile = "(max-width: 770px)";
-const mediaQueryTablet = "(max-width: 1200px)";
+const mediaQueryTablet = "(max-width: 1281px)";
+const mediaQueryTabletMain = "(max-width: 1000px)";
 const mediaQueryMobileSmall = "(max-width: 450px)";
+
+const maxWidthLineConstruction = "1394px";
+const maxWidthOtherPages = "1064px";
 
 const stripLeadingSlash = (u?: string) => u?.replace(/^\/+/, "") ?? undefined;
 const configTranslate = {
@@ -46,7 +50,10 @@ export {
   enviroment,
   mediaQueryMobile,
   mediaQueryTablet,
+  mediaQueryTabletMain,
   mediaQueryMobileSmall,
+  maxWidthLineConstruction,
+  maxWidthOtherPages,
   maxRetriesServices,
   maxRetriesPost,
   maxRetriesDelete,

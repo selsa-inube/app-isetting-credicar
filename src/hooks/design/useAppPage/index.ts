@@ -1,17 +1,21 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
-import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
-import { decrypt } from "@utils/crypto/decrypt";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
+import { useNavigate } from "react-router-dom";
+import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { decrypt } from "@utils/crypto/decrypt";
 import { mainNavigation } from "@config/mainNavigation";
+import {
+  maxWidthLineConstruction,
+  maxWidthOtherPages,
+  mediaQueryTablet,
+  mediaQueryTabletMain,
+} from "@config/environment";
+import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
+import { IUseAppPage } from "@ptypes/hooks/IUseAppPage";
 
-const useAppPage = (
-  appData: IAppData,
-  businessUnitSigla: string,
-  setBusinessUnitSigla: React.Dispatch<React.SetStateAction<string>>,
-) => {
+const useAppPage = (props: IUseAppPage) => {
+  const { appData, businessUnitSigla, setBusinessUnitSigla, location } = props;
   const [collapse, setCollapse] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
@@ -26,10 +30,9 @@ const useAppPage = (
 
   const navigate = useNavigate();
 
-  const location = useLocation();
-
   const { optionsHeader, optionsNav } = mainNavigation(optionsCards, location);
 
+  const { maxWidthPage, setMaxWidthPage } = useContext(ChangeToRequestTab);
   useEffect(() => {
     if (appData.businessUnit.publicCode) {
       setSelectedClient(appData.businessUnit.abbreviatedName);
@@ -44,8 +47,24 @@ const useAppPage = (
     navigate("/");
   };
 
-  const isTablet = useMediaQuery("(max-width: 1281px)");
-  const isTabletMain = useMediaQuery("(max-width: 1000px)");
+  const isTablet = useMediaQuery(mediaQueryTablet);
+  const isTabletMain = useMediaQuery(mediaQueryTabletMain);
+
+  const routeConfigs = {
+    "/edit-credit-lines": { maxWidth: maxWidthLineConstruction },
+  };
+
+  useEffect(() => {
+    const currentRoute = Object.keys(routeConfigs).find((route) =>
+      location.pathname.includes(route),
+    );
+
+    if (currentRoute) {
+      setMaxWidthPage(maxWidthLineConstruction);
+    } else {
+      setMaxWidthPage(maxWidthOtherPages);
+    }
+  }, [location.pathname]);
 
   return {
     collapse,
@@ -56,6 +75,7 @@ const useAppPage = (
     isTabletMain,
     optionsHeader,
     optionsNav,
+    maxWidthPage,
     setCollapse,
     handleLogoClick,
   };

@@ -43,7 +43,7 @@ const LineInitiatedModal = (props: ILineInitiatedModal) => {
           {lineInitiatedLabels.title}
         </Text>
         <Text size="large" appearance={EComponentAppearance.GRAY}>
-          {lineInitiatedLabels.title}
+          {lineInitiatedLabels.subtitle}
         </Text>
 
         <BoxContainer

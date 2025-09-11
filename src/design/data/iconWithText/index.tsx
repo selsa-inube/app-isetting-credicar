@@ -3,7 +3,7 @@ import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { mediaQueryTablet } from "@config/environment";
 interface IIconWithText {
-  icon: JSX.Element;
+  icon: React.ReactNode;
   text: string;
 }
 

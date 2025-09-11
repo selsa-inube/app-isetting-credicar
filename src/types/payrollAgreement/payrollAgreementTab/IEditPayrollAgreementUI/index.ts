@@ -12,7 +12,7 @@ import { IEditPayrollAgreementForms } from "../forms/IEditPayrollAgreementForms"
 interface IEditPayrollAgreementUI {
   isSelected: string;
   onTabChange: (id: string) => void;
-  formReferences: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  formReferences: React.RefObject<FormikProps<IGeneralInformationEntry> | null>;
   formValues: IEditPayrollAgreementForms;
   initialValues: IEditPayrollAgreementForms;
   smallScreen: boolean;

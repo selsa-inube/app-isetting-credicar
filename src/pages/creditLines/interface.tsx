@@ -4,6 +4,7 @@ import { Title } from "@design/data/title";
 import { crumbsCreditLines } from "@config/creditLines/navigation";
 import { ICreditLinesUI } from "@ptypes/creditLines/ICreditLinesUI";
 import { CreditLinesTab } from "./tabs/creditLinesTab";
+import { LinesUnderConstructionTab } from "./tabs/linesUnderConstructionTab";
 
 const CreditLinesUI = (props: ICreditLinesUI) => {
   const {
@@ -28,7 +29,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
           : `${tokens.spacing.s400} ${tokens.spacing.s800}`
       }
     >
-      <Stack gap={tokens.spacing.s600} direction="column">
+      <Stack gap={tokens.spacing.s300} direction="column">
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsCreditLines} />
           <Title
@@ -50,7 +51,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
             />
           )}
           {showRequestsInProgressTab && <></>}
-          {showLinesUnderConstructionTab && <></>}
+          {showLinesUnderConstructionTab && <LinesUnderConstructionTab />}
         </Stack>
       </Stack>
     </Stack>

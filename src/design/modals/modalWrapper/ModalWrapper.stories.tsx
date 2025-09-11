@@ -9,10 +9,8 @@ const meta: Meta<typeof ModalWrapper> = {
   title: "modals/ModalWrapper",
   component: ModalWrapper,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

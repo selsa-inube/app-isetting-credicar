@@ -9,7 +9,7 @@ import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 interface IAddDestinationUI {
   creditLineDecisions: IRuleDecision[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry> | null>;
   initialGeneralInformationValues: IGeneralInformationEntry;
   isCurrentFormValid: boolean;
   requestSteps: IRequestSteps[];

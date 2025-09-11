@@ -8,10 +8,8 @@ const meta: Meta<typeof AppCard> = {
   component: AppCard,
   title: "feedback/AppCard",
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

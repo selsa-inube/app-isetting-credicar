@@ -10,10 +10,8 @@ const meta: Meta<typeof BoxContainer> = {
   title: "layout/BoxContainer",
   component: BoxContainer,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

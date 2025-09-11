@@ -1,4 +1,4 @@
-import { AddCreditLineForm } from "@pages/creditLines/forms/addCreditLineForm";
+import { AddCreditLineForm } from "@pages/creditLines/tabs/forms/addCreditLineForm";
 import { useAddCreditlines } from "@hooks/creditLine/useAddCreditLines";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";

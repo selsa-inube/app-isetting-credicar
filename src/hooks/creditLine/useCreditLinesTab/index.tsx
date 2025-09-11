@@ -19,7 +19,7 @@ import { IUseCreditLinesTab } from "@ptypes/hooks/creditLines/IUseCreditLinesTab
 const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const { businessUnits } = props;
   const [businessRules] = useState<string[]>([]);
-  const [creditLines, setPayrollAgreement] = useState<ICreditLinesData[]>([]);
+  const [creditLines, setCreditLines] = useState<ICreditLinesData[]>([]);
   const [loadingRules] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
@@ -38,11 +38,11 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     if (!loadingRules && businessRules && businessRules.length > 0) {
       return;
     }
-    const fetchPayrollAgreementData = async () => {
+    const fetchCreditLinesData = async () => {
       setLoadingCreditLines(true);
       try {
         const data = await getCreditLinesData(businessUnits);
-        setPayrollAgreement(data);
+        setCreditLines(data);
       } catch (error) {
         console.info(error);
         setHasError(true);
@@ -52,19 +52,21 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
       }
     };
 
-    fetchPayrollAgreementData();
+    fetchCreditLinesData();
   }, [businessRules]);
 
   useEffect(() => {
     if (entryDeleted) {
-      setPayrollAgreement((prev) =>
+      setCreditLines((prev) =>
         prev.filter((entry) => entry.id !== entryDeleted),
       );
     }
   }, [entryDeleted]);
 
+  const disabledAdd = disabledButton || businessRules.length > 0;
+
   const handleToggleInfoModal = () => {
-    if (disabledButton && !hasError) {
+    if (disabledAdd && !hasError) {
       setShowInfoModal(!showInfoModal);
     } else {
       setHasError(!hasError);
@@ -147,7 +149,7 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
 
   const validateMissingRules = !loadingRules && businessRules.length === 0;
 
-  const showIcon = !validateMissingRules || disabledButton;
+  const showIcon = disabledButton || !validateMissingRules;
 
   const hasBusinessRules = businessRules && businessRules.length > 0;
 
@@ -168,6 +170,7 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     showIcon,
     hasBusinessRules,
     showAddModal,
+    disabledAdd,
     setShowAddModal,
     handleToggleAddModal,
     handleSearchCreditLines,

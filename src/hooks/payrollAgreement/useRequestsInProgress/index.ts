@@ -28,7 +28,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
             businessUnits,
             ERequestInProgress.PAYROLL_AGREEMENT,
           );
-          setRequestsInProgress(data);
+          setRequestsInProgress(data as IRequestsInProgress[]);
         }
       } catch (error) {
         console.info(error);

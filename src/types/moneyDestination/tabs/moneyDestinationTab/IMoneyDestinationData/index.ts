@@ -1,5 +1,5 @@
 interface IMoneyDestinationData {
-  abbreviatedName: string | JSX.Element;
+  abbreviatedName: string | React.ReactNode;
   descriptionUse: string;
   iconReference: string;
   moneyDestinationId: string;

@@ -307,6 +307,17 @@ const sistemasenlinea = {
         color: inube.palette.neutral.N40,
       },
     },
+    primary: {
+      border: {
+        color: inube.palette.blue.B300,
+      },
+      background: {
+        color: inube.palette.blue.B300,
+      },
+      boxShadow: {
+        color: inube.palette.blue.B300,
+      },
+    },
   },
 };
 

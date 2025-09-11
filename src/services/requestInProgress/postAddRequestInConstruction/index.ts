@@ -17,7 +17,7 @@ const postAddRequestInConstruction = async (
   };
 
   const saveData = await postWithRetries<ISaveDataResponse>(
-    `/requestssss`,
+    `/requests`,
     config,
     mapSaveAddRequestEntityToApi(data) as unknown as string[],
     isaasPerAxiosInstance,

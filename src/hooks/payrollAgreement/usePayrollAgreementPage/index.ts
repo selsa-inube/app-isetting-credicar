@@ -80,7 +80,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
             businessUnits,
             EPayrollAgreement.CONDITION_RULE,
           );
-          setRequestsInProgress(data);
+          setRequestsInProgress(data as IRequestsInProgress[]);
         }
       } catch (error) {
         console.info(error);

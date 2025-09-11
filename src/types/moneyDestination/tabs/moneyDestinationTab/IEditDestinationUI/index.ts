@@ -9,7 +9,7 @@ interface IEditDestinationUI {
   editDestinationTabsConfig: ITab[];
   creditLineDecisions: IRuleDecision[];
   normalizeEvaluateRuleData: IRuleDecision[];
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry> | null>;
   initialGeneralInformationValues: IGeneralInformationEntry;
   initialGeneralInfData: IGeneralInformationEntry;
   isSelected: string;
