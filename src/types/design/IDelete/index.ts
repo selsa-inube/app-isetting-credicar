@@ -1,13 +1,9 @@
-import { IMessageModal } from "../IMessageModal";
-
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 interface IDelete {
-  showModal: boolean;
-  messageDelete: IMessageModal;
+  modalData: IModalData;
+  showDecision: boolean;
   loading: boolean;
-  showInfoModal: boolean;
-  onToggleInfoModal: () => void;
   onToggleModal: () => void;
-  onClick: () => void;
   withActionMobile?: boolean;
 }
 

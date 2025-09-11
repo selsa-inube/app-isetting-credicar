@@ -1,14 +1,14 @@
 import { useContext } from "react";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useSavePayrollAgreement } from "@hooks/payrollAgreement/useSavePayrollAgreement";
-import { useDeletePayroll } from "@hooks/payrollAgreement/useDeletePayroll";
+import { useSavePayrollAgreement } from "@hooks/payrollAgreement/savePayrollAgreement/useSavePayrollAgreement";
+import { useModalDeletePayroll } from "@hooks/payrollAgreement/delete/useModalDeletePayroll";
+import { useDeletePayroll } from "@hooks/payrollAgreement/delete/useDeletePayroll";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { DeleteRecord } from "@design/feedback/DeleteRecord";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { EUseCase } from "@enum/useCase";
 import { EComponentAppearance } from "@enum/appearances";
-import { deletePayrollAgreModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletePayrollAgreModal";
 import { requestProcessMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestProcessMessage";
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
 import { portalId } from "@config/portalId";
@@ -38,9 +38,14 @@ const Delete = (props: IDelete) => {
     loadingSendData,
     showRequestProcess,
     showRequestStatus,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
-    handleClosePendingReqModal,
+    handleClosePendingRequestModal,
   } = useSavePayrollAgreement({
     useCase: EUseCase.DELETE,
     businessUnits: appData.businessUnit.publicCode,
@@ -53,16 +58,27 @@ const Delete = (props: IDelete) => {
     setEntryDeleted,
   });
 
+  const { modalData, showDecision } = useModalDeletePayroll({
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    showInfoModal,
+    showModal,
+    handleToggleInfoModal,
+    handleClick,
+    handleToggleModal,
+    handleToggleErrorModal,
+  });
+
   return (
     <>
       <DeleteRecord
-        messageDelete={deletePayrollAgreModal}
-        showModal={showModal}
+        modalData={modalData}
+        showDecision={showDecision}
         onToggleModal={handleToggleModal}
-        onClick={handleClick}
         loading={loadingSendData}
-        showInfoModal={showInfoModal}
-        onToggleInfoModal={handleToggleInfoModal}
       />
       {showRequestProcess && (
         <RequestProcess
@@ -84,8 +100,8 @@ const Delete = (props: IDelete) => {
             requestStatusMessage(savePayrollAgreement?.staffName).description
           }
           requestNumber={savePayrollAgreement?.requestNumber ?? ""}
-          onClick={handleClosePendingReqModal}
-          onCloseModal={handleClosePendingReqModal}
+          onClick={handleClosePendingRequestModal}
+          onCloseModal={handleClosePendingRequestModal}
           loading={false}
           actionText={
             requestStatusMessage(savePayrollAgreement?.staffName).actionText

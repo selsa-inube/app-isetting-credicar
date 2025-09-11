@@ -4,7 +4,9 @@ interface IConfigurationRequestsTraceability {
   executionDate: string;
   settingRequestId: string;
   traceabilityId: string;
-  userWhoExecutedAction: string;
+  userWhoExecutedAction?: string;
+  executorUserName?: string;
+  executordUser?: string;
 }
 
 export type { IConfigurationRequestsTraceability };

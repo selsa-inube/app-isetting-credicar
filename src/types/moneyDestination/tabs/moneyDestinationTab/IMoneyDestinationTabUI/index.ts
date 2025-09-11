@@ -1,4 +1,5 @@
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 interface IMoneyDestinationTabUI {
   entries: IEntry[];
   loading: boolean;
@@ -8,7 +9,9 @@ interface IMoneyDestinationTabUI {
   emptyDataMessage: string;
   showInfoModal: boolean;
   disabledButton: boolean;
+  modalData: IModalData;
   onToggleInfoModal: () => void;
+  pageLength: number;
   onSearchMoneyDestination: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setEntryDeleted: (value: string | number) => void;
 }

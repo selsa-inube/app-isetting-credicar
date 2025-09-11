@@ -4,7 +4,7 @@ const mapBusinessManagerApiToEntity = (
   businessManager: Record<string, string>,
 ): IBusinessManagers => {
   const business: IBusinessManagers = {
-    id: String(businessManager.businessManagerId),
+    id: String(businessManager.businessManagerCode),
     publicCode: String(businessManager.publicCode),
     language: String(businessManager.languageId),
     abbreviatedName: String(businessManager.abbreviatedName),

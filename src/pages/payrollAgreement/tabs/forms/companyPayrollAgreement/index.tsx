@@ -1,3 +1,4 @@
+import { IOption } from "@inubekit/inubekit";
 import { forwardRef } from "react";
 import { FormikProps } from "formik";
 import { ICompanyEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyEntry";
@@ -22,6 +23,7 @@ const CompanyForm = forwardRef<FormikProps<ICompanyEntry>, ICompanyForm>(
       actionText,
       moreDetails,
       isAddingCompany,
+      optionsIdentification,
       handleToggleAlertModal,
       handleChange,
       handleCompanyChange,
@@ -46,6 +48,7 @@ const CompanyForm = forwardRef<FormikProps<ICompanyEntry>, ICompanyForm>(
         actionTextModal={actionText}
         moreDetailsModal={moreDetails}
         isAddingCompany={isAddingCompany}
+        optionsIdentification={optionsIdentification as IOption[]}
       />
     );
   },

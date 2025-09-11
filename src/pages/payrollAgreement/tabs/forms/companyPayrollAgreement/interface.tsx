@@ -12,7 +12,6 @@ import {
 } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
-import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { isInvalid } from "@utils/isInvalid";
 import { getFieldState } from "@utils/getFieldState";
 import { BoxContainer } from "@design/layout/boxContainer";
@@ -36,6 +35,8 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
     actionTextModal,
     moreDetailsModal,
     isAddingCompany,
+    optionsIdentification,
+    optionsCities,
     onToggleAlertModal,
     onChange,
     onCompanyChange,
@@ -171,7 +172,7 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                             companyLabels.placeholderCompanyTypeIdent
                           }
                           onChange={onChange}
-                          options={getDomainById("typeIdentCompany")}
+                          options={optionsIdentification}
                           onBlur={formik.handleBlur}
                           size="compact"
                           value={formik.values.companyTypeIdent ?? ""}
@@ -237,13 +238,14 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                           label={companyLabels.companyCity}
                           placeholder={companyLabels.placeholderCompanyCity}
                           onChange={onChange}
-                          options={getDomainById("cities")}
+                          options={optionsCities}
                           size="compact"
                           onBlur={formik.handleBlur}
                           value={formik.values.companyCity ?? ""}
                           message={formik.errors.companyCity}
                           invalid={isInvalid(formik, "companyCity")}
                           fullwidth
+                          required
                         />
                       </Stack>
                       <Stack

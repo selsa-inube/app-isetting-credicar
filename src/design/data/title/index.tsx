@@ -15,7 +15,7 @@ import { StyledContainerText } from "./styles";
 interface ITitle {
   title: string;
   description?: string;
-  icon?: JSX.Element;
+  icon?: React.ReactNode;
   navigatePage?: string;
   sizeTitle?: ITextSize;
   onClick?: () => void;

@@ -5,13 +5,16 @@ import { ChangeToRequestTab } from "./changeToRequest";
 const ChangeToRequestTabProvider = (props: IChangeToRequestTabProvider) => {
   const { children } = props;
   const [changeTab, setChangeTab] = useState<boolean>(false);
+  const [maxWidthPage, setMaxWidthPage] = useState<string>("1064px");
 
   const changeToRequestContainer = useMemo(
     () => ({
       changeTab,
+      maxWidthPage,
       setChangeTab,
+      setMaxWidthPage,
     }),
-    [changeTab, setChangeTab],
+    [changeTab, maxWidthPage, setChangeTab, setMaxWidthPage],
   );
 
   return (

@@ -3,13 +3,19 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { useFormik } from "formik";
 import { object } from "yup";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useCountries } from "@hooks/generic/useCountries";
+import { useEnumeratorsIsaas } from "@hooks/useEnumeratorsIsaas";
+import { useCitySubdivisionCountry } from "@hooks/generic/useCitySubdivisionCountry";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { useCountries } from "@hooks/generic/useCountries";
-import { useCities } from "@hooks/generic/useCities";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
+import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
+import { enviroment, mediaQueryTablet } from "@config/environment";
 import { alertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/alertModal";
 import { IUseCompanyForm } from "@ptypes/hooks/IUseCompanyForm";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { ILanguage } from "@ptypes/i18n";
 import { useLegalPerson } from "../useLegalPerson";
 
 const useCompanyForm = (props: IUseCompanyForm) => {
@@ -46,9 +52,22 @@ const useCompanyForm = (props: IUseCompanyForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
   const { optionsCountries } = useCountries();
-  const { optionsCities } = useCities();
   const [showModal, setShowModal] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const isMobile = useMediaQuery(mediaQueryTablet);
+
+  const { optionsCitySubdivision: optionsCities } = useCitySubdivisionCountry({
+    countryName: EPayrollAgreement.COUNTRY,
+  });
+
+  const { enumData: typeIdentification } = useEnumeratorsIsaas({
+    enumIsaas: ECyclesPayroll.TYPE_IDENTIFICATION_COMPANY,
+  });
+
+  const optionsIdentification = optionsFromEnumI18n(
+    enviroment.VITE_LANGUAGE as ILanguage,
+    typeIdentification,
+    false,
+  );
 
   const legalPersonExists = (companyNumberIdent: string) => {
     return legalPersonData.find(
@@ -99,7 +118,10 @@ const useCompanyForm = (props: IUseCompanyForm) => {
       });
     });
 
-    if (name === "companySelected" && value === "addCompany") {
+    if (
+      name === EPayrollAgreement.COMPANY_SELECTED &&
+      value === EPayrollAgreement.ADD_COMPANY
+    ) {
       setDynamicValidationSchema(
         validationSchema.shape({
           companyName: validationRules.string.required(
@@ -160,7 +182,8 @@ const useCompanyForm = (props: IUseCompanyForm) => {
     setShowModal(!showModal);
   };
 
-  const isAddingCompany = formik.values.companySelected === "addCompany";
+  const isAddingCompany =
+    formik.values.companySelected === EPayrollAgreement.ADD_COMPANY;
 
   return {
     formik,
@@ -174,6 +197,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
     moreDetails,
     showModal,
     isAddingCompany,
+    optionsIdentification,
     handleChange,
     handleCompanyChange,
     handleToggleAlertModal,

@@ -1,7 +1,7 @@
 import { StyledOptionList } from "./styles";
 
 interface IOptionList {
-  children: JSX.Element | JSX.Element[];
+  children: React.ReactNode | React.ReactNode[];
   onClick?: React.ChangeEventHandler<HTMLInputElement>;
 }
 

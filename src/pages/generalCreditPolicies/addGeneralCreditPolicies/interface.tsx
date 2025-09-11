@@ -1,24 +1,24 @@
 import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-import { IAddGenCreditPoliciesUI } from "@ptypes/generalCredPolicies/IAddGenCreditPoliciesUI";
+import { DecisionsForm } from "@design/forms/decisions";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { stepKeysPolicies } from "@enum/stepsKeysPolicies";
+import { ENameRules } from "@enum/nameRules";
+import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { addLabels } from "@config/generalCreditPolicies/assisted/addLabels";
 import { crumbsAddGenCredPolicies } from "@config/generalCreditPolicies/assisted/navigation";
 import { controlsAssisted } from "@config/controlsAssisted";
-import { DecisionsForm } from "@design/forms/decisions";
 import { deleteModal } from "@config/decisions/messages";
+import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
+import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
+import { portalId } from "@config/portalId";
 import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
 import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
-import { ENameRules } from "@enum/nameRules";
-import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
-import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-import { DecisionModal } from "@design/modals/decisionModal";
-import { goBackModal } from "@config/goBackModal";
-import { portalId } from "@config/portalId";
+import { IAddGenCreditPoliciesUI } from "@ptypes/generalCredPolicies/IAddGenCreditPoliciesUI";
 import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
 import { VerificationForm } from "../forms/verification";
 
@@ -40,10 +40,10 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     loading,
     showPendingReqModal,
     dateVerification,
-    showGoBackModal,
+    modalData,
+    showDecision,
     onOpenModal,
-    onCloseGoBackModal,
-    onGoBack,
+
     setDateVerification,
     onCloseRequestStatus,
     onClosePendingReqModal,
@@ -93,7 +93,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
             size={smallScreen ? "small" : "large"}
           />
           <Stack direction="column">
-            {currentStep === 1 && (
+            {currentStep === stepKeysPolicies.DECISIONS_GENERAL && (
               <DecisionsGeneralForm
                 ref={formReferences.decisionsGeneral}
                 initialValues={initialValues.decisionsGeneral.values}
@@ -101,7 +101,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 handleFormValidChange={handleFormValidChange}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO && (
               <DecisionsForm
                 deleteModal={deleteModal}
                 textValuesBusinessRules={textValuesBusinessRules}
@@ -121,7 +121,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 }
               />
             )}
-            {currentStep === 3 && (
+            {currentStep === stepKeysPolicies.INCOME_PORTFOLIO && (
               <DecisionsForm
                 deleteModal={deleteModal}
                 textValuesBusinessRules={textValuesBusinessRules}
@@ -139,7 +139,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 }
               />
             )}
-            {currentStep === 4 && (
+            {currentStep === stepKeysPolicies.SCORE_MODELS && (
               <DecisionsForm
                 deleteModal={deleteModal}
                 textValuesBusinessRules={textValuesBusinessRules}
@@ -158,7 +158,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 }
               />
             )}
-            {currentStep === 5 && (
+            {currentStep === stepKeysPolicies.VERIFICATION && (
               <VerificationForm
                 updatedData={{
                   decisionsGeneral: {
@@ -199,14 +199,19 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
           </Stack>
         </Stack>
       </Stack>
-      {showGoBackModal && (
+      {showDecision && (
         <DecisionModal
           portalId={portalId}
-          title={goBackModal.title}
-          description={goBackModal.description}
-          actionText={goBackModal.actionText}
-          onCloseModal={onCloseGoBackModal}
-          onClick={onGoBack}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </Stack>

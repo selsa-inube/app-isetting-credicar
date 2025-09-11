@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 
 import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
+import { useModalEditPolicies } from "@hooks/GeneralCreditPolicies/edit/useModalEditPolicies";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
 import { EUseCase } from "@enum/useCase";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -48,8 +49,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
-    modalData,
-    showDecision,
+    showInfoModal,
+    handleFinishForm,
+    handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,
     handleEditedModal,
@@ -58,6 +60,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setScoreModels,
     setContributionsPortfolio,
     handleReset,
+    handleGoBack,
+    handleCloseGoBackModal,
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,
@@ -80,6 +84,11 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     loadingSendData,
     showPendingReqModal,
     isRequestStatusModal,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingReqModal,
@@ -93,6 +102,23 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setShowModal: setShowDateModal,
   });
 
+  const { modalData, showDecision } = useModalEditPolicies({
+    showGoBackModal,
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    showInfoModal,
+    showDateModal,
+    loadingSendData,
+    handleToggleInfoModal,
+    handleFinishForm,
+    handleToggleDateModal,
+    handleCloseGoBackModal,
+    handleGoBack,
+    handleToggleErrorModal,
+  });
   return (
     <EditGeneralPoliciesUI
       formValues={formValues}

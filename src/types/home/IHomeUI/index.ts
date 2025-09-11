@@ -6,10 +6,10 @@ import { ICardData } from "../ICardData";
 
 interface IHomeUI {
   appData: IAppData;
-  businessUnitChangeRef: React.RefObject<HTMLDivElement>;
+  businessUnitChangeRef: React.RefObject<HTMLDivElement | null>;
   businessUnitsToTheStaff: IBusinessUnitsPortalStaff[];
   collapse: boolean;
-  collapseMenuRef: React.RefObject<HTMLDivElement>;
+  collapseMenuRef: React.RefObject<HTMLDivElement | null>;
   selectedClient: string;
   username: string;
   screenMobile: boolean;
@@ -22,6 +22,7 @@ interface IHomeUI {
   };
   hasMultipleBusinessUnits: boolean;
   handleLogoClick: (businessUnit: IBusinessUnitsPortalStaff) => void;
+  onlogout: () => void;
   setCollapse: (value: boolean) => void;
   loading: boolean;
   data: ICardData[];

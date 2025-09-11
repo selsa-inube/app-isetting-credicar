@@ -11,14 +11,14 @@ const patchEditGeneralPolicies = async (
 ): Promise<IRequestGeneralPol> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "ModifyGeneralPortfolioPolicess",
+      "X-Action": "ModifyGeneralPortfolioPolicies",
       "X-Business-Unit": businessUnit,
       "X-User-Name": user,
     },
   };
 
   const newData = await patchWithRetries<IRequestGeneralPol>(
-    `/portfolio-policess`,
+    `/portfolio-policies`,
     config,
     mapEditGeneralPoliciesToApi(data) as unknown as string[],
     credicarAxiosInstance,

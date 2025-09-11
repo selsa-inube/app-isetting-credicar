@@ -1,13 +1,12 @@
 import { useContext } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { MdOutlineChevronRight } from "react-icons/md";
 import { Icon, Grid, Header, Nav } from "@inubekit/inubekit";
-
-import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useAppPage } from "@hooks/design/useAppPage";
+import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
 import { userMenu } from "@config/menuMainConfiguration";
 import { actionsConfig } from "@config/mainActionLogout";
-import { useAppPage } from "@hooks/design/useAppPage";
 import {
   StyledAppPage,
   StyledCollapse,
@@ -27,7 +26,7 @@ const renderLogo = (imgUrl: string) => {
   );
 };
 
-function AppPage() {
+const AppPage = () => {
   const {
     appData,
     businessUnitsToTheStaff,
@@ -35,6 +34,7 @@ function AppPage() {
     businessUnitSigla,
   } = useContext(AuthAndPortalData);
 
+  const location = useLocation();
   const {
     collapse,
     collapseMenuRef,
@@ -44,9 +44,17 @@ function AppPage() {
     isTabletMain,
     businessUnitChangeRef,
     selectedClient,
+    maxWidthPage,
     setCollapse,
     handleLogoClick,
-  } = useAppPage(appData, businessUnitSigla, setBusinessUnitSigla);
+  } = useAppPage({
+    appData,
+    businessUnitSigla,
+    setBusinessUnitSigla,
+    location,
+  });
+
+  const hasbusinessUnits = businessUnitsToTheStaff.length > 1;
 
   return (
     <StyledAppPage>
@@ -56,13 +64,13 @@ function AppPage() {
             navigation={optionsHeader}
             user={{
               username: appData.user.userName,
-              breakpoint: "848px",
+              breakpoint: "1281px",
             }}
             logoURL={renderLogo(appData.businessUnit.urlLogo)}
             menu={userMenu}
           />
         </StyledHeaderContainer>
-        {businessUnitsToTheStaff.length > 1 && (
+        {hasbusinessUnits && (
           <>
             <StyledCollapseIcon
               $collapse={collapse}
@@ -97,7 +105,7 @@ function AppPage() {
             {!isTablet && (
               <Nav navigation={optionsNav} actions={actionsConfig()} />
             )}
-            <StyledMain $isMobile={isTabletMain}>
+            <StyledMain $maxWidthPage={maxWidthPage} $isMobile={isTabletMain}>
               <Outlet />
             </StyledMain>
           </Grid>
@@ -105,6 +113,6 @@ function AppPage() {
       </Grid>
     </StyledAppPage>
   );
-}
+};
 
 export { AppPage };

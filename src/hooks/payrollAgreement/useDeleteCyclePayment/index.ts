@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
-import { deletedCycleMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedCycleMessage";
-import { IUseDeleteCyclePayment } from "@ptypes/hooks/IUseDeleteCyclePayment";
 import { eventBus } from "@events/eventBus";
+import { EModalState } from "@enum/modalState";
+import { deletedCycleMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/deletedCycleMessage";
+import { deleteCyclePaymentModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deleteCyclePaymentModal";
+import { IUseDeleteCyclePayment } from "@ptypes/hooks/IUseDeleteCyclePayment";
 
 const useDeleteCyclePayment = (props: IUseDeleteCyclePayment) => {
   const { data, setEntryDeleted } = props;
@@ -24,12 +26,22 @@ const useDeleteCyclePayment = (props: IUseDeleteCyclePayment) => {
     });
   };
 
+  const modalData = {
+    title: deleteCyclePaymentModal.title,
+    description: deleteCyclePaymentModal.description,
+    actionText: deleteCyclePaymentModal.actionText,
+    onCloseModal: handleToggleModal,
+    onClick: handleClick,
+    withCancelButton: false,
+  };
+
   useEffect(() => {
-    eventBus.emit("secondModalState", showModal);
+    eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
 
   return {
     showModal,
+    modalData,
     handleToggleModal,
     handleClick,
     setShowModal,

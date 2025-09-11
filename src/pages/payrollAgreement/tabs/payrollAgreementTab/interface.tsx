@@ -15,7 +15,6 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
-import { disabledModal } from "@config/disabledModal";
 
 const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
   const {
@@ -28,6 +27,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
     emptyDataMessage,
     showInfoModal,
     disabledButton,
+    modalData,
     onToggleInfoModal,
     setEntryDeleted,
     onSearchPayrollAgreement,
@@ -135,7 +135,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
           )}
 
           <Table
-            id="portal"
+            id={portalId}
             titles={titles}
             entries={entries}
             actions={actionsConfig(setEntryDeleted)}
@@ -151,13 +151,17 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
       {showInfoModal && (
         <DecisionModal
           portalId={portalId}
-          title={disabledModal.title}
-          actionText={disabledModal.actionText}
-          description={disabledModal.description}
-          subtitle={disabledModal.subtitle}
-          onCloseModal={onToggleInfoModal}
-          onClick={onToggleInfoModal}
-          withCancelButton={false}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          subtitle={modalData.subtitle}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </BoxContainer>

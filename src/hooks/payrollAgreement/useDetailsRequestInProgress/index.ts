@@ -54,7 +54,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   };
 
   if (
-    data.useCaseName === EPayrollAgreement.USE_CASE_NAME &&
+    data.useCaseName === EPayrollAgreement.USE_CASE_ADD &&
     data.configurationRequestData.regularPaymentCycles
   ) {
     normalizeData.regularPaymentCycles =
@@ -62,7 +62,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   }
 
   if (
-    data.useCaseName !== EPayrollAgreement.USE_CASE_NAME &&
+    data.useCaseName !== EPayrollAgreement.USE_CASE_ADD &&
     data.configurationRequestData.regularPaymentCycles
   ) {
     normalizeData.regularCyclesIncluded =
@@ -77,7 +77,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
       );
   }
   if (
-    data.useCaseName === EPayrollAgreement.USE_CASE_NAME &&
+    data.useCaseName === EPayrollAgreement.USE_CASE_ADD &&
     data.configurationRequestData.payrollSpecialBenefitPaymentCycles
   ) {
     normalizeData.payrollSpecialBenefitPaymentCycles =
@@ -98,7 +98,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   }
 
   if (
-    data.useCaseName === EPayrollAgreement.USE_CASE_NAME &&
+    data.useCaseName === EPayrollAgreement.USE_CASE_ADD &&
     data.configurationRequestData.severancePaymentCycles
   ) {
     normalizeData.severancePaymentCycles =

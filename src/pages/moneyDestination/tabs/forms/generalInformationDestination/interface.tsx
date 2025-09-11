@@ -1,5 +1,5 @@
 import {
-  Autosuggest,
+  Autocomplete,
   Button,
   Stack,
   Text,
@@ -37,7 +37,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     onChange,
     onButtonClick,
     onReset,
-    valuesEqual,
     autosuggestValue,
     buttonDisabledState,
   } = props;
@@ -70,12 +69,12 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                       </Stack>
                     ) : (
                       <Stack height={tokens.spacing.s850} width="100%">
-                        <Autosuggest
+                        <Autocomplete
                           label={generalInfoLabels.name}
                           name="nameDestination"
                           id="nameDestination"
                           placeholder={generalInfoLabels.placeholderName}
-                          value={autosuggestValue}
+                          value={formik.values.nameDestination}
                           onChange={onChange}
                           options={optionsDestination}
                           onBlur={formik.handleBlur}
@@ -126,11 +125,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         {editDataOption && (
-          <Button
-            onClick={onReset}
-            appearance={EComponentAppearance.GRAY}
-            disabled={valuesEqual}
-          >
+          <Button onClick={onReset} appearance={EComponentAppearance.GRAY}>
             {generalInfoLabels.cancelButton}
           </Button>
         )}

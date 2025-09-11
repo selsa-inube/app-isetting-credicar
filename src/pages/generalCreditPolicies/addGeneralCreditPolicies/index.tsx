@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import { useAddGenCredPolicies } from "@hooks/GeneralCreditPolicies/useAddGenCredPolicies";
-import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
-import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
-import { EUseCase } from "@enum/useCase";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
+import { useAddGeneralPolicies } from "@hooks/GeneralCreditPolicies/add/useAddGeneralPolicies";
+import { useModalAddGeneral } from "@hooks/GeneralCreditPolicies/add/useModalAddGeneral";
+import { EUseCase } from "@enum/useCase";
+import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
@@ -41,13 +42,18 @@ const AddGenCreditPolicies = () => {
     handleToggleModal,
     setIsCurrentFormValid,
     setShowModal,
-  } = useAddGenCredPolicies({ appData });
+  } = useAddGeneralPolicies({ appData });
 
   const {
     saveGeneralPolicies,
     requestSteps,
     loadingSendData,
     showPendingReqModal,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingReqModal,
@@ -59,6 +65,18 @@ const AddGenCreditPolicies = () => {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
+  });
+
+  const { modalData, showDecision } = useModalAddGeneral({
+    showGoBackModal,
+    loading: loadingSendData,
+    hasError,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleCloseModal: handleCloseGoBackModal,
+    handleGoBack,
+    handleToggleErrorModal,
   });
 
   return (
@@ -92,11 +110,10 @@ const AddGenCreditPolicies = () => {
       onFinishForm={handleSubmitClick}
       dateVerification={dateVerification as IDateVerification}
       setDateVerification={setDateVerification}
-      showGoBackModal={showGoBackModal}
-      onCloseGoBackModal={handleCloseGoBackModal}
-      onGoBack={handleGoBack}
       onOpenModal={handleOpenModal}
       onCloseProcess={handleCloseProcess}
+      modalData={modalData}
+      showDecision={showDecision}
     />
   );
 };

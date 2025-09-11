@@ -1,5 +1,5 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { getErrorMessage } from "@utils/getErrorMessage";
+
 import { maxRetriesPost } from "@config/environment";
 
 const patchWithRetries = async <T>(
@@ -34,8 +34,7 @@ const patchWithRetries = async <T>(
     }
   }
 
-  const errorMessage = getErrorMessage(lastError);
-  throw new Error(errorMessage);
+  throw new Error(lastError as string);
 };
 
 export { patchWithRetries };

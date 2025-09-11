@@ -1,7 +1,7 @@
 interface IPortal {
   abbreviatedName: string;
-  staffPortalCatalogId: string;
-  businessManagerId: string;
+  staffPortalCatalogCode: string;
+  businessManagerCode: string;
   publicCode: string;
 }
 

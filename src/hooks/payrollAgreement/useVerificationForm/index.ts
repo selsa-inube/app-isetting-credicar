@@ -1,7 +1,8 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
-import { IUseVerification } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IUseVerification";
 import { verificationFormLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/verificationFormLabels";
+import { mediaQueryMobile, mediaQueryTablet } from "@config/environment";
+import { IUseVerification } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IUseVerification";
 
 const useVerification = (props: IUseVerification) => {
   const {
@@ -9,17 +10,17 @@ const useVerification = (props: IUseVerification) => {
     showRequestProcessModal,
     savePayrollAgreement,
     typeRegularPayroll,
-    showPendingReqModal,
+    showPendingRequestModal,
   } = props;
 
-  const isTablet = useMediaQuery("(max-width: 1224px)");
+  const isTablet = useMediaQuery(mediaQueryTablet);
 
-  const isMobile = useMediaQuery("(max-width: 990px)");
+  const isMobile = useMediaQuery(mediaQueryMobile);
 
   const canShowRequestProcess = showRequestProcessModal && savePayrollAgreement;
 
   const canShowPendingRequest =
-    showPendingReqModal &&
+    showPendingRequestModal &&
     savePayrollAgreement &&
     savePayrollAgreement.requestNumber.length > 0;
 

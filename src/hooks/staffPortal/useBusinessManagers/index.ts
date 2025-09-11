@@ -19,9 +19,12 @@ const useBusinessManagers = (
         return;
       }
       try {
-        if (portalPublicCode.businessManagerId.length > 0) {
+        if (
+          portalPublicCode.businessManagerCode &&
+          portalPublicCode.businessManagerCode.length > 0
+        ) {
           const newData = await getBusinessManagers(
-            portalPublicCode.businessManagerId,
+            portalPublicCode.businessManagerCode,
           );
           setBusinessManagersData(newData);
         }

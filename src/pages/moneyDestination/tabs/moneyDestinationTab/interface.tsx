@@ -12,7 +12,6 @@ import {
   breakPoints,
   titles,
 } from "@config/moneyDestination/moneyDestinationTab/table";
-import { disabledModal } from "@config/disabledModal";
 import { IMoneyDestinationTabUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationTabUI";
 import { StyledContainer } from "./styles";
 
@@ -26,6 +25,8 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
     emptyDataMessage,
     showInfoModal,
     disabledButton,
+    modalData,
+    pageLength,
     onToggleInfoModal,
     onSearchMoneyDestination,
     setEntryDeleted,
@@ -131,7 +132,7 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
             filter={searchMoneyDestination}
             loading={loading}
             columnWidths={columnWidths}
-            pageLength={8}
+            pageLength={pageLength}
             emptyDataMessage={emptyDataMessage}
           />
         </Stack>
@@ -139,13 +140,17 @@ const MoneyDestinationTabUI = (props: IMoneyDestinationTabUI) => {
       {showInfoModal && (
         <DecisionModal
           portalId={portalId}
-          title={disabledModal.title}
-          actionText={disabledModal.actionText}
-          description={disabledModal.description}
-          subtitle={disabledModal.subtitle}
-          onCloseModal={onToggleInfoModal}
-          onClick={onToggleInfoModal}
-          withCancelButton={false}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          subtitle={modalData.subtitle}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </StyledContainer>

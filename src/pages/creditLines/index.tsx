@@ -1,30 +1,38 @@
 import { useContext } from "react";
 
-import { useCreditLinePage } from "@hooks/creditLine/useCreditLinePage";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useCreditLinePage } from "@hooks/creditLine/useCreditLinePage";
+import { creditLinesTabsConfig } from "@config/creditLines/tabs";
 import { ICardData } from "@ptypes/home/ICardData";
 import { CreditLinesUI } from "./interface";
 
-function CreditLines() {
+const CreditLines = () => {
   const { businessUnitSigla } = useContext(AuthAndPortalData);
   const {
-    searchCreditLines,
     descriptionOptions,
     smallScreen,
-    columnWidths,
-    handleSearchCreditLines,
+    isSelected,
+    showCreditLinesTab,
+    showLinesRequestTab,
+    showLinesUnderConstructionTab,
+    creditLinesTabs,
+    handleTabChange,
+    setShowUnderConstruction,
   } = useCreditLinePage(businessUnitSigla);
 
   return (
     <CreditLinesUI
-      loading={false}
-      searchCreditLines={searchCreditLines}
-      onSearchCreditLines={handleSearchCreditLines}
+      isSelected={isSelected ?? creditLinesTabsConfig.creditLines.id}
+      handleTabChange={handleTabChange}
       descriptionOptions={descriptionOptions as ICardData}
-      columnWidths={columnWidths}
       smallScreen={smallScreen}
+      showCreditLinesTab={showCreditLinesTab}
+      showRequestsInProgressTab={showLinesRequestTab}
+      showLinesUnderConstructionTab={showLinesUnderConstructionTab}
+      creditLinesTabs={creditLinesTabs}
+      setShowUnderConstruction={setShowUnderConstruction}
     />
   );
-}
+};
 
 export { CreditLines };

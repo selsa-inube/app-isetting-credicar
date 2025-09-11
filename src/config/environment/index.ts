@@ -8,8 +8,12 @@ const maxRetriesDelete = 1;
 const fetchTimeoutServices = 6000;
 
 const mediaQueryMobile = "(max-width: 770px)";
-const mediaQueryTablet = "(max-width: 1200px)";
+const mediaQueryTablet = "(max-width: 1281px)";
+const mediaQueryTabletMain = "(max-width: 1000px)";
 const mediaQueryMobileSmall = "(max-width: 450px)";
+
+const maxWidthLineConstruction = "1394px";
+const maxWidthOtherPages = "1064px";
 
 const stripLeadingSlash = (u?: string) => u?.replace(/^\/+/, "") ?? undefined;
 const configTranslate = {
@@ -26,7 +30,7 @@ const enviroment = {
   SECRET_KET_PORTAL_ID: import.meta.env.VITE_SECRET_KEY_PORTAL_ID,
   SECRET_KET_PORTAL_IV: import.meta.env.VITE_SECRET_KEY_PORTAL_IV,
   REDIRECT_URI: IS_PRODUCTION ? window.location.origin : AUTH_REDIRECT_URI,
-  PORTAL_CATALOG_ID: import.meta.env.VITE_PORTAL_CATALOG_ID,
+  PORTAL_CATALOG_CODE: import.meta.env.VITE_PORTAL_CATALOG_CODE,
   IVITE_ISAAS_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_ISAAS_QUERY_PROCESS_SERVICE,
   IPORTAL_STAFF_QUERY_PROCESS_SERVICE: import.meta.env
@@ -46,7 +50,10 @@ export {
   enviroment,
   mediaQueryMobile,
   mediaQueryTablet,
+  mediaQueryTabletMain,
   mediaQueryMobileSmall,
+  maxWidthLineConstruction,
+  maxWidthOtherPages,
   maxRetriesServices,
   maxRetriesPost,
   maxRetriesDelete,

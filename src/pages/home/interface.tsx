@@ -1,16 +1,17 @@
 import { MdOutlineChevronRight, MdOutlineDoorFront } from "react-icons/md";
-import { Icon, Header, Text } from "@inubekit/inubekit";
+import { Icon, Header } from "@inubekit/inubekit";
 
+import { EComponentAppearance } from "@enum/appearances";
 import { AppCard } from "@design/feedback/appCard";
 import { Title } from "@design/data/title";
 import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
-import { userMenu } from "@config/menuMainConfiguration";
-import { IHomeUI } from "@ptypes/home/IHomeUI";
-import { EComponentAppearance } from "@enum/appearances";
 import { RenderLogo } from "@design/feedback/renderLogo";
-import { homeLabels } from "@config/home/homeLabels";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { ErrorPage } from "@design/layout/errorPage";
 import { tokens } from "@design/tokens";
+import { userMenu } from "@config/menuMainConfiguration";
+import { homeLabels } from "@config/home/homeLabels";
+import { IHomeUI } from "@ptypes/home/IHomeUI";
 import {
   StyledCollapse,
   StyledCollapseIcon,
@@ -37,16 +38,21 @@ const HomeUI = (props: IHomeUI) => {
     hasMultipleBusinessUnits,
     optionsHeader,
     dataExists,
+    onlogout,
     setCollapse,
     handleLogoClick,
   } = props;
+
+  const padding = !dataExists
+    ? tokens.spacing.s0
+    : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`;
 
   return (
     <>
       <BoxContainer
         direction="column"
         boxSizing="border-box"
-        padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`}
+        padding={padding}
         height="100vh"
         overflowY="auto"
         backgroundColor={EComponentAppearance.LIGHT}
@@ -97,14 +103,16 @@ const HomeUI = (props: IHomeUI) => {
           backgroundColor={EComponentAppearance.LIGHT}
           boxSizing="initial"
         >
-          <StyledTitle $isTablet={screenTablet}>
-            <Title
-              title={`${homeLabels.welcome} ${username}`}
-              description={homeLabels.description}
-              icon={<MdOutlineDoorFront />}
-              sizeTitle="large"
-            />
-          </StyledTitle>
+          {(loading || dataExists) && (
+            <StyledTitle $isTablet={screenTablet}>
+              <Title
+                title={`${homeLabels.welcome} ${username}`}
+                description={homeLabels.description}
+                icon={<MdOutlineDoorFront />}
+                sizeTitle="large"
+              />
+            </StyledTitle>
+          )}
           <BoxContainer
             direction="row"
             boxSizing="border-box"
@@ -118,25 +126,42 @@ const HomeUI = (props: IHomeUI) => {
             gap={tokens.spacing.s400}
             backgroundColor={EComponentAppearance.LIGHT}
           >
-            {dataExists ? (
-              data?.map((card) => (
-                <AppCard
-                  key={card.id}
-                  label={card.publicCode}
-                  description={card.description}
-                  icon={card.icon}
-                  url={card.url}
-                  loading={loading}
-                />
-              ))
+            {loading ? (
+              <AppCard label={""} description={""} icon={""} url={""} loading />
             ) : (
-              <Text size="medium">{homeLabels.noData}</Text>
+              <>
+                {dataExists ? (
+                  <>
+                    {data?.map((card) => (
+                      <AppCard
+                        key={card.id}
+                        label={card.publicCode}
+                        description={card.description}
+                        icon={card.icon}
+                        url={card.url}
+                        loading={false}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <BoxContainer
+                    direction="column"
+                    boxSizing="border-box"
+                    width="100%"
+                    height="80vh"
+                  >
+                    <ErrorPage errorCode={500} onClick={onlogout} />
+                  </BoxContainer>
+                )}
+              </>
             )}
           </BoxContainer>
         </BoxContainer>
-        <StyledFooter $isMobile={screenMobile}>
-          <StyledLogo src={appData.businessManager.urlBrand} />
-        </StyledFooter>
+        {dataExists && (
+          <StyledFooter $isMobile={screenMobile}>
+            <StyledLogo src={appData.businessManager.urlBrand} />
+          </StyledFooter>
+        )}
       </BoxContainer>
     </>
   );

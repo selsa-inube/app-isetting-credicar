@@ -23,6 +23,7 @@ const StyledContainer = styled.div`
 
 interface IStyledMain {
   $isMobile: boolean;
+  $maxWidthPage: string;
 }
 
 const StyledMain = styled.main<IStyledMain>`
@@ -37,7 +38,7 @@ const StyledMain = styled.main<IStyledMain>`
 
   & > div {
     height: 100%;
-    max-width: 1064px;
+    max-width: ${({ $maxWidthPage }) => $maxWidthPage};
   }
 `;
 
@@ -49,7 +50,7 @@ const StyledContentImg = styled(Link)`
 `;
 
 const StyledLogo = styled.img`
-  max-width: 100px;
+  max-width: 80px;
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
@@ -65,6 +66,7 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
 const StyledCollapse = styled.div`
   position: absolute;
   margin-top: 55px;
+  z-index: 2;
 `;
 
 export {

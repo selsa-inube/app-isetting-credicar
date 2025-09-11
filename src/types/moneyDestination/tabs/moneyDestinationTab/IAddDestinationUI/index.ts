@@ -3,12 +3,13 @@ import { FormikProps } from "formik";
 import { IRuleDecision } from "@isettingkit/input";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 
 interface IAddDestinationUI {
   creditLineDecisions: IRuleDecision[];
   currentStep: number;
-  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry>>;
+  generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry> | null>;
   initialGeneralInformationValues: IGeneralInformationEntry;
   isCurrentFormValid: boolean;
   requestSteps: IRequestSteps[];
@@ -20,10 +21,9 @@ interface IAddDestinationUI {
   showPendingReqModal: boolean;
   showAttentionModal: boolean;
   smallScreen: boolean;
-  showGoBackModal: boolean;
-  onCloseModal: () => void;
+  modalData: IModalData;
+  showDecision: boolean;
   onOpenModal: () => void;
-  onGoBack: () => void;
   onFinishForm: () => void;
   onNextStep: () => void;
   onPreviousStep: () => void;

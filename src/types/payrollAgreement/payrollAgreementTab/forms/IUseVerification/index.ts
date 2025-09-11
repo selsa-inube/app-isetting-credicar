@@ -6,7 +6,7 @@ interface IUseVerification {
   showRequestProcessModal: boolean;
   savePayrollAgreement: ISaveDataResponse;
   typeRegularPayroll: boolean;
-  showPendingReqModal: boolean;
+  showPendingRequestModal: boolean;
 }
 
 export type { IUseVerification };

@@ -19,9 +19,7 @@ interface IEditGeneralPoliciesUI {
   smallScreen: boolean;
   formValues: IDecisionsGeneralEntry;
   initialDecisionsData: IDecisionsGeneralEntry;
-  decisionsGeneralReference: React.RefObject<
-    FormikProps<IDecisionsGeneralEntry>
-  >;
+  decisionsGeneralReference: React.RefObject<FormikProps<IDecisionsGeneralEntry> | null>;
   incomePortfolio: IRuleDecision[];
   scoreModels: IRuleDecision[];
   showDecisionsGeneral: boolean;

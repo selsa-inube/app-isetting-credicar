@@ -5,6 +5,7 @@ import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IAddGenCredPoliciesRef } from "../forms/IAddGenCredPoliciesRef";
 import { IAddGenCredPoliciesForms } from "../forms/IAddGenCredPoliciesForms";
 import { IDateVerification } from "../forms/IDateVerification";
+import { IModalData } from "../IModalData";
 
 interface IAddGenCreditPoliciesUI {
   currentStep: number;
@@ -23,9 +24,8 @@ interface IAddGenCreditPoliciesUI {
   loading: boolean;
   showPendingReqModal: boolean;
   dateVerification: IDateVerification;
-  showGoBackModal: boolean;
-  onCloseGoBackModal: () => void;
-  onGoBack: () => void;
+  modalData: IModalData;
+  showDecision: boolean;
   onOpenModal: () => void;
   setDateVerification: React.Dispatch<
     React.SetStateAction<IDateVerification | undefined>

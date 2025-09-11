@@ -1,18 +1,19 @@
 import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 
-import { Title } from "@design/data/title";
-import { tokens } from "@design/tokens";
-import { crumbsAddPayrollAgreement } from "@config/payrollAgreement/payrollAgreementTab/navigation";
-import { DecisionModal } from "@design/modals/decisionModal";
-import { goBackModal } from "@config/goBackModal";
-import { IAddPayrollAgreementUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IAddPayrollAgreementUI";
 import { CompanyForm } from "@pages/payrollAgreement/tabs/forms/companyPayrollAgreement";
 import { RegularPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/regularPaymentCycles";
 import { ExtraordinaryPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/extraordinaryPaymentCycles";
 import { VerificationForm } from "@pages/payrollAgreement/tabs/forms/verificationPayrollAgreement";
 import { GeneralInformationPayrollForm } from "@pages/payrollAgreement/tabs/forms/generalInfoPayrollAgreement";
+import { Title } from "@design/data/title";
+import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { stepKeysPayroll } from "@enum/stepsKeysPayroll";
+import { crumbsAddPayrollAgreement } from "@config/payrollAgreement/payrollAgreementTab/navigation";
 import { addPayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/addPayrollLabels";
 import { controlsAssisted } from "@config/controlsAssisted";
+import { portalId } from "@config/portalId";
+import { IAddPayrollAgreementUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IAddPayrollAgreementUI";
 
 const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
   const {
@@ -26,20 +27,19 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
     regularPaymentCycles,
     requestSteps,
     savePayrollAgreement,
-    showGoBackModal,
     showModal,
-    showPendingReqModal,
+    showPendingRequestModal,
     showRequestProcessModal,
     smallScreen,
     sourcesOfIncomeValues,
     steps,
     typeRegularPayroll,
     includeExtraPayDay,
-    onCloseModal,
-    onClosePendingReqModal,
+    showDecision,
+    modalData,
+    onClosePendingRequestModal,
     onCloseRequestStatus,
     onFinishForm,
-    onGoBack,
     onNextStep,
     onOpenModal,
     onPreviousStep,
@@ -87,7 +87,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
             showCurrentStepNumber={false}
           />
           <Stack direction="column">
-            {currentStep === 1 && (
+            {currentStep === stepKeysPayroll.COMPANY && (
               <CompanyForm
                 ref={formReferences.company}
                 initialValues={initialGeneralInformationValues.company.values}
@@ -95,7 +95,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 onButtonClick={onNextStep}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === stepKeysPayroll.GENERAL_INFO && (
               <GeneralInformationPayrollForm
                 ref={formReferences.generalInformation}
                 initialValues={
@@ -108,7 +108,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 setSourcesOfIncomeValues={setSourcesOfIncomeValues}
               />
             )}
-            {currentStep === 3 && (
+            {currentStep === stepKeysPayroll.REGULAR_CYCLES && (
               <RegularPaymentCyclesForm
                 regularPaymentCycles={regularPaymentCycles}
                 onFormValid={setIsCurrentFormValid}
@@ -119,7 +119,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 setRegularDeleted={setRegularDeleted}
               />
             )}
-            {currentStep === 4 && (
+            {currentStep === stepKeysPayroll.EXTRAORDINARY_CYCLES && (
               <ExtraordinaryPaymentCyclesForm
                 extraordinaryPayment={extraordinaryPayment}
                 setExtraordinaryPayment={setExtraordinaryPayment}
@@ -130,7 +130,7 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 regularPaymentCycles={includeExtraPayDay}
               />
             )}
-            {currentStep === 5 && (
+            {currentStep === stepKeysPayroll.VERIFICATION && (
               <VerificationForm
                 updatedData={{
                   company: {
@@ -161,8 +161,8 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
                 savePayrollAgreement={savePayrollAgreement}
                 loading={loading}
                 onCloseRequestStatus={onCloseRequestStatus}
-                showPendingReqModal={showPendingReqModal}
-                onClosePendingReqModal={onClosePendingReqModal}
+                showPendingRequestModal={showPendingRequestModal}
+                onClosePendingRequestModal={onClosePendingRequestModal}
                 typeRegularPayroll={typeRegularPayroll}
                 onCloseProcess={onCloseProcess}
               />
@@ -171,14 +171,19 @@ const AddPayrollAgreementUI = (props: IAddPayrollAgreementUI) => {
         </Stack>
       </Stack>
 
-      {showGoBackModal && (
+      {showDecision && (
         <DecisionModal
-          portalId="portal"
-          title={goBackModal.title}
-          description={goBackModal.description}
-          actionText={goBackModal.actionText}
-          onCloseModal={onCloseModal}
-          onClick={onGoBack}
+          portalId={portalId}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </Stack>
