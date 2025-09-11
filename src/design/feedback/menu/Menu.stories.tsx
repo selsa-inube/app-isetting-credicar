@@ -9,10 +9,8 @@ const meta: Meta<typeof Menu> = {
   title: "feedback/Menu",
   component: Menu,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

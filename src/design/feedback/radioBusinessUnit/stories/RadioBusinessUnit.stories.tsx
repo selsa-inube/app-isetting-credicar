@@ -8,10 +8,8 @@ const meta: Meta<typeof RadioBusinessUnit> = {
   title: "feedback/RadioBusinessUnit",
   component: RadioBusinessUnit,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

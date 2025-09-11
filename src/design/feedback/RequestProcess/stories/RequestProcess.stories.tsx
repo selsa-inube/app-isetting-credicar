@@ -10,10 +10,8 @@ const meta: Meta<typeof RequestProcess> = {
   title: "feedback/RequestProcess",
   component: RequestProcess,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

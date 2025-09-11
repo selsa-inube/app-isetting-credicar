@@ -1,11 +1,10 @@
 import { Icon } from "@inubekit/inubekit";
-import {
-  MdDeleteOutline,
-  MdOutlineCreate,
-  MdOutlineRemoveRedEye,
-} from "react-icons/md";
+import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
+import { EditConstruction } from "@pages/creditLines/tabs/linesUnderConstructionTab/edit";
 import { EComponentAppearance } from "@enum/appearances";
+import { ECreditLines } from "@enum/creditLines";
 import { IAction } from "@ptypes/design/table/IAction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const actions: IAction[] = [
   {
@@ -21,11 +20,10 @@ const actions: IAction[] = [
   },
   {
     id: "edit",
-    content: () => (
-      <Icon
-        icon={<MdOutlineCreate />}
-        appearance={EComponentAppearance.PRIMARY}
-        size="16px"
+    content: (entry: IEntry) => (
+      <EditConstruction
+        data={entry}
+        useCaseConfiguration={ECreditLines.USE_CASE_CONFIG_CONSTRUCTION}
       />
     ),
   },

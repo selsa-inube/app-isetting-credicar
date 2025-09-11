@@ -6,10 +6,8 @@ const meta: Meta<typeof RequestProcessModal> = {
   title: "modals/RequestProcessModal",
   component: RequestProcessModal,
   decorators: [
-    (Story: StoryFn) => (
-      <BrowserRouter>
-        <Story />
-      </BrowserRouter>
+    (Story: StoryFn, context) => (
+      <BrowserRouter>{Story(context.args, context)}</BrowserRouter>
     ),
   ],
 };

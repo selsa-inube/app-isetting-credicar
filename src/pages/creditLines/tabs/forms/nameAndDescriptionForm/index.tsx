@@ -1,26 +1,37 @@
-import { forwardRef } from "react";
-import { FormikProps } from "formik";
-
 import { useNameAndDescriptionForm } from "@hooks/creditLine/useNameAndDescriptionForm";
-import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
-import { INameAndDescriptionForm } from "@ptypes/creditLines/forms/IGeneralInformationPayrollForm";
+import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { NameAndDescriptionFormUI } from "./interface";
 
-const NameAndDescriptionForm = forwardRef<
-  FormikProps<INameAndDescriptionEntry>,
-  INameAndDescriptionForm
->(({ initialValues, onFormValid, onSubmit, loading = false }, ref) => {
-  const { formik } = useNameAndDescriptionForm({
-    initialValues,
-    ref,
+const NameAndDescriptionForm = () => {
+  const {
+    showInfoModal,
     loading,
-    onSubmit,
-    onFormValid,
+    modalData,
+    showDecision,
+    formValues,
+    setIsCurrentFormValid,
+    nameLineRef,
+    handleToggleInfoModal,
+    handleOpenModal,
+  } = useConfigurationLines();
+
+  const { formik } = useNameAndDescriptionForm({
+    initialValues: formValues.nameAndDescription,
+    loading,
+    onFormValid: setIsCurrentFormValid,
+    ref: nameLineRef,
   });
 
-  return <NameAndDescriptionFormUI formik={formik} />;
-});
-
-NameAndDescriptionForm.displayName = "NameAndDescriptionForm";
+  return (
+    <NameAndDescriptionFormUI
+      formik={formik}
+      showModal={showDecision}
+      showInfoModal={showInfoModal}
+      modalData={modalData}
+      onToggleInfoModal={handleToggleInfoModal}
+      onOpenModal={handleOpenModal}
+    />
+  );
+};
 
 export { NameAndDescriptionForm };

@@ -6,7 +6,7 @@ import { validationMessages } from "@validations/validationMessages";
 import { IUseNameAndDescriptionForm } from "@ptypes/hooks/creditLines/IUseNameAndDescriptionForm";
 
 const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
-  const { ref, onSubmit, onFormValid, initialValues } = props;
+  const { ref, onFormValid, initialValues } = props;
 
   const validationSchema = object().shape({
     aliasLine: validationRules.string.required(validationMessages.required),
@@ -20,7 +20,7 @@ const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
     initialValues,
     validationSchema,
     validateOnBlur: true,
-    onSubmit: onSubmit ?? (() => true),
+    onSubmit: () => void 0,
   });
 
   useImperativeHandle(ref, () => formik);
