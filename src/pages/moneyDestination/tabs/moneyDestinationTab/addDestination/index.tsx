@@ -4,6 +4,7 @@ import { useAddDestination } from "@hooks/moneyDestination/add/useAddDestination
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
 import { useModalAddDestination } from "@hooks/moneyDestination/add/useModalAddDestination";
 import { EUseCase } from "@enum/useCase";
+import { normalizeCodeDestination } from "@utils/destination/normalizeCodeDestination";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -90,7 +91,9 @@ function AddDestination() {
       setCurrentStep={setCurrentStep}
       setIsCurrentFormValid={setIsCurrentFormValid}
       showModal={showModal}
-      steps={addDestinationStepsConfig(nameDecision)}
+      steps={addDestinationStepsConfig(
+        normalizeCodeDestination(nameDecision)?.name ?? "",
+      )}
       requestSteps={requestSteps}
       showRequestProcessModal={showRequestProcessModal}
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}

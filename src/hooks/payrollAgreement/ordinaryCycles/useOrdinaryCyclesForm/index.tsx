@@ -1,21 +1,27 @@
-import { useEffect, useImperativeHandle, useState } from "react";
+import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { object } from "yup";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEnumeratorsICardes } from "@hooks/useEnumeratorsIcardes";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
-import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
-import { IServerDomain } from "@ptypes/IServerDomain";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
+import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
+import { getNextId } from "@utils/getNextId";
 import { addLeadingZero } from "@utils/addLeadingZero";
 import { payDayValues } from "@utils/payDayValues";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
-import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
-import { IEntry } from "@ptypes/design/table/IEntry";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
-import { getNextId } from "@utils/getNextId";
+import { enviroment } from "@config/environment";
+import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
+import { ILanguage } from "@ptypes/i18n";
+import { IServerDomain } from "@ptypes/IServerDomain";
+import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { useValuesSelect } from "../useValuesSelect";
 
 const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
@@ -40,6 +46,9 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       numberDaysUntilCut: validationRules.string.required(
         validationMessages.required,
       ),
+      laborRegulatorFramework: validationRules.string.required(
+        validationMessages.required,
+      ),
     });
 
   const validationSchema = createValidationSchema();
@@ -61,6 +70,8 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     onSubmit: onSubmit ?? (() => true),
   });
 
+  const { appData } = useContext(AuthAndPortalData);
+
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -80,6 +91,17 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     payDayOrdinaryOptions,
     courtDaysOrdinaryOptions,
   } = useValuesSelect();
+
+  const { enumData: laborRegulator } = useEnumeratorsICardes({
+    enumCredicar: ECyclesPayroll.COLOMBIAN_LABOR_LEGAL,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const laborRegulatorOptions = optionsFromEnumI18n(
+    enviroment.VITE_LANGUAGE as ILanguage,
+    laborRegulator,
+    true,
+  );
 
   useImperativeHandle(ref, () => formik);
 
@@ -231,6 +253,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     numberDaysUntilCutOptions,
     paydayOptions,
     periodicityOptions,
+    laborRegulatorOptions,
     isMobile,
     columnWidths,
     labelButtonPrevious,

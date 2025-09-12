@@ -5,12 +5,14 @@ import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRul
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
 import { EConditionRules } from "@enum/conditionRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
-import { IDecision } from "@ptypes/decisions/IDecision";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 
 const useEnumRules = (props: IUseEnumRules) => {
   const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
-  const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
+  const [enumRuleData, setEnumRuleData] = useState<IDecisionData>(
+    {} as IDecisionData,
+  );
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
     useState<{ value: string }[]>();

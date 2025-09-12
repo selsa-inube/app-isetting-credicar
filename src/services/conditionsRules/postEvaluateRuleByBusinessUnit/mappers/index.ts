@@ -1,8 +1,8 @@
-import { IRuleDecision } from "@isettingkit/input";
 import { formatDate } from "@utils/date/formatDate";
-import { dataTranslations } from "@utils/dataTranslations";
 import { transformKeysToLowerFirst } from "@utils/transformKeysToLowerFirst";
+import { enviroment } from "@config/environment";
 import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 
 const mapEvaluateRuleByBusinessEntityToApi = (
   ruleData: IEvaluateRuleRequest,
@@ -14,7 +14,7 @@ const mapEvaluateRuleByBusinessEntityToApi = (
 };
 
 const mapEvaluateRuleByBusinessEntities = (
-  data: IRuleDecision[] | undefined,
+  data: IDecisionData[] | undefined,
 ) => {
   if (!data) return [];
   return data.map((item, index) => ({
@@ -22,10 +22,10 @@ const mapEvaluateRuleByBusinessEntities = (
     id: item.decisionId,
     businessRuleId: item.decisionId,
     decisionId: `Decisión ${index + 1}`,
-    labelName:
-      item.labelName && dataTranslations[item.labelName]
-        ? dataTranslations[item.labelName]
-        : item.labelName,
+    labelName: String(
+      item.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof item.i18n] ??
+        item.descriptionUse,
+    ),
     effectiveFrom: item.effectiveFrom
       ? formatDate(new Date(item.effectiveFrom))
       : undefined,
@@ -35,10 +35,11 @@ const mapEvaluateRuleByBusinessEntities = (
     conditionsThatEstablishesTheDecision:
       item.conditionsThatEstablishesTheDecision?.map((condition) => ({
         ...condition,
-        labelName:
-          condition.labelName && dataTranslations[condition.labelName]
-            ? dataTranslations[condition.labelName]
-            : condition.labelName,
+        labelName: String(
+          condition.i18n?.[
+            enviroment.VITE_LANGUAGE as keyof typeof condition.i18n
+          ] ?? condition.descriptionUse,
+        ),
         value: transformKeysToLowerFirst(condition.value),
       })),
   }));

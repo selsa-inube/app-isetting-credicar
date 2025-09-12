@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
+import { IDragAndDropColumn } from "@isettingkit/business-rules";
 import { FormikProps } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { compareObjects } from "@utils/compareObjects";
+import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
-import { IOptionClient } from "@ptypes/creditLines/forms/IOptionClient";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 import { useModalConfiguration } from "../useModalConfiguration";
 
@@ -25,12 +26,24 @@ const useConfigurationLines = () => {
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
-  const [optionsIncluded, setOptionsIncluded] = useState<IOptionClient[]>([
-    { id: "p1", value: "Clientes personales naturales" },
-    { id: "p2", value: "Clientes personales naturales" },
-    { id: "p3", value: "Personas sancionadas" },
-  ]);
-  const [optionsExcluded, setOptionsExcluded] = useState<IOptionClient[]>([]);
+  const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
+    legend: clientsSupportLineLabels.titleCustomerProfiles,
+    items: [
+      "Clientes NO asociados",
+      "Personas sancionadas",
+      "Personas con alerta de riesgo",
+      "Personas sin enrolamiento seguro",
+    ],
+    emptyMessage: clientsSupportLineLabels.withoutIncluding,
+    highlightFirst: true,
+  });
+
+  const [optionsExcluded, setOptionsExcluded] = useState<IDragAndDropColumn>({
+    legend: clientsSupportLineLabels.titleDoesNotApply,
+    items: [],
+    emptyMessage: clientsSupportLineLabels.withoutExcluding,
+    highlightFirst: false,
+  });
 
   const navigate = useNavigate();
 
@@ -49,13 +62,13 @@ const useConfigurationLines = () => {
     if (!compare || !compareCompany) {
       setShowGoBackModal(true);
     } else {
-      navigate(-1);
+      navigate("/credit-lines");
     }
   };
 
   const handleGoBack = () => {
     setCanRefresh(true);
-    navigate(-1);
+    navigate("/credit-lines");
   };
 
   const handleToggleErrorModal = () => {

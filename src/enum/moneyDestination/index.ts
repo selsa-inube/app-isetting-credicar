@@ -1,6 +1,7 @@
 enum EMoneyDestination {
   OPTION_NAME = "Destinos de dinero",
   ENTITY = "MoneyDestination",
+  MENU_OPTION_ADD = "Agregar destino",
   LINE_OF_CREDIT = "LineOfCredit",
   MONEY_DESTINATION = "nameDestination",
   ICON_DEFAULT = "MdOutlineFax",

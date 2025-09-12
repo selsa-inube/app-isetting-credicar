@@ -4,6 +4,7 @@ interface ISeverancePaymentCycles {
   paymentDay: string;
   payrollForDeductionAgreementId?: string;
   id?: string;
+  regulatoryFrameworkCode?: string;
 }
 
 export type { ISeverancePaymentCycles };

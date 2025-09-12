@@ -4,6 +4,8 @@ const addCycleLabels = {
   payday: "Día de pago",
   typePayment: "Tipo de pago",
   numberDaysUntilCut: "# de días para el corte",
+  laborRegulatorFramework: "Marco normativo laboral",
+  palceholderLaborRegulator: "Selecciona de la lista",
   placeholderNameCycle: "Nombre",
   placeholderPeriodicity: "Selecciona de la lista",
   placeholderPayday: "Selecciona de la lista",

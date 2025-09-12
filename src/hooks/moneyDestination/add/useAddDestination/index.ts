@@ -134,7 +134,7 @@ const useAddDestination = () => {
       conditionsThatEstablishesTheDecision:
         decision.conditionsThatEstablishesTheDecision?.map((condition) => {
           return {
-            labelName: condition.labelName,
+            descriptionUse: condition.labelName,
             conditionName: condition.conditionName,
             value: condition.value,
           };

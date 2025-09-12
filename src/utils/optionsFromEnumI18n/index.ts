@@ -8,6 +8,14 @@ const optionsFromEnumI18n = (
 ) =>
   enumData.map((item) => {
     if (valueSpanish) {
+      if (item.value === "undefined") {
+        return {
+          id: item.code,
+          label: item.i18n?.[language] ?? item.description,
+          value: item.i18n?.[language] ?? item.description,
+        };
+      }
+
       return {
         id: item.code,
         label: item.i18n?.[language] ?? item.value,

@@ -35,6 +35,7 @@ const AddCycleModal = (props: IAddCycleModal) => {
     monthOptions,
     dayOptions,
     numberDaysUntilCutOptions,
+    laborRegulatorOptions,
     onCloseModal,
     onClick,
     onChange,
@@ -46,7 +47,7 @@ const AddCycleModal = (props: IAddCycleModal) => {
   return (
     <ModalWrapper
       width={isMobile ? "335px" : "450px"}
-      minHeight={isMobile ? "auto" : "480px"}
+      height="auto"
       isMobile={isMobile}
       labelActionButton={actionText}
       labelCloseModal="Cerrar"
@@ -201,7 +202,7 @@ const AddCycleModal = (props: IAddCycleModal) => {
           </>
         )}
         <Stack
-          height={isMobile ? tokens.spacing.s850 : tokens.spacing.s800}
+          height={isMobile ? tokens.spacing.s800 : tokens.spacing.s800}
           width="100%"
         >
           <Select
@@ -220,6 +221,20 @@ const AddCycleModal = (props: IAddCycleModal) => {
             onBlur={formik.handleBlur}
           />
         </Stack>
+        <Select
+          label={addCycleLabels.laborRegulatorFramework}
+          id="laborRegulatorFramework"
+          name="laborRegulatorFramework"
+          placeholder={addCycleLabels.palceholderLaborRegulator}
+          onChange={onChange}
+          options={laborRegulatorOptions ?? []}
+          size="compact"
+          fullwidth
+          value={formik.values.laborRegulatorFramework ?? ""}
+          message={formik.errors.laborRegulatorFramework}
+          invalid={isInvalid(formik, "laborRegulatorFramework")}
+          onBlur={formik.handleBlur}
+        />
       </Stack>
     </ModalWrapper>
   );

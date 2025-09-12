@@ -1,20 +1,30 @@
 import { IRuleDecision, ValueDataType } from "@isettingkit/input";
+import { enviroment } from "@config/environment";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { dataTranslations } from "@utils/dataTranslations";
 
 const decisionIncomePortfolioConfig = ({
   ruleName,
-  labelName,
+  descriptionUse,
   howToSetTheDecision,
   decisionDataType,
   conditionsThatEstablishesTheDecision,
   listOfPossibleValues,
-}: IRuleDecision) => {
-  if (labelName && decisionDataType) {
+  i18n,
+}: IDecisionData) => {
+  if (descriptionUse && decisionDataType) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
-      labelName: "Número de veces los ingresos",
+      labelName: String(
+        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+          "Número de veces los ingresos",
+      ),
+      descriptionUse: String(
+        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+          "Número de veces los ingresos",
+      ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision: howToSetTheDecision,
@@ -33,8 +43,14 @@ const decisionIncomePortfolioConfig = ({
           conditionName:
             dataTranslations[condition.conditionName] ??
             condition.conditionName,
-          labelName:
-            dataTranslations[condition.labelName] ?? condition.labelName,
+          labelName: String(
+            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
+          descriptionUse: String(
+            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
           conditionDataType: condition.conditionDataType,
           value: condition.value,
           listOfPossibleValues: condition.listOfPossibleValues,
