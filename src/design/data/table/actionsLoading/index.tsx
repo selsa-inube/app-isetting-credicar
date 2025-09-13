@@ -6,7 +6,7 @@ const ActionsLoading = (props: IActionsLoading) => {
   const cellsOfActionsLoading = [];
   for (let cellAction = 0; cellAction < numberActions; cellAction++) {
     cellsOfActionsLoading.push(
-      <Td key={cellAction}>
+      <Td key={cellAction} type="custom">
         <SkeletonLine animated />
       </Td>,
     );

@@ -11,6 +11,7 @@ import { MdOutlineFax } from "react-icons/md";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { isInvalid } from "@utils/isInvalid";
+import { getIcon } from "@utils/getIcon";
 import { getFieldState } from "@utils/forms/getFieldState";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
 import { IGeneralInformationFormUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationFormUI";
@@ -27,7 +28,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     loading,
     optionsDestination,
     editDataOption,
-    icon,
     labelButtonNext,
     isMobile,
     widthStack,
@@ -98,7 +98,9 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                       </Text>
                     </Stack>
                     <StyledIcon $isMobile={isMobile}>
-                      {icon ?? <MdOutlineFax size={24} />}
+                      {getIcon(formik.values.icon) ?? (
+                        <MdOutlineFax size={24} />
+                      )}
                     </StyledIcon>
                   </Stack>
                 </Stack>

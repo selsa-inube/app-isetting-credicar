@@ -4,7 +4,6 @@ import {
   useMediaQuery,
 } from "@inubekit/inubekit";
 import { useEffect, useImperativeHandle, useState } from "react";
-import { MdOutlineFax } from "react-icons/md";
 import { FormikProps, useFormik } from "formik";
 import { object } from "yup";
 
@@ -12,16 +11,12 @@ import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { tokens } from "@design/tokens";
 import { EMoneyDestination } from "@enum/moneyDestination";
-import { normalizeCodeDestination } from "@utils/destination/normalizeCodeDestination";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
-import { normalizeEditDestination } from "@utils/destination/normalizeEditDestination";
-import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
-import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
-import { mediaQueryTablet } from "@config/environment";
+import { enviroment, mediaQueryTablet } from "@config/environment";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
-import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
+import { II18n } from "@ptypes/i18n";
 
 const useGeneralInformationForm = (
   enumData: IEnumerators[],
@@ -37,7 +32,7 @@ const useGeneralInformationForm = (
     object().shape({
       nameDestination: validationRules.string
         .required(validationMessages.required)
-        .max(36, generalInfoLabels.maxLengthName),
+        .max(65, generalInfoLabels.maxLengthName),
       description: validationRules.string.required(validationMessages.required),
       icon: validationRules.string,
     });
@@ -56,18 +51,13 @@ const useGeneralInformationForm = (
   );
 
   const [isDisabledButton, setIsDisabledButton] = useState(false);
-  const [icon, setIcon] = useState<React.ReactNode | undefined>(
-    editDataOption && normalizeIconDestination(initialValues.icon)?.icon ? (
-      normalizeIconDestination(initialValues.icon)?.icon
-    ) : (
-      <></>
-    ),
-  );
 
-  const optionsDestination: IServerDomain[] = enumData.map((item) => {
-    const name = normalizeCodeDestination(item.code)?.name as unknown as string;
+  const optionsDestination = enumData.map((item: IEnumerators) => {
+    const name =
+      item.i18nValue?.[enviroment.VITE_LANGUAGE as keyof typeof item.i18n] ??
+      item.description;
     return {
-      id: item.code,
+      id: name,
       label: name,
       value: item.code,
     };
@@ -94,8 +84,11 @@ const useGeneralInformationForm = (
 
     if (name === EMoneyDestination.MONEY_DESTINATION) {
       const equalValueName = value !== formik.values.nameDestination;
+      const normalizeData = normalizeDestination(enumData, value);
       const description =
-        normalizeDestination(enumData, value)?.description ?? "";
+        normalizeData?.i18nDescription?.[
+          enviroment.VITE_LANGUAGE as keyof II18n
+        ] ?? "";
 
       if (value === "") {
         formik.setFieldValue("description", "");
@@ -105,6 +98,10 @@ const useGeneralInformationForm = (
 
         if (equalValueName) {
           formik.setFieldValue("description", descriptionToAdd);
+          const addIconFormik =
+            normalizeData?.type ?? EMoneyDestination.ICON_DEFAULT;
+
+          formik.setFieldValue("icon", addIconFormik);
         } else {
           const newDescription =
             `${currentDescription} ${descriptionToAdd}`.trim();
@@ -113,10 +110,6 @@ const useGeneralInformationForm = (
       }
     }
   };
-
-  const addData = enumData.find(
-    (item) => item.value === formik.values.nameDestination,
-  )?.type;
 
   const valuesEqual =
     JSON.stringify(initialValues) === JSON.stringify(formik.values);
@@ -127,6 +120,18 @@ const useGeneralInformationForm = (
   const valuesEmpty = Object.values(formik.values).every(
     (value) => value === "" || value === null || value === undefined,
   );
+
+  useEffect(() => {
+    if (editDataOption) {
+      if (
+        initialGeneralInfData?.nameDestination !== formik.values.nameDestination
+      ) {
+        formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
+      } else {
+        formik.setFieldValue("icon", initialGeneralInfData?.icon);
+      }
+    }
+  }, [editDataOption, formik.values]);
 
   useEffect(() => {
     const updateButton = () => {
@@ -144,58 +149,6 @@ const useGeneralInformationForm = (
     formik.isValid,
     initialValues,
     editDataOption,
-  ]);
-
-  useEffect(() => {
-    const updateIcon = () => {
-      const getNormalizedIcon = (value: string | undefined) =>
-        normalizeIconDestination(value ?? "")?.icon;
-
-      const isNameDestinationEqual =
-        JSON.stringify(initialGeneralInfData?.nameDestination) ===
-        JSON.stringify(formik.values.nameDestination);
-
-      let iconData = getNormalizedIcon(initialValues.icon);
-
-      if (editDataOption && formik.values.nameDestination) {
-        const editData = normalizeEditDestination(enumData, formik.values.icon);
-
-        iconData =
-          editData && isNameDestinationEqual ? (
-            getNormalizedIcon(editData?.value)
-          ) : addData ? (
-            getNormalizedIcon(addData)
-          ) : (
-            <MdOutlineFax size={24} />
-          );
-
-        iconData ??= getNormalizedIcon(initialValues.icon);
-      } else {
-        iconData = getNormalizedIcon(addData);
-      }
-
-      if (editDataOption && valuesEqual) {
-        formik.setFieldValue("icon", initialValues.icon);
-      } else {
-        const normalizedIconValue =
-          normalizeIconTextDestination(iconData)?.value ??
-          EMoneyDestination.ICON_DEFAULT;
-        formik.setFieldValue("icon", normalizedIconValue);
-      }
-
-      setIcon(iconData);
-    };
-
-    updateIcon();
-  }, [
-    editDataOption,
-    formik.values.icon,
-    formik.values.nameDestination,
-    enumData,
-    initialValues.nameDestination,
-    addData,
-    initialGeneralInfData,
-    valuesEqual,
   ]);
 
   const handleReset = () => {
@@ -228,7 +181,6 @@ const useGeneralInformationForm = (
     optionsDestination,
     formik,
     isDisabledButton,
-    icon,
     labelButtonNext,
     isMobile,
     widthStack,

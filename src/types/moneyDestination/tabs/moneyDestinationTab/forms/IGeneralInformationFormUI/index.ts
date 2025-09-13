@@ -8,7 +8,6 @@ interface IGeneralInformationFormUI {
   optionsDestination: IServerDomain[];
   autosuggestValue: string;
   editDataOption: boolean;
-  icon: React.ReactNode | undefined;
   loading: boolean;
   labelButtonNext: string;
   buttonDisabledState: boolean;

@@ -105,9 +105,13 @@ const TableUI = (props: ITableUI) => {
                           align={getAlignment(title.id, entry[title.id])}
                           type="custom"
                         >
-                          <Text size="small" ellipsis={ellipsisCell}>
-                            {entry[title.id]}
-                          </Text>
+                          {typeof entry[title.id] !== "string" ? (
+                            entry[title.id]
+                          ) : (
+                            <Text size="small" ellipsis={ellipsisCell}>
+                              {entry[title.id]}
+                            </Text>
+                          )}
                         </Td>
                       ))}
                       {ShowAction({

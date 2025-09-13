@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 
-import { IEnumerators } from "@ptypes/IEnumerators";
 import { getEnumsMoneyDestination } from "@services/enums/getEnumsMoneyDestination";
+import { getIcon } from "@utils/getIcon";
+import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseEnumsMoneyDestination } from "@ptypes/hooks/IUseEnumsMoneyDestination";
 
 const useEnumsMoneyDestination = (props: IUseEnumsMoneyDestination) => {
@@ -24,7 +25,12 @@ const useEnumsMoneyDestination = (props: IUseEnumsMoneyDestination) => {
     fetchEnumData();
   }, []);
 
-  return { enumData, hasError };
+  const enumDestination = enumData.map((data) => ({
+    ...data,
+    icon: getIcon(data.value),
+  }));
+
+  return { enumData, enumDestination, hasError };
 };
 
 export { useEnumsMoneyDestination };
