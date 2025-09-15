@@ -5,17 +5,11 @@ import {
   useMediaQuery,
   SkeletonIcon,
   SkeletonLine,
+  Divider,
 } from "@inubekit/inubekit";
-import { tokens } from "@design/tokens";
+import { EComponentAppearance } from "@enum/appearances";
+import { IAppCard } from "@ptypes/design/IAppCard";
 import { StyledAppCard } from "./styles";
-
-interface IAppCard {
-  description?: string;
-  icon?: React.ReactNode;
-  label?: string;
-  url?: string;
-  loading?: boolean;
-}
 
 const AppCard = (props: IAppCard) => {
   const { label, description, icon, url, loading } = props;
@@ -23,33 +17,27 @@ const AppCard = (props: IAppCard) => {
   if (loading) {
     return (
       <StyledAppCard to={url ?? ""} $isMobile={screenMobile}>
-        <Stack direction="column" gap={tokens.spacing.s200}>
-          <Stack width="70%">
-            <SkeletonLine animated />
-          </Stack>
-          <Stack width="100%">
-            <SkeletonLine animated />
-          </Stack>
-        </Stack>
-        <Stack justifyContent="flex-end">
+        <Stack justifyContent="space-between">
+          <SkeletonLine animated width="60%" height="24px" />
           <SkeletonIcon animated />
         </Stack>
+        <Divider dashed />
+        <SkeletonLine animated width="100%" height="48px" />
       </StyledAppCard>
     );
   }
   return (
     <StyledAppCard to={url ?? ""} $isMobile={screenMobile}>
-      <Stack direction="column" gap={tokens.spacing.s200}>
+      <Stack justifyContent="space-between">
         <Text type="title" size="medium" weight="bold">
           {label}
         </Text>
-        <Text type="body" size="small">
-          {description}
-        </Text>
+        <Icon icon={icon} appearance="dark" size="22px" cursorHover />
       </Stack>
-      <Stack justifyContent="flex-end">
-        <Icon icon={icon} appearance="dark" size="24px" cursorHover />
-      </Stack>
+      <Divider dashed />
+      <Text size="small" appearance={EComponentAppearance.GRAY}>
+        {description}
+      </Text>
     </StyledAppCard>
   );
 };

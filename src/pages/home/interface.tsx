@@ -119,42 +119,60 @@ const HomeUI = (props: IHomeUI) => {
             padding={
               screenTablet
                 ? `${tokens.spacing.s0}`
-                : `${tokens.spacing.s0} ${tokens.spacing.s1400} ${tokens.spacing.s400} 170px`
+                : `${tokens.spacing.s0} ${tokens.spacing.s400} ${tokens.spacing.s400} 120px`
             }
             justifyContent={screenTablet ? "center" : "flex-start"}
             wrap="wrap"
             gap={tokens.spacing.s400}
             backgroundColor={EComponentAppearance.LIGHT}
           >
-            {loading ? (
-              <AppCard label={""} description={""} icon={""} url={""} loading />
-            ) : (
-              <>
-                {dataExists ? (
-                  <>
-                    {data?.map((card) => (
-                      <AppCard
-                        key={card.id}
-                        label={card.publicCode}
-                        description={card.description}
-                        icon={card.icon}
-                        url={card.url}
-                        loading={false}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <BoxContainer
-                    direction="column"
-                    boxSizing="border-box"
-                    width="100%"
-                    height="80vh"
-                  >
-                    <ErrorPage errorCode={500} onClick={onlogout} />
-                  </BoxContainer>
-                )}
-              </>
-            )}
+            <BoxContainer
+              direction="row"
+              boxSizing="border-box"
+              padding={tokens.spacing.s200}
+              justifyContent={screenTablet ? "center" : "flex-start"}
+              wrap="wrap"
+              gap={tokens.spacing.s250}
+              backgroundColor={EComponentAppearance.LIGHT}
+              borderColor={EComponentAppearance.DARK}
+              borderRadius={tokens.spacing.s100}
+            >
+              {loading ? (
+                <AppCard
+                  label={""}
+                  description={""}
+                  icon={""}
+                  url={""}
+                  loading
+                />
+              ) : (
+                <>
+                  {dataExists ? (
+                    <>
+                      {data?.map((card) => (
+                        <AppCard
+                          key={card.id}
+                          label={card.publicCode}
+                          description={card.description}
+                          icon={card.icon}
+                          url={card.url}
+                          loading={false}
+                        />
+                      ))}
+                    </>
+                  ) : (
+                    <BoxContainer
+                      direction="column"
+                      boxSizing="border-box"
+                      width="100%"
+                      height="80vh"
+                    >
+                      <ErrorPage errorCode={500} onClick={onlogout} />
+                    </BoxContainer>
+                  )}
+                </>
+              )}
+            </BoxContainer>
           </BoxContainer>
         </BoxContainer>
         {dataExists && (

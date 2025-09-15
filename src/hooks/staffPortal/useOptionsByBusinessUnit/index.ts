@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import { getOptionsByBusinessUnit } from "@services/staffPortal/getOptionsByBusinessUnits";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
+import { getIcon } from "@utils/getIcon";
 import { normalizeOptionsByPublicCode } from "@utils/optionByBusinessunit";
 import { IUseOptionsByBusinessUnit } from "@ptypes/staffPortal/IUseOptionsByBusinessUnit";
 
@@ -43,7 +44,7 @@ const useOptionsByBusinessUnit = (props: IUseOptionsByBusinessUnit) => {
         id: option.publicCode,
         publicCode: option.abbreviatedName,
         description: option.descriptionUse,
-        icon: normalizedOption?.icon ?? "",
+        icon: getIcon(option.iconReference, 22, false) ?? "",
         url: normalizedOption?.url ?? "",
       };
     });
