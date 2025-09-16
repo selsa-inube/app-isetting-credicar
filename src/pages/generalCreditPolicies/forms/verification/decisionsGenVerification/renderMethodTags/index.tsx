@@ -4,11 +4,12 @@ import { verificationLabels } from "@config/generalCreditPolicies/assisted/verif
 import { IRenderMethodTags } from "@ptypes/generalCredPolicies/forms/IRenderMethodTags";
 
 const RenderMethodTags = (props: IRenderMethodTags) => {
-  const { reciprocity, factor, calculation } = props;
+  const { reciprocity, factor, calculation, customValue } = props;
   const methods = [
     { condition: reciprocity, label: verificationLabels.reciprocity },
     { condition: factor, label: verificationLabels.factor },
     { condition: calculation, label: verificationLabels.calculation },
+    { condition: customValue, label: verificationLabels.customValue },
   ];
 
   const activeMethods = methods.filter((method) => method.condition);

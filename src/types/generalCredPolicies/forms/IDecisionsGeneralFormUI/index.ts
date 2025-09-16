@@ -12,7 +12,6 @@ interface IDecisionsGeneralFormUI {
   isDisabledButton: boolean;
   buttonLabel: string;
   onToggle: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onReferenceChange: (name: string, value: string) => void;
   onInfoRefModal: () => void;
   onInfoObligModal: () => void;
   onInfoMethodsModal: () => void;
