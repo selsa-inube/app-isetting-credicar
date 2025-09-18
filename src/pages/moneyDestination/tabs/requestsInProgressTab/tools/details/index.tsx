@@ -1,12 +1,8 @@
 import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
 import { useDetailsRequestInProgress } from "@hooks/moneyDestination/useDetailsRequestInProgress";
-import {
-  decisionTemplate,
-  textValuesBusinessRules,
-} from "@config/moneyDestination/moneyDestinationTab/businessRules";
+import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
 import { useMoreDetailsRequestProgress } from "@hooks/moneyDestination/useMoreDetailsRequestProgress";
 import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/tabs";
-import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
 import { IEntry } from "@ptypes/design/table/IEntry";
 interface IDetails {
   data: IEntry;
@@ -21,7 +17,6 @@ const Details = (props: IDetails) => {
   const {
     showMoreDetailsModal,
     moreDetailsData,
-    decisions,
     isMoreDetails,
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress(data);
@@ -32,15 +27,7 @@ const Details = (props: IDetails) => {
     handleTabChange,
     filteredTabsConfig,
     defaultSelectedTab,
-    decisionDeleted,
-    decisionInserted,
-    filteredDecisions,
-  } = useDetailsDestinationModal(
-    moreDetailsData,
-    detailsTabsConfig,
-    decisions,
-    isMoreDetails,
-  );
+  } = useDetailsDestinationModal(moreDetailsData, detailsTabsConfig);
 
   return (
     <DetailsRequestInProcess
@@ -50,9 +37,6 @@ const Details = (props: IDetails) => {
       moreDetailsData={moreDetailsData}
       showMoreDetailsModal={showMoreDetailsModal}
       detailsTabsConfig={detailsTabsConfig}
-      decisionTemplate={decisionTemplate}
-      decisions={filteredDecisions}
-      textValuesBusinessRules={textValuesBusinessRules}
       onToggleMoreDetailsModal={onToggleMoreDetailsModal}
       isMoreDetails={isMoreDetails}
       isSelected={isSelected ?? defaultSelectedTab ?? ""}
@@ -60,8 +44,6 @@ const Details = (props: IDetails) => {
       onTabChange={handleTabChange}
       defaultSelectedTab={defaultSelectedTab ?? ""}
       filteredTabsConfig={filteredTabsConfig}
-      decisionDeleted={decisionDeleted}
-      decisionInserted={decisionInserted}
     />
   );
 };

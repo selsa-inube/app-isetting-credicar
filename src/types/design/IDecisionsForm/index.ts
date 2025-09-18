@@ -10,6 +10,7 @@ interface IDecisionsForm {
   textValuesBusinessRules: IRulesFormTextValues;
   decisionTemplateConfig: (
     enumeratorsRules: IDecisionData,
+    language: string,
     nameRule: string,
     businessUnit?: string,
   ) => IRuleDecision | undefined;

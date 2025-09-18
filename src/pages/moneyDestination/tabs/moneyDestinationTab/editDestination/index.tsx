@@ -17,7 +17,6 @@ const EditDestination = () => {
   const { appData } = useContext(AuthAndPortalData);
 
   const {
-    creditLineDecisions,
     normalizeEvaluateRuleData,
     formValues,
     initialGeneralInfData,
@@ -27,17 +26,16 @@ const EditDestination = () => {
     showRequestProcessModal,
     smallScreen,
     showGeneralInformation,
-    showDecisionsForm,
     showModal,
     showGoBackModal,
+    creditLineValues,
+    setCreditLineValues,
     handleOpenModal,
     handleCloseGoBackModal,
     handleEditedModal,
     handleGoBack,
     handleToggleEditedModal,
-    onSubmit,
     handleReset,
-    setCreditLineDecisions,
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,
@@ -89,15 +87,12 @@ const EditDestination = () => {
 
   return (
     <EditDestinationUI
-      creditLineDecisions={creditLineDecisions}
       editDestinationTabsConfig={editDestinationTabs}
       isSelected={isSelected}
       onTabChange={handleTabChange}
       generalInformationRef={generalInformationRef}
       initialGeneralInformationValues={formValues}
-      onButtonClick={onSubmit}
       onReset={handleReset}
-      setCreditLineDecisions={setCreditLineDecisions}
       setIsCurrentFormValid={setIsCurrentFormValid}
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}
       requestSteps={requestSteps}
@@ -108,13 +103,14 @@ const EditDestination = () => {
       normalizeEvaluateRuleData={normalizeEvaluateRuleData as IRuleDecision[]}
       smallScreen={smallScreen}
       showGeneralInformation={showGeneralInformation}
-      showDecisionsForm={showDecisionsForm}
       showRequestStatus={showRequestStatus}
       onCloseProcess={handleCloseProcess}
       modalData={modalData}
       showDecision={showDecision}
       onOpenModal={handleOpenModal}
       onToggleEditedModal={handleToggleEditedModal}
+      creditLineValues={creditLineValues}
+      setCreditLineValues={setCreditLineValues}
     />
   );
 };

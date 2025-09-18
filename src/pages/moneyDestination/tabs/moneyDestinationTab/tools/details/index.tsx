@@ -11,8 +11,7 @@ const Details = (props: IDetails) => {
   const { data } = props;
   const { appData } = useContext(AuthAndPortalData);
 
-  const { showModal, handleToggleModal, evaluateRuleData } =
-    useDetailsDestination(appData, data);
+  const { showModal, handleToggleModal } = useDetailsDestination(appData, data);
 
   const {
     isSelected,
@@ -20,12 +19,7 @@ const Details = (props: IDetails) => {
     handleTabChange,
     filteredTabsConfig,
     defaultSelectedTab,
-    filteredDecisions,
-  } = useDetailsDestinationModal(
-    data,
-    detailsTabsConfig,
-    evaluateRuleData ?? [],
-  );
+  } = useDetailsDestinationModal(data, detailsTabsConfig);
 
   return (
     <>
@@ -33,7 +27,6 @@ const Details = (props: IDetails) => {
         data={data}
         showModal={showModal}
         detailsTabsConfig={detailsTabsConfig}
-        evaluateRuleData={filteredDecisions}
         handleToggleModal={handleToggleModal}
         defaultSelectedTab={defaultSelectedTab ?? ""}
         filteredTabsConfig={filteredTabsConfig}

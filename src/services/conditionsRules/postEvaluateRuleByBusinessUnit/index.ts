@@ -8,6 +8,7 @@ import { mapEvaluateRuleByBusinessEntities } from "./mappers";
 const evaluateRuleByBusinessUnit = async (
   businessUnits: string,
   rulesData: IEvaluateRuleRequest,
+  language: string,
 ): Promise<IRuleDecisionExtended[] | undefined> => {
   const config: AxiosRequestConfig = {
     headers: {
@@ -25,7 +26,7 @@ const evaluateRuleByBusinessUnit = async (
     credicarAxiosInstance,
   );
 
-  return mapEvaluateRuleByBusinessEntities(data);
+  return mapEvaluateRuleByBusinessEntities(data, language);
 };
 
 export { evaluateRuleByBusinessUnit };

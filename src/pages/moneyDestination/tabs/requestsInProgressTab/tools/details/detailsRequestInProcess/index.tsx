@@ -5,7 +5,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { labelsOfRequest } from "@config/moneyDestination/requestsInProgressTab/details/labelsOfRequest";
 import { labelsOfTraceability } from "@config/moneyDestination/requestsInProgressTab/details/labelsOfTraceability";
 import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
-
+import { mediaQueryTablet } from "@config/environment";
 import { detailsLabels } from "@config/moneyDestination/requestsInProgressTab/details/detailsLabels";
 import { IDetails } from "@ptypes/moneyDestination/tabs/IDetailsRequest";
 import { StyledContainerIcon } from "./styles";
@@ -14,26 +14,20 @@ import { RequestsInProcess } from "../requestsInProcess";
 const DetailsRequestInProcess = (props: IDetails) => {
   const {
     data,
-    decisionDeleted,
-    decisionInserted,
-    decisions,
-    decisionTemplate,
     defaultSelectedTab,
     detailsTabsConfig,
     filteredTabsConfig,
     isMobile,
-    isMoreDetails,
     isSelected,
     moreDetailsData,
     showModal,
     showMoreDetailsModal,
-    textValuesBusinessRules,
     onTabChange,
     onToggleModal,
     onToggleMoreDetailsModal,
   } = props;
 
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   return (
     <>
@@ -69,17 +63,11 @@ const DetailsRequestInProcess = (props: IDetails) => {
           detailsTabsConfig={detailsTabsConfig}
           portalId="portal"
           onCloseModal={onToggleMoreDetailsModal}
-          textValues={textValuesBusinessRules}
-          decisionTemplate={decisionTemplate}
-          decisions={decisions}
-          isMoreDetails={isMoreDetails}
           defaultSelectedTab={defaultSelectedTab}
           filteredTabsConfig={filteredTabsConfig}
           isMobile={isMobile}
           isSelected={isSelected ?? defaultSelectedTab}
           onTabChange={onTabChange}
-          decisionDeleted={decisionDeleted}
-          decisionInserted={decisionInserted}
         />
       )}
     </>

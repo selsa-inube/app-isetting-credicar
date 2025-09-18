@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import { usePortalData } from "@hooks/staffPortal/usePortalData";
+import { useLanguage } from "@hooks/useLanguage";
 import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
 import { validateAndTrimString } from "@utils/validateAndTrimString";
 import { decrypt } from "@utils/crypto/decrypt";
+import { enviroment } from "@config/environment";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 
@@ -20,6 +22,8 @@ const useValidatingLoginInformation = () => {
   const [useCases, setUseCases] = useState<string>(
     localStorage.getItem("useCasesByStaff") ?? "",
   );
+
+  const { languageBrowser } = useLanguage();
 
   const [businessUnitsToTheStaff, setBusinessUnitsToTheStaff] = useState<
     IBusinessUnitsPortalStaff[]
@@ -69,6 +73,7 @@ const useValidatingLoginInformation = () => {
       userName: user?.name ?? "",
     },
     useCasesByStaff: useCasesData ?? [],
+    language: enviroment.VITE_LANGUAGE,
   });
 
   useEffect(() => {
@@ -148,6 +153,13 @@ const useValidatingLoginInformation = () => {
   useEffect(() => {
     localStorage.setItem("useCasesByStaff", useCases);
   }, [useCases]);
+
+  useEffect(() => {
+    setAppData((prev) => ({
+      ...prev,
+      language: languageBrowser ?? enviroment.VITE_LANGUAGE,
+    }));
+  }, [languageBrowser]);
 
   const authAndPortalDataContainer = useMemo(
     () => ({

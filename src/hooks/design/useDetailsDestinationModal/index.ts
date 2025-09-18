@@ -1,17 +1,13 @@
 import { useState } from "react";
-import { ICondition, IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { mediaQueryMobile } from "@config/environment";
-import { ETransactionOperation } from "@enum/transactionOperation";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsConfig";
 
 const useDetailsDestinationModal = (
   data: IEntry,
   detailsTabsConfig: IDetailsTabsConfig,
-  decisions: IRuleDecision[],
-  isMoreDetails?: boolean,
 ) => {
   const [isSelected, setIsSelected] = useState<string>();
   const isMobile = useMediaQuery(mediaQueryMobile);
@@ -30,58 +26,12 @@ const useDetailsDestinationModal = (
       ) {
         return acc;
       }
-      if (
-        (isMoreDetails || decisions.length === 0) &&
-        tab?.id === detailsTabsConfig.creditLine.id
-      ) {
-        return acc;
-      }
-
-      if (
-        !decisions.some(
-          (decision) =>
-            decision.transactionOperation === ETransactionOperation.INSERT,
-        ) &&
-        tab?.id === detailsTabsConfig.creditLineIncluded?.id
-      ) {
-        return acc;
-      }
-      if (
-        !decisions.some(
-          (decision) =>
-            decision.transactionOperation === ETransactionOperation.DELETE,
-        ) &&
-        tab?.id === detailsTabsConfig.creditLineRemoved?.id
-      ) {
-        return acc;
-      }
       if (tab !== undefined) {
         acc[key as keyof IDetailsTabsConfig] = tab;
       }
       return acc;
     },
     {} as IDetailsTabsConfig,
-  );
-
-  const filteredDecisions = decisions.map((decision: IRuleDecision) => {
-    return {
-      ...decision,
-      conditionsThatEstablishesTheDecision: (
-        decision.conditionsThatEstablishesTheDecision ?? []
-      ).filter(
-        (condition: ICondition) =>
-          condition.conditionName !== "MoneyDestination",
-      ),
-    };
-  });
-
-  const decisionDeleted = filteredDecisions.filter(
-    (decision: IRuleDecision) =>
-      decision.transactionOperation === ETransactionOperation.DELETE,
-  );
-  const decisionInserted = filteredDecisions.filter(
-    (decision: IRuleDecision) =>
-      decision.transactionOperation === ETransactionOperation.INSERT,
   );
 
   const getFirstFilteredTab = (filteredTabsConfig: IDetailsTabsConfig) => {
@@ -101,9 +51,6 @@ const useDetailsDestinationModal = (
     isMobile,
     filteredTabsConfig,
     defaultSelectedTab,
-    decisionDeleted,
-    decisionInserted,
-    filteredDecisions,
     handleTabChange,
   };
 };

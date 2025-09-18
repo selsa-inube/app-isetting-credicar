@@ -1,28 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
-import { ICondition, IRuleDecision } from "@isettingkit/input";
+import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
+import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
-import { formatDateDecision } from "@utils/date/formatDateDecision";
-import { arraysEqual } from "@utils/destination/arraysEqual";
-import { findDecision } from "@utils/destination/findDecision";
-import { ETransactionOperation } from "@enum/transactionOperation";
-import { EMoneyDestination } from "@enum/moneyDestination";
+import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/moneyDestination/editDestination/editLabels";
 import { IUseEditDestination } from "@ptypes/hooks/moneyDestination/IUseEditDestination";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IServerDomain } from "@ptypes/IServerDomain";
+import { II18n } from "@ptypes/i18n";
 
 const useEditDestination = (props: IUseEditDestination) => {
   const { data, appData } = props;
   const initialGeneralInfData = {
     nameDestination: data.nameDestination ?? "",
+    typeDestination: data.typeDestination ?? "",
+    creditLine: data.creditLine ?? "",
     description: data.description ?? "",
     icon: data.icon ?? "",
     id: data.id ?? "",
@@ -43,7 +45,6 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [creditLineDecisions, setCreditLineDecisions] = useState<
     IRuleDecision[]
   >([]);
-  const [newDecisions, setNewDecisions] = useState<IRuleDecision[]>();
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
 
@@ -52,14 +53,16 @@ const useEditDestination = (props: IUseEditDestination) => {
       data.nameDestination,
   );
 
+  const [creditLineValues, setCreditLineValues] = useState<IServerDomain[]>([]);
+
   const navigate = useNavigate();
 
   const ruleName = "LineOfCredit";
   const conditionRule = "MoneyDestination";
 
-  const { evaluateRuleData } = useEvaluateRuleByBusinessUnit(
-    appData.businessUnit.publicCode,
-    {
+  const { evaluateRuleData } = useEvaluateRuleByBusinessUnit({
+    businessUnits: appData.businessUnit.publicCode,
+    rulesData: {
       ruleName: ruleName,
       conditions: [
         {
@@ -68,7 +71,8 @@ const useEditDestination = (props: IUseEditDestination) => {
         },
       ],
     },
-  );
+    language: appData.language,
+  });
 
   useEffect(() => {
     setNameDecision(formValues.nameDestination ?? data.nameDestination);
@@ -97,89 +101,10 @@ const useEditDestination = (props: IUseEditDestination) => {
   const prevCreditLineDecisionsRef = useRef<IRuleDecision[]>([]);
   prevCreditLineDecisionsRef.current = normalizeEvaluateRuleData ?? [];
 
-  const newInsertValues = () => {
-    if (!arraysEqual(prevCreditLineDecisionsRef.current, creditLineDecisions)) {
-      return creditLineDecisions
-        .filter(
-          (decision) =>
-            !findDecision(prevCreditLineDecisionsRef.current, decision),
-        )
-        .map((decision) => {
-          const decisionsByRule: IRuleDecision = {
-            conditionsThatEstablishesTheDecision:
-              decision.conditionsThatEstablishesTheDecision?.map(
-                (condition) => {
-                  return {
-                    conditionName: condition.conditionName,
-                    labelName: condition.labelName,
-                    value: condition.value,
-                  };
-                },
-              ) as ICondition[],
-            effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
-            value: decision.value,
-            transactionOperation: ETransactionOperation.INSERT,
-          };
-
-          if (decision.validUntil) {
-            decisionsByRule.validUntil = formatDateDecision(
-              decision.validUntil as string,
-            );
-          }
-
-          return {
-            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
-            ruleName: decision.ruleName,
-            decisionsByRule: [decisionsByRule],
-          };
-        });
-    }
-  };
-
-  const newDeletedValues = () => {
-    if (!arraysEqual(prevCreditLineDecisionsRef.current, creditLineDecisions)) {
-      return prevCreditLineDecisionsRef.current
-        .filter((decision) => !findDecision(creditLineDecisions, decision))
-        .map((decision: IRuleDecision) => {
-          const decisionsByRule: IRuleDecision = {
-            conditionsThatEstablishesTheDecision:
-              decision.conditionsThatEstablishesTheDecision?.map(
-                (condition) => {
-                  return {
-                    conditionName: condition.conditionName,
-                    labelName: condition.labelName,
-                    value: condition.value,
-                  };
-                },
-              ) as ICondition[],
-            effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
-            value: decision.value,
-            transactionOperation: ETransactionOperation.DELETE,
-          };
-
-          if (decision.validUntil) {
-            decisionsByRule.validUntil = formatDateDecision(
-              decision.validUntil as string,
-            );
-          }
-
-          return {
-            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
-            ruleName: decision.ruleName,
-            decisionsByRule: [decisionsByRule],
-          };
-        });
-    }
-  };
-
-  useEffect(() => {
-    const insertValues = newInsertValues();
-    const deleteValues = newDeletedValues();
-
-    setNewDecisions([...(insertValues ?? []), ...(deleteValues ?? [])]);
-  }, [creditLineDecisions]);
-
   const onSubmit = () => {
+    const { enumDestination } = useEnumsMoneyDestination({
+      businessUnits: appData.businessUnit.publicCode,
+    });
     const currentValues = generalInformationRef.current?.values;
     const compare =
       JSON.stringify(initialGeneralInfData) === JSON.stringify(formValues);
@@ -189,40 +114,46 @@ const useEditDestination = (props: IUseEditDestination) => {
     const valuesUpdatedDesc =
       initialGeneralInfData.description !== currentValues?.description;
 
+    const valueName = (name: string) => {
+      const normalizeData = normalizeDestination(enumDestination, name);
+      return (
+        normalizeData?.i18nValue?.[appData.language as keyof II18n] ?? name
+      );
+    };
+
     const configurationRequestData: {
       moneyDestinationId: string;
       modifyJustification: string;
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
-      rules?: IRuleDecision[];
     } = {
       moneyDestinationId: data.id,
       modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
     };
 
     if (currentValues?.nameDestination !== undefined && valuesUpdatedName) {
-      configurationRequestData.abbreviatedName = currentValues?.nameDestination;
+      configurationRequestData.abbreviatedName = valueName(
+        currentValues?.nameDestination,
+      );
       configurationRequestData.iconReference = currentValues?.icon;
     }
     if (currentValues?.description !== undefined && valuesUpdatedDesc) {
       configurationRequestData.descriptionUse = currentValues?.description;
     }
 
-    if (!compare && isSelected === editDestinationTabsConfig.creditLine.id) {
+    if (!compare) {
       if (
         initialGeneralInfData.nameDestination !== formValues.nameDestination
       ) {
-        configurationRequestData.abbreviatedName = formValues.nameDestination;
+        configurationRequestData.abbreviatedName = valueName(
+          formValues.nameDestination,
+        );
         configurationRequestData.iconReference = formValues.icon;
       }
       if (initialGeneralInfData.description !== formValues.description) {
         configurationRequestData.descriptionUse = formValues.description;
       }
-    }
-
-    if (newDecisions && newDecisions.length > 0) {
-      configurationRequestData.rules = newDecisions;
     }
 
     setSaveData({
@@ -320,9 +251,6 @@ const useEditDestination = (props: IUseEditDestination) => {
   const showGeneralInformation =
     isSelected === editDestinationTabsConfig.generalInformation.id;
 
-  const showDecisionsForm =
-    isSelected === editDestinationTabsConfig.creditLine.id;
-
   return {
     creditLineDecisions,
     normalizeEvaluateRuleData,
@@ -337,8 +265,9 @@ const useEditDestination = (props: IUseEditDestination) => {
     showModal,
     smallScreen,
     showGeneralInformation,
-    showDecisionsForm,
     showGoBackModal,
+    creditLineValues,
+    setCreditLineValues,
     handleOpenModal,
     handleCloseGoBackModal,
     handleEditedModal,

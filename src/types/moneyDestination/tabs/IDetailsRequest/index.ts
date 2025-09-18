@@ -5,22 +5,22 @@ import { IDetailsTabsConfig } from "@ptypes/moneyDestination/tabs/IDetailsTabsCo
 
 interface IDetails {
   data: IEntry;
-  decisions: IRuleDecision[];
-  decisionTemplate: IRuleDecision;
   defaultSelectedTab: string;
   detailsTabsConfig: IDetailsTabsConfig;
   filteredTabsConfig: IDetailsTabsConfig;
   isMobile: boolean;
-  isMoreDetails: boolean;
+  isMoreDetails?: boolean;
   isSelected: string;
   moreDetailsData: IEntry;
   showModal: boolean;
   showMoreDetailsModal: boolean;
-  textValuesBusinessRules: IRulesFormTextValues;
   onTabChange: (id: string) => void;
   onToggleModal: () => void;
   onToggleMoreDetailsModal: () => void;
+  decisionTemplate?: IRuleDecision;
+  textValuesBusinessRules?: IRulesFormTextValues;
   decisionDeleted?: IRuleDecision[];
+  decisions?: IRuleDecision[];
   decisionInserted?: IRuleDecision[];
 }
 

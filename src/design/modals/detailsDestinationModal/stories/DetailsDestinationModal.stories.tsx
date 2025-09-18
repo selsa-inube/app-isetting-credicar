@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { Meta, StoryFn } from "@storybook/react";
 import { Button } from "@inubekit/inubekit";
 
-import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { IconWithText } from "@design/data/iconWithText";
 import { DetailsDestinationModal, IDetailsDestinationModal } from "..";
 
@@ -63,14 +62,12 @@ Default.args = {
   filteredTabsConfig: detailsTabsConfig,
   detailsTabsConfig: detailsTabsConfig,
   data: data,
-  isMoreDetails: false,
   isMobile: false,
   isSelected: detailsTabsConfig.generalData.id,
   defaultSelectedTab: detailsTabsConfig.creditLine.id,
   onTabChange: (selectedTabId: string) => {
     console.log(`Tab changed to: ${selectedTabId}`);
   },
-  textValues: textValuesBusinessRules,
 };
 
 export default meta;
