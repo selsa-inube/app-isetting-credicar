@@ -9,17 +9,7 @@ import { IDetailsMoneyDestination } from "@ptypes/moneyDestination/tabs/IDetails
 import { StyledContainerIcon } from "./styles";
 
 const DetailsMoneyDestination = (props: IDetailsMoneyDestination) => {
-  const {
-    data,
-    showModal,
-    defaultSelectedTab,
-    filteredTabsConfig,
-    isMobile,
-    isSelected,
-    detailsTabsConfig,
-    handleToggleModal,
-    onTabChange,
-  } = props;
+  const { data, showModal, handleToggleModal } = props;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 
@@ -43,14 +33,8 @@ const DetailsMoneyDestination = (props: IDetailsMoneyDestination) => {
       {showModal && (
         <DetailsDestinationModal
           data={data}
-          detailsTabsConfig={detailsTabsConfig}
           portalId={portalId}
           onCloseModal={handleToggleModal}
-          defaultSelectedTab={defaultSelectedTab}
-          filteredTabsConfig={filteredTabsConfig}
-          isMobile={isMobile}
-          isSelected={isSelected}
-          onTabChange={onTabChange}
         />
       )}
     </>

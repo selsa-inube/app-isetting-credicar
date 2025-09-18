@@ -1,9 +1,9 @@
 import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
 import { useDetailsRequestInProgress } from "@hooks/moneyDestination/useDetailsRequestInProgress";
-import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
 import { useMoreDetailsRequestProgress } from "@hooks/moneyDestination/useMoreDetailsRequestProgress";
-import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/tabs";
+import { mediaQueryMobile } from "@config/environment";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { useMediaQuery } from "@inubekit/inubekit";
 interface IDetails {
   data: IEntry;
 }
@@ -21,13 +21,7 @@ const Details = (props: IDetails) => {
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress(data);
 
-  const {
-    isSelected,
-    isMobile,
-    handleTabChange,
-    filteredTabsConfig,
-    defaultSelectedTab,
-  } = useDetailsDestinationModal(moreDetailsData, detailsTabsConfig);
+  const isMobile = useMediaQuery(mediaQueryMobile);
 
   return (
     <DetailsRequestInProcess
@@ -36,14 +30,9 @@ const Details = (props: IDetails) => {
       onToggleModal={handleToggleModal}
       moreDetailsData={moreDetailsData}
       showMoreDetailsModal={showMoreDetailsModal}
-      detailsTabsConfig={detailsTabsConfig}
       onToggleMoreDetailsModal={onToggleMoreDetailsModal}
       isMoreDetails={isMoreDetails}
-      isSelected={isSelected ?? defaultSelectedTab ?? ""}
       isMobile={isMobile}
-      onTabChange={handleTabChange}
-      defaultSelectedTab={defaultSelectedTab ?? ""}
-      filteredTabsConfig={filteredTabsConfig}
     />
   );
 };

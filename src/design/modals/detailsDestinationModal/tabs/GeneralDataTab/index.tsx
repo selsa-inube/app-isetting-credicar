@@ -8,19 +8,29 @@ import {
   StyledContainerName,
 } from "./styles";
 import { mediaQueryMobile } from "@config/environment";
-import { IGeneralDataTab } from "@ptypes/design/IGeneralDataTab";
 import { generalDataTabLabels } from "@config/moneyDestination/moneyDestinationTab/generics/generalDataTabLabels";
+import { IGeneralDataTab } from "@ptypes/design/IGeneralDataTab";
 
 const GeneralDataTab = (props: IGeneralDataTab) => {
   const { data } = props;
   const isMobile = useMediaQuery(mediaQueryMobile);
-
   return (
-    <Stack
-      direction="column"
-      gap={isMobile ? tokens.spacing.s200 : tokens.spacing.s300}
-      height="85%"
-    >
+    <Stack direction="column" gap={tokens.spacing.s200} height="auto">
+      {data.typeDestination !== "undefined" && (
+        <StyledContainerName $smallScreen={isMobile}>
+          <Text
+            type="label"
+            size="medium"
+            appearance={EComponentAppearance.DARK}
+            weight="bold"
+          >
+            {generalDataTabLabels.type}
+          </Text>
+          <Text size="medium" appearance={EComponentAppearance.GRAY}>
+            {data.typeDestination}
+          </Text>
+        </StyledContainerName>
+      )}
       {data.abbreviatedName && (
         <StyledContainerName $smallScreen={isMobile}>
           <Text
@@ -37,7 +47,23 @@ const GeneralDataTab = (props: IGeneralDataTab) => {
         </StyledContainerName>
       )}
 
-      {data.descriptionUse !== undefined && (
+      {data.creditLine !== "undefined" && (
+        <StyledContainerName $smallScreen={isMobile}>
+          <Text
+            type="label"
+            size="medium"
+            appearance={EComponentAppearance.DARK}
+            weight="bold"
+          >
+            {generalDataTabLabels.creditLine}
+          </Text>
+          <Text size="medium" appearance={EComponentAppearance.GRAY}>
+            {data.creditLine}
+          </Text>
+        </StyledContainerName>
+      )}
+
+      {data.descriptionUse !== "undefined" && (
         <StyledContainerDescription $smallScreen={isMobile}>
           <Text
             type="label"

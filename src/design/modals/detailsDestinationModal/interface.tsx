@@ -7,7 +7,6 @@ import {
   Divider,
   useMediaQuery,
   Blanket,
-  Tabs,
   Button,
 } from "@inubekit/inubekit";
 
@@ -20,16 +19,7 @@ import { StyledContainerButton, StyledModal } from "./styles";
 import { GeneralDataTab } from "./tabs/GeneralDataTab";
 
 const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
-  const {
-    isSelected,
-    smallScreenTab,
-    showGeneraldata,
-    data,
-    filteredTabs,
-    portalId,
-    onCloseModal,
-    onTabChange,
-  } = props;
+  const { data, portalId, onCloseModal } = props;
 
   const isMobile = useMediaQuery(mediaQueryMobile);
 
@@ -73,15 +63,7 @@ const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
           <Divider />
         </Stack>
         <Stack gap={tokens.spacing.s150} direction="column" height="100%">
-          <Tabs
-            tabs={filteredTabs}
-            selectedTab={isSelected}
-            onChange={onTabChange}
-            scroll={smallScreenTab ? true : false}
-          />
-          {showGeneraldata && <GeneralDataTab data={data} />}
-
-          <Divider />
+          <GeneralDataTab data={data} />
         </Stack>
         <Stack gap={tokens.spacing.s250} justifyContent="flex-end">
           <Button

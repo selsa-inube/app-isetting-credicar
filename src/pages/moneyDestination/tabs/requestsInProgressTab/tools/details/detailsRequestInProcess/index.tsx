@@ -14,15 +14,10 @@ import { RequestsInProcess } from "../requestsInProcess";
 const DetailsRequestInProcess = (props: IDetails) => {
   const {
     data,
-    defaultSelectedTab,
-    detailsTabsConfig,
-    filteredTabsConfig,
     isMobile,
-    isSelected,
     moreDetailsData,
     showModal,
     showMoreDetailsModal,
-    onTabChange,
     onToggleModal,
     onToggleMoreDetailsModal,
   } = props;
@@ -60,14 +55,8 @@ const DetailsRequestInProcess = (props: IDetails) => {
       {showMoreDetailsModal && (
         <DetailsDestinationModal
           data={moreDetailsData}
-          detailsTabsConfig={detailsTabsConfig}
           portalId="portal"
           onCloseModal={onToggleMoreDetailsModal}
-          defaultSelectedTab={defaultSelectedTab}
-          filteredTabsConfig={filteredTabsConfig}
-          isMobile={isMobile}
-          isSelected={isSelected ?? defaultSelectedTab}
-          onTabChange={onTabChange}
         />
       )}
     </>

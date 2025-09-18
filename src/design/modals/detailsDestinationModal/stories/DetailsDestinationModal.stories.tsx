@@ -17,20 +17,6 @@ const meta: Meta<typeof DetailsDestinationModal> = {
   ],
 };
 
-const detailsTabsConfig = {
-  generalData: {
-    id: "generalData",
-    isDisabled: false,
-    label: "Datos generales",
-  },
-  creditLine: {
-    id: "creditLine",
-    isDisabled: false,
-    label: "Línea de crédito",
-    notificationIndicators: 2,
-  },
-};
-
 const data = {
   id: "1",
   name: (
@@ -59,15 +45,7 @@ const Template: StoryFn<IDetailsDestinationModal> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   portalId: "portal",
-  filteredTabsConfig: detailsTabsConfig,
-  detailsTabsConfig: detailsTabsConfig,
   data: data,
-  isMobile: false,
-  isSelected: detailsTabsConfig.generalData.id,
-  defaultSelectedTab: detailsTabsConfig.creditLine.id,
-  onTabChange: (selectedTabId: string) => {
-    console.log(`Tab changed to: ${selectedTabId}`);
-  },
 };
 
 export default meta;

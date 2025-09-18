@@ -17,6 +17,8 @@ const mapMoneyDestinationToEntity = (
     iconReference: String(data.iconReference),
     moneyDestinationId: String(data.moneyDestinationId),
     name: String(data.abbreviatedName),
+    typeDestination: String(data.typeDestination),
+    creditLine: String(data.creditLine),
   };
 
   return business;
