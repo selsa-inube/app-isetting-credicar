@@ -146,7 +146,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   useEffect(() => {
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
+        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqual);
       } else {
         setIsDisabledButton(!formik.isValid);
       }

@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
-import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 
-import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
+import { useCreditLine } from "@hooks/moneyDestination/useCreditLine";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
@@ -42,64 +41,20 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [showModal, setShowModal] = useState(false);
-  const [creditLineDecisions, setCreditLineDecisions] = useState<
-    IRuleDecision[]
-  >([]);
+
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
-
-  const [nameDecision, setNameDecision] = useState(
-    generalInformationRef.current?.values?.nameDestination ??
-      data.nameDestination,
-  );
-
   const [creditLineValues, setCreditLineValues] = useState<IServerDomain[]>([]);
 
   const navigate = useNavigate();
 
-  const ruleName = "LineOfCredit";
   const conditionRule = "MoneyDestination";
 
-  const { evaluateRuleData } = useEvaluateRuleByBusinessUnit({
-    businessUnits: appData.businessUnit.publicCode,
-    rulesData: {
-      ruleName: ruleName,
-      conditions: [
-        {
-          condition: conditionRule,
-          value: data.nameDestination,
-        },
-      ],
-    },
-    language: appData.language,
-  });
+  const { optionsCreditLine, creditLineData } = useCreditLine();
 
   useEffect(() => {
-    setNameDecision(formValues.nameDestination ?? data.nameDestination);
-  }, [formValues.nameDestination]);
-
-  const normalizeEvaluateRuleData: IRuleDecision[] | undefined =
-    evaluateRuleData?.map((item) => {
-      return {
-        ...item,
-        conditionsThatEstablishesTheDecision:
-          item.conditionsThatEstablishesTheDecision?.map((condition) => {
-            return {
-              ...condition,
-              hidden: condition.conditionName === conditionRule,
-            };
-          }),
-      };
-    });
-
-  useEffect(() => {
-    if (evaluateRuleData && normalizeEvaluateRuleData) {
-      setCreditLineDecisions(normalizeEvaluateRuleData);
-    }
-  }, [evaluateRuleData]);
-
-  const prevCreditLineDecisionsRef = useRef<IRuleDecision[]>([]);
-  prevCreditLineDecisionsRef.current = normalizeEvaluateRuleData ?? [];
+    setCreditLineValues(optionsCreditLine);
+  }, [creditLineData]);
 
   const onSubmit = () => {
     const { enumDestination } = useEnumsMoneyDestination({
@@ -113,7 +68,8 @@ const useEditDestination = (props: IUseEditDestination) => {
       initialGeneralInfData.nameDestination !== currentValues?.nameDestination;
     const valuesUpdatedDesc =
       initialGeneralInfData.description !== currentValues?.description;
-
+    const valuesUpdatedLine =
+      initialGeneralInfData.creditLine !== currentValues?.creditLine;
     const valueName = (name: string) => {
       const normalizeData = normalizeDestination(enumDestination, name);
       return (
@@ -127,6 +83,8 @@ const useEditDestination = (props: IUseEditDestination) => {
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
+      typeDestination?: string;
+      creditLine?: string;
     } = {
       moneyDestinationId: data.id,
       modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
@@ -142,19 +100,20 @@ const useEditDestination = (props: IUseEditDestination) => {
       configurationRequestData.descriptionUse = currentValues?.description;
     }
 
-    if (!compare) {
-      if (
-        initialGeneralInfData.nameDestination !== formValues.nameDestination
-      ) {
-        configurationRequestData.abbreviatedName = valueName(
-          formValues.nameDestination,
-        );
-        configurationRequestData.iconReference = formValues.icon;
+    if (currentValues?.creditLine !== undefined && valuesUpdatedLine)
+      if (!compare) {
+        if (
+          initialGeneralInfData.nameDestination !== formValues.nameDestination
+        ) {
+          configurationRequestData.abbreviatedName = valueName(
+            formValues.nameDestination,
+          );
+          configurationRequestData.iconReference = formValues.icon;
+        }
+        if (initialGeneralInfData.description !== formValues.description) {
+          configurationRequestData.descriptionUse = formValues.description;
+        }
       }
-      if (initialGeneralInfData.description !== formValues.description) {
-        configurationRequestData.descriptionUse = formValues.description;
-      }
-    }
 
     setSaveData({
       applicationName: "ifac",
@@ -252,13 +211,10 @@ const useEditDestination = (props: IUseEditDestination) => {
     isSelected === editDestinationTabsConfig.generalInformation.id;
 
   return {
-    creditLineDecisions,
-    normalizeEvaluateRuleData,
     formValues,
     initialGeneralInfData,
     generalInformationRef,
     isCurrentFormValid,
-    nameDecision,
     isSelected,
     saveData,
     showRequestProcessModal,
@@ -275,7 +231,6 @@ const useEditDestination = (props: IUseEditDestination) => {
     handleToggleEditedModal,
     handleReset,
     onSubmit,
-    setCreditLineDecisions,
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,

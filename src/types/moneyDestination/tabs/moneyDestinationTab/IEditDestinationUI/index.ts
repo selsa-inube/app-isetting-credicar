@@ -1,5 +1,4 @@
 import { ITab } from "@inubekit/inubekit";
-import { IRuleDecision } from "@isettingkit/input";
 import { FormikProps } from "formik";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
@@ -8,7 +7,6 @@ import { IServerDomain } from "@ptypes/IServerDomain";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 interface IEditDestinationUI {
   editDestinationTabsConfig: ITab[];
-  normalizeEvaluateRuleData: IRuleDecision[];
   generalInformationRef: React.RefObject<FormikProps<IGeneralInformationEntry> | null>;
   initialGeneralInformationValues: IGeneralInformationEntry;
   initialGeneralInfData: IGeneralInformationEntry;

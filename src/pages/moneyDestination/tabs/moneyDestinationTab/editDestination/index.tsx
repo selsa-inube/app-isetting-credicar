@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
-import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditDestination } from "@hooks/moneyDestination/edit/useEditDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
@@ -17,7 +16,6 @@ const EditDestination = () => {
   const { appData } = useContext(AuthAndPortalData);
 
   const {
-    normalizeEvaluateRuleData,
     formValues,
     initialGeneralInfData,
     generalInformationRef,
@@ -100,7 +98,6 @@ const EditDestination = () => {
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
       initialGeneralInfData={initialGeneralInfData}
-      normalizeEvaluateRuleData={normalizeEvaluateRuleData as IRuleDecision[]}
       smallScreen={smallScreen}
       showGeneralInformation={showGeneralInformation}
       showRequestStatus={showRequestStatus}
