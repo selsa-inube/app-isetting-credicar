@@ -28,12 +28,7 @@ const useConfigurationLines = () => {
 
   const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleCustomerProfiles,
-    items: [
-      "Clientes NO asociados",
-      "Personas sancionadas",
-      "Personas con alerta de riesgo",
-      "Personas sin enrolamiento seguro",
-    ],
+    items: [],
     emptyMessage: clientsSupportLineLabels.withoutIncluding,
     highlightFirst: true,
   });

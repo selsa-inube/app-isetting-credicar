@@ -22,8 +22,8 @@ const useRules = (props: IUseRules) => {
     const data =
       typeof value === "boolean"
         ? value
-          ? EBooleanText.YES
-          : EBooleanText.NO
+          ? EBooleanText.Y
+          : EBooleanText.N
         : value;
 
     return [

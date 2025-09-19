@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { ISide } from "@ptypes/ISide";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
+import { EBooleanText } from "@src/enum/booleanText";
 
 const useClientsSupportLineForm = () => {
   const {
@@ -19,7 +20,7 @@ const useClientsSupportLineForm = () => {
     null,
   );
 
-  const targetInsertMode = "prepend";
+  const targetInsertMode = EBooleanText.PREPEND;
 
   const removeFrom = useCallback((options: string[], item: string) => {
     const IndexOptions = options.indexOf(item);
@@ -31,7 +32,7 @@ const useClientsSupportLineForm = () => {
 
   const insertInto = useCallback(
     (options: string[], item: string) => {
-      if (targetInsertMode === "prepend") return [item, ...options];
+      if (targetInsertMode === EBooleanText.PREPEND) return [item, ...options];
       return [...options, item];
     },
     [targetInsertMode],
@@ -41,7 +42,7 @@ const useClientsSupportLineForm = () => {
     (payload: { item: string; from: ISide; to: ISide }) => {
       const { item, from, to } = payload;
 
-      if (from === "left" && to === "right") {
+      if (from === EBooleanText.LEFT && to === EBooleanText.RIGHT) {
         setOptionsExcluded((prev) => ({
           ...prev,
           items: removeFrom(prev.items, item),
@@ -50,7 +51,7 @@ const useClientsSupportLineForm = () => {
           ...prev,
           items: insertInto(prev.items, item),
         }));
-      } else if (from === "right" && to === "left") {
+      } else if (from === EBooleanText.RIGHT && to === EBooleanText.LEFT) {
         setOptionsExcluded((prev) => ({
           ...prev,
           items: insertInto(prev.items, item),
