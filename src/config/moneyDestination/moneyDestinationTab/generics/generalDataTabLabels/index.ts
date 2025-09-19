@@ -1,7 +1,7 @@
 const generalDataTabLabels = {
   name: "Nombre del destino",
   type: "Tipo del destino",
-  creditLine: "Liínea de crédito",
+  creditLine: "Línea de crédito",
   description: "Descripción",
 };
 

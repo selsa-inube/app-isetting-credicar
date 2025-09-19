@@ -56,7 +56,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
   const isMobile = useMediaQuery(mediaQueryTablet);
 
   const { optionsCitySubdivision: optionsCities } = useCitySubdivisionCountry({
-    countryName: EPayrollAgreement.COUNTRY,
+    countryName: formik.values.companyCountry ?? "",
   });
 
   const { enumData: typeIdentification } = useEnumeratorsIsaas({
