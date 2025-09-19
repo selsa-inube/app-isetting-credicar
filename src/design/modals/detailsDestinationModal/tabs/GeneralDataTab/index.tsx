@@ -14,9 +14,13 @@ import { IGeneralDataTab } from "@ptypes/design/IGeneralDataTab";
 const GeneralDataTab = (props: IGeneralDataTab) => {
   const { data } = props;
   const isMobile = useMediaQuery(mediaQueryMobile);
+
+  const withoutData = ["undefined", undefined];
+
+  console.log({ data });
   return (
     <Stack direction="column" gap={tokens.spacing.s200} height="auto">
-      {data.typeDestination !== "undefined" && (
+      {!withoutData.includes(data.typeDestination) && (
         <StyledContainerName $smallScreen={isMobile}>
           <Text
             type="label"
@@ -47,7 +51,7 @@ const GeneralDataTab = (props: IGeneralDataTab) => {
         </StyledContainerName>
       )}
 
-      {data.creditLine !== "undefined" && (
+      {!withoutData.includes(data.creditLine) && (
         <StyledContainerName $smallScreen={isMobile}>
           <Text
             type="label"
@@ -63,7 +67,7 @@ const GeneralDataTab = (props: IGeneralDataTab) => {
         </StyledContainerName>
       )}
 
-      {data.descriptionUse !== "undefined" && (
+      {!withoutData.includes(data.descriptionUse) && (
         <StyledContainerDescription $smallScreen={isMobile}>
           <Text
             type="label"

@@ -23,6 +23,8 @@ const useMoreDetailsRequestProgress = (data: IEntry) => {
     descriptionUse:
       data.configurationRequestData.descriptionUse ??
       data.configurationRequestData.justification,
+    typeDestination: data.typeDestination,
+    creditLine: data.creditLine,
   };
 
   const decisions = data.configurationRequestData.rules

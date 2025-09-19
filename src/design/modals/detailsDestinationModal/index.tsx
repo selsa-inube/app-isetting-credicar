@@ -14,4 +14,3 @@ const DetailsDestinationModal = (props: IDetailsDestinationModal) => {
 };
 
 export { DetailsDestinationModal };
-export type { IDetailsDestinationModal };
