@@ -38,14 +38,11 @@ const HomeUI = (props: IHomeUI) => {
     hasMultipleBusinessUnits,
     optionsHeader,
     dataExists,
+    padding,
     onlogout,
     setCollapse,
     handleLogoClick,
   } = props;
-
-  const padding = !dataExists
-    ? tokens.spacing.s0
-    : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`;
 
   return (
     <>
@@ -119,7 +116,7 @@ const HomeUI = (props: IHomeUI) => {
             padding={
               screenTablet
                 ? `${tokens.spacing.s0}`
-                : `${tokens.spacing.s0} ${tokens.spacing.s400} ${tokens.spacing.s400} 120px`
+                : `${tokens.spacing.s0} 120px ${tokens.spacing.s400}`
             }
             justifyContent={screenTablet ? "center" : "flex-start"}
             wrap="wrap"
@@ -132,6 +129,7 @@ const HomeUI = (props: IHomeUI) => {
               padding={tokens.spacing.s200}
               justifyContent={screenTablet ? "center" : "flex-start"}
               wrap="wrap"
+              width="100%"
               gap={tokens.spacing.s250}
               backgroundColor={EComponentAppearance.LIGHT}
               borderColor={EComponentAppearance.DARK}
