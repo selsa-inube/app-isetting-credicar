@@ -1,6 +1,5 @@
 import { IRuleDecision, ValueDataType } from "@isettingkit/input";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
-import { enviroment } from "@config/environment";
 import { dataTranslations } from "@utils/dataTranslations";
 
 const decisionScoreModelsConfig = (
@@ -13,6 +12,7 @@ const decisionScoreModelsConfig = (
     listOfPossibleValues,
     i18n,
   }: IDecisionData,
+  language: string,
   nameRule?: string,
   businessUnit?: string,
 ) => {
@@ -22,12 +22,10 @@ const decisionScoreModelsConfig = (
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
       labelName: String(
-        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-          "Modelo de score",
+        i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
       ),
       descriptionUse: String(
-        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-          "Modelo de score",
+        i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
       ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
@@ -48,11 +46,11 @@ const decisionScoreModelsConfig = (
             dataTranslations[condition.conditionName] ??
             condition.conditionName,
           labelName: String(
-            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+            condition.i18n?.[language as keyof typeof i18n] ??
               condition.descriptionUse,
           ),
           descriptionUse: String(
-            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+            condition.i18n?.[language as keyof typeof i18n] ??
               condition.descriptionUse,
           ),
           conditionDataType: condition.conditionDataType,

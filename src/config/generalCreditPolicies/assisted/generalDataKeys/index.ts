@@ -5,6 +5,7 @@ const generalDataKeys = [
   "financialObligations",
   "realGuarantees",
   "reciprocity",
+  "customValue",
   "sourcesIncome",
   "reference",
 ];

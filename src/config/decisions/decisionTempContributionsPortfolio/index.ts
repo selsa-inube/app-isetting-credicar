@@ -1,29 +1,29 @@
 import { IRuleDecision, ValueDataType } from "@isettingkit/input";
-import { enviroment } from "@config/environment";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { dataTranslations } from "@utils/dataTranslations";
 
-const decisionContributionsPortfConfig = ({
-  ruleName,
-  descriptionUse,
-  howToSetTheDecision,
-  decisionDataType,
-  conditionsThatEstablishesTheDecision,
-  listOfPossibleValues,
-  i18n,
-}: IDecisionData) => {
+const decisionContributionsPortfConfig = (
+  {
+    ruleName,
+    descriptionUse,
+    howToSetTheDecision,
+    decisionDataType,
+    conditionsThatEstablishesTheDecision,
+    listOfPossibleValues,
+    i18n,
+  }: IDecisionData,
+  language: string,
+) => {
   if (descriptionUse && decisionDataType) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
       labelName: String(
-        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-          "Número de veces los aportes",
+        i18n?.[language as keyof typeof i18n] ?? "Número de veces los aportes",
       ),
       descriptionUse: String(
-        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-          "Número de veces los aportes",
+        i18n?.[language as keyof typeof i18n] ?? "Número de veces los aportes",
       ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
@@ -44,11 +44,11 @@ const decisionContributionsPortfConfig = ({
             dataTranslations[condition.conditionName] ??
             condition.conditionName,
           labelName: String(
-            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+            condition.i18n?.[language as keyof typeof i18n] ??
               condition.descriptionUse,
           ),
           descriptionUse:
-            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+            condition.i18n?.[language as keyof typeof i18n] ??
             condition.descriptionUse,
           conditionDataType: condition.conditionDataType,
           value: condition.value,

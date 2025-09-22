@@ -20,17 +20,15 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     showPoliciesTab,
     showrequestTab,
     smallScreen,
-    referenceData,
     contributionsData,
     incomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
+    loadingRequest,
     modalData,
     showGoBackModal,
     onCloseGoBackModal,
@@ -41,7 +39,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
 
   return (
     <>
-      {loadingPolicies ? (
+      {loadingPolicies || loadingRequest ? (
         <Stack
           alignItems="center"
           justifyContent="center"
@@ -108,14 +106,11 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
 
                   {showPoliciesTab && (
                     <EditGeneralPolicies
-                      referenceData={referenceData}
                       contributionsData={contributionsData}
                       incomeData={incomeData}
                       scoreModelsData={scoreModelsData}
                       methodsData={methodsData}
                       additionalDebtorsData={additionalDebtorsData}
-                      sourcesIncomeData={sourcesIncomeData}
-                      financialObligData={financialObligData}
                       realGuaranteesData={realGuaranteesData}
                     />
                   )}

@@ -16,7 +16,6 @@ import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
-import { enviroment } from "@config/environment";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { ILanguage } from "@ptypes/i18n";
 import { IServerDomain } from "@ptypes/IServerDomain";
@@ -98,7 +97,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   });
 
   const laborRegulatorOptions = optionsFromEnumI18n(
-    enviroment.VITE_LANGUAGE as ILanguage,
+    appData.language as ILanguage,
     laborRegulator,
     true,
   );

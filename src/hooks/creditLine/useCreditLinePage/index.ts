@@ -81,7 +81,6 @@ const useCreditLinePage = (businessUnitSigla: string) => {
       data[key as keyof ICreditTabsConfig] = tab;
     }
     return data;
-    return data;
   }, {} as ICreditTabsConfig);
 
   const showCreditLinesTab = isSelected === tabs.creditLines.id;

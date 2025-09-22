@@ -20,7 +20,7 @@ import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { enviroment, mediaQueryTablet } from "@config/environment";
+import { mediaQueryTablet } from "@config/environment";
 import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
@@ -94,7 +94,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
   const monthOptions = optionsFromEnumI18n(
-    enviroment.VITE_LANGUAGE as ILanguage,
+    appData.language as ILanguage,
     months,
     true,
   );
@@ -112,7 +112,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   });
 
   const laborRegulatorOptions = optionsFromEnumI18n(
-    enviroment.VITE_LANGUAGE as ILanguage,
+    appData.language as ILanguage,
     laborRegulator,
     true,
   );

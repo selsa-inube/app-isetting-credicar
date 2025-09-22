@@ -7,7 +7,6 @@ import {
   Divider,
   useMediaQuery,
   Blanket,
-  Tabs,
   Button,
 } from "@inubekit/inubekit";
 
@@ -18,29 +17,9 @@ import { detailsModalLabels } from "@config/moneyDestination/moneyDestinationTab
 import { IDetailsDestinationModalUI } from "@ptypes/moneyDestination/tabs/IDetailsDestinationModalUI";
 import { StyledContainerButton, StyledModal } from "./styles";
 import { GeneralDataTab } from "./tabs/GeneralDataTab";
-import { CreditLineTab } from "./tabs/creditLineTab";
-import { CreditLinesIncluded } from "./tabs/creditLinesIncluded";
-import { CreditLinesRemoved } from "./tabs/creditLinesRemoved";
 
 const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
-  const {
-    isSelected,
-    smallScreenTab,
-    showGeneraldata,
-    showCreditLineTab,
-    showCreditLinesIncluded,
-    showCreditLinesRemoved,
-    data,
-    filteredTabs,
-    portalId,
-    textValues,
-    decisionTemplate,
-    decisions,
-    decisionDeleted,
-    decisionInserted,
-    onCloseModal,
-    onTabChange,
-  } = props;
+  const { data, portalId, onCloseModal } = props;
 
   const isMobile = useMediaQuery(mediaQueryMobile);
 
@@ -84,35 +63,7 @@ const DetailsDestinationModalUI = (props: IDetailsDestinationModalUI) => {
           <Divider />
         </Stack>
         <Stack gap={tokens.spacing.s150} direction="column" height="100%">
-          <Tabs
-            tabs={filteredTabs}
-            selectedTab={isSelected}
-            onChange={onTabChange}
-            scroll={smallScreenTab ? true : false}
-          />
-          {showGeneraldata && <GeneralDataTab data={data} />}
-          {showCreditLineTab && (
-            <CreditLineTab
-              data={decisions}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-          {showCreditLinesIncluded && (
-            <CreditLinesIncluded
-              data={decisionInserted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-          {showCreditLinesRemoved && (
-            <CreditLinesRemoved
-              data={decisionDeleted ?? []}
-              textValues={textValues}
-              decisionTemplate={decisionTemplate}
-            />
-          )}
-          <Divider />
+          <GeneralDataTab data={data} />
         </Stack>
         <Stack gap={tokens.spacing.s250} justifyContent="flex-end">
           <Button

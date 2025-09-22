@@ -48,12 +48,17 @@ const useEnumRules = (props: IUseEnumRules) => {
 
   const fetchListValuesDecision = async (conditionOrDecisionName: string) => {
     try {
-      const data = await getConditionsOrDecisionName(
-        businessUnits,
-        conditionOrDecisionName,
-      );
-      setListValuesDecision(data.possibleValues);
-      return data.possibleValues.map((obj: { value: string }) => obj.value);
+      if (
+        conditionOrDecisionName !== "undefined" &&
+        conditionOrDecisionName.length > 0
+      ) {
+        const data = await getConditionsOrDecisionName(
+          businessUnits,
+          conditionOrDecisionName,
+        );
+        setListValuesDecision(data.possibleValues);
+        return data.possibleValues.map((obj: { value: string }) => obj.value);
+      }
     } catch (error) {
       console.info(error);
       setHasError(true);
@@ -66,12 +71,17 @@ const useEnumRules = (props: IUseEnumRules) => {
     conditionOrDecisionName: string,
   ) => {
     try {
-      const data = await getConditionsOrDecisionName(
-        businessUnits,
-        conditionOrDecisionName,
-      );
-      setListValuesCondition({ [conditionName]: data.possibleValues });
-      return data.possibleValues.map((obj: { value: string }) => obj.value);
+      if (
+        conditionOrDecisionName !== "undefined" &&
+        conditionOrDecisionName.length > 0
+      ) {
+        const data = await getConditionsOrDecisionName(
+          businessUnits,
+          conditionOrDecisionName,
+        );
+        setListValuesCondition({ [conditionName]: data.possibleValues });
+        return data.possibleValues.map((obj: { value: string }) => obj.value);
+      }
     } catch (error) {
       console.info(error);
       setHasError(true);

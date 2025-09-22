@@ -6,6 +6,7 @@ import { IModalData } from "../IModalData";
 interface IGeneralCreditPoliciesUI {
   withoutPolicies: boolean;
   smallScreen: boolean;
+  loadingRequest: boolean;
   policiesTabs: ITab[];
   descriptionOptions: ICardData;
   smallScreenTab: boolean;
@@ -13,21 +14,18 @@ interface IGeneralCreditPoliciesUI {
   showrequestTab: boolean;
   isSelected: string;
   loadingPolicies: boolean;
-  showAddPolicies: boolean;
+  showAddPolicies?: boolean;
   showGoBackModal: boolean;
   modalData: IModalData;
   onTabChange: (id: string) => void;
   handleOpenModal: () => void;
   onCloseGoBackModal: () => void;
   onGoBack: () => void;
-  referenceData?: IRuleDecision[];
   contributionsData?: IRuleDecision[];
   incomeData?: IRuleDecision[];
   scoreModelsData?: IRuleDecision[];
   methodsData?: IRuleDecision[];
   additionalDebtorsData?: IRuleDecision[];
-  sourcesIncomeData?: IRuleDecision[];
-  financialObligData?: IRuleDecision[];
   realGuaranteesData?: IRuleDecision[];
 }
 

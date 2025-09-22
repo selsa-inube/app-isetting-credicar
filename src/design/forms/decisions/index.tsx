@@ -85,6 +85,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
       decisionTemplate={
         decisionTemplateConfig(
           ruleData,
+          appData.language,
           nameRule,
           appData.businessUnit.publicCode,
         ) ?? ({} as IRuleDecision)

@@ -23,6 +23,8 @@ const useDetailsRequestInProgress = (data: IEntry) => {
         description: traceability.description,
       }),
     ),
+    typeDestination: data.typeDestination,
+    creditLine: data.creditLine,
   };
 
   useEffect(() => {
