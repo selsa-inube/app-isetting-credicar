@@ -14,10 +14,12 @@ interface IRequestsInProcess {
   showErrorData: boolean;
   withErrorRequest: boolean;
   loading: boolean;
+  labelButton: string;
+  iconButton: React.ReactElement;
   onTabChange: (id: string) => void;
   onCloseModal: () => void;
   onClick: () => void;
-  onApproval: () => void;
+  onThirdClick: () => void;
 }
 
 export type { IRequestsInProcess };

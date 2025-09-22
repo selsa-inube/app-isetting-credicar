@@ -3,13 +3,16 @@ import { Stack, Text } from "@inubekit/inubekit";
 import { IconWithText } from "@design/data/iconWithText";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
-import { withErrorInRequest } from "@config/status/withErrorInRequest";
+import { approvalInRequest } from "@config/status/approvalInRequest";
+import { executeInRequest } from "@config/status/executeInRequest";
 import { IIconRequestError } from "@ptypes/design/IIconRequestError";
 
 const IconRequestError = (props: IIconRequestError) => {
   const { status } = props;
 
-  const withError = withErrorInRequest.includes(status);
+  const withError =
+    approvalInRequest.includes(status) || executeInRequest.includes(status);
+
   return (
     <Stack width="100%">
       {!withError ? (

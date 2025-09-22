@@ -19,11 +19,11 @@ const Details = (props: IDetails) => {
     showErrorData,
     modalData,
     showDecision,
-    withErrorRequest,
     loading,
     isSelected: isSelectedRequest,
     defaultSelectedTab: defaultSelectedRequestTab,
-    handleApproval,
+    statusRequestData,
+    withErrorRequest,
     handleToggleModal,
     handleTabRequestChange,
   } = useDetailsRequestInProgress({ data });
@@ -81,12 +81,14 @@ const Details = (props: IDetails) => {
       showTrazabilityData={showTrazabilityData}
       withErrorRequest={withErrorRequest}
       loading={loading}
-      onApproval={handleApproval}
+      onClick={statusRequestData.onClick}
       showErrorData={showErrorData}
       onTabRequestChange={handleTabRequestChange}
       showDecision={showDecision}
       modalData={modalData}
       isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
+      labelButton={statusRequestData.textButton}
+      iconButton={statusRequestData.iconButton}
     />
   );
 };

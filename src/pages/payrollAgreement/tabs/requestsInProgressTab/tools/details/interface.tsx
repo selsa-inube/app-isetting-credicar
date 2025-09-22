@@ -42,7 +42,9 @@ const DetailsUI = (props: IDetailsUI) => {
     loading,
     showDecision,
     modalData,
-    onApproval,
+    iconButton,
+    labelButton,
+    onClick,
     onTabRequestChange,
     onTabChange,
     onToggleModal,
@@ -81,8 +83,10 @@ const DetailsUI = (props: IDetailsUI) => {
           showErrorData={showErrorData}
           onTabChange={onTabRequestChange}
           withErrorRequest={withErrorRequest}
-          onApproval={onApproval}
+          onThirdClick={onClick}
           loading={loading}
+          labelButton={labelButton}
+          iconButton={iconButton}
         />
       )}
 

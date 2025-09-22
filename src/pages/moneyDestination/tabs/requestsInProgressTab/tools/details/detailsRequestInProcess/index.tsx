@@ -29,8 +29,10 @@ const DetailsRequestInProcess = (props: IDetails) => {
     loading,
     modalData,
     showDecision,
+    labelButton,
+    iconButton,
     onTabRequestChange,
-    onApproval,
+    onClick,
     onToggleModal,
     onToggleMoreDetailsModal,
   } = props;
@@ -70,14 +72,16 @@ const DetailsRequestInProcess = (props: IDetails) => {
           withErrorRequest={withErrorRequest}
           loading={loading}
           onTabChange={onTabRequestChange}
-          onApproval={onApproval}
+          onThirdClick={onClick}
+          labelButton={labelButton}
+          iconButton={iconButton}
         />
       )}
 
       {showMoreDetailsModal && (
         <DetailsDestinationModal
           data={moreDetailsData}
-          portalId="portal"
+          portalId={portalId}
           onCloseModal={onToggleMoreDetailsModal}
         />
       )}

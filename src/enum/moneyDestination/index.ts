@@ -9,6 +9,9 @@ enum EMoneyDestination {
   USE_CASE_EDIT = "Modificar destino de dinero de credito",
   USE_CASE_DELETE = "Eliminar destinos de dinero de credito",
   USE_CASE_CANCEL_REQUEST = "Eliminar solicitud de configuracion",
+  ADD_MONEY_DESTINATION = "AddMoneyDestination",
+  MODIFY_MONEY_DESTINATION = "ModifyMoneyDestination",
+  DELETE_MONEY_DESTINATION = "DeleteMoneyDestination",
 }
 
 export { EMoneyDestination };

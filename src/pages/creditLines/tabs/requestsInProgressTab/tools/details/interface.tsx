@@ -26,7 +26,9 @@ const DetailsUI = (props: IDetailsRequestUI) => {
     showTrazabilityData,
     title,
     withErrorRequest,
-    onApproval,
+    labelButton,
+    iconButton,
+    onClick,
     onTabRequestChange,
     onToggleModal,
   } = props;
@@ -63,8 +65,10 @@ const DetailsUI = (props: IDetailsRequestUI) => {
           showErrorData={showErrorData}
           onTabChange={onTabRequestChange}
           withErrorRequest={withErrorRequest}
-          onApproval={onApproval}
+          onThirdClick={onClick}
           loading={loading}
+          labelButton={labelButton}
+          iconButton={iconButton}
         />
       )}
 

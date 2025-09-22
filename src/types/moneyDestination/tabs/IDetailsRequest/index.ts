@@ -18,8 +18,10 @@ interface IDetails {
   loading: boolean;
   modalData: IModalData;
   showDecision: boolean;
+  labelButton: string;
+  iconButton: React.ReactElement;
   onTabRequestChange: (id: string) => void;
-  onApproval: () => void;
+  onClick: () => void;
   onToggleModal: () => void;
   onToggleMoreDetailsModal: () => void;
 }
