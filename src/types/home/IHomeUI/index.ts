@@ -16,6 +16,7 @@ interface IHomeUI {
   screenTablet: boolean;
   screenTabletHeader: boolean;
   dataExists: boolean;
+  padding: string;
   optionsHeader: {
     nav: IFullscreenNav;
     breakpoint?: string;

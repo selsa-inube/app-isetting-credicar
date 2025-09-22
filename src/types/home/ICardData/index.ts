@@ -1,7 +1,7 @@
 interface ICardData {
   publicCode: string;
-  icon: string | React.ReactNode;
   url: string;
+  icon?: string | React.ReactNode;
   id?: string;
   description?: string;
 }

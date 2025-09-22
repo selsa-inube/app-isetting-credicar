@@ -57,7 +57,7 @@ const StyledTitle = styled.div<IStyledTitle>`
   padding: ${({ $isTablet }) =>
     $isTablet
       ? `var(--spacing-S200, ${tokens.spacing.s200})`
-      : `${tokens.spacing.s600} ${tokens.spacing.s1600} ${tokens.spacing.s1000}`};
+      : `${tokens.spacing.s600} ${tokens.spacing.s1600} ${tokens.spacing.s300}`};
   display: flex;
   flex-direction: column;
   align-items: ${({ $isTablet }) => $isTablet && "flex-start"};
@@ -71,10 +71,6 @@ const StyledTitle = styled.div<IStyledTitle>`
 const StyledContainerCards = styled.div<IStyledContainerCards>`
   display: flex;
   box-sizing: border-box;
-  padding: ${({ $isTablet }) =>
-    $isTablet
-      ? `${tokens.spacing.s0}`
-      : `${tokens.spacing.s0} ${tokens.spacing.s1400} ${tokens.spacing.s400} 170px`};
   justify-content: ${({ $isTablet }) => ($isTablet ? "center" : "flex-start")};
   flex-wrap: wrap;
   gap: ${tokens.spacing.s400};
