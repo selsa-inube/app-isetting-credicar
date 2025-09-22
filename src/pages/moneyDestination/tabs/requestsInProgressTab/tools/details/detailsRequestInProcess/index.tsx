@@ -1,15 +1,17 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
+import { RequestsInProcess } from "@design/modals/requestInProgressModal";
+import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { EComponentAppearance } from "@enum/appearances";
 import { labelsOfRequest } from "@config/moneyDestination/requestsInProgressTab/details/labelsOfRequest";
 import { labelsOfTraceability } from "@config/moneyDestination/requestsInProgressTab/details/labelsOfTraceability";
-import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
-
 import { detailsLabels } from "@config/moneyDestination/requestsInProgressTab/details/detailsLabels";
+import { portalId } from "@config/portalId";
+import { mediaQueryTablet } from "@config/environment";
 import { IDetails } from "@ptypes/moneyDestination/tabs/IDetailsRequest";
 import { StyledContainerIcon } from "./styles";
-import { RequestsInProcess } from "../requestsInProcess";
 
 const DetailsRequestInProcess = (props: IDetails) => {
   const {
@@ -28,12 +30,23 @@ const DetailsRequestInProcess = (props: IDetails) => {
     showModal,
     showMoreDetailsModal,
     textValuesBusinessRules,
+    titleRequest,
+    isSelectedRequest,
+    filteredTabs,
+    showTrazabilityData,
+    showErrorData,
+    withErrorRequest,
+    loading,
+    modalData,
+    showDecision,
+    onTabRequestChange,
+    onApproval,
     onTabChange,
     onToggleModal,
     onToggleMoreDetailsModal,
   } = props;
 
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   return (
     <>
@@ -60,6 +73,15 @@ const DetailsRequestInProcess = (props: IDetails) => {
           onCloseModal={onToggleModal}
           isMobile={isMobile}
           onClick={onToggleMoreDetailsModal}
+          title={titleRequest}
+          isSelected={isSelectedRequest}
+          filteredTabs={filteredTabs}
+          showTrazabilityData={showTrazabilityData}
+          showErrorData={showErrorData}
+          withErrorRequest={withErrorRequest}
+          loading={loading}
+          onTabChange={onTabRequestChange}
+          onApproval={onApproval}
         />
       )}
 
@@ -80,6 +102,21 @@ const DetailsRequestInProcess = (props: IDetails) => {
           onTabChange={onTabChange}
           decisionDeleted={decisionDeleted}
           decisionInserted={decisionInserted}
+        />
+      )}
+      {showDecision && (
+        <DecisionModal
+          portalId={portalId}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </>

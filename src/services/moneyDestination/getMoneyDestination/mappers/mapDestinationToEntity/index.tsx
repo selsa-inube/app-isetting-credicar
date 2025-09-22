@@ -1,7 +1,7 @@
 import { MdCategory } from "react-icons/md";
 import { IconWithText } from "@design/data/iconWithText";
-import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
+import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
 
 const mapMoneyDestinationToEntity = (
   data: IMoneyDestinationData,
@@ -10,6 +10,7 @@ const mapMoneyDestinationToEntity = (
     id: String(data.moneyDestinationId),
     abbreviatedName: (
       <IconWithText
+        withIconBefore
         icon={
           normalizeIconDestination(data.iconReference)?.icon ?? (
             <MdCategory size={20} />
