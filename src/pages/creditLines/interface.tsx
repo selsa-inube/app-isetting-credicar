@@ -5,6 +5,7 @@ import { crumbsCreditLines } from "@config/creditLines/navigation";
 import { ICreditLinesUI } from "@ptypes/creditLines/ICreditLinesUI";
 import { CreditLinesTab } from "./tabs/creditLinesTab";
 import { LinesUnderConstructionTab } from "./tabs/linesUnderConstructionTab";
+import { RequestsInProgressTab } from "./tabs/requestsInProgressTab";
 
 const CreditLinesUI = (props: ICreditLinesUI) => {
   const {
@@ -50,7 +51,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
               setShowUnderConstruction={setShowUnderConstruction}
             />
           )}
-          {showRequestsInProgressTab && <></>}
+          {showRequestsInProgressTab && <RequestsInProgressTab />}
           {showLinesUnderConstructionTab && <LinesUnderConstructionTab />}
         </Stack>
       </Stack>

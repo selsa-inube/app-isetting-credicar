@@ -10,8 +10,8 @@ import {
   Text,
 } from "@inubekit/inubekit";
 
-import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
+import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { IModalWrapper } from "@ptypes/design/IModalWrapper";
 
@@ -41,6 +41,12 @@ const ModalWrapper = (props: IModalWrapper) => {
     weightTitle = "normal",
     width = "auto",
     withCancelButton,
+    withThirdButton,
+    appearanceThirdButton,
+    labelThirdButton,
+    iconThirdButton,
+    loadingThirdButton,
+    onClickThirdButton,
     onClick,
     onCloseModal,
   } = props;
@@ -111,21 +117,40 @@ const ModalWrapper = (props: IModalWrapper) => {
           {children}
         </Stack>
 
-        <Stack gap={tokens.spacing.s250} justifyContent="flex-end">
+        <Stack
+          gap={tokens.spacing.s250}
+          justifyContent="flex-end"
+          direction={isMobile ? "column-reverse" : "row"}
+        >
           {withCancelButton && (
             <Button
               spacing="wide"
               appearance={EComponentAppearance.GRAY}
+              fullwidth={isMobile}
               variant={variantCancel}
               onClick={onCloseModal}
             >
               {labelCloseButton}
             </Button>
           )}
+          {withThirdButton && (
+            <Button
+              spacing="wide"
+              appearance={appearanceThirdButton}
+              iconBefore={iconThirdButton ?? <></>}
+              fullwidth={isMobile}
+              variant="filled"
+              onClick={onClickThirdButton}
+              loading={loadingThirdButton}
+            >
+              {labelThirdButton}
+            </Button>
+          )}
 
           <Button
             spacing="wide"
             appearance={appearanceButton}
+            fullwidth={isMobile}
             variant="filled"
             onClick={onClick}
             loading={loading}

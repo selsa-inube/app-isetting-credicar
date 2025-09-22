@@ -1,7 +1,9 @@
+import { ITab } from "@inubekit/inubekit";
+import { IRuleDecision } from "@isettingkit/input";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { IDetailsTabsConfig } from "@ptypes/generalCredPolicies/IDetailsTabsConfig";
 import { IEntry } from "@ptypes/design/table/IEntry";
-import { IRuleDecision } from "@isettingkit/input";
+import { IModalData } from "../IModalData";
 
 interface IDetailsRequest {
   data: IEntry;
@@ -19,6 +21,17 @@ interface IDetailsRequest {
   showModal: boolean;
   showMoreDetailsModal: boolean;
   textValuesBusinessRules: IRulesFormTextValues;
+  titleRequest: string;
+  isSelectedRequest: string;
+  filteredTabs: ITab[];
+  showTrazabilityData: boolean;
+  showErrorData: boolean;
+  withErrorRequest: boolean;
+  loading: boolean;
+  modalData: IModalData;
+  showDecision: boolean;
+  onTabRequestChange: (id: string) => void;
+  onApproval: () => void;
   onTabChange: (id: string) => void;
   onToggleModal: () => void;
   onToggleMoreDetailsModal: () => void;

@@ -1,24 +1,12 @@
-import { useEffect, useState } from "react";
-import { useMediaQuery } from "@inubekit/inubekit";
-
-import { eventBus } from "@events/eventBus";
 import { ETransactionOperation } from "@enum/transactionOperation";
-import { EModalState } from "@enum/modalState";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
-import { mediaQueryMobile } from "@config/environment";
-import { IUseDetailsRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseDetailsRequestInProgress";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IUseDataDetails } from "@ptypes/hooks/payrollAgreement/IUseDataDetails";
 
-const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
+const useDataDetailsRequest = (props: IUseDataDetails) => {
   const { data } = props;
-  const [showModal, setShowModal] = useState(false);
-
-  const handleToggleModal = () => {
-    setShowModal(!showModal);
-  };
-
   const normalizeData = {
     ...data,
     id: data.id,
@@ -119,20 +107,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
       );
   }
 
-  useEffect(() => {
-    eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
-  }, [showModal]);
-
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
-  const isMobile = useMediaQuery(mediaQueryMobile);
-
-  return {
-    showModal,
-    screenTablet,
-    isMobile,
-    handleToggleModal,
-    normalizeData,
-  };
+  return { normalizeData };
 };
 
-export { useDetailsRequestInProgress };
+export { useDataDetailsRequest };

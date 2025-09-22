@@ -16,6 +16,7 @@ const useMoreDetailsRequestProgress = (data: IEntry) => {
     id: data.id,
     abbreviatedName: data.configurationRequestData.abbreviatedName && (
       <IconWithText
+        withIconBefore
         icon={getIcon(data.configurationRequestData.iconReference)}
         text={String(data.configurationRequestData.abbreviatedName)}
       />

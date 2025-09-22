@@ -21,7 +21,11 @@ const meta: Meta<typeof DetailsDestinationModal> = {
 const data = {
   id: "1",
   name: (
-    <IconWithText icon={<MdOutlineBeachAccess size={16} />} text="Vacaciones" />
+    <IconWithText
+      withIconBefore
+      icon={<MdOutlineBeachAccess size={16} />}
+      text="Vacaciones"
+    />
   ),
   description:
     "lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",

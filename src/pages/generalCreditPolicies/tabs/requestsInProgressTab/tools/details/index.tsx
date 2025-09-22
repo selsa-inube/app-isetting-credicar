@@ -1,17 +1,32 @@
-import { detailsTabsConfig } from "@config/generalCreditPolicies/requestsInProgressTab/tabs";
-import { IDetails } from "@ptypes/generalCredPolicies/IDetails";
-import { DetailsRequestInProcess } from "./detailsRequest";
-import { decisionTemplate } from "@config/generalCreditPolicies/decisionTemplate";
-import { textValuesBusinessRules } from "@config/generalCreditPolicies/textValuesBusinessRules";
 import { useDetailsRequestInProgress } from "@hooks/GeneralCreditPolicies/useDetailsRequestInProgress";
 import { useMoreDetailsRequestProgress } from "@hooks/GeneralCreditPolicies/useMoreDetailsRequestProgress";
 import { useDetailsPoliciesModal } from "@hooks/GeneralCreditPolicies/useDetailsPoliciesModal";
+import { decisionTemplate } from "@config/generalCreditPolicies/decisionTemplate";
+import { detailsTabsConfig } from "@config/generalCreditPolicies/requestsInProgressTab/tabs";
+import { textValuesBusinessRules } from "@config/generalCreditPolicies/textValuesBusinessRules";
+import { IDetails } from "@ptypes/generalCredPolicies/IDetails";
+import { DetailsRequestInProcess } from "./detailsRequest";
 
 const Details = (props: IDetails) => {
   const { data } = props;
 
-  const { showModal, normalizeData, handleToggleModal } =
-    useDetailsRequestInProgress({ data });
+  const {
+    showModal,
+    normalizeData,
+    filteredRequestTabs,
+    showTrazabilityData,
+    showErrorData,
+    withErrorRequest,
+    loading,
+    modalData,
+    showDecision,
+    title: titleRequest,
+    isSelected: isSelectedRequest,
+    defaultSelectedTab: defaultSelectedRequestTab,
+    handleTabRequestChange,
+    handleApproval,
+    handleToggleModal,
+  } = useDetailsRequestInProgress({ data });
 
   const {
     showMoreDetailsModal,
@@ -70,6 +85,17 @@ const Details = (props: IDetails) => {
       incomeQuotaDeleted={incomeQuotaDeleted}
       scoreModelsInserted={scoreModelsInserted}
       scoreModelsDeleted={scoreModelsDeleted}
+      titleRequest={titleRequest}
+      isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
+      filteredTabs={filteredRequestTabs}
+      showTrazabilityData={showTrazabilityData}
+      showErrorData={showErrorData}
+      withErrorRequest={withErrorRequest}
+      loading={loading}
+      onTabRequestChange={handleTabRequestChange}
+      onApproval={handleApproval}
+      modalData={modalData}
+      showDecision={showDecision}
     />
   );
 };

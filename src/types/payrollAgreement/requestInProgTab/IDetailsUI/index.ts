@@ -1,5 +1,7 @@
+import { ITab } from "@inubekit/inubekit";
 import { ILabel } from "@ptypes/ILabel";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IDetailsTabsConfig } from "../IDetailsTabsConfig";
 
 interface IDetailsUI {
@@ -24,6 +26,16 @@ interface IDetailsUI {
   normalizeDataMoreDetails: IEntry;
   labelsOfRequestDetails: ILabel[];
   title: string;
+  filteredTabs: ITab[];
+  showTrazabilityData: boolean;
+  showErrorData: boolean;
+  isSelectedRequest: string;
+  loading: boolean;
+  withErrorRequest: boolean;
+  showDecision: boolean;
+  modalData: IModalData;
+  onApproval: () => void;
+  onTabRequestChange: (id: string) => void;
   onTabChange: (id: string) => void;
   onToggleModal: () => void;
   onToggleMoreDetailsModal: () => void;

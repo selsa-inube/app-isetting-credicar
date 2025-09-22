@@ -1,40 +1,38 @@
 import { Divider, Stack, Text } from "@inubekit/inubekit";
-
+import { DetailBox } from "@design/feedback/detailBox";
+import { TraceabilityCard } from "@design/feedback/traceabilityCard";
+import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { detailsRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/details/detailsRequestInProgressModal";
-import { TraceabilityCard } from "@design/feedback/traceabilityCard";
-import { ModalWrapper } from "@design/modals/modalWrapper";
-import { BoxContainer } from "@design/layout/boxContainer";
-import { DetailBox } from "@design/feedback/detailBox";
-import { IRequestsInProcess } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProcess";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { ITrazabilityTab } from "@ptypes/design/ITrazabilityTab";
 
-const RequestsInProcess = (props: IRequestsInProcess) => {
-  const {
-    data,
-    title,
-    labelsOfRequest,
-    labelsOfTraceability,
-    isMobile,
-    onCloseModal,
-    onClick,
-  } = props;
+const TrazabilityTab = (props: ITrazabilityTab) => {
+  const { data, title, isMobile, labelsOfRequest, labelsOfTraceability } =
+    props;
 
+  const labelsOfRequestDetails = labelsOfRequest.filter(
+    (field) => data[field.id],
+  );
   return (
-    <ModalWrapper
-      portalId="portal"
-      width={isMobile ? "335px" : "600px"}
-      isMobile={isMobile}
-      labelActionButton={detailsRequestInProgressModal.labelActionButton}
-      labelCloseButton={detailsRequestInProgressModal.labelCloseButton}
-      labelCloseModal={detailsRequestInProgressModal.labelCloseModal}
-      iconBeforeButton={detailsRequestInProgressModal.iconBeforeButton}
-      title={detailsRequestInProgressModal.title}
-      withCancelButton={true}
-      onCloseModal={onCloseModal}
-      onClick={onClick}
-    >
+    <Stack direction="column" gap={tokens.spacing.s200}>
+      <Stack gap={tokens.spacing.s250} direction={isMobile ? "column" : "row"}>
+        {labelsOfRequestDetails.map((field, id) => (
+          <DetailBox
+            key={id}
+            field={field}
+            data={data}
+            id={id}
+            borderRadius={tokens.spacing.s100}
+            padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
+            width={isMobile ? "100%" : "240px"}
+            borderColor={EComponentAppearance.DARK}
+            ellipsis
+          />
+        ))}
+      </Stack>
+
       <BoxContainer
         direction="column"
         backgroundColor={EComponentAppearance.LIGHT}
@@ -78,25 +76,6 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
           gap={isMobile ? `${tokens.spacing.s075}` : `${tokens.spacing.s150}`}
         >
           <Stack
-            gap={tokens.spacing.s250}
-            direction={isMobile ? "column" : "row"}
-          >
-            {labelsOfRequest.map((field, id) => (
-              <DetailBox
-                key={id}
-                field={field}
-                data={data}
-                id={id}
-                borderRadius={tokens.spacing.s100}
-                padding={`${tokens.spacing.s075} ${tokens.spacing.s150}`}
-                width={isMobile ? "253px" : "240px"}
-                borderColor={EComponentAppearance.DARK}
-                ellipsis
-              />
-            ))}
-          </Stack>
-
-          <Stack
             margin={`${tokens.spacing.s075} ${tokens.spacing.s0}`}
             direction="column"
             alignItems="center"
@@ -126,8 +105,8 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
           </Stack>
         </BoxContainer>
       </BoxContainer>
-    </ModalWrapper>
+    </Stack>
   );
 };
 
-export { RequestsInProcess };
+export { TrazabilityTab };

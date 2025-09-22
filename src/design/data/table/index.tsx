@@ -11,6 +11,7 @@ import { goToEndPage } from "@utils/table/pagination/goToEndPage";
 import { getPageEntries } from "@utils/table/pagination/getPageEntries";
 import { titleColumns } from "@utils/table/titleColumns";
 import { findCurrentMediaQuery } from "@utils/table/breakpoint/findCurrentMediaQuery";
+import { mediaQueryTablet } from "@config/environment";
 import { ITable } from "@ptypes/design/table/ITable";
 import { TableUI } from "./interface";
 import { StyledContainerTable, StyledTableOverflow } from "./styles";
@@ -39,8 +40,8 @@ const Table = (props: ITable) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const mediaQueries = useMediaQueries(getQueriesArray(breakpoints));
-  const mediaActionOpen = useMediaQuery("(max-width: 1200px)");
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const mediaActionOpen = useMediaQuery(mediaQueryTablet);
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   const media = useMediaQueries(getQueriesArray(breakpoints) || []);
 

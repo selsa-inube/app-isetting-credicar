@@ -56,6 +56,17 @@ const tokensBoxContainer = {
       color: inube.palette.yellow.Y50,
     },
   },
+  danger: {
+    border: {
+      color: inube.palette.red.R400,
+    },
+    background: {
+      color: inube.palette.red.R50,
+    },
+    boxShadow: {
+      color: inube.palette.red.R50,
+    },
+  },
 };
 
 export { tokensBoxContainer };

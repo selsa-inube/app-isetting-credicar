@@ -1,16 +1,16 @@
 const requestStatus: Record<string, string> = {
-  RequestProcessed: "Solicitud procesada",
-  RequestCanceled: "Solicitud cancelada",
-  RequestProcessedWithError: "Solicitud procesada con error",
-  PendingApproval: "Pendiente de aprobación",
-  InTheProcessOfValidation: "En proceso de validación",
+  RequestProcessed: "Procesada",
+  RequestCanceled: "Cancelada",
+  RequestProcessedWithError: "Pendiente",
+  PendingApproval: "Pendiente aprobación",
+  InTheProcessOfValidation: "En proceso validación",
   InTheProcessComplementationValidation:
-    "En proceso de complementación y validación",
+    "En proceso complementación y validación",
   ProcessingRequest: "Procesando solicitud",
   RequestInProgress: "Procesando solicitud",
-  RejectedRequest: "Solicitud rechazada",
-  RequestReadyToProcess: "Solicitud lista para procesar",
-  RequestPendingProcessing: "Solicitud pendiente de procesamiento",
+  RejectedRequest: "Rechazada",
+  RequestReadyToProcess: "Lista para procesar",
+  RequestPendingProcessing: "Pendiente procesamiento",
 };
 
 export { requestStatus };

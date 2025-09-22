@@ -9,6 +9,7 @@ const mapMoneyDestinationToEntity = (
     id: String(data.moneyDestinationId),
     abbreviatedName: (
       <IconWithText
+        withIconBefore
         icon={getIcon(data.iconReference)}
         text={String(data.abbreviatedName)}
       />

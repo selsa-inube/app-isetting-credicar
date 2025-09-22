@@ -1,6 +1,7 @@
-import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
+import { IconRequestError } from "@design/data/iconRequestError";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { requestStatus } from "@config/requestStatus";
+import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const mapRequestsInProgressToEntity = (
   data: IRequestsInProgress,
@@ -18,13 +19,20 @@ const mapRequestsInProgressToEntity = (
     entityName: String(data.entityName),
     requestDate: formatDateTable(new Date(String(data.requestDate))),
     requestNumber: String(data.requestNumber),
-    requestStatus: requestStatus[data.requestStatus] ?? data.requestStatus,
+    requestStatus: (
+      <IconRequestError
+        status={
+          requestStatus[data.requestStatus as string] ?? data.requestStatus
+        }
+      />
+    ),
     requestStatusCode: String(data.requestStatus),
     settingRequestId: String(data.settingRequestId),
     useCaseName: String(data.useCaseName),
     userManagingConfigurationRequests: Object(
       data.userManagingConfigurationRequests,
     ),
+    settingRequestError: Object(data.settingRequestError),
   };
   return request;
 };

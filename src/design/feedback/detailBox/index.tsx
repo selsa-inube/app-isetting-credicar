@@ -41,7 +41,7 @@ const DetailBox = (props: IDetailBox) => {
         </Stack>
       ) : (
         <Text
-          size="small"
+          size="medium"
           appearance={EComponentAppearance.GRAY}
           ellipsis={ellipsis}
         >
