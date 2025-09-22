@@ -4,6 +4,7 @@ interface IPayrollSpecialBenefit {
   paymentDay: string;
   payrollForDeductionAgreementId?: string;
   id?: string;
+  regulatoryFrameworkCode?: string;
 }
 
 export type { IPayrollSpecialBenefit };

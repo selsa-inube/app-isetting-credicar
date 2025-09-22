@@ -48,21 +48,22 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     const isEditing = selectedDecision !== null;
 
     const updatedConditions =
-      decisionTemplate.conditionsThatEstablishesTheDecision?.map(
-        (templateCondition) => {
+      decisionTemplate.conditionsThatEstablishesTheDecision
+        ?.map((templateCondition) => {
           const existingCondition =
             dataDecision.conditionsThatEstablishesTheDecision?.find(
               (condition) =>
                 condition.conditionName === templateCondition.conditionName,
             );
 
-          if (!existingCondition) {
-            return templateCondition;
-          }
-
-          return existingCondition;
-        },
-      );
+          return existingCondition || templateCondition;
+        })
+        .filter(
+          (condition) =>
+            condition.value !== undefined &&
+            condition.value !== null &&
+            condition.value !== "",
+        );
 
     const newDecision = isEditing
       ? (revertModalDisplayData(

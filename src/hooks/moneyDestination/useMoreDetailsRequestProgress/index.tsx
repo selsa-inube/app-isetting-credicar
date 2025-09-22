@@ -2,8 +2,8 @@ import { useState } from "react";
 import { dataTranslations } from "@utils/dataTranslations";
 import { formatDate } from "@utils/date/formatDate";
 import { IconWithText } from "@design/data/iconWithText";
-import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { getIcon } from "@utils/getIcon";
 
 const useMoreDetailsRequestProgress = (data: IEntry) => {
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
@@ -17,16 +17,15 @@ const useMoreDetailsRequestProgress = (data: IEntry) => {
     abbreviatedName: data.configurationRequestData.abbreviatedName && (
       <IconWithText
         withIconBefore
-        icon={
-          normalizeIconDestination(data.configurationRequestData.iconReference)
-            ?.icon ?? <></>
-        }
+        icon={getIcon(data.configurationRequestData.iconReference)}
         text={String(data.configurationRequestData.abbreviatedName)}
       />
     ),
     descriptionUse:
       data.configurationRequestData.descriptionUse ??
       data.configurationRequestData.justification,
+    typeDestination: data.typeDestination,
+    creditLine: data.creditLine,
   };
 
   const decisions = data.configurationRequestData.rules

@@ -1,20 +1,30 @@
 import { IRuleDecision, ValueDataType } from "@isettingkit/input";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { dataTranslations } from "@utils/dataTranslations";
 
-const decisionContributionsPortfConfig = ({
-  ruleName,
-  labelName,
-  howToSetTheDecision,
-  decisionDataType,
-  conditionsThatEstablishesTheDecision,
-  listOfPossibleValues,
-}: IRuleDecision) => {
-  if (labelName && decisionDataType) {
+const decisionContributionsPortfConfig = (
+  {
+    ruleName,
+    descriptionUse,
+    howToSetTheDecision,
+    decisionDataType,
+    conditionsThatEstablishesTheDecision,
+    listOfPossibleValues,
+    i18n,
+  }: IDecisionData,
+  language: string,
+) => {
+  if (descriptionUse && decisionDataType) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
-      labelName: "Número de veces los aportes",
+      labelName: String(
+        i18n?.[language as keyof typeof i18n] ?? "Número de veces los aportes",
+      ),
+      descriptionUse: String(
+        i18n?.[language as keyof typeof i18n] ?? "Número de veces los aportes",
+      ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision: howToSetTheDecision,
@@ -33,8 +43,13 @@ const decisionContributionsPortfConfig = ({
           conditionName:
             dataTranslations[condition.conditionName] ??
             condition.conditionName,
-          labelName:
-            dataTranslations[condition.labelName] ?? condition.labelName,
+          labelName: String(
+            condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
+          descriptionUse:
+            condition.i18n?.[language as keyof typeof i18n] ??
+            condition.descriptionUse,
           conditionDataType: condition.conditionDataType,
           value: condition.value,
           listOfPossibleValues: condition.listOfPossibleValues,

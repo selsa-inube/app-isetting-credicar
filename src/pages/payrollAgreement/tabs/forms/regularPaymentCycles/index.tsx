@@ -1,3 +1,4 @@
+import { IOption } from "@inubekit/inubekit";
 import { forwardRef } from "react";
 import { FormikProps } from "formik";
 
@@ -36,6 +37,7 @@ const RegularPaymentCyclesForm = forwardRef<
       numberDaysUntilCutOptions,
       paydayOptions,
       periodicityOptions,
+      laborRegulatorOptions,
       showInfoModal,
       isMobile,
       columnWidths,
@@ -77,6 +79,7 @@ const RegularPaymentCyclesForm = forwardRef<
         numberDaysUntilCutOptions={numberDaysUntilCutOptions ?? []}
         paydayOptions={paydayOptions ?? []}
         periodicityOptions={periodicityOptions}
+        laborRegulatorOptions={laborRegulatorOptions as IOption[]}
         showInfoModal={showInfoModal}
         onToggleInfoModal={onToggleInfoModal}
         isMobile={isMobile}

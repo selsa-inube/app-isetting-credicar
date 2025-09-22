@@ -1,12 +1,5 @@
 import { MdInfoOutline } from "react-icons/md";
-import {
-  Button,
-  Checkbox,
-  Icon,
-  Select,
-  Stack,
-  Text,
-} from "@inubekit/inubekit";
+import { Button, Checkbox, Icon, Stack, Text } from "@inubekit/inubekit";
 
 import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
@@ -14,9 +7,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IDecisionsGeneralFormUI } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralFormUI";
-import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { methodsOfCalculation } from "@config/generalCreditPolicies/assisted/methodsOfCalculation";
-import { isInvalid } from "@utils/isInvalid";
 import { infoObligationModal } from "@config/generalCreditPolicies/generic/infoObligationModal";
 import { infoReferenceModal } from "@config/generalCreditPolicies/generic/infoReferenceModal";
 import { infoMethodsModal } from "@config/generalCreditPolicies/generic/infoMethodsModal";
@@ -36,7 +27,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     isMobile,
     buttonLabel,
     onToggle,
-    onReferenceChange,
     onButtonClick,
     onResetEdit,
     onInfoRefModal,
@@ -71,45 +61,6 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 <Icon
                   icon={<MdInfoOutline />}
                   appearance={EComponentAppearance.PRIMARY}
-                  onClick={onInfoRefModal}
-                  size="12px"
-                  cursorHover
-                />
-              </Stack>
-              <Stack
-                direction="column"
-                width={isMobile ? "100%" : "45%"}
-                padding={
-                  isMobile
-                    ? `${tokens.spacing.s0}`
-                    : `${tokens.spacing.s0} ${tokens.spacing.s150} ${tokens.spacing.s0}`
-                }
-              >
-                <Stack height={tokens.spacing.s550} width="100%">
-                  <Select
-                    fullwidth
-                    id="reference"
-                    name="reference"
-                    label=""
-                    placeholder={decisionsGenLabels.placeholderReference}
-                    onChange={onReferenceChange}
-                    options={getDomainById("referenceDecision")}
-                    size="compact"
-                    onBlur={formik.handleBlur}
-                    value={formik.values.reference ?? ""}
-                    message={formik.errors.reference}
-                    invalid={isInvalid(formik, "reference")}
-                  />
-                </Stack>
-              </Stack>
-            </Stack>
-
-            <Stack direction="column" gap={tokens.spacing.s200}>
-              <Stack alignItems="center" gap={tokens.spacing.s050}>
-                <Text size="medium">{decisionsGenLabels.second}</Text>
-                <Icon
-                  icon={<MdInfoOutline />}
-                  appearance={EComponentAppearance.PRIMARY}
                   onClick={onInfoMethodsModal}
                   size="12px"
                   cursorHover
@@ -137,25 +88,13 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
             </Stack>
             <ToggleGeneralDecision
               name="additionalDebtors"
-              label={decisionsGenLabels.third}
+              label={decisionsGenLabels.second}
               isChecked={formik.values.additionalDebtors}
               onToggle={onToggle}
             />
             <ToggleGeneralDecision
-              name="sourcesIncome"
-              label={decisionsGenLabels.fourth}
-              isChecked={formik.values.sourcesIncome}
-              onToggle={onToggle}
-            />
-            <ToggleGeneralDecision
-              name="financialObligations"
-              label={decisionsGenLabels.fifth}
-              isChecked={formik.values.financialObligations}
-              onToggle={onToggle}
-            />
-            <ToggleGeneralDecision
               name="realGuarantees"
-              label={decisionsGenLabels.sixth}
+              label={decisionsGenLabels.third}
               isChecked={formik.values.realGuarantees}
               onToggle={onToggle}
               showIcon

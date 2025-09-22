@@ -76,6 +76,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
           periodicity: "",
           payday: "",
           numberDaysUntilCut: "",
+          laborRegulatorFramework: "",
         },
       ],
     },
@@ -87,6 +88,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
           typePayment: "",
           payday: "",
           numberDaysUntilCut: "",
+          laborRegulatorFramework: "",
         },
       ],
     },
@@ -386,6 +388,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
       paymentDay: formatPaymentDay(item.payday ?? "") ?? "",
+      regulatoryFrameworkCode: item.laborRegulatorFramework ?? "",
     }));
 
   const severancePayment = formValues.extraordinaryCycles.values
@@ -394,6 +397,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
       paymentDay: formatPaymentDay(item.payday ?? "") ?? "",
+      regulatoryFrameworkCode: item.laborRegulatorFramework ?? "",
     }));
 
   const handleSubmitClick = () => {

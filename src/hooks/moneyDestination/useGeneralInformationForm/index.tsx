@@ -3,43 +3,48 @@ import {
   IStackDirectionAlignment,
   useMediaQuery,
 } from "@inubekit/inubekit";
-import { useEffect, useImperativeHandle, useState } from "react";
-import { MdOutlineFax } from "react-icons/md";
-import { FormikProps, useFormik } from "formik";
+import { useContext, useEffect, useImperativeHandle, useState } from "react";
+import { useFormik } from "formik";
 import { object } from "yup";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { tokens } from "@design/tokens";
 import { EMoneyDestination } from "@enum/moneyDestination";
-import { normalizeCodeDestination } from "@utils/destination/normalizeCodeDestination";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
-import { normalizeEditDestination } from "@utils/destination/normalizeEditDestination";
-import { normalizeIconDestination } from "@utils/destination/normalizeIconDestination";
-import { normalizeIconTextDestination } from "@utils/destination/normalizeIconTextDestination";
 import { mediaQueryTablet } from "@config/environment";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
-import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
-import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
+import { II18n } from "@ptypes/i18n";
+import { IServerDomain } from "@ptypes/IServerDomain";
+import { IUseGeneralInformationForm } from "@ptypes/hooks/moneyDestination/IUseGeneralInformationForm";
 
-const useGeneralInformationForm = (
-  enumData: IEnumerators[],
-  initialValues: IGeneralInformationEntry,
-  ref: React.ForwardedRef<FormikProps<IGeneralInformationEntry>>,
-  editDataOption: boolean,
-  loading: boolean | undefined,
-  onSubmit: ((values: IGeneralInformationEntry) => void) | undefined,
-  onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined,
-  initialGeneralInfData?: IGeneralInformationEntry,
-) => {
+const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
+  const {
+    enumData,
+    initialValues,
+    ref,
+    editDataOption,
+    loading,
+    creditLineValues,
+    setCreditLineValues,
+    onSubmit,
+    onFormValid,
+    initialGeneralInfData,
+  } = props;
+
   const createValidationSchema = () =>
     object().shape({
       nameDestination: validationRules.string
         .required(validationMessages.required)
-        .max(36, generalInfoLabels.maxLengthName),
+        .max(65, generalInfoLabels.maxLengthName),
+      typeDestination: validationRules.string.required(
+        validationMessages.required,
+      ),
       description: validationRules.string.required(validationMessages.required),
       icon: validationRules.string,
+      creditLine: validationRules.string,
     });
 
   const validationSchema = createValidationSchema();
@@ -56,16 +61,12 @@ const useGeneralInformationForm = (
   );
 
   const [isDisabledButton, setIsDisabledButton] = useState(false);
-  const [icon, setIcon] = useState<React.ReactNode | undefined>(
-    editDataOption && normalizeIconDestination(initialValues.icon)?.icon ? (
-      normalizeIconDestination(initialValues.icon)?.icon
-    ) : (
-      <></>
-    ),
-  );
+  const { appData } = useContext(AuthAndPortalData);
 
-  const optionsDestination: IServerDomain[] = enumData.map((item) => {
-    const name = normalizeCodeDestination(item.code)?.name as unknown as string;
+  const optionsDestination = enumData.map((item: IEnumerators) => {
+    const name =
+      item.i18nValue?.[appData.language as keyof typeof item.i18n] ??
+      item.description;
     return {
       id: item.code,
       label: name,
@@ -94,17 +95,23 @@ const useGeneralInformationForm = (
 
     if (name === EMoneyDestination.MONEY_DESTINATION) {
       const equalValueName = value !== formik.values.nameDestination;
+      const normalizeData = normalizeDestination(enumData, value);
       const description =
-        normalizeDestination(enumData, value)?.description ?? "";
+        normalizeData?.i18nDescription?.[appData.language as keyof II18n] ?? "";
 
       if (value === "") {
         formik.setFieldValue("description", "");
+        formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
       } else {
         const currentDescription = formik.values.description ?? "";
         const descriptionToAdd = description.trim();
 
         if (equalValueName) {
           formik.setFieldValue("description", descriptionToAdd);
+          const addIconFormik =
+            normalizeData?.type ?? EMoneyDestination.ICON_DEFAULT;
+
+          formik.setFieldValue("icon", addIconFormik);
         } else {
           const newDescription =
             `${currentDescription} ${descriptionToAdd}`.trim();
@@ -113,10 +120,6 @@ const useGeneralInformationForm = (
       }
     }
   };
-
-  const addData = enumData.find(
-    (item) => item.value === formik.values.nameDestination,
-  )?.type;
 
   const valuesEqual =
     JSON.stringify(initialValues) === JSON.stringify(formik.values);
@@ -129,9 +132,21 @@ const useGeneralInformationForm = (
   );
 
   useEffect(() => {
+    if (editDataOption) {
+      if (
+        initialGeneralInfData?.nameDestination !== formik.values.nameDestination
+      ) {
+        formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
+      } else {
+        formik.setFieldValue("icon", initialGeneralInfData?.icon);
+      }
+    }
+  }, [editDataOption, formik.values]);
+
+  useEffect(() => {
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
+        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqual);
       } else {
         setIsDisabledButton(!formik.isValid);
       }
@@ -146,57 +161,13 @@ const useGeneralInformationForm = (
     editDataOption,
   ]);
 
-  useEffect(() => {
-    const updateIcon = () => {
-      const getNormalizedIcon = (value: string | undefined) =>
-        normalizeIconDestination(value ?? "")?.icon;
-
-      const isNameDestinationEqual =
-        JSON.stringify(initialGeneralInfData?.nameDestination) ===
-        JSON.stringify(formik.values.nameDestination);
-
-      let iconData = getNormalizedIcon(initialValues.icon);
-
-      if (editDataOption && formik.values.nameDestination) {
-        const editData = normalizeEditDestination(enumData, formik.values.icon);
-
-        iconData =
-          editData && isNameDestinationEqual ? (
-            getNormalizedIcon(editData?.value)
-          ) : addData ? (
-            getNormalizedIcon(addData)
-          ) : (
-            <MdOutlineFax size={24} />
-          );
-
-        iconData ??= getNormalizedIcon(initialValues.icon);
-      } else {
-        iconData = getNormalizedIcon(addData);
-      }
-
-      if (editDataOption && valuesEqual) {
-        formik.setFieldValue("icon", initialValues.icon);
-      } else {
-        const normalizedIconValue =
-          normalizeIconTextDestination(iconData)?.value ??
-          EMoneyDestination.ICON_DEFAULT;
-        formik.setFieldValue("icon", normalizedIconValue);
-      }
-
-      setIcon(iconData);
-    };
-
-    updateIcon();
-  }, [
-    editDataOption,
-    formik.values.icon,
-    formik.values.nameDestination,
-    enumData,
-    initialValues.nameDestination,
-    addData,
-    initialGeneralInfData,
-    valuesEqual,
-  ]);
+  const handleChangeCheck = (name: string, values: string) => {
+    const updatedData = creditLineValues.map((entry) =>
+      entry.id === name ? { ...entry, values } : entry,
+    );
+    formik.setFieldValue("creditLine", values.trim());
+    setCreditLineValues(updatedData);
+  };
 
   const handleReset = () => {
     if (editDataOption && initialGeneralInfData) {
@@ -223,20 +194,24 @@ const useGeneralInformationForm = (
     ? `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s050} ${tokens.spacing.s250}`
     : tokens.spacing.s0;
 
+  const typeDestinationOptions: IServerDomain[] = [];
+
   return {
     autosuggestValue,
     optionsDestination,
     formik,
     isDisabledButton,
-    icon,
     labelButtonNext,
     isMobile,
     widthStack,
     directionStack,
     alignItemsIcon,
     paddingIcon,
+    typeDestinationOptions,
+    creditLineValues,
     handleChange,
     handleReset,
+    handleChangeCheck,
     valuesEqual,
     valuesEqualBoton,
     buttonDisabledState,

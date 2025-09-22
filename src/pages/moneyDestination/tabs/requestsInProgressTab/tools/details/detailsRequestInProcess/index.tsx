@@ -16,20 +16,10 @@ import { StyledContainerIcon } from "./styles";
 const DetailsRequestInProcess = (props: IDetails) => {
   const {
     data,
-    decisionDeleted,
-    decisionInserted,
-    decisions,
-    decisionTemplate,
-    defaultSelectedTab,
-    detailsTabsConfig,
-    filteredTabsConfig,
     isMobile,
-    isMoreDetails,
-    isSelected,
     moreDetailsData,
     showModal,
     showMoreDetailsModal,
-    textValuesBusinessRules,
     titleRequest,
     isSelectedRequest,
     filteredTabs,
@@ -41,7 +31,6 @@ const DetailsRequestInProcess = (props: IDetails) => {
     showDecision,
     onTabRequestChange,
     onApproval,
-    onTabChange,
     onToggleModal,
     onToggleMoreDetailsModal,
   } = props;
@@ -88,20 +77,8 @@ const DetailsRequestInProcess = (props: IDetails) => {
       {showMoreDetailsModal && (
         <DetailsDestinationModal
           data={moreDetailsData}
-          detailsTabsConfig={detailsTabsConfig}
           portalId="portal"
           onCloseModal={onToggleMoreDetailsModal}
-          textValues={textValuesBusinessRules}
-          decisionTemplate={decisionTemplate}
-          decisions={decisions}
-          isMoreDetails={isMoreDetails}
-          defaultSelectedTab={defaultSelectedTab}
-          filteredTabsConfig={filteredTabsConfig}
-          isMobile={isMobile}
-          isSelected={isSelected ?? defaultSelectedTab}
-          onTabChange={onTabChange}
-          decisionDeleted={decisionDeleted}
-          decisionInserted={decisionInserted}
         />
       )}
       {showDecision && (

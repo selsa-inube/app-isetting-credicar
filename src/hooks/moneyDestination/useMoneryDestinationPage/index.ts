@@ -4,13 +4,16 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { decrypt } from "@utils/crypto/decrypt";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { mediaQueryTablet } from "@config/environment";
+import { menuOptionsMoneyDestination } from "@config/moneyDestination/moneyDestinationTab/generics/menuOptions";
 import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
 import { IUseMoneryDestinationPage } from "@ptypes/hooks/moneyDestination/IUseMoneryDestinationPage";
 import { IDestinationTabsConfig } from "@ptypes/moneyDestination/tabs/IDestinationTabsConfig";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
+import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   const { businessUnitSigla, businessUnits, businessManager } = props;
@@ -26,12 +29,34 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
+  const [options, setOptions] = useState<IMenuOptions[]>(
+    menuOptionsMoneyDestination,
+  );
+
+  const { disabledButton: disabledAdd } = useValidateUseCase({
+    useCase: EMoneyDestination.USE_CASE_ADD,
+  });
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId,
     optionName: EMoneyDestination.OPTION_NAME,
   });
+
+  useEffect(() => {
+    const menuOptions = menuOptionsMoneyDestination.map((option) => {
+      if (option.description === EMoneyDestination.MENU_OPTION_ADD) {
+        return {
+          ...option,
+          disabled: disabledAdd,
+        };
+      } else {
+        return option;
+      }
+    });
+
+    setOptions(menuOptions);
+  }, [disabledAdd]);
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
@@ -43,8 +68,11 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   };
 
   const onToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
+    if (disabledAdd) {
+      setShowInfoModal(!showInfoModal);
+    }
   };
+
   const onCloseMenu = () => {
     setShowModal(!showModal);
   };
@@ -113,6 +141,7 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
     showMoneyTab,
     showRequestsTab,
     moneyDestinationTabs,
+    options,
     onCloseMenu,
     onToggleModal,
     onToggleInfoModal,

@@ -2,10 +2,9 @@ import { Grid, Stack } from "@inubekit/inubekit";
 
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
-import { IRenderDecisionsGenVerification } from "@ptypes/generalCredPolicies/forms/IRenderDecisionsGenVerification";
-import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
 import { renderValue } from "@utils/renderValue";
-import { dataTranslations } from "@utils/dataTranslations";
+import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
+import { IRenderDecisionsGenVerification } from "@ptypes/generalCredPolicies/forms/IRenderDecisionsGenVerification";
 import { RenderMethodTags } from "./renderMethodTags";
 
 const RenderDecisionsGenVerification = (
@@ -14,14 +13,12 @@ const RenderDecisionsGenVerification = (
   const { values, isMobile } = props;
 
   const {
-    reference,
     additionalDebtors,
-    sourcesIncome,
-    financialObligations,
     realGuarantees,
     reciprocity,
     factor,
     calculation,
+    customValue,
   } = values;
 
   return (
@@ -29,15 +26,9 @@ const RenderDecisionsGenVerification = (
       <Grid
         width="100%"
         templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
-        templateRows={isMobile ? "repeat(6, 1fr)" : "repeat(3, 1fr)"}
+        templateRows={isMobile ? "repeat(3, 1fr)" : "repeat(2, 1fr)"}
         gap={tokens.spacing.s200}
       >
-        <BoxAttribute
-          direction="column"
-          label={verificationLabels.reference}
-          value={dataTranslations[reference] ?? reference}
-        />
-
         <BoxAttribute
           direction="column"
           label={verificationLabels.methods}
@@ -52,6 +43,7 @@ const RenderDecisionsGenVerification = (
                 reciprocity={reciprocity}
                 factor={factor}
                 calculation={calculation}
+                customValue={customValue}
               />
             }
           </Stack>
@@ -61,16 +53,6 @@ const RenderDecisionsGenVerification = (
           direction="column"
           label={verificationLabels.additionalDebtors}
           value={renderValue(additionalDebtors)}
-        />
-        <BoxAttribute
-          direction="column"
-          label={verificationLabels.sourcesIncome}
-          value={renderValue(sourcesIncome)}
-        />
-        <BoxAttribute
-          direction="column"
-          label={verificationLabels.financialObligations}
-          value={renderValue(financialObligations)}
         />
         <BoxAttribute
           direction="column"

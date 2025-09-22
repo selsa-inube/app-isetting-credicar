@@ -232,13 +232,13 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
                     >
                       <Stack height={tokens.spacing.s800} width="100%">
                         <Autocomplete
-                          disabled={false}
                           id="companyCity"
                           name="companyCity"
                           label={companyLabels.companyCity}
                           placeholder={companyLabels.placeholderCompanyCity}
                           onChange={onChange}
                           options={optionsCities}
+                          disabled={!formik.values.companyCountry}
                           size="compact"
                           onBlur={formik.handleBlur}
                           value={formik.values.companyCity ?? ""}

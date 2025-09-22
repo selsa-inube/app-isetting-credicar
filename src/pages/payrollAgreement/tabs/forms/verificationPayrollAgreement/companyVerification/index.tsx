@@ -1,11 +1,12 @@
+import { useContext } from "react";
 import { Grid, Stack } from "@inubekit/inubekit";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsIsaas } from "@hooks/useEnumeratorsIsaas";
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
-import { enviroment } from "@config/environment";
 import { verificationLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/verificationLabels";
 import { IRenderCompanyVerification } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IRenderCompanyVerification";
 import { ILanguage } from "@ptypes/i18n";
@@ -13,11 +14,13 @@ import { ILanguage } from "@ptypes/i18n";
 const RenderCompanyVerification = (props: IRenderCompanyVerification) => {
   const { values, isMobile } = props;
 
+  const { appData } = useContext(AuthAndPortalData);
+
   const isCompanySelected = values.companySelected !== "addCompany";
   const { enumData: typeIdentification } = useEnumeratorsIsaas({
     enumIsaas: ECyclesPayroll.TYPE_IDENTIFICATION_COMPANY,
   });
-  const value = `${normalizeDestination(typeIdentification, values.companyTypeIdent ?? "")?.i18n?.[enviroment.VITE_LANGUAGE as ILanguage]} - ${values.companyNumberIdent} - ${values.companyCountry}`;
+  const value = `${normalizeDestination(typeIdentification, values.companyTypeIdent ?? "")?.i18n?.[appData.language as ILanguage]} - ${values.companyNumberIdent} - ${values.companyCountry}`;
   return (
     <>
       {isCompanySelected ? (

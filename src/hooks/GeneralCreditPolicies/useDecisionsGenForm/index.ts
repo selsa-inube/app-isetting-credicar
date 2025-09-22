@@ -4,10 +4,9 @@ import { useFormik } from "formik";
 import { object } from "yup";
 
 import { validationRules } from "@validations/validationRules";
-import { validationMessages } from "@validations/validationMessages";
 import { mediaQueryMobile } from "@config/environment";
-import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
+import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
 
 const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const {
@@ -24,14 +23,12 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   const createValidationSchema = () =>
     object().shape({
-      reference: validationRules.string.required(validationMessages.required),
       additionalDebtors: validationRules.boolean,
-      sourcesIncome: validationRules.boolean,
-      financialObligations: validationRules.boolean,
       realGuarantees: validationRules.boolean,
       calculation: validationRules.boolean,
       reciprocity: validationRules.boolean,
       factor: validationRules.boolean,
+      customValue: validationRules.boolean,
     });
 
   const validationSchema = createValidationSchema();
@@ -81,14 +78,6 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     }
   }, [formik.values.factor, setShowFactor]);
 
-  const handleChange = (name: string, value: string) => {
-    formik.setFieldValue(name, value).then(() => {
-      formik.validateForm().then((errors) => {
-        formik.setErrors(errors);
-      });
-    });
-  };
-
   const valuesEmpty = Object.values(formik.values).every(
     (value) => value === "" || value === null || value === undefined,
   );
@@ -97,11 +86,17 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     JSON.stringify(initialValuesEdit) === JSON.stringify(formik.values);
 
   useEffect(() => {
+    const { calculation, reciprocity, factor, customValue } = formik.values;
+    const requiredFields = [calculation, reciprocity, factor, customValue];
+    const validatefields = requiredFields.every((field) => !field);
+
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
+        setIsDisabledButton(
+          !formik.isValid || validatefields || valuesEmpty || valuesEqualBoton,
+        );
       } else {
-        setIsDisabledButton(!formik.isValid);
+        setIsDisabledButton(!formik.isValid || validatefields);
       }
     };
     updateButton();
@@ -139,7 +134,6 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     handleInformationReferenceModal,
     handleInformationObligationModal,
     handleInformationMethodsModal,
-    handleChange,
     handleToggleChange,
   };
 };

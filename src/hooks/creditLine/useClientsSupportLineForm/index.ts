@@ -1,6 +1,7 @@
-import { useState } from "react";
-import { IOptionClient } from "@ptypes/creditLines/forms/IOptionClient";
+import { useCallback, useState } from "react";
+import { ISide } from "@ptypes/ISide";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
+import { EBooleanText } from "@src/enum/booleanText";
 
 const useClientsSupportLineForm = () => {
   const {
@@ -19,38 +20,50 @@ const useClientsSupportLineForm = () => {
     null,
   );
 
-  const handleClickIncluded = () => {
-    const objectToMove = optionsExcluded.find(
-      (option: IOptionClient) => option.id === selectedConditionId,
-    );
+  const targetInsertMode = EBooleanText.PREPEND;
 
-    if (objectToMove) {
-      setOptionsIncluded((prev: IOptionClient[]) => [...prev, objectToMove]);
-      setOptionsExcluded((prev: IOptionClient[]) =>
-        prev.filter(
-          (option: IOptionClient) => option.id !== selectedConditionId,
-        ),
-      );
-    }
-    setSelectedConditionId(null);
-  };
+  const removeFrom = useCallback((options: string[], item: string) => {
+    const IndexOptions = options.indexOf(item);
+    if (IndexOptions === -1) return options;
+    const copyOptions = options.slice();
+    copyOptions.splice(IndexOptions, 1);
+    return copyOptions;
+  }, []);
 
-  const handleClickExcluded = () => {
-    const objectToMove = optionsIncluded.find(
-      (option: IOptionClient) => option.id === selectedConditionId,
-    );
+  const insertInto = useCallback(
+    (options: string[], item: string) => {
+      if (targetInsertMode === EBooleanText.PREPEND) return [item, ...options];
+      return [...options, item];
+    },
+    [targetInsertMode],
+  );
 
-    if (objectToMove) {
-      setOptionsExcluded((prev: IOptionClient[]) => [...prev, objectToMove]);
-      setOptionsIncluded((prev: IOptionClient[]) =>
-        prev.filter(
-          (option: IOptionClient) => option.id !== selectedConditionId,
-        ),
-      );
-    }
+  const handleMove = useCallback(
+    (payload: { item: string; from: ISide; to: ISide }) => {
+      const { item, from, to } = payload;
 
-    setSelectedConditionId(null);
-  };
+      if (from === EBooleanText.LEFT && to === EBooleanText.RIGHT) {
+        setOptionsExcluded((prev) => ({
+          ...prev,
+          items: removeFrom(prev.items, item),
+        }));
+        setOptionsIncluded((prev) => ({
+          ...prev,
+          items: insertInto(prev.items, item),
+        }));
+      } else if (from === EBooleanText.RIGHT && to === EBooleanText.LEFT) {
+        setOptionsExcluded((prev) => ({
+          ...prev,
+          items: insertInto(prev.items, item),
+        }));
+        setOptionsIncluded((prev) => ({
+          ...prev,
+          items: removeFrom(prev.items, item),
+        }));
+      }
+    },
+    [insertInto, removeFrom],
+  );
 
   return {
     selectedConditionId,
@@ -59,11 +72,10 @@ const useClientsSupportLineForm = () => {
     showInfoModal,
     loading,
     updateData,
+    handleMove,
     handleOpenModal,
     handleToggleInfoModal,
     setSelectedConditionId,
-    handleClickIncluded,
-    handleClickExcluded,
   };
 };
 

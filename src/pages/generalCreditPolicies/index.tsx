@@ -12,19 +12,17 @@ const GeneralCreditPolicies = () => {
     smallScreenTab,
     showPoliciesTab,
     policiesTabs,
-    referenceData,
     contributionsData,
     incomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
     showrequestTab,
     modalData,
+    loadingRequest,
     handleTabChange,
   } = useGeneralCreditPolicies();
 
@@ -37,11 +35,8 @@ const GeneralCreditPolicies = () => {
     contributionsData,
     incomeData,
     scoreModelsData,
-    referenceData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
   });
 
@@ -55,14 +50,11 @@ const GeneralCreditPolicies = () => {
       showPoliciesTab={showPoliciesTab}
       showrequestTab={showrequestTab}
       smallScreen={smallScreen}
-      referenceData={referenceData}
       contributionsData={contributionsData}
       incomeData={incomeData}
       scoreModelsData={scoreModelsData}
       methodsData={methodsData}
       additionalDebtorsData={additionalDebtorsData}
-      sourcesIncomeData={sourcesIncomeData}
-      financialObligData={financialObligData}
       realGuaranteesData={realGuaranteesData}
       withoutPolicies={withoutPolicies}
       loadingPolicies={loadingPolicies ?? true}
@@ -72,6 +64,7 @@ const GeneralCreditPolicies = () => {
       showGoBackModal={showGoBackModal}
       onCloseGoBackModal={handleCloseGoBackModal}
       onGoBack={handleGoBack}
+      loadingRequest={loadingRequest}
     />
   );
 };
