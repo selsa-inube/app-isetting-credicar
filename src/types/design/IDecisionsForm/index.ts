@@ -1,6 +1,7 @@
 import { IRuleDecision } from "@isettingkit/input";
 import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 
 interface IDecisionsForm {
   deleteModal: IMessageModal;
@@ -8,7 +9,8 @@ interface IDecisionsForm {
   labelBusinessRules: string;
   textValuesBusinessRules: IRulesFormTextValues;
   decisionTemplateConfig: (
-    enumeratorsRules: IRuleDecision,
+    enumeratorsRules: IDecisionData,
+    language: string,
     nameRule: string,
     businessUnit?: string,
   ) => IRuleDecision | undefined;

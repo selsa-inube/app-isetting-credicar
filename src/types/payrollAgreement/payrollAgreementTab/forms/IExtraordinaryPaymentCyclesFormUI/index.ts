@@ -15,6 +15,7 @@ interface IExtraordinaryPaymentCyclesFormUI {
   numberDaysUntilCutOptions: IServerDomain[];
   monthOptions: IServerDomain[];
   dayOptions: IServerDomain[];
+  laborRegulatorOptions: IServerDomain[];
   labelButtonNext: string;
   labelButtonPrevious: string;
   columnWidths: number[];

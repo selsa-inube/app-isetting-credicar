@@ -9,14 +9,13 @@ import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
-import { dataTranslations } from "@utils/dataTranslations";
 import { compareObjects } from "@utils/compareObjects";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
 import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
-import { referencePolicies } from "@config/generalCreditPolicies/editGeneralPolicies/reference";
+import { customValue } from "@config/generalCreditPolicies/editGeneralPolicies/customValue";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
@@ -30,11 +29,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     contributionsData,
     incomeData,
     scoreModelsData,
-    referenceData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
   } = props;
   const { appData } = useContext(AuthAndPortalData);
@@ -50,26 +46,23 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     const hasFactor = methodsData?.some((condition) =>
       factor.includes(condition.value as string),
     );
-    return { hasReciprocity, hasCalculation, hasFactor };
+
+    const hasCustomValue = methodsData?.some((condition) =>
+      customValue.includes(condition.value as string),
+    );
+    return { hasReciprocity, hasCalculation, hasFactor, hasCustomValue };
   };
 
-  const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
-
-  const hasReference = referenceData?.find(
-    (condition) =>
-      referencePolicies.includes(condition.value as string) &&
-      condition.validUntil === undefined,
-  )?.value;
+  const { hasReciprocity, hasCalculation, hasFactor, hasCustomValue } =
+    initialMethodsData();
 
   const initialDecisionsGenData = {
-    reference: hasReference ? dataTranslations[hasReference as string] : "",
     additionalDebtors: hasValuesRule(additionalDebtorsData),
-    sourcesIncome: hasValuesRule(sourcesIncomeData),
-    financialObligations: hasValuesRule(financialObligData),
     realGuarantees: hasValuesRule(realGuaranteesData),
     calculation: hasCalculation ?? false,
     reciprocity: hasReciprocity ?? false,
     factor: hasFactor ?? false,
+    customValue: hasCustomValue ?? false,
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(

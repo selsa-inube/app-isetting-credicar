@@ -5,6 +5,7 @@ const mapEnumToEntity = (enumData: IEnumerators): IEnumerators => {
     code: String(enumData.code),
     description: String(enumData.description),
     value: String(enumData.value),
+    i18n: Object(enumData.i18n),
   };
   return business;
 };

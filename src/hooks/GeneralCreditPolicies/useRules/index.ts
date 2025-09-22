@@ -22,8 +22,8 @@ const useRules = (props: IUseRules) => {
     const data =
       typeof value === "boolean"
         ? value
-          ? EBooleanText.YES
-          : EBooleanText.NO
+          ? EBooleanText.Y
+          : EBooleanText.N
         : value;
 
     return [
@@ -34,11 +34,6 @@ const useRules = (props: IUseRules) => {
     ];
   };
 
-  const referenceValues = decisionWithoutConditions(
-    ENameRules.REFERENCE,
-    decisionGeneralData.reference,
-  );
-
   const calculation =
     decisionGeneralData.calculation &&
     ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY;
@@ -48,9 +43,12 @@ const useRules = (props: IUseRules) => {
     decisionGeneralData.reciprocity &&
     ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
 
+  const customValue =
+    decisionGeneralData.customValue && ERulesOfDecisions.CUSTOM_VALUE;
+
   const methodsArray =
-    calculation || factor || reciprocity
-      ? [calculation, factor, reciprocity].filter(Boolean)
+    calculation || factor || reciprocity || customValue
+      ? [calculation, factor, reciprocity, customValue].filter(Boolean)
       : ["No"];
 
   const methods = {
@@ -62,43 +60,9 @@ const useRules = (props: IUseRules) => {
     })),
   };
 
-  const additionalDebtorsValues = decisionWithoutConditions(
-    ENameRules.ADDITIONAL_DEBTORS,
-    decisionGeneralData.additionalDebtors,
-  );
-
-  const sourcesIncomeValues = decisionWithoutConditions(
-    ENameRules.SOURCES_INCOME,
-    decisionGeneralData.sourcesIncome,
-  );
-
-  const financialObligationsValues = decisionWithoutConditions(
-    ENameRules.FINANCIAL_OBLIGATIONS,
-    decisionGeneralData.financialObligations,
-  );
-
   const realGuaranteesValues = decisionWithoutConditions(
     ENameRules.REAL_GUARANTEES,
     decisionGeneralData.realGuarantees,
-  );
-
-  const reference = referenceValues
-    ? formatRuleDecisions(referenceValues, dateVerification?.date)
-    : [];
-
-  const financialObligations = formatRuleDecisions(
-    financialObligationsValues,
-    dateVerification?.date,
-  );
-
-  const additionalDebtors = formatRuleDecisions(
-    additionalDebtorsValues,
-    dateVerification?.date,
-  );
-
-  const sourcesIncome = formatRuleDecisions(
-    sourcesIncomeValues,
-    dateVerification?.date,
   );
 
   const realGuarantees = formatRuleDecisions(
@@ -121,14 +85,10 @@ const useRules = (props: IUseRules) => {
   );
 
   const rules = [
-    ...reference,
     methods,
     ...rulesContributions,
     ...rulesIncomes,
     ...ruleScoremodels,
-    ...additionalDebtors,
-    ...sourcesIncome,
-    ...financialObligations,
     ...realGuarantees,
   ];
 

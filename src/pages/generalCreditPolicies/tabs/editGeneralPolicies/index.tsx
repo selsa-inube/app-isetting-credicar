@@ -16,11 +16,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     contributionsData,
     incomeData,
     scoreModelsData,
-    referenceData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
   } = props;
 
@@ -70,11 +67,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     contributionsData,
     incomeData,
     scoreModelsData,
-    referenceData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
   });
 

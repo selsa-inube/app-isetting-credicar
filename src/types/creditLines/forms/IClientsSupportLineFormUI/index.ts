@@ -1,17 +1,14 @@
-import { IOptionClient } from "../IOptionClient";
-
+import { IDragAndDropColumn } from "@isettingkit/business-rules";
+import { ISide } from "@ptypes/ISide";
 interface IClientsSupportLineFormUI {
-  optionsExcluded: IOptionClient[];
-  optionsIncluded: IOptionClient[];
-  selectedConditionId: string | null;
+  optionsExcluded: IDragAndDropColumn;
+  optionsIncluded: IDragAndDropColumn;
   showInfoModal: boolean;
   updateData: boolean;
   loading: boolean;
+  onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
   onOpenModal: () => void;
   onToggleInfoModal: () => void;
-  setSelectedConditionId: (id: string | null) => void;
-  onClickIncluded: () => void;
-  onClickExcluded: () => void;
 }
 
 export type { IClientsSupportLineFormUI };

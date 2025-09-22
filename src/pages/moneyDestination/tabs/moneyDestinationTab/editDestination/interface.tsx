@@ -4,16 +4,10 @@ import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/gener
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { DecisionsForm } from "@design/forms/decisions";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { EComponentAppearance } from "@enum/appearances";
-import { EMoneyDestination } from "@enum/moneyDestination";
-import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
-import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
-import { attentionModal, deleteModal } from "@config/decisions/messages";
-import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
@@ -22,8 +16,6 @@ import { IEditDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinati
 
 const EditDestinationUI = (props: IEditDestinationUI) => {
   const {
-    creditLineDecisions,
-    normalizeEvaluateRuleData,
     editDestinationTabsConfig,
     generalInformationRef,
     initialGeneralInformationValues,
@@ -35,15 +27,14 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     showRequestProcessModal,
     smallScreen,
     showGeneralInformation,
-    showDecisionsForm,
     modalData,
     showDecision,
+    creditLineValues,
+    setCreditLineValues,
     onToggleEditedModal,
     onOpenModal,
     onTabChange,
-    onButtonClick,
     onReset,
-    setCreditLineDecisions,
     setIsCurrentFormValid,
     onCloseRequestStatus,
     onClosePendingReqModal,
@@ -86,29 +77,8 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 editDataOption
                 onReset={onReset}
                 initialGeneralInfData={initialGeneralInfData}
-              />
-            )}
-            {showDecisionsForm && (
-              <DecisionsForm
-                attentionModal={attentionModal}
-                deleteModal={deleteModal}
-                textValuesBusinessRules={textValuesBusinessRules}
-                decisionTemplateConfig={decisionTemplateConfig}
-                onButtonClick={onButtonClick}
-                onPreviousStep={onReset}
-                initialValues={creditLineDecisions}
-                setDecisions={setCreditLineDecisions}
-                revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules={EMoneyDestination.LINE_OF_CREDIT}
-                nameRule={initialGeneralInformationValues.nameDestination}
-                editDataOption
-                showAttentionModal={false}
-                setShowAttentionModal={() => void 0}
-                titleContentAddCard={editDestinationLabels.addLineCredit}
-                messageEmptyDecisions={
-                  editDestinationLabels.messageEmptyDecisions
-                }
-                normalizeEvaluateRuleData={normalizeEvaluateRuleData ?? []}
+                creditLineValues={creditLineValues}
+                setCreditLineValues={setCreditLineValues}
               />
             )}
           </Stack>

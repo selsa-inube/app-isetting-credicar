@@ -1,5 +1,6 @@
 import { MdOutlineAdd } from "react-icons/md";
 import { Button, Stack } from "@inubekit/inubekit";
+import { AddCycleModal } from "@pages/payrollAgreement/tabs/addCycleModal";
 import { tokens } from "@design/tokens";
 import { Table } from "@design/data/table";
 import { EComponentAppearance } from "@enum/appearances";
@@ -15,7 +16,6 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { portalId } from "@config/portalId";
 import { StyledFormContent } from "./styles";
-import { AddCycleModal } from "../../addCycleModal";
 
 const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
   const {
@@ -27,6 +27,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
     numberDaysUntilCutOptions,
     paydayOptions,
     periodicityOptions,
+    laborRegulatorOptions,
     showAddModal,
     showInfoModal,
     valuesEqual,
@@ -139,6 +140,7 @@ const RegularPaymentCyclesFormUI = (props: IRegularPaymentCyclesFormUI) => {
           onClick={onAddCycle}
           onChange={onChange}
           onToggleInfoModal={onToggleInfoModal}
+          laborRegulatorOptions={laborRegulatorOptions}
         />
       )}
 

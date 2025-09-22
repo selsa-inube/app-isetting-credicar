@@ -14,6 +14,11 @@ const methodsOfCalculation = [
     label: "Factor de riesgo",
     value: "RiskFactor",
   },
+  {
+    id: "customValue",
+    label: "Valor personalizado",
+    value: "CustomValue",
+  },
 ];
 
 export { methodsOfCalculation };

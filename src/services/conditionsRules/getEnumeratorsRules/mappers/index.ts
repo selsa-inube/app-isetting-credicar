@@ -1,16 +1,18 @@
-import { IDecision } from "@ptypes/decisions/IDecision";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 
-const mapEnumeratorsRulesApiToEntity = (enumerator: IDecision): IDecision => {
-  const enumeratorEntry: IDecision = {
+const mapEnumeratorsRulesApiToEntity = (
+  enumerator: IDecisionData,
+): IDecisionData => {
+  const enumeratorEntry: IDecisionData = {
     conditionsThatEstablishesTheDecision: Object(
       enumerator.conditionThatEstablishesTheDecision,
     ),
     decisionDataType: enumerator.decisionDataType,
     descriptionUse: String(enumerator.descriptionUse),
     howToSetTheDecision: enumerator.howToSetTheDecision,
-    labelName: String(enumerator.labelName),
     ruleName: String(enumerator.ruleName),
-    listOfPossibleValues: String(enumerator.listOfPossibleValues),
+    listOfPossibleValues: enumerator.listOfPossibleValues,
+    i18n: Object(enumerator.i18n),
   };
 
   return enumeratorEntry;

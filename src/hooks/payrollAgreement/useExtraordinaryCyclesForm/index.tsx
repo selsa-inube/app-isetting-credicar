@@ -5,6 +5,7 @@ import { object } from "yup";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumerators } from "@hooks/useEnumerators";
+import { useEnumeratorsICardes } from "@hooks/useEnumeratorsIcardes";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { eventBus } from "@events/eventBus";
@@ -19,7 +20,7 @@ import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { enviroment, mediaQueryTablet } from "@config/environment";
+import { mediaQueryTablet } from "@config/environment";
 import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
@@ -51,6 +52,9 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       numberDaysUntilCut: validationRules.string.required(
         validationMessages.required,
       ),
+      laborRegulatorFramework: validationRules.string.required(
+        validationMessages.required,
+      ),
     });
 
   const validationSchema = createValidationSchema();
@@ -61,6 +65,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     day: "",
     month: "",
     numberDaysUntilCut: "",
+    laborRegulatorFramework: "",
   };
 
   const formik = useFormik({
@@ -89,7 +94,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
   const monthOptions = optionsFromEnumI18n(
-    enviroment.VITE_LANGUAGE as ILanguage,
+    appData.language as ILanguage,
     months,
     true,
   );
@@ -100,6 +105,17 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   });
 
   const typePaymentOptions = optionsFromEnumerators(enumData);
+
+  const { enumData: laborRegulator } = useEnumeratorsICardes({
+    enumCredicar: ECyclesPayroll.COLOMBIAN_LABOR_LEGAL,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const laborRegulatorOptions = optionsFromEnumI18n(
+    appData.language as ILanguage,
+    laborRegulator,
+    true,
+  );
 
   useImperativeHandle(ref, () => formik);
 
@@ -175,6 +191,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       formik.values.typePayment,
     payday: `${formik.values.month}-${formik.values.day}`,
     numberDaysUntilCut: formik.values.numberDaysUntilCut,
+    laborRegulatorFramework: formik.values.laborRegulatorFramework,
   });
 
   const handleAddCycle = () => {
@@ -210,7 +227,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     ? cyclespaymentLabels.sendButton
     : cyclespaymentLabels.nextButton;
 
-  const columnWidths = isMobile ? [70, 12, 10, 14] : [40, 15, 15, 14];
+  const columnWidths = isMobile ? [65, 12] : [40, 15, 15, 14];
 
   useEffect(() => {
     eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
@@ -227,6 +244,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     numberDaysUntilCutOptions,
     monthOptions,
     dayOptions,
+    laborRegulatorOptions,
     labelButtonPrevious,
     labelButtonNext,
     columnWidths,

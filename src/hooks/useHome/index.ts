@@ -4,6 +4,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
+import { tokens } from "@design/tokens";
 import { decrypt } from "@utils/crypto/decrypt";
 import { enviroment } from "@config/environment";
 import { mainNavigation } from "@config/mainNavigation";
@@ -83,6 +84,10 @@ const useHome = () => {
 
   const dataExists = optionsCards && optionsCards?.length > 0;
 
+  const padding = !dataExists
+    ? tokens.spacing.s0
+    : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`;
+
   return {
     businessUnitChangeRef,
     businessUnitsToTheStaff,
@@ -99,6 +104,7 @@ const useHome = () => {
     hasMultipleBusinessUnits,
     dataExists,
     optionsHeader,
+    padding,
     handlelogout,
     setCollapse,
     handleLogoClick,

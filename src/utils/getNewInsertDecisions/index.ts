@@ -33,7 +33,7 @@ const getNewInsertDecisions = (
                     conditionName:
                       translationToEnum[condition.conditionName] ??
                       condition.conditionName,
-                    labelName: condition.labelName,
+                    descriptionUse: condition.labelName,
                     value: condition.value,
                   };
                 }

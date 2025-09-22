@@ -73,37 +73,26 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     value: ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS,
   };
 
-  const methodsArray = [calculationValues, factorValues, reciprocityValues];
+  const customValues = initialGeneralData.customValue !==
+    formValues.customValue && {
+    transactionOperation: valueTransactionOperation(
+      formValues.customValue ?? false,
+    ),
+    value: ERulesOfDecisions.CUSTOM_VALUE,
+  };
 
-  const reference = decisionWithoutConditions(
-    ENameRules.REFERENCE,
-    formValues.reference ?? "",
-    initialGeneralData.reference,
-    ETransactionOperation.INSERT,
-    user,
-  );
-
-  const sourcesIncome = decisionWithoutConditions(
-    ENameRules.SOURCES_INCOME,
-    formValues.sourcesIncome ?? "",
-    initialGeneralData.sourcesIncome,
-    valueTransactionOperation(formValues.sourcesIncome),
-    user,
-  );
+  const methodsArray = [
+    calculationValues,
+    factorValues,
+    reciprocityValues,
+    customValues,
+  ];
 
   const additionalDebtors = decisionWithoutConditions(
     ENameRules.ADDITIONAL_DEBTORS,
     formValues.additionalDebtors ?? "",
     initialGeneralData.additionalDebtors,
     valueTransactionOperation(formValues.additionalDebtors),
-    user,
-  );
-
-  const financialObligations = decisionWithoutConditions(
-    ENameRules.FINANCIAL_OBLIGATIONS,
-    formValues.financialObligations ?? "",
-    initialGeneralData.financialObligations,
-    valueTransactionOperation(formValues.financialObligations),
     user,
   );
 
@@ -199,14 +188,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
         };
       }
     }
-    const allGeneralDecisions = [
-      reference,
-      methods,
-      sourcesIncome,
-      additionalDebtors,
-      financialObligations,
-      realGuarantees,
-    ];
+    const allGeneralDecisions = [methods, additionalDebtors, realGuarantees];
 
     const validGeneralDecisions = allGeneralDecisions.filter(
       (decision) => decision !== undefined,

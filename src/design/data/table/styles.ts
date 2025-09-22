@@ -20,11 +20,11 @@ const StyledContainerTable = styled.div<IStyledContainer>`
   ${({ $isTablet }) =>
     $isTablet &&
     `
-    & > td {
+    &: > td {
       justify-content: flex-start;
     }
 
-    & > div > div {
+    &: > div > div {
      overflow: auto;
   }
   `}

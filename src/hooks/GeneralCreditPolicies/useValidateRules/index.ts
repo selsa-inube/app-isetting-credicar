@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
-import { IConditionsEvaluateRule } from "@ptypes/decisions/IConditionsEvaluateRule";
 import { ENameRules } from "@enum/nameRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
+import { IConditionsEvaluateRule } from "@ptypes/decisions/IConditionsEvaluateRule";
 
 const useValidateRules = () => {
   const { appData } = useContext(AuthAndPortalData);
@@ -11,16 +11,15 @@ const useValidateRules = () => {
   const [loadingPolicies, setLoadingPolicies] = useState<boolean>(false);
 
   const getRule = (ruleName: string, conditions?: IConditionsEvaluateRule[]) =>
-    useEvaluateRuleByBusinessUnit(appData.businessUnit.publicCode, {
-      ruleName,
-      ...(conditions && { conditions }),
+    useEvaluateRuleByBusinessUnit({
+      businessUnits: appData.businessUnit.publicCode,
+      rulesData: {
+        ruleName,
+        ...(conditions && { conditions }),
+      },
+      language: appData.language,
     });
 
-  const {
-    evaluateRuleData: referenceData,
-    loading: referenceLoadding,
-    hasError: referenceError,
-  } = getRule(ENameRules.REFERENCE);
   const {
     evaluateRuleData: methodsData,
     loading: methodsLoadding,
@@ -32,18 +31,6 @@ const useValidateRules = () => {
     loading: additionalLoadding,
     hasError: additionalError,
   } = getRule(ENameRules.ADDITIONAL_DEBTORS);
-
-  const {
-    evaluateRuleData: sourcesIncomeData,
-    loading: sourcesIncLoadding,
-    hasError: sourcesIncomeError,
-  } = getRule(ENameRules.SOURCES_INCOME);
-
-  const {
-    evaluateRuleData: financialObligData,
-    loading: financialLoadding,
-    hasError: obligationError,
-  } = getRule(ENameRules.FINANCIAL_OBLIGATIONS);
 
   const {
     evaluateRuleData: realGuaranteesData,
@@ -76,11 +63,8 @@ const useValidateRules = () => {
 
   useEffect(() => {
     setWithoutPolicies(
-      (referenceError &&
-        methodsError &&
+      (methodsError &&
         additionalError &&
-        sourcesIncomeError &&
-        obligationError &&
         GuaranteesError &&
         contributionsError &&
         incomeError &&
@@ -88,11 +72,8 @@ const useValidateRules = () => {
         false,
     );
   }, [
-    referenceError,
     methodsError,
     additionalError,
-    sourcesIncomeError,
-    obligationError,
     GuaranteesError,
     contributionsError,
     incomeError,
@@ -101,22 +82,16 @@ const useValidateRules = () => {
 
   useEffect(() => {
     setLoadingPolicies(
-      referenceLoadding ||
-        methodsLoadding ||
+      methodsLoadding ||
         additionalLoadding ||
-        sourcesIncLoadding ||
-        financialLoadding ||
         realGuaLoadding ||
         contributionsLoadding ||
         incomeLoadding ||
         scoreLoadding,
     );
   }, [
-    referenceLoadding,
     methodsLoadding,
     additionalLoadding,
-    sourcesIncLoadding,
-    financialLoadding,
     realGuaLoadding,
     contributionsLoadding,
     incomeLoadding,
@@ -124,14 +99,11 @@ const useValidateRules = () => {
   ]);
 
   return {
-    referenceData,
     contributionsData,
     incomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
     withoutPolicies,
     loadingPolicies,

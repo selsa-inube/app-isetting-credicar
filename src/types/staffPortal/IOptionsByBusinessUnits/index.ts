@@ -3,6 +3,7 @@ interface IOptionsByBusinessUnits {
   descriptionUse: string;
   optionStaffId: string;
   publicCode: string;
+  iconReference: string;
   useCaseName?: string;
 }
 

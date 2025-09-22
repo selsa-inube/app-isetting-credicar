@@ -34,7 +34,6 @@ const DecisionsGeneralForm = forwardRef<
       isMobile,
       isDisabledButton,
       buttonLabel,
-      handleChange,
       handleInformationReferenceModal,
       handleInformationObligationModal,
       handleInformationMethodsModal,
@@ -57,7 +56,6 @@ const DecisionsGeneralForm = forwardRef<
         loading={loading}
         formik={formik}
         onButtonClick={handleNextStep}
-        onReferenceChange={handleChange}
         onToggle={handleToggleChange}
         showInformationReferenceModal={showInformationReferenceModal}
         showInformationMethodModal={showInformationMethodModal}
