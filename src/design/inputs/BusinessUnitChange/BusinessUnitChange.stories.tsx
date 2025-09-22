@@ -35,6 +35,7 @@ const defaultContextValue = {
       userName: "Angie Pinilla",
     },
     useCasesByStaff: [],
+    language: "es",
   },
   setBusinessUnitSigla: (value: React.SetStateAction<string>) => {
     console.log(

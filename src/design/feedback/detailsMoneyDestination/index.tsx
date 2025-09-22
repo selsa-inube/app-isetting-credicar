@@ -2,29 +2,16 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { EComponentAppearance } from "@enum/appearances";
-import {
-  decisionTemplate,
-  textValuesBusinessRules,
-} from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { DetailsDestinationModal } from "@design/modals/detailsDestinationModal";
+import { portalId } from "@config/portalId";
+import { mediaQueryTablet } from "@config/environment";
 import { IDetailsMoneyDestination } from "@ptypes/moneyDestination/tabs/IDetailsMoneyDestination";
 import { StyledContainerIcon } from "./styles";
 
 const DetailsMoneyDestination = (props: IDetailsMoneyDestination) => {
-  const {
-    data,
-    showModal,
-    evaluateRuleData,
-    defaultSelectedTab,
-    filteredTabsConfig,
-    isMobile,
-    isSelected,
-    detailsTabsConfig,
-    handleToggleModal,
-    onTabChange,
-  } = props;
+  const { data, showModal, handleToggleModal } = props;
 
-  const screenTablet = useMediaQuery("(max-width: 1200px)");
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   return (
     <>
@@ -46,18 +33,8 @@ const DetailsMoneyDestination = (props: IDetailsMoneyDestination) => {
       {showModal && (
         <DetailsDestinationModal
           data={data}
-          detailsTabsConfig={detailsTabsConfig}
-          portalId="portal"
+          portalId={portalId}
           onCloseModal={handleToggleModal}
-          textValues={textValuesBusinessRules}
-          decisionTemplate={decisionTemplate}
-          decisions={evaluateRuleData ?? []}
-          isMoreDetails={false}
-          defaultSelectedTab={defaultSelectedTab}
-          filteredTabsConfig={filteredTabsConfig}
-          isMobile={isMobile}
-          isSelected={isSelected}
-          onTabChange={onTabChange}
         />
       )}
     </>

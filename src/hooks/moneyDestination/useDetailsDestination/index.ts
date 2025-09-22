@@ -11,9 +11,9 @@ const useDetailsDestination = (appData: IAppData, data: IEntry) => {
     setShowModal(!showModal);
   };
 
-  const { evaluateRuleData } = useEvaluateRuleByBusinessUnit(
-    appData.businessUnit.publicCode,
-    {
+  const { evaluateRuleData } = useEvaluateRuleByBusinessUnit({
+    businessUnits: appData.businessUnit.publicCode,
+    rulesData: {
       ruleName: "LineOfCredit",
       conditions: [
         {
@@ -22,7 +22,8 @@ const useDetailsDestination = (appData: IAppData, data: IEntry) => {
         },
       ],
     },
-  );
+    language: appData.language,
+  });
 
   useEffect(() => {
     eventBus.emit("secondModalState", showModal);

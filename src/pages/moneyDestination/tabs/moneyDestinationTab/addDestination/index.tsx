@@ -4,26 +4,24 @@ import { useAddDestination } from "@hooks/moneyDestination/add/useAddDestination
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
 import { useModalAddDestination } from "@hooks/moneyDestination/add/useModalAddDestination";
 import { EUseCase } from "@enum/useCase";
-import { normalizeCodeDestination } from "@utils/destination/normalizeCodeDestination";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { AddDestinationUI } from "./interface";
 
-function AddDestination() {
+const AddDestination = () => {
   const {
-    creditLineDecisions,
     currentStep,
     formValues,
     generalInformationRef,
     isCurrentFormValid,
-    nameDecision,
     showModal,
     showRequestProcessModal,
     saveData,
-    showAttentionModal,
     smallScreen,
     showGoBackModal,
+    creditLineValues,
+    setCreditLineValues,
     handleCloseModal,
     handleGoBack,
     handleOpenModal,
@@ -31,11 +29,9 @@ function AddDestination() {
     handlePreviousStep,
     handleSubmitClick,
     handleToggleModal,
-    setCreditLineDecisions,
     setCurrentStep,
     setIsCurrentFormValid,
     setShowRequestProcessModal,
-    setShowAttentionModal,
     setShowModal,
   } = useAddDestination();
 
@@ -78,7 +74,6 @@ function AddDestination() {
 
   return (
     <AddDestinationUI
-      creditLineDecisions={creditLineDecisions}
       currentStep={currentStep}
       generalInformationRef={generalInformationRef}
       initialGeneralInformationValues={formValues}
@@ -87,13 +82,10 @@ function AddDestination() {
       onNextStep={handleNextStep}
       onPreviousStep={handlePreviousStep}
       onToggleModal={handleToggleModal}
-      setCreditLineDecisions={setCreditLineDecisions}
       setCurrentStep={setCurrentStep}
       setIsCurrentFormValid={setIsCurrentFormValid}
       showModal={showModal}
-      steps={addDestinationStepsConfig(
-        normalizeCodeDestination(nameDecision)?.name ?? "",
-      )}
+      steps={addDestinationStepsConfig}
       requestSteps={requestSteps}
       showRequestProcessModal={showRequestProcessModal}
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}
@@ -101,15 +93,15 @@ function AddDestination() {
       onCloseRequestStatus={handleCloseRequestStatus}
       showPendingReqModal={showPendingReqModal}
       onClosePendingReqModal={handleClosePendingReqModal}
-      showAttentionModal={showAttentionModal}
-      setShowAttentionModal={setShowAttentionModal}
       smallScreen={smallScreen}
       onCloseProcess={handleCloseProcess}
       onOpenModal={handleOpenModal}
       modalData={modalData}
       showDecision={showDecision}
+      creditLineValues={creditLineValues}
+      setCreditLineValues={setCreditLineValues}
     />
   );
-}
+};
 
 export { AddDestination };

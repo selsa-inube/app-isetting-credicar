@@ -29,7 +29,7 @@ const StyledContainerDescription = styled.div<IStyledContainerName>`
   flex-direction: column;
   background-color: ${inube.palette.neutral.N0};
   width: ${(props) => (props.$smallScreen ? "270px" : "672px")};
-  height: ${(props) => (props.$smallScreen ? "260px" : "288px")};
+  height: ${(props) => (props.$smallScreen ? "240px" : "230px")};
   border-radius: ${tokens.spacing.s100};
   padding: ${tokens.spacing.s075} ${tokens.spacing.s200};
   gap: ${tokens.spacing.s050};

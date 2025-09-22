@@ -7,7 +7,7 @@ import { IGeneralDecisionsTab } from "@ptypes/generalCredPolicies/IGeneralDecisi
 import { BoxContainer } from "@design/layout/boxContainer";
 import { ILabel } from "@ptypes/ILabel";
 
-const GeneralDecisionsTab = (props: IGeneralDecisionsTab) => {
+const GeneralTab = (props: IGeneralDecisionsTab) => {
   const { data, labelsDetails } = props;
   const isMobile = useMediaQuery(mediaQueryMobile);
 
@@ -48,4 +48,4 @@ const GeneralDecisionsTab = (props: IGeneralDecisionsTab) => {
   );
 };
 
-export { GeneralDecisionsTab };
+export { GeneralTab };

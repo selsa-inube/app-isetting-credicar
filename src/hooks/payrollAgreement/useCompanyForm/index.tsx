@@ -12,7 +12,7 @@ import { validationMessages } from "@validations/validationMessages";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
-import { enviroment, mediaQueryTablet } from "@config/environment";
+import { mediaQueryTablet } from "@config/environment";
 import { alertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/alertModal";
 import { IUseCompanyForm } from "@ptypes/hooks/IUseCompanyForm";
 import { ILanguage } from "@ptypes/i18n";
@@ -56,7 +56,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
   const isMobile = useMediaQuery(mediaQueryTablet);
 
   const { optionsCitySubdivision: optionsCities } = useCitySubdivisionCountry({
-    countryName: EPayrollAgreement.COUNTRY,
+    countryName: formik.values.companyCountry ?? "",
   });
 
   const { enumData: typeIdentification } = useEnumeratorsIsaas({
@@ -64,7 +64,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
   });
 
   const optionsIdentification = optionsFromEnumI18n(
-    enviroment.VITE_LANGUAGE as ILanguage,
+    appData.language as ILanguage,
     typeIdentification,
     false,
   );

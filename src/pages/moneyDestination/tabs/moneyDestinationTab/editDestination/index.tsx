@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
-import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditDestination } from "@hooks/moneyDestination/edit/useEditDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
@@ -17,8 +16,6 @@ const EditDestination = () => {
   const { appData } = useContext(AuthAndPortalData);
 
   const {
-    creditLineDecisions,
-    normalizeEvaluateRuleData,
     formValues,
     initialGeneralInfData,
     generalInformationRef,
@@ -27,17 +24,16 @@ const EditDestination = () => {
     showRequestProcessModal,
     smallScreen,
     showGeneralInformation,
-    showDecisionsForm,
     showModal,
     showGoBackModal,
+    creditLineValues,
+    setCreditLineValues,
     handleOpenModal,
     handleCloseGoBackModal,
     handleEditedModal,
     handleGoBack,
     handleToggleEditedModal,
-    onSubmit,
     handleReset,
-    setCreditLineDecisions,
     setIsCurrentFormValid,
     handleTabChange,
     setShowRequestProcessModal,
@@ -89,15 +85,12 @@ const EditDestination = () => {
 
   return (
     <EditDestinationUI
-      creditLineDecisions={creditLineDecisions}
       editDestinationTabsConfig={editDestinationTabs}
       isSelected={isSelected}
       onTabChange={handleTabChange}
       generalInformationRef={generalInformationRef}
       initialGeneralInformationValues={formValues}
-      onButtonClick={onSubmit}
       onReset={handleReset}
-      setCreditLineDecisions={setCreditLineDecisions}
       setIsCurrentFormValid={setIsCurrentFormValid}
       saveMoneyDestination={saveMoneyDestination as ISaveDataResponse}
       requestSteps={requestSteps}
@@ -105,16 +98,16 @@ const EditDestination = () => {
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
       initialGeneralInfData={initialGeneralInfData}
-      normalizeEvaluateRuleData={normalizeEvaluateRuleData as IRuleDecision[]}
       smallScreen={smallScreen}
       showGeneralInformation={showGeneralInformation}
-      showDecisionsForm={showDecisionsForm}
       showRequestStatus={showRequestStatus}
       onCloseProcess={handleCloseProcess}
       modalData={modalData}
       showDecision={showDecision}
       onOpenModal={handleOpenModal}
       onToggleEditedModal={handleToggleEditedModal}
+      creditLineValues={creditLineValues}
+      setCreditLineValues={setCreditLineValues}
     />
   );
 };

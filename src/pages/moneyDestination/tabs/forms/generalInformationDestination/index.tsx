@@ -21,6 +21,8 @@ const GeneralInformationForm = forwardRef<
       onSubmit,
       onReset,
       onButtonClick,
+      creditLineValues,
+      setCreditLineValues,
       loading = false,
       editDataOption = false,
     },
@@ -43,9 +45,11 @@ const GeneralInformationForm = forwardRef<
       directionStack,
       alignItemsIcon,
       paddingIcon,
+      typeDestinationOptions,
+      handleChangeCheck,
       handleChange,
-    } = useGeneralInformationForm(
-      enumDestination,
+    } = useGeneralInformationForm({
+      enumData: enumDestination,
       initialValues,
       ref,
       editDataOption,
@@ -53,7 +57,9 @@ const GeneralInformationForm = forwardRef<
       onSubmit,
       onFormValid,
       initialGeneralInfData,
-    );
+      creditLineValues,
+      setCreditLineValues,
+    });
 
     return (
       <GeneralInformationFormUI
@@ -72,6 +78,9 @@ const GeneralInformationForm = forwardRef<
         directionStack={directionStack}
         alignItemsIcon={alignItemsIcon}
         paddingIcon={paddingIcon}
+        typeDestinationOptions={typeDestinationOptions}
+        creditLineOptions={creditLineValues}
+        onChangeCheck={handleChangeCheck}
       />
     );
   },

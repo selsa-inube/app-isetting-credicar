@@ -11,9 +11,13 @@ const useValidateRules = () => {
   const [loadingPolicies, setLoadingPolicies] = useState<boolean>(false);
 
   const getRule = (ruleName: string, conditions?: IConditionsEvaluateRule[]) =>
-    useEvaluateRuleByBusinessUnit(appData.businessUnit.publicCode, {
-      ruleName,
-      ...(conditions && { conditions }),
+    useEvaluateRuleByBusinessUnit({
+      businessUnits: appData.businessUnit.publicCode,
+      rulesData: {
+        ruleName,
+        ...(conditions && { conditions }),
+      },
+      language: appData.language,
     });
 
   const {
