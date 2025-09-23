@@ -4,14 +4,12 @@ import { IconWithText } from "@design/data/iconWithText";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { approvalInRequest } from "@config/status/approvalInRequest";
-import { executeInRequest } from "@config/status/executeInRequest";
 import { IIconRequestError } from "@ptypes/design/IIconRequestError";
 
 const IconRequestError = (props: IIconRequestError) => {
   const { status } = props;
 
-  const withError =
-    approvalInRequest.includes(status) || executeInRequest.includes(status);
+  const withError = approvalInRequest.includes(status);
 
   return (
     <Stack width="100%">
