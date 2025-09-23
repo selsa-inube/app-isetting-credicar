@@ -7,6 +7,7 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { EComponentAppearance } from "@enum/appearances";
 import { groups } from "@config/creditLines/configuration/mainOptions";
+import { StyledDropdownMenuContainer } from "./styles";
 
 const ConfigurationLines = () => {
   return (
@@ -21,10 +22,12 @@ const ConfigurationLines = () => {
           overflowY="auto"
         >
           <Stack direction="column" height="100%">
-            <DropdownMenuContainer
-              groups={groups as unknown as IDropdownMenuGroup[]}
-              defaultOpenId="lineNamesAndDescriptions"
-            />
+            <StyledDropdownMenuContainer>
+              <DropdownMenuContainer
+                groups={groups as unknown as IDropdownMenuGroup[]}
+                defaultOpenId="lineNamesAndDescriptions"
+              />
+            </StyledDropdownMenuContainer>
           </Stack>
         </BoxContainer>
         <Stack direction="column">
