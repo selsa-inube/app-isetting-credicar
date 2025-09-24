@@ -8,13 +8,11 @@ import { IDecisionTemplateScreen } from "@ptypes/decisions/IDecisionTemplateScre
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 
 const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
-  const {
-    templateKey,
-    initialDecisions = [],
-    language = "es",
-  } = props;
+  const { templateKey, initialDecisions = [], language = "es" } = props;
   const decisionTemplate = decisionTemplates[templateKey];
-
+  const noop = () => {
+    console.log("noop");
+  };
   return (
     <Stack
       direction="column"
@@ -28,8 +26,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
         updateData={false}
         loading={false}
         withoutDecisions={true}
-        onToggleInfoModal={() => { null; }}
-        onOpenModal={() => { null; }}
+        onToggleInfoModal={noop}
+        onOpenModal={noop}
       />
 
       <BusinessRulesNewHandler

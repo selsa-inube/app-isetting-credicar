@@ -3,7 +3,10 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { EComponentAppearance } from "@enum/appearances";
 import { groups } from "@config/creditLines/configuration/mainOptions";
-import { StyledDropdownMenuContainer, StyledFloatButtonsContainer } from "./styles";
+import {
+  StyledDropdownMenuContainer,
+  StyledFloatButtonsContainer,
+} from "./styles";
 import { MdOutlineSend } from "react-icons/md";
 import {
   BackAndNextButton,
@@ -13,13 +16,14 @@ import {
 } from "@isettingkit/business-rules";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 
-
 const ConfigurationLines = () => {
-  const nav = useStepNavigation({ groups: groups as unknown as IDropdownMenuGroup[] });
+  const nav = useStepNavigation({
+    groups: groups as unknown as IDropdownMenuGroup[],
+  });
 
   return (
-    <Stack direction="column" width="-webkit-fill-available">
-      <Grid alignContent="unset" height="95vh" templateColumns="auto 1fr">
+    <Stack direction="column" width="-webkit-fill-available" height="100%">
+      <Grid alignContent="unset" templateColumns="auto 1fr">
         <BoxContainer
           borderColor={EComponentAppearance.GRAY}
           boxSizing="border-box"
@@ -55,12 +59,13 @@ const ConfigurationLines = () => {
             textValues={{ back: "Atrás", next: "Siguiente" }}
           />
           <SendButton
-            children="Enviar"
             cursorHover
             disabled={false}
             iconBefore={<MdOutlineSend />}
             loading={false}
-          />
+          >
+            Enviar
+          </SendButton>
         </Stack>
       </StyledFloatButtonsContainer>
     </Stack>

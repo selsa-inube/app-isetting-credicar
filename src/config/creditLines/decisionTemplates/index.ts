@@ -1,5 +1,3 @@
-// @config/creditLines/decisionTemplates/interestRateType.ts
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
 

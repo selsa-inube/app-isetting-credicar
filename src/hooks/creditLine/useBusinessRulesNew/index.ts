@@ -18,41 +18,52 @@ const asArray = (v: unknown): any[] =>
   Array.isArray(v)
     ? v
     : v && typeof v === "object"
-    ? Object.values(v as Record<string, unknown>)
-    : [];
+      ? Object.values(v as Record<string, unknown>)
+      : [];
 
 const normalizeCondition = (c: any) => ({
   ...c,
   listOfPossibleValues: asArray(c?.listOfPossibleValues),
 });
 
-
 const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
-  const groups = (getConditionsByGroup(cloned) || {}) as Record<string, unknown>;
+  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
   const normalizedGroups = Object.fromEntries(
-    Object.entries(groups).map(([g, list]) => [g, asArray(list).map(normalizeCondition)]),
+    Object.entries(groups).map(([g, list]) => [
+      g,
+      asArray(list).map(normalizeCondition),
+    ]),
   );
   cloned.conditionsThatEstablishesTheDecision = normalizedGroups as any;
   return cloned;
 };
 
-const safeSortDisplayDataSwitchPlaces = (input: { decisions: IRuleDecision[] }) => {
+const safeSortDisplayDataSwitchPlaces = (input: {
+  decisions: IRuleDecision[];
+}) => {
   try {
     const normalized = (input?.decisions ?? []).map(ensureArrayGroupsDeep);
-    return sortDisplayDataSwitchPlaces({ decisions: normalized }) as IRuleDecision[];
+    return sortDisplayDataSwitchPlaces({ decisions: normalized });
   } catch (err) {
     console.warn("sortDisplayDataSwitchPlaces failed, returning input:", err);
     return input.decisions ?? [];
   }
 };
 
-const safeSortDisplayDataSampleSwitchPlaces = (input: { decisionTemplate: IRuleDecision }) => {
+const safeSortDisplayDataSampleSwitchPlaces = (input: {
+  decisionTemplate: IRuleDecision;
+}) => {
   try {
     const normalized = ensureArrayGroupsDeep(input.decisionTemplate);
-    return sortDisplayDataSampleSwitchPlaces({ decisionTemplate: normalized }) as IRuleDecision;
+    return sortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: normalized,
+    }) as IRuleDecision;
   } catch (err) {
-    console.warn("sortDisplayDataSampleSwitchPlaces failed, returning input:", err);
+    console.warn(
+      "sortDisplayDataSampleSwitchPlaces failed, returning input:",
+      err,
+    );
     return input.decisionTemplate;
   }
 };
@@ -62,15 +73,20 @@ const localizeLabel = (
   lang: "es" | "en" | undefined,
 ) => (lang && base?.i18n?.[lang]) || base?.labelName || "";
 
-const localizeDecision = (raw: IRuleDecision, lang: "es" | "en" | undefined): IRuleDecision => {
+const localizeDecision = (
+  raw: IRuleDecision,
+  lang: "es" | "en" | undefined,
+): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(raw));
   cloned.labelName = localizeLabel(raw, lang);
 
-  const groups = (getConditionsByGroup(cloned) || {}) as Record<string, unknown>;
+  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
   const localizedGroups = Object.fromEntries(
     Object.entries(groups).map(([g, list]) => [
       g,
-      asArray(list).map((c: any) => normalizeCondition({ ...c, labelName: localizeLabel(c, lang) })),
+      asArray(list).map((c: any) =>
+        normalizeCondition({ ...c, labelName: localizeLabel(c, lang) }),
+      ),
     ]),
   );
 
@@ -84,7 +100,8 @@ const normalizeHowToSet = (raw: unknown): EValueHowToSetUp => {
     if (k.includes("equal")) return EValueHowToSetUp.EQUAL;
     if (k.includes("greater")) return EValueHowToSetUp.GREATER_THAN;
     if (k.includes("less")) return EValueHowToSetUp.LESS_THAN;
-    if (k.includes("range") || k.includes("between")) return EValueHowToSetUp.RANGE;
+    if (k.includes("range") || k.includes("between"))
+      return EValueHowToSetUp.RANGE;
     if (k.includes("multi")) return EValueHowToSetUp.LIST_OF_VALUES_MULTI;
     if (k.includes("list_of_values") || k.includes("among") || k.includes("in"))
       return EValueHowToSetUp.LIST_OF_VALUES;
@@ -134,13 +151,18 @@ const withConditionSentences = (
 };
 
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
-  const { decisionTemplate, initialDecisions, language, onDecisionsChange } = props;
+  const { decisionTemplate, initialDecisions, language, onDecisionsChange } =
+    props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDecision, setSelectedDecision] = useState<IRuleDecision | null>(null);
+  const [selectedDecision, setSelectedDecision] =
+    useState<IRuleDecision | null>(null);
 
   const localizedTemplate = useMemo(
-    () => ensureArrayGroupsDeep(localizeDecision(interestRateTypeTemplate as any, language)),
+    () =>
+      ensureArrayGroupsDeep(
+        localizeDecision(interestRateTypeTemplate as any, language),
+      ),
     [decisionTemplate, language],
   );
 
@@ -153,10 +175,15 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         value: parseRangeFromString(withSentences.value),
         conditionsThatEstablishesTheDecision: mapByGroup(
           getConditionsByGroup(withSentences),
-          (condition: { value: string | number | IValue | string[] | undefined }) => ({
+          (condition: {
+            value: string | number | IValue | string[] | undefined;
+          }) => ({
             ...normalizeCondition(condition),
             labelName: localizeLabel(
-              condition as { labelName?: string; i18n?: Record<string, string> },
+              condition as {
+                labelName?: string;
+                i18n?: Record<string, string>;
+              },
               language,
             ),
             value: parseRangeFromString(condition.value),
@@ -166,13 +193,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     }),
   );
 
-  const [selectedConditionsCSV, setSelectedConditionsCSV] = useState<string>("");
+  const [selectedConditionsCSV, setSelectedConditionsCSV] =
+    useState<string>("");
   const selectedIds = useMemo(
     () => new Set(selectedConditionsCSV.split(",").filter(Boolean)),
     [selectedConditionsCSV],
   );
 
-  const [removedConditionNames, setRemovedConditionNames] = useState<Set<string>>(new Set());
+  const [removedConditionNames, setRemovedConditionNames] = useState<
+    Set<string>
+  >(new Set());
 
   const removeCondition = (conditionName: string) => {
     setRemovedConditionNames((prev) => {
@@ -193,7 +223,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const multipleChoicesOptions = useMemo(() => {
-    const groups = (getConditionsByGroup(localizedTemplate) || {}) as Record<string, unknown>;
+    const groups = (getConditionsByGroup(localizedTemplate) || {}) as Record<
+      string,
+      unknown
+    >;
     return Object.values(groups)
       .flatMap(asArray)
       .map((c: any) => ({
@@ -228,15 +261,21 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
           decisionId: `Decisión ${decisions.length + 1}`,
         };
 
-    const tplGroups = (getConditionsByGroup(localizedTemplate) || {}) as Record<string, unknown>;
-    const dataGroups = (getConditionsByGroup(dataDecision) || {}) as Record<string, unknown>;
+    const tplGroups = (getConditionsByGroup(localizedTemplate) || {}) as Record<
+      string,
+      unknown
+    >;
+    const dataGroups = (getConditionsByGroup(dataDecision) || {}) as Record<
+      string,
+      unknown
+    >;
 
     const mergedGroups = Object.fromEntries(
       Object.entries(tplGroups).map(([group, tplList]) => {
         const dataList = asArray(dataGroups[group]);
 
         const merged = asArray(tplList).map((tplItem: any) => {
-          const match = (dataList as any[]).find(
+          const match = dataList.find(
             (d: any) => d?.conditionName === tplItem?.conditionName,
           );
           return normalizeCondition({
@@ -260,7 +299,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     );
 
     const newDecision: IRuleDecision = {
-      ...(base),
+      ...base,
       labelName: localizeLabel(base, language),
       conditionsThatEstablishesTheDecision: mergedGroups as any,
     };
@@ -268,7 +307,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     const decisionWithSentences = withConditionSentences(
       ensureArrayGroupsDeep(newDecision),
     );
-    
+
     console.log(
       "Formatted for backend:",
       formatDecisionForBackend({
@@ -285,8 +324,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
               selectedDecision?.businessRuleId &&
               d.businessRuleId === selectedDecision.businessRuleId;
             const sameByDecisionId =
-              selectedDecision?.decisionId && d.decisionId === selectedDecision.decisionId;
-            return sameByBusinessRule || sameByDecisionId ? decisionWithSentences : d;
+              selectedDecision?.decisionId &&
+              d.decisionId === selectedDecision.decisionId;
+            return sameByBusinessRule || sameByDecisionId
+              ? decisionWithSentences
+              : d;
           })
         : [...prev, decisionWithSentences],
     );
@@ -308,7 +350,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       decisionTemplate: normalizedTemplate,
     });
 
-    const groups = (tpl.conditionsThatEstablishesTheDecision || {}) as Record<string, unknown>;
+    const groups = (tpl.conditionsThatEstablishesTheDecision || {}) as Record<
+      string,
+      unknown
+    >;
     const filtered = Object.fromEntries(
       Object.entries(groups).map(([group, list]) => [
         group,
@@ -326,7 +371,12 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       conditionsThatEstablishesTheDecision: filtered,
     };
 
-    return withConditionSentences(ensureArrayGroupsDeep(withFiltered as any));
+    const conditionsArray = Object.values(filtered).flat();
+
+    return withConditionSentences({
+      ...withFiltered,
+      conditionsThatEstablishesTheDecision: conditionsArray,
+    });
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(
