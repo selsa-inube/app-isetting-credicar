@@ -39,32 +39,24 @@ const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
   return cloned;
 };
 
-const safeSortDisplayDataSwitchPlaces = (input: {
-  decisions: IRuleDecision[];
-}) => {
-  try {
-    const normalized = (input?.decisions ?? []).map(ensureArrayGroupsDeep);
-    return sortDisplayDataSwitchPlaces({ decisions: normalized });
-  } catch (err) {
-    console.warn("sortDisplayDataSwitchPlaces failed, returning input:", err);
-    return input.decisions ?? [];
-  }
-};
+const isIRuleDecision = (v: unknown): v is IRuleDecision =>
+  typeof v === "object" && v !== null;
 
 const safeSortDisplayDataSampleSwitchPlaces = (input: {
-  decisionTemplate: IRuleDecision;
-}) => {
+  decisionTemplate?: IRuleDecision | null;
+}): IRuleDecision => {
   try {
-    const normalized = ensureArrayGroupsDeep(input.decisionTemplate);
-    return sortDisplayDataSampleSwitchPlaces({
-      decisionTemplate: normalized,
-    }) as IRuleDecision;
+    const tpl: IRuleDecision = ensureArrayGroupsDeep(
+      input.decisionTemplate ?? ({} as IRuleDecision),
+    );
+    const out = sortDisplayDataSampleSwitchPlaces({ decisionTemplate: tpl });
+    return isIRuleDecision(out) ? out : tpl;
   } catch (err) {
     console.warn(
       "sortDisplayDataSampleSwitchPlaces failed, returning input:",
       err,
     );
-    return input.decisionTemplate;
+    return input.decisionTemplate ?? ({} as IRuleDecision);
   }
 };
 
@@ -371,16 +363,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       conditionsThatEstablishesTheDecision: filtered,
     };
 
-    const conditionsArray = Object.values(filtered).flat();
-
-    return withConditionSentences({
-      ...withFiltered,
-      conditionsThatEstablishesTheDecision: conditionsArray,
-    });
+    return withConditionSentences(ensureArrayGroupsDeep(withFiltered as any));
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(
-    () => safeSortDisplayDataSwitchPlaces({ decisions }),
+    () => sortDisplayDataSwitchPlaces({ decisions }),
     [decisions],
   );
 
