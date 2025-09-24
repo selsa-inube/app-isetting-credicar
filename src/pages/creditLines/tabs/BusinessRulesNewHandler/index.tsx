@@ -8,7 +8,7 @@ import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
 import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 
-const BusinessRulesNewComponent = (props: IBusinessRulesNew) => {
+const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const {
     controls,
     customMessageEmptyDecisions,
@@ -57,7 +57,7 @@ const BusinessRulesNewComponent = (props: IBusinessRulesNew) => {
             name="conditionsPicker"
             onChange={onMultipleChoicesChange}
             options={multipleChoicesOptions as IOption[]}
-            placeholder="Seleccione una o varias condiciones"
+            placeholder="Selecciona las condiciones"
             required={false}
             size="wide"
             values={selectedConditionsCSV}
@@ -130,4 +130,4 @@ const BusinessRulesNewComponent = (props: IBusinessRulesNew) => {
   );
 };
 
-export { BusinessRulesNewComponent };
+export { BusinessRulesNewHandler };

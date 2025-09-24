@@ -5,4 +5,11 @@ const StyledDropdownMenuContainer = styled.div`
   }
 `;
 
-export { StyledDropdownMenuContainer };
+const StyledFloatButtonsContainer = styled.div`
+   position: sticky; 
+   bottom: 1rem;
+   left: 50rem;
+`;
+
+
+export { StyledDropdownMenuContainer, StyledFloatButtonsContainer };

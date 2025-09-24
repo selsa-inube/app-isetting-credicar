@@ -17,7 +17,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.4",
     "@inubekit/inubekit": "^6.1.0",
-    "@isettingkit/business-rules": "^2.0.3",
+    "@isettingkit/business-rules": "^2.0.5",
     "@isettingkit/input": "^1.0.7",
     "@isettingkit/view": "^0.1.25",
     "axios": "^1.7.7",

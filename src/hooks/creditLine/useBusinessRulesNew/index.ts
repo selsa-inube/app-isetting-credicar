@@ -12,24 +12,65 @@ import {
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
+import { interestRateTypeTemplate } from "@config/creditLines/decisionTemplates";
+
+const asArray = (v: unknown): any[] =>
+  Array.isArray(v)
+    ? v
+    : v && typeof v === "object"
+    ? Object.values(v as Record<string, unknown>)
+    : [];
+
+const normalizeCondition = (c: any) => ({
+  ...c,
+  listOfPossibleValues: asArray(c?.listOfPossibleValues),
+});
+
+
+const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
+  const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
+  const groups = (getConditionsByGroup(cloned) || {}) as Record<string, unknown>;
+  const normalizedGroups = Object.fromEntries(
+    Object.entries(groups).map(([g, list]) => [g, asArray(list).map(normalizeCondition)]),
+  );
+  cloned.conditionsThatEstablishesTheDecision = normalizedGroups as any;
+  return cloned;
+};
+
+const safeSortDisplayDataSwitchPlaces = (input: { decisions: IRuleDecision[] }) => {
+  try {
+    const normalized = (input?.decisions ?? []).map(ensureArrayGroupsDeep);
+    return sortDisplayDataSwitchPlaces({ decisions: normalized }) as IRuleDecision[];
+  } catch (err) {
+    console.warn("sortDisplayDataSwitchPlaces failed, returning input:", err);
+    return input.decisions ?? [];
+  }
+};
+
+const safeSortDisplayDataSampleSwitchPlaces = (input: { decisionTemplate: IRuleDecision }) => {
+  try {
+    const normalized = ensureArrayGroupsDeep(input.decisionTemplate);
+    return sortDisplayDataSampleSwitchPlaces({ decisionTemplate: normalized }) as IRuleDecision;
+  } catch (err) {
+    console.warn("sortDisplayDataSampleSwitchPlaces failed, returning input:", err);
+    return input.decisionTemplate;
+  }
+};
 
 const localizeLabel = (
   base: { labelName?: string; i18n?: Record<string, string> } | undefined,
   lang: "es" | "en" | undefined,
 ) => (lang && base?.i18n?.[lang]) || base?.labelName || "";
 
-const localizeDecision = (
-  raw: IRuleDecision,
-  lang: "es" | "en" | undefined,
-): IRuleDecision => {
+const localizeDecision = (raw: IRuleDecision, lang: "es" | "en" | undefined): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(raw));
   cloned.labelName = localizeLabel(raw, lang);
 
-  const groups = getConditionsByGroup(cloned) as Record<string, any[]>;
+  const groups = (getConditionsByGroup(cloned) || {}) as Record<string, unknown>;
   const localizedGroups = Object.fromEntries(
     Object.entries(groups).map(([g, list]) => [
       g,
-      list.map((c) => ({ ...c, labelName: localizeLabel(c, lang) })),
+      asArray(list).map((c: any) => normalizeCondition({ ...c, labelName: localizeLabel(c, lang) })),
     ]),
   );
 
@@ -43,8 +84,7 @@ const normalizeHowToSet = (raw: unknown): EValueHowToSetUp => {
     if (k.includes("equal")) return EValueHowToSetUp.EQUAL;
     if (k.includes("greater")) return EValueHowToSetUp.GREATER_THAN;
     if (k.includes("less")) return EValueHowToSetUp.LESS_THAN;
-    if (k.includes("range") || k.includes("between"))
-      return EValueHowToSetUp.RANGE;
+    if (k.includes("range") || k.includes("between")) return EValueHowToSetUp.RANGE;
     if (k.includes("multi")) return EValueHowToSetUp.LIST_OF_VALUES_MULTI;
     if (k.includes("list_of_values") || k.includes("among") || k.includes("in"))
       return EValueHowToSetUp.LIST_OF_VALUES;
@@ -57,7 +97,7 @@ const withConditionSentences = (
   isPrimaryFirst = true,
 ): IRuleDecision => {
   const d: IRuleDecision = JSON.parse(JSON.stringify(decision));
-  const groups = getConditionsByGroup(d) as Record<string, any[]>;
+  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
 
   const orderedKeys = [
     ...Object.keys(groups).filter((k) => k === "group-primary"),
@@ -68,7 +108,7 @@ const withConditionSentences = (
 
   const decorated = Object.fromEntries(
     orderedKeys.map((g) => {
-      const list = groups[g] ?? [];
+      const list = asArray(groups[g]);
       const mapped = list.map((c: any, idx: number) => {
         const isFirst = !firstUsed && g === "group-primary" && idx === 0;
         if (isFirst) firstUsed = true;
@@ -94,54 +134,45 @@ const withConditionSentences = (
 };
 
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
-  const { decisionTemplate, initialDecisions, language, onDecisionsChange } =
-    props;
+  const { decisionTemplate, initialDecisions, language, onDecisionsChange } = props;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedDecision, setSelectedDecision] =
-    useState<IRuleDecision | null>(null);
+  const [selectedDecision, setSelectedDecision] = useState<IRuleDecision | null>(null);
 
   const localizedTemplate = useMemo(
-    () => localizeDecision(decisionTemplate, language),
+    () => ensureArrayGroupsDeep(localizeDecision(interestRateTypeTemplate as any, language)),
     [decisionTemplate, language],
   );
 
-  const [decisions, setDecisions] = useState<any[]>(
+  const [decisions, setDecisions] = useState<IRuleDecision[]>(
     initialDecisions.map((d) => {
-      const loc = localizeDecision(d, language);
+      const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
       const withSentences = withConditionSentences(loc);
       return {
         ...withSentences,
         value: parseRangeFromString(withSentences.value),
         conditionsThatEstablishesTheDecision: mapByGroup(
           getConditionsByGroup(withSentences),
-          (condition: {
-            value: string | number | IValue | string[] | undefined;
-          }) => ({
-            ...condition,
+          (condition: { value: string | number | IValue | string[] | undefined }) => ({
+            ...normalizeCondition(condition),
             labelName: localizeLabel(
-              condition as {
-                labelName?: string;
-                i18n?: Record<string, string>;
-              },
+              condition as { labelName?: string; i18n?: Record<string, string> },
               language,
             ),
             value: parseRangeFromString(condition.value),
           }),
         ),
-      };
+      } as any;
     }),
   );
 
-  const [selectedConditionsCSV, setSelectedConditionsCSV] =
-    useState<string>("");
+  const [selectedConditionsCSV, setSelectedConditionsCSV] = useState<string>("");
   const selectedIds = useMemo(
     () => new Set(selectedConditionsCSV.split(",").filter(Boolean)),
     [selectedConditionsCSV],
   );
 
-  const [removedConditionNames, setRemovedConditionNames] = useState<
-    Set<string>
-  >(new Set());
+  const [removedConditionNames, setRemovedConditionNames] = useState<Set<string>>(new Set());
 
   const removeCondition = (conditionName: string) => {
     setRemovedConditionNames((prev) => {
@@ -162,9 +193,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const multipleChoicesOptions = useMemo(() => {
-    const groups = getConditionsByGroup(localizedTemplate);
+    const groups = (getConditionsByGroup(localizedTemplate) || {}) as Record<string, unknown>;
     return Object.values(groups)
-      .flat()
+      .flatMap(asArray)
       .map((c: any) => ({
         id: c.conditionName,
         label: localizeLabel(c, language),
@@ -197,27 +228,24 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
           decisionId: `Decisión ${decisions.length + 1}`,
         };
 
-    const tplGroups = getConditionsByGroup(localizedTemplate);
-    const dataGroups = getConditionsByGroup(dataDecision) as Record<
-      string,
-      any[]
-    >;
+    const tplGroups = (getConditionsByGroup(localizedTemplate) || {}) as Record<string, unknown>;
+    const dataGroups = (getConditionsByGroup(dataDecision) || {}) as Record<string, unknown>;
 
     const mergedGroups = Object.fromEntries(
       Object.entries(tplGroups).map(([group, tplList]) => {
-        const dataList = dataGroups[group] ?? [];
+        const dataList = asArray(dataGroups[group]);
 
-        const merged = (tplList as any).map((tplItem: any) => {
-          const match = dataList.find(
-            (d: any) => d.conditionName === tplItem.conditionName,
+        const merged = asArray(tplList).map((tplItem: any) => {
+          const match = (dataList as any[]).find(
+            (d: any) => d?.conditionName === tplItem?.conditionName,
           );
-          return {
+          return normalizeCondition({
             ...tplItem,
             labelName: localizeLabel(tplItem, language),
             value: match?.value ?? tplItem.value,
             listOfPossibleValues:
               match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,
-          };
+          });
         });
 
         const finalList = merged.filter((m: any) => {
@@ -232,14 +260,15 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     );
 
     const newDecision: IRuleDecision = {
-      ...base,
+      ...(base),
       labelName: localizeLabel(base, language),
-      conditionsThatEstablishesTheDecision: mergedGroups,
+      conditionsThatEstablishesTheDecision: mergedGroups as any,
     };
-    const decisionWithSentences = withConditionSentences(newDecision);
 
-    // side-effect to show we still call the same formatter
-    // (leave in place if it’s consumed elsewhere)
+    const decisionWithSentences = withConditionSentences(
+      ensureArrayGroupsDeep(newDecision),
+    );
+    
     console.log(
       "Formatted for backend:",
       formatDecisionForBackend({
@@ -256,11 +285,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
               selectedDecision?.businessRuleId &&
               d.businessRuleId === selectedDecision.businessRuleId;
             const sameByDecisionId =
-              selectedDecision?.decisionId &&
-              d.decisionId === selectedDecision.decisionId;
-            return sameByBusinessRule || sameByDecisionId
-              ? decisionWithSentences
-              : d;
+              selectedDecision?.decisionId && d.decisionId === selectedDecision.decisionId;
+            return sameByBusinessRule || sameByDecisionId ? decisionWithSentences : d;
           })
         : [...prev, decisionWithSentences],
     );
@@ -274,19 +300,20 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   useEffect(() => {
     onDecisionsChange?.(decisions);
-  }, [decisions]);
+  }, [decisions, onDecisionsChange]);
 
   const filteredDecisionTemplate = useMemo(() => {
-    const tpl = sortDisplayDataSampleSwitchPlaces({
-      decisionTemplate: localizedTemplate,
+    const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
+    const tpl = safeSortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: normalizedTemplate,
     });
-    const groups = tpl.conditionsThatEstablishesTheDecision || {};
 
+    const groups = (tpl.conditionsThatEstablishesTheDecision || {}) as Record<string, unknown>;
     const filtered = Object.fromEntries(
       Object.entries(groups).map(([group, list]) => [
         group,
-        (list as any[]).filter(
-          (c) =>
+        asArray(list).filter(
+          (c: any) =>
             (selectedIds.size === 0 || selectedIds.has(c.conditionName)) &&
             !removedConditionNames.has(c.conditionName),
         ),
@@ -295,15 +322,15 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const withFiltered = {
       ...tpl,
-      labelName: localizeLabel(tpl, language),
+      labelName: localizeLabel(tpl as any, language),
       conditionsThatEstablishesTheDecision: filtered,
     };
 
-    return withConditionSentences(withFiltered as any);
+    return withConditionSentences(ensureArrayGroupsDeep(withFiltered as any));
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
-  const decisionsSorted: any = useMemo(
-    () => sortDisplayDataSwitchPlaces({ decisions }),
+  const decisionsSorted = useMemo(
+    () => safeSortDisplayDataSwitchPlaces({ decisions }),
     [decisions],
   );
 
