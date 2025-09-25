@@ -138,7 +138,7 @@ const useAddDestination = () => {
         abbreviatedName: valueName,
         descriptionUse: formValues.description,
         iconReference: formValues.icon ?? "",
-        typeDestination: formValues.typeDestination,
+        moneyDestinationType: formValues.typeDestination,
         creditLine: formValues.creditLine ?? "",
       },
     });
