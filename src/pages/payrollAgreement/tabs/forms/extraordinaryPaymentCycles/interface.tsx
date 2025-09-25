@@ -1,7 +1,10 @@
 import { MdOutlineAdd } from "react-icons/md";
 import { Button, Stack } from "@inubekit/inubekit";
+import { AddCycleModal } from "@pages/payrollAgreement/tabs/addCycleModal";
+import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { Table } from "@design/data/table";
+import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { EComponentAppearance } from "@enum/appearances";
 import {
   breakPoints,
@@ -9,12 +12,9 @@ import {
   actionsConfig,
 } from "@config/payrollAgreement/payrollAgreementTab/assisted/extraordinaryCyclesTable";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { IExtraordinaryPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesFormUI";
-import { BoxContainer } from "@design/layout/boxContainer";
-import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { portalId } from "@config/portalId";
+import { IExtraordinaryPaymentCyclesFormUI } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IExtraordinaryPaymentCyclesFormUI";
 import { StyledFormContent } from "../styles";
-import { AddCycleModal } from "../../addCycleModal";
 
 const ExtraordinaryPaymentCyclesFormUI = (
   props: IExtraordinaryPaymentCyclesFormUI,
@@ -30,6 +30,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
     typePaymentOptions,
     monthOptions,
     dayOptions,
+    laborRegulatorOptions,
     numberDaysUntilCutOptions,
     labelButtonNext,
     labelButtonPrevious,
@@ -135,6 +136,7 @@ const ExtraordinaryPaymentCyclesFormUI = (
           typePaymentOptions={typePaymentOptions}
           monthOptions={monthOptions}
           dayOptions={dayOptions}
+          laborRegulatorOptions={laborRegulatorOptions}
           numberDaysUntilCutOptions={numberDaysUntilCutOptions}
           onCloseModal={onToggleModal}
           onClick={onAddCycle}

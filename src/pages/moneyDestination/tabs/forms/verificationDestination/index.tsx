@@ -4,17 +4,18 @@ import { Button, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { EComponentAppearance } from "@enum/appearances";
 import { Accordion } from "@design/data/accordions";
 import { tokens } from "@design/tokens";
-import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
-import { finishModal } from "@config/moneyDestination/moneyDestinationTab/form/verificationForm";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
-import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { verificationLabels } from "@config/moneyDestination/moneyDestinationTab/form/verificationLabels";
-import { VerificationBoxes } from "./verificationBoxes";
-import { IVerificationForm } from "@ptypes/moneyDestination/IVerificationForm";
+import { finishModal } from "@config/moneyDestination/moneyDestinationTab/form/verificationForm";
+import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
+import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
+import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { portalId } from "@config/portalId";
+import { mediaQueryTablet } from "@config/environment";
+import { IVerificationForm } from "@ptypes/moneyDestination/IVerificationForm";
+import { VerificationBoxes } from "./verificationBoxes";
 
 const VerificationForm = (props: IVerificationForm) => {
   const {
@@ -34,7 +35,7 @@ const VerificationForm = (props: IVerificationForm) => {
     onClosePendingReqModal,
   } = props;
 
-  const isTablet = useMediaQuery("(max-width: 1224px)");
+  const isTablet = useMediaQuery(mediaQueryTablet);
 
   const showRequestProcess = showRequestProcessModal && saveMoneyDestination;
 
@@ -43,7 +44,7 @@ const VerificationForm = (props: IVerificationForm) => {
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
-      {addDestinationStepsConfig("")
+      {addDestinationStepsConfig
         .filter((step) => step.name.toLowerCase() !== "verificación")
         .map((step) => (
           <Accordion title={step.name} key={`${step.id}-box`}>
@@ -95,7 +96,7 @@ const VerificationForm = (props: IVerificationForm) => {
       )}
       {showRequestProcess && (
         <RequestProcess
-          portalId="portal"
+          portalId={portalId}
           saveData={saveMoneyDestination}
           descriptionRequestProcess={requestProcessMessage}
           descriptionRequestStatus={requestStatusMessage}
@@ -107,7 +108,7 @@ const VerificationForm = (props: IVerificationForm) => {
       )}
       {ShowRequestStatus && (
         <RequestStatusModal
-          portalId="portal"
+          portalId={portalId}
           title={requestStatusMessage(saveMoneyDestination.staffName).title}
           description={
             requestStatusMessage(saveMoneyDestination.staffName).description

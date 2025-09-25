@@ -5,7 +5,7 @@ import { ModalWrapper } from "@design/modals/modalWrapper";
 import { moreDetailsLabels } from "@config/generalCreditPolicies/requestsInProgressTab/details/moreDetailsLabels";
 import { generalDataLabels } from "@config/generalCreditPolicies/requestsInProgressTab/details/generaDataLabels";
 import { IMoreDetailsModalUI } from "@ptypes/generalCredPolicies/IMoreDetailsModalUI";
-import { GeneralDecisionsTab } from "./tabs/generalDataTab";
+import { GeneralTab } from "./generalDataTab";
 import { DecisionTab } from "./tabs/decisionTab";
 
 const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
@@ -60,7 +60,7 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
           scroll={Object.values(filteredTabsConfig).length > 2}
         />
         {showGeneralDecisionsTab && (
-          <GeneralDecisionsTab data={data} labelsDetails={generalDataLabels} />
+          <GeneralTab data={data} labelsDetails={generalDataLabels} />
         )}
         {showDecisionsRecip && (
           <DecisionTab

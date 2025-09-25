@@ -18,6 +18,7 @@ interface IAddCycleModal {
   typePaymentOptions?: IServerDomain[];
   monthOptions?: IServerDomain[];
   dayOptions?: IServerDomain[];
+  laborRegulatorOptions?: IServerDomain[];
   isOrdinary?: boolean;
   isExtraordinary?: boolean;
 }

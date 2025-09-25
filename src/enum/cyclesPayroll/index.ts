@@ -14,6 +14,7 @@ enum ECyclesPayroll {
   EXTRAORDINARY_TYPE = "extraordinarypaymenttype",
   TYPE_IDENTIFICATION_COMPANY = "identificationtypelegalperson",
   MONTHS = "emonthofyear",
+  COLOMBIAN_LABOR_LEGAL = "colombianlaborlegalframeworks",
 }
 
 export { ECyclesPayroll };

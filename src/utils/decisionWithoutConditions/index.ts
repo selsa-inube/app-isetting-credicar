@@ -14,8 +14,8 @@ const decisionWithoutConditions = (
       value:
         typeof value === "boolean"
           ? value
-            ? EBooleanText.YES
-            : EBooleanText.NO
+            ? EBooleanText.Y
+            : EBooleanText.N
           : value,
       effectiveFrom: String(formatDate(new Date())),
       transactionOperation: transactionOperation,

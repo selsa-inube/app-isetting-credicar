@@ -11,7 +11,7 @@ interface IRequestsInProgress {
   entityName: string;
   requestDate: string;
   requestNumber: string;
-  requestStatus: string;
+  requestStatus: string | React.ReactNode;
   settingRequestId: string;
   useCaseName: string;
   userManagingConfigurationRequests: IUserManagingConfigRequests[];

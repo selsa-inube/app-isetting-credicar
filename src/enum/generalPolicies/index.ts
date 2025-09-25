@@ -6,6 +6,8 @@ enum EGeneralPolicies {
   USE_CASE_ADD = "Agregar politicas generales de crediboard",
   USE_CASE_EDIT = "Modificar politicas generales de crediboard",
   USE_CASE_CANCEL_REQUEST = "Eliminar solicitud de configuracion",
+  ADD_GENERAL_CREDIT_POLICIES = "AddGeneralCreditPolicies",
+  MODIFY_GENERAL_CREDIT_POLICIES = "ModifyGeneralCreditPolicies",
 }
 
 export { EGeneralPolicies };

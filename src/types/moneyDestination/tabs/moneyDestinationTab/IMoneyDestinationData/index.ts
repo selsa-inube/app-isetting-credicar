@@ -5,6 +5,8 @@ interface IMoneyDestinationData {
   moneyDestinationId: string;
   id?: string | number;
   name?: string;
+  typeDestination?: string;
+  creditLine?: string;
 }
 
 export type { IMoneyDestinationData };

@@ -1,46 +1,39 @@
-import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
+import { useMediaQuery } from "@inubekit/inubekit";
 import { useDetailsRequestInProgress } from "@hooks/moneyDestination/useDetailsRequestInProgress";
-import {
-  decisionTemplate,
-  textValuesBusinessRules,
-} from "@config/moneyDestination/moneyDestinationTab/businessRules";
 import { useMoreDetailsRequestProgress } from "@hooks/moneyDestination/useMoreDetailsRequestProgress";
-import { detailsTabsConfig } from "@config/moneyDestination/moneyDestinationTab/tabs";
-import { useDetailsDestinationModal } from "@hooks/design/useDetailsDestinationModal";
-import { IEntry } from "@ptypes/design/table/IEntry";
-interface IDetails {
-  data: IEntry;
-}
+import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
+import { mediaQueryMobile } from "@config/environment";
+import { IDetails } from "@ptypes/moneyDestination/tabs/IDetails";
 
 const Details = (props: IDetails) => {
   const { data } = props;
 
-  const { showModal, normalizeData, handleToggleModal } =
-    useDetailsRequestInProgress(data);
+  const {
+    showModal,
+    normalizeData,
+    filteredRequestTabs,
+    showTrazabilityData,
+    showErrorData,
+    withErrorRequest,
+    loading,
+    modalData,
+    showDecision,
+    title: titleRequest,
+    isSelected: isSelectedRequest,
+    defaultSelectedTab: defaultSelectedRequestTab,
+    statusRequestData,
+    handleTabRequestChange,
+    handleToggleModal,
+  } = useDetailsRequestInProgress(data);
 
   const {
     showMoreDetailsModal,
     moreDetailsData,
-    decisions,
     isMoreDetails,
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress(data);
 
-  const {
-    isSelected,
-    isMobile,
-    handleTabChange,
-    filteredTabsConfig,
-    defaultSelectedTab,
-    decisionDeleted,
-    decisionInserted,
-    filteredDecisions,
-  } = useDetailsDestinationModal(
-    moreDetailsData,
-    detailsTabsConfig,
-    decisions,
-    isMoreDetails,
-  );
+  const isMobile = useMediaQuery(mediaQueryMobile);
 
   return (
     <DetailsRequestInProcess
@@ -49,19 +42,22 @@ const Details = (props: IDetails) => {
       onToggleModal={handleToggleModal}
       moreDetailsData={moreDetailsData}
       showMoreDetailsModal={showMoreDetailsModal}
-      detailsTabsConfig={detailsTabsConfig}
-      decisionTemplate={decisionTemplate}
-      decisions={filteredDecisions}
-      textValuesBusinessRules={textValuesBusinessRules}
       onToggleMoreDetailsModal={onToggleMoreDetailsModal}
       isMoreDetails={isMoreDetails}
-      isSelected={isSelected ?? defaultSelectedTab ?? ""}
       isMobile={isMobile}
-      onTabChange={handleTabChange}
-      defaultSelectedTab={defaultSelectedTab ?? ""}
-      filteredTabsConfig={filteredTabsConfig}
-      decisionDeleted={decisionDeleted}
-      decisionInserted={decisionInserted}
+      titleRequest={titleRequest}
+      isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
+      filteredTabs={filteredRequestTabs}
+      showTrazabilityData={showTrazabilityData}
+      showErrorData={showErrorData}
+      withErrorRequest={withErrorRequest}
+      loading={loading}
+      onTabRequestChange={handleTabRequestChange}
+      onClick={statusRequestData.onClick}
+      modalData={modalData}
+      showDecision={showDecision}
+      labelButton={statusRequestData.textButton}
+      iconButton={statusRequestData.iconButton}
     />
   );
 };

@@ -8,6 +8,8 @@ const detailsRequestInProgressModal = {
   iconBeforeButton: <MdOutlineRemoveRedEye />,
   labelRequest: "Solicitud",
   labelsTraceability: "Trazabilidad",
+  errorTitle: "Error presentado en la solicitud",
+  withoutError: "No fue posible obtener el error presentado",
 };
 
 export { detailsRequestInProgressModal };

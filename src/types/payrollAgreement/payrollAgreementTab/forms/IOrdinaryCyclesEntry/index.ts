@@ -9,6 +9,7 @@ interface IOrdinaryCyclesEntry {
   paymentDay?: string;
   numberDaysUntilCut?: string | number;
   numberOfDaysBeforePaymentToBill?: string | number;
+  laborRegulatorFramework?: string;
 }
 
 export type { IOrdinaryCyclesEntry };

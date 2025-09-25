@@ -3,20 +3,31 @@ import {
   ValueDataType,
   ValueHowToSetUp,
 } from "@isettingkit/input";
-import { dataTranslations } from "@utils/dataTranslations";
+import { enviroment } from "@config/environment";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 
 const decisionTemplateConfig = ({
   ruleName,
-  labelName,
   decisionDataType,
   conditionsThatEstablishesTheDecision,
-}: IRuleDecision) => {
-  if (labelName && decisionDataType && conditionsThatEstablishesTheDecision) {
+  i18n,
+  descriptionUse,
+}: IDecisionData) => {
+  if (
+    descriptionUse &&
+    decisionDataType &&
+    conditionsThatEstablishesTheDecision
+  ) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const decisionTemplate: IRuleDecision = {
       ruleName: ruleName,
-      labelName: dataTranslations[labelName] ?? labelName,
+      labelName: String(
+        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ?? descriptionUse,
+      ),
+      descriptionUse: String(
+        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ?? descriptionUse,
+      ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision: ValueHowToSetUp.EQUAL,
@@ -26,7 +37,14 @@ const decisionTemplateConfig = ({
       conditionsThatEstablishesTheDecision:
         conditionsThatEstablishesTheDecision.map((condition) => ({
           conditionName: condition.conditionName,
-          labelName: dataTranslations[condition.labelName],
+          labelName: String(
+            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
+          descriptionUse: String(
+            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
           conditionDataType: condition.conditionDataType,
           value: "",
           howToSetTheCondition: ValueHowToSetUp.EQUAL,

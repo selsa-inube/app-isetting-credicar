@@ -72,7 +72,7 @@ const MoreDetails = (props: IMoreDetails) => {
       width={isMobile ? "335px" : "700px"}
       maxHeight={isMobile ? "600px" : "750px"}
       isMobile={isMobile}
-      padding={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s300}`}
+      padding={tokens.spacing.s300}
       labelActionButton={moreDetailsRequestModal.labelActionButton}
       labelCloseButton={moreDetailsRequestModal.labelCloseButton}
       labelCloseModal={moreDetailsRequestModal.labelCloseModal}

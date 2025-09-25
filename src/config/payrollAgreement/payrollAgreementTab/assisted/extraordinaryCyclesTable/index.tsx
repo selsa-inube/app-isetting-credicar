@@ -55,7 +55,8 @@ const actionsConfig = (
 };
 
 const breakPoints = [
-  { breakpoint: "(min-width: 745px)", totalColumns: 4 },
+  { breakpoint: "(min-width: 1300px)", totalColumns: 4 },
+  { breakpoint: "(min-width: 1299px)", totalColumns: 2 },
   { breakpoint: "(max-width: 744px)", totalColumns: 1 },
 ];
 

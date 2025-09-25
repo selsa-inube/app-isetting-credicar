@@ -5,22 +5,15 @@ import { VerificationForm } from "@pages/moneyDestination/tabs/forms/verificatio
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
-import { DecisionsForm } from "@design/forms/decisions";
 import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
-import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { crumbsAddDestination } from "@config/moneyDestination/addDestination/navigation";
-import { textValuesBusinessRules } from "@config/moneyDestination/moneyDestinationTab/businessRules";
-import { attentionModal, deleteModal } from "@config/decisions/messages";
-import { decisionTemplateConfig } from "@config/decisions/decisionTemplateDestination";
 import { controlsAssisted } from "@config/controlsAssisted";
-import { lineCreditLabels } from "@config/moneyDestination/addDestination/assisted/lineCreditLabels";
 import { addDestinatrionLabels } from "@config/moneyDestination/moneyDestinationTab/addDestinationLabels";
 import { portalId } from "@config/portalId";
 import { IAddDestinationUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IAddDestinationUI";
 
 const AddDestinationUI = (props: IAddDestinationUI) => {
   const {
-    creditLineDecisions,
     currentStep,
     generalInformationRef,
     initialGeneralInformationValues,
@@ -32,21 +25,20 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     loading,
     saveMoneyDestination,
     showPendingReqModal,
-    showAttentionModal,
     smallScreen,
     modalData,
     showDecision,
+    creditLineValues,
+    setCreditLineValues,
     onOpenModal,
     onFinishForm,
     onNextStep,
     onPreviousStep,
     onToggleModal,
-    setCreditLineDecisions,
     setCurrentStep,
     setIsCurrentFormValid,
     onCloseRequestStatus,
     onClosePendingReqModal,
-    setShowAttentionModal,
     onCloseProcess,
   } = props;
 
@@ -77,7 +69,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
             onBackClick={onPreviousStep}
             onNextClick={onNextStep}
             onSubmitClick={onToggleModal}
-            disableNext={!isCurrentFormValid}
+            disableNext={false}
             controls={controlsAssisted}
             size={smallScreen ? "small" : "large"}
           />
@@ -88,27 +80,8 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                 initialValues={initialGeneralInformationValues}
                 onFormValid={setIsCurrentFormValid}
                 onButtonClick={onNextStep}
-              />
-            )}
-            {currentStep === EStepsKeysMoneyDestination.LINE_CREDIT && (
-              <DecisionsForm
-                attentionModal={attentionModal}
-                deleteModal={deleteModal}
-                textValuesBusinessRules={textValuesBusinessRules}
-                decisionTemplateConfig={decisionTemplateConfig}
-                onButtonClick={onNextStep}
-                onPreviousStep={onPreviousStep}
-                initialValues={creditLineDecisions}
-                setDecisions={setCreditLineDecisions}
-                revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules="LineOfCredit"
-                nameRule={initialGeneralInformationValues.nameDestination}
-                showAttentionModal={showAttentionModal}
-                setShowAttentionModal={setShowAttentionModal}
-                titleContentAddCard={lineCreditLabels.titleContentAddCard}
-                messageEmptyDecisions={
-                  lineCreditLabels.messageEmptyDecisions as unknown as string
-                }
+                creditLineValues={creditLineValues}
+                setCreditLineValues={setCreditLineValues}
               />
             )}
             {currentStep === EStepsKeysMoneyDestination.VERIFICATION && (
@@ -117,10 +90,6 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                   personalInformation: {
                     isValid: isCurrentFormValid,
                     values: initialGeneralInformationValues,
-                  },
-                  creditline: {
-                    isValid: true,
-                    values: creditLineDecisions,
                   },
                 }}
                 requestSteps={requestSteps}

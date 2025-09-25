@@ -51,6 +51,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
       payday: getDayPayment(entry.paymentDay),
       numberDaysUntilCut: Number(entry.numberOfDaysBeforePaymentToBill),
+      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
   };
 
@@ -63,6 +64,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       typePayment: specialBenefitPayment[0],
       payday: getDayPayment(entry.paymentDay),
       numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
 
     const severances = transformToArray<ISeverancePaymentCycles>(
@@ -73,6 +75,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       typePayment: severancePay[0],
       payday: getDayPayment(entry.paymentDay),
       numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
 
     return [...specials, ...severances];

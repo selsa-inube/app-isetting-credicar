@@ -22,14 +22,12 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     decisionsGeneral: {
       isValid: false,
       values: {
-        reference: "",
         additionalDebtors: false,
-        sourcesIncome: false,
-        financialObligations: false,
         realGuarantees: false,
         calculation: false,
         reciprocity: false,
         factor: false,
+        customValue: false,
       },
     },
   };

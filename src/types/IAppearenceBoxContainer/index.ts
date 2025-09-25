@@ -4,6 +4,7 @@ const appearenceBoxContainer = [
   "dark",
   "help",
   "warning",
+  "danger",
 ] as const;
 
 type IAppearenceBoxContainer = (typeof appearenceBoxContainer)[number];

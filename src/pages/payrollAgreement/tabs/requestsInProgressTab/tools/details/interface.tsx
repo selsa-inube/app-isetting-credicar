@@ -1,14 +1,15 @@
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { Icon, Text } from "@inubekit/inubekit";
 
+import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { RequestsInProcess } from "@design/modals/requestInProgressModal";
 import { EComponentAppearance } from "@enum/appearances";
 import { labelsOfTraceability } from "@config/payrollAgreement/requestsInProgressTab/details/labelsOfTraceability";
-
-import { MoreDetails } from "@pages/payrollAgreement/tabs/moreDetails";
-import { IDetailsUI } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsUI";
+import { portalId } from "@config/portalId";
 import { detailsLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/detailsLabels";
+import { IDetailsUI } from "@ptypes/payrollAgreement/requestInProgTab/IDetailsUI";
 import { StyledContainerIcon } from "./styles";
-import { RequestsInProcess } from "./requestsInProcess";
 
 const DetailsUI = (props: IDetailsUI) => {
   const {
@@ -33,6 +34,18 @@ const DetailsUI = (props: IDetailsUI) => {
     normalizeDataMoreDetails,
     labelsOfRequestDetails,
     title,
+    filteredTabs,
+    isSelectedRequest,
+    showTrazabilityData,
+    showErrorData,
+    withErrorRequest,
+    loading,
+    showDecision,
+    modalData,
+    iconButton,
+    labelButton,
+    onClick,
+    onTabRequestChange,
     onTabChange,
     onToggleModal,
     onToggleMoreDetailsModal,
@@ -64,6 +77,16 @@ const DetailsUI = (props: IDetailsUI) => {
           onCloseModal={onToggleModal}
           isMobile={isMobile}
           onClick={onToggleMoreDetailsModal}
+          isSelected={isSelectedRequest}
+          filteredTabs={filteredTabs}
+          showTrazabilityData={showTrazabilityData}
+          showErrorData={showErrorData}
+          onTabChange={onTabRequestChange}
+          withErrorRequest={withErrorRequest}
+          onThirdClick={onClick}
+          loading={loading}
+          labelButton={labelButton}
+          iconButton={iconButton}
         />
       )}
 
@@ -76,7 +99,7 @@ const DetailsUI = (props: IDetailsUI) => {
           smallScreenTab={isMobile}
           detailsTabsConfig={detailsTabsConfig}
           data={normalizeDataMoreDetails}
-          portalId="portal"
+          portalId={portalId}
           labelsDetails={labelsDetails}
           labelsPaymentCard={labelsPaymentCard}
           ordinaryPaymentData={ordinaryPaymentData}
@@ -88,6 +111,22 @@ const DetailsUI = (props: IDetailsUI) => {
           title={detailsLabels.titleMoreDetails}
           onCloseModal={onToggleMoreDetailsModal}
           onTabChange={onTabChange}
+        />
+      )}
+
+      {showDecision && (
+        <DecisionModal
+          portalId={portalId}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
         />
       )}
     </>

@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useMoneryDestinationPage } from "@hooks/moneyDestination/useMoneryDestinationPage";
 import { moneyDestinationTabsConfig } from "@config/moneyDestination/tabs";
-import { menuOptionsMoneyDestination } from "@config/moneyDestination/moneyDestinationTab/generics/menuOptions";
 import { ICardData } from "@ptypes/home/ICardData";
 import { MoneyDestinationUI } from "./interface";
 
@@ -17,6 +16,7 @@ const MoneyDestination = () => {
     showMoneyTab,
     showRequestsTab,
     moneyDestinationTabs,
+    options,
     onCloseMenu,
     onToggleModal,
     onToggleInfoModal,
@@ -35,7 +35,7 @@ const MoneyDestination = () => {
       }
       handleTabChange={handleTabChange}
       descriptionOptions={descriptionOptions as ICardData}
-      options={menuOptionsMoneyDestination}
+      options={options}
       showModal={showModal}
       showInfoModal={showInfoModal}
       onToggleInfoModal={onToggleInfoModal}

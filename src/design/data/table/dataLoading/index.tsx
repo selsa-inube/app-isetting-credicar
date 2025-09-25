@@ -10,7 +10,7 @@ const DataLoading = (props: IDataLoading) => {
     rowsLoading.push(
       <Tr key={rows}>
         {titleColumns.map((title) => (
-          <Td key={`e-${title.id}`}>
+          <Td key={`e-${title.id}`} type="custom">
             <SkeletonLine animated />
           </Td>
         ))}

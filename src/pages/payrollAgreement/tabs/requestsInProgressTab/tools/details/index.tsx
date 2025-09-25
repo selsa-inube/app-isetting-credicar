@@ -10,8 +10,23 @@ import { DetailsUI } from "./interface";
 const Details = (props: IDetails) => {
   const { data } = props;
 
-  const { showModal, screenTablet, normalizeData, handleToggleModal } =
-    useDetailsRequestInProgress({ data });
+  const {
+    showModal,
+    screenTablet,
+    normalizeData,
+    filteredRequestTabs,
+    showTrazabilityData,
+    showErrorData,
+    modalData,
+    showDecision,
+    loading,
+    isSelected: isSelectedRequest,
+    defaultSelectedTab: defaultSelectedRequestTab,
+    statusRequestData,
+    withErrorRequest,
+    handleToggleModal,
+    handleTabRequestChange,
+  } = useDetailsRequestInProgress({ data });
 
   const {
     showModal: showMoreDetailsModal,
@@ -62,6 +77,18 @@ const Details = (props: IDetails) => {
       normalizeDataMoreDetails={normalizeDataMoreDetails}
       labelsOfRequestDetails={labelsOfRequestDetails}
       title={title}
+      filteredTabs={filteredRequestTabs}
+      showTrazabilityData={showTrazabilityData}
+      withErrorRequest={withErrorRequest}
+      loading={loading}
+      onClick={statusRequestData.onClick}
+      showErrorData={showErrorData}
+      onTabRequestChange={handleTabRequestChange}
+      showDecision={showDecision}
+      modalData={modalData}
+      isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
+      labelButton={statusRequestData.textButton}
+      iconButton={statusRequestData.iconButton}
     />
   );
 };

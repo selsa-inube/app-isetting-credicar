@@ -5,12 +5,14 @@ import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRul
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
 import { EConditionRules } from "@enum/conditionRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
-import { IDecision } from "@ptypes/decisions/IDecision";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 
 const useEnumRules = (props: IUseEnumRules) => {
   const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
-  const [enumRuleData, setEnumRuleData] = useState<IDecision>({} as IDecision);
+  const [enumRuleData, setEnumRuleData] = useState<IDecisionData>(
+    {} as IDecisionData,
+  );
   const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
   const [listValuesDecision, setListValuesDecision] =
     useState<{ value: string }[]>();
@@ -46,12 +48,17 @@ const useEnumRules = (props: IUseEnumRules) => {
 
   const fetchListValuesDecision = async (conditionOrDecisionName: string) => {
     try {
-      const data = await getConditionsOrDecisionName(
-        businessUnits,
-        conditionOrDecisionName,
-      );
-      setListValuesDecision(data.possibleValues);
-      return data.possibleValues.map((obj: { value: string }) => obj.value);
+      if (
+        conditionOrDecisionName !== "undefined" &&
+        conditionOrDecisionName.length > 0
+      ) {
+        const data = await getConditionsOrDecisionName(
+          businessUnits,
+          conditionOrDecisionName,
+        );
+        setListValuesDecision(data.possibleValues);
+        return data.possibleValues.map((obj: { value: string }) => obj.value);
+      }
     } catch (error) {
       console.info(error);
       setHasError(true);
@@ -64,12 +71,17 @@ const useEnumRules = (props: IUseEnumRules) => {
     conditionOrDecisionName: string,
   ) => {
     try {
-      const data = await getConditionsOrDecisionName(
-        businessUnits,
-        conditionOrDecisionName,
-      );
-      setListValuesCondition({ [conditionName]: data.possibleValues });
-      return data.possibleValues.map((obj: { value: string }) => obj.value);
+      if (
+        conditionOrDecisionName !== "undefined" &&
+        conditionOrDecisionName.length > 0
+      ) {
+        const data = await getConditionsOrDecisionName(
+          businessUnits,
+          conditionOrDecisionName,
+        );
+        setListValuesCondition({ [conditionName]: data.possibleValues });
+        return data.possibleValues.map((obj: { value: string }) => obj.value);
+      }
     } catch (error) {
       console.info(error);
       setHasError(true);

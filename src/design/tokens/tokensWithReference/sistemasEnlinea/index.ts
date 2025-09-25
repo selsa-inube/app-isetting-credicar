@@ -318,6 +318,30 @@ const sistemasenlinea = {
         color: inube.palette.blue.B300,
       },
     },
+    danger: {
+      border: {
+        color: inube.palette.red.R400,
+      },
+      background: {
+        color: inube.palette.red.R50,
+      },
+      boxShadow: {
+        color: inube.palette.red.R50,
+      },
+    },
+  },
+  appCard: {
+    boxShadow: {
+      color: {
+        regular: inube.palette.neutral.N30,
+      },
+    },
+    background: {
+      color: {
+        regular: inube.palette.neutral.N0,
+        hover: inube.palette.neutral.N20,
+      },
+    },
   },
 };
 

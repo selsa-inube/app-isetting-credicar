@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { tokens } from "@design/tokens";
 
 interface IStyledContainer {
   $multipleTables?: boolean;
@@ -12,6 +13,11 @@ const StyledContainerTable = styled.div<IStyledContainer>`
   width: 100%;
   border-radius: 8px;
 
+  td {
+    padding: ${({ $isTablet }) =>
+      $isTablet ? `${tokens.spacing.s100}` : `${tokens.spacing.s200}`};
+  }
+
   & > td,
   & > div {
     justify-content: center;
@@ -20,11 +26,12 @@ const StyledContainerTable = styled.div<IStyledContainer>`
   ${({ $isTablet }) =>
     $isTablet &&
     `
-    & > td {
+    &: > td {
       justify-content: flex-start;
+ 
     }
 
-    & > div > div {
+    &: > div > div {
      overflow: auto;
   }
   `}

@@ -8,7 +8,7 @@ import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsult
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { EComponentAppearance } from "@enum/appearances";
 import { payrollTabLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/payrollTabLabels";
-import { mediaQueryMobile } from "@config/environment";
+import { mediaQueryTablet } from "@config/environment";
 import { disabledModal } from "@config/disabledModal";
 import { errorModal } from "@config/errorModal";
 import { IEntry } from "@ptypes/design/table/IEntry";
@@ -127,7 +127,7 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
 
   const modalData = modal();
 
-  const smallScreen = useMediaQuery(mediaQueryMobile);
+  const smallScreen = useMediaQuery(mediaQueryTablet);
   const columnWidths = smallScreen ? [20, 53] : [20, 60];
 
   const emptyDataMessage = useEmptyDataMessage({

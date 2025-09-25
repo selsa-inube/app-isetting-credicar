@@ -40,6 +40,7 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
       numberDaysUntilCutOptions,
       monthOptions,
       dayOptions,
+      laborRegulatorOptions,
       labelButtonPrevious,
       labelButtonNext,
       columnWidths,
@@ -83,6 +84,7 @@ const ExtraordinaryPaymentCyclesForm = forwardRef<
         }
         monthOptions={monthOptions as IOption[]}
         dayOptions={dayOptions ?? []}
+        laborRegulatorOptions={laborRegulatorOptions as IOption[]}
         setEntryDeleted={setEntryDeleted}
         labelButtonPrevious={labelButtonPrevious}
         labelButtonNext={labelButtonNext}

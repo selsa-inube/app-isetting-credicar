@@ -1,3 +1,8 @@
-const alignedColumns = ["payday", "cycleId", "numberDaysUntilCut"];
+const alignedColumns = [
+  "payday",
+  "cycleId",
+  "numberDaysUntilCut",
+  "requestStatus",
+];
 
 export { alignedColumns };

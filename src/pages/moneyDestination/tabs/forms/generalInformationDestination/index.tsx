@@ -1,11 +1,12 @@
 import { forwardRef, useContext } from "react";
 import { FormikProps } from "formik";
 
-import { useGeneralInformationForm } from "@hooks/moneyDestination/useGeneralInformationForm";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useGeneralInformationForm } from "@hooks/moneyDestination/useGeneralInformationForm";
+import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { IGeneralInformationForm } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationForm";
-import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { IServerDomain } from "@ptypes/IServerDomain";
 import { GeneralInformationFormUI } from "./interface";
 
 const GeneralInformationForm = forwardRef<
@@ -20,6 +21,8 @@ const GeneralInformationForm = forwardRef<
       onSubmit,
       onReset,
       onButtonClick,
+      creditLineValues,
+      setCreditLineValues,
       loading = false,
       editDataOption = false,
     },
@@ -27,7 +30,7 @@ const GeneralInformationForm = forwardRef<
   ) => {
     const { appData } = useContext(AuthAndPortalData);
 
-    const { enumData } = useEnumsMoneyDestination({
+    const { enumDestination } = useEnumsMoneyDestination({
       businessUnits: appData.businessUnit.publicCode,
     });
 
@@ -36,16 +39,17 @@ const GeneralInformationForm = forwardRef<
       optionsDestination,
       formik,
       buttonDisabledState,
-      icon,
       labelButtonNext,
       isMobile,
       widthStack,
       directionStack,
       alignItemsIcon,
       paddingIcon,
+      typeDestinationOptions,
+      handleChangeCheck,
       handleChange,
-    } = useGeneralInformationForm(
-      enumData,
+    } = useGeneralInformationForm({
+      enumData: enumDestination,
       initialValues,
       ref,
       editDataOption,
@@ -53,19 +57,20 @@ const GeneralInformationForm = forwardRef<
       onSubmit,
       onFormValid,
       initialGeneralInfData,
-    );
+      creditLineValues,
+      setCreditLineValues,
+    });
 
     return (
       <GeneralInformationFormUI
         loading={loading}
         formik={formik}
         onButtonClick={onButtonClick}
-        optionsDestination={optionsDestination}
+        optionsDestination={optionsDestination as IServerDomain[]}
         onChange={handleChange}
         autosuggestValue={autosuggestValue}
         editDataOption={editDataOption}
         buttonDisabledState={buttonDisabledState}
-        icon={icon}
         onReset={onReset}
         labelButtonNext={labelButtonNext}
         isMobile={isMobile}
@@ -73,6 +78,9 @@ const GeneralInformationForm = forwardRef<
         directionStack={directionStack}
         alignItemsIcon={alignItemsIcon}
         paddingIcon={paddingIcon}
+        typeDestinationOptions={typeDestinationOptions}
+        creditLineOptions={creditLineValues}
+        onChangeCheck={handleChangeCheck}
       />
     );
   },

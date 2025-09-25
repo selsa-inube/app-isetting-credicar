@@ -8,12 +8,14 @@ interface IGeneralInformationFormUI {
   optionsDestination: IServerDomain[];
   autosuggestValue: string;
   editDataOption: boolean;
-  icon: React.ReactNode | undefined;
   loading: boolean;
   labelButtonNext: string;
   buttonDisabledState: boolean;
   isMobile: boolean;
   widthStack: string;
+  creditLineOptions: IServerDomain[];
+  onChangeCheck: (name: string, values: string) => void;
+  typeDestinationOptions: IServerDomain[];
   directionStack: IStackDirectionAlignment;
   alignItemsIcon: IStackAlignItem;
   paddingIcon: string;

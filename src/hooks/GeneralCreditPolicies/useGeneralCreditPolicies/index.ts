@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
@@ -19,14 +19,11 @@ const useGeneralCreditPolicies = () => {
   const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
 
   const {
-    referenceData,
     contributionsData,
     incomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
     withoutPolicies,
     loadingPolicies,
@@ -40,6 +37,7 @@ const useGeneralCreditPolicies = () => {
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
+  const [loadingRequest, setLoadingRequest] = useState<boolean>(false);
   const smallScreen = useMediaQuery(mediaQueryTablet);
   const smallScreenTab = useMediaQuery(mediaQueryMobileSmall);
 
@@ -52,52 +50,8 @@ const useGeneralCreditPolicies = () => {
   });
 
   useEffect(() => {
-    if (withoutPolicies !== undefined) {
-      setWithoutPoliciesData(withoutPolicies);
-    }
-  }, [withoutPolicies]);
-
-  useEffect(() => {
-    if (withoutPoliciesData) {
-      setShowModal(true);
-    }
-  }, [withoutPoliciesData]);
-
-  const filteredTabsConfig = Object.keys(tabs).reduce((tabOption, key) => {
-    const tab = tabs[key as keyof typeof tabs];
-
-    if (
-      key === tabs.requestsInProgress.id &&
-      requestsInProgress &&
-      requestsInProgress.length === 0
-    ) {
-      return tabOption;
-    }
-
-    if (tab !== undefined) {
-      tabOption[key as keyof IGeneralPoliciesTabsConfig] = tab;
-    }
-    return tabOption;
-  }, {} as IGeneralPoliciesTabsConfig);
-
-  const policiesTabs = Object.values(filteredTabsConfig);
-
-  const tab = policiesTabs[policiesTabs.length - 1].id;
-
-  const [isSelected, setIsSelected] = useState<string>(tab);
-
-  const handlePolicies = () => {
-    setShowModal(false);
-    navigate("/general-credit-policies/add-general-credit-policies");
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    navigate("/");
-  };
-
-  useEffect(() => {
     const fetchRequestsInProgressData = async () => {
+      setLoadingRequest(true);
       try {
         if (appData.businessManager.publicCode.length > 0) {
           const data = await getRequestsInProgress(
@@ -109,11 +63,82 @@ const useGeneralCreditPolicies = () => {
         }
       } catch (error) {
         console.info(error);
+      } finally {
+        setLoadingRequest(false);
       }
     };
 
     fetchRequestsInProgressData();
   }, [appData.businessManager.publicCode, appData.businessUnit.publicCode]);
+
+  const withoutRequestsData =
+    !loadingRequest && requestsInProgress.length === 0;
+
+  useEffect(() => {
+    const validatePolicies =
+      !loadingPolicies && withoutRequestsData && withoutPolicies !== undefined;
+
+    if (validatePolicies) {
+      setWithoutPoliciesData(withoutPolicies);
+    }
+  }, [loadingPolicies, withoutPolicies, requestsInProgress]);
+
+  useEffect(() => {
+    if (withoutPoliciesData) {
+      setShowModal(!showModal);
+    }
+  }, [withoutPoliciesData]);
+
+  const showAddPolicies =
+    withoutPoliciesData !== undefined && withoutPoliciesData;
+
+  const filteredTabsConfig = useMemo(() => {
+    return Object.keys(tabs).reduce((tabOption, key) => {
+      const tab = tabs[key as keyof typeof tabs];
+
+      if (key === tabs.generalPolicies.id && !showAddPolicies) {
+        return tabOption;
+      }
+
+      if (key === tabs.requestsInProgress.id && withoutRequestsData) {
+        return tabOption;
+      }
+
+      if (tab !== undefined) {
+        tabOption[key as keyof IGeneralPoliciesTabsConfig] = tab;
+      }
+
+      return tabOption;
+    }, {} as IGeneralPoliciesTabsConfig);
+  }, [tabs, showAddPolicies, withoutRequestsData]);
+
+  const policiesTabs = Object.values(filteredTabsConfig);
+
+  const getFirstFilteredTab = (
+    filteredTabsConfig: IGeneralPoliciesTabsConfig,
+  ) => {
+    const keys = Object.keys(filteredTabsConfig);
+    if (keys.length > 0) {
+      return filteredTabsConfig[keys[0] as keyof IGeneralPoliciesTabsConfig];
+    }
+    return undefined;
+  };
+
+  const defaultSelectedTab = getFirstFilteredTab(filteredTabsConfig)?.id;
+
+  const [isSelected, setIsSelected] = useState<string>(
+    defaultSelectedTab ?? tabs.requestsInProgress.id,
+  );
+
+  const handlePolicies = () => {
+    setShowModal(false);
+    navigate("/general-credit-policies/add-general-credit-policies");
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    navigate("/");
+  };
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
@@ -125,28 +150,28 @@ const useGeneralCreditPolicies = () => {
     setIsSelected(tabId);
   };
 
-  const modalData = withoutPrivilegesAdd
-    ? {
-        ...disabledModal,
-        withCancelButton: false,
-        onCloseModal: handleCloseModal,
-        onClick: handleCloseModal,
-      }
-    : {
-        ...notPoliciesModal,
-        withCancelButton: true,
-        onCloseModal: handleCloseModal,
-        onClick: handlePolicies,
-      };
+  const modalData =
+    withoutPrivilegesAdd && showAddPolicies
+      ? {
+          ...disabledModal,
+          withCancelButton: false,
+          onCloseModal: handleCloseModal,
+          onClick: handleCloseModal,
+        }
+      : {
+          ...notPoliciesModal,
+          withCancelButton: true,
+          onCloseModal: handleCloseModal,
+          onClick: handlePolicies,
+        };
 
   const showPoliciesTab = isSelected === tabs.generalPolicies.id;
 
   const showrequestTab = isSelected === tabs.requestsInProgress.id;
 
-  const showAddPolicies = withoutPoliciesData && showModal;
-
   return {
     withoutPolicies,
+    withoutPoliciesData,
     isSelected,
     descriptionOptions,
     smallScreen,
@@ -154,18 +179,16 @@ const useGeneralCreditPolicies = () => {
     showPoliciesTab,
     showrequestTab,
     policiesTabs,
-    referenceData,
     contributionsData,
     incomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
-    sourcesIncomeData,
-    financialObligData,
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
     modalData,
+    loadingRequest,
     handleTabChange,
   };
 };

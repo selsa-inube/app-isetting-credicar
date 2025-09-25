@@ -39,6 +39,10 @@ const StyledMain = styled.main<IStyledMain>`
   & > div {
     height: 100%;
     max-width: ${({ $maxWidthPage }) => $maxWidthPage};
+    // overflow-y: auto;
+    & > div > div {
+      // overflow-y: auto;
+    }
   }
 `;
 

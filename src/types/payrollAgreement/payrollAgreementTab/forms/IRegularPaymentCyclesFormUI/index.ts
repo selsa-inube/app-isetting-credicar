@@ -13,6 +13,7 @@ interface IRegularPaymentCyclesFormUI {
   numberDaysUntilCutOptions: IServerDomain[];
   paydayOptions: IServerDomain[];
   periodicityOptions: IServerDomain[];
+  laborRegulatorOptions: IServerDomain[];
   showAddModal: boolean;
   showInfoModal: boolean;
   valuesEqual: boolean;

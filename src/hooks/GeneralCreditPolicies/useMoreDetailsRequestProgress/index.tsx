@@ -27,20 +27,8 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   data.configurationRequestData.rules.map((rule: IEntry) => {
     if (rule === null) return;
     rule.decisionsByRule?.filter((decision: IRuleDecision) => {
-      if (rule.ruleName === ENameRules.REFERENCE) {
-        reference = decision.value;
-      }
-
       if (rule.ruleName === ENameRules.ADDITIONAL_DEBTORS) {
         additionalDebtors = decision.value;
-      }
-
-      if (rule.ruleName === ENameRules.SOURCES_INCOME) {
-        sourcesIncome = decision.value;
-      }
-
-      if (rule.ruleName === ENameRules.FINANCIAL_OBLIGATIONS) {
-        financialObligations = decision.value;
       }
 
       if (rule.ruleName === ENameRules.REAL_GUARANTEES) {
@@ -58,8 +46,13 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
         const reciprocity =
           decision.value === ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS &&
           optionsMethods.ReciprocityOfContributions;
+        const customValue =
+          decision.value === ERulesOfDecisions.CUSTOM_VALUE &&
+          optionsMethods.customValue;
 
-        methods = [calculation, factor, reciprocity].filter(Boolean).join(", ");
+        methods = [calculation, factor, reciprocity, customValue]
+          .filter(Boolean)
+          .join(", ");
       }
     });
   });
