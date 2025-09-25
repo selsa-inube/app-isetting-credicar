@@ -27,7 +27,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
       width="-webkit-fill-available"
     >
       <LineInformation
-        lineName={"linea "}
+        lineName="linea"
         lineType={options.lineNames.links.namesAndDescriptions.label}
         updateData={false}
         loading={false}

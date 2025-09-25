@@ -21,7 +21,7 @@ const Details = (props: IDetails) => {
     isMobile,
     isSelected: isSelectedRequest,
     defaultSelectedTab: defaultSelectedRequestTab,
-    handleApproval,
+    statusRequestData,
     handleToggleModal,
     handleTabRequestChange,
   } = useDetailsRequestInProgress({ data });
@@ -39,12 +39,14 @@ const Details = (props: IDetails) => {
       showTrazabilityData={showTrazabilityData}
       withErrorRequest={withErrorRequest}
       loading={loading}
-      onApproval={handleApproval}
+      onClick={statusRequestData.onClick}
       showErrorData={showErrorData}
       onTabRequestChange={handleTabRequestChange}
       showDecision={showDecision}
       modalData={modalData}
       isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
+      labelButton={statusRequestData.textButton}
+      iconButton={statusRequestData.iconButton}
     />
   );
 };

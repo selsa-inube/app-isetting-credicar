@@ -2,10 +2,9 @@ const requestStatus: Record<string, string> = {
   RequestProcessed: "Procesada",
   RequestCanceled: "Cancelada",
   RequestProcessedWithError: "Pendiente",
-  PendingApproval: "Pendiente aprobación",
-  InTheProcessOfValidation: "En proceso validación",
-  InTheProcessComplementationValidation:
-    "En proceso complementación y validación",
+  PendingApproval: "Pendiente",
+  InTheProcessOfValidation: "Pendiente",
+  InTheProcessComplementationValidation: "Pendiente",
   ProcessingRequest: "Procesando solicitud",
   RequestInProgress: "Procesando solicitud",
   RejectedRequest: "Rechazada",

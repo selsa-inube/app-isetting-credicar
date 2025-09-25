@@ -17,7 +17,6 @@ const GeneralDataTab = (props: IGeneralDataTab) => {
 
   const withoutData = ["undefined", undefined];
 
-  console.log({ data });
   return (
     <Stack direction="column" gap={tokens.spacing.s200} height="auto">
       {!withoutData.includes(data.typeDestination) && (
