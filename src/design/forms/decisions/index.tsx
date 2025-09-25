@@ -77,6 +77,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     catalogAction: capitalizeText(ruleCatalog),
     businessUnits: appData.businessUnit.publicCode,
   });
+  console.log({ ruleCatalog, labelBusinessRules });
 
   return (
     <DecisionsFormUI

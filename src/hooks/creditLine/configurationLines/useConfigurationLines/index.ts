@@ -1,20 +1,23 @@
 import { useNavigate } from "react-router-dom";
+import { IRuleDecision } from "@isettingkit/input";
 import { IDragAndDropColumn } from "@isettingkit/business-rules";
 import { FormikProps } from "formik";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { compareObjects } from "@utils/compareObjects";
+import { capitalizeText } from "@utils/capitalizeText";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { IUseConfigurationLines } from "@ptypes/hooks/creditLines/IUseConfigurationLines";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
+import { ECreditLines } from "@enum/creditLines";
+import { ILanguage } from "@ptypes/i18n";
 import { useModalConfiguration } from "../useModalConfiguration";
-import { IRuleDecision } from "@isettingkit/input";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
-
-  console.log({ templateKey });
 
   const initialValues = {
     nameAndDescription: {
@@ -23,6 +26,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       descriptionLine: "",
     },
   };
+
+  const { appData } = useContext(AuthAndPortalData);
   const [formValues, setFormValues] = useState(initialValues);
   const [isUpdated] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState<boolean>(false);
@@ -139,10 +144,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     handleToggleErrorModal,
   });
 
-  const lineNameDecision = "";
-  const lineTypeDecision = "";
+  const { ruleData } = useEnumRules({
+    enumDestination: templateKey ?? "",
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: capitalizeText(ECreditLines.RULE_CATALOG),
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const lineNameDecision = formValues.nameAndDescription.nameLine;
+  const lineTypeDecision = ruleData.ruleName ?? "";
   const initialDecisions: IRuleDecision[] = [];
-  const language = "es" as "es" | "en" | undefined;
+  const language = appData.language as ILanguage;
 
   return {
     loading,
@@ -161,6 +173,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     lineTypeDecision,
     initialDecisions,
     language,
+    ruleData,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

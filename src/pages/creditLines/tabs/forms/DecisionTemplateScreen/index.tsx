@@ -51,7 +51,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
         controls
         decisionTemplate={decisionTemplate}
         initialDecisions={initialDecisions}
-        language={language}
+        language={language as "es" | "en"}
         loading={false}
         textValues={commonTextValues}
       />
@@ -65,7 +65,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
           withIcon={modalData.withIcon}
-          icon={<></>}
+          icon={modalData.icon}
           appearance={modalData.appearance}
           appearanceButton={modalData.appearanceButton}
         />

@@ -19,7 +19,7 @@ const CreditLinesRoutes = () => {
         />
         <Route
           path="loan-term"
-          element={<DecisionTemplateScreen templateKey="loan-term" />}
+          element={<DecisionTemplateScreen templateKey="LineOfCredit" />}
         />
         <Route path="amortization-methods" element={<></>} />
         <Route path="rate-increase" element={<></>} />
