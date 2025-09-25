@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useModifyLinesConstructionData } from "@hooks/creditLine/useModifyLinesConstructionData";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
@@ -10,6 +9,7 @@ import { withoutDataModal } from "@config/withoutData";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { IUseConfigurationInitial } from "@ptypes/hooks/creditLines/IUseConfigurationInitial";
+import { useAutoSaveOnRouteChange } from "../../useAutoSaveOnRouteChange";
 
 const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const { data } = props;
@@ -37,10 +37,10 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   }, [data?.settingRequestId, setLinesConstructionData]);
 
   const { borrowerData, loading, hasError, errorData, setHasError } =
-    useModifyLinesConstructionData({
-      userAccount: appData.user.userAccount,
+    useAutoSaveOnRouteChange({
+      debounceMs: 500,
       linesData,
-      withNeWData: true,
+      userAccount: appData.user.userAccount,
     });
 
   useEffect(() => {

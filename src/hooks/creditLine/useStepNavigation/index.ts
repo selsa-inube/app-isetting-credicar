@@ -54,6 +54,7 @@ function useStepNavigation({ groups }: IUseStepNavigation) {
     const next = nextIndex >= 0 ? sequence[nextIndex] : null;
     if (next) navigate(next.path);
   }, [currentIndex, navigate, nextIndex, sequence]);
+  console.log("mi data: ", location.pathname, currentIndex, sequence);
 
   const disabledBack = currentIndex <= 0;
   const disabledNext = currentIndex < 0 || currentIndex >= sequence.length - 1;
