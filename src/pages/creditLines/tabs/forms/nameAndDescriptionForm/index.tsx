@@ -14,7 +14,7 @@ const NameAndDescriptionForm = () => {
     nameLineRef,
     handleToggleInfoModal,
     handleOpenModal,
-  } = useConfigurationLines();
+  } = useConfigurationLines({});
 
   const { formik } = useNameAndDescriptionForm({
     initialValues: formValues.nameAndDescription,

@@ -6,10 +6,16 @@ import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { compareObjects } from "@utils/compareObjects";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
+import { IUseConfigurationLines } from "@ptypes/hooks/creditLines/IUseConfigurationLines";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 import { useModalConfiguration } from "../useModalConfiguration";
+import { IRuleDecision } from "@isettingkit/input";
 
-const useConfigurationLines = () => {
+const useConfigurationLines = (props: IUseConfigurationLines) => {
+  const { templateKey } = props;
+
+  console.log({ templateKey });
+
   const initialValues = {
     nameAndDescription: {
       aliasLine: "",
@@ -133,6 +139,11 @@ const useConfigurationLines = () => {
     handleToggleErrorModal,
   });
 
+  const lineNameDecision = "";
+  const lineTypeDecision = "";
+  const initialDecisions: IRuleDecision[] = [];
+  const language = "es" as "es" | "en" | undefined;
+
   return {
     loading,
     initialValues,
@@ -146,6 +157,10 @@ const useConfigurationLines = () => {
     nameLineRef,
     formValues,
     isUpdated,
+    lineNameDecision,
+    lineTypeDecision,
+    initialDecisions,
+    language,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

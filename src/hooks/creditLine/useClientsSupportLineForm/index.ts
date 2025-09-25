@@ -14,7 +14,7 @@ const useClientsSupportLineForm = () => {
     setOptionsExcluded,
     handleToggleInfoModal,
     handleOpenModal,
-  } = useConfigurationLines();
+  } = useConfigurationLines({});
 
   const [selectedConditionId, setSelectedConditionId] = useState<string | null>(
     null,
