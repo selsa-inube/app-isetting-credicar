@@ -34,7 +34,9 @@ interface IDetailsUI {
   withErrorRequest: boolean;
   showDecision: boolean;
   modalData: IModalData;
-  onApproval: () => void;
+  labelButton: string;
+  iconButton: React.ReactElement;
+  onClick: () => void;
   onTabRequestChange: (id: string) => void;
   onTabChange: (id: string) => void;
   onToggleModal: () => void;

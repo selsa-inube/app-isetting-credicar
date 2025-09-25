@@ -21,10 +21,12 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
     isMobile,
     withErrorRequest,
     loading,
+    labelButton,
+    iconButton,
     onTabChange,
     onCloseModal,
     onClick,
-    onApproval,
+    onThirdClick,
   } = props;
 
   return (
@@ -42,9 +44,9 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
       onClick={onClick}
       withThirdButton={withErrorRequest}
       appearanceThirdButton={EComponentAppearance.PRIMARY}
-      labelThirdButton={detailsRequestInProgressModal.labelThirdButton}
-      onClickThirdButton={onApproval}
-      iconThirdButton={detailsRequestInProgressModal.iconApprovalButton}
+      labelThirdButton={labelButton}
+      onClickThirdButton={onThirdClick}
+      iconThirdButton={iconButton}
       loadingThirdButton={loading}
     >
       <Tabs

@@ -1,33 +1,34 @@
-import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { patchApprovalConfiguration } from "@services/requestInProgress/patchApprovalConfiguration";
+import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
+import { patchEditGeneralPolicies } from "@services/generalPolicies/patchEditGeneralPolicies";
+import { useRequestDetails } from "@hooks/useRequestDetails";
 import { eventBus } from "@events/eventBus";
 import { formatDateTable } from "@utils/date/formatDateTable";
-import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorObject } from "@utils/errorObject";
+import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { RequestType } from "@enum/requestType";
 import { EModalState } from "@enum/modalState";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
-import { detailsRequestTabsConfig } from "@config/detailsRequestTabsConfig";
-import { withErrorInRequest } from "@config/status/withErrorInRequest";
-import { detailsRequest } from "@config/detailsRequest";
 import { detailsRequestInProgressModal } from "@config/generalCreditPolicies/requestsInProgressTab/details/detailsRequestInProgressModal";
-import { IDetailsRequestTabsConfig } from "@ptypes/requestInProgress/IDetailsRequestTabsConfig";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IUseDetailsRequestInProgress } from "@ptypes/generalCredPolicies/IUseDetailsRequest";
+import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
 import { IErrors } from "@ptypes/IErrors";
 
 const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const { data } = props;
+
+  const { appData } = useContext(AuthAndPortalData);
   const [showModal, setShowModal] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
-  const [isSelected, setIsSelected] = useState<string>();
-  const { appData } = useContext(AuthAndPortalData);
+  const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
-  const [hasError, setHasError] = useState(false);
   const navigate = useNavigate();
 
   const handleToggleModal = () => {
@@ -49,18 +50,37 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     ),
   };
 
-  const withErrorRequest = withErrorInRequest.includes(data.requestStatusCode);
+  const requestConfiguration = {
+    ...data?.configurationRequestData,
+    settingRequest: {
+      requestNumber: data?.requestNumber,
+      settingRequestId: data?.settingRequestId,
+    },
+  };
 
   const fetchRequestData = async () => {
     setLoading(true);
     try {
-      await patchApprovalConfiguration(appData.user.userAccount, {
-        requestNumber: data.requestNumber,
-        modifyJustification: `${detailsRequest.modifyJustification} ${appData.user.userAccount}`,
-        settingRequestId: data.settingRequestId,
-      });
-      setShowModal(false);
-      navigate("/");
+      if (data.useCaseName === EGeneralPolicies.ADD_GENERAL_CREDIT_POLICIES) {
+        await postAddGeneralPolicies(
+          appData.businessUnit.publicCode,
+          appData.user.userAccount,
+          requestConfiguration as IRequestGeneralPol,
+        );
+        setShowModal(false);
+        navigate(-1);
+      }
+      if (
+        data.useCaseName === EGeneralPolicies.MODIFY_GENERAL_CREDIT_POLICIES
+      ) {
+        await patchEditGeneralPolicies(
+          appData.businessUnit.publicCode,
+          appData.user.userAccount,
+          requestConfiguration as IRequestGeneralPol,
+        );
+        setShowModal(false);
+        navigate(-1);
+      }
     } catch (error) {
       console.info(error);
       setHasError(true);
@@ -70,40 +90,26 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     }
   };
 
-  const filteredRequestTabsConfig = Object.keys(
-    detailsRequestTabsConfig,
-  ).reduce((detail, key) => {
-    const tab =
-      detailsRequestTabsConfig[key as keyof IDetailsRequestTabsConfig];
-
-    if (
-      tab?.id === detailsRequestTabsConfig.errorData.id &&
-      !withErrorRequest
-    ) {
-      return detail;
-    }
-
-    if (tab !== undefined) {
-      detail[key as keyof IDetailsRequestTabsConfig] = tab;
-    }
-    return detail;
-  }, {} as IDetailsRequestTabsConfig);
-
-  const handleTabRequestChange = (tabId: string) => {
-    setIsSelected(tabId);
-  };
-
-  const handleApproval = () => {
-    fetchRequestData();
-  };
-
-  const handleToggleErrorModal = () => {
-    setHasError(!hasError);
-
-    if (hasError) {
-      setShowModal(false);
-    }
-  };
+  const {
+    approvalRequest,
+    defaultSelectedTab,
+    executeRequest,
+    filteredRequestTabs,
+    isSelected,
+    showErrorData,
+    showTrazabilityData,
+    statusRequestData,
+    handleTabRequestChange,
+    handleToggleErrorModal,
+  } = useRequestDetails({
+    data,
+    hasError,
+    setShowModal,
+    setLoading,
+    setErrorData,
+    setHasError,
+    fetchRequestData,
+  });
 
   useEffect(() => {
     const decision = hasError;
@@ -146,37 +152,12 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
 
-  useEffect(() => {
-    if (defaultSelectedTab === detailsRequestTabsConfig.errorData.id) {
-      setIsSelected(detailsRequestTabsConfig.errorData.id);
-    } else {
-      setIsSelected(detailsRequestTabsConfig.trazabilityData.id);
-    }
-  }, []);
-
-  const getFirstFilteredTab = (
-    filteredTabsConfig: IDetailsRequestTabsConfig,
-  ) => {
-    const keys = Object.keys(filteredTabsConfig);
-    if (keys.length > 0) {
-      return filteredTabsConfig[keys[0] as keyof IDetailsRequestTabsConfig];
-    }
-    return undefined;
-  };
-
-  const defaultSelectedTab = getFirstFilteredTab(filteredRequestTabsConfig)?.id;
-
-  const filteredRequestTabs = Object.values(filteredRequestTabsConfig);
-
-  const showTrazabilityData =
-    isSelected === detailsRequestTabsConfig.trazabilityData.id;
-
-  const showErrorData = isSelected === detailsRequestTabsConfig.errorData.id;
-
   const title = `${detailsRequestInProgressModal.labelRequest} ${
     RequestType[normalizeData.request as keyof typeof RequestType] ??
     data.request
   }`;
+
+  const withErrorRequest = approvalRequest || executeRequest;
 
   return {
     showModal,
@@ -192,8 +173,8 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     title,
     modalData,
     showDecision,
+    statusRequestData,
     handleTabRequestChange,
-    handleApproval,
     handleToggleModal,
     normalizeData,
   };

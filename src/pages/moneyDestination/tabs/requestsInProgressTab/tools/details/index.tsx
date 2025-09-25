@@ -1,12 +1,9 @@
-import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
-import { useDetailsRequestInProgress } from "@hooks/moneyDestination/useDetailsRequestInProgress";
-import { mediaQueryMobile } from "@config/environment";
-import { useMoreDetailsRequestProgress } from "@hooks/moneyDestination/useMoreDetailsRequestProgress";
-import { IEntry } from "@ptypes/design/table/IEntry";
 import { useMediaQuery } from "@inubekit/inubekit";
-interface IDetails {
-  data: IEntry;
-}
+import { useDetailsRequestInProgress } from "@hooks/moneyDestination/useDetailsRequestInProgress";
+import { useMoreDetailsRequestProgress } from "@hooks/moneyDestination/useMoreDetailsRequestProgress";
+import { DetailsRequestInProcess } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details/detailsRequestInProcess";
+import { mediaQueryMobile } from "@config/environment";
+import { IDetails } from "@ptypes/moneyDestination/tabs/IDetails";
 
 const Details = (props: IDetails) => {
   const { data } = props;
@@ -24,8 +21,8 @@ const Details = (props: IDetails) => {
     title: titleRequest,
     isSelected: isSelectedRequest,
     defaultSelectedTab: defaultSelectedRequestTab,
+    statusRequestData,
     handleTabRequestChange,
-    handleApproval,
     handleToggleModal,
   } = useDetailsRequestInProgress(data);
 
@@ -56,9 +53,11 @@ const Details = (props: IDetails) => {
       withErrorRequest={withErrorRequest}
       loading={loading}
       onTabRequestChange={handleTabRequestChange}
-      onApproval={handleApproval}
+      onClick={statusRequestData.onClick}
       modalData={modalData}
       showDecision={showDecision}
+      labelButton={statusRequestData.textButton}
+      iconButton={statusRequestData.iconButton}
     />
   );
 };

@@ -100,7 +100,7 @@ const AppPage = () => {
           <Grid
             templateColumns={!isTablet ? "auto 1fr" : "1fr"}
             alignContent="unset"
-            height={"95vh"}
+            height="93vh"
           >
             {!isTablet && (
               <Nav navigation={optionsNav} actions={actionsConfig()} />

@@ -4,6 +4,7 @@ import { CreditLines } from "@pages/creditLines";
 import { ConfigurationLines } from "@pages/creditLines/tabs/configurationLines";
 import { ClientsSupportLineForm } from "@pages/creditLines/tabs/forms/clientsSupportLineForm";
 import { NameAndDescriptionForm } from "@pages/creditLines/tabs/forms/nameAndDescriptionForm";
+import { DecisionTemplateScreen } from "@pages/creditLines/tabs/forms/DecisionTemplateScreen";
 
 const CreditLinesRoutes = () => {
   return (
@@ -16,7 +17,10 @@ const CreditLinesRoutes = () => {
           path="line-Names-Descriptions"
           element={<NameAndDescriptionForm />}
         />
-        <Route path="loan-term" element={<></>} />
+        <Route
+          path="loan-term"
+          element={<DecisionTemplateScreen templateKey="loan-term" />}
+        />
         <Route path="amortization-methods" element={<></>} />
         <Route path="rate-increase" element={<></>} />
         <Route path="increment-value" element={<></>} />

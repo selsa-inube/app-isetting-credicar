@@ -18,7 +18,9 @@ interface IDetailsRequestUI {
   title: string;
   withErrorRequest: boolean;
   labelsOfRequest: ILabel[];
-  onApproval: () => void;
+  labelButton: string;
+  iconButton: React.ReactElement;
+  onClick: () => void;
   onTabRequestChange: (id: string) => void;
 
   onToggleModal: () => void;

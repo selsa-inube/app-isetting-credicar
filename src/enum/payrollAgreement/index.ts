@@ -13,6 +13,9 @@ enum EPayrollAgreement {
   ADD_COMPANY = "addCompany",
   COUNTRY = "Colombia",
   COUNTRY_IDENTIFICATION = "colombia",
+  DELETE_PAYROLL_AGREEMENT = "DeletePayrollAgreement",
+  ADD_PAYROLL_AGREEMENT = "AddPayrollAgreement",
+  MODIFY_PAYROLL_AGREEMENT = "ModifyPayrollAgreement",
 }
 
 export { EPayrollAgreement };
