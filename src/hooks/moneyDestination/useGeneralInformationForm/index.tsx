@@ -10,15 +10,16 @@ import { object } from "yup";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
+import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { tokens } from "@design/tokens";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { mediaQueryTablet } from "@config/environment";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
+import { IUseGeneralInformationForm } from "@ptypes/hooks/moneyDestination/IUseGeneralInformationForm";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { II18n } from "@ptypes/i18n";
 import { IServerDomain } from "@ptypes/IServerDomain";
-import { IUseGeneralInformationForm } from "@ptypes/hooks/moneyDestination/IUseGeneralInformationForm";
 
 const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const {
@@ -63,16 +64,38 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const { appData } = useContext(AuthAndPortalData);
 
-  const optionsDestination = enumData.map((item: IEnumerators) => {
-    const name =
-      item.i18nValue?.[appData.language as keyof typeof item.i18n] ??
-      item.description;
-    return {
-      id: item.code,
-      label: name,
-      value: item.code,
-    };
+  const { enumData: type } = useEnumeratorsCrediboard({
+    businessUnits: appData.businessUnit.publicCode,
+    enumQuery: EMoneyDestination.DESTINATION_TYPE,
   });
+  const typeDestinationOptions: IServerDomain[] = type.map(
+    (item: IEnumerators) => {
+      const name =
+        item.i18n?.[appData.language as keyof typeof item.i18n] ??
+        item.description;
+
+      return {
+        id: item.code ?? "",
+        label: name ?? "",
+        value: item.code ?? "",
+      };
+    },
+  );
+
+  const optionsDestination = enumData
+    .filter(
+      (entry) => entry.moneyDestinationType === formik.values.typeDestination,
+    )
+    .map((item: IEnumerators) => {
+      const name =
+        item.i18nValue?.[appData.language as keyof typeof item.i18n] ??
+        item.description;
+      return {
+        id: item.code,
+        label: name,
+        value: item.code,
+      };
+    });
 
   useImperativeHandle(ref, () => formik);
 
@@ -93,7 +116,15 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     setAutosuggestValue(value);
     formik.setFieldValue(name, value);
 
-    if (name === EMoneyDestination.MONEY_DESTINATION) {
+    if (name === EMoneyDestination.FIELD_TYPE_DESTINATION) {
+      if (!value || value !== formik.values.typeDestination) {
+        setAutosuggestValue("");
+        formik.setFieldValue("nameDestination", "");
+        formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
+      }
+    }
+
+    if (name === EMoneyDestination.FIELD_MONEY_DESTINATION) {
       const equalValueName = value !== formik.values.nameDestination;
       const normalizeData = normalizeDestination(enumData, value);
       const description =
@@ -193,8 +224,6 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const paddingIcon = isMobile
     ? `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s050} ${tokens.spacing.s250}`
     : tokens.spacing.s0;
-
-  const typeDestinationOptions: IServerDomain[] = [];
 
   return {
     autosuggestValue,

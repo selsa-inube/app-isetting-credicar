@@ -23,6 +23,14 @@ const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
     onSubmit: () => void 0,
   });
 
+  useEffect(() => {
+    formik.setValues(initialValues);
+  }, [
+    initialValues.aliasLine,
+    initialValues.nameLine,
+    initialValues.descriptionLine,
+  ]);
+
   useImperativeHandle(ref, () => formik);
 
   useEffect(() => {

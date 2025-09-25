@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { IDragAndDropColumn } from "@isettingkit/business-rules";
 import { FormikProps } from "formik";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { compareObjects } from "@utils/compareObjects";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
@@ -17,8 +18,7 @@ const useConfigurationLines = () => {
     },
   };
   const [formValues, setFormValues] = useState(initialValues);
-  const [loading] = useState<boolean>(false);
-  const [updateData] = useState<boolean>(false);
+  const [isUpdated] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [canRefresh, setCanRefresh] = useState(false);
@@ -41,6 +41,31 @@ const useConfigurationLines = () => {
   });
 
   const navigate = useNavigate();
+
+  const { linesConstructionData: initialData, loadingInitial: loading } =
+    useContext(CreditLinesConstruction);
+
+  useEffect(() => {
+    if (
+      !initialData.abbreviatedName &&
+      !initialData.alias &&
+      !initialData.descriptionUse
+    ) {
+      setFormValues(initialValues);
+    } else {
+      setFormValues({
+        nameAndDescription: {
+          aliasLine: initialData.alias || "",
+          nameLine: initialData.abbreviatedName || "",
+          descriptionLine: initialData.descriptionUse || "",
+        },
+      });
+    }
+  }, [
+    initialData.abbreviatedName,
+    initialData.alias,
+    initialData.descriptionUse,
+  ]);
 
   const handleToggleInfoModal = () => {
     setShowInfoModal(!showInfoModal);
@@ -115,12 +140,12 @@ const useConfigurationLines = () => {
     modalData,
     canRefresh,
     showInfoModal,
-    updateData,
     optionsExcluded,
     optionsIncluded,
     isCurrentFormValid,
     nameLineRef,
     formValues,
+    isUpdated,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

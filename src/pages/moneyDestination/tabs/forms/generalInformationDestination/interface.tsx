@@ -116,7 +116,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                               onBlur={formik.handleBlur}
                               size="compact"
                               fullwidth
-                              disabled={!formik.values.nameDestination}
+                              disabled={!formik.values.typeDestination}
                               invalid={isInvalid(formik, "nameDestination")}
                               message={formik.errors.nameDestination}
                               required

@@ -46,13 +46,8 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
         const reciprocity =
           decision.value === ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS &&
           optionsMethods.ReciprocityOfContributions;
-        const customValue =
-          decision.value === ERulesOfDecisions.CUSTOM_VALUE &&
-          optionsMethods.customValue;
 
-        methods = [calculation, factor, reciprocity, customValue]
-          .filter(Boolean)
-          .join(", ");
+        methods = [calculation, factor, reciprocity].filter(Boolean).join(", ");
       }
     });
   });

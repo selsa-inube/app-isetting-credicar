@@ -9,6 +9,7 @@ const NameAndDescriptionForm = () => {
     modalData,
     showDecision,
     formValues,
+    isUpdated,
     setIsCurrentFormValid,
     nameLineRef,
     handleToggleInfoModal,
@@ -30,6 +31,9 @@ const NameAndDescriptionForm = () => {
       modalData={modalData}
       onToggleInfoModal={handleToggleInfoModal}
       onOpenModal={handleOpenModal}
+      loading={loading}
+      lineName={formValues.nameAndDescription.nameLine}
+      isUpdated={isUpdated}
     />
   );
 };

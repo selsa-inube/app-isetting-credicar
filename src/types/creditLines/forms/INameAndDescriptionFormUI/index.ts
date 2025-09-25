@@ -7,6 +7,9 @@ interface INameAndDescriptionFormUI {
   showModal: boolean;
   showInfoModal: boolean;
   modalData: IModalData;
+  loading: boolean;
+  lineName: string;
+  isUpdated: boolean;
   onToggleInfoModal: () => void;
   onOpenModal: () => void;
 }

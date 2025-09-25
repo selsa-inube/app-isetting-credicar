@@ -1,12 +1,17 @@
-import { useEffect, useImperativeHandle, useState } from "react";
+import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useFormik } from "formik";
 import { object } from "yup";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { validationRules } from "@validations/validationRules";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { mediaQueryMobile } from "@config/environment";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
+import { IServerDomain } from "@ptypes/IServerDomain";
+import { IEnumerators } from "@ptypes/IEnumerators";
 
 const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const {
@@ -25,10 +30,9 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     object().shape({
       additionalDebtors: validationRules.boolean,
       realGuarantees: validationRules.boolean,
-      calculation: validationRules.boolean,
-      reciprocity: validationRules.boolean,
-      factor: validationRules.boolean,
-      customValue: validationRules.boolean,
+      PaymentCapacityBasedCreditLimit: validationRules.boolean,
+      ReciprocityBasedCreditLimit: validationRules.boolean,
+      RiskAnalysisBasedCreditLimit: validationRules.boolean,
     });
 
   const validationSchema = createValidationSchema();
@@ -43,11 +47,28 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   useImperativeHandle(ref, () => formik);
 
+  const { appData } = useContext(AuthAndPortalData);
   const [showInformationReferenceModal, setShowInfoRefModal] = useState(false);
   const [showInformationMethodModal, setShowInfoMetModal] = useState(false);
   const [showInformationObligationModal, setShowInfoObligModal] =
     useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
+
+  const { enumData: methods } = useEnumeratorsCrediboard({
+    businessUnits: appData.businessUnit.publicCode,
+    enumQuery: EPayrollAgreement.METHODS,
+  });
+  const methodsOptions: IServerDomain[] = methods.map((item: IEnumerators) => {
+    const name =
+      item.i18n?.[appData.language as keyof typeof item.i18n] ??
+      item.description;
+
+    return {
+      id: item.code ?? "",
+      label: name ?? "",
+      value: item.code ?? "",
+    };
+  });
 
   const handleInformationReferenceModal = () => {
     setShowInfoRefModal(!showInformationReferenceModal);
@@ -68,15 +89,15 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   useEffect(() => {
     if (setShowReciprocity) {
-      setShowReciprocity(formik.values.reciprocity);
+      setShowReciprocity(formik.values.ReciprocityBasedCreditLimit);
     }
-  }, [formik.values.reciprocity, setShowReciprocity]);
+  }, [formik.values.ReciprocityBasedCreditLimit, setShowReciprocity]);
 
   useEffect(() => {
     if (setShowFactor) {
-      setShowFactor(formik.values.factor);
+      setShowFactor(formik.values.RiskAnalysisBasedCreditLimit);
     }
-  }, [formik.values.factor, setShowFactor]);
+  }, [formik.values.RiskAnalysisBasedCreditLimit, setShowFactor]);
 
   const valuesEmpty = Object.values(formik.values).every(
     (value) => value === "" || value === null || value === undefined,
@@ -86,8 +107,16 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     JSON.stringify(initialValuesEdit) === JSON.stringify(formik.values);
 
   useEffect(() => {
-    const { calculation, reciprocity, factor, customValue } = formik.values;
-    const requiredFields = [calculation, reciprocity, factor, customValue];
+    const {
+      PaymentCapacityBasedCreditLimit,
+      ReciprocityBasedCreditLimit,
+      RiskAnalysisBasedCreditLimit,
+    } = formik.values;
+    const requiredFields = [
+      PaymentCapacityBasedCreditLimit,
+      ReciprocityBasedCreditLimit,
+      RiskAnalysisBasedCreditLimit,
+    ];
     const validatefields = requiredFields.every((field) => !field);
 
     const updateButton = () => {
@@ -131,6 +160,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     isMobile,
     isDisabledButton,
     buttonLabel,
+    methodsOptions,
     handleInformationReferenceModal,
     handleInformationObligationModal,
     handleInformationMethodsModal,

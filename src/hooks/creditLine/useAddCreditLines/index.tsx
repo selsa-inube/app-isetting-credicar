@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useContext, useRef, useState } from "react";
 import { FormikProps } from "formik";
 
@@ -40,6 +41,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
   });
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+  const navigate = useNavigate();
 
   const generalInformationRef = useRef<FormikProps<IInformationEntry>>(null);
 
@@ -145,6 +147,11 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
   const handleGoContinue = () => {
     setShowLineInitiatedModal(!showLineInitiatedModal);
     setShowAddModal(false);
+    if (saveLine) {
+      navigate(`/credit-lines/edit-credit-lines`, {
+        state: { data: saveLine },
+      });
+    }
   };
 
   return {

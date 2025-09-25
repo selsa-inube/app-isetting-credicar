@@ -35,20 +35,20 @@ const useRules = (props: IUseRules) => {
   };
 
   const calculation =
-    decisionGeneralData.calculation &&
+    decisionGeneralData.PaymentCapacityBasedCreditLimit &&
     ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY;
-  const factor = decisionGeneralData.factor && ERulesOfDecisions.RISK_FACTOR;
+
+  const factor =
+    decisionGeneralData.RiskAnalysisBasedCreditLimit &&
+    ERulesOfDecisions.RISK_FACTOR;
 
   const reciprocity =
-    decisionGeneralData.reciprocity &&
+    decisionGeneralData.ReciprocityBasedCreditLimit &&
     ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
 
-  const customValue =
-    decisionGeneralData.customValue && ERulesOfDecisions.CUSTOM_VALUE;
-
   const methodsArray =
-    calculation || factor || reciprocity || customValue
-      ? [calculation, factor, reciprocity, customValue].filter(Boolean)
+    calculation || factor || reciprocity
+      ? [calculation, factor, reciprocity].filter(Boolean)
       : ["No"];
 
   const methods = {

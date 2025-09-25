@@ -1,12 +1,12 @@
 import { useCallback, useState } from "react";
 import { ISide } from "@ptypes/ISide";
+import { EBooleanText } from "@enum/booleanText";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
-import { EBooleanText } from "@src/enum/booleanText";
 
 const useClientsSupportLineForm = () => {
   const {
     showInfoModal,
-    updateData,
+    isUpdated,
     optionsExcluded,
     optionsIncluded,
     loading,
@@ -71,7 +71,7 @@ const useClientsSupportLineForm = () => {
     optionsIncluded,
     showInfoModal,
     loading,
-    updateData,
+    isUpdated,
     handleMove,
     handleOpenModal,
     handleToggleInfoModal,

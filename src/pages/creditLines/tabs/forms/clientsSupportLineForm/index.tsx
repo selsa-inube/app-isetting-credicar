@@ -7,7 +7,7 @@ const ClientsSupportLineForm = () => {
     optionsIncluded,
     showInfoModal,
     loading,
-    updateData,
+    isUpdated,
     handleOpenModal,
     handleToggleInfoModal,
     handleMove,
@@ -19,7 +19,7 @@ const ClientsSupportLineForm = () => {
       onToggleInfoModal={handleToggleInfoModal}
       optionsExcluded={optionsExcluded}
       optionsIncluded={optionsIncluded}
-      updateData={updateData}
+      updateData={isUpdated}
       loading={loading}
       onOpenModal={handleOpenModal}
       onMove={handleMove}

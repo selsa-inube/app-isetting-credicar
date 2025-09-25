@@ -4,10 +4,6 @@ const verificationLabels = {
   additionalDebtors: "2. ¿Se permiten deudores adicionales en una solicitud?",
   realGuarantees:
     "3. ¿Las obligaciones con garantías reales se incluyen en el cálculo del descubierto?",
-  factor: "Factor de riesgo",
-  reciprocity: "Reciprocidad de los aportes",
-  calculation: "Cálculo por capacidad de pago",
-  customValue: "Valor personalizado",
   noDefined: "No definida",
 };
 
