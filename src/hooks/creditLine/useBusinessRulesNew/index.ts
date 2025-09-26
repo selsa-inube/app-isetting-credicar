@@ -33,28 +33,72 @@ const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
       asArray(list).map(normalizeCondition),
     ]),
   );
-  cloned.conditionsThatEstablishesTheDecision = normalizedGroups as any;
+  (cloned as any).conditionsThatEstablishesTheDecision =
+    normalizedGroups as any;
   return cloned;
 };
 
 const isIRuleDecision = (v: unknown): v is IRuleDecision =>
   typeof v === "object" && v !== null;
 
+const toArrayConditionsDecision = (d: IRuleDecision): IRuleDecision => {
+  const cloned: IRuleDecision = JSON.parse(JSON.stringify(d ?? {}));
+  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const flat = Object.values(groups).flatMap(asArray);
+  (cloned as any).conditionsThatEstablishesTheDecision = flat;
+  return cloned;
+};
+
+const nameToGroupMapOf = (d: IRuleDecision) => {
+  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
+  const map = new Map<string, string>();
+  Object.entries(groups).forEach(([group, list]) => {
+    asArray(list).forEach((c: any) => {
+      if (c?.conditionName) map.set(c.conditionName, group);
+    });
+  });
+  return map;
+};
+
 const safeSortDisplayDataSampleSwitchPlaces = (input: {
   decisionTemplate?: IRuleDecision | null;
+  nameToGroup?: Map<string, string>;
 }): IRuleDecision => {
   try {
-    const tpl: IRuleDecision = ensureArrayGroupsDeep(
+    const original = ensureArrayGroupsDeep(
       input.decisionTemplate ?? ({} as IRuleDecision),
     );
-    const out = sortDisplayDataSampleSwitchPlaces({ decisionTemplate: tpl });
-    return isIRuleDecision(out) ? out : tpl;
+    const nameToGroup = input.nameToGroup ?? nameToGroupMapOf(original);
+
+    const flatTpl = toArrayConditionsDecision(original);
+    const sorted = sortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: flatTpl,
+    }) as any;
+
+    const arr = Array.isArray(sorted?.conditionsThatEstablishesTheDecision)
+      ? (sorted.conditionsThatEstablishesTheDecision as any[])
+      : (((flatTpl as any).conditionsThatEstablishesTheDecision as
+          | any[]
+          | undefined) ?? []);
+
+    const regrouped: Record<string, any[]> = {};
+    for (const c of arr) {
+      const g = nameToGroup.get(c?.conditionName) ?? "group-primary";
+      (regrouped[g] ||= []).push(c);
+    }
+
+    return {
+      ...(isIRuleDecision(sorted) ? sorted : original),
+      conditionsThatEstablishesTheDecision: regrouped as any,
+    } as IRuleDecision;
   } catch (err) {
     console.warn(
       "sortDisplayDataSampleSwitchPlaces failed, returning input:",
       err,
     );
-    return input.decisionTemplate ?? ({} as IRuleDecision);
+    return ensureArrayGroupsDeep(
+      input.decisionTemplate ?? ({} as IRuleDecision),
+    );
   }
 };
 
@@ -67,7 +111,7 @@ const localizeDecision = (
   raw: IRuleDecision,
   lang: "es" | "en" | undefined,
 ): IRuleDecision => {
-  const cloned: IRuleDecision = JSON.parse(JSON.stringify(raw));
+  const cloned: IRuleDecision = JSON.parse(JSON.stringify(raw ?? {}));
   cloned.labelName = localizeLabel(raw, lang);
 
   const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
@@ -80,7 +124,7 @@ const localizeDecision = (
     ]),
   );
 
-  cloned.conditionsThatEstablishesTheDecision = localizedGroups as any;
+  (cloned as any).conditionsThatEstablishesTheDecision = localizedGroups as any;
   return cloned;
 };
 
@@ -136,7 +180,7 @@ const withConditionSentences = (
     }),
   );
 
-  d.conditionsThatEstablishesTheDecision = decorated as any;
+  (d as any).conditionsThatEstablishesTheDecision = decorated as any;
   return d;
 };
 
@@ -327,24 +371,33 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   const filteredDecisionTemplate = useMemo(() => {
     const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
+    const nameToGroup = nameToGroupMapOf(normalizedTemplate);
+
     const tpl = safeSortDisplayDataSampleSwitchPlaces({
       decisionTemplate: normalizedTemplate,
+      nameToGroup,
     });
 
-    const groups = (tpl.conditionsThatEstablishesTheDecision || {}) as Record<
+    const tplGroups = (getConditionsByGroup(tpl) || {}) as Record<
       string,
       unknown
     >;
-    const filtered = Object.fromEntries(
-      Object.entries(groups).map(([group, list]) => [
-        group,
-        asArray(list).filter(
+
+    const filteredEntries = Object.entries(tplGroups).reduce(
+      (acc, [group, list]) => {
+        const kept = asArray(list).filter(
           (c: any) =>
             (selectedIds.size === 0 || selectedIds.has(c.conditionName)) &&
-            !removedConditionNames.has(c.conditionName),
-        ),
-      ]),
+            !removedConditionNames.has(c.conditionName) &&
+            !c?.hidden,
+        );
+        if (kept.length > 0) acc.push([group, kept]);
+        return acc;
+      },
+      [] as [string, any[]][],
     );
+
+    const filtered = Object.fromEntries(filteredEntries);
 
     const withFiltered = {
       ...tpl,
@@ -355,10 +408,42 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     return withConditionSentences(ensureArrayGroupsDeep(withFiltered as any));
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
-  const decisionsSorted = useMemo(
-    () => sortDisplayDataSwitchPlaces({ decisions }),
-    [decisions],
-  );
+  const decisionsSorted = useMemo(() => {
+    const prepared = decisions.map((d) => ({
+      flat: toArrayConditionsDecision(d),
+      map: nameToGroupMapOf(d),
+    }));
+
+    const sorted = sortDisplayDataSwitchPlaces({
+      decisions: prepared.map((p) => p.flat),
+    }) as unknown as IRuleDecision[];
+
+    const safeSorted = Array.isArray(sorted)
+      ? sorted
+      : prepared.map((p) => p.flat);
+
+    const regrouped = safeSorted.map((dec, idx) => {
+      const arr = Array.isArray(
+        (dec as any).conditionsThatEstablishesTheDecision,
+      )
+        ? ((dec as any).conditionsThatEstablishesTheDecision as any[])
+        : [];
+      const map = prepared[idx].map;
+
+      const byGroup: Record<string, any[]> = {};
+      for (const c of arr) {
+        const g = map.get(c?.conditionName) ?? "group-primary";
+        (byGroup[g] ||= []).push(c);
+      }
+
+      return {
+        ...dec,
+        conditionsThatEstablishesTheDecision: byGroup as any,
+      } as IRuleDecision;
+    });
+
+    return regrouped;
+  }, [decisions]);
 
   return {
     isModalOpen,
