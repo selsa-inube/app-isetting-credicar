@@ -37,23 +37,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
 
   const ruleLabel = `${ruleData.ruleName}`;
 
-  console.log(
-    "templateKey, lineTypeDecision, ruleLabel",
-    showInfoModal,
-    loading,
-    modalData,
-    showDecision,
-    ruleData,
-    lineNameDecision,
-    lineTypeDecision,
-    initialDecisions,
-    language,
-    nav,
-    isUpdated,
-    handleToggleInfoModal,
-    handleOpenModal,
-  );
-
   return (
     <>
       <Stack
