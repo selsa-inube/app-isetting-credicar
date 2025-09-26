@@ -54,18 +54,29 @@ function useStepNavigation({ groups }: IUseStepNavigation) {
     const next = nextIndex >= 0 ? sequence[nextIndex] : null;
     if (next) navigate(next.path);
   }, [currentIndex, navigate, nextIndex, sequence]);
-  console.log("mi data: ", location.pathname, currentIndex, sequence);
+  const handleClickSend = () => {
+    console.log("");
+  };
 
   const disabledBack = currentIndex <= 0;
-  const disabledNext = currentIndex < 0 || currentIndex >= sequence.length - 1;
+  // const disabledNext = currentIndex < 0 || currentIndex >= sequence.length - 1;
+  const disabledNext = false;
+
+  const disabledSend = false;
+  const loadingBackAndNext = false;
+  const loadingSend = false;
 
   return {
+    currentIndex,
     disabledBack,
     disabledNext,
-    handleBack,
-    handleNext,
+    disabledSend,
+    loadingBackAndNext,
+    loadingSend,
     sequence,
-    currentIndex,
+    handleBack,
+    handleClickSend,
+    handleNext,
   };
 }
 

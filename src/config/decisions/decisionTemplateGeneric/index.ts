@@ -1,8 +1,4 @@
-import {
-  IRuleDecision,
-  ValueDataType,
-  ValueHowToSetUp,
-} from "@isettingkit/input";
+import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
 import { enviroment } from "@config/environment";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 
@@ -20,7 +16,7 @@ const decisionTemplateConfig = ({
   ) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
-    const decisionTemplate: IRuleDecision = {
+    const decisionTemplate = {
       ruleName: ruleName,
       labelName: String(
         i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ?? descriptionUse,
@@ -34,23 +30,25 @@ const decisionTemplateConfig = ({
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      conditionsThatEstablishesTheDecision:
-        conditionsThatEstablishesTheDecision.map((condition) => ({
-          conditionName: condition.conditionName,
-          labelName: String(
-            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-              condition.descriptionUse,
-          ),
-          descriptionUse: String(
-            condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-              condition.descriptionUse,
-          ),
-          conditionDataType: condition.conditionDataType,
-          value: "",
-          howToSetTheCondition: ValueHowToSetUp.EQUAL,
-        })),
+      conditionsThatEstablishesTheDecision: {
+        "group-primary": conditionsThatEstablishesTheDecision.map(
+          (condition) => ({
+            conditionName: condition.conditionName,
+            labelName: String(
+              condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+                condition.descriptionUse,
+            ),
+            descriptionUse: String(
+              condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
+                condition.descriptionUse,
+            ),
+            conditionDataType: condition.conditionDataType,
+            value: "",
+            howToSetTheCondition: ValueHowToSetUp.EQUAL,
+          }),
+        ),
+      },
     };
-
     return decisionTemplate;
   }
 };

@@ -2,14 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { patchModifyConstruction } from "@services/requestInProgress/patchModifyConstruction";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
+import { errorObject } from "@utils/errorObject";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
 import { withoutDataModal } from "@config/withoutData";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { IUseConfigurationInitial } from "@ptypes/hooks/creditLines/IUseConfigurationInitial";
-import { useAutoSaveOnRouteChange } from "../../useAutoSaveOnRouteChange";
+import { IErrors } from "@ptypes/IErrors";
 
 const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const { data } = props;
@@ -22,6 +24,13 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     useState<boolean>(false);
   const [showDecision, setShowDecision] = useState<boolean>(false);
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
+  const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
+    {} as IModifyConstructionResponse,
+  );
+  const [hasError, setHasError] = useState(false);
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const withoutData = data === undefined;
 
@@ -36,12 +45,34 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     }
   }, [data?.settingRequestId, setLinesConstructionData]);
 
-  const { borrowerData, loading, hasError, errorData, setHasError } =
-    useAutoSaveOnRouteChange({
-      debounceMs: 500,
-      linesData,
-      userAccount: appData.user.userAccount,
-    });
+  useEffect(() => {
+    const fetchLinesConstructiontData = async () => {
+      setHasError(false);
+      setErrorData({} as IErrors);
+      setBorrowerData({} as IModifyConstructionResponse);
+
+      if (linesData) {
+        setLoading(true);
+        try {
+          const data = await patchModifyConstruction(
+            appData.user.userAccount,
+            linesData,
+          );
+          setBorrowerData(data);
+        } catch (error) {
+          console.info(error);
+          setHasError(true);
+          setErrorData(errorObject(error));
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+      }
+    };
+
+    fetchLinesConstructiontData();
+  }, [linesData?.settingRequestId]);
 
   useEffect(() => {
     if (loading) {

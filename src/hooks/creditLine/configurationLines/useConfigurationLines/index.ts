@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { IRuleDecision } from "@isettingkit/input";
-import { IDragAndDropColumn } from "@isettingkit/business-rules";
+import {
+  IDragAndDropColumn,
+  IDropdownMenuGroup,
+} from "@isettingkit/business-rules";
 import { FormikProps } from "formik";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
+import { groups } from "@config/creditLines/configuration/mainOptions";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { IUseConfigurationLines } from "@ptypes/hooks/creditLines/IUseConfigurationLines";
@@ -25,6 +30,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       nameLine: "",
       descriptionLine: "",
     },
+    rules: [],
   };
 
   const { appData } = useContext(AuthAndPortalData);
@@ -64,13 +70,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ) {
       setFormValues(initialValues);
     } else {
-      setFormValues({
+      setFormValues((prev) => ({
+        ...prev,
         nameAndDescription: {
           aliasLine: initialData.alias || "",
           nameLine: initialData.abbreviatedName || "",
           descriptionLine: initialData.descriptionUse || "",
         },
-      });
+      }));
     }
   }, [
     initialData.abbreviatedName,
@@ -152,10 +159,23 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   });
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
-  const lineTypeDecision = ruleData.ruleName ?? "";
+  const lineTypeDecision =
+    (ruleData.i18n?.[
+      appData.language as keyof typeof ruleData.i18n
+    ] as string) ?? "";
   const initialDecisions: IRuleDecision[] = [];
   const language = appData.language as ILanguage;
 
+  const nav = useStepNavigation({
+    groups: groups as unknown as IDropdownMenuGroup[],
+  });
+
+  // const { borrowerData, loading: loadingE, hasError, errorData, setHasError } =
+  //   useAutoSaveOnRouteChange({
+  //     debounceMs: 500,
+  //     linesData,
+  //     userAccount: appData.user.userAccount,
+  //   });
   return {
     loading,
     initialValues,
@@ -174,6 +194,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     initialDecisions,
     language,
     ruleData,
+    nav,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

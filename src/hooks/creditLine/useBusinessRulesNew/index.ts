@@ -5,14 +5,12 @@ import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRul
 import {
   buildEsConditionSentence,
   EValueHowToSetUp,
-  formatDecisionForBackend,
   getConditionsByGroup,
   mapByGroup,
   parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
-import { interestRateTypeTemplate } from "@config/creditLines/decisionTemplates";
 
 const asArray = (v: unknown): any[] =>
   Array.isArray(v)
@@ -153,7 +151,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const localizedTemplate = useMemo(
     () =>
       ensureArrayGroupsDeep(
-        localizeDecision(interestRateTypeTemplate as any, language),
+        localizeDecision(decisionTemplate as any, language),
       ),
     [decisionTemplate, language],
   );
@@ -298,15 +296,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const decisionWithSentences = withConditionSentences(
       ensureArrayGroupsDeep(newDecision),
-    );
-
-    console.log(
-      "Formatted for backend:",
-      formatDecisionForBackend({
-        decision: decisionWithSentences,
-        template: localizedTemplate,
-        fallbackId: decisionWithSentences.decisionId!,
-      }),
     );
 
     setDecisions((prev) =>
