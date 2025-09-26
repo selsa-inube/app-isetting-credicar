@@ -10,6 +10,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
 import { groups } from "@config/creditLines/configuration/mainOptions";
+import { StyledDropdownMenuContainer } from "./styles";
 
 const ConfigurationLines = () => {
   const location = useLocation();
@@ -29,10 +30,12 @@ const ConfigurationLines = () => {
           width="334px"
         >
           <Stack direction="column" height="100%">
-            <DropdownMenuContainer
-              defaultOpenId="lineNamesAndDescriptions"
-              groups={groups as unknown as IDropdownMenuGroup[]}
-            />
+            <StyledDropdownMenuContainer>
+              <DropdownMenuContainer
+                defaultOpenId="lineNamesAndDescriptions"
+                groups={groups as unknown as IDropdownMenuGroup[]}
+              />
+            </StyledDropdownMenuContainer>
           </Stack>
         </BoxContainer>
 
