@@ -15,10 +15,9 @@ const RenderDecisionsGenVerification = (
   const {
     additionalDebtors,
     realGuarantees,
-    reciprocity,
-    factor,
-    calculation,
-    customValue,
+    PaymentCapacityBasedCreditLimit,
+    ReciprocityBasedCreditLimit,
+    RiskAnalysisBasedCreditLimit,
   } = values;
 
   return (
@@ -40,10 +39,11 @@ const RenderDecisionsGenVerification = (
           >
             {
               <RenderMethodTags
-                reciprocity={reciprocity}
-                factor={factor}
-                calculation={calculation}
-                customValue={customValue}
+                PaymentCapacityBasedCreditLimit={
+                  PaymentCapacityBasedCreditLimit
+                }
+                ReciprocityBasedCreditLimit={ReciprocityBasedCreditLimit}
+                RiskAnalysisBasedCreditLimit={RiskAnalysisBasedCreditLimit}
               />
             }
           </Stack>

@@ -10,7 +10,7 @@ const mapLineInConstructionToEntity = (
     businessManagerName: String(data.businessManagerName),
     businessUnitCode: String(data.businessUnitCode),
     businessUnitName: String(data.businessUnitName),
-    configurationRequestData: String(data.configurationRequestData),
+    configurationRequestData: Object(data.configurationRequestData),
     configurationRequestsTraceability: Object(
       data.configurationRequestsTraceability,
     ),

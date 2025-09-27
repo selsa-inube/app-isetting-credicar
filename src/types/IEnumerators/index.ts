@@ -9,6 +9,7 @@ interface IEnumerators {
   i18nValue?: II18n;
   i18nDescription?: II18n;
   icon?: React.ReactNode;
+  moneyDestinationType?: string;
 }
 
 export type { IEnumerators };

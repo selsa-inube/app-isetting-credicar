@@ -8,13 +8,15 @@ import {
   Textarea,
   Textfield,
 } from "@inubekit/inubekit";
-import { MdOutlineFax } from "react-icons/md";
+import { MdOutlineFax, MdOutlineWarningAmber } from "react-icons/md";
 
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { isInvalid } from "@utils/isInvalid";
 import { getIcon } from "@utils/getIcon";
 import { getFieldState } from "@utils/forms/getFieldState";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
 import { IGeneralInformationFormUI } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationFormUI";
 import {
@@ -38,6 +40,9 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
     paddingIcon,
     typeDestinationOptions,
     creditLineOptions,
+    showDecisionModal,
+    attentionModal,
+    onToggleAttentionModal,
     onChangeCheck,
     onChange,
     onButtonClick,
@@ -99,7 +104,6 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                             size="compact"
                             value={formik.values.typeDestination ?? ""}
                             fullwidth
-                            required
                             message={formik.errors.typeDestination}
                             onBlur={formik.handleBlur}
                             invalid={isInvalid(formik, "typeDestination")}
@@ -116,7 +120,7 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                               onBlur={formik.handleBlur}
                               size="compact"
                               fullwidth
-                              disabled={!formik.values.nameDestination}
+                              disabled={!formik.values.typeDestination}
                               invalid={isInvalid(formik, "nameDestination")}
                               message={formik.errors.nameDestination}
                               required
@@ -195,6 +199,19 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
           {labelButtonNext}
         </Button>
       </Stack>
+      {showDecisionModal && (
+        <DecisionModal
+          portalId={portalId}
+          title={attentionModal!.title}
+          description={attentionModal!.description}
+          actionText={attentionModal!.actionText}
+          withIcon
+          icon={<MdOutlineWarningAmber />}
+          appearance={EComponentAppearance.WARNING}
+          onCloseModal={onToggleAttentionModal}
+          onClick={onButtonClick}
+        />
+      )}
     </StyledContainer>
   );
 };

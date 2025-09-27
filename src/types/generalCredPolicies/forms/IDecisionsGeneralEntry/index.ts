@@ -1,10 +1,9 @@
 interface IDecisionsGeneralEntry {
   additionalDebtors: boolean;
   realGuarantees: boolean;
-  calculation: boolean;
-  reciprocity: boolean;
-  factor: boolean;
-  customValue: boolean;
+  PaymentCapacityBasedCreditLimit: boolean;
+  ReciprocityBasedCreditLimit: boolean;
+  RiskAnalysisBasedCreditLimit: boolean;
 }
 
 export type { IDecisionsGeneralEntry };

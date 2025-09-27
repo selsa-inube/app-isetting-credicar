@@ -56,6 +56,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         onClick: handleGoBack,
         withCancelButton: true,
         withIcon: false,
+        icon: <></>,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
       };

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRules";
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
@@ -7,13 +6,16 @@ import { EConditionRules } from "@enum/conditionRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const useEnumRules = (props: IUseEnumRules) => {
   const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
   const [enumRuleData, setEnumRuleData] = useState<IDecisionData>(
     {} as IDecisionData,
   );
-  const [ruleData, setRuleData] = useState<IRuleDecision>({} as IRuleDecision);
+  const [ruleData, setRuleData] = useState<IRuleDecisionExtended>(
+    {} as IRuleDecisionExtended,
+  );
   const [listValuesDecision, setListValuesDecision] =
     useState<{ value: string }[]>();
   const [listValuesCondition, setListValuesCondition] =
@@ -26,6 +28,9 @@ const useEnumRules = (props: IUseEnumRules) => {
 
   useEffect(() => {
     const fetchEnumData = async () => {
+      if (enumDestination.length === 0) {
+        return;
+      }
       try {
         const data = await getEnumeratorsRules(
           enumDestination,
@@ -43,7 +48,7 @@ const useEnumRules = (props: IUseEnumRules) => {
   }, [enumDestination, ruleCatalog, businessUnits]);
 
   useEffect(() => {
-    setRuleData({ ...enumRuleData } as IRuleDecision);
+    setRuleData({ ...enumRuleData } as IRuleDecisionExtended);
   }, [enumRuleData]);
 
   const fetchListValuesDecision = async (conditionOrDecisionName: string) => {

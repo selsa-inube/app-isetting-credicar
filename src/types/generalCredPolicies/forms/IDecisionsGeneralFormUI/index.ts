@@ -1,4 +1,5 @@
 import { FormikProps } from "formik";
+import { IServerDomain } from "@ptypes/IServerDomain";
 import { IDecisionsGeneralEntry } from "../IDecisionsGeneralEntry";
 
 interface IDecisionsGeneralFormUI {
@@ -11,6 +12,7 @@ interface IDecisionsGeneralFormUI {
   isMobile: boolean;
   isDisabledButton: boolean;
   buttonLabel: string;
+  methodsOptions: IServerDomain[];
   onToggle: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onInfoRefModal: () => void;
   onInfoObligModal: () => void;

@@ -4,7 +4,8 @@ import { TNavItem } from "@ptypes/creditLines/TNavItem";
 const buildNavDropDownSequence = (src: readonly TGroupLite[]): TNavItem[] => {
   const out: TNavItem[] = [];
   for (const g of src) {
-    if (g.path) out.push({ kind: "group", groupId: g.id, id: g.id, path: g.path });
+    if (g.path)
+      out.push({ kind: "group", groupId: g.id, id: g.id, path: g.path });
     const links = g.links ?? [];
     for (const l of links) {
       if (!l?.path) continue;

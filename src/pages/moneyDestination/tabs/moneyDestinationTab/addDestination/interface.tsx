@@ -29,6 +29,8 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
     modalData,
     showDecision,
     creditLineValues,
+    showDecisionModal,
+    setShowDecisionModal,
     setCreditLineValues,
     onOpenModal,
     onFinishForm,
@@ -69,7 +71,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
             onBackClick={onPreviousStep}
             onNextClick={onNextStep}
             onSubmitClick={onToggleModal}
-            disableNext={false}
+            disableNext={!isCurrentFormValid}
             controls={controlsAssisted}
             size={smallScreen ? "small" : "large"}
           />
@@ -82,6 +84,8 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
                 onButtonClick={onNextStep}
                 creditLineValues={creditLineValues}
                 setCreditLineValues={setCreditLineValues}
+                showDecisionModal={showDecisionModal}
+                setShowDecisionModal={setShowDecisionModal}
               />
             )}
             {currentStep === EStepsKeysMoneyDestination.VERIFICATION && (

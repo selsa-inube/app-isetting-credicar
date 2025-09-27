@@ -1,8 +1,7 @@
 interface IRenderMethodTags {
-  reciprocity: boolean;
-  factor: boolean;
-  calculation: boolean;
-  customValue: boolean;
+  PaymentCapacityBasedCreditLimit: boolean;
+  ReciprocityBasedCreditLimit: boolean;
+  RiskAnalysisBasedCreditLimit: boolean;
 }
 
 export type { IRenderMethodTags };

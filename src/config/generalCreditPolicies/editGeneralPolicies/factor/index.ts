@@ -1,3 +1,3 @@
-const factor = ["Factor", "RiskFactor"];
+const factor = ["RiskAnalysisBasedCreditLimit"];
 
 export { factor };

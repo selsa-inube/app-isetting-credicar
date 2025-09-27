@@ -55,11 +55,13 @@ const RenderPersonalInfoVerification = (props: IPersonalInfoVerification) => {
         label={personalInfoVeriflabels.nameDestination}
         value={valueName}
       />
-      <BoxAttribute
-        direction="column"
-        label={personalInfoVeriflabels.creditLine}
-        value={normalizeLine}
-      />
+      {normalizeLine && (
+        <BoxAttribute
+          direction="column"
+          label={personalInfoVeriflabels.creditLine}
+          value={normalizeLine}
+        />
+      )}
       <BoxAttribute
         direction="column"
         label={personalInfoVeriflabels.description}

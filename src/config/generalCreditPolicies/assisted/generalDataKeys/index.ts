@@ -1,10 +1,10 @@
 const generalDataKeys = [
   "additionalDebtors",
-  "calculation",
-  "factor",
+  "PaymentCapacityBasedCreditLimit",
+  "RiskAnalysisBasedCreditLimit",
   "financialObligations",
   "realGuarantees",
-  "reciprocity",
+  "ReciprocityBasedCreditLimit",
   "customValue",
   "sourcesIncome",
   "reference",

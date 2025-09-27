@@ -1,20 +1,22 @@
 import { useCallback, useState } from "react";
-import { ISide } from "@ptypes/ISide";
 import { EBooleanText } from "@enum/booleanText";
+import { ISide } from "@ptypes/ISide";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
 
 const useClientsSupportLineForm = () => {
   const {
     showInfoModal,
-    updateData,
+    isUpdated,
     optionsExcluded,
     optionsIncluded,
     loading,
+    nav,
+    lineNameDecision,
     setOptionsIncluded,
     setOptionsExcluded,
     handleToggleInfoModal,
     handleOpenModal,
-  } = useConfigurationLines();
+  } = useConfigurationLines({});
 
   const [selectedConditionId, setSelectedConditionId] = useState<string | null>(
     null,
@@ -71,7 +73,9 @@ const useClientsSupportLineForm = () => {
     optionsIncluded,
     showInfoModal,
     loading,
-    updateData,
+    isUpdated,
+    nav,
+    lineNameDecision,
     handleMove,
     handleOpenModal,
     handleToggleInfoModal,

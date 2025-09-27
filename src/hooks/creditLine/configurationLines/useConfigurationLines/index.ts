@@ -1,28 +1,52 @@
 import { useNavigate } from "react-router-dom";
-import { IDragAndDropColumn } from "@isettingkit/business-rules";
+import { IRuleDecision } from "@isettingkit/input";
+import {
+  IDragAndDropColumn,
+  IDropdownMenuGroup,
+} from "@isettingkit/business-rules";
 import { FormikProps } from "formik";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
+import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
+import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
 import { compareObjects } from "@utils/compareObjects";
+import { capitalizeText } from "@utils/capitalizeText";
+import { ECreditLines } from "@enum/creditLines";
+import { groups } from "@config/creditLines/configuration/mainOptions";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
+import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
+import { IUseConfigurationLines } from "@ptypes/hooks/creditLines/IUseConfigurationLines";
+import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
+import { ILanguage } from "@ptypes/i18n";
 import { useModalConfiguration } from "../useModalConfiguration";
 
-const useConfigurationLines = () => {
+const useConfigurationLines = (props: IUseConfigurationLines) => {
+  const { templateKey } = props;
+
   const initialValues = {
     nameAndDescription: {
       aliasLine: "",
       nameLine: "",
       descriptionLine: "",
     },
+    rules: [],
   };
+
+  const { appData } = useContext(AuthAndPortalData);
   const [formValues, setFormValues] = useState(initialValues);
-  const [loading] = useState<boolean>(false);
-  const [updateData] = useState<boolean>(false);
+  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
+  const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
+
+  const { setLinesConstructionData, setLoadingInitial, linesConstructionData } =
+    useContext(CreditLinesConstruction);
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
@@ -41,6 +65,32 @@ const useConfigurationLines = () => {
   });
 
   const navigate = useNavigate();
+
+  const { linesConstructionData: initialData, loadingInitial: loading } =
+    useContext(CreditLinesConstruction);
+
+  useEffect(() => {
+    if (
+      !initialData.abbreviatedName &&
+      !initialData.alias &&
+      !initialData.descriptionUse
+    ) {
+      setFormValues(initialValues);
+    } else {
+      setFormValues((prev) => ({
+        ...prev,
+        nameAndDescription: {
+          aliasLine: initialData.alias || "",
+          nameLine: initialData.abbreviatedName || "",
+          descriptionLine: initialData.descriptionUse || "",
+        },
+      }));
+    }
+  }, [
+    initialData.abbreviatedName,
+    initialData.alias,
+    initialData.descriptionUse,
+  ]);
 
   const handleToggleInfoModal = () => {
     setShowInfoModal(!showInfoModal);
@@ -108,6 +158,133 @@ const useConfigurationLines = () => {
     handleToggleErrorModal,
   });
 
+  const { ruleData } = useEnumRules({
+    enumDestination: templateKey ?? "",
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: capitalizeText(ECreditLines.RULE_CATALOG),
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const lineNameDecision = formValues.nameAndDescription.nameLine;
+  const lineTypeDecision =
+    (ruleData.i18n?.[
+      appData.language as keyof typeof ruleData.i18n
+    ] as string) ?? "";
+  const initialDecisions: IRuleDecision[] = [];
+  const language = appData.language as ILanguage;
+
+  const newData: {
+    abbreviatedName?: string;
+    alias?: string;
+    descriptionUse?: string;
+  } = {};
+
+  useEffect(() => {
+    if (!nameLineRef.current?.values) return;
+
+    newData.alias = nameLineRef.current?.values.aliasLine;
+    newData.abbreviatedName = nameLineRef.current?.values.nameLine;
+    newData.descriptionUse = nameLineRef.current?.values.descriptionLine;
+
+    if (Object.values(newData).length > 0)
+      setLinesData((prev) => ({
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        configurationRequestData: {
+          ...prev?.configurationRequestData,
+          ...newData,
+        },
+      }));
+  }, [nameLineRef.current?.values]);
+
+  const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
+    debounceMs: 500,
+    linesData: linesData,
+    userAccount: appData.user.userAccount,
+    withNeWData: isUpdated,
+  });
+
+  const loadingModifyRef = useRef(loadingModify);
+  const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
+
+  useEffect(() => {
+    const wasLoading = loadingModifyRef.current;
+    loadingModifyRef.current = loadingModify;
+
+    if (wasLoading && !loadingModify && savePromiseRef.current) {
+      savePromiseRef.current(true);
+      savePromiseRef.current = null;
+    }
+  }, [loadingModify]);
+
+  const handleStep = async (click: boolean): Promise<boolean> => {
+    if (!click) {
+      setIsUpdated(false);
+      return true;
+    }
+
+    const currentFormValues = nameLineRef.current?.values;
+    const hasChanges =
+      currentFormValues &&
+      (currentFormValues.aliasLine !== (initialData.alias || "") ||
+        currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
+        currentFormValues.descriptionLine !==
+          (initialData.descriptionUse || ""));
+
+    if (hasChanges) {
+      setIsUpdated(true);
+
+      return new Promise((resolve) => {
+        savePromiseRef.current = resolve;
+        // setTimeout(() => {
+        //     if (savePromiseRef.current) {
+        //       savePromiseRef.current(true);
+        //       savePromiseRef.current = null;
+        //     }
+        //   }, 2000);
+      });
+    }
+
+    return true;
+  };
+
+  const nav = useStepNavigation({
+    groups: groups as unknown as IDropdownMenuGroup[],
+    isProcessing: loadingModify,
+    handleStep,
+  });
+
+  useEffect(() => {
+    if (loadingModify) {
+      setLoadingInitial(true);
+    } else {
+      setLoadingInitial(false);
+      if (borrowerData?.settingRequestId) {
+        const normalizeData: ILinesConstructionData = {
+          settingRequestId: linesConstructionData.settingRequestId,
+          abbreviatedName: String(
+            borrowerData.configurationRequestData?.abbreviatedName ?? "",
+          ),
+          alias: String(borrowerData.configurationRequestData?.alias ?? ""),
+          descriptionUse: String(
+            borrowerData.configurationRequestData?.descriptionUse ?? "",
+          ),
+          lineOfCreditId: borrowerData.settingRequestId,
+        };
+
+        if (borrowerData.configurationRequestData?.rules) {
+          normalizeData.rules = Object(
+            borrowerData.configurationRequestData.rules,
+          );
+        }
+        setLinesConstructionData((prev) => ({
+          ...prev,
+          ...normalizeData,
+        }));
+      }
+    }
+  }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
+
   return {
     loading,
     initialValues,
@@ -115,12 +292,19 @@ const useConfigurationLines = () => {
     modalData,
     canRefresh,
     showInfoModal,
-    updateData,
     optionsExcluded,
     optionsIncluded,
     isCurrentFormValid,
     nameLineRef,
     formValues,
+    isUpdated,
+    lineNameDecision,
+    lineTypeDecision,
+    initialDecisions,
+    language,
+    ruleData,
+    nav,
+    loadingModify,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

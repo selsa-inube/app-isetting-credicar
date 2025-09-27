@@ -10,6 +10,8 @@ interface IUseGeneralInformationForm {
   editDataOption: boolean;
   loading: boolean | undefined;
   creditLineValues: IServerDomain[];
+  showDecisionModal: boolean;
+  setShowDecisionModal: React.Dispatch<React.SetStateAction<boolean>>;
   setCreditLineValues: React.Dispatch<React.SetStateAction<IServerDomain[]>>;
   onSubmit: ((values: IGeneralInformationEntry) => void) | undefined;
   onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined;

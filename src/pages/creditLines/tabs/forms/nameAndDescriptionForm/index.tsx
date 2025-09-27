@@ -9,11 +9,13 @@ const NameAndDescriptionForm = () => {
     modalData,
     showDecision,
     formValues,
+    loadingModify,
+    nav,
     setIsCurrentFormValid,
     nameLineRef,
     handleToggleInfoModal,
     handleOpenModal,
-  } = useConfigurationLines();
+  } = useConfigurationLines({});
 
   const { formik } = useNameAndDescriptionForm({
     initialValues: formValues.nameAndDescription,
@@ -30,6 +32,10 @@ const NameAndDescriptionForm = () => {
       modalData={modalData}
       onToggleInfoModal={handleToggleInfoModal}
       onOpenModal={handleOpenModal}
+      loading={loading}
+      lineName={formValues.nameAndDescription.nameLine}
+      isUpdated={loadingModify}
+      navigation={nav}
     />
   );
 };

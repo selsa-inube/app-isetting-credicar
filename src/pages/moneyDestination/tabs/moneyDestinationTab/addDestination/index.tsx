@@ -21,6 +21,8 @@ const AddDestination = () => {
     smallScreen,
     showGoBackModal,
     creditLineValues,
+    showDecisionModal,
+    setShowDecisionModal,
     setCreditLineValues,
     handleCloseModal,
     handleGoBack,
@@ -100,6 +102,8 @@ const AddDestination = () => {
       showDecision={showDecision}
       creditLineValues={creditLineValues}
       setCreditLineValues={setCreditLineValues}
+      showDecisionModal={showDecisionModal}
+      setShowDecisionModal={setShowDecisionModal}
     />
   );
 };
