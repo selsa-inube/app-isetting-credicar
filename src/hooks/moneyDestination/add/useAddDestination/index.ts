@@ -5,6 +5,7 @@ import { FormikProps } from "formik";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useCreditLine } from "@hooks/moneyDestination/useCreditLine";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
@@ -36,6 +37,7 @@ const useAddDestination = () => {
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
+  const [showDecisionModal, setShowDecisionModal] = useState<boolean>(false);
 
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
@@ -59,6 +61,22 @@ const useAddDestination = () => {
     formValues.nameDestination;
 
   const handleNextStep = () => {
+    if (
+      currentStep === EStepsKeysMoneyDestination.GENERAL_DATA &&
+      (!generalInformationRef.current?.values.creditLine ||
+        generalInformationRef.current?.values.creditLine.length === 0) &&
+      !showDecisionModal
+    ) {
+      setShowDecisionModal(true);
+      return;
+    }
+
+    if (
+      currentStep === EStepsKeysMoneyDestination.GENERAL_DATA &&
+      showDecisionModal
+    ) {
+      setShowDecisionModal(false);
+    }
     if (currentStep < addDestinationStepsConfig.length) {
       if (generalInformationRef.current) {
         setFormValues(generalInformationRef.current.values);
@@ -156,6 +174,8 @@ const useAddDestination = () => {
     smallScreen,
     showGoBackModal,
     creditLineValues,
+    showDecisionModal,
+    setShowDecisionModal,
     setCreditLineValues,
     handleCloseModal,
     handleGoBack,

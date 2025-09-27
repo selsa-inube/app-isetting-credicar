@@ -19,47 +19,206 @@ const CreditLinesRoutes = () => {
         />
         <Route
           path="loan-term"
+          element={<DecisionTemplateScreen templateKey="LoanTerm" />}
+        />
+        <Route
+          path="amortization-methods"
+          element={<DecisionTemplateScreen templateKey="RepaymentStructure" />}
+        />
+        <Route
+          path="rate-increase"
+          element={
+            <DecisionTemplateScreen templateKey="GeometricGradientRepaymentRate" />
+          }
+        />
+        <Route
+          path="increment-value"
+          element={
+            <DecisionTemplateScreen templateKey="ArithmeticGradientRepaymentValue" />
+          }
+        />
+        <Route
+          path="disbursement-methods"
+          element={
+            <DecisionTemplateScreen templateKey="ModeOfDisbursementType" />
+          }
+        />
+        <Route
+          path="suggested-payment-channel"
+          element={
+            <DecisionTemplateScreen templateKey="SuggestedPaymentChannelType" />
+          }
+        />
+        <Route
+          path="percentage-requested-amount"
+          element={
+            <DecisionTemplateScreen templateKey="PercentagePayableViaExtraInstallments" />
+          }
+        />
+        <Route
+          path="grace-period"
+          element={<DecisionTemplateScreen templateKey="GracePeriod" />}
+        />
+        <Route
+          path="payment-channel-extraInstallments"
+          element={
+            <DecisionTemplateScreen templateKey="PaymentChannelTypeForExtraInstallments" />
+          }
+        />
+        <Route
+          path="adjustment-interest-payment-type"
+          element={
+            <DecisionTemplateScreen templateKey="AdjustmentInterestPaymentType" />
+          }
+        />
+        <Route
+          path="line-credit"
           element={<DecisionTemplateScreen templateKey="LineOfCredit" />}
         />
-        <Route path="amortization-methods" element={<></>} />
-        <Route path="rate-increase" element={<></>} />
-        <Route path="increment-value" element={<></>} />
-        <Route path="disbursement-methods" element={<></>} />
-        <Route path="suggested-payment-channel" element={<></>} />
-        <Route path="percentage-requested-amount" element={<></>} />
-        <Route path="grace-period" element={<></>} />
-        <Route path="payment-channel-extraInstallments" element={<></>} />
-        <Route path="adjustment-interest-payment-type" element={<></>} />
-        <Route path="line-credit" element={<></>} />
-        <Route path="channels-credit-by-Line" element={<></>} />
-        <Route path="loan-amount-limit" element={<></>} />
-        <Route path="maximum-percentage-extraordinary" element={<></>} />
-        <Route path="percentage-available-monthly-payment" element={<></>} />
-        <Route path="lines-not-subtracted-analysis" element={<></>} />
-        <Route path="interest-rate-type" element={<></>} />
-        <Route path="interest-rate-fixed-points" element={<></>} />
-        <Route path="reference-rate-fixed-points" element={<></>} />
-        <Route path="credit-risk-premium" element={<></>} />
-        <Route path="fixed-interest-rate" element={<></>} />
+        <Route
+          path="channels-credit-by-Line"
+          element={
+            <DecisionTemplateScreen templateKey="CreditPlacementChannelsByLine" />
+          }
+        />
+        <Route
+          path="loan-amount-limit"
+          element={<DecisionTemplateScreen templateKey="LoanAmountLimit" />}
+        />
+        <Route
+          path="maximum-percentage-extraordinary"
+          element={
+            <DecisionTemplateScreen templateKey="MaximumPremiumPercentageForExtraordinaryInstallmentsCommitments" />
+          }
+        />
+        <Route
+          path="percentage-available-monthly-payment"
+          element={
+            <DecisionTemplateScreen templateKey="PercentageOfMonthlyCapacityForLimit" />
+          }
+        />
+        <Route
+          path="lines-not-subtracted-analysis"
+          element={
+            <DecisionTemplateScreen templateKey="IsExcludedFromLimitAnalysisByPaymentCapacity" />
+          }
+        />
+        <Route
+          path="interest-rate-type"
+          element={<DecisionTemplateScreen templateKey="InterestRateType" />}
+        />
+        <Route
+          path="interest-rate-fixed-points"
+          element={
+            <DecisionTemplateScreen templateKey="InterestRateFixedPoints" />
+          }
+        />
+        <Route
+          path="reference-rate-fixed-points"
+          element={
+            <DecisionTemplateScreen templateKey="ReferenceRateForFixedPoints" />
+          }
+        />
+        <Route
+          path="credit-risk-premium"
+          element={<DecisionTemplateScreen templateKey="CreditRiskPremium" />}
+        />
+        <Route
+          path="fixed-interest-rate"
+          element={<DecisionTemplateScreen templateKey="FixedInterestRate" />}
+        />
         <Route
           path="monthly-remuneration-rate-other-expenses"
-          element={<></>}
+          element={
+            <DecisionTemplateScreen templateKey="ChargeMonthlyRateForAdditionalLoanCosts" />
+          }
         />
-        <Route path="approval-board-positions" element={<></>} />
-        <Route path="indicator-automatic-manual-approval" element={<></>} />
-        <Route path="positions-authorized-approve" element={<></>} />
-        <Route path="has-atomatic-collection" element={<></>} />
-        <Route path="exclusive-credit-lines" element={<></>} />
-        <Route path="positions-authorized-extemporaneous" element={<></>} />
-        <Route path="omittable-human-tasks" element={<></>} />
-        <Route path="automatic-collection-exclusive-lines" element={<></>} />
-        <Route path="estimated-days-loan-disbursement" element={<></>} />
-        <Route path="allows-collect-other-products" element={<></>} />
-        <Route path="financial-obligations-update-required" element={<></>} />
-        <Route path="guarantee-requirements" element={<></>} />
-        <Route path="additional-borrowers-allowed" element={<></>} />
-        <Route path="bond-calculation-factor-amount" element={<></>} />
-        <Route path="requirement" element={<></>} />
+        <Route
+          path="approval-board-positions"
+          element={
+            <DecisionTemplateScreen templateKey="ApprovalBoardPositions" />
+          }
+        />
+        <Route
+          path="indicator-automatic-manual-approval"
+          element={
+            <DecisionTemplateScreen templateKey="IndicatorForAutomaticManualApproval" />
+          }
+        />
+        <Route
+          path="positions-authorized-approve"
+          element={
+            <DecisionTemplateScreen templateKey="PositionsAuthorizedToApproveOnBehalfOfApprover" />
+          }
+        />
+        <Route
+          path="has-atomatic-collection"
+          element={
+            <DecisionTemplateScreen templateKey="HasAtomaticCollection" />
+          }
+        />
+        <Route
+          path="exclusive-credit-lines"
+          element={
+            <DecisionTemplateScreen templateKey="ExclusiveCreditLines" />
+          }
+        />
+        <Route
+          path="positions-authorized-extemporaneous"
+          element={
+            <DecisionTemplateScreen templateKey="PositionsAuthorizedForExtemporaneousSystemValidationRequirementsApproval" />
+          }
+        />
+        <Route
+          path="omittable-human-tasks"
+          element={<DecisionTemplateScreen templateKey="OmittableHumanTasks" />}
+        />
+        <Route
+          path="automatic-collection-exclusive-lines"
+          element={
+            <DecisionTemplateScreen templateKey="AutomaticCollectionForExclusiveCreditLines" />
+          }
+        />
+        <Route
+          path="estimated-days-loan-disbursement"
+          element={
+            <DecisionTemplateScreen templateKey="EstimatedDaysForLoanDisbursementProcess" />
+          }
+        />
+        <Route
+          path="allows-collect-other-products"
+          element={
+            <DecisionTemplateScreen templateKey="ConsolidationOfOtherCreditProductsAllowed" />
+          }
+        />
+        <Route
+          path="financial-obligations-update-required"
+          element={
+            <DecisionTemplateScreen templateKey="FinancialObligationsUpdateRequired" />
+          }
+        />
+        <Route
+          path="guarantee-requirements"
+          element={
+            <DecisionTemplateScreen templateKey="GuaranteeRequirements" />
+          }
+        />
+        <Route
+          path="additional-borrowers-allowed"
+          element={
+            <DecisionTemplateScreen templateKey="AdditionalBorrowersAllowed" />
+          }
+        />
+        <Route
+          path="bond-calculation-factor-amount"
+          element={
+            <DecisionTemplateScreen templateKey="BondCalculationFactorByAmount" />
+          }
+        />
+        <Route
+          path="requirement"
+          element={<DecisionTemplateScreen templateKey="Requirement" />}
+        />
       </Route>
     </Routes>
   );

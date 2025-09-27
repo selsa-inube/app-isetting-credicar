@@ -22,6 +22,8 @@ interface IAddDestinationUI {
   modalData: IModalData;
   showDecision: boolean;
   creditLineValues: IServerDomain[];
+  showDecisionModal: boolean;
+  setShowDecisionModal: React.Dispatch<React.SetStateAction<boolean>>;
   setCreditLineValues: React.Dispatch<React.SetStateAction<IServerDomain[]>>;
   onOpenModal: () => void;
   onFinishForm: () => void;

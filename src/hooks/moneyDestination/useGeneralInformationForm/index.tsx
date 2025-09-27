@@ -29,6 +29,8 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     editDataOption,
     loading,
     creditLineValues,
+    showDecisionModal,
+    setShowDecisionModal,
     setCreditLineValues,
     onSubmit,
     onFormValid,
@@ -162,6 +164,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     (value) => value === "" || value === null || value === undefined,
   );
 
+  const handleToggleAttentionModal = () => {
+    if (setShowDecisionModal) setShowDecisionModal(!showDecisionModal);
+  };
+
   useEffect(() => {
     if (editDataOption) {
       if (
@@ -238,6 +244,8 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     paddingIcon,
     typeDestinationOptions,
     creditLineValues,
+    showDecisionModal,
+    handleToggleAttentionModal,
     handleChange,
     handleReset,
     handleChangeCheck,

@@ -39,8 +39,6 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
       setLinesData({
         settingRequestId: data.settingRequestId,
         configurationRequestData: data.configurationRequestData,
-        configurationRequestsTraceability:
-          data.configurationRequestsTraceability,
       });
     }
   }, [data?.settingRequestId, setLinesConstructionData]);
@@ -81,6 +79,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
       setLoadingInitial(false);
       if (!loading && borrowerData?.settingRequestId) {
         const normalizeData: ILinesConstructionData = {
+          settingRequestId: data.settingRequestId,
           abbreviatedName: String(
             borrowerData.configurationRequestData?.abbreviatedName ?? "",
           ),
@@ -115,7 +114,6 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     setShowWithoutDataModal(!showWithoutDataModal);
     navigate("/credit-lines");
   };
-
   useEffect(() => {
     const decision =
       showErrorModal || showWithoutDataModal || hasError || withoutData;

@@ -79,6 +79,8 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                 initialGeneralInfData={initialGeneralInfData}
                 creditLineValues={creditLineValues}
                 setCreditLineValues={setCreditLineValues}
+                showDecisionModal={false}
+                setShowDecisionModal={() => void 0}
               />
             )}
           </Stack>

@@ -4,6 +4,8 @@ import { IServerDomain } from "@ptypes/IServerDomain";
 interface IGeneralInformationForm {
   initialValues: IGeneralInformationEntry;
   creditLineValues: IServerDomain[];
+  showDecisionModal: boolean;
+  setShowDecisionModal: React.Dispatch<React.SetStateAction<boolean>>;
   onButtonClick: () => void;
   setCreditLineValues: React.Dispatch<React.SetStateAction<IServerDomain[]>>;
   loading?: boolean;

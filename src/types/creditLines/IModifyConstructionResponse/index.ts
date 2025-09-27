@@ -3,7 +3,7 @@ import { IConfigurationRequestsTraceability } from "@ptypes/requestInProgress/IC
 interface IModifyConstructionResponse {
   configurationRequestData: Record<string, unknown>;
   settingRequestId: string;
-  configurationRequestsTraceability: IConfigurationRequestsTraceability;
+  configurationRequestsTraceability?: IConfigurationRequestsTraceability;
 }
 
 export type { IModifyConstructionResponse };

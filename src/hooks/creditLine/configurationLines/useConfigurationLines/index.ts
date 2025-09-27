@@ -10,14 +10,17 @@ import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
+import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
+import { ECreditLines } from "@enum/creditLines";
 import { groups } from "@config/creditLines/configuration/mainOptions";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
+import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IUseConfigurationLines } from "@ptypes/hooks/creditLines/IUseConfigurationLines";
+import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
-import { ECreditLines } from "@enum/creditLines";
 import { ILanguage } from "@ptypes/i18n";
 import { useModalConfiguration } from "../useModalConfiguration";
 
@@ -35,11 +38,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { appData } = useContext(AuthAndPortalData);
   const [formValues, setFormValues] = useState(initialValues);
-  const [isUpdated] = useState<boolean>(false);
+  const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [showGoBackModal, setShowGoBackModal] = useState<boolean>(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
+  const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
+
+  const { setLinesConstructionData, setLoadingInitial, linesConstructionData } =
+    useContext(CreditLinesConstruction);
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
 
@@ -166,16 +173,118 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const initialDecisions: IRuleDecision[] = [];
   const language = appData.language as ILanguage;
 
-  const nav = useStepNavigation({
-    groups: groups as unknown as IDropdownMenuGroup[],
+  const newData: {
+    abbreviatedName?: string;
+    alias?: string;
+    descriptionUse?: string;
+  } = {};
+
+  useEffect(() => {
+    if (!nameLineRef.current?.values) return;
+
+    newData.alias = nameLineRef.current?.values.aliasLine;
+    newData.abbreviatedName = nameLineRef.current?.values.nameLine;
+    newData.descriptionUse = nameLineRef.current?.values.descriptionLine;
+
+    if (Object.values(newData).length > 0)
+      setLinesData((prev) => ({
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        configurationRequestData: {
+          ...prev?.configurationRequestData,
+          ...newData,
+        },
+      }));
+  }, [nameLineRef.current?.values]);
+
+  const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
+    debounceMs: 500,
+    linesData: linesData,
+    userAccount: appData.user.userAccount,
+    withNeWData: isUpdated,
   });
 
-  // const { borrowerData, loading: loadingE, hasError, errorData, setHasError } =
-  //   useAutoSaveOnRouteChange({
-  //     debounceMs: 500,
-  //     linesData,
-  //     userAccount: appData.user.userAccount,
-  //   });
+  const loadingModifyRef = useRef(loadingModify);
+  const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
+
+  useEffect(() => {
+    const wasLoading = loadingModifyRef.current;
+    loadingModifyRef.current = loadingModify;
+
+    if (wasLoading && !loadingModify && savePromiseRef.current) {
+      savePromiseRef.current(true);
+      savePromiseRef.current = null;
+    }
+  }, [loadingModify]);
+
+  const handleStep = async (click: boolean): Promise<boolean> => {
+    if (!click) {
+      setIsUpdated(false);
+      return true;
+    }
+
+    const currentFormValues = nameLineRef.current?.values;
+    const hasChanges =
+      currentFormValues &&
+      (currentFormValues.aliasLine !== (initialData.alias || "") ||
+        currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
+        currentFormValues.descriptionLine !==
+          (initialData.descriptionUse || ""));
+
+    if (hasChanges) {
+      setIsUpdated(true);
+
+      return new Promise((resolve) => {
+        savePromiseRef.current = resolve;
+        // setTimeout(() => {
+        //     if (savePromiseRef.current) {
+        //       savePromiseRef.current(true);
+        //       savePromiseRef.current = null;
+        //     }
+        //   }, 2000);
+      });
+    }
+
+    return true;
+  };
+
+  const nav = useStepNavigation({
+    groups: groups as unknown as IDropdownMenuGroup[],
+    isProcessing: loadingModify,
+    handleStep,
+  });
+
+  useEffect(() => {
+    if (loadingModify) {
+      setLoadingInitial(true);
+    } else {
+      setLoadingInitial(false);
+      if (borrowerData?.settingRequestId) {
+        const normalizeData: ILinesConstructionData = {
+          settingRequestId: linesConstructionData.settingRequestId,
+          abbreviatedName: String(
+            borrowerData.configurationRequestData?.abbreviatedName ?? "",
+          ),
+          alias: String(borrowerData.configurationRequestData?.alias ?? ""),
+          descriptionUse: String(
+            borrowerData.configurationRequestData?.descriptionUse ?? "",
+          ),
+          lineOfCreditId: borrowerData.settingRequestId,
+        };
+
+        if (borrowerData.configurationRequestData?.rules) {
+          normalizeData.rules = Object(
+            borrowerData.configurationRequestData.rules,
+          );
+        }
+        setLinesConstructionData((prev) => ({
+          ...prev,
+          ...normalizeData,
+        }));
+      }
+    }
+  }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
+
   return {
     loading,
     initialValues,
@@ -195,6 +304,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     language,
     ruleData,
     nav,
+    loadingModify,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

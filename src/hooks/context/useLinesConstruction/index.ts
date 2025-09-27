@@ -5,6 +5,7 @@ const useLinesConstruction = () => {
   const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
   const [linesConstructionData, setLinesConstructionData] =
     useState<ILinesConstructionData>({
+      settingRequestId: "",
       abbreviatedName: "",
       alias: "",
       descriptionUse: "",

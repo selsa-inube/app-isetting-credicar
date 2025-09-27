@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { ISide } from "@ptypes/ISide";
 import { EBooleanText } from "@enum/booleanText";
+import { ISide } from "@ptypes/ISide";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
 
 const useClientsSupportLineForm = () => {
@@ -10,6 +10,8 @@ const useClientsSupportLineForm = () => {
     optionsExcluded,
     optionsIncluded,
     loading,
+    nav,
+    lineNameDecision,
     setOptionsIncluded,
     setOptionsExcluded,
     handleToggleInfoModal,
@@ -72,6 +74,8 @@ const useClientsSupportLineForm = () => {
     showInfoModal,
     loading,
     isUpdated,
+    nav,
+    lineNameDecision,
     handleMove,
     handleOpenModal,
     handleToggleInfoModal,

@@ -5,6 +5,7 @@ interface ILinesConstructionData {
   alias: string;
   descriptionUse: string;
   lineOfCreditId: string;
+  settingRequestId: string;
   rules?: IRules[];
 }
 

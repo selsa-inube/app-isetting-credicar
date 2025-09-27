@@ -9,7 +9,7 @@ const NameAndDescriptionForm = () => {
     modalData,
     showDecision,
     formValues,
-    isUpdated,
+    loadingModify,
     nav,
     setIsCurrentFormValid,
     nameLineRef,
@@ -34,7 +34,7 @@ const NameAndDescriptionForm = () => {
       onOpenModal={handleOpenModal}
       loading={loading}
       lineName={formValues.nameAndDescription.nameLine}
-      isUpdated={isUpdated}
+      isUpdated={loadingModify}
       navigation={nav}
     />
   );

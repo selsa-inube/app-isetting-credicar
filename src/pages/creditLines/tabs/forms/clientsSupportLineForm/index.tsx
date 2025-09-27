@@ -8,6 +8,8 @@ const ClientsSupportLineForm = () => {
     showInfoModal,
     loading,
     isUpdated,
+    nav,
+    lineNameDecision,
     handleOpenModal,
     handleToggleInfoModal,
     handleMove,
@@ -23,6 +25,8 @@ const ClientsSupportLineForm = () => {
       loading={loading}
       onOpenModal={handleOpenModal}
       onMove={handleMove}
+      navigation={nav}
+      lineNameDecision={lineNameDecision}
     />
   );
 };
