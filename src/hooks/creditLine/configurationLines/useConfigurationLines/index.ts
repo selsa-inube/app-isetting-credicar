@@ -309,8 +309,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
 
-  console.log({ decisionsData, linesConstructionData });
-
   return {
     loading,
     initialValues,

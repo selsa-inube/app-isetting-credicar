@@ -11,6 +11,7 @@ import {
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
+import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 
 const asArray = (v: unknown): any[] =>
   Array.isArray(v)
@@ -450,6 +451,23 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     return regrouped;
   }, [decisions]);
 
+  const responseForBackend = useMemo(() => {
+    const ruleNameFromTemplate =
+      (decisionTemplate as any)?.ruleName ||
+      (decisionTemplate as any)?.businessRuleName ||
+      (decisionTemplate as any)?.businessRuleId ||
+      undefined;
+
+    return mapDecisionsToRulePayload({
+      decisions: decisionsSorted,
+      ruleName: ruleNameFromTemplate,
+    });
+  }, [decisionsSorted, decisionTemplate]);
+
+  useEffect(() => {
+    console.log("responseForBackend", responseForBackend);
+  }, [responseForBackend]);
+
   useEffect(() => {
     setDecisionData(decisionsSorted);
   }, [decisionsSorted]);
@@ -464,6 +482,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     filteredDecisionTemplate,
     multipleChoicesOptions,
     decisionsSorted,
+    responseForBackend,
     setSelectedDecision,
     openModal,
     closeModal,
