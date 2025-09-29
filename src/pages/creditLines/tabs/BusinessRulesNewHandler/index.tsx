@@ -21,6 +21,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     language,
     loading,
     textValues,
+    setDecisionData,
   } = props;
 
   const {
@@ -47,6 +48,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     language,
     loading,
     textValues,
+    setDecisionData,
   });
 
   return (

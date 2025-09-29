@@ -21,6 +21,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     loading,
     navigation,
     lineNameDecision,
+    message,
     onToggleInfoModal,
     onOpenModal,
     onMove,
@@ -73,9 +74,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
         {showInfoModal && (
           <InfoConfigurationModal
             title={options.clientsSupported.links.clientsSupported.label}
-            description={
-              options.clientsSupported.links.clientsSupported.description
-            }
+            description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
           />

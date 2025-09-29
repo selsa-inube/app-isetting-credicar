@@ -1,5 +1,8 @@
-const infoRulesMessage = (ruleLabel: string) => {
+const infoRulesMessage = (ruleLabel?: string) => {
   return {
+    lineNamesAndDescriptions:
+      "En este paso encontraras la información principal que permite identificar la línea de crédito, además de una breve descripción de uso.",
+    clientsSupported: "Clientes que soporta la línea",
     LoanTerm: `En este paso encontraras la información de la decisión ${ruleLabel}`,
     RepaymentStructure: `En este paso encontraras la información de la decisión ${ruleLabel}`,
     GeometricGradientRepaymentRate: `En este paso encontraras la información de la decisión ${ruleLabel}`,

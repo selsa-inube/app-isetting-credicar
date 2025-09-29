@@ -12,6 +12,7 @@ interface INameAndDescriptionFormUI {
   lineName: string;
   isUpdated: boolean;
   navigation: INavigation;
+  message: string;
   onToggleInfoModal: () => void;
   onOpenModal: () => void;
 }

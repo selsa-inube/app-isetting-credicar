@@ -9,6 +9,7 @@ interface IClientsSupportLineFormUI {
   loading: boolean;
   navigation: INavigation;
   lineNameDecision: string;
+  message: string;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
   onOpenModal: () => void;
   onToggleInfoModal: () => void;

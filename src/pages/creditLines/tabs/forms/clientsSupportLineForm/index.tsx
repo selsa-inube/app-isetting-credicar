@@ -10,6 +10,7 @@ const ClientsSupportLineForm = () => {
     isUpdated,
     nav,
     lineNameDecision,
+    message,
     handleOpenModal,
     handleToggleInfoModal,
     handleMove,
@@ -27,6 +28,7 @@ const ClientsSupportLineForm = () => {
       onMove={handleMove}
       navigation={nav}
       lineNameDecision={lineNameDecision}
+      message={message}
     />
   );
 };

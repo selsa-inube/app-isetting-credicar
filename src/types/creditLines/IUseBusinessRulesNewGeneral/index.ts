@@ -7,6 +7,7 @@ interface IUseBusinessRulesNewGeneral {
   initialDecisions: IRuleDecision[];
   loading?: boolean;
   textValues: IRulesFormTextValues;
+  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[]>>;
   controls?: boolean;
   customMessageEmptyDecisions?: string;
   customTitleContentAddCard?: string;

@@ -29,13 +29,17 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     language,
     nav,
     isUpdated,
+    setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
 
+  const ruleLabel = `${ruleData.ruleName}`;
   const information = infoRulesMessage(lineTypeDecision);
 
-  const ruleLabel = `${ruleData.ruleName}`;
+  const message = String(
+    information[ruleLabel as keyof typeof information] || information.Default,
+  );
 
   return (
     <>
@@ -66,6 +70,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           language={language as "es" | "en"}
           loading={false}
           textValues={commonTextValues}
+          setDecisionData={setDecisionData}
         />
         {showDecision && (
           <DecisionModal
@@ -85,10 +90,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
         {showInfoModal && (
           <InfoConfigurationModal
             title={lineTypeDecision}
-            description={String(
-              information[ruleLabel as keyof typeof information] ||
-                information.Default,
-            )}
+            description={message}
             onClick={handleToggleInfoModal}
             onCloseModal={handleToggleInfoModal}
           />

@@ -185,8 +185,13 @@ const withConditionSentences = (
 };
 
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
-  const { decisionTemplate, initialDecisions, language, onDecisionsChange } =
-    props;
+  const {
+    decisionTemplate,
+    initialDecisions,
+    language,
+    setDecisionData,
+    onDecisionsChange,
+  } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
@@ -444,6 +449,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     return regrouped;
   }, [decisions]);
+
+  useEffect(() => {
+    setDecisionData(decisionsSorted);
+  }, [decisionsSorted]);
 
   return {
     isModalOpen,

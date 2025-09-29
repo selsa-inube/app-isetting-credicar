@@ -14,7 +14,6 @@ import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteCh
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { ECreditLines } from "@enum/creditLines";
-import { groups } from "@config/creditLines/configuration/mainOptions";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -23,6 +22,9 @@ import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstruc
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 import { ILanguage } from "@ptypes/i18n";
 import { useModalConfiguration } from "../useModalConfiguration";
+import { useGroupOptions } from "../useGroupOptions";
+import { IRules } from "@src/types/context/creditLinesConstruction/IRules";
+import { formatRuleDecisionsConfig } from "@src/utils/formatRuleDecisionsConfig";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -33,7 +35,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       nameLine: "",
       descriptionLine: "",
     },
-    rules: [],
+    rules: [] as IRules[],
   };
 
   const { appData } = useContext(AuthAndPortalData);
@@ -44,6 +46,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [canRefresh, setCanRefresh] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
+  const [decisionsData, setDecisionData] = useState<IRuleDecision[]>([]);
 
   const { setLinesConstructionData, setLoadingInitial, linesConstructionData } =
     useContext(CreditLinesConstruction);
@@ -84,6 +87,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           nameLine: initialData.abbreviatedName || "",
           descriptionLine: initialData.descriptionUse || "",
         },
+        rules: initialData.rules || [],
       }));
     }
   }, [
@@ -197,6 +201,23 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }));
   }, [nameLineRef.current?.values]);
 
+  useEffect(() => {
+    if (decisionsData.length === 0) return;
+
+    const newRules = {
+      rules: formatRuleDecisionsConfig(decisionsData),
+    };
+
+    setLinesData((prev) => ({
+      ...prev,
+      settingRequestId: linesConstructionData.settingRequestId,
+      configurationRequestData: {
+        ...linesConstructionData,
+        ...newRules,
+      },
+    }));
+  }, [decisionsData]);
+
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     debounceMs: 500,
     linesData: linesData,
@@ -204,6 +225,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     withNeWData: isUpdated,
   });
 
+  console.log({ linesData, borrowerData });
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
 
@@ -231,7 +253,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         currentFormValues.descriptionLine !==
           (initialData.descriptionUse || ""));
 
-    if (hasChanges) {
+    if (hasChanges || decisionsData.length > 0) {
       setIsUpdated(true);
 
       return new Promise((resolve) => {
@@ -247,6 +269,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
     return true;
   };
+
+  const { groups } = useGroupOptions();
 
   const nav = useStepNavigation({
     groups: groups as unknown as IDropdownMenuGroup[],
@@ -285,6 +309,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
 
+  console.log({ decisionsData, linesConstructionData });
+
   return {
     loading,
     initialValues,
@@ -305,6 +331,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleData,
     nav,
     loadingModify,
+    setDecisionData,
     setIsCurrentFormValid,
     setFormValues,
     setOptionsIncluded,

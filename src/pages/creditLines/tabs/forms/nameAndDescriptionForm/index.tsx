@@ -17,7 +17,7 @@ const NameAndDescriptionForm = () => {
     handleOpenModal,
   } = useConfigurationLines({});
 
-  const { formik } = useNameAndDescriptionForm({
+  const { formik, message } = useNameAndDescriptionForm({
     initialValues: formValues.nameAndDescription,
     loading,
     onFormValid: setIsCurrentFormValid,
@@ -36,6 +36,7 @@ const NameAndDescriptionForm = () => {
       lineName={formValues.nameAndDescription.nameLine}
       isUpdated={loadingModify}
       navigation={nav}
+      message={message}
     />
   );
 };

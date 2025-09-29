@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorsRules";
+import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorByRules";
 import { getConditionsOrDecisionName } from "@services/conditionsRules/getConditionsOrDecisionName";
 import { EConditionRules } from "@enum/conditionRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";

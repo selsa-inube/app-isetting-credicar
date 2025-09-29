@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 import { EBooleanText } from "@enum/booleanText";
+import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { ISide } from "@ptypes/ISide";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
 
@@ -67,6 +68,13 @@ const useClientsSupportLineForm = () => {
     [insertInto, removeFrom],
   );
 
+  const information = infoRulesMessage();
+
+  const message = String(
+    information["clientsSupported" as keyof typeof information] ||
+      information.Default,
+  );
+
   return {
     selectedConditionId,
     optionsExcluded,
@@ -76,6 +84,7 @@ const useClientsSupportLineForm = () => {
     isUpdated,
     nav,
     lineNameDecision,
+    message,
     handleMove,
     handleOpenModal,
     handleToggleInfoModal,

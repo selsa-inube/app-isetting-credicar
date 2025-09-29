@@ -21,6 +21,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     lineName,
     isUpdated,
     navigation,
+    message,
     onToggleInfoModal,
     onOpenModal,
   } = props;
@@ -113,9 +114,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
         {showInfoModal && (
           <InfoConfigurationModal
             title={options.lineNames.links.namesAndDescriptions.label}
-            description={
-              options.lineNames.links.namesAndDescriptions.description
-            }
+            description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
           />

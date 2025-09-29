@@ -5,11 +5,11 @@ import {
 import { Outlet, useLocation } from "react-router-dom";
 import { Grid, Stack } from "@inubekit/inubekit";
 import { useConfigurationInitial } from "@hooks/creditLine/configurationLines/useConfigurationInitial";
+import { useGroupOptions } from "@hooks/creditLine/configurationLines/useGroupOptions";
 import { EComponentAppearance } from "@enum/appearances";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
-import { groups } from "@config/creditLines/configuration/mainOptions";
 import { StyledDropdownMenuContainer } from "./styles";
 
 const ConfigurationLines = () => {
@@ -17,6 +17,8 @@ const ConfigurationLines = () => {
   const { data } = location.state ?? {};
 
   const { showDecision, modalData } = useConfigurationInitial({ data });
+
+  const { groups } = useGroupOptions();
 
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
