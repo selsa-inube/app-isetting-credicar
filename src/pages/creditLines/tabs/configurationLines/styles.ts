@@ -6,6 +6,7 @@ const StyledDropdownMenuContainer = styled.div`
   z-index: 1;
   overflow: auto;
   width: 334px;
+  height: -webkit-fill-available;
   background: ${({ theme }) =>
     `${theme?.palette?.neutral?.N20 || inube.palette.neutral.N20}`};
 
