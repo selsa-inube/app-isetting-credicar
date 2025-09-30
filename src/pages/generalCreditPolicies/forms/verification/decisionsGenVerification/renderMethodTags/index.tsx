@@ -3,7 +3,7 @@ import { Tag } from "@inubekit/inubekit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { EComponentAppearance } from "@enum/appearances";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
 import { IRenderMethodTags } from "@ptypes/generalCredPolicies/forms/IRenderMethodTags";
 import { IEnumerators } from "@ptypes/IEnumerators";
@@ -19,7 +19,7 @@ const RenderMethodTags = (props: IRenderMethodTags) => {
 
   const { enumData: enumMethods } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
-    enumQuery: EPayrollAgreement.METHODS,
+    enumQuery: EGeneralPolicies.METHODS,
   });
 
   const labels = (method: string) => {

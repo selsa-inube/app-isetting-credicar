@@ -73,26 +73,30 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   };
 
   const getNextStep = (step: number) => {
-    const { RiskAnalysisBasedCreditLimit, ReciprocityBasedCreditLimit } =
+    const { PaymentCapacityBasedCreditLimit, ReciprocityBasedCreditLimit } =
       getValues();
 
-    if (step === 2) return RiskAnalysisBasedCreditLimit ? 3 : 4;
+    if (step === 2) return PaymentCapacityBasedCreditLimit ? 3 : 4;
     if ([3, 4].includes(step)) return step + 1;
     if ([1].includes(step)) {
       if (ReciprocityBasedCreditLimit) return 2;
-      return RiskAnalysisBasedCreditLimit ? 3 : 4;
+      return PaymentCapacityBasedCreditLimit ? 3 : 4;
     }
     return step + 1;
   };
 
   const getPreviousStep = (step: number) => {
-    const { RiskAnalysisBasedCreditLimit, ReciprocityBasedCreditLimit } =
+    const { PaymentCapacityBasedCreditLimit, ReciprocityBasedCreditLimit } =
       formValues.decisionsGeneral.values;
 
     const map: Record<number, number> = {
       2: 1,
       3: ReciprocityBasedCreditLimit ? 2 : 1,
-      4: RiskAnalysisBasedCreditLimit ? 3 : ReciprocityBasedCreditLimit ? 2 : 1,
+      4: PaymentCapacityBasedCreditLimit
+        ? 3
+        : ReciprocityBasedCreditLimit
+          ? 2
+          : 1,
       5: 4,
     };
 
