@@ -28,7 +28,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     initialDecisions,
     language,
     nav,
-    isUpdated,
+    loadingModify,
     setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,
@@ -53,7 +53,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
         <LineInformation
           lineName={lineNameDecision}
           lineType={lineTypeDecision}
-          updateData={isUpdated}
+          updateData={loadingModify}
           loading={loading}
           withDecisions={true}
           onToggleInfoModal={handleToggleInfoModal}

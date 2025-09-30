@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IRuleDecision } from "@isettingkit/input";
 import {
   IDragAndDropColumn,
@@ -13,18 +13,19 @@ import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
+import { transformationDecisions } from "@utils/transformationDecisions";
+import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { ECreditLines } from "@enum/creditLines";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IUseConfigurationLines } from "@ptypes/hooks/creditLines/IUseConfigurationLines";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 import { ILanguage } from "@ptypes/i18n";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useGroupOptions } from "../useGroupOptions";
-import { IRules } from "@src/types/context/creditLinesConstruction/IRules";
-import { formatRuleDecisionsConfig } from "@src/utils/formatRuleDecisionsConfig";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -66,8 +67,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     emptyMessage: clientsSupportLineLabels.withoutExcluding,
     highlightFirst: false,
   });
-
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsUpdated(false);
+    setDecisionData([]);
+  }, [location.pathname]);
 
   const { linesConstructionData: initialData, loadingInitial: loading } =
     useContext(CreditLinesConstruction);
@@ -174,7 +181,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     (ruleData.i18n?.[
       appData.language as keyof typeof ruleData.i18n
     ] as string) ?? "";
-  const initialDecisions: IRuleDecision[] = [];
+
+  const initialDecisions =
+    linesConstructionData.rules?.filter((rule) => {
+      if (rule.ruleName === ruleData.ruleName) {
+        return transformationDecisions(rule);
+      }
+    }) ?? [];
+
   const language = appData.language as ILanguage;
 
   const newData: {
@@ -201,31 +215,45 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }));
   }, [nameLineRef.current?.values]);
 
+  const mergeRules = (
+    existingRules: IRuleDecision[] = [],
+    newRules: IRuleDecision[] = [],
+  ): IRuleDecision[] => {
+    return [...existingRules, ...newRules];
+  };
+
   useEffect(() => {
     if (decisionsData.length === 0) return;
 
-    const newRules = {
-      rules: formatRuleDecisionsConfig(decisionsData),
-    };
+    const newFormattedRules = formatRuleDecisionsConfig(decisionsData);
+    setLinesData((prev) => {
+      const existingRules =
+        (prev?.configurationRequestData?.rules as
+          | IRuleDecision[]
+          | undefined) ??
+        (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+        [];
 
-    setLinesData((prev) => ({
-      ...prev,
-      settingRequestId: linesConstructionData.settingRequestId,
-      configurationRequestData: {
-        ...linesConstructionData,
-        ...newRules,
-      },
-    }));
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        configurationRequestData: {
+          ...prev?.configurationRequestData,
+          alias: linesConstructionData.alias,
+          abbreviatedName: linesConstructionData.abbreviatedName,
+          descriptionUse: linesConstructionData.descriptionUse,
+          rules: mergeRules(existingRules, newFormattedRules),
+        },
+      };
+    });
   }, [decisionsData]);
 
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
-    debounceMs: 500,
     linesData: linesData,
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
   });
 
-  console.log({ linesData, borrowerData });
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
 
@@ -258,12 +286,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
       return new Promise((resolve) => {
         savePromiseRef.current = resolve;
-        // setTimeout(() => {
-        //     if (savePromiseRef.current) {
-        //       savePromiseRef.current(true);
-        //       savePromiseRef.current = null;
-        //     }
-        //   }, 2000);
       });
     }
 

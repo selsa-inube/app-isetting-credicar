@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useMemo, useState } from "react";
-import { IRuleDecision, IValue } from "@isettingkit/input";
-import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 import {
   buildEsConditionSentence,
   EValueHowToSetUp,
@@ -11,7 +8,10 @@ import {
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
+import { useEffect, useMemo, useState } from "react";
+import { IRuleDecision, IValue } from "@isettingkit/input";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
+import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 
 const asArray = (v: unknown): any[] =>
   Array.isArray(v)
@@ -463,10 +463,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       ruleName: ruleNameFromTemplate,
     });
   }, [decisionsSorted, decisionTemplate]);
-
-  useEffect(() => {
-    console.log("responseForBackend", responseForBackend);
-  }, [responseForBackend]);
 
   useEffect(() => {
     setDecisionData(decisionsSorted);

@@ -1,20 +1,13 @@
-import { ICondition, IRuleDecision } from "@isettingkit/input";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getConditionsByGroup } from "@isettingkit/business-rules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
+import { toValueString } from "../toValueString";
 
-const toFlatConditions = (v: unknown): ICondition[] => {
-  if (!v) return [];
-  if (Array.isArray(v)) return v as ICondition[];
-  if (typeof v === "object") {
-    return Object.values(v as Record<string, unknown>).flatMap((x) =>
-      Array.isArray(x) ? (x as ICondition[]) : [],
-    );
-  }
-  return [];
-};
-
-const formatRuleDecisionsConfig = (rule: IRuleDecision[]) =>
+const formatRuleDecisionsConfig = (rule: IRuleDecisionExtended[]) =>
   rule.map((decision) => {
-    const decisionsByRule: Partial<IRuleDecision> = {
+    const decisionsByRule: Partial<IRuleDecisionExtended> = {
       effectiveFrom:
         decision.effectiveFrom &&
         formatDateDecision(String(decision.effectiveFrom)),
@@ -27,18 +20,23 @@ const formatRuleDecisionsConfig = (rule: IRuleDecision[]) =>
       );
     }
 
-    const flatConditions = toFlatConditions(
-      decision.conditionsThatEstablishesTheDecision,
-    );
+    const groups = (getConditionsByGroup(decision) || {}) as Record<
+      string,
+      unknown
+    >;
 
-    if (flatConditions.length > 0) {
-      decisionsByRule.conditionsThatEstablishesTheDecision = flatConditions
-        .filter((condition) => condition.value !== undefined)
-        .map((condition) => ({
-          conditionName: condition.conditionName,
-          value: condition.value,
-        })) as ICondition[];
-    }
+    decisionsByRule.conditionGroups = Object.entries(groups).map(
+      ([groupKey, rawList]) => {
+        const items = asArray(rawList).filter((item) => !(item as any)?.hidden);
+        return {
+          ConditionGroupId: groupKey,
+          conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
+            conditionName: condition?.conditionName ?? "",
+            value: toValueString(condition?.value),
+          })),
+        };
+      },
+    );
 
     return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
   });
