@@ -26,7 +26,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   } = props;
 
   const {
-    decisionsSorted,
     filteredDecisionTemplate,
     isModalOpen,
     localizedTemplate,
@@ -52,6 +51,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setDecisionData,
     formId,
   });
+  console.log("initialDecisions1: ", initialDecisions);
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
@@ -87,14 +87,14 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
         </>
       )}
 
-      {selectedConditionsCSV.length > 0 ? (
+      {selectedConditionsCSV.length > 0 || initialDecisions ? (
         <BusinessRulesNew
           baseDecisionTemplate={localizedTemplate}
           controls={controls}
           customMessageEmptyDecisions={customMessageEmptyDecisions}
           customTitleContentAddCard={customTitleContentAddCard}
           decisionTemplate={filteredDecisionTemplate as any}
-          decisions={decisionsSorted}
+          decisions={initialDecisions}
           handleCloseModal={closeModal}
           handleDelete={deleteDecision}
           handleOpenModal={openModal}

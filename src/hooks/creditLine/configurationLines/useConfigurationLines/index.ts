@@ -219,7 +219,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     .filter((r) => r.ruleName === ruleData.ruleName)
     .flatMap((r) => transformationDecisions(r, { ruleDict, conditionDict }));
 
-  console.log("Initial Decisions:", initialDecisions);
   const language = appData.language as ILanguage;
 
   const newData: {
