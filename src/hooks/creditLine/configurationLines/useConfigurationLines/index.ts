@@ -76,6 +76,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setDecisionData([]);
   }, [location.pathname]);
 
+  useEffect(() => {
+    setDecisionData([]);
+    setIsUpdated(false);
+  }, [templateKey]);
+
   const { linesConstructionData: initialData, loadingInitial: loading } =
     useContext(CreditLinesConstruction);
 
