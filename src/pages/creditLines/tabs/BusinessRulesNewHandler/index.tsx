@@ -22,10 +22,10 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     loading,
     textValues,
     setDecisionData,
+    formId,
   } = props;
 
   const {
-    decisionsSorted,
     filteredDecisionTemplate,
     isModalOpen,
     localizedTemplate,
@@ -49,47 +49,52 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     loading,
     textValues,
     setDecisionData,
+    formId,
   });
+  console.log("initialDecisions1: ", initialDecisions);
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
-      <Fieldset legend={newBusinessRulesLabels.conditionsTitle}>
-        <StyledMultipleChoiceContainer>
-          <Checkpicker
-            fullwidth
-            id="conditionsPicker"
-            label=""
-            name="conditionsPicker"
-            onChange={onMultipleChoicesChange}
-            options={multipleChoicesOptions as IOption[]}
-            placeholder="Selecciona las condiciones"
-            required={false}
-            size="wide"
-            values={selectedConditionsCSV}
-          />
-        </StyledMultipleChoiceContainer>
-      </Fieldset>
+      {!loading && (
+        <>
+          <Fieldset legend={newBusinessRulesLabels.conditionsTitle}>
+            <StyledMultipleChoiceContainer>
+              <Checkpicker
+                fullwidth
+                id="conditionsPicker"
+                label=""
+                name="conditionsPicker"
+                onChange={onMultipleChoicesChange}
+                options={multipleChoicesOptions as IOption[]}
+                placeholder="Selecciona las condiciones"
+                required={false}
+                size="wide"
+                values={selectedConditionsCSV}
+              />
+            </StyledMultipleChoiceContainer>
+          </Fieldset>
+          <Stack justifyContent="flex-end">
+            <Button
+              appearance="primary"
+              cursorHover
+              disabled={selectedConditionsCSV.length === 0}
+              iconBefore={<MdAdd />}
+              onClick={() => openModal()}
+            >
+              {newBusinessRulesLabels.add}
+            </Button>
+          </Stack>
+        </>
+      )}
 
-      <Stack justifyContent="flex-end">
-        <Button
-          appearance="primary"
-          cursorHover
-          disabled={selectedConditionsCSV.length === 0}
-          iconBefore={<MdAdd />}
-          onClick={() => openModal()}
-        >
-          {newBusinessRulesLabels.add}
-        </Button>
-      </Stack>
-
-      {selectedConditionsCSV.length > 0 ? (
+      {selectedConditionsCSV.length > 0 || initialDecisions ? (
         <BusinessRulesNew
           baseDecisionTemplate={localizedTemplate}
           controls={controls}
           customMessageEmptyDecisions={customMessageEmptyDecisions}
           customTitleContentAddCard={customTitleContentAddCard}
           decisionTemplate={filteredDecisionTemplate as any}
-          decisions={decisionsSorted}
+          decisions={initialDecisions}
           handleCloseModal={closeModal}
           handleDelete={deleteDecision}
           handleOpenModal={openModal}

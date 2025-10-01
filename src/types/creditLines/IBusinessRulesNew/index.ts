@@ -7,6 +7,7 @@ interface IBusinessRulesNew extends IUseBusinessRulesNewGeneral {
   controls?: boolean;
   customMessageEmptyDecisions?: string;
   customTitleContentAddCard?: string;
+  formId?: string;
 }
 
 export type { IBusinessRulesNew };

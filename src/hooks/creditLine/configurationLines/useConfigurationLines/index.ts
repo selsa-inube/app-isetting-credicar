@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLocation, useNavigate } from "react-router-dom";
 import { IRuleDecision } from "@isettingkit/input";
 import {
@@ -90,6 +91,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setIsUpdated(false);
     setDecisionData([]);
   }, [location.pathname]);
+
+  useEffect(() => {
+    setDecisionData([]);
+    setIsUpdated(false);
+  }, [templateKey]);
 
   const { linesConstructionData: initialData, loadingInitial: loading } =
     useContext(CreditLinesConstruction);
@@ -222,12 +228,36 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       appData.language as keyof typeof ruleData.i18n
     ] as string) ?? "";
 
-  const initialDecisions =
-    linesConstructionData.rules?.filter((rule) => {
-      if (rule.ruleName === ruleData.ruleName) {
-        return transformationDecisions(rule);
-      }
-    }) ?? [];
+  const ruleDict = {
+    [String(ruleData.ruleName)]: {
+      labelName: ruleData.i18n?.[appData.language as any] ?? ruleData.ruleName,
+      descriptionUse:
+        ruleData.i18n?.[appData.language as any] ?? ruleData.ruleName,
+      decisionDataType: "alphabetical",
+      howToSetTheDecision: "EqualTo",
+    },
+  };
+
+  const conditionDict = {
+    MoneyDestination: {
+      labelName: "Que el Destino del dinero sea",
+      descriptionUse: "Destino del dinero",
+      conditionDataType: "Alphabetical",
+      howToSetTheCondition: "EqualTo",
+      listOfPossibleValues: [],
+    },
+    LineOfCredit: {
+      labelName: "Línea de crédito",
+      descriptionUse: "Línea de crédito",
+      conditionDataType: "Alphabetical",
+      howToSetTheCondition: "EqualTo",
+      listOfPossibleValues: [],
+    },
+  };
+
+  const initialDecisions: IRuleDecision[] = (linesConstructionData.rules ?? [])
+    .filter((r) => r.ruleName === ruleData.ruleName)
+    .flatMap((r) => transformationDecisions(r, { ruleDict, conditionDict }));
 
   const language = appData.language as ILanguage;
 

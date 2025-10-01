@@ -32,6 +32,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     initialDecisions,
     language,
     nav,
+    isUpdated,
     loadingModify,
     saveCreditLines,
     requestSteps,
@@ -49,9 +50,10 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
 
+  const formId = `credit-lines/${templateKey}`;
+
   const ruleLabel = `${ruleData.ruleName}`;
   const information = infoRulesMessage(lineTypeDecision);
-
   const message = String(
     information[ruleLabel as keyof typeof information] || information.Default,
   );
@@ -61,53 +63,59 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
       <Stack
         direction="column"
         gap={tokens.spacing.s300}
+        height="100%"
         padding={`${tokens.spacing.s350} ${tokens.spacing.s700}`}
         width="-webkit-fill-available"
-        height="100%"
       >
         <LineInformation
           lineName={lineNameDecision}
           lineType={lineTypeDecision}
-          updateData={loadingModify}
           loading={loading}
-          withDecisions={true}
-          onToggleInfoModal={handleToggleInfoModal}
           onOpenModal={handleOpenModal}
+          onToggleInfoModal={handleToggleInfoModal}
+          updateData={isUpdated}
+          withDecisions
         />
 
         <BusinessRulesNewHandler
+          key={formId}
           controls
+          customMessageEmptyDecisions={undefined}
+          customTitleContentAddCard={undefined}
           decisionTemplate={
             (decisionTemplateConfig(ruleData) as unknown as IRuleDecision) ??
             ({} as IRuleDecision)
           }
           initialDecisions={initialDecisions}
           language={language as "es" | "en"}
-          loading={false}
-          textValues={commonTextValues}
+          loading={loading}
           setDecisionData={setDecisionData}
+          textValues={commonTextValues}
+          formId={formId as unknown as never}
         />
+
         {showDecision && (
           <DecisionModal
-            portalId={portalId}
-            title={modalData.title}
-            actionText={modalData.actionText}
-            description={modalData.description}
-            onCloseModal={modalData.onCloseModal}
-            onClick={modalData.onClick}
-            withCancelButton={modalData.withCancelButton}
-            withIcon={modalData.withIcon}
-            icon={modalData.icon}
             appearance={modalData.appearance}
             appearanceButton={modalData.appearanceButton}
+            actionText={modalData.actionText}
+            description={modalData.description}
+            icon={modalData.icon}
+            onClick={modalData.onClick}
+            onCloseModal={modalData.onCloseModal}
+            portalId={portalId}
+            title={modalData.title}
+            withCancelButton={modalData.withCancelButton}
+            withIcon={modalData.withIcon}
           />
         )}
+
         {showInfoModal && (
           <InfoConfigurationModal
-            title={lineTypeDecision}
             description={message}
             onClick={handleToggleInfoModal}
             onCloseModal={handleToggleInfoModal}
+            title={lineTypeDecision}
           />
         )}
         {showUnconfiguredModal && (
@@ -117,7 +125,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             description={submitRequestLabels.description}
             onClick={handleUnconfiguredRules}
             onCloseModal={handleToggleUnconfiguredRulesModal}
-            loading={loading}
+            loading={loadingModify}
           />
         )}
 
@@ -131,6 +139,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           onClosePendingModal={handleClosePendingModal}
         />
       </Stack>
+
       <StyledFloatButtonsContainer>
         <ButtonsConfiguration navigation={nav} />
       </StyledFloatButtonsContainer>

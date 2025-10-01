@@ -5,8 +5,8 @@ import { object } from "yup";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { validationRules } from "@validations/validationRules";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { mediaQueryMobile } from "@config/environment";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
@@ -56,7 +56,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   const { enumData: methods } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
-    enumQuery: EPayrollAgreement.METHODS,
+    enumQuery: EGeneralPolicies.METHODS,
   });
   const methodsOptions: IServerDomain[] = methods.map((item: IEnumerators) => {
     const name =

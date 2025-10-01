@@ -12,6 +12,7 @@ interface IUseBusinessRulesNewGeneral {
   customMessageEmptyDecisions?: string;
   customTitleContentAddCard?: string;
   onDecisionsChange?: (decisions: IRuleDecision[]) => void;
+  formId?: string;
 }
 
 export type { IUseBusinessRulesNewGeneral };
