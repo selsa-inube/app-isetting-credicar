@@ -3,6 +3,6 @@ interface TNavItem {
   groupId: string;
   id: string;
   path: string;
-};
+}
 
 export type { TNavItem };

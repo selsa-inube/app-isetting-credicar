@@ -2,6 +2,8 @@ enum ECreditLines {
   CONDITION_RULE = "PayrollAgreement",
   OPTION_NAME = "Líneas de Crédito",
   REQUEST_STATUS = "RequestInConstruction",
+  RULE_CATALOG = "crediboard",
+  CATALOG_ACTION = "Crediboard",
   USE_CASE_NAME_ADD = "AddCreditLine",
   USE_CASE_ADD = "Agregar",
   USE_CASE_EDIT = "Modificar",

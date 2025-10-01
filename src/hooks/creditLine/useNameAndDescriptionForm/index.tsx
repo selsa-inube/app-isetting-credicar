@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { object } from "yup";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
+import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { IUseNameAndDescriptionForm } from "@ptypes/hooks/creditLines/IUseNameAndDescriptionForm";
 
 const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
@@ -23,6 +24,14 @@ const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
     onSubmit: () => void 0,
   });
 
+  useEffect(() => {
+    formik.setValues(initialValues);
+  }, [
+    initialValues.aliasLine,
+    initialValues.nameLine,
+    initialValues.descriptionLine,
+  ]);
+
   useImperativeHandle(ref, () => formik);
 
   useEffect(() => {
@@ -34,8 +43,16 @@ const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
     }
   }, [formik.values, onFormValid]);
 
+  const information = infoRulesMessage();
+
+  const message = String(
+    information["clientsSupported" as keyof typeof information] ||
+      information.Default,
+  );
+
   return {
     formik,
+    message,
   };
 };
 

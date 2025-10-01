@@ -1,3 +1,3 @@
-const reciprocity = ["Reciprocity", "ReciprocityOfContributions"];
+const reciprocity = ["ReciprocityBasedCreditLimit"];
 
 export { reciprocity };

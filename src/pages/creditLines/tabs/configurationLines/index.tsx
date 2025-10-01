@@ -1,25 +1,24 @@
-import { Outlet } from "react-router-dom";
-import { Grid, Stack } from "@inubekit/inubekit";
-import { BoxContainer } from "@design/layout/boxContainer";
-import { EComponentAppearance } from "@enum/appearances";
-import { groups } from "@config/creditLines/configuration/mainOptions";
 import {
-  StyledDropdownMenuContainer,
-  StyledFloatButtonsContainer,
-} from "./styles";
-import { MdOutlineSend } from "react-icons/md";
-import {
-  BackAndNextButton,
   DropdownMenuContainer,
   IDropdownMenuGroup,
-  SendButton,
 } from "@isettingkit/business-rules";
-import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
+import { Outlet, useLocation } from "react-router-dom";
+import { Grid, Stack } from "@inubekit/inubekit";
+import { useConfigurationInitial } from "@hooks/creditLine/configurationLines/useConfigurationInitial";
+import { useGroupOptions } from "@hooks/creditLine/configurationLines/useGroupOptions";
+import { EComponentAppearance } from "@enum/appearances";
+import { BoxContainer } from "@design/layout/boxContainer";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
+import { StyledDropdownMenuContainer } from "./styles";
 
 const ConfigurationLines = () => {
-  const nav = useStepNavigation({
-    groups: groups as unknown as IDropdownMenuGroup[],
-  });
+  const location = useLocation();
+  const { data } = location.state ?? {};
+
+  const { showDecision, modalData } = useConfigurationInitial({ data });
+
+  const { groups } = useGroupOptions();
 
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
@@ -46,28 +45,21 @@ const ConfigurationLines = () => {
           <Outlet />
         </Stack>
       </Grid>
-
-      <StyledFloatButtonsContainer>
-        <Stack gap="16px" justifyContent="flex-end" padding="0 3.3rem 0 0">
-          <BackAndNextButton
-            cursorHover
-            disabledBack={nav.disabledBack}
-            disabledNext={nav.disabledNext}
-            handleBack={nav.handleBack}
-            handleNext={nav.handleNext}
-            loading={false}
-            textValues={{ back: "Atrás", next: "Siguiente" }}
-          />
-          <SendButton
-            cursorHover
-            disabled={false}
-            iconBefore={<MdOutlineSend />}
-            loading={false}
-          >
-            Enviar
-          </SendButton>
-        </Stack>
-      </StyledFloatButtonsContainer>
+      {showDecision && (
+        <DecisionModal
+          portalId={portalId}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          icon={modalData.icon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
+        />
+      )}
     </Stack>
   );
 };

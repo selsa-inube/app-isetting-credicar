@@ -21,7 +21,7 @@ const StyledContainer = styled.div<IStyledContainer>`
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
-  height: 90vh;
+  height: 90dvh;
   padding: ${({ $isTablet }) =>
     $isTablet
       ? `${tokens.spacing.s250} ${tokens.spacing.s250} ${tokens.spacing.s0}`
