@@ -14,16 +14,19 @@ const InformationBox = (props: IInformationBox) => {
     sizeDescription,
     appearanceIcon,
     widthBox = "100%",
+    heigthBox = "100%",
+    ellipsisText = false,
   } = props;
 
   return (
     <BoxContainer
       width={widthBox}
+      height={heigthBox}
       borderColor={EComponentAppearance.WARNING}
       borderRadius={tokens.spacing.s050}
       padding={boxPadding}
       backgroundColor={boxColor}
-      boxSizing="initial"
+      boxSizing="border-box"
       gap={tokens.spacing.s150}
     >
       <Icon
@@ -32,7 +35,12 @@ const InformationBox = (props: IInformationBox) => {
         cursorHover
         size={sizeIcon}
       />
-      <Text type="label" size={sizeDescription} weight="bold">
+      <Text
+        type="label"
+        size={sizeDescription}
+        weight="bold"
+        ellipsis={ellipsisText}
+      >
         {description}
       </Text>
     </BoxContainer>

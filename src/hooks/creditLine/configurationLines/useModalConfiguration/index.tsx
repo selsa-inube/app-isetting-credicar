@@ -3,6 +3,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorModal } from "@config/errorModal";
 import { goBackModal } from "@config/goBackModal";
+import { sendSaveModal } from "@config/creditLines/generic/sendSaveModal";
 import { IUseModalConfiguration } from "@ptypes/hooks/creditLines/IUseModalConfiguration";
 
 const useModalConfiguration = (props: IUseModalConfiguration) => {
@@ -11,6 +12,10 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     loading,
     hasError,
     errorData,
+    showSaveModal,
+    loadingSendData,
+    handleToggleSaveModal,
+    handleSaveModal,
     handleCloseModal,
     handleGoBack,
     handleToggleErrorModal,
@@ -18,9 +23,9 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
 
   const [showDecision, setShowDecision] = useState(false);
   useEffect(() => {
-    const decision = showGoBackModal || hasError;
+    const decision = showGoBackModal || showSaveModal || hasError;
     setShowDecision(decision);
-  }, [showGoBackModal, hasError]);
+  }, [showGoBackModal, showSaveModal, hasError]);
 
   const modal = () => {
     const initial = {
@@ -55,6 +60,20 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        withIcon: false,
+        icon: <></>,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    if (showSaveModal) {
+      return {
+        ...sendSaveModal,
+        onCloseModal: handleToggleSaveModal,
+        onClick: handleSaveModal,
+        withCancelButton: true,
+        loading: loadingSendData,
         withIcon: false,
         icon: <></>,
         appearance: EComponentAppearance.PRIMARY,

@@ -10,6 +10,10 @@ interface IClientsSupportLineFormUI {
   navigation: INavigation;
   lineNameDecision: string;
   message: string;
+  showUnconfiguredModal: boolean;
+  unconfiguredRules: string[];
+  onUnconfiguredModal: () => void;
+  onToggleUnconfiguredRules: () => void;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
   onOpenModal: () => void;
   onToggleInfoModal: () => void;

@@ -11,11 +11,16 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
+import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
+import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguration";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
+import { validateUnconfiguredRules } from "@utils/validateUnconfiguredRules";
 import { transformationDecisions } from "@utils/transformationDecisions";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { ECreditLines } from "@enum/creditLines";
+import { EUseCase } from "@enum/useCase";
+import { rules } from "@config/creditLines/configuration/rules";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -48,12 +53,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [hasError, setHasError] = useState<boolean>(false);
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
   const [decisionsData, setDecisionData] = useState<IRuleDecision[]>([]);
-
+  const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const { setLinesConstructionData, setLoadingInitial, linesConstructionData } =
     useContext(CreditLinesConstruction);
-
+  const [data, setData] = useState<IModifyConstructionResponse>();
+  const [unconfiguredRules, setUnconfiguredRules] = useState<string[]>([]);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-
+  const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
+  const [showUnconfiguredModal, setShowUnconfiguredModal] =
+    useState<boolean>(false);
   const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleCustomerProfiles,
     items: [],
@@ -71,6 +79,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const location = useLocation();
 
+  const ruleCatalog = ECreditLines.RULE_CATALOG;
+  const catalogAction = ECreditLines.CATALOG_ACTION;
+
+  const { optionsAllRules } = useEnumAllRulesConfiguration({
+    ruleCatalog,
+    catalogAction,
+  });
   useEffect(() => {
     setIsUpdated(false);
     setDecisionData([]);
@@ -102,6 +117,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     initialData.alias,
     initialData.descriptionUse,
   ]);
+
+  const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
+    linesData: linesData,
+    userAccount: appData.user.userAccount,
+    withNeWData: isUpdated,
+  });
 
   const handleToggleInfoModal = () => {
     setShowInfoModal(!showInfoModal);
@@ -135,6 +156,35 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setShowGoBackModal(!showGoBackModal);
   };
 
+  const handleToggleUnconfiguredRulesModal = () => {
+    setShowUnconfiguredModal(!showUnconfiguredModal);
+  };
+
+  const handleUnconfiguredRules = () => {
+    setIsUpdated(true);
+    if (loadingModify && borrowerData?.settingRequestId)
+      navigate("/credit-lines");
+  };
+
+  const handleToggleSaveModal = () => {
+    setShowSaveModal(!showSaveModal);
+  };
+
+  const handleSaveModal = () => {
+    setShowSaveModal(false);
+    onSubmit();
+  };
+
+  const onSubmit = () => {
+    const { settingRequestId, ...dataWithoutId } = linesConstructionData;
+
+    setData({
+      settingRequestId: settingRequestId,
+      configurationRequestData: dataWithoutId as Record<string, unknown>,
+    });
+    setShowRequestProcessModal(true);
+  };
+
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       const hasUnsavedChanges =
@@ -158,16 +208,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [formValues, initialValues, nameLineRef, canRefresh]);
-
-  const { modalData, showDecision } = useModalConfiguration({
-    showGoBackModal,
-    loading,
-    hasError: false,
-    errorData: {} as IErrors,
-    handleCloseModal,
-    handleGoBack,
-    handleToggleErrorModal,
-  });
 
   const { ruleData } = useEnumRules({
     enumDestination: templateKey ?? "",
@@ -248,12 +288,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     });
   }, [decisionsData]);
 
-  const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
-    linesData: linesData,
-    userAccount: appData.user.userAccount,
-    withNeWData: isUpdated,
-  });
-
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
 
@@ -266,6 +300,16 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       savePromiseRef.current = null;
     }
   }, [loadingModify]);
+
+  useEffect(() => {
+    setUnconfiguredRules(
+      validateUnconfiguredRules(
+        linesConstructionData.rules ?? [],
+        rules,
+        optionsAllRules as { rule: string; label: string }[],
+      ),
+    );
+  }, [linesConstructionData.rules]);
 
   const handleStep = async (click: boolean): Promise<boolean> => {
     if (!click) {
@@ -288,8 +332,25 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         savePromiseRef.current = resolve;
       });
     }
-
     return true;
+  };
+
+  const handleSave = async (click: boolean): Promise<boolean> => {
+    if (!click) {
+      setShowSaveModal(false);
+      setShowUnconfiguredModal(false);
+      return true;
+    }
+
+    if (unconfiguredRules.length > 0) {
+      setShowUnconfiguredModal(true);
+    } else {
+      setShowSaveModal(true);
+    }
+
+    return new Promise((resolve) => {
+      savePromiseRef.current = resolve;
+    });
   };
 
   const { groups } = useGroupOptions();
@@ -298,6 +359,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     groups: groups as unknown as IDropdownMenuGroup[],
     isProcessing: loadingModify,
     handleStep,
+    handleSave,
   });
 
   useEffect(() => {
@@ -331,6 +393,44 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
 
+  const {
+    saveCreditLines,
+    requestSteps,
+    loadingSendData,
+    showPendingModal,
+    hasError: hasErrorSave,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    showRequestStatusModal,
+    handleToggleErrorModal: handleToggleErrorSaveModal,
+    handleCloseRequestStatus,
+    handleCloseProcess,
+    handleClosePendingModal,
+  } = useSaveCreditlines({
+    useCase: EUseCase.ADD,
+    businessUnits: appData.businessUnit.publicCode,
+    userAccount: appData.user.userAccount,
+    sendData: showRequestProcessModal,
+    data: data || ({} as IModifyConstructionResponse),
+    setSendData: setShowRequestProcessModal,
+    setShowModal: setShowSaveModal,
+  });
+
+  const { modalData, showDecision } = useModalConfiguration({
+    showGoBackModal,
+    loading,
+    hasError: false,
+    errorData: {} as IErrors,
+    showSaveModal,
+    loadingSendData,
+    handleToggleSaveModal,
+    handleSaveModal,
+    handleCloseModal,
+    handleGoBack,
+    handleToggleErrorModal,
+  });
+
   return {
     loading,
     initialValues,
@@ -343,6 +443,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     isCurrentFormValid,
     nameLineRef,
     formValues,
+    saveCreditLines,
+    showRequestProcessModal,
+    showRequestStatusModal,
     isUpdated,
     lineNameDecision,
     lineTypeDecision,
@@ -351,6 +454,23 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleData,
     nav,
     loadingModify,
+    requestSteps,
+    loadingSendData,
+    showPendingModal,
+    hasErrorSave,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    unconfiguredRules,
+    showUnconfiguredModal,
+    showSaveModal,
+    handleToggleUnconfiguredRulesModal,
+    handleUnconfiguredRules,
+    handleToggleErrorSaveModal,
+    handleToggleErrorModal,
+    handleCloseRequestStatus,
+    handleCloseProcess,
+    handleClosePendingModal,
     setDecisionData,
     setIsCurrentFormValid,
     setFormValues,

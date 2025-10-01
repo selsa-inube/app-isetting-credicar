@@ -1,6 +1,7 @@
 import { MdOutlineInfo } from "react-icons/md";
 import { Stack } from "@inubekit/inubekit";
 import { DragAndDropBoxes } from "@isettingkit/business-rules";
+import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/InformationBox";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
@@ -8,6 +9,7 @@ import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfigurati
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
+import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
@@ -22,6 +24,10 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     navigation,
     lineNameDecision,
     message,
+    showUnconfiguredModal,
+    unconfiguredRules,
+    onUnconfiguredModal,
+    onToggleUnconfiguredRules,
     onToggleInfoModal,
     onOpenModal,
     onMove,
@@ -77,6 +83,17 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
+          />
+        )}
+
+        {showUnconfiguredModal && (
+          <SubmitRequestModal
+            title={submitRequestLabels.title}
+            unconfiguredRules={unconfiguredRules}
+            description={submitRequestLabels.description}
+            onClick={onUnconfiguredModal}
+            onCloseModal={onToggleUnconfiguredRules}
+            loading={loading}
           />
         )}
       </Stack>

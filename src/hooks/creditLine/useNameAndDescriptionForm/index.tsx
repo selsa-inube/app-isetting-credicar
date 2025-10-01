@@ -46,7 +46,7 @@ const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
   const information = infoRulesMessage();
 
   const message = String(
-    information["clientsSupported" as keyof typeof information] ||
+    information["lineNamesAndDescriptions" as keyof typeof information] ||
       information.Default,
   );
 

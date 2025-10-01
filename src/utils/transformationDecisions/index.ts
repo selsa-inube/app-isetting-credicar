@@ -1,7 +1,7 @@
-import { IRulePayload } from "@ptypes/creditLines/IRulePayload";
 import { ICondition } from "@ptypes/creditLines/ICondition";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
-const transformationDecisions = (decisions: IRulePayload) => {
+const transformationDecisions = (decisions: IRules) => {
   return decisions.decisionsByRule.map((decision, index) => {
     const groupedConditions: Record<string, ICondition[]> = {};
 

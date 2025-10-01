@@ -11,6 +11,10 @@ const ClientsSupportLineForm = () => {
     nav,
     lineNameDecision,
     message,
+    unconfiguredRules,
+    showUnconfiguredModal,
+    handleToggleUnconfiguredRulesModal,
+    handleUnconfiguredRules,
     handleOpenModal,
     handleToggleInfoModal,
     handleMove,
@@ -29,6 +33,10 @@ const ClientsSupportLineForm = () => {
       navigation={nav}
       lineNameDecision={lineNameDecision}
       message={message}
+      onUnconfiguredModal={handleUnconfiguredRules}
+      onToggleUnconfiguredRules={handleToggleUnconfiguredRulesModal}
+      showUnconfiguredModal={showUnconfiguredModal}
+      unconfiguredRules={unconfiguredRules}
     />
   );
 };
