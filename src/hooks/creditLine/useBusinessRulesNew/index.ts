@@ -8,7 +8,7 @@ import {
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
@@ -185,6 +185,55 @@ const withConditionSentences = (
   return d;
 };
 
+const transformDecision = (
+  d: IRuleDecision,
+  language: "es" | "en" | undefined,
+): IRuleDecision => {
+  const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
+  const withSentences = withConditionSentences(loc);
+  return {
+    ...withSentences,
+    value: parseRangeFromString(withSentences.value),
+    conditionsThatEstablishesTheDecision: mapByGroup(
+      getConditionsByGroup(withSentences),
+      (condition: {
+        value: string | number | IValue | string[] | undefined;
+      }) => ({
+        ...normalizeCondition(condition),
+        labelName: localizeLabel(
+          condition as { labelName?: string; i18n?: Record<string, string> },
+          language,
+        ),
+        value: parseRangeFromString(condition.value),
+      }),
+    ),
+  } as any;
+};
+
+const stableStringify = (v: unknown) => {
+  const seen = new WeakSet();
+  return JSON.stringify(v, (_k, val) => {
+    if (val && typeof val === "object") {
+      if (seen.has(val)) return;
+      seen.add(val);
+      if (!Array.isArray(val)) {
+        return (
+          Object.keys(val)
+            .sort()
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+            .reduce((o: any, k) => ((o[k] = (val as any)[k]), o), {})
+        );
+      }
+    }
+    return val;
+  });
+};
+
+const keyOf = (x: IRuleDecision) =>
+  String(
+    (x as any).decisionId ?? (x as any).businessRuleId ?? (x as any).id ?? "",
+  );
+
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
     decisionTemplate,
@@ -207,31 +256,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   );
 
   const [decisions, setDecisions] = useState<IRuleDecision[]>(
-    initialDecisions.map((d) => {
-      const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
-      const withSentences = withConditionSentences(loc);
-      return {
-        ...withSentences,
-        value: parseRangeFromString(withSentences.value),
-        conditionsThatEstablishesTheDecision: mapByGroup(
-          getConditionsByGroup(withSentences),
-          (condition: {
-            value: string | number | IValue | string[] | undefined;
-          }) => ({
-            ...normalizeCondition(condition),
-            labelName: localizeLabel(
-              condition as {
-                labelName?: string;
-                i18n?: Record<string, string>;
-              },
-              language,
-            ),
-            value: parseRangeFromString(condition.value),
-          }),
-        ),
-      } as any;
-    }),
+    (initialDecisions ?? []).map((d) => transformDecision(d, language)),
   );
+
+  useEffect(() => {
+    if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
+      setDecisions(
+        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+      );
+    }
+  }, [initialDecisions, language]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
     useState<string>("");
@@ -344,23 +378,13 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       conditionsThatEstablishesTheDecision: mergedGroups as any,
     };
 
-    const decisionWithSentences = withConditionSentences(
-      ensureArrayGroupsDeep(newDecision),
-    );
+    const decisionWithSentences = transformDecision(newDecision, language);
 
     setDecisions((prev) =>
       isEditing
-        ? prev.map((d) => {
-            const sameByBusinessRule =
-              selectedDecision?.businessRuleId &&
-              d.businessRuleId === selectedDecision.businessRuleId;
-            const sameByDecisionId =
-              selectedDecision?.decisionId &&
-              d.decisionId === selectedDecision.decisionId;
-            return sameByBusinessRule || sameByDecisionId
-              ? decisionWithSentences
-              : d;
-          })
+        ? prev.map((d) =>
+            keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+          )
         : [...prev, decisionWithSentences],
     );
 
@@ -368,7 +392,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const deleteDecision = (id: string) => {
-    setDecisions((prev) => prev.filter((d) => d.decisionId !== id));
+    setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
   };
 
   useEffect(() => {
@@ -418,6 +442,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     const prepared = decisions.map((d) => ({
       flat: toArrayConditionsDecision(d),
       map: nameToGroupMapOf(d),
+      key: keyOf(d),
+      original: d,
     }));
 
     const sorted = sortDisplayDataSwitchPlaces({
@@ -434,7 +460,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       )
         ? ((dec as any).conditionsThatEstablishesTheDecision as any[])
         : [];
-      const map = prepared[idx].map;
+      const map = prepared[idx]?.map ?? new Map<string, string>();
 
       const byGroup: Record<string, any[]> = {};
       for (const c of arr) {
@@ -442,7 +468,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         (byGroup[g] ||= []).push(c);
       }
 
+      const src = prepared[idx]?.original ?? {};
       return {
+        ...src,
         ...dec,
         conditionsThatEstablishesTheDecision: byGroup as any,
       } as IRuleDecision;
@@ -464,9 +492,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     });
   }, [decisionsSorted, decisionTemplate]);
 
+  const lastSigRef = useRef<string>("");
   useEffect(() => {
-    setDecisionData(decisionsSorted);
-  }, [decisionsSorted]);
+    const sig = stableStringify(decisionsSorted);
+    if (sig !== lastSigRef.current) {
+      lastSigRef.current = sig;
+      setDecisionData(decisionsSorted);
+    }
+  }, [decisionsSorted, setDecisionData]);
 
   return {
     isModalOpen,
