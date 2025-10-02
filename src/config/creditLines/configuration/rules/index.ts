@@ -31,7 +31,6 @@ const rules = [
   "OmittableHumanTasks",
   "AutomaticCollectionForExclusiveCreditLines",
   "EstimatedDaysForLoanDisbursementProcess",
-  "ConsolidationOfOtherCreditProductsAllowed",
   "FinancialObligationsUpdateRequired",
   "GuaranteeRequirements",
   "AdditionalBorrowersAllowed",

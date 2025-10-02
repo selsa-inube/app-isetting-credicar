@@ -87,6 +87,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
                 sizeIcon="16px"
                 sizeDescription="medium"
                 ellipsisText
+                heigthBox="auto"
               />
             ))}
           </BoxContainer>

@@ -168,8 +168,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   };
 
   const handleUnconfiguredRules = () => {
-    if (!loadingModify && !borrowerData?.settingRequestId)
+    if (!loadingModify && borrowerData?.settingRequestId) {
       navigate("/credit-lines");
+    }
   };
 
   const handleToggleSaveModal = () => {
@@ -284,13 +285,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         },
       }));
   }, [nameLineRef.current?.values]);
-
-  // const mergeRules = (
-  //   existingRules: IRuleDecision[] = [],
-  //   newRules: IRuleDecision[] = [],
-  // ): IRuleDecision[] => {
-  //   return [...existingRules, ...newRules];
-  // };
 
   const mergeRules = (
     existingRules: IRuleDecision[] = [],
@@ -433,7 +427,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     loadingModify ||
     (templateKey === "CreditLineByRiskProfile" &&
       optionsIncluded.items.length === 0) ||
-    !isCurrentFormValid;
+    (ruleData.ruleName === "lineNamesAndDescriptions" && !isCurrentFormValid);
 
   const nav = useStepNavigation({
     groups: groups as unknown as IDropdownMenuGroup[],

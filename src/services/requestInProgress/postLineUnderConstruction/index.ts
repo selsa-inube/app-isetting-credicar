@@ -12,7 +12,7 @@ const postLineUnderConstruction = async (
 ): Promise<IRequestPayrollAgre> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "",
+      "X-Action": "AddLineOfCredit",
       "X-Business-Unit": businessUnit,
       "X-User-Name": userAcount,
     },
