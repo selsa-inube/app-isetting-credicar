@@ -219,7 +219,10 @@ const stableStringify = (v: unknown) => {
       if (!Array.isArray(val)) {
         return Object.keys(val)
           .sort()
-          .reduce((o: any, k) => ((o[k] = (val as any)[k]), o), {});
+          .reduce<Record<string, unknown>>((o, k) => {
+            o[k] = (val as Record<string, unknown>)[k];
+            return o;
+          }, {});
       }
     }
     return val;
@@ -262,7 +265,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         (initialDecisions ?? []).map((d) => transformDecision(d, language)),
       );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialDecisions, language]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
@@ -378,13 +380,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const decisionWithSentences = transformDecision(newDecision, language);
 
-    setDecisions((prev) =>
-      isEditing
-        ? prev.map((d) =>
-            keyOf(d) === keyOf(selectedDecision!) ? decisionWithSentences : d,
-          )
-        : [...prev, decisionWithSentences],
-    );
+    setDecisions((prev) => {
+      if (isEditing && selectedDecision) {
+        return prev.map((d) =>
+          keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+        );
+      }
+      return [...prev, decisionWithSentences];
+    });
 
     closeModal();
   };
