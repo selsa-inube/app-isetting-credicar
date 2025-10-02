@@ -432,7 +432,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const validateDisabled =
     loadingModify ||
     (templateKey === "CreditLineByRiskProfile" &&
-      optionsIncluded.items.length === 0);
+      optionsIncluded.items.length === 0) ||
+    !isCurrentFormValid;
 
   const nav = useStepNavigation({
     groups: groups as unknown as IDropdownMenuGroup[],
