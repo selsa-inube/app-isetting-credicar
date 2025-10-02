@@ -24,10 +24,9 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
       values: {
         additionalDebtors: false,
         realGuarantees: false,
-        calculation: false,
-        reciprocity: false,
-        factor: false,
-        customValue: false,
+        PaymentCapacityBasedCreditLimit: false,
+        ReciprocityBasedCreditLimit: false,
+        RiskAnalysisBasedCreditLimit: false,
       },
     },
   };
@@ -74,24 +73,30 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   };
 
   const getNextStep = (step: number) => {
-    const { factor, reciprocity } = getValues();
+    const { PaymentCapacityBasedCreditLimit, ReciprocityBasedCreditLimit } =
+      getValues();
 
-    if (step === 2) return factor ? 3 : 4;
+    if (step === 2) return PaymentCapacityBasedCreditLimit ? 3 : 4;
     if ([3, 4].includes(step)) return step + 1;
     if ([1].includes(step)) {
-      if (reciprocity) return 2;
-      return factor ? 3 : 4;
+      if (ReciprocityBasedCreditLimit) return 2;
+      return PaymentCapacityBasedCreditLimit ? 3 : 4;
     }
     return step + 1;
   };
 
   const getPreviousStep = (step: number) => {
-    const { factor, reciprocity } = formValues.decisionsGeneral.values;
+    const { PaymentCapacityBasedCreditLimit, ReciprocityBasedCreditLimit } =
+      formValues.decisionsGeneral.values;
 
     const map: Record<number, number> = {
       2: 1,
-      3: reciprocity ? 2 : 1,
-      4: factor ? 3 : reciprocity ? 2 : 1,
+      3: ReciprocityBasedCreditLimit ? 2 : 1,
+      4: PaymentCapacityBasedCreditLimit
+        ? 3
+        : ReciprocityBasedCreditLimit
+          ? 2
+          : 1,
       5: 4,
     };
 

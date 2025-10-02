@@ -4,6 +4,7 @@ import { FormikProps } from "formik";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useGeneralInformationForm } from "@hooks/moneyDestination/useGeneralInformationForm";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { attentionModal } from "@config/decisions/messages";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { IGeneralInformationForm } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
@@ -22,6 +23,8 @@ const GeneralInformationForm = forwardRef<
       onReset,
       onButtonClick,
       creditLineValues,
+      showDecisionModal,
+      setShowDecisionModal,
       setCreditLineValues,
       loading = false,
       editDataOption = false,
@@ -46,6 +49,7 @@ const GeneralInformationForm = forwardRef<
       alignItemsIcon,
       paddingIcon,
       typeDestinationOptions,
+      handleToggleAttentionModal,
       handleChangeCheck,
       handleChange,
     } = useGeneralInformationForm({
@@ -58,6 +62,8 @@ const GeneralInformationForm = forwardRef<
       onFormValid,
       initialGeneralInfData,
       creditLineValues,
+      showDecisionModal,
+      setShowDecisionModal,
       setCreditLineValues,
     });
 
@@ -81,6 +87,9 @@ const GeneralInformationForm = forwardRef<
         typeDestinationOptions={typeDestinationOptions}
         creditLineOptions={creditLineValues}
         onChangeCheck={handleChangeCheck}
+        attentionModal={attentionModal}
+        showDecisionModal={showDecisionModal}
+        onToggleAttentionModal={handleToggleAttentionModal}
       />
     );
   },

@@ -9,6 +9,7 @@ import { AuthAndPortalDataProvider } from "./context/authAndPortalDataProvider";
 import { ErrorPage } from "./design/layout/errorPage";
 import { ChangeToRequestTabProvider } from "./context/changeToRequestTab";
 import { ThemeProviderWrapper } from "./context/theme";
+import { CreditLinesConstructionProvider } from "./context/creditLinesConstruction";
 import { useAppData } from "./hooks/useAppData/index.ts";
 import { AuthWrapper } from "./pages/AuthWrapper/index.tsx";
 
@@ -51,7 +52,9 @@ function AppContent(props: IApp) {
         <FlagProvider>
           <AuthAndPortalDataProvider>
             <ChangeToRequestTabProvider>
-              <RouterProvider router={mainNavigation} />
+              <CreditLinesConstructionProvider>
+                <RouterProvider router={mainNavigation} />
+              </CreditLinesConstructionProvider>
             </ChangeToRequestTabProvider>
           </AuthAndPortalDataProvider>
         </FlagProvider>

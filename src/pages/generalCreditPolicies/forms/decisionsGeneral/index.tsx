@@ -34,6 +34,7 @@ const DecisionsGeneralForm = forwardRef<
       isMobile,
       isDisabledButton,
       buttonLabel,
+      methodsOptions,
       handleInformationReferenceModal,
       handleInformationObligationModal,
       handleInformationMethodsModal,
@@ -67,6 +68,7 @@ const DecisionsGeneralForm = forwardRef<
         isDisabledButton={isDisabledButton}
         buttonLabel={buttonLabel}
         onResetEdit={onReset}
+        methodsOptions={methodsOptions}
       />
     );
   },

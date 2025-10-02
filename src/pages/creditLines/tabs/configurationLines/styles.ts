@@ -6,15 +6,35 @@ const StyledDropdownMenuContainer = styled.div`
   z-index: 1;
   overflow: auto;
   width: 334px;
+  height: -webkit-fill-available;
   background: ${({ theme }) =>
     `${theme?.palette?.neutral?.N20 || inube.palette.neutral.N20}`};
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) =>
+      `${theme?.palette?.neutral?.N80 || inube.palette.neutral.N80}`};
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &:hover::-webkit-scrollbar,
+  &:hover::-webkit-scrollbar-thumb {
+    opacity: 1;
+    pointer-events: auto;
+  }
 `;
 
-const StyledFloatButtonsContainer = styled.div`
-  position: sticky;
-  bottom: 1rem;
-  left: 50rem;
-  margin-top: -58px;
-`;
-
-export { StyledDropdownMenuContainer, StyledFloatButtonsContainer };
+export { StyledDropdownMenuContainer };

@@ -7,10 +7,12 @@ interface IUseBusinessRulesNewGeneral {
   initialDecisions: IRuleDecision[];
   loading?: boolean;
   textValues: IRulesFormTextValues;
+  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[]>>;
   controls?: boolean;
   customMessageEmptyDecisions?: string;
   customTitleContentAddCard?: string;
   onDecisionsChange?: (decisions: IRuleDecision[]) => void;
+  formId?: string;
 }
 
 export type { IUseBusinessRulesNewGeneral };

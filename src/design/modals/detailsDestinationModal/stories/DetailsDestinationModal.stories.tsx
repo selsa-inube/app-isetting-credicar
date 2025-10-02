@@ -5,8 +5,8 @@ import { Meta, StoryFn } from "@storybook/react";
 import { Button } from "@inubekit/inubekit";
 
 import { IconWithText } from "@design/data/iconWithText";
-import { DetailsDestinationModal } from "..";
 import { IDetailsDestinationModal } from "@ptypes/moneyDestination/tabs/IDetailsDestinationModal";
+import { DetailsDestinationModal } from "..";
 
 const meta: Meta<typeof DetailsDestinationModal> = {
   title: "modals/DetailsDestinationModal",

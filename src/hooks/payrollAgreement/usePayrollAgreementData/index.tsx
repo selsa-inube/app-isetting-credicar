@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
 import { getPayrollAgreementData } from "@services/payrollAgreement/getPayrollAgreement";
 import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { IUsePayrollAgreementData } from "@ptypes/hooks/IUsePayrollAgreementData";
-import { useEffect, useState } from "react";
 
 const usePayrollAgreementData = (props: IUsePayrollAgreementData) => {
   const { businessUnits } = props;

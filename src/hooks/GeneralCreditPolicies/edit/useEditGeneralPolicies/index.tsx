@@ -15,7 +15,6 @@ import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor
 import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
-import { customValue } from "@config/generalCreditPolicies/editGeneralPolicies/customValue";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
@@ -47,22 +46,17 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       factor.includes(condition.value as string),
     );
 
-    const hasCustomValue = methodsData?.some((condition) =>
-      customValue.includes(condition.value as string),
-    );
-    return { hasReciprocity, hasCalculation, hasFactor, hasCustomValue };
+    return { hasReciprocity, hasCalculation, hasFactor };
   };
 
-  const { hasReciprocity, hasCalculation, hasFactor, hasCustomValue } =
-    initialMethodsData();
+  const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
 
   const initialDecisionsGenData = {
     additionalDebtors: hasValuesRule(additionalDebtorsData),
     realGuarantees: hasValuesRule(realGuaranteesData),
-    calculation: hasCalculation ?? false,
-    reciprocity: hasReciprocity ?? false,
-    factor: hasFactor ?? false,
-    customValue: hasCustomValue ?? false,
+    PaymentCapacityBasedCreditLimit: hasCalculation ?? false,
+    ReciprocityBasedCreditLimit: hasReciprocity ?? false,
+    RiskAnalysisBasedCreditLimit: hasFactor ?? false,
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(
