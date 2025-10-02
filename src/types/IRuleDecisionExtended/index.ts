@@ -5,7 +5,7 @@ interface IRuleDecisionExtended extends IRuleDecision {
   i18n?: ILanguage;
   language?: string;
   conditionGroups?: {
-    ConditionGroupId: string;
+    ConditionGroupId?: string;
     conditionsThatEstablishesTheDecision: {
       conditionName: string;
       value: string;

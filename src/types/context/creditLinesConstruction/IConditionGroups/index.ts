@@ -1,7 +1,7 @@
 import { IConditionsTheDecision } from "../IConditionsTheDecision";
 
 interface IConditionGroups {
-  ConditionGroupId: string;
+  ConditionGroupId?: string;
   conditionsThatEstablishesTheDecision: IConditionsTheDecision[];
 }
 

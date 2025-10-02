@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IRulePayload } from "@ptypes/creditLines/IRulePayload";
 import { ICondition } from "@ptypes/creditLines/ICondition";
 import { IRuleDecision } from "@isettingkit/input";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const asDateOnly = (iso?: string | null): string =>
   iso ? new Date(iso).toISOString().slice(0, 10) : "";
 
 const transformationDecisions = (
-  payload: IRulePayload,
+  payload: IRules,
   meta?: IMeta,
 ): IRuleDecision[] => {
   const ruleName = payload.ruleName;
@@ -28,7 +28,7 @@ const transformationDecisions = (
 
     decision.conditionGroups?.forEach((group) => {
       const groupId = group.ConditionGroupId;
-      groupedConditions[groupId] =
+      groupedConditions[groupId as string] =
         group.conditionsThatEstablishesTheDecision.map((c) => {
           const condMeta: IConditionMeta =
             meta?.conditionDict?.[c.conditionName] ?? {};

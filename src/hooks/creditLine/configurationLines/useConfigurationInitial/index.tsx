@@ -100,6 +100,10 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
           ...normalizeData,
         }));
       }
+
+      setTimeout(() => {
+        navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
+      }, 1000);
     }
   }, [loading, borrowerData?.settingRequestId, setLinesConstructionData]);
 

@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
+import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { errorModal } from "@config/errorModal";
 import { goBackModal } from "@config/goBackModal";
+import { operationTypes } from "@config/useCase";
 import { sendSaveModal } from "@config/creditLines/generic/sendSaveModal";
 import { IUseModalConfiguration } from "@ptypes/hooks/creditLines/IUseModalConfiguration";
 
@@ -14,18 +17,23 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     errorData,
     showSaveModal,
     loadingSendData,
+    hasErrorRequest,
+    networkError,
+    errorFetchRequest,
     handleToggleSaveModal,
     handleSaveModal,
     handleCloseModal,
     handleGoBack,
     handleToggleErrorModal,
+    handleToggleErrorSaveModal,
   } = props;
 
   const [showDecision, setShowDecision] = useState(false);
   useEffect(() => {
-    const decision = showGoBackModal || showSaveModal || hasError;
+    const decision =
+      showGoBackModal || showSaveModal || hasErrorRequest || hasError;
     setShowDecision(decision);
-  }, [showGoBackModal, showSaveModal, hasError]);
+  }, [showGoBackModal, hasErrorRequest, showSaveModal, hasError]);
 
   const modal = () => {
     const initial = {
@@ -78,6 +86,36 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         icon: <></>,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    if (!errorFetchRequest && hasErrorRequest) {
+      return {
+        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        onCloseModal: handleToggleErrorSaveModal,
+        onClick: handleToggleErrorSaveModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (errorFetchRequest && hasErrorRequest) {
+      return {
+        ...errorModal(
+          messageErrorUseCases(
+            networkError.status,
+            operationTypes.editConfiguration,
+            ECreditLines.OPTION_NAME,
+          ),
+        ),
+        onCloseModal: handleToggleErrorSaveModal,
+        onClick: handleToggleErrorSaveModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 

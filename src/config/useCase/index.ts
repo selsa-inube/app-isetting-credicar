@@ -5,6 +5,7 @@ const operationTypes = {
   addError: "agregar",
   editError: "editar",
   deleteError: "Eliminar",
+  editConfiguration: "Modificar Configuración",
 };
 
 export { operationTypes };

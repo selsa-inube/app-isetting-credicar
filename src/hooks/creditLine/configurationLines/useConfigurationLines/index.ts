@@ -168,7 +168,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   };
 
   const handleUnconfiguredRules = () => {
-    if (!loadingModify && borrowerData?.settingRequestId) {
+    if (!loadingModify) {
       navigate("/credit-lines");
     }
   };
@@ -178,11 +178,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   };
 
   const handleSaveModal = () => {
-    setShowSaveModal(false);
     onSubmit();
   };
 
   const onSubmit = () => {
+    setShowSaveModal(false);
     const { settingRequestId, ...dataWithoutId } = linesConstructionData;
 
     setData({
@@ -427,7 +427,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     loadingModify ||
     (templateKey === "CreditLineByRiskProfile" &&
       optionsIncluded.items.length === 0) ||
-    (ruleData.ruleName === "lineNamesAndDescriptions" && !isCurrentFormValid);
+    (location.pathname ===
+      "/credit-lines/edit-credit-lines/line-Names-Descriptions" &&
+      !isCurrentFormValid);
 
   const nav = useStepNavigation({
     groups: groups as unknown as IDropdownMenuGroup[],
@@ -498,11 +500,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     errorData: {} as IErrors,
     showSaveModal,
     loadingSendData,
+    hasErrorRequest: hasErrorSave,
+    networkError,
+    errorFetchRequest,
     handleToggleSaveModal,
     handleSaveModal,
     handleCloseModal,
     handleGoBack,
     handleToggleErrorModal,
+    handleToggleErrorSaveModal,
   });
 
   return {

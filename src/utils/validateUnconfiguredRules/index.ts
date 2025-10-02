@@ -5,8 +5,6 @@ const validateUnconfiguredRules = (
   validRules: string[],
   optionsAllRules: { rule: string; label: string }[],
 ) => {
-  if (!data || data.length === 0) return validRules;
-
   const existingRuleNames = new Set(data.map((item) => item.ruleName));
 
   const missingRules = validRules.filter(
