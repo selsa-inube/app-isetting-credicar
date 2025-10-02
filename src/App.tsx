@@ -2,13 +2,15 @@ import { RouterProvider } from "react-router-dom";
 import { FlagProvider } from "@inubekit/inubekit";
 
 import { IUser } from "@ptypes/app.types";
+
 import { mainNavigation } from "./routes/mainNavigation";
-import { useAppData } from "./hooks/useAppData";
 import { GlobalStyles } from "./styles/global";
 import { AuthAndPortalDataProvider } from "./context/authAndPortalDataProvider";
 import { ErrorPage } from "./design/layout/errorPage";
 import { ChangeToRequestTabProvider } from "./context/changeToRequestTab";
 import { ThemeProviderWrapper } from "./context/theme";
+import { useAppData } from "./hooks/useAppData/index.ts";
+import { AuthWrapper } from "./pages/AuthWrapper/index.tsx";
 
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
@@ -20,7 +22,7 @@ interface IApp {
   user?: IUser;
 }
 
-function App(props: IApp) {
+function AppContent(props: IApp) {
   const { code, user, businessUnit } = props;
 
   const { hasError, isLoading, isAuthenticated, errorCode } = useAppData(
@@ -55,6 +57,14 @@ function App(props: IApp) {
         </FlagProvider>
       </ThemeProviderWrapper>
     </>
+  );
+}
+
+function App(props: IApp) {
+  return (
+    <AuthWrapper>
+      <AppContent {...props} />
+    </AuthWrapper>
   );
 }
 

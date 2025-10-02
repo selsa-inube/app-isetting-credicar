@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 import { IBusinessManagers } from "@ptypes/staffPortal/IBusinessManagers";
+import { useIAuth } from "@inube/iauth-react";
 
 const useAuthRedirect = (
   portalPublicCode: IStaffPortalByBusinessManager,
   businessManagersData: IBusinessManagers,
   portalCode: string | null,
 ) => {
-  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useIAuth();
   const [hasRedirected, setHasRedirected] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorCode, setErrorCode] = useState<number>(0);

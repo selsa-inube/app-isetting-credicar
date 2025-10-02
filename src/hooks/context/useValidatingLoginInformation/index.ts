@@ -1,17 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useIAuth } from "@inube/iauth-react";
+
 import { usePortalData } from "@hooks/staffPortal/usePortalData";
 import { useLanguage } from "@hooks/useLanguage";
 import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
-import { validateAndTrimString } from "@utils/validateAndTrimString";
+
 import { decrypt } from "@utils/crypto/decrypt";
 import { enviroment } from "@config/environment";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 
 const useValidatingLoginInformation = () => {
-  const { user } = useAuth0();
-
+  const { user, isLoading: isIAuthLoading } = useIAuth();
   const portalCode = decrypt(localStorage.getItem("portalCode") ?? "");
   const { portalData } = usePortalData(portalCode);
   const { businessManagersData } = useBusinessManagers(portalData);
@@ -69,13 +69,28 @@ const useValidatingLoginInformation = () => {
       urlLogo: businessUnitData?.urlLogo ?? "",
     },
     user: {
-      userAccount: validateAndTrimString(user?.email ?? "") ?? "",
-      userName: user?.name ?? "",
+      userAccount: "",
+      userName: "",
+      identificationDocumentNumber: "",
     },
     useCasesByStaff: useCasesData ?? [],
     language: enviroment.VITE_LANGUAGE,
   });
-
+  useEffect(() => {
+    if (!isIAuthLoading) {
+      if (user) {
+        setAppData((prev) => ({
+          ...prev,
+          user: {
+            ...prev.user,
+            userAccount: user.username || "",
+            userName: user.nickname || "",
+            identificationDocumentNumber: user.id || "",
+          },
+        }));
+      }
+    }
+  }, [user, isIAuthLoading]);
   useEffect(() => {
     if (!businessManagersData) return;
 
@@ -84,7 +99,7 @@ const useValidatingLoginInformation = () => {
       portal: {
         ...prev.portal,
         abbreviatedName: portalData?.abbreviatedName || "",
-        staffPortalCatalogCode: portalData?.staffPortalCatalogCode || "",
+        staffPortalCatalogCode: portalData?.staffPortalId || "",
         businessManagerCode: portalData?.businessManagerCode || "",
         publicCode: portalData?.publicCode || "",
       },
@@ -104,7 +119,7 @@ const useValidatingLoginInformation = () => {
           ...prev.businessManager,
           publicCode: businessManagersData.publicCode,
           abbreviatedName: businessManagersData.abbreviatedName,
-          urlBrand: portalData.brandImageUrl ?? businessManagersData.urlBrand,
+          urlBrand: businessManagersData.urlBrand,
           urlLogo: businessManagersData.urlLogo,
         },
       }));

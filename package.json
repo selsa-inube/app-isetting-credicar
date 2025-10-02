@@ -15,7 +15,7 @@
     "changelog": "npm run auto changelog"
   },
   "dependencies": {
-    "@auth0/auth0-react": "^2.2.4",
+    "@inube/iauth-react": "^1.0.2",
     "@inubekit/inubekit": "^6.1.0",
     "@isettingkit/business-rules": "^2.0.5",
     "@isettingkit/input": "^1.0.7",

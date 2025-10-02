@@ -12,6 +12,7 @@ interface IAuthAndPortalDataProvider {
 function AuthAndPortalDataProvider(props: IAuthAndPortalDataProvider) {
   const { children } = props;
   const { authAndPortalDataContainer } = useValidatingLoginInformation();
+
   return (
     <AuthAndPortalData.Provider value={authAndPortalDataContainer}>
       {children}
