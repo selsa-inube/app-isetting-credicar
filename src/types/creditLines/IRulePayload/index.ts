@@ -1,7 +1,7 @@
 interface IRulePayload {
   ruleName: string;
   decisionsByRule: {
-    conditionGroups: {
+    conditionGroups?: {
       ConditionGroupId: string;
       conditionsThatEstablishesTheDecision: {
         conditionName: string;
@@ -9,7 +9,7 @@ interface IRulePayload {
       }[];
     }[];
     effectiveFrom: string;
-    validUntil: string;
+    validUntil?: string;
     value: string;
   }[];
 }

@@ -26,7 +26,7 @@ const transformationDecisions = (
   return payload.decisionsByRule.map((decision, index) => {
     const groupedConditions: Record<string, ICondition[]> = {};
 
-    decision.conditionGroups.forEach((group) => {
+    decision.conditionGroups?.forEach((group) => {
       const groupId = group.ConditionGroupId;
       groupedConditions[groupId] =
         group.conditionsThatEstablishesTheDecision.map((c) => {

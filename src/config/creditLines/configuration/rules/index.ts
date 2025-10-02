@@ -1,5 +1,6 @@
 const rules = [
   "LoanTerm",
+  "CreditLineByRiskProfile",
   "RepaymentStructure",
   "GeometricGradientRepaymentRate",
   "ArithmeticGradientRepaymentValue",

@@ -6,6 +6,7 @@ import { IUseEnumeratorsCrediboard } from "@ptypes/hooks/IUseEnumeratorsCrediboa
 
 const useEnumeratorsCrediboard = (props: IUseEnumeratorsCrediboard) => {
   const { businessUnits, enumQuery } = props;
+  const [loading, setLoading] = useState<boolean>(false);
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
   );
@@ -13,18 +14,21 @@ const useEnumeratorsCrediboard = (props: IUseEnumeratorsCrediboard) => {
 
   useEffect(() => {
     const fetchEnumData = async () => {
+      setLoading(true);
       try {
         const data = await getEnumsCrediboard(businessUnits, enumQuery);
         setEnumData(data);
       } catch (error) {
         console.info(error);
         setHasError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchEnumData();
   }, []);
 
-  return { enumData, hasError };
+  return { enumData, loading, hasError };
 };
 
 export { useEnumeratorsCrediboard };

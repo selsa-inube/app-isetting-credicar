@@ -1,5 +1,5 @@
 import { MdOutlineInfo } from "react-icons/md";
-import { Stack } from "@inubekit/inubekit";
+import { SkeletonLine, Stack } from "@inubekit/inubekit";
 import { DragAndDropBoxes } from "@isettingkit/business-rules";
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/InformationBox";
@@ -26,6 +26,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     message,
     showUnconfiguredModal,
     unconfiguredRules,
+    loadingData,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onToggleInfoModal,
@@ -64,18 +65,30 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
               sizeDescription="large"
             />
           </Stack>
-          <Stack
-            width="100%"
-            gap={tokens.spacing.s300}
-            height="100%"
-            alignItems="flex-start"
-          >
-            <DragAndDropBoxes
-              left={optionsExcluded}
-              right={optionsIncluded}
-              onMove={onMove}
-            />
-          </Stack>
+          {loadingData ? (
+            <Stack
+              width="100%"
+              gap={tokens.spacing.s500}
+              height="100%"
+              alignItems="flex-start"
+            >
+              <SkeletonLine width="100%" height="250px" animated />
+              <SkeletonLine width="100%" height="250px" animated />
+            </Stack>
+          ) : (
+            <Stack
+              width="100%"
+              gap={tokens.spacing.s300}
+              height="100%"
+              alignItems="flex-start"
+            >
+              <DragAndDropBoxes
+                left={optionsExcluded}
+                right={optionsIncluded}
+                onMove={onMove}
+              />
+            </Stack>
+          )}
         </Stack>
         {showInfoModal && (
           <InfoConfigurationModal

@@ -499,7 +499,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       lastSigRef.current = sig;
       setDecisionData(decisionsSorted);
     }
-  }, [decisionsSorted, setDecisionData]);
+  }, [decisionsSorted]);
+
+  useEffect(() => {
+    setDecisionData(decisionsSorted);
+  }, [decisionsSorted]);
 
   return {
     isModalOpen,

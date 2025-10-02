@@ -2,9 +2,9 @@ import { IConditionGroups } from "../IConditionGroups";
 
 interface IDecisionsByRule {
   effectiveFrom: string;
-  validUntil: string;
+  validUntil?: string;
   value: string;
-  conditionGroups: IConditionGroups[];
+  conditionGroups?: IConditionGroups[];
 }
 
 export type { IDecisionsByRule };

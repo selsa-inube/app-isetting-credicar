@@ -13,7 +13,6 @@ import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
 import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
-import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguration";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { validateUnconfiguredRules } from "@utils/validateUnconfiguredRules";
@@ -63,6 +62,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [showUnconfiguredModal, setShowUnconfiguredModal] =
     useState<boolean>(false);
+  const [clientSupportData, setClientSupportData] = useState<IRules[]>();
   const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleCustomerProfiles,
     items: [],
@@ -80,25 +80,16 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const location = useLocation();
 
-  const ruleCatalog = ECreditLines.RULE_CATALOG;
-  const catalogAction = ECreditLines.CATALOG_ACTION;
-
-  const { optionsAllRules } = useEnumAllRulesConfiguration({
-    ruleCatalog,
-    catalogAction,
-  });
   useEffect(() => {
     setIsUpdated(false);
     setDecisionData([]);
-  }, [location.pathname]);
+  }, [location.pathname, templateKey]);
 
-  useEffect(() => {
-    setDecisionData([]);
-    setIsUpdated(false);
-  }, [templateKey]);
-
-  const { linesConstructionData: initialData, loadingInitial: loading } =
-    useContext(CreditLinesConstruction);
+  const {
+    linesConstructionData: initialData,
+    loadingInitial: loading,
+    optionsAllRules,
+  } = useContext(CreditLinesConstruction);
 
   useEffect(() => {
     if (
@@ -136,6 +127,16 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const nameLineRef = useRef<FormikProps<INameAndDescriptionEntry>>(null);
 
+  useEffect(() => {
+    setUnconfiguredRules(
+      validateUnconfiguredRules(
+        linesConstructionData.rules ?? [],
+        rules,
+        optionsAllRules,
+      ),
+    );
+  }, [linesConstructionData.rules]);
+
   const handleOpenModal = () => {
     const compare = compareObjects(initialValues, formValues);
     const compareCompany = compareObjects(
@@ -167,8 +168,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   };
 
   const handleUnconfiguredRules = () => {
-    setIsUpdated(true);
-    if (loadingModify && borrowerData?.settingRequestId)
+    if (!loadingModify && !borrowerData?.settingRequestId)
       navigate("/credit-lines");
   };
 
@@ -285,11 +285,28 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }));
   }, [nameLineRef.current?.values]);
 
+  // const mergeRules = (
+  //   existingRules: IRuleDecision[] = [],
+  //   newRules: IRuleDecision[] = [],
+  // ): IRuleDecision[] => {
+  //   return [...existingRules, ...newRules];
+  // };
+
   const mergeRules = (
     existingRules: IRuleDecision[] = [],
     newRules: IRuleDecision[] = [],
   ): IRuleDecision[] => {
-    return [...existingRules, ...newRules];
+    if (!newRules || newRules.length === 0) {
+      return existingRules;
+    }
+
+    const newRulesMap = new Map(newRules.map((rule) => [rule.ruleName, rule]));
+
+    const filteredExisting = existingRules.filter(
+      (rule) => !newRulesMap.has(rule.ruleName),
+    );
+
+    return [...filteredExisting, ...newRules];
   };
 
   useEffect(() => {
@@ -318,6 +335,29 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     });
   }, [decisionsData]);
 
+  useEffect(() => {
+    setLinesData((prev) => {
+      const existingRules =
+        (prev?.configurationRequestData?.rules as
+          | IRuleDecision[]
+          | undefined) ??
+        (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+        [];
+
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        configurationRequestData: {
+          ...prev?.configurationRequestData,
+          alias: linesConstructionData.alias,
+          abbreviatedName: linesConstructionData.abbreviatedName,
+          descriptionUse: linesConstructionData.descriptionUse,
+          rules: mergeRules(existingRules, clientSupportData),
+        },
+      };
+    });
+  }, [clientSupportData]);
+
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
 
@@ -330,16 +370,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       savePromiseRef.current = null;
     }
   }, [loadingModify]);
-
-  useEffect(() => {
-    setUnconfiguredRules(
-      validateUnconfiguredRules(
-        linesConstructionData.rules ?? [],
-        rules,
-        optionsAllRules as { rule: string; label: string }[],
-      ),
-    );
-  }, [linesConstructionData.rules]);
 
   const handleStep = async (click: boolean): Promise<boolean> => {
     if (!click) {
@@ -355,7 +385,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         currentFormValues.descriptionLine !==
           (initialData.descriptionUse || ""));
 
-    if (hasChanges || decisionsData.length > 0) {
+    if (hasChanges || decisionsData.length > 0 || clientSupportData) {
       setIsUpdated(true);
 
       return new Promise((resolve) => {
@@ -368,14 +398,28 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const handleSave = async (click: boolean): Promise<boolean> => {
     if (!click) {
       setShowSaveModal(false);
+      setIsUpdated(false);
       setShowUnconfiguredModal(false);
       return true;
     }
+    const currentFormValues = nameLineRef.current?.values;
+    const hasChanges =
+      currentFormValues &&
+      (currentFormValues.aliasLine !== (initialData.alias || "") ||
+        currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
+        currentFormValues.descriptionLine !==
+          (initialData.descriptionUse || ""));
 
-    if (unconfiguredRules.length > 0) {
-      setShowUnconfiguredModal(true);
-    } else {
-      setShowSaveModal(true);
+    if (hasChanges || decisionsData.length > 0 || clientSupportData) {
+      setIsUpdated(true);
+    }
+
+    if (!loadingModify) {
+      if (unconfiguredRules.length > 0) {
+        setShowUnconfiguredModal(true);
+      } else {
+        setShowSaveModal(true);
+      }
     }
 
     return new Promise((resolve) => {
@@ -385,9 +429,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { groups } = useGroupOptions();
 
+  const validateDisabled =
+    loadingModify ||
+    (templateKey === "CreditLineByRiskProfile" &&
+      optionsIncluded.items.length === 0);
+
   const nav = useStepNavigation({
     groups: groups as unknown as IDropdownMenuGroup[],
-    isProcessing: loadingModify,
+    disabledButtons: validateDisabled,
     handleStep,
     handleSave,
   });
@@ -494,6 +543,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     unconfiguredRules,
     showUnconfiguredModal,
     showSaveModal,
+    setClientSupportData,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleToggleErrorSaveModal,

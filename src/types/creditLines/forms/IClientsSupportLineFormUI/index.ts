@@ -12,6 +12,7 @@ interface IClientsSupportLineFormUI {
   message: string;
   showUnconfiguredModal: boolean;
   unconfiguredRules: string[];
+  loadingData: boolean;
   onUnconfiguredModal: () => void;
   onToggleUnconfiguredRules: () => void;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
