@@ -1,10 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useIAuth } from "@inube/iauth-react";
 import { Home } from "@pages/home";
 
 const Logout = () => {
   const redirect_uri = window.location.origin;
   localStorage.clear();
-  const { logout } = useAuth0();
+  const { logout } = useIAuth();
   logout({ logoutParams: { returnTo: redirect_uri } });
   return <Home />;
 };

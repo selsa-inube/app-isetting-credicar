@@ -21,7 +21,7 @@ export default defineConfig({
       remotes: {
         hostApp: "http://localhost:3000/dist/assets/remoteEntry.js",
       },
-      shared: ["react", "react-dom", "react-router-dom", "@auth0/auth0-react"],
+      shared: ["react", "react-dom", "react-router-dom", "@inube/iauth-react"],
     }),
   ],
   server: {

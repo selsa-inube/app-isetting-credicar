@@ -185,7 +185,10 @@ const withConditionSentences = (
   return d;
 };
 
-const transformDecision = (d: IRuleDecision, language: "es" | "en" | undefined): IRuleDecision => {
+const transformDecision = (
+  d: IRuleDecision,
+  language: "es" | "en" | undefined,
+): IRuleDecision => {
   const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
   const withSentences = withConditionSentences(loc);
   return {
@@ -193,7 +196,9 @@ const transformDecision = (d: IRuleDecision, language: "es" | "en" | undefined):
     value: parseRangeFromString(withSentences.value),
     conditionsThatEstablishesTheDecision: mapByGroup(
       getConditionsByGroup(withSentences),
-      (condition: { value: string | number | IValue | string[] | undefined }) => ({
+      (condition: {
+        value: string | number | IValue | string[] | undefined;
+      }) => ({
         ...normalizeCondition(condition),
         labelName: localizeLabel(
           condition as { labelName?: string; i18n?: Record<string, string> },
@@ -214,7 +219,10 @@ const stableStringify = (v: unknown) => {
       if (!Array.isArray(val)) {
         return Object.keys(val)
           .sort()
-          .reduce((o: any, k) => ((o[k] = (val as any)[k]), o), {});
+          .reduce<Record<string, unknown>>((o, k) => {
+            o[k] = (val as Record<string, unknown>)[k];
+            return o;
+          }, {});
       }
     }
     return val;
@@ -222,7 +230,9 @@ const stableStringify = (v: unknown) => {
 };
 
 const keyOf = (x: IRuleDecision) =>
-  String((x as any).decisionId ?? (x as any).businessRuleId ?? (x as any).id ?? "");
+  String(
+    (x as any).decisionId ?? (x as any).businessRuleId ?? (x as any).id ?? "",
+  );
 
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
@@ -251,9 +261,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   useEffect(() => {
     if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
-      setDecisions((initialDecisions ?? []).map((d) => transformDecision(d, language)));
+      setDecisions(
+        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+      );
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialDecisions, language]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
@@ -369,11 +380,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const decisionWithSentences = transformDecision(newDecision, language);
 
-    setDecisions((prev) =>
-      isEditing
-        ? prev.map((d) => (keyOf(d) === keyOf(selectedDecision!) ? decisionWithSentences : d))
-        : [...prev, decisionWithSentences],
-    );
+    setDecisions((prev) => {
+      if (isEditing && selectedDecision) {
+        return prev.map((d) =>
+          keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+        );
+      }
+      return [...prev, decisionWithSentences];
+    });
 
     closeModal();
   };
@@ -437,10 +451,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       decisions: prepared.map((p) => p.flat),
     }) as unknown as IRuleDecision[];
 
-    const safeSorted = Array.isArray(sorted) ? sorted : prepared.map((p) => p.flat);
+    const safeSorted = Array.isArray(sorted)
+      ? sorted
+      : prepared.map((p) => p.flat);
 
     const regrouped = safeSorted.map((dec, idx) => {
-      const arr = Array.isArray((dec as any).conditionsThatEstablishesTheDecision)
+      const arr = Array.isArray(
+        (dec as any).conditionsThatEstablishesTheDecision,
+      )
         ? ((dec as any).conditionsThatEstablishesTheDecision as any[])
         : [];
       const map = prepared[idx]?.map ?? new Map<string, string>();

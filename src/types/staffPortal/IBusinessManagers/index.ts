@@ -7,6 +7,8 @@ interface IBusinessManagers {
   urlBrand: string;
   urlLogo: string;
   customerId: string;
+  clientId: string;
+  clientSecret: string;
   [key: string]: string;
 }
 
