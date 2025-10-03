@@ -2,8 +2,8 @@ import { AxiosRequestConfig } from "axios";
 import { postWithRetries } from "@services/core/postWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { mapEvaluateRuleByBusinessEntities } from "./mappers";
-import { IRules } from "@src/types/context/creditLinesConstruction/IRules";
 
 const evaluateRuleByBusinessUnit = async (
   businessUnits: string,

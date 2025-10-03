@@ -3,8 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { patchConfirmConstruction } from "@services/requestInProgress/patchConfirmConstruction";
-import { postLineUnderConstruction } from "@services/requestInProgress/postLineUnderConstruction";
+import { patchConfirmConstruction } from "@services/creditLines/patchConfirmConstruction";
+import { postLineUnderConstruction } from "@services/creditLines/postLineUnderConstruction";
 import { EUseCase } from "@enum/useCase";
 import { errorObject } from "@utils/errorObject";
 import { interventionHumanMessage } from "@config/creditLines/generic/interventionHumanMessage";

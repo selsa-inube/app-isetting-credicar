@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { patchModifyConstruction } from "@services/requestInProgress/patchModifyConstruction";
+import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
 import { errorObject } from "@utils/errorObject";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { IUseLinesConstructionData } from "@ptypes/hooks/creditLines/IUseLinesConstructionData";

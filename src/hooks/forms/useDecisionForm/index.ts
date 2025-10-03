@@ -7,7 +7,7 @@ import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 const useDecisionForm = (props: IUseDecisionForm) => {
   const {
     initialValues,
-    revertModalDisplayData,
+    // revertModalDisplayData,
     onButtonClick,
     setCreditLineDecisions,
     showAttentionModal,
@@ -65,27 +65,29 @@ const useDecisionForm = (props: IUseDecisionForm) => {
             condition.value !== "",
         );
 
-    const newDecision = isEditing
-      ? (revertModalDisplayData(
-          dataDecision,
-          selectedDecision,
-        ) as unknown as IRuleDecision)
-      : {
-          ...dataDecision,
-          decisionId: `Decisión ${decisions.length + 1}`,
-          conditionsThatEstablishesTheDecision: updatedConditions,
-        };
+    const newDecision = isEditing && // ? (revertModalDisplayData(
+    //     dataDecision,
+    //     selectedDecision,
+    //   ) as unknown as IRuleDecision)
+    // :
+    {
+      ...dataDecision,
+      decisionId: `Decisión ${decisions.length + 1}`,
+      conditionsThatEstablishesTheDecision: updatedConditions,
+    };
 
-    const updatedDecisions = isEditing
-      ? decisions.map((decision) =>
-          decision.decisionId === selectedDecision.decisionId
-            ? newDecision
-            : decision,
-        )
-      : [...decisions, newDecision];
+    console.log({ newDecision });
 
-    setDecisions(updatedDecisions);
-    setCreditLineDecisions(updatedDecisions);
+    // const updatedDecisions = isEditing
+    //   ? decisions.map((decision) =>
+    //       decision.decisionId === selectedDecision.decisionId
+    //         ? newDecision
+    //         : decision,
+    //     )
+    //   : [...decisions, newDecision];
+
+    // setDecisions([updatedDecisions]);
+    // setCreditLineDecisions(updatedDecisions);
     handleCloseModal();
   };
 

@@ -1,8 +1,8 @@
 import { ISettingRequest } from "@ptypes/ISettingRequest";
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IRequestGeneralPol {
-  rules: IRuleDecision[];
+  rules: IRuleDecisionExtended[];
   removalJustification?: string;
   settingRequest?: ISettingRequest;
 }

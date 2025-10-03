@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { evaluateRuleByBusinessUnit } from "@services/conditionsRules/postEvaluateRuleByBusinessUnit";
 import { IUseEvaluateRuleByUnit } from "@ptypes/hooks/IUseEvaluateRuleByUnit";
-import { IRules } from "@src/types/context/creditLinesConstruction/IRules";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const useEvaluateRuleByBusinessUnit = (props: IUseEvaluateRuleByUnit) => {
   const { businessUnits, rulesData } = props;

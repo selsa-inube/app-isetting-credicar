@@ -1,12 +1,12 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 interface IUseEditGeneralPolicies {
-  contributionsData?: IRuleDecision[];
-  incomeData?: IRuleDecision[];
-  scoreModelsData?: IRuleDecision[];
-  methodsData?: IRuleDecision[];
-  additionalDebtorsData?: IRuleDecision[];
-  realGuaranteesData?: IRuleDecision[];
+  contributionsData?: IRules[];
+  incomeData?: IRules[];
+  scoreModelsData?: IRules[];
+  methodsData?: IRules[];
+  additionalDebtorsData?: IRules[];
+  realGuaranteesData?: IRules[];
 }
 
 export type { IUseEditGeneralPolicies };

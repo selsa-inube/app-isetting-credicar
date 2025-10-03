@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { patchModifyConstruction } from "@services/requestInProgress/patchModifyConstruction";
+import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { errorObject } from "@utils/errorObject";
 import { EComponentAppearance } from "@enum/appearances";
