@@ -1,6 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useMediaQueries } from "@inubekit/inubekit";
 import { useContext, useEffect, useRef, useState } from "react";
+import { useIAuth } from "@inube/iauth-react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
@@ -19,7 +19,7 @@ const useHome = () => {
     setUseCases,
   } = useContext(AuthAndPortalData);
 
-  const { logout } = useAuth0();
+  const { logout } = useIAuth();
 
   const portalId = localStorage.getItem("portalCode");
   const staffPortalId = portalId ? decrypt(portalId) : "";

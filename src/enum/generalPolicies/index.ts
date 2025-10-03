@@ -1,6 +1,7 @@
 enum EGeneralPolicies {
   ENTITY = "GeneralCreditPolicies",
   CONDITION_BUSINESS_UNIT = "BusinessUnit",
+  METHODS = "ecreditlimitcalculationmethod",
   OPTION_NAME = "Políticas generales de crédito",
   LIST_OF_VALUES = "ListOfValues",
   USE_CASE_ADD = "Agregar politicas generales de crediboard",

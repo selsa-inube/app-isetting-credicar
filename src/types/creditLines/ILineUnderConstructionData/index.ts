@@ -8,7 +8,7 @@ interface ILineUnderConstructionData {
   businessManagerName: string;
   businessUnitCode: string;
   businessUnitName: string;
-  configurationRequestData: string;
+  configurationRequestData: Record<string, string | number>;
   configurationRequestsTraceability: IConfigurationRequestsTraceability[];
   description: string;
   entityName: string;

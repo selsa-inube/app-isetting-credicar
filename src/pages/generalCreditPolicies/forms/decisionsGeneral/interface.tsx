@@ -7,7 +7,6 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IDecisionsGeneralFormUI } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralFormUI";
-import { methodsOfCalculation } from "@config/generalCreditPolicies/assisted/methodsOfCalculation";
 import { infoObligationModal } from "@config/generalCreditPolicies/generic/infoObligationModal";
 import { infoReferenceModal } from "@config/generalCreditPolicies/generic/infoReferenceModal";
 import { infoMethodsModal } from "@config/generalCreditPolicies/generic/infoMethodsModal";
@@ -26,6 +25,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     showInformationObligationModal,
     isMobile,
     buttonLabel,
+    methodsOptions,
     onToggle,
     onButtonClick,
     onResetEdit,
@@ -71,7 +71,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                 gap={tokens.spacing.s100}
                 margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
               >
-                {methodsOfCalculation.map((method) => (
+                {methodsOptions.map((method) => (
                   <Checkbox
                     key={method.id}
                     id={method.id}

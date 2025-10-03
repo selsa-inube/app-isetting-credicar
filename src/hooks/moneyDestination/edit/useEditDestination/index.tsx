@@ -83,10 +83,11 @@ const useEditDestination = (props: IUseEditDestination) => {
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
-      typeDestination?: string;
+      moneyDestinationType?: string;
       creditLine?: string;
     } = {
       moneyDestinationId: data.id,
+      moneyDestinationType: data.typeDestination,
       modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
     };
 

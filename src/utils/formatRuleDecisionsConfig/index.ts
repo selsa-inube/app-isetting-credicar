@@ -1,0 +1,44 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getConditionsByGroup } from "@isettingkit/business-rules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { asArray } from "../asArray";
+import { formatDateDecision } from "../date/formatDateDecision";
+import { toValueString } from "../toValueString";
+
+const formatRuleDecisionsConfig = (rule: IRuleDecisionExtended[]) =>
+  rule.map((decision) => {
+    const decisionsByRule: Partial<IRuleDecisionExtended> = {
+      effectiveFrom:
+        decision.effectiveFrom &&
+        formatDateDecision(String(decision.effectiveFrom)),
+      value: decision.value,
+    };
+
+    if (decision.validUntil) {
+      decisionsByRule.validUntil = formatDateDecision(
+        String(decision.validUntil),
+      );
+    }
+
+    const groups = (getConditionsByGroup(decision) || {}) as Record<
+      string,
+      unknown
+    >;
+
+    decisionsByRule.conditionGroups = Object.entries(groups).map(
+      ([groupKey, rawList]) => {
+        const items = asArray(rawList).filter((item) => !(item as any)?.hidden);
+        return {
+          ConditionGroupId: groupKey,
+          conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
+            conditionName: condition?.conditionName ?? "",
+            value: toValueString(condition?.value),
+          })),
+        };
+      },
+    );
+
+    return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
+  });
+
+export { formatRuleDecisionsConfig };

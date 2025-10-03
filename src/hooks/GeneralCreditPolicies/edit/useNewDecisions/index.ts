@@ -54,39 +54,32 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const valueTransactionOperation = (value: boolean) =>
     value ? ETransactionOperation.INSERT : ETransactionOperation.DELETE;
 
-  const calculationValues = initialGeneralData.calculation !==
-    formValues.calculation && {
-    transactionOperation: valueTransactionOperation(formValues.calculation),
-    value: ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY,
-  };
+  const calculationValues =
+    initialGeneralData.PaymentCapacityBasedCreditLimit !==
+      formValues.PaymentCapacityBasedCreditLimit && {
+      transactionOperation: valueTransactionOperation(
+        formValues.PaymentCapacityBasedCreditLimit,
+      ),
+      value: ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY,
+    };
 
-  const factorValues = initialGeneralData.factor !== formValues.factor && {
-    transactionOperation: valueTransactionOperation(formValues.factor ?? false),
+  const factorValues = initialGeneralData.RiskAnalysisBasedCreditLimit !==
+    formValues.RiskAnalysisBasedCreditLimit && {
+    transactionOperation: valueTransactionOperation(
+      formValues.RiskAnalysisBasedCreditLimit ?? false,
+    ),
     value: ERulesOfDecisions.RISK_FACTOR,
   };
 
-  const reciprocityValues = initialGeneralData.reciprocity !==
-    formValues.reciprocity && {
+  const reciprocityValues = initialGeneralData.ReciprocityBasedCreditLimit !==
+    formValues.ReciprocityBasedCreditLimit && {
     transactionOperation: valueTransactionOperation(
-      formValues.reciprocity ?? false,
+      formValues.ReciprocityBasedCreditLimit ?? false,
     ),
     value: ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS,
   };
 
-  const customValues = initialGeneralData.customValue !==
-    formValues.customValue && {
-    transactionOperation: valueTransactionOperation(
-      formValues.customValue ?? false,
-    ),
-    value: ERulesOfDecisions.CUSTOM_VALUE,
-  };
-
-  const methodsArray = [
-    calculationValues,
-    factorValues,
-    reciprocityValues,
-    customValues,
-  ];
+  const methodsArray = [calculationValues, factorValues, reciprocityValues];
 
   const additionalDebtors = decisionWithoutConditions(
     ENameRules.ADDITIONAL_DEBTORS,
