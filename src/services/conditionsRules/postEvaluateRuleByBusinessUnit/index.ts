@@ -2,14 +2,13 @@ import { AxiosRequestConfig } from "axios";
 import { postWithRetries } from "@services/core/postWithRetries";
 import { credicarAxiosInstance } from "@api/isettingCredicar";
 import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
-import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { mapEvaluateRuleByBusinessEntities } from "./mappers";
+import { IRules } from "@src/types/context/creditLinesConstruction/IRules";
 
 const evaluateRuleByBusinessUnit = async (
   businessUnits: string,
   rulesData: IEvaluateRuleRequest,
-  language: string,
-): Promise<IRuleDecisionExtended[] | undefined> => {
+): Promise<IRules[] | undefined> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "EvaluteRuleByBusinessUnit",
@@ -17,8 +16,8 @@ const evaluateRuleByBusinessUnit = async (
     },
   };
 
-  const data: IRuleDecisionExtended[] | undefined = await postWithRetries<
-    IRuleDecisionExtended[] | undefined
+  const data: IRules[] | undefined = await postWithRetries<
+    IRules[] | undefined
   >(
     `/crediboard-business-unit-rules`,
     config,
@@ -26,7 +25,7 @@ const evaluateRuleByBusinessUnit = async (
     credicarAxiosInstance,
   );
 
-  return mapEvaluateRuleByBusinessEntities(data, language);
+  return mapEvaluateRuleByBusinessEntities(data);
 };
 
 export { evaluateRuleByBusinessUnit };

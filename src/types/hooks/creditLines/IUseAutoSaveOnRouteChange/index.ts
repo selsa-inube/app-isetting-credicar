@@ -4,6 +4,7 @@ interface IUseAutoSaveOnRouteChange {
   linesData: any;
   userAccount: string;
   debounceMs?: number;
+  setIsUpdated?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type { IUseAutoSaveOnRouteChange };

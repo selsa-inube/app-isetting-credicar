@@ -1,8 +1,9 @@
 import { IConditionsTheDecision } from "../IConditionsTheDecision";
 
 interface IConditionGroups {
-  ConditionGroupId?: string;
   conditionsThatEstablishesTheDecision: IConditionsTheDecision[];
+  ConditionGroupId?: string;
+  transactionOperation?: string;
 }
 
 export type { IConditionGroups };

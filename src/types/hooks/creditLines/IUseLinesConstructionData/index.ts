@@ -6,6 +6,7 @@ interface IUseLinesConstructionData {
   linesData?: IModifyConstructionRequest;
   debounceMs?: number;
   saveOn?: string | number;
+  setIsUpdated?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type { IUseLinesConstructionData };

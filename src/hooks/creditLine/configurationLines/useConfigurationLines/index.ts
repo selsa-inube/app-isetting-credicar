@@ -63,6 +63,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [showUnconfiguredModal, setShowUnconfiguredModal] =
     useState<boolean>(false);
   const [clientSupportData, setClientSupportData] = useState<IRules[]>();
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleCustomerProfiles,
     items: [],
@@ -119,6 +120,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     linesData: linesData,
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
+    setIsUpdated,
   });
 
   const handleToggleInfoModal = () => {
@@ -168,6 +170,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   };
 
   const handleUnconfiguredRules = () => {
+    onSubmit();
     if (!loadingModify) {
       navigate("/credit-lines");
     }
@@ -365,21 +368,35 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
   }, [loadingModify]);
 
-  const handleStep = async (click: boolean): Promise<boolean> => {
-    if (!click) {
-      setIsUpdated(false);
-      return true;
-    }
-
+  useEffect(() => {
     const currentFormValues = nameLineRef.current?.values;
-    const hasChanges =
+    const hasFormChanges =
       currentFormValues &&
       (currentFormValues.aliasLine !== (initialData.alias || "") ||
         currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
         currentFormValues.descriptionLine !==
           (initialData.descriptionUse || ""));
 
-    if (hasChanges || decisionsData.length > 0 || clientSupportData) {
+    setHasUnsavedChanges(
+      Boolean(hasFormChanges || decisionsData.length > 0 || clientSupportData),
+    );
+  }, [nameLineRef.current?.values, decisionsData, clientSupportData]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (!isUpdated && hasUnsavedChanges) {
+        setIsUpdated(true);
+      }
+    }, 5000);
+  }, [hasUnsavedChanges, isUpdated]);
+
+  const handleStep = async (click: boolean): Promise<boolean> => {
+    if (!click) {
+      setIsUpdated(false);
+      return true;
+    }
+
+    if (hasUnsavedChanges) {
       setIsUpdated(true);
 
       return new Promise((resolve) => {
@@ -396,15 +413,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setShowUnconfiguredModal(false);
       return true;
     }
-    const currentFormValues = nameLineRef.current?.values;
-    const hasChanges =
-      currentFormValues &&
-      (currentFormValues.aliasLine !== (initialData.alias || "") ||
-        currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
-        currentFormValues.descriptionLine !==
-          (initialData.descriptionUse || ""));
 
-    if (hasChanges || decisionsData.length > 0 || clientSupportData) {
+    if (hasUnsavedChanges) {
       setIsUpdated(true);
     }
 

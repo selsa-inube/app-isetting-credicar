@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { IRuleDecision } from "@isettingkit/input";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
@@ -9,6 +10,7 @@ import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
+import { normalizeOptions } from "@utils/destination/normalizeOptions";
 import { addDestinationStepsConfig } from "@config/moneyDestination/addDestination/assisted";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { addMoneyLabels } from "@config/payrollAgreement/payrollAgreementTab/assisted/addMoneyLabels";
@@ -143,7 +145,39 @@ const useAddDestination = () => {
 
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
+  const creditLineDecisions = formValues.creditLine.split(",").map((item) => {
+    return normalizeOptions(optionsCreditLine, item.trim());
+  });
+
   const handleSubmitClick = () => {
+    const transformDecision = creditLineDecisions.map((rule) => ({
+      effectiveFrom: formatDate(new Date()),
+      value: rule?.value,
+    }));
+    const rules = [
+      {
+        ruleName: EMoneyDestination.LINE_OF_CREDIT,
+        decisionsByRule: transformDecision,
+      },
+    ];
+
+    const configurationRequestData: {
+      abbreviatedName: string;
+      descriptionUse: string;
+      iconReference: string;
+      moneyDestinationType: string;
+      rules?: IRuleDecision[];
+    } = {
+      abbreviatedName: valueName,
+      descriptionUse: formValues.description,
+      iconReference: formValues.icon ?? "",
+      moneyDestinationType: formValues.typeDestination,
+    };
+
+    if (formValues.creditLine.length > 0) {
+      configurationRequestData.rules = rules;
+    }
+
     setSaveData({
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
@@ -152,13 +186,7 @@ const useAddDestination = () => {
       entityName: "MoneyDestination",
       requestDate: formatDate(new Date()),
       useCaseName: EMoneyDestination.USE_CASE_ADD,
-      configurationRequestData: {
-        abbreviatedName: valueName,
-        descriptionUse: formValues.description,
-        iconReference: formValues.icon ?? "",
-        moneyDestinationType: formValues.typeDestination,
-        creditLine: formValues.creditLine ?? "",
-      },
+      configurationRequestData: configurationRequestData,
     });
     setShowRequestProcessModal(!showRequestProcessModal);
   };

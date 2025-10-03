@@ -1,14 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+import { IRuleDecision } from "@isettingkit/input";
 import { FormikProps } from "formik";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { useCreditLine } from "@hooks/moneyDestination/useCreditLine";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBusinessUnit";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
+import { extractDecisionValues } from "@utils/extractDecisionValues";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
+import { arraysEqual } from "@utils/destination/arraysEqual";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
+import { normalizeOptions } from "@utils/destination/normalizeOptions";
+import { findDecision } from "@utils/destination/findDecision";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/moneyDestination/editDestination/editLabels";
@@ -20,10 +28,11 @@ import { II18n } from "@ptypes/i18n";
 
 const useEditDestination = (props: IUseEditDestination) => {
   const { data, appData } = props;
+
   const initialGeneralInfData = {
     nameDestination: data.nameDestination ?? "",
     typeDestination: data.typeDestination ?? "",
-    creditLine: data.creditLine ?? "",
+    creditLine: "",
     description: data.description ?? "",
     icon: data.icon ?? "",
     id: data.id ?? "",
@@ -41,6 +50,44 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [showModal, setShowModal] = useState(false);
+  const [newDecisions, setNewDecisions] = useState<IRuleDecision[]>();
+
+  const { optionsCreditLine, creditLineData } = useCreditLine();
+
+  const getRule = (ruleName: string) =>
+    useEvaluateRuleByBusinessUnit({
+      businessUnits: appData.businessUnit.publicCode,
+      rulesData: {
+        ruleName,
+      },
+      language: appData.language,
+    });
+
+  const { evaluateRuleData, loading } = getRule(
+    EMoneyDestination.LINE_OF_CREDIT,
+  );
+
+  useEffect(() => {
+    if (!loading && evaluateRuleData) {
+      const { decisionValues } = extractDecisionValues(evaluateRuleData);
+
+      const dataOptions = optionsCreditLine.filter((option) =>
+        decisionValues.includes(option.value)
+          ? { ...option, checked: true }
+          : { ...option, checked: false },
+      );
+
+      setCreditLineValues(dataOptions);
+      setFormValues((prev) => ({
+        ...prev,
+        creditLine: dataOptions
+          .map((item) => {
+            return item.label;
+          })
+          .join(","),
+      }));
+    }
+  }, [loading]);
 
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
@@ -50,11 +97,93 @@ const useEditDestination = (props: IUseEditDestination) => {
 
   const conditionRule = "MoneyDestination";
 
-  const { optionsCreditLine, creditLineData } = useCreditLine();
-
   useEffect(() => {
     setCreditLineValues(optionsCreditLine);
   }, [creditLineData]);
+
+  const creditLineDecisions = formValues.creditLine.split(",").map((item) => {
+    return normalizeOptions(optionsCreditLine, item.trim());
+  });
+
+  const tranformEvaluteDecision = evaluateRuleData
+    ? evaluateRuleData?.map((decision) => {
+        const dataEvalute = {
+          effectiveFrom: decision.decisionsByRule[0].effectiveFrom,
+          value: decision?.decisionsByRule[0].value,
+        };
+        return {
+          ruleName: decision.ruleName,
+          decisionsByRule: [dataEvalute],
+        };
+      })
+    : [];
+
+  const transformDecision = creditLineDecisions.map((rule) => ({
+    effectiveFrom: formatDate(new Date()),
+    value: rule?.value,
+  }));
+
+  const rules = [
+    {
+      ruleName: EMoneyDestination.LINE_OF_CREDIT,
+      decisionsByRule: transformDecision,
+    },
+  ];
+
+  const newInsertValues = () => {
+    if (!arraysEqual(rules, tranformEvaluteDecision)) {
+      return tranformEvaluteDecision
+        .filter((decision) => !findDecision(rules, decision))
+        .map((decision) => {
+          const decisionsByRule = decision.decisionsByRule?.map((condition) => {
+            return {
+              effectiveFrom: formatDateDecision(
+                condition.effectiveFrom as string,
+              ),
+              value: condition.value,
+              transactionOperation: ETransactionOperation.INSERT,
+            };
+          });
+
+          return {
+            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
+            ruleName: decision.ruleName,
+            decisionsByRule: [decisionsByRule],
+          };
+        });
+    }
+  };
+
+  const newDeletedValues = () => {
+    if (!arraysEqual(rules, tranformEvaluteDecision)) {
+      return rules
+        .filter((decision) => !findDecision(rules, decision))
+        .map((decision) => {
+          const decisionsByRule = decision.decisionsByRule?.map((condition) => {
+            return {
+              effectiveFrom: formatDateDecision(
+                condition.effectiveFrom as string,
+              ),
+              value: condition.value,
+              transactionOperation: ETransactionOperation.DELETE,
+            };
+          });
+
+          return {
+            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
+            ruleName: decision.ruleName,
+            decisionsByRule: [decisionsByRule],
+          };
+        });
+    }
+  };
+
+  useEffect(() => {
+    const insertValues = newInsertValues();
+    const deleteValues = newDeletedValues();
+
+    setNewDecisions([...(insertValues ?? []), ...(deleteValues ?? [])]);
+  }, [creditLineDecisions]);
 
   const onSubmit = () => {
     const { enumDestination } = useEnumsMoneyDestination({
@@ -85,6 +214,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       iconReference?: string;
       moneyDestinationType?: string;
       creditLine?: string;
+      rules?: IRuleDecision[];
     } = {
       moneyDestinationId: data.id,
       moneyDestinationType: data.typeDestination,
@@ -115,6 +245,10 @@ const useEditDestination = (props: IUseEditDestination) => {
           configurationRequestData.descriptionUse = formValues.description;
         }
       }
+
+    if (newDecisions && newDecisions.length > 0) {
+      configurationRequestData.rules = newDecisions;
+    }
 
     setSaveData({
       applicationName: "ifac",
