@@ -6,7 +6,7 @@ import { decrypt } from "@utils/crypto/decrypt";
 
 const StoredPortal = localStorage.getItem("portalCode");
 
-export function AuthWrapper({ children }: { children: React.ReactNode }) {
+function AuthWrapper({ children }: { children: React.ReactNode }) {
   const { portalData } = usePortalData(decrypt(String(StoredPortal)));
   const { businessManagersData } = useBusinessManagers(portalData);
 
@@ -22,3 +22,5 @@ export function AuthWrapper({ children }: { children: React.ReactNode }) {
     </IAuthProvider>
   );
 }
+
+export { AuthWrapper };
