@@ -5,6 +5,7 @@ import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { errorModal } from "@config/errorModal";
 import { goBackModal } from "@config/goBackModal";
+import { infoErrorModal } from "@config/creditLines/generic/infoErrorModal";
 import { operationTypes } from "@config/useCase";
 import { sendSaveModal } from "@config/creditLines/generic/sendSaveModal";
 import { IUseModalConfiguration } from "@ptypes/hooks/creditLines/IUseModalConfiguration";
@@ -20,6 +21,8 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     hasErrorRequest,
     networkError,
     errorFetchRequest,
+    showInfoErrorModal,
+    handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
     handleCloseModal,
@@ -112,6 +115,18 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         ),
         onCloseModal: handleToggleErrorSaveModal,
         onClick: handleToggleErrorSaveModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (showInfoErrorModal) {
+      return {
+        ...infoErrorModal,
+        onCloseModal: handleClickInfo,
+        onClick: handleClickInfo,
         withCancelButton: false,
         withIcon: true,
         appearance: EComponentAppearance.WARNING,

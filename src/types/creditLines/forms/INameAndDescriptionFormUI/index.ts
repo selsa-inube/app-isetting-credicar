@@ -3,6 +3,7 @@ import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { INavigation } from "@ptypes/context/INavigation";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { INameAndDescriptionEntry } from "../INameAndDescriptionEntry";
 
 interface INameAndDescriptionFormUI {
@@ -20,7 +21,10 @@ interface INameAndDescriptionFormUI {
   showRequestProcessModal: boolean;
   showRequestStatusModal: boolean;
   showUnconfiguredModal: boolean;
-  unconfiguredRules: string[];
+  unconfiguredRules: IPostCheckLineRule[];
+  language: string;
+  showInfoErrorModal: boolean;
+  onClickInfo: () => void;
   onUnconfiguredModal: () => void;
   onToggleUnconfiguredRules: () => void;
   onCloseRequestStatus: () => void;

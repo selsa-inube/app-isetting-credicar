@@ -39,6 +39,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     showRequestStatusModal,
     showUnconfiguredModal,
     unconfiguredRules,
+    showInfoErrorModal,
+    handleClickInfo,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -125,6 +127,10 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             onClick={handleUnconfiguredRules}
             onCloseModal={handleToggleUnconfiguredRulesModal}
             loading={loadingModify}
+            language={language}
+            showModal={showInfoErrorModal}
+            modalData={modalData}
+            onClickInfo={handleClickInfo}
           />
         )}
 

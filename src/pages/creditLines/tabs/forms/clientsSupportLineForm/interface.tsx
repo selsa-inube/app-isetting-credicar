@@ -27,6 +27,10 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     showUnconfiguredModal,
     unconfiguredRules,
     loadingData,
+    language,
+    showInfoErrorModal,
+    modalData,
+    onClickInfo,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onToggleInfoModal,
@@ -107,6 +111,10 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             onClick={onUnconfiguredModal}
             onCloseModal={onToggleUnconfiguredRules}
             loading={loading}
+            language={language}
+            showModal={showInfoErrorModal}
+            modalData={modalData}
+            onClickInfo={onClickInfo}
           />
         )}
       </Stack>

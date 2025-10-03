@@ -12,15 +12,14 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
+import { useCheckLineRuleConsistency } from "@hooks/creditLine/useCheckLineRuleConsistency";
 import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
-import { validateUnconfiguredRules } from "@utils/validateUnconfiguredRules";
 import { transformationDecisions } from "@utils/transformationDecisions";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
-import { rules } from "@config/creditLines/configuration/rules";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -29,6 +28,7 @@ import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstruc
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 import { ILanguage } from "@ptypes/i18n";
+import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useGroupOptions } from "../useGroupOptions";
 
@@ -57,13 +57,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { setLinesConstructionData, setLoadingInitial, linesConstructionData } =
     useContext(CreditLinesConstruction);
   const [data, setData] = useState<IModifyConstructionResponse>();
-  const [unconfiguredRules, setUnconfiguredRules] = useState<string[]>([]);
-  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
+  const [unconfiguredRules, setUnconfiguredRules] = useState<
+    IPostCheckLineRule[]
+  >([]);
+  const [isCurrentFormValid, setIsCurrentFormValid] = useState<boolean>(false);
+  const [showRequestProcessModal, setShowRequestProcessModal] =
+    useState<boolean>(false);
   const [showUnconfiguredModal, setShowUnconfiguredModal] =
     useState<boolean>(false);
   const [clientSupportData, setClientSupportData] = useState<IRules[]>();
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
+  const [showInfoErrorModal, setShowInfoErrorModal] = useState<boolean>(false);
   const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleCustomerProfiles,
     items: [],
@@ -86,11 +90,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setDecisionData([]);
   }, [location.pathname, templateKey]);
 
-  const {
-    linesConstructionData: initialData,
-    loadingInitial: loading,
-    optionsAllRules,
-  } = useContext(CreditLinesConstruction);
+  const { linesConstructionData: initialData, loadingInitial: loading } =
+    useContext(CreditLinesConstruction);
 
   useEffect(() => {
     if (
@@ -129,14 +130,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const nameLineRef = useRef<FormikProps<INameAndDescriptionEntry>>(null);
 
+  console.log({ data, linesConstructionData });
+
+  const { checkLineRule, loading: loadingCheck } = useCheckLineRuleConsistency({
+    data: { rules: linesConstructionData.rules || [] },
+  });
+
   useEffect(() => {
-    setUnconfiguredRules(
-      validateUnconfiguredRules(
-        linesConstructionData.rules ?? [],
-        rules,
-        optionsAllRules,
-      ),
-    );
+    setUnconfiguredRules(checkLineRule);
   }, [linesConstructionData.rules]);
 
   const handleOpenModal = () => {
@@ -182,6 +183,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const handleSaveModal = () => {
     onSubmit();
+  };
+
+  const handleClickInfo = () => {
+    setShowInfoErrorModal(!showInfoErrorModal);
   };
 
   const onSubmit = () => {
@@ -418,7 +423,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setIsUpdated(true);
     }
 
-    if (!loadingModify) {
+    if (!loadingModify && !loadingCheck) {
       if (unconfiguredRules.length > 0) {
         setShowUnconfiguredModal(true);
       } else {
@@ -513,6 +518,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     hasErrorRequest: hasErrorSave,
     networkError,
     errorFetchRequest,
+    showInfoErrorModal,
+    handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
     handleCloseModal,
@@ -554,6 +561,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     unconfiguredRules,
     showUnconfiguredModal,
     showSaveModal,
+    handleClickInfo,
+    showInfoErrorModal,
     setClientSupportData,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,

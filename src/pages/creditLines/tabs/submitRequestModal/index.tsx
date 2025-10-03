@@ -16,6 +16,10 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
     unconfiguredRules,
     description,
     loading,
+    language,
+    showModal,
+    modalData,
+    onClickInfo,
     onClick,
     onCloseModal,
   } = props;
@@ -81,13 +85,21 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
                 key={index}
                 icon={<MdOutlineInfo />}
                 appearanceIcon={EComponentAppearance.DANGER}
-                description={rule}
+                description={
+                  rule.ruleName[language as keyof typeof rule.ruleName]
+                }
+                descriptionModal={
+                  rule.errorMessage[language as keyof typeof rule.errorMessage]
+                }
                 boxPadding={tokens.spacing.s100}
                 boxColor={EComponentAppearance.DANGER}
                 sizeIcon="16px"
                 sizeDescription="medium"
                 ellipsisText
                 heigthBox="auto"
+                showModal={showModal}
+                modalData={modalData}
+                onClickInfo={onClickInfo}
               />
             ))}
           </BoxContainer>

@@ -31,6 +31,9 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     showRequestStatusModal,
     showUnconfiguredModal,
     unconfiguredRules,
+    language,
+    showInfoErrorModal,
+    onClickInfo,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onCloseRequestStatus,
@@ -150,6 +153,10 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             onClick={onUnconfiguredModal}
             onCloseModal={onToggleUnconfiguredRules}
             loading={loading}
+            language={language}
+            showModal={showInfoErrorModal}
+            modalData={modalData}
+            onClickInfo={onClickInfo}
           />
         )}
       </Stack>

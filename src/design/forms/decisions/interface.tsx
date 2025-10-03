@@ -1,5 +1,5 @@
 import { MdOutlineWarningAmber } from "react-icons/md";
-import { BusinessRules } from "@isettingkit/business-rules";
+import { BusinessRulesWithGroup } from "@isettingkit/business-rules";
 import { Stack, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
@@ -53,7 +53,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
       >
         <StyledFormContent>
           <StyledContainer $isMobile={isMobile}>
-            <BusinessRules
+            <BusinessRulesWithGroup
               decisions={decisions}
               textValues={textValuesBusinessRules}
               loading={loading}
