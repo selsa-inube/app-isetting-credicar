@@ -1,18 +1,12 @@
-import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguration";
-import { ECreditLines } from "@enum/creditLines";
+import { useContext } from "react";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { toLinksArray } from "@utils/toLinksArray";
 import { filterNavConfiguration } from "@utils/filterNavConfiguration";
 import { INavigationRule } from "@ptypes/creditLines/INavigationRule";
 
 const useGroupOptions = () => {
-  const ruleCatalog = ECreditLines.RULE_CATALOG;
-  const catalogAction = ECreditLines.CATALOG_ACTION;
-
-  const { optionsAllRules } = useEnumAllRulesConfiguration({
-    ruleCatalog,
-    catalogAction,
-  });
+  const { optionsAllRules } = useContext(CreditLinesConstruction);
 
   const amortizationOptions = filterNavConfiguration(
     options.AmortizationCollectionDebt.links,

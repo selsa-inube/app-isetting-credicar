@@ -1,6 +1,7 @@
-import { IRuleDecision } from "@isettingkit/input";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { arraysEqual } from "../destination/arraysEqual";
 import { findDecision } from "../destination/findDecision";
 import { formatDateDecision } from "../date/formatDateDecision";
@@ -8,44 +9,51 @@ import { translationToEnum } from "../translationToEnum";
 
 const getNewInsertDecisions = (
   user: string,
-  prevRef: React.MutableRefObject<IRuleDecision[]>,
-  currentPortfolio: IRuleDecision[],
+  prevRef: React.MutableRefObject<IRules[]>,
+  currentPortfolio: IRules[],
   dateFrom?: string,
 ) => {
   if (!arraysEqual(prevRef.current, currentPortfolio)) {
     return currentPortfolio
       .filter((decision) => !findDecision(prevRef.current, decision))
       .map((decision) => {
-        const decisionsByRule: IRuleDecision = {
-          effectiveFrom: dateFrom
-            ? formatDateDecision(dateFrom)
-            : formatDateDecision(decision.effectiveFrom as string),
-          value: decision.value,
-          transactionOperation: ETransactionOperation.INSERT,
-        };
+        const decisionsByRule = decision.decisionsByRule?.map((condition) => {
+          const conditionGroups = condition.conditionGroups
+            ? condition.conditionGroups.map((item) => ({
+                conditionGroupId: item.ConditionGroupId,
+                transactionOperation: ETransactionOperation.INSERT,
+                conditionsThatEstablishesTheDecision:
+                  item.conditionsThatEstablishesTheDecision?.filter(
+                    (condition) => {
+                      if (condition.value !== undefined) {
+                        return {
+                          conditionName:
+                            translationToEnum[condition.conditionName] ??
+                            condition.conditionName,
+                          value: condition.value,
+                          transactionOperation: ETransactionOperation.INSERT,
+                        };
+                      }
+                    },
+                  ) as IConditionsTheDecision[],
+              }))
+            : undefined;
 
-        if (decision.conditionsThatEstablishesTheDecision) {
-          decisionsByRule.conditionsThatEstablishesTheDecision =
-            decision.conditionsThatEstablishesTheDecision?.filter(
-              (condition) => {
-                if (condition.value !== undefined) {
-                  return {
-                    conditionName:
-                      translationToEnum[condition.conditionName] ??
-                      condition.conditionName,
-                    descriptionUse: condition.labelName,
-                    value: condition.value,
-                  };
-                }
-              },
-            );
-        }
+          const validUntil = condition.validUntil
+            ? formatDateDecision(condition.validUntil as string)
+            : undefined;
 
-        if (decision.validUntil) {
-          decisionsByRule.validUntil = formatDateDecision(
-            decision.validUntil as string,
-          );
-        }
+          return {
+            effectiveFrom: dateFrom
+              ? formatDateDecision(dateFrom)
+              : formatDateDecision(condition.effectiveFrom as string),
+            validUntil: validUntil,
+            value: condition.value,
+            transactionOperation: ETransactionOperation.INSERT,
+            decisionId: condition.decisionId,
+            conditionGroups: conditionGroups,
+          };
+        });
 
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,

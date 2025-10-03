@@ -17,7 +17,7 @@ const RenderMethodTags = (props: IRenderMethodTags) => {
 
   const { appData } = useContext(AuthAndPortalData);
 
-  const { enumData: enumMethods } = useEnumeratorsCrediboard({
+  const { enumData: enumMethods, loading } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EGeneralPolicies.METHODS,
   });
@@ -53,25 +53,26 @@ const RenderMethodTags = (props: IRenderMethodTags) => {
   ];
 
   const activeMethods = methods.filter((method) => method.condition);
+  if (!loading) {
+    if (activeMethods.length === 0) {
+      return (
+        <Tag
+          appearance={EComponentAppearance.DANGER}
+          label={verificationLabels.noDefined}
+          displayIcon={false}
+        />
+      );
+    }
 
-  if (activeMethods.length === 0) {
-    return (
+    return activeMethods.map((method) => (
       <Tag
-        appearance={EComponentAppearance.DANGER}
-        label={verificationLabels.noDefined}
+        key={method.label}
+        appearance={EComponentAppearance.GRAY}
+        label={method.label ?? ""}
         displayIcon={false}
       />
-    );
+    ));
   }
-
-  return activeMethods.map((method) => (
-    <Tag
-      key={method.label}
-      appearance={EComponentAppearance.GRAY}
-      label={method.label ?? ""}
-      displayIcon={false}
-    />
-  ));
 };
 
 export { RenderMethodTags };

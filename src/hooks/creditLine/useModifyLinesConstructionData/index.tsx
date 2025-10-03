@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { patchModifyConstruction } from "@services/requestInProgress/patchModifyConstruction";
+import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
 import { errorObject } from "@utils/errorObject";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { IUseLinesConstructionData } from "@ptypes/hooks/creditLines/IUseLinesConstructionData";
 import { IErrors } from "@ptypes/IErrors";
 
 const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
-  const { userAccount, linesData, withNeWData } = props;
+  const { userAccount, linesData, withNeWData, setIsUpdated } = props;
   const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
     {} as IModifyConstructionResponse,
   );
@@ -31,6 +31,9 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
           setErrorData(errorObject(error));
         } finally {
           setLoading(false);
+          if (setIsUpdated) {
+            setIsUpdated(false);
+          }
         }
       } else {
         setLoading(false);

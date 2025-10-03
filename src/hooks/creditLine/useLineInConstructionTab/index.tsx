@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { EComponentAppearance } from "@enum/appearances";
@@ -21,6 +22,19 @@ const useLineInConstructionTab = () => {
     hasError,
     errorData,
   } = useLineInconstructionData();
+
+  const { setLinesConstructionData } = useContext(CreditLinesConstruction);
+
+  useEffect(() => {
+    setLinesConstructionData({
+      settingRequestId: "",
+      abbreviatedName: "",
+      alias: "",
+      descriptionUse: "",
+      lineOfCreditId: "",
+      rules: [],
+    });
+  }, []);
 
   useEffect(() => {
     if (entryDeleted) {

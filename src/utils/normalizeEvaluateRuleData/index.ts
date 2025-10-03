@@ -1,19 +1,25 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const normalizeEvaluateRuleData = (
-  data: IRuleDecision[] | undefined,
+  data: IRules[] | undefined,
   conditionRule?: string,
-): IRuleDecision[] | undefined =>
+): IRules[] | undefined =>
   data?.map((item) => ({
     ...item,
-    conditionsThatEstablishesTheDecision:
-      item.conditionsThatEstablishesTheDecision?.map((condition) => ({
+    decisionsByRule: item.decisionsByRule.map((decision) => ({
+      ...decision,
+      conditionGroups: decision.conditionGroups?.map((condition) => ({
         ...condition,
-        hidden:
-          conditionRule && condition.conditionName === conditionRule
-            ? true
-            : false,
+        conditionsThatEstablishesTheDecision:
+          condition.conditionsThatEstablishesTheDecision?.map((condition) => ({
+            ...condition,
+            hidden:
+              conditionRule && condition.conditionName === conditionRule
+                ? true
+                : false,
+          })),
       })),
+    })),
   }));
 
 export { normalizeEvaluateRuleData };

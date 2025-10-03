@@ -1,29 +1,51 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IRuleDecision } from "@isettingkit/input";
+import { ensureArrayGroupsDeep } from "../ensureArrayGroupsDeep";
+import { nameToGroupMapOf } from "../nameToGroupMapOf";
+import { toArrayConditionsDecision } from "../toArrayConditionsDecision";
+import { sortDisplayDataSampleSwitchPlaces } from "@isettingkit/business-rules";
+import { isIRuleDecision } from "../isIRuleDecision";
 
-const sortDisplayDataSampleSwitchPlaces = (decision: IRuleDecision) => {
-  const data: IRuleDecision = { ...decision };
-  const conditionToDisplay = data.conditionsThatEstablishesTheDecision?.find(
-    (condition) => condition.switchPlaces,
-  );
+const safeSortDisplayDataSampleSwitchPlaces = (input: {
+  decisionTemplate?: IRuleDecision | null;
+  nameToGroup?: Map<string, string>;
+}): IRuleDecision => {
+  try {
+    const original = ensureArrayGroupsDeep(
+      input.decisionTemplate ?? ({} as IRuleDecision),
+    );
+    const nameToGroup = input.nameToGroup ?? nameToGroupMapOf(original);
 
-  if (conditionToDisplay) {
+    const flatTpl = toArrayConditionsDecision(original);
+    const sorted = sortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: flatTpl,
+    }) as any;
+
+    const arr = Array.isArray(sorted?.conditionsThatEstablishesTheDecision)
+      ? (sorted.conditionsThatEstablishesTheDecision as any[])
+      : (((flatTpl as any).conditionsThatEstablishesTheDecision as
+          | any[]
+          | undefined) ?? []);
+
+    const regrouped: Record<string, any[]> = {};
+    for (const c of arr) {
+      const g = nameToGroup.get(c?.conditionName) ?? "group-primary";
+      (regrouped[g] ||= []).push(c);
+    }
+
     return {
-      ...data,
-      ruleName: conditionToDisplay.conditionName,
-      labelName: conditionToDisplay.labelName,
-      decisionDataType: conditionToDisplay.conditionDataType,
-      value: conditionToDisplay.value,
-      howToSetTheDecision: conditionToDisplay.howToSetTheCondition,
-      conditionsThatEstablishesTheDecision:
-        data.conditionsThatEstablishesTheDecision!.map((condition) =>
-          condition.conditionName === conditionToDisplay.conditionName
-            ? { ...condition, hidden: true }
-            : condition,
-        ),
-    };
+      ...(isIRuleDecision(sorted) ? sorted : original),
+      conditionsThatEstablishesTheDecision: regrouped as any,
+    } as IRuleDecision;
+  } catch (err) {
+    console.warn(
+      "sortDisplayDataSampleSwitchPlaces failed, returning input:",
+      err,
+    );
+    return ensureArrayGroupsDeep(
+      input.decisionTemplate ?? ({} as IRuleDecision),
+    );
   }
-
-  return data;
 };
 
-export { sortDisplayDataSampleSwitchPlaces };
+export { safeSortDisplayDataSampleSwitchPlaces };

@@ -21,6 +21,7 @@ import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecis
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
@@ -36,14 +37,14 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const initialMethodsData = () => {
     const hasReciprocity = methodsData?.some((condition) =>
-      reciprocity.includes(condition.value as string),
+      reciprocity.includes(condition.decisionsByRule[0].value as string),
     );
 
     const hasCalculation = methodsData?.some((condition) =>
-      calculation.includes(condition.value as string),
+      calculation.includes(condition.decisionsByRule[0].value as string),
     );
     const hasFactor = methodsData?.some((condition) =>
-      factor.includes(condition.value as string),
+      factor.includes(condition.decisionsByRule[0].value as string),
     );
 
     return { hasReciprocity, hasCalculation, hasFactor };
@@ -82,13 +83,13 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     EGeneralPolicies.CONDITION_BUSINESS_UNIT,
   );
 
-  const prevContributionsRef = useRef<IRuleDecision[]>([]);
+  const prevContributionsRef = useRef<IRules[]>([]);
   prevContributionsRef.current = normalizedContributions ?? [];
 
-  const prevIncomesRef = useRef<IRuleDecision[]>([]);
+  const prevIncomesRef = useRef<IRules[]>([]);
   prevIncomesRef.current = normalizedIncome ?? [];
 
-  const prevScoreModelsRef = useRef<IRuleDecision[]>([]);
+  const prevScoreModelsRef = useRef<IRules[]>([]);
   prevScoreModelsRef.current = normalizedScoreModels ?? [];
 
   const {

@@ -10,7 +10,6 @@ import { useRequestDetails } from "@hooks/useRequestDetails";
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
-import { RequestType } from "@enum/requestType";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorObject } from "@utils/errorObject";
@@ -151,9 +150,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const modalData = modal();
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${
-    RequestType[data.request as keyof typeof RequestType] ?? data.request
-  }`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
 
   const withErrorRequest = approvalRequest || executeRequest;
 

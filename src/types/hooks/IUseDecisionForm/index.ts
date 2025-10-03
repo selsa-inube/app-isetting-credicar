@@ -1,18 +1,20 @@
-import { IRuleDecision } from "@isettingkit/input";
 import { IMessageModal } from "@ptypes/decisions/IMessageModal";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IUseDecisionForm {
   initialValues: IRuleDecision[];
   revertModalDisplayData: (
-    dataDecision: IRuleDecision,
-    originalDecision: IRuleDecision,
+    dataDecision: IRules,
+    originalDecision: IRules,
   ) => void;
   onButtonClick: () => void;
-  setCreditLineDecisions: (decisions: IRuleDecision[]) => void;
+  setCreditLineDecisions: (decisions: IRuleDecisionExtended[]) => void;
   heightContentPage: string;
   showAttentionModal?: boolean;
   setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>;
-  normalizeEvaluateRuleData?: IRuleDecision[];
+  normalizeEvaluateRuleData?: IRules[];
   editDataOption?: boolean;
   disabledButton?: boolean;
   onPreviousStep?: () => void;

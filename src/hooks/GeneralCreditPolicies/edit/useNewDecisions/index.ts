@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
@@ -12,6 +11,7 @@ import { ENameRules } from "@enum/nameRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { IUseNewDecisions } from "@ptypes/hooks/IUseNewDecisions";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const useNewDecisions = (props: IUseNewDecisions) => {
   const {
@@ -33,13 +33,13 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [contributionsPortfolio, setContributionsPortfolio] = useState<
-    IRuleDecision[]
+    IRules[]
   >(contributionsData ?? []);
-  const [incomePortfolio, setIncomePortfolio] = useState<IRuleDecision[]>([]);
-  const [scoreModels, setScoreModels] = useState<IRuleDecision[]>([]);
-  const [newDecisions, setNewDecisions] = useState<IRuleDecision[]>();
+  const [incomePortfolio, setIncomePortfolio] = useState<IRules[]>([]);
+  const [scoreModels, setScoreModels] = useState<IRules[]>([]);
+  const [newDecisions, setNewDecisions] = useState<IRules[]>();
   const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
-  const [generalDecisions, setGeneralDecisions] = useState<IRuleDecision[]>([]);
+  const [generalDecisions, setGeneralDecisions] = useState<IRules[]>([]);
   const [showReciprocity, setShowReciprocity] = useState(false);
   const [showFactor, setShowFactor] = useState(false);
 
@@ -185,7 +185,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
 
     const validGeneralDecisions = allGeneralDecisions.filter(
       (decision) => decision !== undefined,
-    ) as IRuleDecision[];
+    ) as IRules[];
 
     setGeneralDecisions(validGeneralDecisions ?? []);
   }, [formValues]);
@@ -204,11 +204,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ].filter((decision) => decision !== undefined);
 
     setNewDecisions(
-      [
-        ...(insertValues as IRuleDecision[]),
-        ...(deleteValues as IRuleDecision[]),
-        ...generalDecisions,
-      ].flatMap((item) => item),
+      [...insertValues, ...deleteValues, ...generalDecisions].flatMap(
+        (item) => item as IRules,
+      ),
     );
   }, [contributionsPortfolio, incomePortfolio, scoreModels, generalDecisions]);
 

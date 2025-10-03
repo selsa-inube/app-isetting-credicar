@@ -4,7 +4,7 @@ import { FormikProps } from "formik";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { postAddRequestInConstruction } from "@services/requestInProgress/postAddRequestInConstruction";
+import { postAddRequestInConstruction } from "@services/creditLines/postAddRequestInConstruction";
 import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { errorObject } from "@utils/errorObject";

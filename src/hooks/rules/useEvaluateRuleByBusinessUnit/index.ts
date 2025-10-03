@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 
 import { evaluateRuleByBusinessUnit } from "@services/conditionsRules/postEvaluateRuleByBusinessUnit";
 import { IUseEvaluateRuleByUnit } from "@ptypes/hooks/IUseEvaluateRuleByUnit";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const useEvaluateRuleByBusinessUnit = (props: IUseEvaluateRuleByUnit) => {
-  const { businessUnits, rulesData, language } = props;
+  const { businessUnits, rulesData } = props;
   const [evaluateRuleData, setEvaluateRuleData] = useState<
-    IRuleDecision[] | undefined
+    IRules[] | undefined
   >([]);
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState<boolean>();
@@ -16,11 +16,7 @@ const useEvaluateRuleByBusinessUnit = (props: IUseEvaluateRuleByUnit) => {
     const fetchEvaluateRule = async () => {
       setLoading(true);
       try {
-        const data = await evaluateRuleByBusinessUnit(
-          businessUnits,
-          rulesData,
-          language,
-        );
+        const data = await evaluateRuleByBusinessUnit(businessUnits, rulesData);
 
         setEvaluateRuleData(data);
         setHasError(false);

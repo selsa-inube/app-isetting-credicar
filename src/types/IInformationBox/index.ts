@@ -10,6 +10,8 @@ interface IInformationBox {
   sizeDescription: ITextSize;
   appearanceIcon: IIconAppearance;
   widthBox?: string;
+  heigthBox?: string;
+  ellipsisText?: boolean;
 }
 
 export type { IInformationBox };

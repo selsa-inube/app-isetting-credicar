@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { MdCheck, MdOutlineChangeCircle } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { patchApprovalConfiguration } from "@services/requestInProgress/patchApprovalConfiguration";
+import { patchApprovalConfiguration } from "@services/creditLines/patchApprovalConfiguration";
 import { errorObject } from "@utils/errorObject";
 import { detailsRequest } from "@config/detailsRequest";
 import { detailsRequestTabsConfig } from "@config/detailsRequestTabsConfig";

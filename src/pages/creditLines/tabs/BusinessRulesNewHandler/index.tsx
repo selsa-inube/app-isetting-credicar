@@ -39,7 +39,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     removeCondition,
     restoreConditions,
     submitForm,
-    decisionsSorted
+    decisionsSorted,
   } = useBusinessRulesNew({
     controls,
     customMessageEmptyDecisions,
@@ -52,7 +52,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setDecisionData,
     formId,
   });
-  console.log("initialDecisions1: ", initialDecisions, decisionsSorted);
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>

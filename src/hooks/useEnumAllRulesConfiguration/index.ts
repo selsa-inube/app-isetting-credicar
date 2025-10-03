@@ -33,16 +33,17 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
     fetchEnumData();
   }, [ruleCatalog]);
 
-  const optionsAllRules = enumRuleData
-    ? enumRuleData.map((ruleData) => ({
-        rule: ruleData.ruleName,
-        label:
-          ruleData.i18n?.[appData.language as keyof typeof ruleData.i18n] ??
-          ruleData.descriptionUse,
-      }))
-    : [];
+  const optionsAllRules =
+    enumRuleData.length > 0
+      ? enumRuleData.map((ruleData) => ({
+          rule: ruleData.ruleName,
+          label:
+            ruleData.i18n?.[appData.language as keyof typeof ruleData.i18n] ??
+            ruleData.descriptionUse,
+        }))
+      : [];
 
-  return { optionsAllRules, hasError };
+  return { optionsAllRules, enumRuleData, hasError };
 };
 
 export { useEnumAllRulesConfiguration };

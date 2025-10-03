@@ -11,7 +11,6 @@ import { errorObject } from "@utils/errorObject";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { EModalState } from "@enum/modalState";
-import { RequestType } from "@enum/requestType";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { EComponentAppearance } from "@enum/appearances";
 import { detailsRequestInProgressModal } from "@config/moneyDestination/requestsInProgressTab/details/detailsRequestInProgressModal";
@@ -155,8 +154,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
   }, [showModal]);
 
   const title = `${detailsRequestInProgressModal.labelRequest} ${
-    RequestType[normalizeData.request as keyof typeof RequestType] ??
-    data.request
+    normalizeData.request
   }`;
 
   const withErrorRequest = approvalRequest || executeRequest;
