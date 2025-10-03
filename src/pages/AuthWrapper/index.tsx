@@ -1,13 +1,18 @@
+import { ReactNode } from "react";
 import { IAuthProvider } from "@inube/iauth-react";
 import { usePortalData } from "@hooks/staffPortal/usePortalData";
 import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
 import { enviroment } from "@config/environment";
 import { decrypt } from "@utils/crypto/decrypt";
 
-const StoredPortal = localStorage.getItem("portalCode");
+const storedPortal = localStorage.getItem("portalCode");
 
-function AuthWrapper({ children }: { children: React.ReactNode }) {
-  const { portalData } = usePortalData(decrypt(String(StoredPortal)));
+interface IAuthWrapper {
+  children: ReactNode;
+}
+
+const AuthWrapper = ({ children }: IAuthWrapper) => {
+  const { portalData } = usePortalData(decrypt(String(storedPortal)));
   const { businessManagersData } = useBusinessManagers(portalData);
 
   return (
@@ -21,6 +26,6 @@ function AuthWrapper({ children }: { children: React.ReactNode }) {
       {children}
     </IAuthProvider>
   );
-}
+};
 
 export { AuthWrapper };
