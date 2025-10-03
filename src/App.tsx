@@ -11,7 +11,7 @@ import { ChangeToRequestTabProvider } from "./context/changeToRequestTab";
 import { ThemeProviderWrapper } from "./context/theme";
 import { CreditLinesConstructionProvider } from "./context/creditLinesConstruction";
 import { useAppData } from "./hooks/useAppData/index.ts";
-import { AuthWrapper } from "./pages/AuthWrapper/index.tsx";
+import { AuthWrapper } from "./pages/authWrapper/index.tsx";
 
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
