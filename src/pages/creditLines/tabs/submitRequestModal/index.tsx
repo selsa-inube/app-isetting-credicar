@@ -1,11 +1,14 @@
 import { MdClear, MdOutlineInfo } from "react-icons/md";
 import { createPortal } from "react-dom";
+import { useState } from "react";
 import { Blanket, Button, Icon, Stack, Text } from "@inubekit/inubekit";
 
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { infoConfigurationLabels } from "@config/creditLines/creditLinesTab/generic/infoConfigurationLabels";
+import { infoErrorModal } from "@config/creditLines/generic/infoErrorModal";
 import { portalId } from "@config/portalId";
 import { ISubmitRequestModal } from "@ptypes/creditLines/ISubmitRequestModal";
 import { InformationBox } from "../creditLinesTab/InformationBox";
@@ -17,12 +20,22 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
     description,
     loading,
     language,
-    showModal,
-    modalData,
-    onClickInfo,
     onClick,
     onCloseModal,
   } = props;
+
+  const [descriptionError, setDescriptionError] = useState<string>("");
+  const [showDecisionModal, setShowDecisionModal] = useState<boolean>(false);
+
+  const onClickInfo = (error?: string) => {
+    setDescriptionError(error || "");
+    setShowDecisionModal(!showDecisionModal);
+  };
+
+  const onCloseDecisionModal = () => {
+    setShowDecisionModal(!showDecisionModal);
+    setDescriptionError("");
+  };
 
   const node = document.getElementById(portalId);
 
@@ -36,8 +49,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
     <Blanket>
       <BoxContainer
         width="500px"
-        minHeight="332px"
-        maxHeight="600px"
+        height="auto"
         direction="column"
         backgroundColor={EComponentAppearance.LIGHT}
         borderRadius={tokens.spacing.s100}
@@ -73,7 +85,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
 
           <BoxContainer
             width="100%"
-            height="360px"
+            height="250px"
             direction="column"
             backgroundColor={EComponentAppearance.LIGHT}
             boxSizing="border-box"
@@ -97,8 +109,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
                 sizeDescription="medium"
                 ellipsisText
                 heigthBox="auto"
-                showModal={showModal}
-                modalData={modalData}
+                setDescriptionError={setDescriptionError}
                 onClickInfo={onClickInfo}
               />
             ))}
@@ -124,6 +135,18 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
             </Button>
           </Stack>
         </Stack>
+
+        {showDecisionModal && (
+          <DecisionModal
+            portalId={portalId}
+            title={infoErrorModal.title}
+            actionText={infoErrorModal.actionText}
+            description={descriptionError}
+            onCloseModal={onCloseDecisionModal}
+            onClick={onCloseDecisionModal}
+            withCancelButton={false}
+          />
+        )}
       </BoxContainer>
     </Blanket>,
     node,

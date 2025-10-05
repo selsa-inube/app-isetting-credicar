@@ -78,18 +78,24 @@ const DecisionsForm = (props: IDecisionsForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
+  const enumeratorsRules = ruleData as unknown as IRuleDecisionExtended;
+
+  const getDecisionTemplate = () => {
+    return decisionTemplateConfig(
+      enumeratorsRules,
+      appData.language, // segundo parámetro: language
+      nameRule,
+      appData.businessUnit.publicCode,
+    ) as unknown as IRuleDecisionExtended;
+  };
+
+  const decisionTemplate = getDecisionTemplate();
+
   return (
     <DecisionsFormUI
       attentionModal={attentionModal}
       decisions={decisions}
-      decisionTemplate={
-        decisionTemplateConfig(
-          ruleData,
-          appData.language,
-          nameRule,
-          appData.businessUnit.publicCode,
-        ) ?? ({} as IRuleDecisionExtended)
-      }
+      decisionTemplate={decisionTemplateConfig}
       deleteModal={deleteModal}
       isModalOpen={isModalOpen}
       loading={false}
@@ -100,11 +106,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
       onSubmitForm={(dataDecision: IRuleDecisionExtended) =>
         handleSubmitForm(
           dataDecision,
-          decisionTemplateConfig(
-            ruleData,
-            nameRule,
-            appData.businessUnit.publicCode,
-          ) ?? ({} as IRuleDecisionExtended),
+          decisionTemplate as unknown as IRuleDecisionExtended,
         )
       }
       onToggleAttentionModal={handleToggleAttentionModal}

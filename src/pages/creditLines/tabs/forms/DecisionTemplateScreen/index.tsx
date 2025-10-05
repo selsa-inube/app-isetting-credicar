@@ -1,5 +1,7 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { useContext } from "react";
 import { Stack } from "@inubekit/inubekit";
+import { IRuleDecision } from "@isettingkit/input";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { BusinessRulesNewHandler } from "@pages/creditLines/tabs/BusinessRulesNewHandler";
@@ -39,8 +41,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     showRequestStatusModal,
     showUnconfiguredModal,
     unconfiguredRules,
-    showInfoErrorModal,
-    handleClickInfo,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -50,6 +50,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     handleToggleInfoModal,
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
+
+  const { appData } = useContext(AuthAndPortalData);
 
   const formId = `credit-lines/${templateKey}`;
 
@@ -84,8 +86,10 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           customMessageEmptyDecisions={undefined}
           customTitleContentAddCard={undefined}
           decisionTemplate={
-            (decisionTemplateConfig(ruleData) as unknown as IRuleDecision) ??
-            ({} as IRuleDecision)
+            (decisionTemplateConfig(
+              ruleData,
+              appData.language,
+            ) as unknown as IRuleDecision) ?? ({} as IRuleDecision)
           }
           initialDecisions={initialDecisions}
           language={language as "es" | "en"}
@@ -128,9 +132,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             onCloseModal={handleToggleUnconfiguredRulesModal}
             loading={loadingModify}
             language={language}
-            showModal={showInfoErrorModal}
-            modalData={modalData}
-            onClickInfo={handleClickInfo}
           />
         )}
 

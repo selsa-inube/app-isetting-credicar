@@ -11,6 +11,7 @@ interface IUseModalConfiguration {
   networkError: IErrors;
   errorFetchRequest: boolean;
   showInfoErrorModal: boolean;
+  hasErrorCheck: boolean;
   handleClickInfo: () => void;
   handleToggleSaveModal: () => void;
   handleSaveModal: () => void;

@@ -1,23 +1,23 @@
 import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-// import { DecisionsForm } from "@design/forms/decisions";
+import { DecisionsForm } from "@design/forms/decisions";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { stepKeysPolicies } from "@enum/stepsKeysPolicies";
-// import { ENameRules } from "@enum/nameRules";
-// import { revertModalDisplayData } from "@utils/revertModalDisplayData";
+import { ENameRules } from "@enum/nameRules";
+import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { addLabels } from "@config/generalCreditPolicies/assisted/addLabels";
 import { crumbsAddGenCredPolicies } from "@config/generalCreditPolicies/assisted/navigation";
 import { controlsAssisted } from "@config/controlsAssisted";
-// import { deleteModal } from "@config/decisions/messages";
-// import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
-// import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
+import { deleteModal } from "@config/decisions/messages";
+import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
+import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
 import { portalId } from "@config/portalId";
-// import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-// import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
-// import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
-// import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
-// import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
+import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
+import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
+import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
+import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
+import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
 import { IAddGenCreditPoliciesUI } from "@ptypes/generalCredPolicies/IAddGenCreditPoliciesUI";
 import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
 import { VerificationForm } from "../forms/verification";
@@ -48,9 +48,9 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     onCloseRequestStatus,
     onClosePendingReqModal,
     onFinishForm,
-    // setScoreModels,
-    // setIncomePortfolio,
-    // setContributionsPortfolio,
+    setScoreModels,
+    setIncomePortfolio,
+    setContributionsPortfolio,
     setCurrentStep,
     handleFormValidChange,
     onNextStep,
@@ -101,7 +101,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 handleFormValidChange={handleFormValidChange}
               />
             )}
-            {/* {currentStep === stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO && (
+            {currentStep === stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO && (
               <DecisionsForm
                 deleteModal={deleteModal}
                 textValuesBusinessRules={textValuesBusinessRules}
@@ -157,7 +157,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   scoreModelsLabels.messageEmptyDecisions as unknown as string
                 }
               />
-            )} */}
+            )}
             {currentStep === stepKeysPolicies.VERIFICATION && (
               <VerificationForm
                 updatedData={{

@@ -9,6 +9,7 @@ import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { portalId } from "@config/portalId";
 import { StyledContainer, StyledFormContent } from "./styles";
+import { IRuleDecision } from "@isettingkit/input";
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
   const {
@@ -57,7 +58,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
               decisions={decisions}
               textValues={textValuesBusinessRules}
               loading={loading}
-              decisionTemplate={decisionTemplate}
+              decisionTemplate={decisionTemplate as IRuleDecision}
               isModalOpen={isModalOpen}
               selectedDecision={selectedDecision}
               handleOpenModal={onOpenModal}

@@ -1,6 +1,6 @@
-import { IRuleDecision, ValueDataType } from "@isettingkit/input";
-import { IDecisionData } from "@ptypes/decisions/IDecision";
+import { ValueDataType } from "@isettingkit/input";
 import { dataTranslations } from "@utils/dataTranslations";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionIncomePortfolioConfig = (
   {
@@ -11,13 +11,17 @@ const decisionIncomePortfolioConfig = (
     conditionsThatEstablishesTheDecision,
     listOfPossibleValues,
     i18n,
-  }: IDecisionData,
+  }: IRuleDecisionExtended,
   language: string,
 ) => {
-  if (descriptionUse && decisionDataType) {
+  if (
+    descriptionUse &&
+    decisionDataType &&
+    conditionsThatEstablishesTheDecision
+  ) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
-    const decisionTemplate: IRuleDecision = {
+    const decisionTemplate = {
       ruleName: ruleName,
       labelName: String(
         i18n?.[language as keyof typeof i18n] ?? "Número de veces los ingresos",
@@ -32,31 +36,28 @@ const decisionIncomePortfolioConfig = (
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
+      conditionsThatEstablishesTheDecision: {
+        "group-primary": conditionsThatEstablishesTheDecision.map(
+          (condition) => ({
+            conditionName:
+              dataTranslations[condition.conditionName] ??
+              condition.conditionName,
+            labelName: String(
+              // condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
+            ),
+            descriptionUse: String(
+              // condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
+            ),
+            conditionDataType: condition.conditionDataType,
+            value: condition.value,
+            listOfPossibleValues: condition.listOfPossibleValues,
+            howToSetTheCondition: condition.howToSetTheCondition,
+          }),
+        ),
+      },
     };
-
-    if (
-      conditionsThatEstablishesTheDecision &&
-      conditionsThatEstablishesTheDecision?.length > 0
-    ) {
-      decisionTemplate.conditionsThatEstablishesTheDecision =
-        conditionsThatEstablishesTheDecision.map((condition) => ({
-          conditionName:
-            dataTranslations[condition.conditionName] ??
-            condition.conditionName,
-          labelName: String(
-            condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
-          ),
-          descriptionUse: String(
-            condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
-          ),
-          conditionDataType: condition.conditionDataType,
-          value: condition.value,
-          listOfPossibleValues: condition.listOfPossibleValues,
-          howToSetTheCondition: condition.howToSetTheCondition,
-        }));
-    }
 
     return decisionTemplate;
   }

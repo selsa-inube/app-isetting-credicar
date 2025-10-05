@@ -17,9 +17,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     showUnconfiguredModal,
     loadingData,
     language,
-    showInfoErrorModal,
-    modalData,
-    handleClickInfo,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleOpenModal,
@@ -46,9 +43,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       unconfiguredRules={unconfiguredRules}
       loadingData={loadingData}
       language={language}
-      showInfoErrorModal={showInfoErrorModal}
-      modalData={modalData}
-      onClickInfo={handleClickInfo}
     />
   );
 };

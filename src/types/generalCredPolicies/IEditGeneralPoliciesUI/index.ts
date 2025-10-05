@@ -2,13 +2,13 @@ import { FormikProps } from "formik";
 import { ITab } from "@inubekit/inubekit";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionsGeneralEntry } from "../forms/IDecisionsGeneralEntry";
 import { IModalData } from "../IModalData";
 
 interface IEditGeneralPoliciesUI {
   filteredTabsConfig: ITab[];
-  contributionsPortfolio: IRules[];
+  contributionsPortfolio: IRuleDecisionExtended[];
   isSelected: string;
   requestSteps: IRequestSteps[];
   loading: boolean;
@@ -20,8 +20,8 @@ interface IEditGeneralPoliciesUI {
   formValues: IDecisionsGeneralEntry;
   initialDecisionsData: IDecisionsGeneralEntry;
   decisionsGeneralReference: React.RefObject<FormikProps<IDecisionsGeneralEntry> | null>;
-  incomePortfolio: IRules[];
-  scoreModels: IRules[];
+  incomePortfolio: IRuleDecisionExtended[];
+  scoreModels: IRuleDecisionExtended[];
   showDecisionsGeneral: boolean;
   showIncomePort: boolean;
   showContributions: boolean;
@@ -37,19 +37,19 @@ interface IEditGeneralPoliciesUI {
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
   onToggleDateModal: () => void;
-  setIncomePortfolio: (decisions: IRules[]) => void;
-  setScoreModels: (decisions: IRules[]) => void;
+  setIncomePortfolio: (decisions: IRuleDecisionExtended[]) => void;
+  setScoreModels: (decisions: IRuleDecisionExtended[]) => void;
   onTabChange: (id: string) => void;
   onReset: () => void;
-  setContributionsPortfolio: (decisions: IRules[]) => void;
+  setContributionsPortfolio: (decisions: IRuleDecisionExtended[]) => void;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
   onCloseProcess: () => void;
-  normalizeEvaluateRuleData?: IRules[];
-  normalizedContributions?: IRules[];
-  normalizedIncome?: IRules[];
-  normalizedScoreModels?: IRules[];
+  normalizeEvaluateRuleData?: IRuleDecisionExtended[];
+  normalizedContributions?: IRuleDecisionExtended[];
+  normalizedIncome?: IRuleDecisionExtended[];
+  normalizedScoreModels?: IRuleDecisionExtended[];
 }
 
 export type { IEditGeneralPoliciesUI };

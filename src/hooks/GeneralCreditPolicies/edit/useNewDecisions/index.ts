@@ -12,6 +12,7 @@ import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { IUseNewDecisions } from "@ptypes/hooks/IUseNewDecisions";
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const useNewDecisions = (props: IUseNewDecisions) => {
   const {
@@ -33,13 +34,17 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [contributionsPortfolio, setContributionsPortfolio] = useState<
-    IRules[]
+    IRuleDecisionExtended[]
   >(contributionsData ?? []);
-  const [incomePortfolio, setIncomePortfolio] = useState<IRules[]>([]);
-  const [scoreModels, setScoreModels] = useState<IRules[]>([]);
-  const [newDecisions, setNewDecisions] = useState<IRules[]>();
+  const [incomePortfolio, setIncomePortfolio] = useState<
+    IRuleDecisionExtended[]
+  >([]);
+  const [scoreModels, setScoreModels] = useState<IRuleDecisionExtended[]>([]);
+  const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
   const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
-  const [generalDecisions, setGeneralDecisions] = useState<IRules[]>([]);
+  const [generalDecisions, setGeneralDecisions] = useState<
+    IRuleDecisionExtended[]
+  >([]);
   const [showReciprocity, setShowReciprocity] = useState(false);
   const [showFactor, setShowFactor] = useState(false);
 

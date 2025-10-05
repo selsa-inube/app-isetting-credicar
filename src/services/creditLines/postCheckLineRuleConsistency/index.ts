@@ -8,11 +8,13 @@ import { mapCheckLineRuleEntityToApi } from "./mappers/mapCheckLineRuleEntityToA
 const postCheckLineRuleConsistency = async (
   userAccount: string,
   data: ICheckedRuleLine,
+  businessUnit: string,
 ): Promise<IPostCheckLineRule[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "CheckLineRuleConsistency",
       "X-User-Name": userAccount,
+      "X-Business-Unit": businessUnit,
     },
   };
 

@@ -1,10 +1,7 @@
-import { Icon, IIconAppearance, Text } from "@inubekit/inubekit";
+import { Icon, Text } from "@inubekit/inubekit";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
-import { DecisionModal } from "@design/modals/decisionModal";
 import { EComponentAppearance } from "@enum/appearances";
-import { portalId } from "@config/portalId";
-import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IInformationBox } from "@ptypes/IInformationBox";
 
 const InformationBox = (props: IInformationBox) => {
@@ -21,9 +18,13 @@ const InformationBox = (props: IInformationBox) => {
     ellipsisText = false,
     descriptionModal,
     onClickInfo,
-    modalData = {} as IModalData,
-    showModal,
   } = props;
+
+  const handleClick = () => {
+    if (onClickInfo) {
+      onClickInfo(descriptionModal);
+    }
+  };
 
   return (
     <BoxContainer
@@ -41,7 +42,7 @@ const InformationBox = (props: IInformationBox) => {
         icon={icon}
         cursorHover
         size={sizeIcon}
-        onClick={onClickInfo}
+        onClick={handleClick}
       />
       <Text
         type="label"
@@ -51,24 +52,6 @@ const InformationBox = (props: IInformationBox) => {
       >
         {description}
       </Text>
-
-      {showModal && (
-        <DecisionModal
-          portalId={portalId}
-          title={modalData.title}
-          actionText={modalData.actionText}
-          description={descriptionModal || ""}
-          onCloseModal={modalData.onCloseModal}
-          appearance={
-            modalData.appearance ||
-            (EComponentAppearance.PRIMARY as IIconAppearance)
-          }
-          appearanceButton={
-            modalData.appearanceButton ||
-            (EComponentAppearance.PRIMARY as EComponentAppearance)
-          }
-        />
-      )}
     </BoxContainer>
   );
 };

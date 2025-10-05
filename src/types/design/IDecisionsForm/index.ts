@@ -1,7 +1,5 @@
 import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
-import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IDecisionsForm {
@@ -10,17 +8,17 @@ interface IDecisionsForm {
   labelBusinessRules: string;
   textValuesBusinessRules: IRulesFormTextValues;
   decisionTemplateConfig: (
-    enumeratorsRules: IDecisionData,
+    enumeratorsRules: IRuleDecisionExtended,
     language: string,
     nameRule: string,
     businessUnit?: string,
-  ) => IRuleDecisionExtended;
+  ) => void;
   onButtonClick: () => void;
   onPreviousStep: () => void;
   setDecisions: (decisions: IRuleDecisionExtended[]) => void;
   revertModalDisplayData: (
-    dataDecision: IRules,
-    originalDecision: IRules,
+    dataDecision: IRuleDecisionExtended,
+    originalDecision: IRuleDecisionExtended,
   ) => void;
   nameRule: string;
   disabledButton?: boolean;
@@ -28,7 +26,7 @@ interface IDecisionsForm {
   editDataOption?: boolean;
   showAttentionModal?: boolean;
   attentionModal?: IMessageModal;
-  normalizeEvaluateRuleData?: IRules[];
+  normalizeEvaluateRuleData?: IRuleDecisionExtended[];
   titleContentAddCard?: string;
   setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>;
   messageEmptyDecisions?: string;

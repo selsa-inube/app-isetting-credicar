@@ -44,30 +44,27 @@ const useAppData = (
   let isAuthenticated = true;
   let errorCode = 0;
 
-  if (!code) {
-    const {
-      portalData,
-      hasError: portalError,
-      errorCode: errorCodePortal,
-    } = usePortalData(portalCode);
-    const {
-      businessManagersData,
-      hasError: businessError,
-      errorCode: errorCodeBusiness,
-    } = useBusinessManagers(portalData);
+  const {
+    portalData,
+    hasError: portalError,
+    errorCode: errorCodePortal,
+  } = usePortalData(portalCode);
+  const {
+    businessManagersData,
+    hasError: businessError,
+    errorCode: errorCodeBusiness,
+  } = useBusinessManagers(portalData);
+  const {
+    hasError: authError,
+    isLoading: authLoading,
+    isAuthenticated: authAuthenticated,
+    errorCode: errorCodeAuth,
+  } = useAuthRedirect(portalData, businessManagersData, portalCode);
 
-    const {
-      hasError: authError,
-      isLoading: authLoading,
-      isAuthenticated: authAuthenticated,
-      errorCode: errorCodeAuth,
-    } = useAuthRedirect(portalData, businessManagersData, portalCode);
-
-    hasError = portalError || businessError || authError;
-    errorCode = errorCodePortal || errorCodeBusiness || errorCodeAuth;
-    isLoading = authLoading;
-    isAuthenticated = authAuthenticated;
-  }
+  hasError = portalError || businessError || authError;
+  errorCode = errorCodePortal || errorCodeBusiness || errorCodeAuth;
+  isLoading = authLoading;
+  isAuthenticated = authAuthenticated;
 
   return { hasError, isLoading, isAuthenticated, errorCode };
 };

@@ -1,11 +1,15 @@
 import { IRuleDecision } from "@isettingkit/input";
 import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IDecisionsFormUI {
   decisions: IRuleDecision[];
-  decisionTemplate: IRuleDecisionExtended;
+  decisionTemplate: (
+    enumeratorsRules: IRuleDecision,
+    language: string,
+    nameRule: string,
+    businessUnit?: string,
+  ) => void;
   deleteModal: IMessageModal;
   isModalOpen: boolean;
   loading: boolean;

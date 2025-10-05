@@ -9,10 +9,10 @@ import { FormikProps } from "formik";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { postCheckLineRuleConsistency } from "@services/creditLines/postCheckLineRuleConsistency";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
-import { useCheckLineRuleConsistency } from "@hooks/creditLine/useCheckLineRuleConsistency";
 import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
@@ -68,6 +68,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [clientSupportData, setClientSupportData] = useState<IRules[]>();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [showInfoErrorModal, setShowInfoErrorModal] = useState<boolean>(false);
+  const [hasErrorCheck, setHasErrorCheck] = useState(false);
   const [optionsIncluded, setOptionsIncluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleCustomerProfiles,
     items: [],
@@ -129,16 +130,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   };
 
   const nameLineRef = useRef<FormikProps<INameAndDescriptionEntry>>(null);
-
-  console.log({ data, linesConstructionData });
-
-  const { checkLineRule, loading: loadingCheck } = useCheckLineRuleConsistency({
-    data: { rules: linesConstructionData.rules || [] },
-  });
-
-  useEffect(() => {
-    setUnconfiguredRules(checkLineRule);
-  }, [linesConstructionData.rules]);
 
   const handleOpenModal = () => {
     const compare = compareObjects(initialValues, formValues);
@@ -423,12 +414,22 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setIsUpdated(true);
     }
 
-    if (!loadingModify && !loadingCheck) {
-      if (unconfiguredRules.length > 0) {
+    try {
+      const result = await postCheckLineRuleConsistency(
+        appData.user.userAccount,
+        { rules: linesConstructionData.rules || [] },
+        appData.businessUnit.publicCode,
+      );
+      setUnconfiguredRules(result);
+
+      if (result.length > 0) {
         setShowUnconfiguredModal(true);
       } else {
         setShowSaveModal(true);
       }
+    } catch (error) {
+      console.info(error);
+      setHasErrorCheck(true);
     }
 
     return new Promise((resolve) => {
@@ -519,6 +520,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     networkError,
     errorFetchRequest,
     showInfoErrorModal,
+    hasErrorCheck,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,

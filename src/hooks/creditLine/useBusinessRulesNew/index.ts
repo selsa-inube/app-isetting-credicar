@@ -1,27 +1,241 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  buildEsConditionSentence,
+  EValueHowToSetUp,
   getConditionsByGroup,
+  mapByGroup,
+  parseRangeFromString,
+  sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecision, IValue } from "@isettingkit/input";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
-import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
-import { asArray } from "@utils/decisions/asArray";
-import { normalizeCondition } from "@utils/decisions/normalizeCondition";
-import { ensureArrayGroupsDeep } from "@utils/decisions/ensureArrayGroupsDeep";
-import { localizeDecision } from "@utils/decisions/localizeDecision";
-import { transformDecision } from "@utils/decisions/transformDecision";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
-import { localizeLabel } from "@utils/decisions/localizeLabel";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
-import { keyOf } from "@utils/decisions/keyOf";
-import { nameToGroupMapOf } from "@utils/decisions/nameToGroupMapOf";
-import { safeSortDisplayDataSampleSwitchPlaces } from "@utils/decisions/sortDisplayDataSampleSwitchPlaces";
-import { toArrayConditionsDecision } from "@utils/decisions/toArrayConditionsDecision";
-import { withConditionSentences } from "@utils/decisions/withConditionSentences";
 import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
-import { stableStringify } from "@utils/decisions/stableStringify";
+import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
+
+const asArray = (v: unknown): any[] =>
+  Array.isArray(v)
+    ? v
+    : v && typeof v === "object"
+      ? Object.values(v as Record<string, unknown>)
+      : [];
+
+const normalizeCondition = (c: any) => ({
+  ...c,
+  listOfPossibleValues: asArray(c?.listOfPossibleValues),
+});
+
+const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
+  const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
+  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const normalizedGroups = Object.fromEntries(
+    Object.entries(groups).map(([g, list]) => [
+      g,
+      asArray(list).map(normalizeCondition),
+    ]),
+  );
+  (cloned as any).conditionsThatEstablishesTheDecision =
+    normalizedGroups as any;
+  return cloned;
+};
+
+const isIRuleDecision = (v: unknown): v is IRuleDecision =>
+  typeof v === "object" && v !== null;
+
+const toArrayConditionsDecision = (d: IRuleDecision): IRuleDecision => {
+  const cloned: IRuleDecision = JSON.parse(JSON.stringify(d ?? {}));
+  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const flat = Object.values(groups).flatMap(asArray);
+  (cloned as any).conditionsThatEstablishesTheDecision = flat;
+  return cloned;
+};
+
+const nameToGroupMapOf = (d: IRuleDecision) => {
+  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
+  const map = new Map<string, string>();
+  Object.entries(groups).forEach(([group, list]) => {
+    asArray(list).forEach((c: any) => {
+      if (c?.conditionName) map.set(c.conditionName, group);
+    });
+  });
+  return map;
+};
+
+const safeSortDisplayDataSampleSwitchPlaces = (input: {
+  decisionTemplate?: IRuleDecision | null;
+  nameToGroup?: Map<string, string>;
+}): IRuleDecision => {
+  try {
+    const original = ensureArrayGroupsDeep(
+      input.decisionTemplate ?? ({} as IRuleDecision),
+    );
+    const nameToGroup = input.nameToGroup ?? nameToGroupMapOf(original);
+
+    const flatTpl = toArrayConditionsDecision(original);
+    const sorted = sortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: flatTpl,
+    }) as any;
+
+    const arr = Array.isArray(sorted?.conditionsThatEstablishesTheDecision)
+      ? (sorted.conditionsThatEstablishesTheDecision as any[])
+      : (((flatTpl as any).conditionsThatEstablishesTheDecision as
+          | any[]
+          | undefined) ?? []);
+
+    const regrouped: Record<string, any[]> = {};
+    for (const c of arr) {
+      const g = nameToGroup.get(c?.conditionName) ?? "group-primary";
+      (regrouped[g] ||= []).push(c);
+    }
+
+    return {
+      ...(isIRuleDecision(sorted) ? sorted : original),
+      conditionsThatEstablishesTheDecision: regrouped as any,
+    } as IRuleDecision;
+  } catch (err) {
+    console.warn(
+      "sortDisplayDataSampleSwitchPlaces failed, returning input:",
+      err,
+    );
+    return ensureArrayGroupsDeep(
+      input.decisionTemplate ?? ({} as IRuleDecision),
+    );
+  }
+};
+
+const localizeLabel = (
+  base: { labelName?: string; i18n?: Record<string, string> } | undefined,
+  lang: "es" | "en" | undefined,
+) => (lang && base?.i18n?.[lang]) || base?.labelName || "";
+
+const localizeDecision = (
+  raw: IRuleDecision,
+  lang: "es" | "en" | undefined,
+): IRuleDecision => {
+  const cloned: IRuleDecision = JSON.parse(JSON.stringify(raw ?? {}));
+  cloned.labelName = localizeLabel(raw, lang);
+
+  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const localizedGroups = Object.fromEntries(
+    Object.entries(groups).map(([g, list]) => [
+      g,
+      asArray(list).map((c: any) =>
+        normalizeCondition({ ...c, labelName: localizeLabel(c, lang) }),
+      ),
+    ]),
+  );
+
+  (cloned as any).conditionsThatEstablishesTheDecision = localizedGroups as any;
+  return cloned;
+};
+
+const normalizeHowToSet = (raw: unknown): EValueHowToSetUp => {
+  if (typeof raw === "string") {
+    const k = raw.toLowerCase();
+    if (k.includes("equal")) return EValueHowToSetUp.EQUAL;
+    if (k.includes("greater")) return EValueHowToSetUp.GREATER_THAN;
+    if (k.includes("less")) return EValueHowToSetUp.LESS_THAN;
+    if (k.includes("range") || k.includes("between"))
+      return EValueHowToSetUp.RANGE;
+    if (k.includes("multi")) return EValueHowToSetUp.LIST_OF_VALUES_MULTI;
+    if (k.includes("list_of_values") || k.includes("among") || k.includes("in"))
+      return EValueHowToSetUp.LIST_OF_VALUES;
+  }
+  return (raw as EValueHowToSetUp) ?? EValueHowToSetUp.EQUAL;
+};
+
+const withConditionSentences = (
+  decision: IRuleDecision,
+  isPrimaryFirst = true,
+): IRuleDecision => {
+  const d: IRuleDecision = JSON.parse(JSON.stringify(decision));
+  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
+
+  const orderedKeys = [
+    ...Object.keys(groups).filter((k) => k === "group-primary"),
+    ...Object.keys(groups).filter((k) => k !== "group-primary"),
+  ];
+
+  let firstUsed = !isPrimaryFirst;
+
+  const decorated = Object.fromEntries(
+    orderedKeys.map((g) => {
+      const list = asArray(groups[g]);
+      const mapped = list.map((c: any, idx: number) => {
+        const isFirst = !firstUsed && g === "group-primary" && idx === 0;
+        if (isFirst) firstUsed = true;
+
+        const how = normalizeHowToSet(
+          c.howToSetTheCondition ?? c.valueUse ?? EValueHowToSetUp.EQUAL,
+        );
+
+        const sentence = buildEsConditionSentence({
+          label: c.labelName || "",
+          howToSet: how as any,
+          isFirst,
+        });
+
+        return { ...c, labelName: sentence };
+      });
+      return [g, mapped];
+    }),
+  );
+
+  (d as any).conditionsThatEstablishesTheDecision = decorated as any;
+  return d;
+};
+
+const transformDecision = (
+  d: IRuleDecision,
+  language: "es" | "en" | undefined,
+): IRuleDecision => {
+  const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
+  const withSentences = withConditionSentences(loc);
+  return {
+    ...withSentences,
+    value: parseRangeFromString(withSentences.value),
+    conditionsThatEstablishesTheDecision: mapByGroup(
+      getConditionsByGroup(withSentences),
+      (condition: {
+        value: string | number | IValue | string[] | undefined;
+      }) => ({
+        ...normalizeCondition(condition),
+        labelName: localizeLabel(
+          condition as { labelName?: string; i18n?: Record<string, string> },
+          language,
+        ),
+        value: parseRangeFromString(condition.value),
+      }),
+    ),
+  } as any;
+};
+
+const stableStringify = (v: unknown) => {
+  const seen = new WeakSet();
+  return JSON.stringify(v, (_k, val) => {
+    if (val && typeof val === "object") {
+      if (seen.has(val)) return;
+      seen.add(val);
+      if (!Array.isArray(val)) {
+        return Object.keys(val)
+          .sort()
+          .reduce<Record<string, unknown>>((o, k) => {
+            o[k] = (val as Record<string, unknown>)[k];
+            return o;
+          }, {});
+      }
+    }
+    return val;
+  });
+};
+
+const keyOf = (x: IRuleDecision) =>
+  String(
+    (x as any).decisionId ?? (x as any).businessRuleId ?? (x as any).id ?? "",
+  );
 
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
@@ -53,9 +267,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   useEffect(() => {
     if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
       setDecisions(
-        ensureUniqueIds(
-          (initialDecisions ?? []).map((d) => transformDecision(d, language)),
-        ),
+        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
       );
     }
   }, [initialDecisions, language]);
@@ -180,13 +392,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const decisionWithSentences = transformDecision(newDecision, language);
 
-    setDecisions((prev) =>
-      isEditing
-        ? prev.map((d) =>
-            keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
-          )
-        : [...prev, decisionWithSentences],
-    );
+    setDecisions((prev) => {
+      if (isEditing && selectedDecision) {
+        return prev.map((d) =>
+          keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+        );
+      }
+      return [...prev, decisionWithSentences];
+    });
 
     closeModal();
   };

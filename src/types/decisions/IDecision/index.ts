@@ -30,6 +30,7 @@ interface IDecisionData {
   validUntil?: Date | string;
   value?: string | string[] | number | IValue | undefined;
   i18n?: ILanguage;
+  [key: string]: unknown;
 }
 
 export type { IDecisionData };

@@ -22,6 +22,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     networkError,
     errorFetchRequest,
     showInfoErrorModal,
+    hasErrorCheck,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
@@ -34,9 +35,19 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
   const [showDecision, setShowDecision] = useState(false);
   useEffect(() => {
     const decision =
-      showGoBackModal || showSaveModal || hasErrorRequest || hasError;
+      showGoBackModal ||
+      showSaveModal ||
+      hasErrorCheck ||
+      hasErrorRequest ||
+      hasError;
     setShowDecision(decision);
-  }, [showGoBackModal, hasErrorRequest, showSaveModal, hasError]);
+  }, [
+    showGoBackModal,
+    hasErrorRequest,
+    hasErrorCheck,
+    showSaveModal,
+    hasError,
+  ]);
 
   const modal = () => {
     const initial = {
@@ -54,6 +65,18 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     };
 
     if (!loading && hasError) {
+      return {
+        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (hasErrorCheck) {
       return {
         ...errorModal(messageErrorStatusRequest(errorData.status)),
         onCloseModal: handleToggleErrorModal,

@@ -2,22 +2,22 @@ import { Stack, Tabs } from "@inubekit/inubekit";
 
 import { DecisionsGeneralForm } from "@pages/generalCreditPolicies/forms/decisionsGeneral";
 import { tokens } from "@design/tokens";
-// import { DecisionsForm } from "@design/forms/decisions";
+import { DecisionsForm } from "@design/forms/decisions";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
-// import { revertModalDisplayData } from "@utils/revertModalDisplayData";
+import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { EComponentAppearance } from "@enum/appearances";
-// import { ENameRules } from "@enum/nameRules";
-// import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
-// import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-// import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-// import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
-// import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
-// import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
-// import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
-// import { deleteModal } from "@config/decisions/messages";
+import { ENameRules } from "@enum/nameRules";
+import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
+import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
+import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
+import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
+import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
+import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
+import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
+import { deleteModal } from "@config/decisions/messages";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
 import { portalId } from "@config/portalId";
@@ -33,30 +33,30 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     isRequestStatusModal,
     showRequestProcessModal,
     smallScreen,
-    // contributionsPortfolio,
+    contributionsPortfolio,
     formValues,
-    // incomePortfolio,
-    // scoreModels,
+    incomePortfolio,
+    scoreModels,
     filteredTabsConfig,
     initialDecisionsData,
     showDecisionsGeneral,
-    // showIncomePort,
-    // showContributions,
-    // showScoreModels,
-    // normalizedContributions,
-    // normalizedIncome,
-    // normalizedScoreModels,
-    // heightContPageContribut,
-    // heightContPageIncome,
-    // heightContPageScoreModels,
+    showIncomePort,
+    showContributions,
+    showScoreModels,
+    normalizedContributions,
+    normalizedIncome,
+    normalizedScoreModels,
+    heightContPageContribut,
+    heightContPageIncome,
+    heightContPageScoreModels,
     modalData,
     showDecision,
     setShowFactor,
     setShowReciprocity,
     onToggleDateModal,
-    // setIncomePortfolio,
-    // setScoreModels,
-    // setContributionsPortfolio,
+    setIncomePortfolio,
+    setScoreModels,
+    setContributionsPortfolio,
     onTabChange,
     onReset,
     setIsCurrentFormValid,
@@ -101,7 +101,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               setShowFactor={setShowFactor}
             />
           )}
-          {/* {showContributions && (
+          {showContributions && (
             <DecisionsForm
               deleteModal={deleteModal}
               textValuesBusinessRules={textValuesBusinessRules}
@@ -170,7 +170,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               heightContentPage={heightContPageScoreModels}
               bottomAddButton="80px"
             />
-          )} */}
+          )}
         </Stack>
       </Stack>
       {showDecision && (

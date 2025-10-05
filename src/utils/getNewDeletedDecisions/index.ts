@@ -1,7 +1,7 @@
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { arraysEqual } from "../destination/arraysEqual";
 import { findDecision } from "../destination/findDecision";
@@ -9,8 +9,8 @@ import { translationToEnum } from "../translationToEnum";
 
 const getNewDeletedDecisions = (
   user: string,
-  prevRef: React.MutableRefObject<IRules[]>,
-  currentPortfolio: IRules[],
+  prevRef: React.MutableRefObject<IRuleDecisionExtended[]>,
+  currentPortfolio: IRuleDecisionExtended[],
   dateFrom?: string,
 ) => {
   if (!arraysEqual(prevRef.current, currentPortfolio)) {

@@ -23,8 +23,6 @@ interface INameAndDescriptionFormUI {
   showUnconfiguredModal: boolean;
   unconfiguredRules: IPostCheckLineRule[];
   language: string;
-  showInfoErrorModal: boolean;
-  onClickInfo: () => void;
   onUnconfiguredModal: () => void;
   onToggleUnconfiguredRules: () => void;
   onCloseRequestStatus: () => void;

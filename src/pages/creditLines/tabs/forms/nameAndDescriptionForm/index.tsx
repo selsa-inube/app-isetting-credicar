@@ -19,8 +19,6 @@ const NameAndDescriptionForm = () => {
     unconfiguredRules,
     showUnconfiguredModal,
     language,
-    showInfoErrorModal,
-    handleClickInfo,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -64,8 +62,6 @@ const NameAndDescriptionForm = () => {
       showUnconfiguredModal={showUnconfiguredModal}
       unconfiguredRules={unconfiguredRules}
       language={language}
-      showInfoErrorModal={showInfoErrorModal}
-      onClickInfo={handleClickInfo}
     />
   );
 };
