@@ -19,6 +19,7 @@ import { capitalizeText } from "@utils/capitalizeText";
 import { transformationDecisions } from "@utils/transformationDecisions";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { optionTitleConfiguration } from "@utils/optionTitleConfiguration";
+import { errorObject } from "@utils/errorObject";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
@@ -55,6 +56,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
   const [decisionsData, setDecisionData] = useState<IRuleDecision[]>([]);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
+  const [errorCheckData, setErrorCheckData] = useState<IErrors>({} as IErrors);
   const {
     setLinesConstructionData,
     setLoadingInitial,
@@ -157,6 +159,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+
+    if (hasErrorCheck) {
+      setHasErrorCheck(!hasErrorCheck);
+    }
   };
 
   const handleCloseModal = () => {
@@ -424,7 +430,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return true;
     }
 
-    if (useCaseConfiguration === EUseCase.ADD && hasUnsavedChanges) {
+    console.log({ useCaseConfiguration }, "EUseCase", EUseCase.ADD);
+
+    if (useCaseConfiguration === EUseCase.ADD) {
       setIsUpdated(true);
       try {
         const result = await postCheckLineRuleConsistency(
@@ -442,6 +450,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       } catch (error) {
         console.info(error);
         setHasErrorCheck(true);
+        setErrorCheckData(errorObject(error));
       }
     }
 
@@ -534,6 +543,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     errorFetchRequest,
     showInfoErrorModal,
     hasErrorCheck,
+    errorCheckData,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
