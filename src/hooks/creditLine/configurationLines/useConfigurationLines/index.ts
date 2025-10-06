@@ -317,7 +317,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   useEffect(() => {
     if (decisionsData.length === 0) return;
 
-    const newFormattedRules = formatRuleDecisionsConfig(decisionsData);
+    const validateUseEdit = useCaseConfiguration === EUseCase.EDIT;
+
+    const newFormattedRules = formatRuleDecisionsConfig(
+      decisionsData,
+      validateUseEdit,
+    );
     setLinesData((prev) => {
       const existingRules =
         (prev?.configurationRequestData?.rules as
@@ -506,6 +511,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
+
+  console.log({ linesConstructionData });
 
   const {
     saveCreditLines,

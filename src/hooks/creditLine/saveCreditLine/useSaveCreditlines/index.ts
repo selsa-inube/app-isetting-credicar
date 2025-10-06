@@ -84,8 +84,8 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     try {
       if (useCase === EUseCase.ADD) {
         const newData = await postLineUnderConstruction(
-          businessUnits,
           userAccount,
+          businessUnits,
           requestConfiguration as ILineUnderConstructionRequest,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);

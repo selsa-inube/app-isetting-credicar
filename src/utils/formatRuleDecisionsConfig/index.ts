@@ -5,7 +5,10 @@ import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { toValueString } from "../toValueString";
 
-const formatRuleDecisionsConfig = (rule: IRuleDecisionExtended[]) =>
+const formatRuleDecisionsConfig = (
+  rule: IRuleDecisionExtended[],
+  validateUseEdit: boolean,
+) =>
   rule.map((decision) => {
     const decisionsByRule: Partial<IRuleDecisionExtended> = {
       effectiveFrom:
@@ -28,13 +31,18 @@ const formatRuleDecisionsConfig = (rule: IRuleDecisionExtended[]) =>
     decisionsByRule.conditionGroups = Object.entries(groups).map(
       ([groupKey, rawList]) => {
         const items = asArray(rawList).filter((item) => !(item as any)?.hidden);
-        return {
-          ConditionGroupId: groupKey,
+        const conditionGroup: any = {
           conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
             conditionName: condition?.conditionName ?? "",
             value: toValueString(condition?.value),
           })),
         };
+
+        if (validateUseEdit) {
+          conditionGroup.ConditionGroupId = groupKey;
+        }
+
+        return conditionGroup;
       },
     );
 
