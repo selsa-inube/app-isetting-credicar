@@ -30,6 +30,8 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [showMoreDetailsModal, setShowMoreDetailsModal] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleToggleModal = () => {
@@ -113,6 +115,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     setLoading,
   });
 
+  const onMoreDetails = () => {
+    setShowMoreDetailsModal(!showMoreDetailsModal);
+  };
+
   useEffect(() => {
     const decision = hasError;
     setShowDecision(decision);
@@ -154,6 +160,13 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const withErrorRequest = approvalRequest || executeRequest;
 
+  const useCaseName = data.useCaseName;
+  const normalizeDetails = {
+    id: data.settingRequestId,
+    settingRequestId: data.settingRequestId,
+    configurationRequestData: data.configurationRequestData,
+  };
+
   return {
     showModal,
     screenTablet,
@@ -171,6 +184,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     title,
     statusRequestData,
     withErrorRequest,
+    showMoreDetailsModal,
+    useCaseName,
+    normalizeDetails,
+    onMoreDetails,
     handleTabRequestChange,
     handleToggleModal,
     normalizeData,

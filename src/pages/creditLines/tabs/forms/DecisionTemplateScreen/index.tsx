@@ -41,6 +41,11 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     showRequestStatusModal,
     showUnconfiguredModal,
     unconfiguredRules,
+    title,
+    description,
+    optionCrumb,
+    optionDetails,
+    useCaseConfiguration,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -78,6 +83,11 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           onToggleInfoModal={handleToggleInfoModal}
           updateData={loadingModify}
           withDecisions
+          title={title}
+          description={description}
+          optionCrumb={optionCrumb}
+          withIcon={!optionDetails}
+          withBackModal={!optionDetails}
         />
 
         <BusinessRulesNewHandler
@@ -97,6 +107,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           setDecisionData={setDecisionData}
           textValues={commonTextValues}
           formId={formId as unknown as never}
+          option={useCaseConfiguration}
         />
 
         {showDecision && (
@@ -147,7 +158,10 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
       </Stack>
 
       <StyledFloatButtonsContainer>
-        <ButtonsConfiguration navigation={nav} />
+        <ButtonsConfiguration
+          navigation={nav}
+          withSendButton={!optionDetails}
+        />
       </StyledFloatButtonsContainer>
     </>
   );

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface IUseAutoSaveOnRouteChange {
+  option: string;
   withNeWData: boolean;
   linesData: any;
   userAccount: string;

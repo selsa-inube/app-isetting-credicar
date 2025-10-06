@@ -1,7 +1,8 @@
+import { EUseCase } from "@enum/useCase";
 import { IModifyConstructionRequest } from "@ptypes/creditLines/IModifyConstructionRequest";
 
 interface IUseSaveCreditlines {
-  useCase: "add" | "edit" | "delete";
+  useCase: EUseCase;
   businessUnits: string;
   userAccount: string;
   sendData: boolean;

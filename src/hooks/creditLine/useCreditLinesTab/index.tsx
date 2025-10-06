@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { getCreditLinesData } from "@services/creditLines/getCreditLinesData";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
@@ -33,6 +34,19 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const { disabledButton } = useValidateUseCase({
     useCase: ECreditLines.USE_CASE_ADD,
   });
+
+  const { setLinesConstructionData } = useContext(CreditLinesConstruction);
+
+  useEffect(() => {
+    setLinesConstructionData({
+      settingRequestId: "",
+      abbreviatedName: "",
+      alias: "",
+      descriptionUse: "",
+      lineOfCreditId: "",
+      rules: [],
+    });
+  }, []);
 
   useEffect(() => {
     if (!loadingRules && businessRules && businessRules.length > 0) {

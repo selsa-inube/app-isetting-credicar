@@ -32,6 +32,11 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     showUnconfiguredModal,
     unconfiguredRules,
     language,
+    title,
+    description,
+    optionCrumb,
+    disabledField,
+    optionDetails,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onCloseRequestStatus,
@@ -56,8 +61,13 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
           updateData={isUpdated}
           loading={loading}
           withoutDecisions={true}
+          title={title}
+          description={description}
+          optionCrumb={optionCrumb}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}
+          withIcon={!optionDetails}
+          withBackModal={!optionDetails}
         />
         {!loading && (
           <Stack direction="column" gap={tokens.spacing.s200}>
@@ -73,6 +83,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
               status={getFieldState(formik, "aliasLine")}
               message={formik.errors.aliasLine}
               maxLength={nameAndDescriptionLabels.maxLenghtAlias}
+              disabled={disabledField}
               fullwidth
               required
             />
@@ -89,6 +100,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
               status={getFieldState(formik, "nameLine")}
               message={formik.errors.nameLine}
               maxLength={nameAndDescriptionLabels.maxLenghtName}
+              disabled={disabledField}
               fullwidth
               required
             />
@@ -104,6 +116,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
               message={formik.errors.descriptionLine}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
+              disabled={disabledField}
               fullwidth
               required
             />
@@ -156,7 +169,10 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
         )}
       </Stack>
       <StyledFloatButtonsContainer>
-        <ButtonsConfiguration navigation={navigation} />
+        <ButtonsConfiguration
+          navigation={navigation}
+          withSendButton={!optionDetails}
+        />
       </StyledFloatButtonsContainer>
     </>
   );

@@ -7,6 +7,7 @@ import { INavigationRule } from "@ptypes/creditLines/INavigationRule";
 const useLinesConstruction = () => {
   const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
   const [optionsAllRules, setOptionsAllRules] = useState<INavigationRule[]>([]);
+  const [useCaseConfiguration, setUseCaseConfiguration] = useState<string>("");
   const [linesConstructionData, setLinesConstructionData] =
     useState<ILinesConstructionData>({
       settingRequestId: "",
@@ -38,9 +39,11 @@ const useLinesConstruction = () => {
       linesConstructionData,
       loadingInitial,
       optionsAllRules,
+      useCaseConfiguration,
       setLinesConstructionData,
       setLoadingInitial,
       setOptionsAllRules,
+      setUseCaseConfiguration,
     }),
     [linesConstructionData, loadingInitial],
   );

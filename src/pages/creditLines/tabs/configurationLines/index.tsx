@@ -14,9 +14,9 @@ import { StyledDropdownMenuContainer } from "./styles";
 
 const ConfigurationLines = () => {
   const location = useLocation();
-  const { data } = location.state ?? {};
+  const { data, option } = location.state ?? {};
 
-  const { showDecision, modalData } = useConfigurationInitial({ data });
+  const { showDecision, modalData } = useConfigurationInitial({ data, option });
 
   const { groups } = useGroupOptions();
 

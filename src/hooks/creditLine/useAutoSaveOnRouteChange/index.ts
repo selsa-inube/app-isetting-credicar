@@ -2,10 +2,17 @@ import { IUseAutoSaveOnRouteChange } from "@ptypes/hooks/creditLines/IUseAutoSav
 import { useModifyLinesConstructionData } from "../useModifyLinesConstructionData";
 
 const useAutoSaveOnRouteChange = (props: IUseAutoSaveOnRouteChange) => {
-  const { debounceMs, linesData, userAccount, withNeWData, setIsUpdated } =
-    props;
+  const {
+    debounceMs,
+    linesData,
+    userAccount,
+    withNeWData,
+    setIsUpdated,
+    option,
+  } = props;
 
   return useModifyLinesConstructionData({
+    option,
     debounceMs,
     linesData,
     userAccount,

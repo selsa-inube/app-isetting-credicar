@@ -5,6 +5,7 @@ interface IBusinessRulesNew extends IUseBusinessRulesNewGeneral {
   setDecisionData: React.Dispatch<
     React.SetStateAction<IRuleDecisionExtended[]>
   >;
+  option: string;
   terms?: boolean;
   controls?: boolean;
   customMessageEmptyDecisions?: string;

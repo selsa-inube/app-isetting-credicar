@@ -5,11 +5,13 @@ interface ICreditLinesConstruction {
   linesConstructionData: ILinesConstructionData;
   loadingInitial: boolean;
   optionsAllRules: INavigationRule[];
+  useCaseConfiguration: string;
   setLinesConstructionData: React.Dispatch<
     React.SetStateAction<ILinesConstructionData>
   >;
   setLoadingInitial: React.Dispatch<React.SetStateAction<boolean>>;
   setOptionsAllRules: React.Dispatch<React.SetStateAction<INavigationRule[]>>;
+  setUseCaseConfiguration: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export type { ICreditLinesConstruction };
