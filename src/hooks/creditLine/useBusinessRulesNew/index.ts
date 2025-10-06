@@ -11,6 +11,9 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
+import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
+import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
+import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 
 const asArray = (v: unknown): any[] =>
@@ -256,7 +259,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   );
 
   const [decisions, setDecisions] = useState<IRuleDecision[]>(
-    (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+    ensureUniqueIds(
+      (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+    ),
   );
 
   useEffect(() => {
@@ -332,7 +337,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       : {
           ...localizedTemplate,
           ...dataDecision,
-          decisionId: `Decisión ${decisions.length + 1}`,
         };
 
     const tplGroups = (getConditionsByGroup(localizedTemplate) || {}) as Record<
@@ -372,8 +376,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       }),
     );
 
+    const usedIds = new Set(decisions.map((d) => String(d.decisionId ?? "")));
+    const decisionIdForNew = isEditing
+      ? base.decisionId
+      : base.decisionId && !usedIds.has(base.decisionId)
+        ? base.decisionId
+        : nextDecisionLabel(usedIds);
+
     const newDecision: IRuleDecision = {
       ...base,
+      decisionId: decisionIdForNew,
       labelName: localizeLabel(base, language),
       conditionsThatEstablishesTheDecision: mergedGroups as any,
     };
@@ -390,10 +402,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     });
 
     closeModal();
-  };
-
-  const deleteDecision = (id: string) => {
-    setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
   };
 
   useEffect(() => {
@@ -432,18 +440,19 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const withFiltered = {
       ...tpl,
-      labelName: localizeLabel(tpl as any, language),
+      labelName: localizeLabel(tpl, language),
       conditionsThatEstablishesTheDecision: filtered,
     };
 
-    return withConditionSentences(ensureArrayGroupsDeep(withFiltered as any));
+    return withConditionSentences(
+      ensureArrayGroupsDeep(withFiltered as unknown as IRuleDecision),
+    );
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(() => {
     const prepared = decisions.map((d) => ({
       flat: toArrayConditionsDecision(d),
       map: nameToGroupMapOf(d),
-      key: keyOf(d),
       original: d,
     }));
 
@@ -480,6 +489,20 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     return regrouped;
   }, [decisions]);
 
+  const renderedListRef = useRef<IRuleDecision[]>([]);
+  renderedListRef.current = decisionsSorted;
+
+  const extractId = useMemo(
+    () => makeIdExtractor(() => renderedListRef.current),
+    [],
+  );
+
+  const deleteDecision = (...args: any[]) => {
+    const id = extractId(...args);
+    if (!id) return;
+    setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
+  };
+
   const responseForBackend = useMemo(() => {
     const ruleNameFromTemplate =
       (decisionTemplate as any)?.ruleName ||
@@ -500,7 +523,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       lastSigRef.current = sig;
       setDecisionData(decisionsSorted);
     }
-  }, [decisionsSorted, setDecisionData]);
+  }, [decisionsSorted]);
+
+  useEffect(() => {
+    setDecisionData(decisionsSorted);
+  }, [decisionsSorted]);
 
   return {
     isModalOpen,

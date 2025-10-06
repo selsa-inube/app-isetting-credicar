@@ -3,6 +3,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const useDecisionForm = (props: IUseDecisionForm) => {
   const {
@@ -23,11 +24,14 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
-  const [decisions, setDecisions] = useState<IRuleDecision[]>(initialValues);
+  const [decisions, setDecisions] =
+    useState<IRuleDecisionExtended[]>(initialValues);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
-  const [savedDecisions, setSavedDecisions] = useState<IRuleDecision[]>([]);
+  const [savedDecisions, setSavedDecisions] = useState<IRuleDecisionExtended[]>(
+    [],
+  );
 
   const [initialDecisions] = useState<IRuleDecision[]>(initialValues);
 
@@ -42,8 +46,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   };
 
   const handleSubmitForm = (
-    dataDecision: IRuleDecision,
-    decisionTemplate: IRuleDecision,
+    dataDecision: IRuleDecisionExtended,
+    decisionTemplate: IRuleDecisionExtended,
   ) => {
     const isEditing = selectedDecision !== null;
 
@@ -69,7 +73,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       ? (revertModalDisplayData(
           dataDecision,
           selectedDecision,
-        ) as unknown as IRuleDecision)
+        ) as unknown as IRuleDecisionExtended)
       : {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,

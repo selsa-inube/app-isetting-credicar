@@ -1,6 +1,6 @@
-import { IRuleDecision, ValueDataType } from "@isettingkit/input";
-import { IDecisionData } from "@ptypes/decisions/IDecision";
+import { ValueDataType } from "@isettingkit/input";
 import { dataTranslations } from "@utils/dataTranslations";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionScoreModelsConfig = (
   {
@@ -11,15 +11,19 @@ const decisionScoreModelsConfig = (
     conditionsThatEstablishesTheDecision,
     listOfPossibleValues,
     i18n,
-  }: IDecisionData,
+  }: IRuleDecisionExtended,
   language: string,
   nameRule?: string,
   businessUnit?: string,
 ) => {
-  if (descriptionUse && decisionDataType) {
+  if (
+    descriptionUse &&
+    decisionDataType &&
+    conditionsThatEstablishesTheDecision
+  ) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
-    const decisionTemplate: IRuleDecision = {
+    const decisionTemplate = {
       ruleName: ruleName,
       labelName: String(
         i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
@@ -34,35 +38,33 @@ const decisionScoreModelsConfig = (
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
-    };
 
-    if (
-      conditionsThatEstablishesTheDecision &&
-      conditionsThatEstablishesTheDecision?.length > 0
-    ) {
-      decisionTemplate.conditionsThatEstablishesTheDecision =
-        conditionsThatEstablishesTheDecision.map((condition) => ({
-          conditionName:
-            dataTranslations[condition.conditionName] ??
-            condition.conditionName,
-          labelName: String(
-            condition.i18n?.[language as keyof typeof i18n] ??
+      conditionsThatEstablishesTheDecision: {
+        "group-primary": conditionsThatEstablishesTheDecision.map(
+          (condition) => ({
+            conditionName:
+              dataTranslations[condition.conditionName] ??
+              condition.conditionName,
+            labelName: String(
+              // condition.i18n?.[language as keyof typeof i18n] ??
               condition.descriptionUse,
-          ),
-          descriptionUse: String(
-            condition.i18n?.[language as keyof typeof i18n] ??
+            ),
+            descriptionUse: String(
+              // condition.i18n?.[language as keyof typeof i18n] ??
               condition.descriptionUse,
-          ),
-          conditionDataType: condition.conditionDataType,
-          value:
-            condition.conditionName === "BusinessUnit"
-              ? businessUnit
-              : condition.value,
-          listOfPossibleValues: condition.listOfPossibleValues,
-          howToSetTheCondition: condition.howToSetTheCondition,
-          hidden: condition.conditionName === "BusinessUnit" ? true : false,
-        }));
-    }
+            ),
+            conditionDataType: condition.conditionDataType,
+            value:
+              condition.conditionName === "BusinessUnit"
+                ? businessUnit
+                : condition.value,
+            listOfPossibleValues: condition.listOfPossibleValues,
+            howToSetTheCondition: condition.howToSetTheCondition,
+            hidden: condition.conditionName === "BusinessUnit" ? true : false,
+          }),
+        ),
+      },
+    };
 
     return decisionTemplate;
   }

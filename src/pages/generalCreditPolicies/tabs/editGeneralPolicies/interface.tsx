@@ -1,5 +1,6 @@
 import { Stack, Tabs } from "@inubekit/inubekit";
 
+import { DecisionsGeneralForm } from "@pages/generalCreditPolicies/forms/decisionsGeneral";
 import { tokens } from "@design/tokens";
 import { DecisionsForm } from "@design/forms/decisions";
 import { RequestProcess } from "@design/feedback/RequestProcess";
@@ -21,7 +22,6 @@ import { requestProcessMessage } from "@config/generalCreditPolicies/generic/req
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
 import { portalId } from "@config/portalId";
 import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
-import { DecisionsGeneralForm } from "../../forms/decisionsGeneral";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
   const {

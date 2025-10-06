@@ -24,6 +24,7 @@ const mapRequestsInProgressToEntity = (
         status={
           requestStatus[data.requestStatus as string] ?? data.requestStatus
         }
+        settingRequestError={data.settingRequestError}
       />
     ),
     requestStatusCode: String(data.requestStatus),

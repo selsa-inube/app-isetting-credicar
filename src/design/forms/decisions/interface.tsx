@@ -1,5 +1,5 @@
 import { MdOutlineWarningAmber } from "react-icons/md";
-import { BusinessRules } from "@isettingkit/business-rules";
+import { BusinessRulesWithGroup } from "@isettingkit/business-rules";
 import { Stack, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
@@ -9,6 +9,7 @@ import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { portalId } from "@config/portalId";
 import { StyledContainer, StyledFormContent } from "./styles";
+import { IRuleDecision } from "@isettingkit/input";
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
   const {
@@ -53,11 +54,11 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
       >
         <StyledFormContent>
           <StyledContainer $isMobile={isMobile}>
-            <BusinessRules
+            <BusinessRulesWithGroup
               decisions={decisions}
               textValues={textValuesBusinessRules}
               loading={loading}
-              decisionTemplate={decisionTemplate}
+              decisionTemplate={decisionTemplate as IRuleDecision}
               isModalOpen={isModalOpen}
               selectedDecision={selectedDecision}
               handleOpenModal={onOpenModal}

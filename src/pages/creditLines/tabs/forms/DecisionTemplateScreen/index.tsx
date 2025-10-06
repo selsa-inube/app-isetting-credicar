@@ -1,17 +1,23 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { useContext } from "react";
 import { Stack } from "@inubekit/inubekit";
+import { IRuleDecision } from "@isettingkit/input";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
+import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { BusinessRulesNewHandler } from "@pages/creditLines/tabs/BusinessRulesNewHandler";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
+import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 import { portalId } from "@config/portalId";
+import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateGeneric";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { IDecisionTemplateScreen } from "@ptypes/decisions/IDecisionTemplateScreen";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { LineInformation } from "../lineInformation";
 
 const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
@@ -28,11 +34,24 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     initialDecisions,
     language,
     nav,
-    isUpdated,
+    loadingModify,
+    saveCreditLines,
+    requestSteps,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    showUnconfiguredModal,
+    unconfiguredRules,
+    handleToggleUnconfiguredRulesModal,
+    handleUnconfiguredRules,
+    handleClosePendingModal,
+    handleCloseRequestStatus,
+    handleCloseProcess,
     setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
+
+  const { appData } = useContext(AuthAndPortalData);
 
   const formId = `credit-lines/${templateKey}`;
 
@@ -57,7 +76,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           loading={loading}
           onOpenModal={handleOpenModal}
           onToggleInfoModal={handleToggleInfoModal}
-          updateData={isUpdated}
+          updateData={loadingModify}
           withDecisions
         />
 
@@ -67,8 +86,10 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           customMessageEmptyDecisions={undefined}
           customTitleContentAddCard={undefined}
           decisionTemplate={
-            (decisionTemplateConfig(ruleData) as unknown as IRuleDecision) ??
-            ({} as IRuleDecision)
+            (decisionTemplateConfig(
+              ruleData,
+              appData.language,
+            ) as unknown as IRuleDecision) ?? ({} as IRuleDecision)
           }
           initialDecisions={initialDecisions}
           language={language as "es" | "en"}
@@ -102,6 +123,27 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             title={lineTypeDecision}
           />
         )}
+        {showUnconfiguredModal && (
+          <SubmitRequestModal
+            title={submitRequestLabels.title}
+            unconfiguredRules={unconfiguredRules}
+            description={submitRequestLabels.description}
+            onClick={handleUnconfiguredRules}
+            onCloseModal={handleToggleUnconfiguredRulesModal}
+            loading={loadingModify}
+            language={language}
+          />
+        )}
+
+        <RequestModal
+          showRequestProcessModal={showRequestProcessModal}
+          showRequestStatusModal={showRequestStatusModal}
+          saveData={saveCreditLines as ISaveDataResponse}
+          requestSteps={requestSteps}
+          onCloseRequestStatus={handleCloseRequestStatus}
+          onCloseProcess={handleCloseProcess}
+          onClosePendingModal={handleClosePendingModal}
+        />
       </Stack>
 
       <StyledFloatButtonsContainer>

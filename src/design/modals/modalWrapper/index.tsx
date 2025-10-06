@@ -46,6 +46,7 @@ const ModalWrapper = (props: IModalWrapper) => {
     labelThirdButton,
     iconThirdButton,
     loadingThirdButton,
+    fullwidthbutton = false,
     onClickThirdButton,
     onClick,
     onCloseModal,
@@ -120,13 +121,13 @@ const ModalWrapper = (props: IModalWrapper) => {
         <Stack
           gap={tokens.spacing.s250}
           justifyContent="flex-end"
-          direction={isMobile ? "column-reverse" : "row"}
+          direction={isMobile && fullwidthbutton ? "column-reverse" : "row"}
         >
           {withCancelButton && (
             <Button
               spacing="wide"
               appearance={EComponentAppearance.GRAY}
-              fullwidth={isMobile}
+              fullwidth={isMobile && fullwidthbutton}
               variant={variantCancel}
               onClick={onCloseModal}
             >
@@ -138,7 +139,7 @@ const ModalWrapper = (props: IModalWrapper) => {
               spacing="wide"
               appearance={appearanceThirdButton}
               iconBefore={iconThirdButton ?? <></>}
-              fullwidth={isMobile}
+              fullwidth={isMobile && fullwidthbutton}
               variant="filled"
               onClick={onClickThirdButton}
               loading={loadingThirdButton}
@@ -150,7 +151,7 @@ const ModalWrapper = (props: IModalWrapper) => {
           <Button
             spacing="wide"
             appearance={appearanceButton}
-            fullwidth={isMobile}
+            fullwidth={isMobile && fullwidthbutton}
             variant="filled"
             onClick={onClick}
             loading={loading}

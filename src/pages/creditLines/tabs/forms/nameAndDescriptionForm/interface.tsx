@@ -1,10 +1,13 @@
 import { Stack, Textarea, Textfield } from "@inubekit/inubekit";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
+import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { getFieldState } from "@utils/getFieldState";
+import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { nameAndDescriptionLabels } from "@config/creditLines/configuration/nameAndDescriptionLabels";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { portalId } from "@config/portalId";
@@ -22,6 +25,18 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     isUpdated,
     navigation,
     message,
+    requestSteps,
+    saveData,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    showUnconfiguredModal,
+    unconfiguredRules,
+    language,
+    onUnconfiguredModal,
+    onToggleUnconfiguredRules,
+    onCloseRequestStatus,
+    onClosePendingModal,
+    onCloseProcess,
     onToggleInfoModal,
     onOpenModal,
   } = props;
@@ -94,6 +109,15 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             />
           </Stack>
         )}
+        <RequestModal
+          showRequestProcessModal={showRequestProcessModal}
+          showRequestStatusModal={showRequestStatusModal}
+          saveData={saveData}
+          requestSteps={requestSteps}
+          onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
+          onClosePendingModal={onClosePendingModal}
+        />
 
         {showModal && (
           <DecisionModal
@@ -117,6 +141,17 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
+          />
+        )}
+        {showUnconfiguredModal && (
+          <SubmitRequestModal
+            title={submitRequestLabels.title}
+            unconfiguredRules={unconfiguredRules}
+            description={submitRequestLabels.description}
+            onClick={onUnconfiguredModal}
+            onCloseModal={onToggleUnconfiguredRules}
+            loading={loading}
+            language={language}
           />
         )}
       </Stack>

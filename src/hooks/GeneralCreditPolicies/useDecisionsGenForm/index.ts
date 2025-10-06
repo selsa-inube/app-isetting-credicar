@@ -8,6 +8,7 @@ import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { validationRules } from "@validations/validationRules";
 import { mediaQueryMobile } from "@config/environment";
+import { generalMethods } from "@config/generalCreditPolicies/assisted/generalMethods";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
@@ -58,17 +59,19 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EGeneralPolicies.METHODS,
   });
-  const methodsOptions: IServerDomain[] = methods.map((item: IEnumerators) => {
-    const name =
-      item.i18n?.[appData.language as keyof typeof item.i18n] ??
-      item.description;
+  const methodsOptions: IServerDomain[] = methods
+    .filter((entry) => generalMethods.includes(entry.code))
+    .map((item: IEnumerators) => {
+      const name =
+        item.i18n?.[appData.language as keyof typeof item.i18n] ??
+        item.description;
 
-    return {
-      id: item.code ?? "",
-      label: name ?? "",
-      value: item.code ?? "",
-    };
-  });
+      return {
+        id: item.code ?? "",
+        label: name ?? "",
+        value: item.code ?? "",
+      };
+    });
 
   const handleInformationReferenceModal = () => {
     setShowInfoRefModal(!showInformationReferenceModal);

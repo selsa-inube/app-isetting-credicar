@@ -10,6 +10,11 @@ interface IInformationBox {
   sizeDescription: ITextSize;
   appearanceIcon: IIconAppearance;
   widthBox?: string;
+  heigthBox?: string;
+  ellipsisText?: boolean;
+  descriptionModal?: string;
+  onClickInfo?: (error?: string) => void;
+  setDescriptionError?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export type { IInformationBox };

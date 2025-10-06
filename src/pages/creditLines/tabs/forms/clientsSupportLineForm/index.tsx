@@ -1,20 +1,28 @@
 import { useClientsSupportLineForm } from "@hooks/creditLine/useClientsSupportLineForm";
+import { IClientsSupportLineForm } from "@ptypes/creditLines/IClientsSupportLineForm";
 import { ClientsSupportLineFormUI } from "./interface";
 
-const ClientsSupportLineForm = () => {
+const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
+  const { templateKey } = props;
   const {
     optionsExcluded,
     optionsIncluded,
     showInfoModal,
     loading,
-    isUpdated,
+    loadingModify,
     nav,
     lineNameDecision,
     message,
+    unconfiguredRules,
+    showUnconfiguredModal,
+    loadingData,
+    language,
+    handleToggleUnconfiguredRulesModal,
+    handleUnconfiguredRules,
     handleOpenModal,
     handleToggleInfoModal,
     handleMove,
-  } = useClientsSupportLineForm();
+  } = useClientsSupportLineForm({ templateKey });
 
   return (
     <ClientsSupportLineFormUI
@@ -22,13 +30,19 @@ const ClientsSupportLineForm = () => {
       onToggleInfoModal={handleToggleInfoModal}
       optionsExcluded={optionsExcluded}
       optionsIncluded={optionsIncluded}
-      updateData={isUpdated}
+      updateData={loadingModify}
       loading={loading}
       onOpenModal={handleOpenModal}
       onMove={handleMove}
       navigation={nav}
       lineNameDecision={lineNameDecision}
       message={message}
+      onUnconfiguredModal={handleUnconfiguredRules}
+      onToggleUnconfiguredRules={handleToggleUnconfiguredRulesModal}
+      showUnconfiguredModal={showUnconfiguredModal}
+      unconfiguredRules={unconfiguredRules}
+      loadingData={loadingData}
+      language={language}
     />
   );
 };

@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
@@ -7,6 +6,7 @@ import { useDecisionForm } from "@hooks/forms/useDecisionForm";
 import { capitalizeText } from "@utils/capitalizeText";
 import { ENameRules } from "@enum/nameRules";
 import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { DecisionsFormUI } from "./interface";
 
 const DecisionsForm = (props: IDecisionsForm) => {
@@ -78,18 +78,24 @@ const DecisionsForm = (props: IDecisionsForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
+  const enumeratorsRules = ruleData as unknown as IRuleDecisionExtended;
+
+  const getDecisionTemplate = () => {
+    return decisionTemplateConfig(
+      enumeratorsRules,
+      appData.language, // segundo parámetro: language
+      nameRule,
+      appData.businessUnit.publicCode,
+    ) as unknown as IRuleDecisionExtended;
+  };
+
+  const decisionTemplate = getDecisionTemplate();
+
   return (
     <DecisionsFormUI
       attentionModal={attentionModal}
       decisions={decisions}
-      decisionTemplate={
-        decisionTemplateConfig(
-          ruleData,
-          appData.language,
-          nameRule,
-          appData.businessUnit.publicCode,
-        ) ?? ({} as IRuleDecision)
-      }
+      decisionTemplate={decisionTemplateConfig}
       deleteModal={deleteModal}
       isModalOpen={isModalOpen}
       loading={false}
@@ -97,14 +103,10 @@ const DecisionsForm = (props: IDecisionsForm) => {
       onDelete={handleDelete}
       onButtonClick={onButtonClick}
       onOpenModal={handleOpenModal}
-      onSubmitForm={(dataDecision: IRuleDecision) =>
+      onSubmitForm={(dataDecision: IRuleDecisionExtended) =>
         handleSubmitForm(
           dataDecision,
-          decisionTemplateConfig(
-            ruleData,
-            nameRule,
-            appData.businessUnit.publicCode,
-          ) ?? ({} as IRuleDecision),
+          decisionTemplate as unknown as IRuleDecisionExtended,
         )
       }
       onToggleAttentionModal={handleToggleAttentionModal}

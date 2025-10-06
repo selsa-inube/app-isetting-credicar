@@ -1,25 +1,24 @@
-import { IRuleDecision } from "@isettingkit/input";
 import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { IDecisionData } from "@ptypes/decisions/IDecision";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IDecisionsForm {
   deleteModal: IMessageModal;
-  initialValues: IRuleDecision[];
+  initialValues: IRuleDecisionExtended[];
   labelBusinessRules: string;
   textValuesBusinessRules: IRulesFormTextValues;
   decisionTemplateConfig: (
-    enumeratorsRules: IDecisionData,
+    enumeratorsRules: IRuleDecisionExtended,
     language: string,
     nameRule: string,
     businessUnit?: string,
-  ) => IRuleDecision | undefined;
+  ) => void;
   onButtonClick: () => void;
   onPreviousStep: () => void;
-  setDecisions: (decisions: IRuleDecision[]) => void;
+  setDecisions: (decisions: IRuleDecisionExtended[]) => void;
   revertModalDisplayData: (
-    dataDecision: IRuleDecision,
-    originalDecision: IRuleDecision,
+    dataDecision: IRuleDecisionExtended,
+    originalDecision: IRuleDecisionExtended,
   ) => void;
   nameRule: string;
   disabledButton?: boolean;
@@ -27,7 +26,7 @@ interface IDecisionsForm {
   editDataOption?: boolean;
   showAttentionModal?: boolean;
   attentionModal?: IMessageModal;
-  normalizeEvaluateRuleData?: IRuleDecision[];
+  normalizeEvaluateRuleData?: IRuleDecisionExtended[];
   titleContentAddCard?: string;
   setShowAttentionModal?: React.Dispatch<React.SetStateAction<boolean>>;
   messageEmptyDecisions?: string;
