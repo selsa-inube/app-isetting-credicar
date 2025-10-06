@@ -6,6 +6,7 @@ import { patchModifyConstruction } from "@services/creditLines/patchModifyConstr
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { errorObject } from "@utils/errorObject";
 import { EComponentAppearance } from "@enum/appearances";
+import { EUseCase } from "@enum/useCase";
 import { errorModal } from "@config/errorModal";
 import { withoutDataModal } from "@config/withoutData";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -14,11 +15,13 @@ import { IUseConfigurationInitial } from "@ptypes/hooks/creditLines/IUseConfigur
 import { IErrors } from "@ptypes/IErrors";
 
 const useConfigurationInitial = (props: IUseConfigurationInitial) => {
-  const { data } = props;
+  const { data, option } = props;
   const { appData } = useContext(AuthAndPortalData);
-  const { setLinesConstructionData, setLoadingInitial } = useContext(
-    CreditLinesConstruction,
-  );
+  const {
+    setLinesConstructionData,
+    setLoadingInitial,
+    setUseCaseConfiguration,
+  } = useContext(CreditLinesConstruction);
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [showWithoutDataModal, setShowWithoutDataModal] =
     useState<boolean>(false);
@@ -40,6 +43,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
         settingRequestId: data.settingRequestId,
         configurationRequestData: data.configurationRequestData,
       });
+      setUseCaseConfiguration(option);
     }
   }, [data?.settingRequestId, setLinesConstructionData]);
 
@@ -49,7 +53,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
       setErrorData({} as IErrors);
       setBorrowerData({} as IModifyConstructionResponse);
 
-      if (linesData) {
+      if (linesData && option === EUseCase.ADD) {
         setLoading(true);
         try {
           const data = await patchModifyConstruction(
@@ -77,35 +81,66 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
       setLoadingInitial(true);
     } else {
       setLoadingInitial(false);
-      if (!loading && borrowerData?.settingRequestId) {
-        const normalizeData: ILinesConstructionData = {
-          settingRequestId: data.settingRequestId,
-          abbreviatedName: String(
-            borrowerData.configurationRequestData?.abbreviatedName ?? "",
-          ),
-          alias: String(borrowerData.configurationRequestData?.alias ?? ""),
-          descriptionUse: String(
-            borrowerData.configurationRequestData?.descriptionUse ?? "",
-          ),
-          lineOfCreditId: borrowerData.settingRequestId,
-        };
+      if (!loading) {
+        if (option === EUseCase.ADD && borrowerData?.settingRequestId) {
+          const normalizeData: ILinesConstructionData = {
+            settingRequestId: data.settingRequestId,
+            abbreviatedName: String(
+              borrowerData.configurationRequestData?.abbreviatedName ?? "",
+            ),
+            alias: String(borrowerData.configurationRequestData?.alias ?? ""),
+            descriptionUse: String(
+              borrowerData.configurationRequestData?.descriptionUse ?? "",
+            ),
+            lineOfCreditId: borrowerData.settingRequestId,
+          };
 
-        if (borrowerData.configurationRequestData?.rules) {
-          normalizeData.rules = Object(
-            borrowerData.configurationRequestData.rules,
-          );
+          if (borrowerData.configurationRequestData?.rules) {
+            normalizeData.rules = Object(
+              borrowerData.configurationRequestData.rules,
+            );
+          }
+          setLinesConstructionData((prev) => ({
+            ...prev,
+            ...normalizeData,
+          }));
         }
-        setLinesConstructionData((prev) => ({
-          ...prev,
-          ...normalizeData,
-        }));
+
+        if (option === EUseCase.DETAILS && linesData?.settingRequestId) {
+          const normalizeData: ILinesConstructionData = {
+            settingRequestId: data.settingRequestId,
+            abbreviatedName: String(
+              linesData.configurationRequestData?.abbreviatedName ?? "",
+            ),
+            alias: String(linesData.configurationRequestData?.alias ?? ""),
+            descriptionUse: String(
+              linesData.configurationRequestData?.descriptionUse ?? "",
+            ),
+            lineOfCreditId: linesData.settingRequestId,
+          };
+
+          if (linesData.configurationRequestData?.rules) {
+            normalizeData.rules = Object(
+              linesData.configurationRequestData.rules,
+            );
+          }
+          setLinesConstructionData((prev) => ({
+            ...prev,
+            ...normalizeData,
+          }));
+        }
       }
 
       setTimeout(() => {
         navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
       }, 1000);
     }
-  }, [loading, borrowerData?.settingRequestId, setLinesConstructionData]);
+  }, [
+    loading,
+    linesData,
+    borrowerData?.settingRequestId,
+    setLinesConstructionData,
+  ]);
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);

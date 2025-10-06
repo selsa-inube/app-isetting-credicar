@@ -18,6 +18,7 @@ import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { transformationDecisions } from "@utils/transformationDecisions";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
+import { optionTitleConfiguration } from "@utils/optionTitleConfiguration";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
@@ -54,8 +55,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
   const [decisionsData, setDecisionData] = useState<IRuleDecision[]>([]);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
-  const { setLinesConstructionData, setLoadingInitial, linesConstructionData } =
-    useContext(CreditLinesConstruction);
+  const {
+    setLinesConstructionData,
+    setLoadingInitial,
+    linesConstructionData,
+    useCaseConfiguration,
+  } = useContext(CreditLinesConstruction);
   const [data, setData] = useState<IModifyConstructionResponse>();
   const [unconfiguredRules, setUnconfiguredRules] = useState<
     IPostCheckLineRule[]
@@ -119,6 +124,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   ]);
 
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
+    option: useCaseConfiguration,
     linesData: linesData,
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
@@ -365,26 +371,34 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   }, [loadingModify]);
 
   useEffect(() => {
-    const currentFormValues = nameLineRef.current?.values;
-    const hasFormChanges =
-      currentFormValues &&
-      (currentFormValues.aliasLine !== (initialData.alias || "") ||
-        currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
-        currentFormValues.descriptionLine !==
-          (initialData.descriptionUse || ""));
+    if (useCaseConfiguration !== EUseCase.DETAILS) {
+      const currentFormValues = nameLineRef.current?.values;
+      const hasFormChanges =
+        currentFormValues &&
+        (currentFormValues.aliasLine !== (initialData.alias || "") ||
+          currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
+          currentFormValues.descriptionLine !==
+            (initialData.descriptionUse || ""));
 
-    setHasUnsavedChanges(
-      Boolean(hasFormChanges || decisionsData.length > 0 || clientSupportData),
-    );
+      setHasUnsavedChanges(
+        Boolean(
+          hasFormChanges || decisionsData.length > 0 || clientSupportData,
+        ),
+      );
+    }
   }, [nameLineRef.current?.values, decisionsData, clientSupportData]);
 
   useEffect(() => {
     setTimeout(() => {
-      if (!isUpdated && hasUnsavedChanges) {
+      if (
+        useCaseConfiguration === EUseCase.ADD &&
+        !isUpdated &&
+        hasUnsavedChanges
+      ) {
         setIsUpdated(true);
       }
     }, 5000);
-  }, [hasUnsavedChanges, isUpdated]);
+  }, [useCaseConfiguration, hasUnsavedChanges, isUpdated]);
 
   const handleStep = async (click: boolean): Promise<boolean> => {
     if (!click) {
@@ -392,7 +406,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return true;
     }
 
-    if (hasUnsavedChanges) {
+    if (useCaseConfiguration === EUseCase.ADD && hasUnsavedChanges) {
       setIsUpdated(true);
 
       return new Promise((resolve) => {
@@ -410,26 +424,25 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return true;
     }
 
-    if (hasUnsavedChanges) {
+    if (useCaseConfiguration === EUseCase.ADD && hasUnsavedChanges) {
       setIsUpdated(true);
-    }
+      try {
+        const result = await postCheckLineRuleConsistency(
+          appData.user.userAccount,
+          { rules: linesConstructionData.rules || [] },
+          appData.businessUnit.publicCode,
+        );
+        setUnconfiguredRules(result);
 
-    try {
-      const result = await postCheckLineRuleConsistency(
-        appData.user.userAccount,
-        { rules: linesConstructionData.rules || [] },
-        appData.businessUnit.publicCode,
-      );
-      setUnconfiguredRules(result);
-
-      if (result.length > 0) {
-        setShowUnconfiguredModal(true);
-      } else {
-        setShowSaveModal(true);
+        if (result.length > 0) {
+          setShowUnconfiguredModal(true);
+        } else {
+          setShowSaveModal(true);
+        }
+      } catch (error) {
+        console.info(error);
+        setHasErrorCheck(true);
       }
-    } catch (error) {
-      console.info(error);
-      setHasErrorCheck(true);
     }
 
     return new Promise((resolve) => {
@@ -500,7 +513,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     handleCloseProcess,
     handleClosePendingModal,
   } = useSaveCreditlines({
-    useCase: EUseCase.ADD,
+    useCase: useCaseConfiguration as EUseCase,
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
@@ -529,6 +542,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     handleToggleErrorModal,
     handleToggleErrorSaveModal,
   });
+
+  const optionDetails =
+    useCaseConfiguration === EUseCase.DETAILS ? true : false;
+
+  const { title, description, optionCrumb } =
+    optionTitleConfiguration(useCaseConfiguration);
 
   return {
     loading,
@@ -563,8 +582,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     unconfiguredRules,
     showUnconfiguredModal,
     showSaveModal,
-    handleClickInfo,
     showInfoErrorModal,
+    useCaseConfiguration,
+    title,
+    description,
+    optionCrumb,
+    optionDetails,
+    handleClickInfo,
     setClientSupportData,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,

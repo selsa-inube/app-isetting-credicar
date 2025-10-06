@@ -19,6 +19,10 @@ const NameAndDescriptionForm = () => {
     unconfiguredRules,
     showUnconfiguredModal,
     language,
+    title,
+    description,
+    optionCrumb,
+    optionDetails,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -62,6 +66,11 @@ const NameAndDescriptionForm = () => {
       showUnconfiguredModal={showUnconfiguredModal}
       unconfiguredRules={unconfiguredRules}
       language={language}
+      title={title}
+      description={description}
+      optionCrumb={optionCrumb}
+      optionDetails={optionDetails}
+      disabledField={optionDetails}
     />
   );
 };

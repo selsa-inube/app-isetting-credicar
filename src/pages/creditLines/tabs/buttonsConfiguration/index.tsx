@@ -6,7 +6,7 @@ import { buttonsConfigurationlabels } from "@config/creditLines/configuration/Bu
 import { IButtonsConfiguration } from "@ptypes/context/IButtonsConfiguration";
 
 const ButtonsConfiguration = (props: IButtonsConfiguration) => {
-  const { navigation } = props;
+  const { navigation, withSendButton } = props;
 
   return (
     <Stack
@@ -23,15 +23,18 @@ const ButtonsConfiguration = (props: IButtonsConfiguration) => {
         loading={navigation.loadingBackAndNext}
         textValues={buttonsConfigurationlabels}
       />
-      <SendButton
-        cursorHover
-        disabled={navigation.disabledSend}
-        iconBefore={<MdOutlineSend />}
-        loading={navigation.loadingSend}
-        onClick={navigation.handleClickSend}
-      >
-        {buttonsConfigurationlabels.send}
-      </SendButton>
+
+      {withSendButton && (
+        <SendButton
+          cursorHover
+          disabled={navigation.disabledSend}
+          iconBefore={<MdOutlineSend />}
+          loading={navigation.loadingSend}
+          onClick={navigation.handleClickSend}
+        >
+          {buttonsConfigurationlabels.send}
+        </SendButton>
+      )}
     </Stack>
   );
 };

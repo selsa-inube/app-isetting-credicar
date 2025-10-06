@@ -22,6 +22,10 @@ const Details = (props: IDetails) => {
     isSelected: isSelectedRequest,
     defaultSelectedTab: defaultSelectedRequestTab,
     statusRequestData,
+    showMoreDetailsModal,
+    useCaseName,
+    normalizeDetails,
+    onMoreDetails,
     handleToggleModal,
     handleTabRequestChange,
   } = useDetailsRequestInProgress({ data });
@@ -47,6 +51,10 @@ const Details = (props: IDetails) => {
       isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
       labelButton={statusRequestData.textButton}
       iconButton={statusRequestData.iconButton}
+      showMoreDetailsModal={showMoreDetailsModal}
+      onMoreDetails={onMoreDetails}
+      useCaseName={useCaseName}
+      normalizeDetails={normalizeDetails}
     />
   );
 };

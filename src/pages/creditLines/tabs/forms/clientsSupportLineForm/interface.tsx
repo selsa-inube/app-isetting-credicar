@@ -28,6 +28,10 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     unconfiguredRules,
     loadingData,
     language,
+    title,
+    description,
+    optionCrumb,
+    optionDetails,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onToggleInfoModal,
@@ -52,6 +56,11 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
           withoutDecisions={true}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}
+          title={title}
+          description={description}
+          optionCrumb={optionCrumb}
+          withIcon={!optionDetails}
+          withBackModal={!optionDetails}
         />
 
         <Stack direction="column" gap={tokens.spacing.s200}>
@@ -113,7 +122,10 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
         )}
       </Stack>
       <StyledFloatButtonsContainer>
-        <ButtonsConfiguration navigation={navigation} />
+        <ButtonsConfiguration
+          navigation={navigation}
+          withSendButton={!optionDetails}
+        />
       </StyledFloatButtonsContainer>
     </>
   );

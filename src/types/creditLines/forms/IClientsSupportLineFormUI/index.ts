@@ -15,6 +15,10 @@ interface IClientsSupportLineFormUI {
   unconfiguredRules: IPostCheckLineRule[];
   loadingData: boolean;
   language: string;
+  title: string;
+  description: string;
+  optionCrumb: string;
+  optionDetails: boolean;
   onUnconfiguredModal: () => void;
   onToggleUnconfiguredRules: () => void;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;

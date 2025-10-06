@@ -1,6 +1,7 @@
 import { IModifyConstructionRequest } from "@ptypes/creditLines/IModifyConstructionRequest";
 
 interface IUseLinesConstructionData {
+  option: string;
   userAccount: string;
   withNeWData: boolean;
   linesData?: IModifyConstructionRequest;

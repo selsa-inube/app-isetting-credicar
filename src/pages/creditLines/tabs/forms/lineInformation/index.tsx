@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { MdCloudUpload, MdInfo } from "react-icons/md";
 import {
   Breadcrumbs,
@@ -24,19 +25,30 @@ const LineInformation = (props: ILineInformation) => {
     loading,
     withDecisions,
     withoutDecisions,
+    title,
+    description,
+    optionCrumb,
+    withIcon,
     onToggleInfoModal,
     onOpenModal,
+    withBackModal,
   } = props;
+
+  const navigate = useNavigate();
+
+  const handleClick = withBackModal
+    ? onOpenModal
+    : () => navigate("/credit-lines");
 
   return (
     <>
       <Stack gap={tokens.spacing.s300} direction="column">
-        <Breadcrumbs crumbs={crumbsConfiguration} />
+        <Breadcrumbs crumbs={crumbsConfiguration(optionCrumb)} />
         <Title
-          title={configurationLabels.title}
-          description={configurationLabels.description}
+          title={title}
+          description={description}
           sizeTitle="large"
-          onClick={onOpenModal}
+          onClick={handleClick}
         />
       </Stack>
 
@@ -63,14 +75,18 @@ const LineInformation = (props: ILineInformation) => {
                   >
                     {lineName}
                   </Text>
-                  {updateData ? (
-                    <Spinner size="small" />
-                  ) : (
-                    <Icon
-                      icon={<MdCloudUpload />}
-                      appearance={EComponentAppearance.SUCCESS}
-                      size="24px"
-                    />
+                  {withIcon && (
+                    <>
+                      {updateData ? (
+                        <Spinner size="small" />
+                      ) : (
+                        <Icon
+                          icon={<MdCloudUpload />}
+                          appearance={EComponentAppearance.SUCCESS}
+                          size="24px"
+                        />
+                      )}
+                    </>
                   )}
                 </Stack>
 
