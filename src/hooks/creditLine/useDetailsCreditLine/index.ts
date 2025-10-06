@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
@@ -11,6 +12,8 @@ const useDetailsCreditLine = (props: IUseDetailsCreditLine) => {
 
   const [showModal, setShowModal] = useState(false);
   const isMobile = useMediaQuery(mediaQueryMobile);
+  const screenTablet = useMediaQuery(mediaQueryTablet);
+  const navigate = useNavigate();
 
   const normalizeData = {
     id: data.id,
@@ -20,7 +23,16 @@ const useDetailsCreditLine = (props: IUseDetailsCreditLine) => {
     setShowModal(!showModal);
   };
 
-  const screenTablet = useMediaQuery(mediaQueryTablet);
+  const handleConfiguration = () => {
+    if (!data) {
+      console.error("Data is undefined or null");
+      return;
+    }
+
+    navigate(`/credit-lines/edit-credit-lines`, {
+      state: { data: data, option: "details" },
+    });
+  };
 
   useEffect(() => {
     const emitEvent = (eventName: string) => {
@@ -33,6 +45,7 @@ const useDetailsCreditLine = (props: IUseDetailsCreditLine) => {
 
   return {
     showModal,
+    handleConfiguration,
     normalizeData,
     isMobile,
     screenTablet,
