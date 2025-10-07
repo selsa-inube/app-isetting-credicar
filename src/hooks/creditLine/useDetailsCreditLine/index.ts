@@ -4,6 +4,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
+import { EUseCase } from "@enum/useCase";
 import { mediaQueryMobile, mediaQueryTablet } from "@config/environment";
 import { IUseDetailsCreditLine } from "@ptypes/hooks/creditLines/IUseDetailsCreditLine";
 
@@ -30,7 +31,7 @@ const useDetailsCreditLine = (props: IUseDetailsCreditLine) => {
     }
 
     navigate(`/credit-lines/edit-credit-lines`, {
-      state: { data: data, option: "details" },
+      state: { data: data, option: EUseCase.DETAILS },
     });
   };
 

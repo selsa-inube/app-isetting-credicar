@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { EUseCase } from "@enum/useCase";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { IUseConfigurationConsultation } from "@ptypes/hooks/creditLines/IUseConfigurationConsultation";
 
@@ -22,7 +23,7 @@ const useConfigurationConsultation = (props: IUseConfigurationConsultation) => {
       }
 
       navigate(`/credit-lines/edit-credit-lines`, {
-        state: { data: configurationData, option: "add" },
+        state: { data: configurationData, option: EUseCase.ADD },
       });
     }
   };

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { EUseCase } from "@enum/useCase";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { IUseEditCreditConsultation } from "@ptypes/hooks/creditLines/IUseEditCreditConsultation";
 
@@ -20,7 +21,7 @@ const useEditCreditConsultation = (props: IUseEditCreditConsultation) => {
       }
 
       navigate(`/credit-lines/edit-credit-line`, {
-        state: { data: creditLineData },
+        state: { data: creditLineData, option: EUseCase.EDIT },
       });
     }
   };

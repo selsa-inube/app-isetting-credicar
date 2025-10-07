@@ -14,6 +14,7 @@ import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
 import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
+import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { transformationDecisions } from "@utils/transformationDecisions";
@@ -109,14 +110,27 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ) {
       setFormValues(initialValues);
     } else {
-      setFormValues((prev) => ({
-        ...prev,
+      const dataConfig: {
+        nameAndDescription: {
+          aliasLine: string;
+          nameLine: string;
+          descriptionLine: string;
+        };
+        rules?: IRules[];
+      } = {
         nameAndDescription: {
           aliasLine: initialData.alias || "",
           nameLine: initialData.abbreviatedName || "",
           descriptionLine: initialData.descriptionUse || "",
         },
-        rules: initialData.rules || [],
+      };
+
+      if (useCaseConfiguration === EUseCase.ADD) {
+        dataConfig.rules = initialData.rules || [];
+      }
+      setFormValues((prev) => ({
+        ...prev,
+        dataConfig,
       }));
     }
   }, [
@@ -233,6 +247,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     catalogAction: capitalizeText(ECreditLines.RULE_CATALOG),
     businessUnits: appData.businessUnit.publicCode,
   });
+
+  const { configuredDecisions } = useGetConfiguredDecisions({
+    rule: templateKey,
+    useCase: useCaseConfiguration,
+    businessUnits: appData.businessUnit.publicCode,
+    ruleData: {
+      ruleName: templateKey || "",
+    },
+  });
+
+  console.log({ configuredDecisions });
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
   const lineTypeDecision =
@@ -511,8 +536,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
-
-  console.log({ linesConstructionData });
 
   const {
     saveCreditLines,
