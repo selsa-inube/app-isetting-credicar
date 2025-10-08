@@ -1,12 +1,18 @@
 import { IGetConfiguredDecisions } from "@ptypes/decisions/IGetConfiguredDecisions";
+import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
 
 const mapGetConfiguredEntities = (
-  data: IGetConfiguredDecisions[] | undefined,
-) => {
+  data: IGetConfiguredDecisions,
+): IConfiguredDecisions[] => {
   if (!data) return [];
-  return data.map((item) => ({
-    ...item,
-  }));
+
+  return [
+    {
+      decisionsByRule: data.decisions,
+      parameterizedConditions: data.parameterizedConditions,
+      ruleName: data.decisions[0]?.ruleName || "",
+    },
+  ];
 };
 
 export { mapGetConfiguredEntities };

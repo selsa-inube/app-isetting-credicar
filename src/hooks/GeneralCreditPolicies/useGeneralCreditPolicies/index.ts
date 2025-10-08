@@ -96,9 +96,9 @@ const useGeneralCreditPolicies = () => {
     return Object.keys(tabs).reduce((tabOption, key) => {
       const tab = tabs[key as keyof typeof tabs];
 
-      if (key === tabs.generalPolicies.id && !showAddPolicies) {
-        return tabOption;
-      }
+      // if (key === tabs.generalPolicies.id && !showAddPolicies) {
+      //   return tabOption;
+      // }
 
       if (key === tabs.requestsInProgress.id && withoutRequestsData) {
         return tabOption;

@@ -20,7 +20,7 @@ const useEditCreditConsultation = (props: IUseEditCreditConsultation) => {
         return;
       }
 
-      navigate(`/credit-lines/edit-credit-line`, {
+      navigate(`/credit-lines/edit-credit-lines`, {
         state: { data: creditLineData, option: EUseCase.EDIT },
       });
     }

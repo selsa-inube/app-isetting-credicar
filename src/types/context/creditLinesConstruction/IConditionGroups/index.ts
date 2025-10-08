@@ -4,6 +4,7 @@ import { IConditionsTheDecision } from "../IConditionsTheDecision";
 interface IConditionGroups {
   conditionsThatEstablishesTheDecision: IConditionsTheDecision[];
   ConditionGroupId?: string;
+  conditionGroupId?: string;
   transactionOperation?: string;
   evaluationStatistics?: IEvaluationStatistics;
 }

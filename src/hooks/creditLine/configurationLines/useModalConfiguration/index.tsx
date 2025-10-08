@@ -24,6 +24,9 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     showInfoErrorModal,
     hasErrorCheck,
     errorCheckData,
+    // ruleLoadding,
+    ruleError,
+    // ruleErrorData,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
@@ -41,6 +44,8 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
       hasErrorCheck ||
       hasErrorRequest ||
       hasError;
+    // ||
+    // ruleError;
     setShowDecision(decision);
   }, [
     showGoBackModal,
@@ -48,6 +53,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     hasErrorCheck,
     showSaveModal,
     hasError,
+    ruleError,
   ]);
 
   const modal = () => {
@@ -76,6 +82,18 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         appearanceButton: EComponentAppearance.WARNING,
       };
     }
+
+    // if (!ruleLoadding && ruleError) {
+    //   return {
+    //     ...errorModal(messageErrorStatusRequest(ruleErrorData.status)),
+    //     onCloseModal: handleToggleErrorModal,
+    //     onClick: handleToggleErrorModal,
+    //     withCancelButton: false,
+    //     withIcon: true,
+    //     appearance: EComponentAppearance.WARNING,
+    //     appearanceButton: EComponentAppearance.WARNING,
+    //   };
+    // }
 
     if (hasErrorCheck) {
       return {

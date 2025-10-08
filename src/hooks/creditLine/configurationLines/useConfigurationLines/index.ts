@@ -14,7 +14,6 @@ import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
 import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
-import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { transformationDecisions } from "@utils/transformationDecisions";
@@ -32,8 +31,10 @@ import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDescriptionEntry";
 import { ILanguage } from "@ptypes/i18n";
 import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useGroupOptions } from "../useGroupOptions";
+import { useEditCreditLines } from "../useEditCreditLines";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -44,7 +45,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       nameLine: "",
       descriptionLine: "",
     },
-    rules: [] as IRules[],
+    rules: [] as IRuleDecisionExtended[],
   };
 
   const { appData } = useContext(AuthAndPortalData);
@@ -55,7 +56,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [canRefresh, setCanRefresh] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
-  const [decisionsData, setDecisionData] = useState<IRuleDecision[]>([]);
+
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [errorCheckData, setErrorCheckData] = useState<IErrors>({} as IErrors);
   const {
@@ -74,6 +75,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [showUnconfiguredModal, setShowUnconfiguredModal] =
     useState<boolean>(false);
   const [clientSupportData, setClientSupportData] = useState<IRules[]>();
+  const [decisionsData, setDecisionData] = useState<IRuleDecisionExtended[]>(
+    [],
+  );
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [showInfoErrorModal, setShowInfoErrorModal] = useState<boolean>(false);
   const [hasErrorCheck, setHasErrorCheck] = useState(false);
@@ -103,41 +107,36 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     useContext(CreditLinesConstruction);
 
   useEffect(() => {
-    if (
-      !initialData.abbreviatedName &&
-      !initialData.alias &&
-      !initialData.descriptionUse
-    ) {
-      setFormValues(initialValues);
-    } else {
-      const dataConfig: {
-        nameAndDescription: {
-          aliasLine: string;
-          nameLine: string;
-          descriptionLine: string;
+    if (!loading) {
+      if (initialData.settingRequestId.length > 0) {
+        const dataConfig: {
+          nameAndDescription: {
+            aliasLine: string;
+            nameLine: string;
+            descriptionLine: string;
+          };
+          rules?: IRuleDecisionExtended[];
+        } = {
+          nameAndDescription: {
+            aliasLine: initialData.alias || "",
+            nameLine: initialData.abbreviatedName || "",
+            descriptionLine: initialData.descriptionUse || "",
+          },
         };
-        rules?: IRules[];
-      } = {
-        nameAndDescription: {
-          aliasLine: initialData.alias || "",
-          nameLine: initialData.abbreviatedName || "",
-          descriptionLine: initialData.descriptionUse || "",
-        },
-      };
 
-      if (useCaseConfiguration === EUseCase.ADD) {
-        dataConfig.rules = initialData.rules || [];
+        if (useCaseConfiguration !== EUseCase.EDIT) {
+          dataConfig.rules = initialData.rules || [];
+        }
+
+        setFormValues((prev) => ({
+          ...prev,
+          ...dataConfig,
+        }));
+      } else {
+        setFormValues(initialValues);
       }
-      setFormValues((prev) => ({
-        ...prev,
-        dataConfig,
-      }));
     }
-  }, [
-    initialData.abbreviatedName,
-    initialData.alias,
-    initialData.descriptionUse,
-  ]);
+  }, [initialData]);
 
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
@@ -248,17 +247,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
-  const { configuredDecisions } = useGetConfiguredDecisions({
-    rule: templateKey,
-    useCase: useCaseConfiguration,
-    businessUnits: appData.businessUnit.publicCode,
-    ruleData: {
-      ruleName: templateKey || "",
-    },
-  });
-
-  console.log({ configuredDecisions });
-
   const lineNameDecision = formValues.nameAndDescription.nameLine;
   const lineTypeDecision =
     (ruleData.i18n?.[
@@ -292,9 +280,42 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     },
   };
 
+  const mergeRules = (
+    existingRules: IRuleDecision[] = [],
+    newRules: IRuleDecision[] = [],
+  ): IRuleDecision[] => {
+    if (!newRules || newRules.length === 0) {
+      return existingRules;
+    }
+
+    const newRulesMap = new Map(newRules.map((rule) => [rule.ruleName, rule]));
+
+    const filteredExisting = existingRules.filter(
+      (rule) => !newRulesMap.has(rule.ruleName),
+    );
+
+    return [...filteredExisting, ...newRules];
+  };
+
+  const { ruleError, ruleLoadding, ruleErrorData } = useEditCreditLines({
+    useCaseConfiguration,
+    templateKey: templateKey || "",
+    decisionsData,
+    setLinesConstructionData,
+    linesConstructionData,
+    mergeRules,
+  });
+
   const initialDecisions: IRuleDecision[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
-    .flatMap((r) => transformationDecisions(r, { ruleDict, conditionDict }));
+    .flatMap((r) => {
+      const rule: IRuleDecisionExtended = {
+        ...r,
+        decisionsByRule: r.decisionsByRule ?? [],
+      };
+      console.log({ rule });
+      return transformationDecisions(rule, { ruleDict, conditionDict });
+    });
 
   const language = appData.language as ILanguage;
 
@@ -321,23 +342,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         },
       }));
   }, [nameLineRef.current?.values]);
-
-  const mergeRules = (
-    existingRules: IRuleDecision[] = [],
-    newRules: IRuleDecision[] = [],
-  ): IRuleDecision[] => {
-    if (!newRules || newRules.length === 0) {
-      return existingRules;
-    }
-
-    const newRulesMap = new Map(newRules.map((rule) => [rule.ruleName, rule]));
-
-    const filteredExisting = existingRules.filter(
-      (rule) => !newRulesMap.has(rule.ruleName),
-    );
-
-    return [...filteredExisting, ...newRules];
-  };
 
   useEffect(() => {
     if (decisionsData.length === 0) return;
@@ -460,14 +464,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return true;
     }
 
-    console.log({ useCaseConfiguration }, "EUseCase", EUseCase.ADD);
-
     if (useCaseConfiguration === EUseCase.ADD) {
       setIsUpdated(true);
       try {
         const result = await postCheckLineRuleConsistency(
           appData.user.userAccount,
-          { rules: linesConstructionData.rules || [] },
+          {
+            rules: (linesConstructionData.rules || []).map((rule) => ({
+              ...rule,
+              decisionsByRule: rule.decisionsByRule ?? [],
+            })) as IRules[],
+          },
           appData.businessUnit.publicCode,
         );
         setUnconfiguredRules(result);
@@ -574,6 +581,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     showInfoErrorModal,
     hasErrorCheck,
     errorCheckData,
+    ruleLoadding,
+    ruleError,
+    ruleErrorData,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
