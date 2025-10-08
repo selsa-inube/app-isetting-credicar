@@ -7,21 +7,30 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { parseIfJSON } from "../parseIfJSON";
 import { formatDateDecision } from "../date/formatDateDecision";
 
+const validateObject = (payload: any) => {
+  if (typeof payload !== "object") {
+    return payload.decisionsByRule?.[0];
+  }
+  return payload;
+};
+
 const transformationDecisions = (
   payload: IRuleDecisionExtended,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
 
+  console.log({ payload });
+
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const {
     labelName: ruleLabelName = ruleName,
     descriptionUse: ruleDescriptionUse = ruleName,
-    decisionDataType = payload.decisionsByRule?.[0].ruleDataType
-      ? payload.decisionsByRule?.[0].ruleDataType
-      : "alphabetical",
-    howToSetTheDecision = payload.decisionsByRule?.[0].howToSetTheDecision
-      ? payload.decisionsByRule?.[0].howToSetTheDecision
+    decisionDataType = validateObject(payload).ruleDataType
+      ? validateObject(payload).ruleDataType
+      : "Alphabetical",
+    howToSetTheDecision = validateObject(payload).howToSetTheDecision
+      ? validateObject(payload).howToSetTheDecision
       : "EqualTo",
   } = ruleMeta;
 
@@ -29,7 +38,7 @@ const transformationDecisions = (
     ? payload.decisionsByRule?.map((decision, index) => {
         const groupedConditions: Record<string, ICondition[]> = {};
         decision.conditionGroups?.forEach((group) => {
-          const groupId = group.conditionGroupId;
+          const groupId = group.conditionGroupId ?? `Group-${index + 1}`;
           groupedConditions[groupId as string] =
             group.conditionsThatEstablishesTheDecision.map((c) => {
               const condMeta: IConditionMeta =
@@ -60,8 +69,8 @@ const transformationDecisions = (
           effectiveFrom,
           validUntil,
           conditionsThatEstablishesTheDecision: groupedConditions,
-          decisionId: payload.decisionsByRule?.[0].decisionId
-            ? payload.decisionsByRule?.[0].decisionId
+          decisionId: validateObject(payload).decisionId
+            ? validateObject(payload).decisionId
             : `Decisión ${index + 1}`,
         };
         return out;

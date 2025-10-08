@@ -37,7 +37,9 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
         {
           decisionId: rule.decisionId,
           ruleName: rule.ruleName,
-          ruleDataType: rule.decisionDataType,
+          ruleDataType: rule.decisionDataType
+            ? rule.decisionDataType
+            : "Alphabetical",
           value: parseIfJSON(rule.value),
           howToSetTheDecision: rule.howToSetTheDecision,
           effectiveFrom:
