@@ -17,7 +17,7 @@ const getMoneyDestinationData = async (
     IMoneyDestinationData[]
   >(credicarAxiosInstance, `/money-destinations`, config);
 
-  return mapMoneyDestinationToEntities(data);
+  return data ? mapMoneyDestinationToEntities(data) : [];
 };
 
 export { getMoneyDestinationData };

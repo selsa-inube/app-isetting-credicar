@@ -44,7 +44,7 @@ const dataTranslations: Record<string, string> = {
   BonusesOrSeverancePay: "Primas o cesantías",
   ReciprocityFactorForCreditLimit: "Número de veces los aportes",
   RiskScoreFactorForCreditLimit: "Número de veces los ingresos",
-  CreditRiskScoringModelGp: "Modelo de score",
+  CreditRiskScoringModel: "Modelo de score",
 };
 
 export { dataTranslations };

@@ -1,8 +1,11 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IUseBusinessRulesNewGeneral } from "../IUseBusinessRulesNewGeneral";
 
 interface IBusinessRulesNew extends IUseBusinessRulesNewGeneral {
-  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[]>>;
+  setDecisionData: React.Dispatch<
+    React.SetStateAction<IRuleDecisionExtended[]>
+  >;
+  option: string;
   terms?: boolean;
   controls?: boolean;
   customMessageEmptyDecisions?: string;

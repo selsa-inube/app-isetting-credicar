@@ -9,6 +9,7 @@ import { labelsOfTraceability } from "@config/creditLines/requestInProgressTab/l
 import { detailsLabels } from "@config/creditLines/requestInProgressTab/detailsLabels";
 import { IDetailsRequestUI } from "@ptypes/creditLines/IDetailsRequestUI";
 import { StyledContainerIcon } from "./styles";
+import { MoreDetails } from "./moreDetails";
 
 const DetailsUI = (props: IDetailsRequestUI) => {
   const {
@@ -28,6 +29,10 @@ const DetailsUI = (props: IDetailsRequestUI) => {
     withErrorRequest,
     labelButton,
     iconButton,
+    showMoreDetailsModal,
+    useCaseName,
+    normalizeDetails,
+    onMoreDetails,
     onClick,
     onTabRequestChange,
     onToggleModal,
@@ -58,7 +63,7 @@ const DetailsUI = (props: IDetailsRequestUI) => {
           labelsOfTraceability={labelsOfTraceability}
           onCloseModal={onToggleModal}
           isMobile={isMobile}
-          onClick={() => void 0}
+          onClick={onMoreDetails}
           isSelected={isSelectedRequest}
           filteredTabs={filteredTabs}
           showTrazabilityData={showTrazabilityData}
@@ -70,6 +75,10 @@ const DetailsUI = (props: IDetailsRequestUI) => {
           labelButton={labelButton}
           iconButton={iconButton}
         />
+      )}
+
+      {showMoreDetailsModal && (
+        <MoreDetails data={normalizeDetails} useNameRequest={useCaseName} />
       )}
 
       {showDecision && (

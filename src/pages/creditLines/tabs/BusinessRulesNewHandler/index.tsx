@@ -4,6 +4,7 @@ import { MdAdd, MdOutlineReportProblem } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
 import { BusinessRulesNew, Checkpicker } from "@isettingkit/business-rules";
 import { EComponentAppearance } from "@enum/appearances";
+import { EUseCase } from "@enum/useCase";
 import { tokens } from "@design/tokens";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
@@ -21,6 +22,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     language,
     loading,
     textValues,
+    option,
     setDecisionData,
     formId,
   } = props;
@@ -39,7 +41,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     removeCondition,
     restoreConditions,
     submitForm,
-    decisionsSorted
+    decisionsSorted,
   } = useBusinessRulesNew({
     controls,
     customMessageEmptyDecisions,
@@ -52,39 +54,46 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setDecisionData,
     formId,
   });
-  console.log("initialDecisions1: ", initialDecisions, decisionsSorted);
+
+  const optionDetailsCreditline = option === EUseCase.DETAILS ? true : false;
+  const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!loading && (
         <>
-          <Fieldset legend={newBusinessRulesLabels.conditionsTitle}>
-            <StyledMultipleChoiceContainer>
-              <Checkpicker
-                fullwidth
-                id="conditionsPicker"
-                label=""
-                name="conditionsPicker"
-                onChange={onMultipleChoicesChange}
-                options={multipleChoicesOptions as IOption[]}
-                placeholder="Selecciona las condiciones"
-                required={false}
-                size="wide"
-                values={selectedConditionsCSV}
-              />
-            </StyledMultipleChoiceContainer>
-          </Fieldset>
-          <Stack justifyContent="flex-end">
-            <Button
-              appearance="primary"
-              cursorHover
-              disabled={selectedConditionsCSV.length === 0}
-              iconBefore={<MdAdd />}
-              onClick={() => openModal()}
-            >
-              {newBusinessRulesLabels.add}
-            </Button>
-          </Stack>
+          {!optionDetailsCreditline && (
+            <>
+              <Fieldset legend={newBusinessRulesLabels.conditionsTitle}>
+                <StyledMultipleChoiceContainer>
+                  <Checkpicker
+                    fullwidth
+                    id="conditionsPicker"
+                    label=""
+                    name="conditionsPicker"
+                    onChange={onMultipleChoicesChange}
+                    options={multipleChoicesOptions as IOption[]}
+                    placeholder="Selecciona las condiciones"
+                    required={false}
+                    size="wide"
+                    values={selectedConditionsCSV}
+                  />
+                </StyledMultipleChoiceContainer>
+              </Fieldset>
+
+              <Stack justifyContent="flex-end">
+                <Button
+                  appearance="primary"
+                  cursorHover
+                  disabled={selectedConditionsCSV.length === 0}
+                  iconBefore={<MdAdd />}
+                  onClick={() => openModal()}
+                >
+                  {newBusinessRulesLabels.add}
+                </Button>
+              </Stack>
+            </>
+          )}
         </>
       )}
 
@@ -137,7 +146,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
               {customMessageEmptyDecisions ? (
                 customMessageEmptyDecisions
               ) : (
-                <>{newBusinessRulesLabels.before}</>
+                <>{message}</>
               )}
             </Text>
           </Stack>

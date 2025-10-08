@@ -1,5 +1,6 @@
 const rules = [
   "LoanTerm",
+  "CreditLineByRiskProfile",
   "RepaymentStructure",
   "GeometricGradientRepaymentRate",
   "ArithmeticGradientRepaymentValue",
@@ -30,7 +31,6 @@ const rules = [
   "OmittableHumanTasks",
   "AutomaticCollectionForExclusiveCreditLines",
   "EstimatedDaysForLoanDisbursementProcess",
-  "ConsolidationOfOtherCreditProductsAllowed",
   "FinancialObligationsUpdateRequired",
   "GuaranteeRequirements",
   "AdditionalBorrowersAllowed",

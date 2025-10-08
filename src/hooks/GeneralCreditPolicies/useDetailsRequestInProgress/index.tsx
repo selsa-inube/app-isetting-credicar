@@ -9,7 +9,6 @@ import { eventBus } from "@events/eventBus";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
-import { RequestType } from "@enum/requestType";
 import { EModalState } from "@enum/modalState";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { EComponentAppearance } from "@enum/appearances";
@@ -153,8 +152,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   }, [showModal]);
 
   const title = `${detailsRequestInProgressModal.labelRequest} ${
-    RequestType[normalizeData.request as keyof typeof RequestType] ??
-    data.request
+    normalizeData.request
   }`;
 
   const withErrorRequest = approvalRequest || executeRequest;

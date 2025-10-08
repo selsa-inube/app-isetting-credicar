@@ -3,7 +3,7 @@ enum ERequestInProgress {
   GENERAL_CREDIT_POLICIES = "GeneralCreditPolicies",
   MONEY_DESTINATION = "MoneyDestination",
   PAYROLL_AGREEMENT = "PayrollAgreement",
-  CREDIT_LINE = "CreditLine",
+  CREDIT_LINE = "CreditLines",
 }
 
 export { ERequestInProgress };

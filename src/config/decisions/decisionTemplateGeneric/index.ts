@@ -1,14 +1,16 @@
 import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
-import { enviroment } from "@config/environment";
-import { IDecisionData } from "@ptypes/decisions/IDecision";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
-const decisionTemplateConfig = ({
-  ruleName,
-  decisionDataType,
-  conditionsThatEstablishesTheDecision,
-  i18n,
-  descriptionUse,
-}: IDecisionData) => {
+const decisionTemplateConfig = (
+  {
+    ruleName,
+    decisionDataType,
+    conditionsThatEstablishesTheDecision,
+    i18n,
+    descriptionUse,
+  }: IRuleDecisionExtended,
+  language: string,
+) => {
   if (
     descriptionUse &&
     decisionDataType &&
@@ -19,10 +21,10 @@ const decisionTemplateConfig = ({
     const decisionTemplate = {
       ruleName: ruleName,
       labelName: String(
-        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ?? descriptionUse,
+        i18n?.[language as keyof typeof i18n] ?? descriptionUse,
       ),
       descriptionUse: String(
-        i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ?? descriptionUse,
+        i18n?.[language as keyof typeof i18n] ?? descriptionUse,
       ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
@@ -35,12 +37,12 @@ const decisionTemplateConfig = ({
           (condition) => ({
             conditionName: condition.conditionName,
             labelName: String(
-              condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-                condition.descriptionUse,
+              // condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
             ),
             descriptionUse: String(
-              condition.i18n?.[enviroment.VITE_LANGUAGE as keyof typeof i18n] ??
-                condition.descriptionUse,
+              // condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
             ),
             conditionDataType: condition.conditionDataType,
             value: "",

@@ -22,7 +22,7 @@ const useConfigurationConsultation = (props: IUseConfigurationConsultation) => {
       }
 
       navigate(`/credit-lines/edit-credit-lines`, {
-        state: { data: configurationData },
+        state: { data: configurationData, option: "add" },
       });
     }
   };

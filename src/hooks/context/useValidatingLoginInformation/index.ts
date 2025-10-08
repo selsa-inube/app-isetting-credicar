@@ -83,7 +83,7 @@ const useValidatingLoginInformation = () => {
           ...prev,
           user: {
             ...prev.user,
-            userAccount: user.username || "",
+            userAccount: user.id || "",
             userName: user.nickname || "",
             identificationDocumentNumber: user.id || "",
           },

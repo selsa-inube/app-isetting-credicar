@@ -1,6 +1,7 @@
 import { Icon } from "@inubekit/inubekit";
-import { MdDeleteOutline, MdOutlineRemoveRedEye } from "react-icons/md";
-import { EditConstruction } from "@pages/creditLines/tabs/linesUnderConstructionTab/edit";
+import { MdDeleteOutline } from "react-icons/md";
+import { EditConstruction } from "@pages/creditLines/tabs/linesUnderConstructionTab/tools/edit";
+import { DetailsConfiguration } from "@pages/creditLines/tabs/linesUnderConstructionTab/tools/details";
 import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { IAction } from "@ptypes/design/table/IAction";
@@ -9,14 +10,7 @@ import { IEntry } from "@ptypes/design/table/IEntry";
 const actions: IAction[] = [
   {
     id: "Details",
-
-    content: () => (
-      <Icon
-        icon={<MdOutlineRemoveRedEye />}
-        appearance={EComponentAppearance.DARK}
-        size="16px"
-      />
-    ),
+    content: (entry: IEntry) => <DetailsConfiguration data={entry} />,
   },
   {
     id: "edit",

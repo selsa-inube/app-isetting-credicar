@@ -1,5 +1,6 @@
 import { useNameAndDescriptionForm } from "@hooks/creditLine/useNameAndDescriptionForm";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { NameAndDescriptionFormUI } from "./interface";
 
 const NameAndDescriptionForm = () => {
@@ -11,6 +12,22 @@ const NameAndDescriptionForm = () => {
     formValues,
     loadingModify,
     nav,
+    saveCreditLines,
+    requestSteps,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    unconfiguredRules,
+    showUnconfiguredModal,
+    language,
+    title,
+    description,
+    optionCrumb,
+    optionDetails,
+    handleToggleUnconfiguredRulesModal,
+    handleUnconfiguredRules,
+    handleClosePendingModal,
+    handleCloseRequestStatus,
+    handleCloseProcess,
     setIsCurrentFormValid,
     nameLineRef,
     handleToggleInfoModal,
@@ -37,6 +54,23 @@ const NameAndDescriptionForm = () => {
       isUpdated={loadingModify}
       navigation={nav}
       message={message}
+      showRequestProcessModal={showRequestProcessModal}
+      showRequestStatusModal={showRequestStatusModal}
+      saveData={saveCreditLines as ISaveDataResponse}
+      requestSteps={requestSteps}
+      onCloseRequestStatus={handleCloseRequestStatus}
+      onCloseProcess={handleCloseProcess}
+      onClosePendingModal={handleClosePendingModal}
+      onUnconfiguredModal={handleUnconfiguredRules}
+      onToggleUnconfiguredRules={handleToggleUnconfiguredRulesModal}
+      showUnconfiguredModal={showUnconfiguredModal}
+      unconfiguredRules={unconfiguredRules}
+      language={language}
+      title={title}
+      description={description}
+      optionCrumb={optionCrumb}
+      optionDetails={optionDetails}
+      disabledField={optionDetails}
     />
   );
 };

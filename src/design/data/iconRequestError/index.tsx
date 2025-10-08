@@ -3,17 +3,15 @@ import { Stack, Text } from "@inubekit/inubekit";
 import { IconWithText } from "@design/data/iconWithText";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
-import { approvalInRequest } from "@config/status/approvalInRequest";
+import { requestError } from "@config/status/requestError";
 import { IIconRequestError } from "@ptypes/design/IIconRequestError";
 
 const IconRequestError = (props: IIconRequestError) => {
-  const { status } = props;
-
-  const withError = approvalInRequest.includes(status);
+  const { status, settingRequestError } = props;
 
   return (
     <Stack width="100%">
-      {!withError ? (
+      {settingRequestError === undefined ? (
         <Stack width="100%" justifyContent="center">
           <Text size="small" textAlign="end">
             {status}
@@ -24,7 +22,7 @@ const IconRequestError = (props: IIconRequestError) => {
           <IconWithText
             withIconAfter
             icon={<MdOutlineWarning />}
-            text={String(status)}
+            text={requestError}
             sizeIcon="16px"
             sizeMobileIcon="16px"
             appearanceIcon={EComponentAppearance.WARNING}

@@ -36,6 +36,7 @@ const RenderDecisionsGenVerification = (
           <Stack
             gap={tokens.spacing.s100}
             direction={isMobile ? "column" : "row"}
+            wrap="wrap"
           >
             {
               <RenderMethodTags

@@ -1,8 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
-import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
+import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { decrypt } from "@utils/crypto/decrypt";
+import { ERequestInProgress } from "@enum/requestInProgress";
 import { ECreditLines } from "@enum/creditLines";
 import { mediaQueryTablet } from "@config/environment";
 import { creditLinesTabsConfig } from "@config/creditLines/tabs";
@@ -12,10 +15,14 @@ import { useLineInconstructionData } from "../useLineInconstructionData";
 
 const useCreditLinePage = (businessUnitSigla: string) => {
   const portalId = localStorage.getItem("portalCode");
+  const { appData } = useContext(AuthAndPortalData);
   const staffPortalId = portalId ? decrypt(portalId) : "";
   const [showUnderConstruction, setShowUnderConstruction] =
     useState<boolean>(false);
-  const [requestsInProgress] = useState<IRequestsInProgress[]>([]);
+  const [requestsInProgress, setRequestsInProgress] = useState<
+    IRequestsInProgress[]
+  >([]);
+  const [loading, setLoading] = useState(true);
 
   const tabs = creditLinesTabsConfig;
 
@@ -28,6 +35,28 @@ const useCreditLinePage = (businessUnitSigla: string) => {
   });
 
   const { lineUnderConstruction } = useLineInconstructionData();
+
+  useEffect(() => {
+    const fetchRequestsInProgressData = async () => {
+      setLoading(true);
+      try {
+        if (appData.businessManager.publicCode.length > 0) {
+          const data = await getRequestsInProgress(
+            appData.businessManager.publicCode,
+            appData.businessUnit.publicCode,
+            ERequestInProgress.CREDIT_LINE,
+          );
+          setRequestsInProgress(data as IRequestsInProgress[]);
+        }
+      } catch (error) {
+        console.info(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRequestsInProgressData();
+  }, [appData.businessManager.publicCode, appData.businessUnit.publicCode]);
 
   const handleTabChange = (tabId: string) => {
     setIsSelected(tabId);
@@ -101,6 +130,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     showCreditLinesTab,
     showLinesRequestTab,
     showLinesUnderConstructionTab,
+    loading,
     creditLinesTabs,
     handleTabChange,
     setShowUnderConstruction,

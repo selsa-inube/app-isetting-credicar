@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { eventBus } from "@events/eventBus";
-import { RequestType } from "@enum/requestType";
 import { EModalState } from "@enum/modalState";
 import { EpayrollDetails } from "@enum/payrollDetails";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
@@ -276,9 +275,7 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     (field) => data[field.id],
   );
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${
-    RequestType[data.request as keyof typeof RequestType] ?? data.request
-  }`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 

@@ -20,6 +20,10 @@ interface IDetailsRequestUI {
   labelsOfRequest: ILabel[];
   labelButton: string;
   iconButton: React.ReactElement;
+  showMoreDetailsModal: boolean;
+  useCaseName: string;
+  normalizeDetails: IEntry;
+  onMoreDetails: () => void;
   onClick: () => void;
   onTabRequestChange: (id: string) => void;
 

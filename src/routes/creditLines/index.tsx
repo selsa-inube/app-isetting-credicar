@@ -115,7 +115,12 @@ const CreditLinesRoutes = () => {
       <Route path="/" element={<CreditLines />} />
       <Route path="edit-credit-lines" element={<ConfigurationLines />}>
         <Route index element={<NameAndDescriptionForm />} />
-        <Route path="clients-supported" element={<ClientsSupportLineForm />} />
+        <Route
+          path="clients-supported"
+          element={
+            <ClientsSupportLineForm templateKey="CreditLineByRiskProfile" />
+          }
+        />
         <Route
           path="line-Names-Descriptions"
           element={<NameAndDescriptionForm />}

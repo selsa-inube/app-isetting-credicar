@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { patchModifyConstruction } from "@services/requestInProgress/patchModifyConstruction";
+import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
 import { errorObject } from "@utils/errorObject";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { IUseLinesConstructionData } from "@ptypes/hooks/creditLines/IUseLinesConstructionData";
 import { IErrors } from "@ptypes/IErrors";
 
 const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
-  const { userAccount, linesData, withNeWData } = props;
+  const { option, userAccount, linesData, withNeWData, setIsUpdated } = props;
   const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
     {} as IModifyConstructionResponse,
   );
@@ -20,7 +20,7 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
       setErrorData({} as IErrors);
       setBorrowerData({} as IModifyConstructionResponse);
 
-      if (withNeWData && linesData) {
+      if (option && withNeWData && linesData) {
         setLoading(true);
         try {
           const data = await patchModifyConstruction(userAccount, linesData);
@@ -31,6 +31,9 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
           setErrorData(errorObject(error));
         } finally {
           setLoading(false);
+          if (setIsUpdated) {
+            setIsUpdated(false);
+          }
         }
       } else {
         setLoading(false);
@@ -38,7 +41,7 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
     };
 
     fetchLinesConstructiontData();
-  }, [withNeWData, userAccount, linesData?.settingRequestId]);
+  }, [option, withNeWData, userAccount, linesData?.settingRequestId]);
 
   return {
     borrowerData,

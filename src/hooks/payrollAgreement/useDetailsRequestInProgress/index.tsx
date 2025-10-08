@@ -10,7 +10,6 @@ import { useRequestDetails } from "@hooks/useRequestDetails";
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
-import { RequestType } from "@enum/requestType";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorObject } from "@utils/errorObject";
@@ -31,6 +30,8 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
+  const [showMoreDetailsModal, setShowMoreDetailsModal] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleToggleModal = () => {
@@ -114,6 +115,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     setLoading,
   });
 
+  const onMoreDetails = () => {
+    setShowMoreDetailsModal(!showMoreDetailsModal);
+  };
+
   useEffect(() => {
     const decision = hasError;
     setShowDecision(decision);
@@ -151,11 +156,16 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const modalData = modal();
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${
-    RequestType[data.request as keyof typeof RequestType] ?? data.request
-  }`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
 
   const withErrorRequest = approvalRequest || executeRequest;
+
+  const useCaseName = data.useCaseName;
+  const normalizeDetails = {
+    id: data.settingRequestId,
+    settingRequestId: data.settingRequestId,
+    configurationRequestData: data.configurationRequestData,
+  };
 
   return {
     showModal,
@@ -174,6 +184,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     title,
     statusRequestData,
     withErrorRequest,
+    showMoreDetailsModal,
+    useCaseName,
+    normalizeDetails,
+    onMoreDetails,
     handleTabRequestChange,
     handleToggleModal,
     normalizeData,

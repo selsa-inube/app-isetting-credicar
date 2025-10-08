@@ -48,6 +48,7 @@ const RequestsInProcess = (props: IRequestsInProcess) => {
       onClickThirdButton={onThirdClick}
       iconThirdButton={iconButton}
       loadingThirdButton={loading}
+      fullwidthbutton
     >
       <Tabs
         tabs={filteredTabs}

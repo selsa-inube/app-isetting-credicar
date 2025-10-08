@@ -1,10 +1,13 @@
 import { Stack, Textarea, Textfield } from "@inubekit/inubekit";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
+import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { getFieldState } from "@utils/getFieldState";
+import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { nameAndDescriptionLabels } from "@config/creditLines/configuration/nameAndDescriptionLabels";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { portalId } from "@config/portalId";
@@ -22,6 +25,23 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     isUpdated,
     navigation,
     message,
+    requestSteps,
+    saveData,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    showUnconfiguredModal,
+    unconfiguredRules,
+    language,
+    title,
+    description,
+    optionCrumb,
+    disabledField,
+    optionDetails,
+    onUnconfiguredModal,
+    onToggleUnconfiguredRules,
+    onCloseRequestStatus,
+    onClosePendingModal,
+    onCloseProcess,
     onToggleInfoModal,
     onOpenModal,
   } = props;
@@ -41,8 +61,13 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
           updateData={isUpdated}
           loading={loading}
           withoutDecisions={true}
+          title={title}
+          description={description}
+          optionCrumb={optionCrumb}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}
+          withIcon={!optionDetails}
+          withBackModal={!optionDetails}
         />
         {!loading && (
           <Stack direction="column" gap={tokens.spacing.s200}>
@@ -58,6 +83,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
               status={getFieldState(formik, "aliasLine")}
               message={formik.errors.aliasLine}
               maxLength={nameAndDescriptionLabels.maxLenghtAlias}
+              disabled={disabledField}
               fullwidth
               required
             />
@@ -74,6 +100,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
               status={getFieldState(formik, "nameLine")}
               message={formik.errors.nameLine}
               maxLength={nameAndDescriptionLabels.maxLenghtName}
+              disabled={disabledField}
               fullwidth
               required
             />
@@ -89,11 +116,21 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
               message={formik.errors.descriptionLine}
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
+              disabled={disabledField}
               fullwidth
               required
             />
           </Stack>
         )}
+        <RequestModal
+          showRequestProcessModal={showRequestProcessModal}
+          showRequestStatusModal={showRequestStatusModal}
+          saveData={saveData}
+          requestSteps={requestSteps}
+          onCloseRequestStatus={onCloseRequestStatus}
+          onCloseProcess={onCloseProcess}
+          onClosePendingModal={onClosePendingModal}
+        />
 
         {showModal && (
           <DecisionModal
@@ -119,9 +156,23 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             onCloseModal={onToggleInfoModal}
           />
         )}
+        {showUnconfiguredModal && (
+          <SubmitRequestModal
+            title={submitRequestLabels.title}
+            unconfiguredRules={unconfiguredRules}
+            description={submitRequestLabels.description}
+            onClick={onUnconfiguredModal}
+            onCloseModal={onToggleUnconfiguredRules}
+            loading={loading}
+            language={language}
+          />
+        )}
       </Stack>
       <StyledFloatButtonsContainer>
-        <ButtonsConfiguration navigation={navigation} />
+        <ButtonsConfiguration
+          navigation={navigation}
+          withSendButton={!optionDetails}
+        />
       </StyledFloatButtonsContainer>
     </>
   );

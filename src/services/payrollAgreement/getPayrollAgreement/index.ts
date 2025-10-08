@@ -17,7 +17,7 @@ const getPayrollAgreementData = async (
     IPayrollAgreementData[]
   >(credicarAxiosInstance, `/payroll-for-deduction-agreement`, config);
 
-  return mapPayrollAgreementToEntities(data);
+  return data ? mapPayrollAgreementToEntities(data) : [];
 };
 
 export { getPayrollAgreementData };
