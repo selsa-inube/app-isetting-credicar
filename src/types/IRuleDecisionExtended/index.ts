@@ -10,6 +10,7 @@ interface IRuleDecisionExtended extends IRuleDecision {
   conditionGroups?: IConditionGroups[];
   decisionsByRule?: IDecisionsByRule[];
   evaluationStatistics?: IEvaluationStatistics;
+  parameterizedConditions?: string[];
 }
 
 export type { IRuleDecisionExtended };

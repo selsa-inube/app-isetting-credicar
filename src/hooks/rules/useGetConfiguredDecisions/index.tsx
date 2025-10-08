@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { postGetConfiguredDecisions } from "@services/conditionsRules/postGetConfiguredDecisions";
 import { EUseCase } from "@enum/useCase";
+import { errorObject } from "@utils/errorObject";
 import { IUseGetConfiguredDecisions } from "@ptypes/hooks/IUseGetConfiguredDecisions";
 import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
-import { errorObject } from "@src/utils/errorObject";
-import { IErrors } from "@src/types/IErrors";
+import { IErrors } from "@ptypes/IErrors";
 
 const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
   const { businessUnits, ruleData, useCase, rule } = props;

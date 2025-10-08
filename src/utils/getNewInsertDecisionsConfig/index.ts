@@ -54,7 +54,6 @@ const getNewInsertDecisionsConfig = (
             conditionGroups: conditionGroups,
           };
         });
-        console.log();
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
           ruleName: decision.ruleName,

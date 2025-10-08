@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
-import { getNewInsertDecisionsConfig } from "@src/utils/getNewInsertDecisionsConfigR";
+import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
+import { transformRuleStructure } from "@utils/transformRuleStructure";
+import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { EUseCase } from "@enum/useCase";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
@@ -30,7 +34,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       ruleData: {
         ruleName,
       },
-      // language: appData.language,
     });
 
   const {
@@ -63,44 +66,55 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [configuredDecisions]);
 
+  const normalizeDecisionsArray = (data: any): IRuleDecisionExtended[] =>
+    (Array.isArray(data) ? data : []).map((item) => ({
+      ...item,
+      decisionsByRule: Array.isArray(item.decisionsByRule)
+        ? item.decisionsByRule.map((dbr: any) => ({
+            ...dbr,
+            effectiveFrom: formatDateDecision(dbr.effectiveFrom),
+          }))
+        : [],
+    }));
+
   const newInsertDecision = getNewInsertDecisionsConfig(
     appData.user.userAccount,
-    normalizeEvaluateRuleData(configuredDecisions) ?? [],
-    decisionsData,
+    normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+    normalizeDecisionsArray(transformRuleStructure(decisionsData)),
   );
 
   const newDeleteDecision = getNewDeletedDecisionsConfig(
     appData.user.userAccount,
-    normalizeEvaluateRuleData(configuredDecisions) ?? [],
-    decisionsData,
+    normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+    normalizeDecisionsArray(transformRuleStructure(decisionsData)),
   );
-  // console.log(
-  //   {
-  //     configuredDecisions,
-  //     decisionsData,
-  //     linesConstructionData,
-  //   },
-  //   "aquiiii",
-  // );
 
   useEffect(() => {
     const insertValues = [newInsertDecision].filter(
       (decision) => decision !== undefined,
     );
-    console.log({ newInsertDecision, insertValues });
 
     const deleteValues = [newDeleteDecision].filter(
       (decision) => decision !== undefined,
     );
-    console.log({ deleteValues });
     setNewDecisions(
       [...insertValues, ...deleteValues].flatMap(
         (item) => item as IRuleDecisionExtended,
       ),
     );
-  }, [decisionsData]);
 
-  console.log({ newDecisions });
+    if (decisionsData.length > 0) {
+      setLinesConstructionData((prev) => {
+        const existingRules =
+          (prev?.rules as IRuleDecision[] | undefined) ?? [];
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          rules: mergeRules(existingRules, decisionsData),
+        };
+      });
+    }
+  }, [decisionsData]);
 
   useEffect(() => {
     if (

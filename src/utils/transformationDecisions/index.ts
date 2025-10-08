@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ICondition } from "@ptypes/creditLines/ICondition";
-// import { IRuleDecision } from "@isettingkit/input";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
-import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
-
-const asDateOnly = (iso?: string | null): string =>
-  iso ? new Date(iso).toISOString().slice(0, 10) : "";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { parseIfJSON } from "../parseIfJSON";
+import { formatDateDecision } from "../date/formatDateDecision";
 
 const transformationDecisions = (
   payload: IRuleDecisionExtended,
@@ -19,17 +17,19 @@ const transformationDecisions = (
   const {
     labelName: ruleLabelName = ruleName,
     descriptionUse: ruleDescriptionUse = ruleName,
-    decisionDataType = "alphabetical",
-    howToSetTheDecision = "EqualTo",
+    decisionDataType = payload.decisionsByRule?.[0].ruleDataType
+      ? payload.decisionsByRule?.[0].ruleDataType
+      : "alphabetical",
+    howToSetTheDecision = payload.decisionsByRule?.[0].howToSetTheDecision
+      ? payload.decisionsByRule?.[0].howToSetTheDecision
+      : "EqualTo",
   } = ruleMeta;
 
   return payload.decisionsByRule
     ? payload.decisionsByRule?.map((decision, index) => {
         const groupedConditions: Record<string, ICondition[]> = {};
-        console.log("aaaa", decision.conditionGroups);
         decision.conditionGroups?.forEach((group) => {
           const groupId = group.conditionGroupId;
-          console.log({ groupId }, group.conditionGroupId);
           groupedConditions[groupId as string] =
             group.conditionsThatEstablishesTheDecision.map((c) => {
               const condMeta: IConditionMeta =
@@ -47,8 +47,8 @@ const transformationDecisions = (
             });
         });
 
-        const effectiveFrom = asDateOnly(decision.effectiveFrom);
-        const validUntil = asDateOnly(decision.validUntil ?? "");
+        const effectiveFrom = formatDateDecision(decision.effectiveFrom);
+        const validUntil = formatDateDecision(decision.validUntil ?? "");
 
         const out: any = {
           ruleName,
@@ -56,14 +56,14 @@ const transformationDecisions = (
           descriptionUse: ruleDescriptionUse,
           decisionDataType,
           howToSetTheDecision,
-          value: String(decision.value ?? ""),
+          value: parseIfJSON(decision.value ?? ""),
           effectiveFrom,
           validUntil,
           conditionsThatEstablishesTheDecision: groupedConditions,
-          decisionId: `Decisión ${index + 1}`,
+          decisionId: payload.decisionsByRule?.[0].decisionId
+            ? payload.decisionsByRule?.[0].decisionId
+            : `Decisión ${index + 1}`,
         };
-
-        console.log({ out });
         return out;
       })
     : [];
