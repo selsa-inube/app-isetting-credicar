@@ -3,7 +3,7 @@ import { daysWeek } from "@config/payrollAgreement/payrollAgreementTab/generic/d
 const getDaysInNumber = (paydays: string[]): number[] => {
   return paydays
     .filter(
-      (payday) => !daysWeek.includes(payday) && payday !== "Ultimo día del mes",
+      (payday) => !daysWeek.includes(payday) && payday !== "Último día del mes",
     )
     .map((day) => Number(day));
 };

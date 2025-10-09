@@ -8,19 +8,20 @@ import { useEnumeratorsICardes } from "@hooks/useEnumeratorsIcardes";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
-import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
 import { getNextId } from "@utils/getNextId";
 import { addLeadingZero } from "@utils/addLeadingZero";
 import { payDayValues } from "@utils/payDayValues";
+import { optionsEnumCodeI18n } from "@utils/optionsEnumCodeI18n";
+import { translationToEnum } from "@utils/translationToEnum";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { compareObjects } from "@utils/compareObjects";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { ILanguage } from "@ptypes/i18n";
-import { IServerDomain } from "@ptypes/IServerDomain";
-import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
+import { IServerDomain } from "@ptypes/IServerDomain";
 import { useValuesSelect } from "../useValuesSelect";
 
 const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
@@ -60,6 +61,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     periodicity: "",
     payday: "",
     numberDaysUntilCut: "",
+    laborRegulatorFramework: "",
   };
 
   const formik = useFormik({
@@ -96,7 +98,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
-  const laborRegulatorOptions = optionsFromEnumI18n(
+  const laborRegulatorOptions = optionsEnumCodeI18n(
     appData.language as ILanguage,
     laborRegulator,
     true,
@@ -182,9 +184,12 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
       formik.values.periodicity,
     payday: payDayValues(
       formik.values.periodicity ?? "",
-      formik.values.payday ?? "",
+      formik.values.payday
+        ? (translationToEnum[formik.values.payday] ?? formik.values.payday)
+        : "",
     ),
     numberDaysUntilCut: formik.values.numberDaysUntilCut,
+    laborRegulatorFramework: formik.values.laborRegulatorFramework,
   });
 
   const handleAddCycle = () => {
