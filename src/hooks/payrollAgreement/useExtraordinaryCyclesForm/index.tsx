@@ -16,6 +16,7 @@ import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
 import { compareObjects } from "@utils/compareObjects";
 import { convertToOptions } from "@utils/convertToOptions";
+import { optionsEnumCodeI18n } from "@utils/optionsEnumCodeI18n";
 import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
@@ -111,7 +112,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
-  const laborRegulatorOptions = optionsFromEnumI18n(
+  const laborRegulatorOptions = optionsEnumCodeI18n(
     appData.language as ILanguage,
     laborRegulator,
     true,
