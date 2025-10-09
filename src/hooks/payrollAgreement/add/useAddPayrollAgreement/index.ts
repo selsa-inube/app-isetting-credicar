@@ -165,7 +165,6 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
 
     let verifyDays: number[] = [];
     let lastDayOfMonth: number[] = [];
-
     extraordinaryPayment.forEach((item) => {
       const month = Number(item.payday?.slice(0, 2));
       const paydayValue = Number(item.payday?.split("-")[1]);
@@ -349,13 +348,18 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [formValues, initialValues, companyRef, canRefresh]);
+  const isRegularCycleStepWithCycles = () =>
+    currentStep === stepKeysPayroll.REGULAR_CYCLES &&
+    regularPaymentCycles.length > 0;
+
+  const isExtraordinaryCycleStepWithOnlyExtra = () =>
+    currentStep === stepKeysPayroll.EXTRAORDINARY_CYCLES &&
+    (regularPaymentCycles.length === 0
+      ? extraordinaryPayment.length > 0
+      : true);
 
   const formValid =
-    (currentStep === stepKeysPayroll.REGULAR_CYCLES &&
-      regularPaymentCycles.length > 0) ||
-    (currentStep === stepKeysPayroll.EXTRAORDINARY_CYCLES &&
-      regularPaymentCycles.length === 0 &&
-      extraordinaryPayment.length > 0)
+    isRegularCycleStepWithCycles() || isExtraordinaryCycleStepWithOnlyExtra()
       ? false
       : !isCurrentFormValid;
 
@@ -380,6 +384,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
         item.periodicity,
       paymentDay: checkDayWeek(item.payday ?? ""),
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
+      regulatoryFrameworkCode: item.laborRegulatorFramework ?? "",
     }));
 
   const payrollSpecialBenefit = formValues.extraordinaryCycles.values
