@@ -16,58 +16,64 @@ const decisionScoreModelsConfig = (
   nameRule?: string,
   businessUnit?: string,
 ) => {
-  if (
-    descriptionUse &&
-    decisionDataType &&
-    conditionsThatEstablishesTheDecision
-  ) {
-    const decisionData = decisionDataType.toLocaleUpperCase();
+  if (!descriptionUse || !decisionDataType || !conditionsThatEstablishesTheDecision) {
+    return;
+  }
 
-    const decisionTemplate = {
-      ruleName: ruleName,
-      labelName: String(
-        i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
-      ),
-      descriptionUse: String(
-        i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
-      ),
-      decisionDataType:
-        ValueDataType[decisionData as keyof typeof ValueDataType],
-      howToSetTheDecision: howToSetTheDecision,
-      value: nameRule,
-      effectiveFrom: "",
-      validUntil: "",
-      listOfPossibleValues: listOfPossibleValues,
+  const decisionDataKey = String(decisionDataType).toUpperCase();
+  const decisionDataEnum =
+    (decisionDataKey in ValueDataType
+      ? (ValueDataType as any)[decisionDataKey]
+      : ValueDataType.ALPHABETICAL);
 
-      conditionsThatEstablishesTheDecision: {
-        "group-primary": conditionsThatEstablishesTheDecision.map(
+  const pickTopLabel = () => {
+    const cand = (i18n as any)?.[language];
+    if (typeof cand === "string" && cand.trim()) return cand;
+    return "Modelo de score";
+  };
+
+  const pickLabel = (c: any) => {
+    const cand = c?.i18n?.[language];
+    if (typeof cand === "string" && cand.trim()) return cand;
+    if (typeof c?.descriptionUse === "string" && c.descriptionUse.trim()) return c.descriptionUse;
+    return c?.conditionName ?? "";
+  };
+
+  const decisionTemplate = {
+    ruleName,
+    labelName: String(pickTopLabel()),
+    descriptionUse: String(pickTopLabel()),
+    decisionDataType: decisionDataEnum,
+    howToSetTheDecision,
+    value: nameRule ?? "",
+    effectiveFrom: "",
+    validUntil: "",
+    listOfPossibleValues,
+    conditionGroups: [
+      {
+        ConditionGroupId: "group-primary",
+        conditionsThatEstablishesTheDecision: conditionsThatEstablishesTheDecision.map(
           (condition) => ({
             conditionName:
-              dataTranslations[condition.conditionName] ??
-              condition.conditionName,
-            labelName: String(
-              // condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
-            ),
-            descriptionUse: String(
-              // condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
-            ),
+              dataTranslations[condition.conditionName] ?? condition.conditionName,
+            labelName: String(pickLabel(condition)),
+            descriptionUse: String(pickLabel(condition)),
             conditionDataType: condition.conditionDataType,
+            howToSetTheCondition: condition.howToSetTheCondition,
             value:
               condition.conditionName === "BusinessUnit"
-                ? businessUnit
-                : condition.value,
+                ? (businessUnit ?? "")
+                : (condition.value ?? ""),
             listOfPossibleValues: condition.listOfPossibleValues,
-            howToSetTheCondition: condition.howToSetTheCondition,
-            hidden: condition.conditionName === "BusinessUnit" ? true : false,
+            hidden: condition.conditionName === "BusinessUnit",
+            i18n: (condition as any).i18n ?? undefined,
           }),
         ),
       },
-    };
+    ],
+  };
 
-    return decisionTemplate;
-  }
+  return decisionTemplate;
 };
 
 export { decisionScoreModelsConfig };

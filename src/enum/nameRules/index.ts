@@ -5,8 +5,8 @@ enum ENameRules {
   CONTRIBUTIONS_PORTFOLIO = "LoanAmountLimit",
   INCOME_PORTFOLIO = "LoanAmountLimit",
   SCORE_MODELS = "LoanAmountLimit",
-  RULE_CATALOG_IRISK = "LoanAmountLimit",
-  RULE_CATALOG_CREDIBOARD = "LoanAmountLimit",
+  RULE_CATALOG_IRISK = "irisk",
+  RULE_CATALOG_CREDIBOARD = "crediboard",
 }
 
 export { ENameRules };

@@ -8,8 +8,6 @@ import { ENameRules } from "@enum/nameRules";
 import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { DecisionsFormUI } from "./interface";
-import { ValueDataType } from "@isettingkit/input";
-import { EValueHowToSetUp } from "@isettingkit/business-rules";
 
 const DecisionsForm = (props: IDecisionsForm) => {
   const {
@@ -91,7 +89,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     ) as unknown as IRuleDecisionExtended;
   };
 
-  const decisionTemplate = getDecisionTemplate();
+   const decisionTemplate = getDecisionTemplate();
   // const decisionTemplate = {
   // ruleName: "InterestRateType",
   // labelName: "Interest Rate Type",
@@ -181,12 +179,12 @@ const DecisionsForm = (props: IDecisionsForm) => {
   //   es: "Tipo de tasa de interés",
   // },
   // };
-  console.log('DecisionsFormUI decisionTemplate: ',getDecisionTemplate());
+  console.log('DecisionsFormUI : ',getDecisionTemplate());
   return (
     <DecisionsFormUI
       attentionModal={attentionModal}
       decisions={decisions}
-      decisionTemplate={getDecisionTemplate}
+      decisionTemplate={decisionTemplate as any}
       deleteModal={deleteModal}
       isModalOpen={isModalOpen}
       loading={false}

@@ -50,15 +50,13 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     decisionTemplate: IRuleDecisionExtended,
   ) => {
     const isEditing = selectedDecision !== null;
-
-    const updatedConditions =
-      decisionTemplate.conditionsThatEstablishesTheDecision
+    const updatedConditionGroups = decisionTemplate.conditionGroups?.map((templateGroup) => {
+      const updatedConditions = templateGroup.conditionsThatEstablishesTheDecision
         ?.map((templateCondition) => {
-          const existingCondition =
-            dataDecision.conditionsThatEstablishesTheDecision?.find(
-              (condition) =>
-                condition.conditionName === templateCondition.conditionName,
-            );
+          const existingCondition = dataDecision.conditionGroups?.[0]?.conditionsThatEstablishesTheDecision?.find(
+            (condition) =>
+              condition.conditionName === templateCondition.conditionName,
+          );
 
           return existingCondition || templateCondition;
         })
@@ -69,6 +67,13 @@ const useDecisionForm = (props: IUseDecisionForm) => {
             condition.value !== "",
         );
 
+      return {
+        ...templateGroup,
+        conditionGroupId: templateGroup.conditionGroupId || "",
+        conditionsThatEstablishesTheDecision: updatedConditions,
+      };
+    });
+
     const newDecision = isEditing
       ? (revertModalDisplayData(
           dataDecision,
@@ -77,7 +82,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       : {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,
-          conditionsThatEstablishesTheDecision: updatedConditions,
+          conditionGroups: updatedConditionGroups,
         };
 
     const updatedDecisions = isEditing
@@ -87,7 +92,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
             : decision,
         )
       : [...decisions, newDecision];
-
+    console.log('submit updatedDecisions: ', newDecision,updatedDecisions);
     setDecisions(updatedDecisions);
     setCreditLineDecisions(updatedDecisions);
     handleCloseModal();

@@ -44,7 +44,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onToggleDeleteModal,
     onSave,
   } = props;
-  console.log('decisionTemplate', decisionTemplate);
+  console.log('decisionTemplate1 ', decisionTemplate);
   return (
     <form>
       <Stack
