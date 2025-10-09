@@ -105,37 +105,45 @@ const MoreDetails = (props: IMoreDetails) => {
           </Text>
           <Divider dashed />
         </Stack>
-
-        <Grid
-          templateColumns={isMobile ? "auto" : "repeat(2,auto)"}
-          templateRows={isMobile ? "repeat(4,auto)" : "repeat(2,auto)"}
-          gap={tokens.spacing.s150}
-          padding={
-            isMobile
-              ? `${tokens.spacing.s0}`
-              : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s075}`
-          }
+        <BoxContainer
+          direction="column"
+          width="100%"
+          height={isMobile ? "auto" : "135px"}
+          boxSizing="initial"
+          overflowY="auto"
         >
-          {filteredFieldDetails.map((field, id) => (
-            <BoxContainer
-              key={id}
-              direction="column"
-              width={isMobile ? "100%" : "304px"}
-              minHeight="52px"
-              borderRadius={tokens.spacing.s100}
-              padding={`${tokens.spacing.s075} ${tokens.spacing.s200}`}
-              boxSizing="border-box"
-              backgroundColor={EComponentAppearance.GRAY}
-            >
-              <Text size="medium" type="label" weight="bold">
-                {field.titleName}
-              </Text>
-              <Text size="medium" appearance={EComponentAppearance.GRAY}>
-                {data[field.id]}
-              </Text>
-            </BoxContainer>
-          ))}
-        </Grid>
+          <Grid
+            templateColumns={isMobile ? "auto" : "repeat(2,auto)"}
+            templateRows={isMobile ? "repeat(5,auto)" : "repeat(3,auto)"}
+            gap={tokens.spacing.s150}
+            width="100%"
+            padding={
+              isMobile
+                ? `${tokens.spacing.s0}`
+                : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s075}`
+            }
+          >
+            {filteredFieldDetails.map((field, id) => (
+              <BoxContainer
+                key={id}
+                direction="column"
+                width={"100%"}
+                minHeight="52px"
+                borderRadius={tokens.spacing.s100}
+                padding={`${tokens.spacing.s075} ${tokens.spacing.s200}`}
+                boxSizing="border-box"
+                backgroundColor={EComponentAppearance.GRAY}
+              >
+                <Text size="medium" type="label" weight="bold">
+                  {field.titleName}
+                </Text>
+                <Text size="medium" appearance={EComponentAppearance.GRAY}>
+                  {data[field.id]}
+                </Text>
+              </BoxContainer>
+            ))}
+          </Grid>
+        </BoxContainer>
         <Stack
           direction="column"
           gap={tokens.spacing.s150}

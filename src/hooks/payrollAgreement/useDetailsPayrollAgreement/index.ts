@@ -42,7 +42,11 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     daysToDetermineDate:
       data.numberOfDaysForReceivingTheDiscounts ?? data.applicationDaysPayroll,
     company: data.payingEntityName,
-    paymentSources: dataSourcesOfIncome(data.incomeTypes),
+    paymentSources: dataSourcesOfIncome(
+      data.configurationRequestData.incomeTypes,
+    ),
+    payrollForDeductionAgreementCode:
+      data.configurationRequestData.payrollForDeductionAgreementCode,
   };
 
   const handleToggleModal = () => {

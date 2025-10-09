@@ -1,5 +1,9 @@
 const labelsDetails = [
   {
+    id: "payrollForDeductionAgreementCode",
+    titleName: "Codigo de nómina",
+  },
+  {
     id: "company",
     titleName: "Empresa con convenio",
   },
