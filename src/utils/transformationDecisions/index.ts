@@ -4,15 +4,7 @@ import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
-import { parseIfJSON } from "../parseIfJSON";
 import { formatDateDecision } from "../date/formatDateDecision";
-
-const validateObject = (payload: any) => {
-  if (typeof payload !== "object") {
-    return payload.decisionsByRule?.[0];
-  }
-  return payload;
-};
 
 const transformationDecisions = (
   payload: IRuleDecisionExtended,
@@ -20,17 +12,16 @@ const transformationDecisions = (
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
 
-  console.log({ payload });
-
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
+  const decisionByRuleArray = payload.decisionsByRule?.[0];
   const {
     labelName: ruleLabelName = ruleName,
     descriptionUse: ruleDescriptionUse = ruleName,
-    decisionDataType = validateObject(payload).ruleDataType
-      ? validateObject(payload).ruleDataType
+    decisionDataType = decisionByRuleArray?.ruleDataType
+      ? decisionByRuleArray?.ruleDataType
       : "Alphabetical",
-    howToSetTheDecision = validateObject(payload).howToSetTheDecision
-      ? validateObject(payload).howToSetTheDecision
+    howToSetTheDecision = decisionByRuleArray?.howToSetTheDecision
+      ? decisionByRuleArray?.howToSetTheDecision
       : "EqualTo",
   } = ruleMeta;
 
@@ -57,7 +48,9 @@ const transformationDecisions = (
         });
 
         const effectiveFrom = formatDateDecision(decision.effectiveFrom);
-        const validUntil = formatDateDecision(decision.validUntil ?? "");
+        const validUntil = decision.validUntil
+          ? formatDateDecision(decision.validUntil ?? "")
+          : undefined;
 
         const out: any = {
           ruleName,
@@ -65,14 +58,17 @@ const transformationDecisions = (
           descriptionUse: ruleDescriptionUse,
           decisionDataType,
           howToSetTheDecision,
-          value: parseIfJSON(decision.value ?? ""),
+          value: decision.value,
           effectiveFrom,
-          validUntil,
           conditionsThatEstablishesTheDecision: groupedConditions,
-          decisionId: validateObject(payload).decisionId
-            ? validateObject(payload).decisionId
+          decisionId: decisionByRuleArray?.decisionId
+            ? decisionByRuleArray?.decisionId
             : `Decisión ${index + 1}`,
         };
+
+        if (decision.validUntil) {
+          out.validUntil = validUntil;
+        }
         return out;
       })
     : [];

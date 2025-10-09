@@ -11,7 +11,6 @@ const getNewDeletedDecisionsConfig = (
   user: string,
   prevRef: IRuleDecisionExtended[],
   decision: IRuleDecisionExtended[],
-  dateFrom?: string,
 ) => {
   if (!arraysEqual(prevRef, decision)) {
     return prevRef
@@ -44,9 +43,9 @@ const getNewDeletedDecisionsConfig = (
             : undefined;
 
           return {
-            effectiveFrom: dateFrom
-              ? formatDateDecision(dateFrom)
-              : formatDateDecision(condition.effectiveFrom as string),
+            effectiveFrom: formatDateDecision(
+              condition.effectiveFrom as string,
+            ),
             validUntil: validUntil,
             value: condition.value,
             transactionOperation: ETransactionOperation.DELETE,
@@ -54,7 +53,6 @@ const getNewDeletedDecisionsConfig = (
             conditionGroups: conditionGroups,
           };
         });
-
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
           ruleName: decision.ruleName,

@@ -37,12 +37,12 @@ const decisionTemplateConfig = (
           (condition) => ({
             conditionName: condition.conditionName,
             labelName: String(
-              // condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
+              condition.i18n?.[language as keyof typeof i18n] ??
+                condition.descriptionUse,
             ),
             descriptionUse: String(
-              // condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
+              condition.i18n?.[language as keyof typeof i18n] ??
+                condition.descriptionUse,
             ),
             conditionDataType: condition.conditionDataType,
             value: "",

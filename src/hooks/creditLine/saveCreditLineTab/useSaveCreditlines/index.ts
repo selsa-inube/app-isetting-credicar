@@ -4,6 +4,7 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { patchModifyCreditLine } from "@services/creditLines/patchModifyCreditLine";
 import { deleteCreditLineTab } from "@services/creditLines/deleteCreditLineTab";
 import { EUseCase } from "@enum/useCase";
 import { errorObject } from "@utils/errorObject";
@@ -12,6 +13,7 @@ import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IUseSaveCreditlinesTab } from "@ptypes/hooks/creditLines/IUseSaveCreditlinesTab";
 import { IErrors } from "@ptypes/IErrors";
 import { IRequestCreditLine } from "@ptypes/creditLines/IRequestCreditLine";
+import { IModifyCreditLine } from "@ptypes/creditLines/IModifyCreditLine";
 import { useRequest } from "../useRequest";
 
 const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
@@ -91,6 +93,14 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
+      if (useCase === EUseCase.EDIT) {
+        const newData = await patchModifyCreditLine(
+          businessUnits,
+          userAccount,
+          requestConfiguration as IModifyCreditLine,
+        );
+        setStatusRequest(newData.settingRequest?.requestStatus);
+      }
     } catch (error) {
       console.info(error);
       setErrorFetchRequest(true);
@@ -161,7 +171,8 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     showPendingModal && saveCreditLines?.requestNumber ? true : false;
 
   const showRequestProcess = sendData && saveCreditLines;
-  const showRequestStatus = showPendingModal && saveCreditLines?.requestNumber;
+  const showRequestStatus =
+    showPendingModal && saveCreditLines?.requestNumber ? true : false;
 
   return {
     saveCreditLines,

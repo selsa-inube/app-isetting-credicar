@@ -22,6 +22,7 @@ const AuthWrapper = ({ children }: IAuthWrapper) => {
       iAuthUrl={enviroment.IAUTH_URL}
       clientId={decrypt(businessManagersData.clientId)}
       clientSecret={decrypt(businessManagersData.clientSecret)}
+      serviceUrl={enviroment.IAUTH_SERVICE_URL}
     >
       {children}
     </IAuthProvider>

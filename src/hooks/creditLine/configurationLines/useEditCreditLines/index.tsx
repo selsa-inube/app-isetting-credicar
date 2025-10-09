@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
-import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
 import { transformRuleStructure } from "@utils/transformRuleStructure";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
@@ -12,14 +11,19 @@ import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfi
 import { EUseCase } from "@enum/useCase";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 
 const useEditCreditLines = (props: IUseEditCreditLines) => {
   const {
     useCaseConfiguration,
     templateKey,
     decisionsData,
-    setLinesConstructionData,
     linesConstructionData,
+    linesData,
+    nameLineRef,
+    setLinesConstructionData,
+    setLinesData,
+    setLinesEditData,
     mergeRules,
   } = props;
 
@@ -48,23 +52,30 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       if (
         !ruleLoadding &&
         configuredDecisions &&
-        configuredDecisions?.length > 0
+        configuredDecisions.length > 0
       ) {
-        if (decisionsData.length > 0) return;
-        const normalized = normalizeEvaluateRuleData(configuredDecisions);
-        setLinesConstructionData((prev) => {
-          const existingRules =
-            (prev?.rules as IRuleDecision[] | undefined) ?? [];
+        if (decisionsData.length === 0 && setLinesData) {
+          const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
 
-          return {
-            ...prev,
-            settingRequestId: linesConstructionData.settingRequestId,
-            rules: mergeRules(existingRules, normalized),
-          };
-        });
+          setLinesData((prev) => {
+            const existingRules =
+              (prev?.configurationRequestData?.rules as
+                | IRuleDecision[]
+                | undefined) ?? [];
+
+            return {
+              ...prev,
+              settingRequestId: linesConstructionData.settingRequestId,
+              configurationRequestData: {
+                ...prev?.configurationRequestData,
+                rules: mergeRules(existingRules, normalized),
+              },
+            };
+          });
+        }
       }
     }
-  }, [configuredDecisions]);
+  }, [configuredDecisions, decisionsData, useCaseConfiguration, ruleLoadding]);
 
   const normalizeDecisionsArray = (data: any): IRuleDecisionExtended[] =>
     (Array.isArray(data) ? data : []).map((item) => ({
@@ -102,18 +113,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         (item) => item as IRuleDecisionExtended,
       ),
     );
-
-    if (decisionsData.length > 0) {
-      setLinesConstructionData((prev) => {
-        const existingRules =
-          (prev?.rules as IRuleDecision[] | undefined) ?? [];
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
-          rules: mergeRules(existingRules, decisionsData),
-        };
-      });
-    }
   }, [decisionsData]);
 
   useEffect(() => {
@@ -122,18 +121,69 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       newDecisions &&
       newDecisions.length > 0
     ) {
-      //   setLinesConstructionData((prev) => {
-      //     const existingRules =
-      //       (prev?.rules as IRuleDecision[] | undefined) ?? [];
-      //     return {
-      //       ...prev,
-      //       settingRequestId: linesConstructionData.settingRequestId,
-      //       rules: mergeRules(existingRules, newDecisions),
-      //     };
-      //   });
+      setLinesEditData((prev) => {
+        const existingRules =
+          (prev?.rules as IRuleDecision[] | undefined) ?? [];
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          lineOfCreditId: linesConstructionData.settingRequestId,
+          rules: mergeRules(existingRules, newDecisions),
+        };
+      });
     }
   }, [useCaseConfiguration, newDecisions]);
 
+  useEffect(() => {
+    if (useCaseConfiguration === EUseCase.EDIT) {
+      if (!linesData || linesData?.configurationRequestData.length === 0)
+        return;
+
+      setLinesConstructionData((prev) => {
+        const initialValues = nameLineRef.current?.initialValues;
+        const currentValues = nameLineRef.current?.values;
+
+        const hasNameChanged =
+          currentValues?.nameLine !== initialValues?.nameLine;
+        const hasAliasChanged =
+          currentValues?.aliasLine !== initialValues?.aliasLine;
+        const hasDescriptionChanged =
+          currentValues?.descriptionLine !== initialValues?.descriptionLine;
+
+        const normalizeData: ILinesConstructionData = {
+          settingRequestId:
+            prev.settingRequestId || linesConstructionData.settingRequestId,
+          lineOfCreditId: linesData.settingRequestId,
+
+          abbreviatedName: hasNameChanged
+            ? String(linesData.configurationRequestData?.abbreviatedName ?? "")
+            : (prev.abbreviatedName ?? ""),
+
+          alias: hasAliasChanged
+            ? String(linesData.configurationRequestData?.alias ?? "")
+            : (prev.alias ?? ""),
+
+          descriptionUse: hasDescriptionChanged
+            ? String(linesData.configurationRequestData?.descriptionUse ?? "")
+            : (prev.descriptionUse ?? ""),
+        };
+
+        if (linesData.configurationRequestData?.rules) {
+          const existingRules =
+            (prev?.rules as IRuleDecision[] | undefined) ?? [];
+          const newRules = Object(linesData.configurationRequestData.rules);
+          normalizeData.rules = mergeRules(existingRules, newRules);
+        } else {
+          normalizeData.rules = prev.rules;
+        }
+
+        return {
+          ...prev,
+          ...normalizeData,
+        };
+      });
+    }
+  }, [linesData, useCaseConfiguration]);
   return {
     ruleError,
     ruleErrorData,

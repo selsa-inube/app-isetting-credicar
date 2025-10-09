@@ -12,7 +12,6 @@ import { postCheckLineRuleConsistency } from "@services/creditLines/postCheckLin
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
-import { useSaveCreditlines } from "@hooks/creditLine/saveCreditLine/useSaveCreditlines";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { transformationDecisions } from "@utils/transformationDecisions";
@@ -34,6 +33,7 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useGroupOptions } from "../useGroupOptions";
 import { useEditCreditLines } from "../useEditCreditLines";
+import { useSave } from "../useSave";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -102,8 +102,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setDecisionData([]);
   }, [location.pathname, templateKey]);
 
-  const { linesConstructionData: initialData, loadingInitial: loading } =
-    useContext(CreditLinesConstruction);
+  const {
+    linesConstructionData: initialData,
+    loadingInitial: loading,
+    setLinesEditData,
+    linesEditData,
+  } = useContext(CreditLinesConstruction);
 
   useEffect(() => {
     if (!loading) {
@@ -153,11 +157,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const handleOpenModal = () => {
     const compare = compareObjects(initialValues, formValues);
-    const compareCompany = compareObjects(
+    const compareName = compareObjects(
       nameLineRef.current?.initialValues,
       nameLineRef.current?.values,
     );
-    if (!compare || !compareCompany) {
+    if (!compare || !compareName) {
       setShowGoBackModal(true);
     } else {
       navigate("/credit-lines");
@@ -206,12 +210,22 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const onSubmit = () => {
     setShowSaveModal(false);
-    const { settingRequestId, ...dataWithoutId } = linesConstructionData;
 
-    setData({
-      settingRequestId: settingRequestId,
-      configurationRequestData: dataWithoutId as Record<string, unknown>,
-    });
+    if (useCaseConfiguration === EUseCase.ADD) {
+      const { settingRequestId, ...dataWithoutId } = linesConstructionData;
+      setData({
+        settingRequestId: settingRequestId,
+        configurationRequestData: dataWithoutId as Record<string, unknown>,
+      });
+    }
+
+    if (useCaseConfiguration === EUseCase.EDIT) {
+      const { settingRequestId, ...dataWithoutId } = linesEditData;
+      setData({
+        settingRequestId: settingRequestId,
+        configurationRequestData: dataWithoutId as Record<string, unknown>,
+      });
+    }
     setShowRequestProcessModal(true);
   };
 
@@ -273,9 +287,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     useCaseConfiguration,
     templateKey: templateKey || "",
     decisionsData,
+    linesData,
+    nameLineRef,
     setLinesConstructionData,
     linesConstructionData,
     mergeRules,
+    setLinesEditData,
+    setLinesData,
   });
 
   const initialDecisions: IRuleDecision[] = (linesConstructionData.rules ?? [])
@@ -283,7 +301,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     .flatMap((r) => {
       const rule: IRuleDecisionExtended = {
         ...r,
-        decisionsByRule: r.decisionsByRule ?? [],
       };
       return transformationDecisions(rule);
     });
@@ -520,22 +537,21 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     requestSteps,
     loadingSendData,
     showPendingModal,
+    showRequestStatusModal,
     hasError: hasErrorSave,
     errorData,
     networkError,
     errorFetchRequest,
-    showRequestStatusModal,
     handleToggleErrorModal: handleToggleErrorSaveModal,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingModal,
-  } = useSaveCreditlines({
-    useCase: useCaseConfiguration as EUseCase,
-    businessUnits: appData.businessUnit.publicCode,
-    userAccount: appData.user.userAccount,
-    sendData: showRequestProcessModal,
-    data: data || ({} as IModifyConstructionResponse),
-    setSendData: setShowRequestProcessModal,
+  } = useSave({
+    useCaseConfiguration,
+    showRequestProcessModal,
+    data,
+    setShowRequestProcessModal,
+    setShowSaveModal,
     setShowModal: setShowSaveModal,
   });
 
@@ -566,6 +582,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const optionDetails =
     useCaseConfiguration === EUseCase.DETAILS ? true : false;
+
+  const optionIcon =
+    useCaseConfiguration === EUseCase.DETAILS || EUseCase.EDIT ? true : false;
 
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
@@ -609,6 +628,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     description,
     optionCrumb,
     optionDetails,
+    optionIcon,
     handleClickInfo,
     setClientSupportData,
     handleToggleUnconfiguredRulesModal,

@@ -45,6 +45,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     description,
     optionCrumb,
     optionDetails,
+    optionIcon,
     useCaseConfiguration,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
@@ -86,7 +87,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           title={title}
           description={description}
           optionCrumb={optionCrumb}
-          withIcon={!optionDetails}
+          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
 
