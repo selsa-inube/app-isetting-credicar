@@ -12,6 +12,7 @@ const useSave = (props: IUseSave) => {
     useCaseConfiguration,
     showRequestProcessModal,
     data,
+    editData,
     setShowRequestProcessModal,
     setShowSaveModal,
     setShowModal,
@@ -35,7 +36,7 @@ const useSave = (props: IUseSave) => {
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
-    data: data as ISaveDataRequest,
+    data: editData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
   });
