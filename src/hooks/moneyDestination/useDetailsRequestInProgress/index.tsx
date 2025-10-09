@@ -58,7 +58,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
   const fetchRequestData = async () => {
     setLoading(true);
     try {
-      if (data.useCaseName === EMoneyDestination.ADD_MONEY_DESTINATION) {
+      if (data.useCaseName === EMoneyDestination.USE_CASE_ADD) {
         await postAddMoneyDestination(
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestMoneyDestination,
@@ -66,7 +66,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
         setShowModal(false);
         navigate(-1);
       }
-      if (data.useCaseName === EMoneyDestination.MODIFY_MONEY_DESTINATION) {
+      if (data.useCaseName === EMoneyDestination.USE_CASE_EDIT) {
         await patchEditMoneyDestination(
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestMoneyDestination,
@@ -74,7 +74,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
         setShowModal(false);
         navigate(-1);
       }
-      if (data.useCaseName === EMoneyDestination.DELETE_MONEY_DESTINATION) {
+      if (data.useCaseName === EMoneyDestination.USE_CASE_DELETE) {
         await deleteMoneyDestination(
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestMoneyDestination,
