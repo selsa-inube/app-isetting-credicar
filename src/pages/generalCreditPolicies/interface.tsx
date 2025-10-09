@@ -55,7 +55,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
         </Stack>
       ) : (
         <>
-          {showAddPolicies ? (
+          {!showAddPolicies ? (
             <>
               <AddGenCreditPolicies />
               <DecisionModal

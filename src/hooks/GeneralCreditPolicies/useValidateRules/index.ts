@@ -15,7 +15,7 @@ const useValidateRules = () => {
       businessUnits: appData.businessUnit.publicCode,
       rulesData: {
         ruleName,
-        ...(conditions && { conditions }),
+        // ...(conditions && { conditions }),
       },
       language: appData.language,
     });

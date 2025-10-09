@@ -1,7 +1,7 @@
 enum ENameRules {
-  METHODS = "LoanAmountLimit",
-  ADDITIONAL_DEBTORS = "LoanAmountLimit",
-  REAL_GUARANTEES = "LoanAmountLimit",
+  METHODS = "MaximumLimitCalculationMethod",
+  ADDITIONAL_DEBTORS = "AdditionalBorrowersAllowed",
+  REAL_GUARANTEES = "SecureDebtsIncludedInOverdraft",
   CONTRIBUTIONS_PORTFOLIO = "LoanAmountLimit",
   INCOME_PORTFOLIO = "LoanAmountLimit",
   SCORE_MODELS = "LoanAmountLimit",
