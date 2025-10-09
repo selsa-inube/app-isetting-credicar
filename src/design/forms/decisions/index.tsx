@@ -8,8 +8,6 @@ import { ENameRules } from "@enum/nameRules";
 import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { DecisionsFormUI } from "./interface";
-import { ValueDataType } from "@isettingkit/input";
-import { EValueHowToSetUp } from "@isettingkit/business-rules";
 
 const DecisionsForm = (props: IDecisionsForm) => {
   const {

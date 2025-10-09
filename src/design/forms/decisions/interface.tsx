@@ -45,6 +45,8 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onSave,
   } = props;
   console.log('decisionTemplate', decisionTemplate);
+  console.log({decisions});
+
   return (
     <form>
       <Stack
