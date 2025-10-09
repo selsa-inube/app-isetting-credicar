@@ -19,9 +19,9 @@ import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTa
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
 import { ILanguage } from "@ptypes/i18n";
-import { IServerDomain } from "@ptypes/IServerDomain";
-import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IUseOrdinaryCyclesForm } from "@ptypes/hooks/IUseOrdinaryCyclesForm";
+import { IServerDomain } from "@ptypes/IServerDomain";
 import { useValuesSelect } from "../useValuesSelect";
 
 const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
