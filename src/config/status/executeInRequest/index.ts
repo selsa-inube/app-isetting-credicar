@@ -1,3 +1,7 @@
-const executeInRequest = ["ProcessingRequest", "RequestReadyToProcess"];
+const executeInRequest = [
+  "ProcessingRequest",
+  "RequestReadyToProcess",
+  "RequestInProgress",
+];
 
 export { executeInRequest };
