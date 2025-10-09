@@ -74,6 +74,18 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       };
     });
 
+    const decisionsByRuleData = {
+      effectiveFrom: typeof dataDecision.effectiveFrom === 'string' 
+        ? dataDecision.effectiveFrom 
+        : dataDecision.effectiveFrom?.toString() || "",
+      validUntil: typeof dataDecision.validUntil === 'string'
+        ? dataDecision.validUntil
+        : dataDecision.validUntil?.toString() || "",
+      value: dataDecision.value,
+      conditionGroups: updatedConditionGroups,
+      decisionId: isEditing ? selectedDecision.decisionId : `Decisión ${decisions.length + 1}`,
+    };
+
     const newDecision = isEditing
       ? (revertModalDisplayData(
           dataDecision,
@@ -82,7 +94,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       : {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,
-          conditionGroups: updatedConditionGroups,
+          decisionsByRule: [decisionsByRuleData],
         };
 
     const updatedDecisions = isEditing
@@ -92,7 +104,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
             : decision,
         )
       : [...decisions, newDecision];
-    console.log('submit updatedDecisions: ', newDecision,updatedDecisions);
+    console.log('submit updatedDecisions: ', decisions,' - ',updatedDecisions);
     setDecisions(updatedDecisions);
     setCreditLineDecisions(updatedDecisions);
     handleCloseModal();
@@ -211,3 +223,4 @@ const useDecisionForm = (props: IUseDecisionForm) => {
 };
 
 export { useDecisionForm };
+ 
