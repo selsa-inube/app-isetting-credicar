@@ -20,7 +20,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     additionalDebtorsData,
     realGuaranteesData,
   } = props;
-
+  console.log('EditGeneralPolicies: ',incomeData,contributionsData );
   const { appData } = useContext(AuthAndPortalData);
   const {
     formValues,

@@ -121,6 +121,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const handleFormValidChange = (isValid: boolean) =>
     setIsCurrentFormValid(isValid);
 
+  
   const { rules } = useRules({
     formValues,
     dateVerification: dateVerification ?? ({} as IDateVerification),

@@ -44,7 +44,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onToggleDeleteModal,
     onSave,
   } = props;
-
+  console.log('decisionTemplate', decisionTemplate);
   return (
     <form>
       <Stack
@@ -55,7 +55,7 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
         <StyledFormContent>
           <StyledContainer $isMobile={isMobile}>
             <BusinessRulesWithGroup
-              decisions={decisions}
+              decisions={decisions[0].decisionsByRule}
               textValues={textValuesBusinessRules}
               loading={loading}
               decisionTemplate={decisionTemplate as IRuleDecision}

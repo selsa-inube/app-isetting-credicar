@@ -97,7 +97,7 @@ const useValidateRules = () => {
     incomeLoadding,
     scoreLoadding,
   ]);
-
+   console.log('useValidateRules: ',incomeData);
   return {
     contributionsData,
     incomeData,

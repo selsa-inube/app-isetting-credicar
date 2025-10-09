@@ -12,10 +12,20 @@ const mapEvaluateRuleByBusinessEntityToApi = (
 
 const mapEvaluateRuleByBusinessEntities = (data: IConfigDecisions[]) => {
   if (!data) return [];
+  console.log("data mapEvaluateRuleByBusinessEntities", data);
   return [
     {
       decisionsByRule: data.map((item) => ({
         ...item,
+        labelName: item.ruleName,
+        conditionGroups: item.conditionGroups?.map((group) => ({
+          ...group,
+          conditionsThatEstablishesTheDecision:
+            group.conditionsThatEstablishesTheDecision?.map((condition) => ({
+              ...condition,
+              labelName: condition.conditionName,
+            })),
+        })),
       })),
     },
   ];

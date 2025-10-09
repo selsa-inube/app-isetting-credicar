@@ -74,6 +74,7 @@ const useRules = (props: IUseRules) => {
     contributionsPortfolio,
     dateVerification?.date,
   );
+  console.log('rulesContributions: ', rulesContributions);
   const rulesIncomes = formatRuleDecisions(
     incomePortfolio,
     dateVerification?.date,

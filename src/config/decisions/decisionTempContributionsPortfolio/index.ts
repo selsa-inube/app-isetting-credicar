@@ -31,7 +31,9 @@ const decisionContributionsPortfConfig = (
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
-      conditionsThatEstablishesTheDecision:
+      conditionGroups:[{
+        conditionGroupId: "",
+        conditionsThatEstablishesTheDecision:
         conditionsThatEstablishesTheDecision?.map((condition) => ({
           conditionName: condition.conditionName,
           labelName: String(
@@ -46,6 +48,7 @@ const decisionContributionsPortfConfig = (
           value: "",
           howToSetTheCondition: ValueHowToSetUp.EQUAL,
         })),
+      }]
     };
 
     return decisionTemplate;

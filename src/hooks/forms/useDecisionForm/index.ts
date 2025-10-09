@@ -137,7 +137,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       setSavedDecisions(initialDecisions);
     }
   };
-
+  console.log('useDecisionForm', decisions, ' - ',normalizeEvaluateRuleData, ' initialValues ',initialValues );
   useEffect(() => {
     if (
       JSON.stringify(decisions) !== JSON.stringify(initialValues) ||
