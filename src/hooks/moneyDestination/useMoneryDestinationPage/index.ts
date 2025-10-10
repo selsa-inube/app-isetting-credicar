@@ -2,10 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
-import { decrypt } from "@utils/crypto/decrypt";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { mediaQueryTablet } from "@config/environment";
 import { menuOptionsMoneyDestination } from "@config/moneyDestination/moneyDestinationTab/generics/menuOptions";
@@ -17,8 +17,6 @@ import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
   const { businessUnitSigla, businessUnits, businessManager } = props;
-  const portalId = localStorage.getItem("portalCode");
-  const staffPortalId = portalId ? decrypt(portalId) : "";
   const smallScreen = useMediaQuery(mediaQueryTablet);
   const tabs = moneyDestinationTabsConfig(smallScreen);
   const [isSelected, setIsSelected] = useState<string>(
@@ -33,13 +31,14 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
     menuOptionsMoneyDestination,
   );
 
+  const { appData } = useContext(AuthAndPortalData);
   const { disabledButton: disabledAdd } = useValidateUseCase({
     useCase: EMoneyDestination.USE_CASE_ADD,
   });
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
-    staffPortalId,
+    staffPortalId: appData.portal.publicCode,
     optionName: EMoneyDestination.OPTION_NAME,
   });
 

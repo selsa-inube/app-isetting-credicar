@@ -1,10 +1,10 @@
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useState } from "react";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
-import { decrypt } from "@utils/crypto/decrypt";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { payrollAgreementTabsConfig } from "@config/payrollAgreement/tabs";
 import { menuOptionsPayroll } from "@config/payrollAgreement/payrollAgreementTab/menuOptions";
@@ -16,9 +16,8 @@ import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
   const { businessUnitSigla, businessUnits, businessManager } = props;
-  const portalId = localStorage.getItem("portalCode");
-  const staffPortalId = portalId ? decrypt(portalId) : "";
 
+  const { appData } = useContext(AuthAndPortalData);
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const tabs = payrollAgreementTabsConfig(smallScreen);
@@ -54,7 +53,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
-    staffPortalId,
+    staffPortalId: appData.portal.publicCode,
     optionName: EPayrollAgreement.OPTION_NAME,
   });
 

@@ -4,7 +4,6 @@ import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest"
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { decrypt } from "@utils/crypto/decrypt";
 import { ERequestInProgress } from "@enum/requestInProgress";
 import { ECreditLines } from "@enum/creditLines";
 import { mediaQueryTablet } from "@config/environment";
@@ -14,9 +13,7 @@ import { ICreditTabsConfig } from "@ptypes/creditLines/ICreditTabsConfig";
 import { useLineInconstructionData } from "../useLineInconstructionData";
 
 const useCreditLinePage = (businessUnitSigla: string) => {
-  const portalId = localStorage.getItem("portalCode");
   const { appData } = useContext(AuthAndPortalData);
-  const staffPortalId = portalId ? decrypt(portalId) : "";
   const [showUnderConstruction, setShowUnderConstruction] =
     useState<boolean>(false);
   const [requestsInProgress, setRequestsInProgress] = useState<
@@ -30,7 +27,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
-    staffPortalId,
+    staffPortalId: appData.portal.publicCode,
     optionName: ECreditLines.OPTION_NAME,
   });
 
