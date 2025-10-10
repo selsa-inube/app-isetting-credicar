@@ -39,7 +39,7 @@ const useLineInConstructionTab = () => {
   useEffect(() => {
     if (entryDeleted) {
       setlineUnderConstruction((prev) =>
-        prev.filter((entry) => entry.id !== entryDeleted),
+        prev.filter((entry) => entry.settingRequestId !== entryDeleted),
       );
     }
   }, [entryDeleted]);

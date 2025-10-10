@@ -72,7 +72,7 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   useEffect(() => {
     if (entryDeleted) {
       setCreditLines((prev) =>
-        prev.filter((entry) => entry.id !== entryDeleted),
+        prev.filter((entry) => entry.lineOfCreditId !== entryDeleted),
       );
     }
   }, [entryDeleted]);

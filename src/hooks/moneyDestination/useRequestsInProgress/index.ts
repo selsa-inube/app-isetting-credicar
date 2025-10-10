@@ -51,7 +51,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   useEffect(() => {
     if (entryCanceled) {
       setRequestsInProgress((prev) =>
-        prev.filter((entry) => entry.id !== entryCanceled),
+        prev.filter((entry) => entry.settingRequestId !== entryCanceled),
       );
     }
   }, [entryCanceled]);

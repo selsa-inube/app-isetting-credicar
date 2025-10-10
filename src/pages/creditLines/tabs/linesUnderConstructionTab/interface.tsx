@@ -8,7 +8,7 @@ import { Table } from "@design/data/table";
 import { EComponentAppearance } from "@enum/appearances";
 import { portalId } from "@config/portalId";
 import { titles } from "@config/creditLines/lineUnderConstructionTab/table/titles";
-import { actions } from "@config/creditLines/lineUnderConstructionTab/table/actions";
+import { actionsConfig } from "@config/creditLines/lineUnderConstructionTab/table/actions";
 import { tabLabels } from "@config/payrollAgreement/payrollAgreementTab/tabLabels";
 import { breakPoints } from "@config/creditLines/lineUnderConstructionTab/table/breakPoints";
 import { constructionLabels } from "@config/creditLines/lineUnderConstructionTab/generic/constructionLabels";
@@ -26,6 +26,7 @@ const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
     emptyDataMessage,
     pageLength,
     onSearchLineInConstruction,
+    setEntryDeleted,
   } = props;
 
   return (
@@ -80,7 +81,7 @@ const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
                     id={portalId}
                     titles={titles}
                     entries={entries}
-                    actions={actions}
+                    actions={actionsConfig(setEntryDeleted)}
                     breakpoints={breakPoints}
                     filter={searchLineInConstruction}
                     loading={loading}

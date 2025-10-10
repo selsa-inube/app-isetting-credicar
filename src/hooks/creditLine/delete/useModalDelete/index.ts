@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { EComponentAppearance } from "@enum/appearances";
+import { ECreditLines } from "@enum/creditLines";
+import { messageErrorUseCases } from "@utils/messageErrorUseCases";
+import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { disabledModal } from "@config/disabledModal";
+import { errorModal } from "@config/errorModal";
+import { operationTypes } from "@config/useCase";
 import { deleteCreditModal } from "@config/creditLines/creditLinesTab/generic/deleteCreditModal";
 import { IUseModalDeleteCredit } from "@ptypes/hooks/creditLines/IUseModalDeleteCredit";
 
@@ -8,7 +13,12 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
   const {
     loading,
     showInfoModal,
+    hasError,
     showModal,
+    errorData,
+    networkError,
+    errorFetchRequest,
+    handleToggleErrorModal,
     handleToggleInfoModal,
     handleClick,
     handleToggleModal,
@@ -16,9 +26,9 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
 
   const [showDecision, setShowDecision] = useState(false);
   useEffect(() => {
-    const decision = showInfoModal || showModal;
+    const decision = showInfoModal || showModal || hasError;
     setShowDecision(decision);
-  }, [showInfoModal, showModal]);
+  }, [showInfoModal, showModal, hasError]);
 
   const modal = () => {
     const initial = {
@@ -54,6 +64,35 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
         loading: loading,
         appearance: EComponentAppearance.DANGER,
         appearanceButton: EComponentAppearance.DANGER,
+      };
+    }
+    if (!loading && !errorFetchRequest && hasError) {
+      return {
+        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (errorFetchRequest && hasError) {
+      return {
+        ...errorModal(
+          messageErrorUseCases(
+            networkError.status,
+            operationTypes.deleteError,
+            ECreditLines.OPTION_NAME,
+          ),
+        ),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 

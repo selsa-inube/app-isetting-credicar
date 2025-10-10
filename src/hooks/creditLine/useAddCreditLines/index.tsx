@@ -149,7 +149,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
     setShowAddModal(false);
     if (saveLine) {
       navigate(`/credit-lines/edit-credit-lines`, {
-        state: { data: saveLine },
+        state: { data: saveLine, option: "add" },
       });
     }
   };

@@ -3,18 +3,18 @@ import { useState, useEffect, useContext } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
-import { patchConfirmConstruction } from "@services/creditLines/patchConfirmConstruction";
-import { postLineUnderConstruction } from "@services/creditLines/postLineUnderConstruction";
+import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { deleteCreditLineTab } from "@services/creditLines/deleteCreditLineTab";
 import { EUseCase } from "@enum/useCase";
 import { errorObject } from "@utils/errorObject";
 import { interventionHumanMessage } from "@config/creditLines/generic/interventionHumanMessage";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IUseSaveCreditlinesTab } from "@ptypes/hooks/creditLines/IUseSaveCreditlinesTab";
 import { IErrors } from "@ptypes/IErrors";
-import { IUseSaveCreditlines } from "@ptypes/hooks/creditLines/IUseSaveCreditlines";
-import { ILineUnderConstructionRequest } from "@ptypes/creditLines/ILineUnderConstructionRequest";
+import { IRequestCreditLine } from "@ptypes/creditLines/IRequestCreditLine";
 import { useRequest } from "../useRequest";
 
-const useSaveCreditlines = (props: IUseSaveCreditlines) => {
+const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
   const {
     businessUnits,
     userAccount,
@@ -33,16 +33,17 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [hasError, setHasError] = useState(false);
+
   const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
   const navigate = useNavigate();
   const navigatePage = "/credit-lines";
 
-  const fetchSaveGeneralData = async () => {
+  const fetchSavecreditLineData = async () => {
     setLoadingSendData(true);
     try {
-      const saveData = await patchConfirmConstruction(userAccount, data);
+      const saveData = await postSaveRequest(userAccount, data);
       setSaveCreditLines(saveData);
     } catch (error) {
       console.info(error);
@@ -82,11 +83,11 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
 
   const fetchRequestData = async () => {
     try {
-      if (useCase === EUseCase.ADD) {
-        const newData = await postLineUnderConstruction(
-          userAccount,
+      if (useCase === EUseCase.DELETE) {
+        const newData = await deleteCreditLineTab(
           businessUnits,
-          requestConfiguration as ILineUnderConstructionRequest,
+          userAccount,
+          requestConfiguration as IRequestCreditLine,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
@@ -112,7 +113,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSaveGeneralData();
+    fetchSavecreditLineData();
   }, [sendData]);
 
   useEffect(() => {
@@ -159,6 +160,9 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
   const showRequestStatusModal =
     showPendingModal && saveCreditLines?.requestNumber ? true : false;
 
+  const showRequestProcess = sendData && saveCreditLines;
+  const showRequestStatus = showPendingModal && saveCreditLines?.requestNumber;
+
   return {
     saveCreditLines,
     requestSteps,
@@ -169,6 +173,8 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     errorData,
     networkError,
     errorFetchRequest,
+    showRequestProcess,
+    showRequestStatus,
     handleToggleErrorModal,
     handleCloseProcess,
     handleCloseRequestStatus,
@@ -176,4 +182,4 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
   };
 };
 
-export { useSaveCreditlines };
+export { useSaveCreditlinesTab };
