@@ -22,6 +22,7 @@ import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPolici
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { useNewDecisions } from "../useNewDecisions";
 
 const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
@@ -76,11 +77,28 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const navigate = useNavigate();
 
-  const normalizedContributions = normalizeEvaluateRuleData(contributionsData);
-  const normalizedIncome = normalizeEvaluateRuleData(incomeData);
-  const normalizedScoreModels = normalizeEvaluateRuleData(
-    scoreModelsData,
-    EGeneralPolicies.CONDITION_BUSINESS_UNIT,
+  // Ensure decisionsByRule is always an array for type compatibility with IRules
+  const fixDecisionsByRuleArray = (data: IRuleDecisionExtended[] | undefined) =>
+    (data ?? []).map((item) => ({
+      ...item,
+      decisionsByRule: Array.isArray(item.decisionsByRule)
+        ? item.decisionsByRule
+        : item.decisionsByRule
+          ? [item.decisionsByRule]
+          : [],
+    }));
+
+  const normalizedContributions = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(contributionsData),
+  );
+  const normalizedIncome = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(incomeData),
+  );
+  const normalizedScoreModels = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(
+      scoreModelsData,
+      EGeneralPolicies.CONDITION_BUSINESS_UNIT,
+    ),
   );
 
   const prevContributionsRef = useRef<IRules[]>([]);

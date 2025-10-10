@@ -83,7 +83,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
   const getDecisionTemplate = () => {
     return decisionTemplateConfig(
       enumeratorsRules,
-      appData.language, // segundo parámetro: language
+      appData.language,
       nameRule,
       appData.businessUnit.publicCode,
     ) as unknown as IRuleDecisionExtended;

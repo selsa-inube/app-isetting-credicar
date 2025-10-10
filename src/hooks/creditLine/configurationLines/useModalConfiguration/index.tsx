@@ -24,6 +24,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     showInfoErrorModal,
     hasErrorCheck,
     errorCheckData,
+    ruleError,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
@@ -48,6 +49,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     hasErrorCheck,
     showSaveModal,
     hasError,
+    ruleError,
   ]);
 
   const modal = () => {

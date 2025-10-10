@@ -244,6 +244,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     language,
     setDecisionData,
     onDecisionsChange,
+    optionsConditionsCSV,
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -278,6 +279,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     () => new Set(selectedConditionsCSV.split(",").filter(Boolean)),
     [selectedConditionsCSV],
   );
+  useEffect(() => {
+    if (optionsConditionsCSV) {
+      setSelectedConditionsCSV(optionsConditionsCSV);
+    }
+  }, [optionsConditionsCSV]);
 
   const [removedConditionNames, setRemovedConditionNames] = useState<
     Set<string>
@@ -540,6 +546,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     multipleChoicesOptions,
     decisionsSorted,
     responseForBackend,
+    setSelectedConditionsCSV,
     setSelectedDecision,
     openModal,
     closeModal,

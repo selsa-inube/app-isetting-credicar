@@ -26,7 +26,8 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const [showWithoutDataModal, setShowWithoutDataModal] =
     useState<boolean>(false);
   const [showDecision, setShowDecision] = useState<boolean>(false);
-  const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [linesData, setLinesData] = useState<any>();
   const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
     {} as IModifyConstructionResponse,
   );
@@ -39,13 +40,25 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
   useEffect(() => {
     if (!withoutData) {
-      setLinesData({
-        settingRequestId: data.settingRequestId,
-        configurationRequestData: data.configurationRequestData,
-      });
+      if (data.configurationRequestData === undefined) {
+        const dataInitial = {
+          configurationRequestData: {
+            abbreviatedName: data.abbreviatedName,
+            alias: data.alias,
+            descriptionUse: data.descriptionUse,
+          },
+          settingRequestId: data.lineOfCreditId,
+        };
+        setLinesData(dataInitial);
+      } else {
+        setLinesData({
+          settingRequestId: data.settingRequestId,
+          configurationRequestData: data.configurationRequestData,
+        });
+      }
       setUseCaseConfiguration(option);
     }
-  }, [data?.settingRequestId, setLinesConstructionData]);
+  }, [option, data]);
 
   useEffect(() => {
     const fetchLinesConstructiontData = async () => {
@@ -105,10 +118,23 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
             ...normalizeData,
           }));
         }
+      }
 
-        if (option === EUseCase.DETAILS && linesData?.settingRequestId) {
+      setTimeout(() => {
+        navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
+      }, 500);
+    }
+  }, [loading, option, borrowerData?.settingRequestId]);
+
+  useEffect(() => {
+    if (!linesData) {
+      setLoadingInitial(true);
+    } else {
+      setLoadingInitial(false);
+      if (!loading) {
+        if (option !== EUseCase.ADD && linesData) {
           const normalizeData: ILinesConstructionData = {
-            settingRequestId: data.settingRequestId,
+            settingRequestId: linesData.settingRequestId,
             abbreviatedName: String(
               linesData.configurationRequestData?.abbreviatedName ?? "",
             ),
@@ -135,12 +161,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
         navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
       }, 1000);
     }
-  }, [
-    loading,
-    linesData,
-    borrowerData?.settingRequestId,
-    setLinesConstructionData,
-  ]);
+  }, [loading, option, linesData]);
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);

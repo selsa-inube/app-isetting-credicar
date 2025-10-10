@@ -5,7 +5,13 @@ import { IUseStepNavigation } from "@ptypes/creditLines/IUseStepNavigation";
 import { TGroupLite } from "@ptypes/creditLines/TGroupLite";
 
 const useStepNavigation = (props: IUseStepNavigation) => {
-  const { groups, disabledButtons, handleStep, handleSave } = props;
+  const {
+    groups,
+    disabledButtons,
+    disabledButtonSend,
+    handleStep,
+    handleSave,
+  } = props;
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -77,7 +83,7 @@ const useStepNavigation = (props: IUseStepNavigation) => {
   const disabledBack = currentIndex <= 0 || disabledButtons;
   const disabledNext = disabledButtons || currentIndex >= sequence.length - 1;
 
-  const disabledSend = disabledButtons;
+  const disabledSend = disabledButtons || disabledButtonSend;
   const loadingBackAndNext = false;
   const loadingSend = false;
 

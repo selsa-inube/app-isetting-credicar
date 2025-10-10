@@ -8,6 +8,10 @@ interface IDecisionsByRule {
   transactionOperation?: string;
   conditionGroups?: IConditionGroups[];
   decisionId?: string;
+  ruleName?: string;
+  ruleDataType?: string;
+  howToSetTheDecision?: string;
+  decisionDataType?: string;
 }
 
 export type { IDecisionsByRule };

@@ -80,7 +80,7 @@ const mapDecisionsToRulePayload = (params: {
         }));
 
         return {
-          ConditionGroupId: groupKey,
+          conditionGroupId: groupKey,
           conditionsThatEstablishesTheDecision,
         };
       },

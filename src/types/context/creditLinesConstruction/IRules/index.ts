@@ -1,7 +1,7 @@
 import { IDecisionsByRule } from "../IDecisionsByRule";
 
 interface IRules {
-  ruleName: string;
+  ruleName?: string;
   decisionsByRule: IDecisionsByRule[];
   modifyJustification?: string;
 }

@@ -23,6 +23,7 @@ const NameAndDescriptionForm = () => {
     description,
     optionCrumb,
     optionDetails,
+    optionIcon,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -70,6 +71,7 @@ const NameAndDescriptionForm = () => {
       description={description}
       optionCrumb={optionCrumb}
       optionDetails={optionDetails}
+      optionIcon={optionIcon}
       disabledField={optionDetails}
     />
   );

@@ -1,12 +1,12 @@
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const normalizeEvaluateRuleData = (
-  data: IRules[] | undefined,
+  data: IRuleDecisionExtended[] | undefined,
   conditionRule?: string,
-): IRules[] | undefined =>
+) =>
   data?.map((item) => ({
     ...item,
-    decisionsByRule: item.decisionsByRule.map((decision) => ({
+    decisionsByRule: item.decisionsByRule?.map((decision) => ({
       ...decision,
       conditionGroups: decision.conditionGroups?.map((condition) => ({
         ...condition,
