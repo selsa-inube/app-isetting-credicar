@@ -5,7 +5,6 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
 import { tokens } from "@design/tokens";
-import { decrypt } from "@utils/crypto/decrypt";
 import { enviroment } from "@config/environment";
 import { mainNavigation } from "@config/mainNavigation";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
@@ -20,9 +19,6 @@ const useHome = () => {
   } = useContext(AuthAndPortalData);
 
   const { logout } = useIAuth();
-
-  const portalId = localStorage.getItem("portalCode");
-  const staffPortalId = portalId ? decrypt(portalId) : "";
   const [collapse, setCollapse] = useState(false);
   const [selectedClient, setSelectedClient] = useState<string>("");
 
@@ -31,7 +27,7 @@ const useHome = () => {
 
   const { optionsCards, loading } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
-    staffPortalId,
+    staffPortalId: appData.portal.publicCode,
   });
 
   const { optionsHeader } = mainNavigation(optionsCards);

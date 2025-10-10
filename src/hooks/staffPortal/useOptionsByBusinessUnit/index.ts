@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getOptionsByBusinessUnit } from "@services/staffPortal/getOptionsByBusinessUnits";
 import { IOptionsByBusinessUnits } from "@ptypes/staffPortal/IOptionsByBusinessUnits";
 import { getIcon } from "@utils/getIcon";
@@ -8,6 +9,8 @@ import { IUseOptionsByBusinessUnit } from "@ptypes/staffPortal/IUseOptionsByBusi
 
 const useOptionsByBusinessUnit = (props: IUseOptionsByBusinessUnit) => {
   const { businessUnit, staffPortalId, optionName } = props;
+
+  const { appData } = useContext(AuthAndPortalData);
   const [optionsBusinessUnit, setOptionsBusinessUnit] = useState<
     IOptionsByBusinessUnits[]
   >([]);
@@ -16,25 +19,28 @@ const useOptionsByBusinessUnit = (props: IUseOptionsByBusinessUnit) => {
 
   useEffect(() => {
     const fetchOptionBusinessUnitData = async () => {
-      setLoading(true);
-      try {
-        const businessUnitSigla = JSON.parse(businessUnit ?? "{}");
+      if (staffPortalId.length > 0) {
+        setLoading(true);
+        try {
+          const businessUnitSigla = JSON.parse(businessUnit ?? "{}");
 
-        const data = await getOptionsByBusinessUnit(
-          businessUnitSigla.publicCode,
-          staffPortalId,
-        );
-        setOptionsBusinessUnit(data);
-      } catch (error) {
-        console.info(error);
-        setHasError(true);
-      } finally {
-        setLoading(false);
+          const data = await getOptionsByBusinessUnit(
+            businessUnitSigla.publicCode,
+            staffPortalId,
+            appData.user.userAccount,
+          );
+          setOptionsBusinessUnit(data);
+        } catch (error) {
+          console.info(error);
+          setHasError(true);
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
     fetchOptionBusinessUnitData();
-  }, [businessUnit]);
+  }, [businessUnit, staffPortalId]);
 
   const optionsCards = optionsBusinessUnit
     .filter((option) => normalizeOptionsByPublicCode(option.publicCode))
