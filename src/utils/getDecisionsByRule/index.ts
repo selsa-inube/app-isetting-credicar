@@ -4,8 +4,9 @@ const getDecisionsByRule = (
   decisions: IEntry[],
   ruleName: string,
   conditionFilter?: (condition: IEntry) => boolean,
-) =>
-  decisions
+) =>{
+  console.log('getDecisionsByRule: ',decisions);
+ return decisions
     .filter((decision: IEntry) => decision.ruleName === ruleName)
     .map((decision: IEntry, idx: number) => ({
       ...decision,
@@ -19,5 +20,7 @@ const getDecisionsByRule = (
           }
         : {}),
     }));
+}
+  
 
 export { getDecisionsByRule };

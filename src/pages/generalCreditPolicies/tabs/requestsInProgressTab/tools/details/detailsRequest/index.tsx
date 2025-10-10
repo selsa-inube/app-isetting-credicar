@@ -55,7 +55,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
   } = props;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
-
+  console.log('decisionsReciprocity: ', decisionsReciprocity);
   return (
     <>
       <StyledContainerIcon onClick={onToggleModal} $isTablet={screenTablet}>

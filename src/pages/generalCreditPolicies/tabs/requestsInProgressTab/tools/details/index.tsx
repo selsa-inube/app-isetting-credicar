@@ -37,7 +37,7 @@ const Details = (props: IDetails) => {
     isMoreDetails,
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress({ data });
-
+  console.log('useMoreDetailsRequestProgress: ', decisionsReciprocity);
   const {
     isSelected,
     isMobile,

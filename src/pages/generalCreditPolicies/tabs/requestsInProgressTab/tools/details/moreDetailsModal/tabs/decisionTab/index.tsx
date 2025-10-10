@@ -1,4 +1,4 @@
-import { BusinessRules } from "@isettingkit/business-rules";
+import { BusinessRulesWithGroup } from "@isettingkit/business-rules";
 import { Stack } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
@@ -7,7 +7,7 @@ import { StyledContainer } from "../styles";
 
 const DecisionTab = (props: IDecisionTab) => {
   const { data, textValues, decisionTemplate } = props;
-
+  console.log('DecisionTab: ', data, textValues, decisionTemplate);
   return (
     <Stack
       direction="column"
@@ -16,7 +16,7 @@ const DecisionTab = (props: IDecisionTab) => {
       height="85%"
     >
       <StyledContainer>
-        <BusinessRules
+        <BusinessRulesWithGroup
           controls={false}
           decisions={data}
           textValues={textValues}
