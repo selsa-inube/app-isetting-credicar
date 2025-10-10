@@ -6,6 +6,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
 import { creditTabLabels } from "@config/creditLines/creditLinesTab/generic/creditTabLabels";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { useLineInconstructionData } from "../useLineInconstructionData";
 
 const useLineInConstructionTab = () => {
@@ -23,7 +24,9 @@ const useLineInConstructionTab = () => {
     errorData,
   } = useLineInconstructionData();
 
-  const { setLinesConstructionData } = useContext(CreditLinesConstruction);
+  const { setLinesConstructionData, setLinesEditData } = useContext(
+    CreditLinesConstruction,
+  );
 
   useEffect(() => {
     setLinesConstructionData({
@@ -34,6 +37,7 @@ const useLineInConstructionTab = () => {
       lineOfCreditId: "",
       rules: [],
     });
+    setLinesEditData({} as ILinesConstructionData);
   }, []);
 
   useEffect(() => {

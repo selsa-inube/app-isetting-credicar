@@ -23,6 +23,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     loading,
     textValues,
     option,
+    optionsConditionsCSV,
     setDecisionData,
     formId,
   } = props;
@@ -53,9 +54,13 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     textValues,
     setDecisionData,
     formId,
+    optionsConditionsCSV,
   });
 
-  const optionDetailsCreditline = option === EUseCase.DETAILS ? true : false;
+  const optionDetailsCreditline =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? true
+      : false;
   const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
 
   return (

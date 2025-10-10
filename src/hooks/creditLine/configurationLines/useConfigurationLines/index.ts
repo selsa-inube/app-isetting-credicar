@@ -33,11 +33,11 @@ import { INameAndDescriptionEntry } from "@ptypes/creditLines/forms/INameAndDesc
 import { ILanguage } from "@ptypes/i18n";
 import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useGroupOptions } from "../useGroupOptions";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
-import { ISaveDataRequest } from "@src/types/saveData/ISaveDataRequest";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -295,18 +295,19 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     return [...filteredExisting, ...newRules];
   };
 
-  const { ruleError, ruleLoadding, ruleErrorData } = useEditCreditLines({
-    useCaseConfiguration,
-    templateKey: templateKey || "",
-    decisionsData,
-    linesData,
-    nameLineRef,
-    setLinesConstructionData,
-    linesConstructionData,
-    mergeRules,
-    setLinesEditData,
-    setLinesData,
-  });
+  const { ruleError, ruleLoadding, ruleErrorData, optionsConditionsCSV } =
+    useEditCreditLines({
+      useCaseConfiguration,
+      templateKey: templateKey || "",
+      decisionsData,
+      linesData,
+      nameLineRef,
+      setLinesConstructionData,
+      linesConstructionData,
+      mergeRules,
+      setLinesEditData,
+      setLinesData,
+    });
 
   const initialDecisions: IRuleDecision[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
@@ -410,8 +411,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
   }, [loadingModify]);
 
+  const validateCase =
+    useCaseConfiguration === EUseCase.DETAILS ||
+    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL;
+
   useEffect(() => {
-    if (useCaseConfiguration !== EUseCase.DETAILS) {
+    if (!validateCase) {
       const currentFormValues = nameLineRef.current?.values;
       const hasFormChanges =
         currentFormValues &&
@@ -517,21 +522,20 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ) {
       return true;
     }
-
-    if (
-      useCaseConfiguration === EUseCase.EDIT &&
-      Object.entries(linesEditData).length === 0
-    ) {
-      return true;
-    }
     return false;
   };
 
   const validateDisabled = validateConfig();
 
+  const validateButtonSend = Boolean(
+    useCaseConfiguration === EUseCase.EDIT &&
+      Object.entries(linesEditData).length === 0,
+  );
+
   const nav = useStepNavigation({
     groups: groups as unknown as IDropdownMenuGroup[],
     disabledButtons: validateDisabled,
+    disabledButtonSend: validateButtonSend,
     handleStep,
     handleSave,
   });
@@ -617,10 +621,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   });
 
   const optionDetails =
-    useCaseConfiguration === EUseCase.DETAILS ? true : false;
+    useCaseConfiguration === EUseCase.DETAILS ||
+    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+      ? true
+      : false;
 
   const optionIcon =
-    useCaseConfiguration === EUseCase.DETAILS || EUseCase.EDIT ? true : false;
+    useCaseConfiguration === EUseCase.DETAILS ||
+    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL ||
+    useCaseConfiguration === EUseCase.EDIT
+      ? true
+      : false;
 
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
@@ -665,6 +676,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     optionCrumb,
     optionDetails,
     optionIcon,
+    optionsConditionsCSV,
     handleClickInfo,
     setClientSupportData,
     handleToggleUnconfiguredRulesModal,

@@ -31,7 +31,7 @@ const useDetailsCreditLine = (props: IUseDetailsCreditLine) => {
     }
 
     navigate(`/credit-lines/edit-credit-lines`, {
-      state: { data: data, option: EUseCase.DETAILS },
+      state: { data: data, option: EUseCase.DETAILS_CONDITIONAL },
     });
   };
 

@@ -18,7 +18,11 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!rule) return;
-      if (!useCase || useCase === EUseCase.EDIT) {
+      if (
+        !useCase ||
+        useCase === EUseCase.EDIT ||
+        useCase === EUseCase.DETAILS_CONDITIONAL
+      ) {
         setLoading(true);
 
         try {

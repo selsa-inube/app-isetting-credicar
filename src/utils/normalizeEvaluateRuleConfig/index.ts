@@ -18,8 +18,11 @@ const normalizeEvaluateRuleConfig = (
       conditionGroups: decision.conditionGroups?.map((condition) => ({
         conditionGroupId: condition.conditionGroupId,
         conditionsThatEstablishesTheDecision:
-          condition.conditionsThatEstablishesTheDecision?.map((condition) => ({
-            ...condition,
+          condition.conditionsThatEstablishesTheDecision?.map((cond) => ({
+            conditionDataType: cond.conditionDataType,
+            conditionName: cond.conditionName,
+            howToSetTheCondition: cond.howToSetTheCondition,
+            value: cond.value,
           })),
       })),
     })),

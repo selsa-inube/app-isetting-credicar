@@ -29,6 +29,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
 
   const { appData } = useContext(AuthAndPortalData);
   const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
+  const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
     useGetConfiguredDecisions({
@@ -48,7 +49,10 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
   } = getRule(templateKey || "");
 
   useEffect(() => {
-    if (useCaseConfiguration === EUseCase.EDIT) {
+    if (
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+    ) {
       if (
         !ruleLoadding &&
         configuredDecisions &&
@@ -56,6 +60,9 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       ) {
         if (decisionsData.length === 0 && setLinesData) {
           const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
+          const optionConditions =
+            configuredDecisions[0].parameterizedConditions?.join(",").trim();
+          setOptionsConditionsCSV(optionConditions);
 
           setLinesData((prev) => {
             const existingRules =
@@ -135,7 +142,10 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
   }, [useCaseConfiguration, newDecisions]);
 
   useEffect(() => {
-    if (useCaseConfiguration === EUseCase.EDIT) {
+    if (
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+    ) {
       if (!linesData || linesData?.configurationRequestData.length === 0)
         return;
 
@@ -185,6 +195,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [linesData, useCaseConfiguration]);
   return {
+    optionsConditionsCSV,
     ruleError,
     ruleErrorData,
     ruleLoadding,
