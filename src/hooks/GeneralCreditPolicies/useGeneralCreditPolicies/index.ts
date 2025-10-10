@@ -6,7 +6,6 @@ import { getRequestsInProgress } from "@services/requestInProgress/getRequestsIn
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EGeneralPolicies } from "@enum/generalPolicies";
-import { decrypt } from "@utils/crypto/decrypt";
 import { mediaQueryMobileSmall, mediaQueryTablet } from "@config/environment";
 import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
 import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
@@ -29,8 +28,6 @@ const useGeneralCreditPolicies = () => {
     loadingPolicies,
   } = useValidateRules();
 
-  const portalId = localStorage.getItem("portalCode");
-  const staffPortalId = portalId ? decrypt(portalId) : "";
   const [showModal, setShowModal] = useState<boolean>(false);
   const [withoutPoliciesData, setWithoutPoliciesData] =
     useState<boolean>(false);
@@ -142,7 +139,7 @@ const useGeneralCreditPolicies = () => {
 
   const { descriptionOptions } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
-    staffPortalId,
+    staffPortalId: appData.portal.publicCode,
     optionName: EGeneralPolicies.OPTION_NAME,
   });
 

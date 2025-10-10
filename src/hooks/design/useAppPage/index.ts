@@ -3,7 +3,6 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
-import { decrypt } from "@utils/crypto/decrypt";
 import { mainNavigation } from "@config/mainNavigation";
 import {
   maxWidthLineConstruction,
@@ -20,12 +19,10 @@ const useAppPage = (props: IUseAppPage) => {
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
   const [selectedClient, setSelectedClient] = useState<string>("");
-  const portalId = localStorage.getItem("portalCode");
-  const staffPortalId = portalId ? decrypt(portalId) : "";
 
   const { optionsCards } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
-    staffPortalId,
+    staffPortalId: appData.portal.publicCode,
   });
 
   const navigate = useNavigate();
