@@ -1,3 +1,4 @@
+import { IValue } from "@isettingkit/input";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 
 interface IConfiguredDecisions {
@@ -11,7 +12,7 @@ interface IConfiguredDecisions {
     ruleName: string;
     typeDecision: string;
     validUntil: string;
-    value: string;
+    value: string | number | string[] | IValue | undefined;
   }[];
   parameterizedConditions?: string[];
   ruleName?: string;

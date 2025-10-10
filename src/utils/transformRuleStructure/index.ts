@@ -1,14 +1,6 @@
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseValue = (value: any) => {
-  try {
-    return JSON.parse(value);
-  } catch (error) {
-    console.error(error);
-    return value;
-  }
-};
+import { formatDateDecision } from "../date/formatDateDecision";
+import { parseIfJSON } from "../parseIfJSON";
 
 const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
   return inputArray.map((rule) => {
@@ -24,6 +16,7 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
         )
           ? conditionsThatEstablishesTheDecision
           : [conditionsThatEstablishesTheDecision];
+
         const simplifiedConditions = conditionsArray.map((cond) => {
           return {
             conditionDataType: cond.conditionDataType,
@@ -44,11 +37,14 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
         {
           decisionId: rule.decisionId,
           ruleName: rule.ruleName,
-          ruleDataType: rule.decisionDataType,
-          value: parseValue(rule.value),
+          ruleDataType: rule.decisionDataType
+            ? rule.decisionDataType
+            : "Alphabetical",
+          value: parseIfJSON(rule.value),
           howToSetTheDecision: rule.howToSetTheDecision,
-          effectiveFrom: rule.effectiveFrom,
-          typeDecision: "Permanent",
+          effectiveFrom:
+            rule.effectiveFrom &&
+            formatDateDecision(String(rule.effectiveFrom)),
           conditionGroups: conditionGroups,
         },
       ],

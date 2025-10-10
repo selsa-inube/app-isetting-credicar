@@ -4,6 +4,8 @@ interface IConditionsTheDecision {
   labelName?: string;
   transactionOperation?: string;
   i18n?: string;
+  conditionDataType?: string;
+  howToSetTheCondition?: string;
 }
 
 export type { IConditionsTheDecision };

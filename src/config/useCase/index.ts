@@ -7,6 +7,7 @@ const operationTypes = {
   editError: "editar",
   deleteError: "Eliminar",
   editConfiguration: "Modificar Configuración",
+  detailsConditional: "detalles condicionales",
 };
 
 export { operationTypes };

@@ -1,26 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
-import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
-import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfigR";
+import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
+import { transformRuleStructure } from "@utils/transformRuleStructure";
+import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { EUseCase } from "@enum/useCase";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 
 const useEditCreditLines = (props: IUseEditCreditLines) => {
   const {
     useCaseConfiguration,
     templateKey,
     decisionsData,
-    setLinesConstructionData,
     linesConstructionData,
+    linesData,
+    nameLineRef,
+    setLinesConstructionData,
+    setLinesData,
+    setLinesEditData,
     mergeRules,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
   const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
+  const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
     useGetConfiguredDecisions({
@@ -30,7 +39,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       ruleData: {
         ruleName,
       },
-      // language: appData.language,
     });
 
   const {
@@ -41,38 +49,62 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
   } = getRule(templateKey || "");
 
   useEffect(() => {
-    if (useCaseConfiguration === EUseCase.EDIT) {
+    if (
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+    ) {
       if (
         !ruleLoadding &&
         configuredDecisions &&
-        configuredDecisions?.length > 0
+        configuredDecisions.length > 0
       ) {
-        if (decisionsData.length > 0) return;
-        const normalized = normalizeEvaluateRuleData(configuredDecisions);
-        setLinesConstructionData((prev) => {
-          const existingRules =
-            (prev?.rules as IRuleDecision[] | undefined) ?? [];
+        if (decisionsData.length === 0 && setLinesData) {
+          const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
+          const optionConditions =
+            configuredDecisions[0].parameterizedConditions?.join(",").trim();
+          setOptionsConditionsCSV(optionConditions);
 
-          return {
-            ...prev,
-            settingRequestId: linesConstructionData.settingRequestId,
-            rules: mergeRules(existingRules, normalized),
-          };
-        });
+          setLinesData((prev) => {
+            const existingRules =
+              (prev?.configurationRequestData?.rules as
+                | IRuleDecision[]
+                | undefined) ?? [];
+
+            return {
+              ...prev,
+              settingRequestId: linesConstructionData.settingRequestId,
+              configurationRequestData: {
+                ...prev?.configurationRequestData,
+                rules: mergeRules(existingRules, normalized),
+              },
+            };
+          });
+        }
       }
     }
-  }, [configuredDecisions]);
+  }, [configuredDecisions, decisionsData, useCaseConfiguration, ruleLoadding]);
+
+  const normalizeDecisionsArray = (data: any): IRuleDecisionExtended[] =>
+    (Array.isArray(data) ? data : []).map((item) => ({
+      ...item,
+      decisionsByRule: Array.isArray(item.decisionsByRule)
+        ? item.decisionsByRule.map((dbr: any) => ({
+            ...dbr,
+            effectiveFrom: formatDateDecision(dbr.effectiveFrom),
+          }))
+        : [],
+    }));
 
   const newInsertDecision = getNewInsertDecisionsConfig(
     appData.user.userAccount,
-    normalizeEvaluateRuleData(configuredDecisions) ?? [],
-    decisionsData,
+    normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+    normalizeDecisionsArray(transformRuleStructure(decisionsData)),
   );
 
   const newDeleteDecision = getNewDeletedDecisionsConfig(
     appData.user.userAccount,
-    normalizeEvaluateRuleData(configuredDecisions) ?? [],
-    decisionsData,
+    normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+    normalizeDecisionsArray(transformRuleStructure(decisionsData)),
   );
 
   useEffect(() => {
@@ -96,19 +128,74 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       newDecisions &&
       newDecisions.length > 0
     ) {
-      //   setLinesConstructionData((prev) => {
-      //     const existingRules =
-      //       (prev?.rules as IRuleDecision[] | undefined) ?? [];
-      //     return {
-      //       ...prev,
-      //       settingRequestId: linesConstructionData.settingRequestId,
-      //       rules: mergeRules(existingRules, newDecisions),
-      //     };
-      //   });
+      setLinesEditData((prev) => {
+        const existingRules =
+          (prev?.rules as IRuleDecision[] | undefined) ?? [];
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          lineOfCreditId: linesConstructionData.settingRequestId,
+          rules: mergeRules(existingRules, newDecisions),
+        };
+      });
     }
   }, [useCaseConfiguration, newDecisions]);
 
+  useEffect(() => {
+    if (
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+    ) {
+      if (!linesData || linesData?.configurationRequestData.length === 0)
+        return;
+
+      setLinesConstructionData((prev) => {
+        const initialValues = nameLineRef.current?.initialValues;
+        const currentValues = nameLineRef.current?.values;
+
+        const hasNameChanged =
+          currentValues?.nameLine !== initialValues?.nameLine;
+        const hasAliasChanged =
+          currentValues?.aliasLine !== initialValues?.aliasLine;
+        const hasDescriptionChanged =
+          currentValues?.descriptionLine !== initialValues?.descriptionLine;
+
+        const normalizeData: ILinesConstructionData = {
+          settingRequestId:
+            prev.settingRequestId || linesConstructionData.settingRequestId,
+          lineOfCreditId: linesData.settingRequestId,
+
+          abbreviatedName: hasNameChanged
+            ? String(linesData.configurationRequestData?.abbreviatedName ?? "")
+            : (prev.abbreviatedName ?? ""),
+
+          alias: hasAliasChanged
+            ? String(linesData.configurationRequestData?.alias ?? "")
+            : (prev.alias ?? ""),
+
+          descriptionUse: hasDescriptionChanged
+            ? String(linesData.configurationRequestData?.descriptionUse ?? "")
+            : (prev.descriptionUse ?? ""),
+        };
+
+        if (linesData.configurationRequestData?.rules) {
+          const existingRules =
+            (prev?.rules as IRuleDecision[] | undefined) ?? [];
+          const newRules = Object(linesData.configurationRequestData.rules);
+          normalizeData.rules = mergeRules(existingRules, newRules);
+        } else {
+          normalizeData.rules = prev.rules;
+        }
+
+        return {
+          ...prev,
+          ...normalizeData,
+        };
+      });
+    }
+  }, [linesData, useCaseConfiguration]);
   return {
+    optionsConditionsCSV,
     ruleError,
     ruleErrorData,
     ruleLoadding,

@@ -17,6 +17,7 @@ const mapAddPayrollnEntityToApi = (
     regularPaymentCycles: data.regularPaymentCycles,
     severancePaymentCycles: data.severancePaymentCycles,
     settingRequest: data.settingRequest,
+    payrollForDeductionAgreementCode: data.payrollForDeductionAgreementCode,
   };
 };
 

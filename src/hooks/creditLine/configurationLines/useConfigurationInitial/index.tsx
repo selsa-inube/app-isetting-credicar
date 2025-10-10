@@ -122,7 +122,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
       setTimeout(() => {
         navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
-      }, 1000);
+      }, 500);
     }
   }, [loading, option, borrowerData?.settingRequestId]);
 

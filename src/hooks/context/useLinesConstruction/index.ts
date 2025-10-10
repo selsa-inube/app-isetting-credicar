@@ -18,6 +18,10 @@ const useLinesConstruction = () => {
       rules: [],
     });
 
+  const [linesEditData, setLinesEditData] = useState<ILinesConstructionData>(
+    {} as ILinesConstructionData,
+  );
+
   const ruleCatalog = ECreditLines.RULE_CATALOG;
   const catalogAction = ECreditLines.CATALOG_ACTION;
 
@@ -40,10 +44,12 @@ const useLinesConstruction = () => {
       loadingInitial,
       optionsAllRules,
       useCaseConfiguration,
+      linesEditData,
       setLinesConstructionData,
       setLoadingInitial,
       setOptionsAllRules,
       setUseCaseConfiguration,
+      setLinesEditData,
     }),
     [linesConstructionData, loadingInitial],
   );

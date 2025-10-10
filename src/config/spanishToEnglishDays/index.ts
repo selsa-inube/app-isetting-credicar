@@ -7,6 +7,7 @@ const spanishToEnglishDays = {
   Viernes: "Friday",
   Sabado: "Saturday",
   Miércoles: "Wednesday",
+  "Último día del mes": "LastDayOfTheMonth",
 };
 
 export { spanishToEnglishDays };

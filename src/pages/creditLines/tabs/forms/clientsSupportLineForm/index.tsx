@@ -21,6 +21,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     description,
     optionCrumb,
     optionDetails,
+    optionIcon,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleOpenModal,
@@ -51,6 +52,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       description={description}
       optionCrumb={optionCrumb}
       optionDetails={optionDetails}
+      optionIcon={optionIcon}
     />
   );
 };

@@ -45,7 +45,9 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     description,
     optionCrumb,
     optionDetails,
+    optionIcon,
     useCaseConfiguration,
+    optionsConditionsCSV,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
     handleClosePendingModal,
@@ -86,7 +88,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           title={title}
           description={description}
           optionCrumb={optionCrumb}
-          withIcon={!optionDetails}
+          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
 
@@ -95,6 +97,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           controls
           customMessageEmptyDecisions={undefined}
           customTitleContentAddCard={undefined}
+          optionsConditionsCSV={optionsConditionsCSV}
           decisionTemplate={
             (decisionTemplateConfig(
               ruleData,

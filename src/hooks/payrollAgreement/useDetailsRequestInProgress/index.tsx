@@ -58,32 +58,32 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const fetchRequestData = async () => {
     setLoading(true);
     try {
-      if (data.useCaseName === EPayrollAgreement.ADD_PAYROLL_AGREEMENT) {
+      if (data.useCaseName === EPayrollAgreement.USE_CASE_ADD) {
         await postAddPayrollAgreement(
           appData.user.userAccount,
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestPayrollAgre,
         );
         setShowModal(false);
-        navigate(-1);
+        navigate("/payroll-agreement");
       }
-      if (data.useCaseName === EPayrollAgreement.MODIFY_PAYROLL_AGREEMENT) {
+      if (data.useCaseName === EPayrollAgreement.USE_CASE_EDIT) {
         await pacthEditPayrollAgreement(
           appData.user.userAccount,
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestPayrollAgre,
         );
         setShowModal(false);
-        navigate(-1);
+        navigate("/payroll-agreement");
       }
-      if (data.useCaseName === EPayrollAgreement.DELETE_PAYROLL_AGREEMENT) {
+      if (data.useCaseName === EPayrollAgreement.USE_CASE_DELETE) {
         await deletePayrollAgreement(
           appData.user.userAccount,
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestPayrollAgre,
         );
         setShowModal(false);
-        navigate(-1);
+        navigate("/payroll-agreement");
       }
     } catch (error) {
       console.info(error);

@@ -42,6 +42,7 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
         "",
       paymentDay: checkDayWeek(item.payday ?? ""),
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
+      laborRegulatorFramework: item.laborRegulatorFramework ?? "",
       transactionOperation: transactionOperation,
     }));
 
@@ -54,6 +55,7 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
       paymentDay: formatPaymentDay(item.payday ?? ""),
       payrollForDeductionAgreementId: item.id ?? "",
+      laborRegulatorFramework: item.laborRegulatorFramework ?? "",
       transactionOperation: transactionOperation,
     }));
 

@@ -4,6 +4,7 @@ const translationToEnum: Record<string, string> = {
   "Tipo de ingreso primario": "PrimaryIncomeType",
   "Perfil de riesgo crediticio": "CreditRiskProfile",
   "Tipo de cliente": "ClientType",
+  LastDayOfTheMonth: "Último día del mes",
 };
 
 export { translationToEnum };
