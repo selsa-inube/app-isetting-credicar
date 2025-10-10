@@ -1,5 +1,5 @@
 import { IEvaluateRuleRequest } from "@ptypes/decisions/IEvaluateRuleRequest";
-import { IConfigDecisions } from "@ptypes/decisions/IConfigDecisions";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const mapEvaluateRuleByBusinessEntityToApi = (
   ruleData: IEvaluateRuleRequest,
@@ -10,15 +10,11 @@ const mapEvaluateRuleByBusinessEntityToApi = (
   };
 };
 
-const mapEvaluateRuleByBusinessEntities = (data: IConfigDecisions[]) => {
+const mapEvaluateRuleByBusinessEntities = (data: IRules[]) => {
   if (!data) return [];
-  return [
-    {
-      decisionsByRule: data.map((item) => ({
-        ...item,
-      })),
-    },
-  ];
+  return data.map((item) => ({
+    ...item,
+  }));
 };
 
 export {

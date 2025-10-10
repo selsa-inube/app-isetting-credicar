@@ -152,7 +152,7 @@ const useAddDestination = () => {
   const handleSubmitClick = () => {
     const transformDecision = creditLineDecisions.map((rule) => ({
       effectiveFrom: formatDate(new Date()),
-      value: rule?.value,
+      value: rule?.id,
     }));
     const rules = [
       {

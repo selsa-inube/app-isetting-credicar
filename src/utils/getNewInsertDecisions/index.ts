@@ -17,43 +17,68 @@ const getNewInsertDecisions = (
     return currentPortfolio
       .filter((decision) => !findDecision(prevRef.current, decision))
       .map((decision) => {
-        const decisionsByRule = decision.decisionsByRule?.map((condition) => {
-          const conditionGroups = condition.conditionGroups
-            ? condition.conditionGroups.map((item) => ({
-                conditionGroupId: item.ConditionGroupId,
-                transactionOperation: ETransactionOperation.INSERT,
-                conditionsThatEstablishesTheDecision:
-                  item.conditionsThatEstablishesTheDecision?.filter(
-                    (condition) => {
-                      if (condition.value !== undefined) {
-                        return {
-                          conditionName:
-                            translationToEnum[condition.conditionName] ??
-                            condition.conditionName,
-                          value: condition.value,
-                          transactionOperation: ETransactionOperation.INSERT,
-                        };
-                      }
-                    },
-                  ) as IConditionsTheDecision[],
-              }))
-            : undefined;
+        const conditionGroupsData: unknown[] = [];
+        const decisionsByRule =
+          decision.conditionGroups && decision.conditionGroups?.length > 0
+            ? conditionGroupsData.push(
+                decision.conditionGroups.map((item) => ({
+                  conditionGroupId: item.ConditionGroupId,
+                  transactionOperation: ETransactionOperation.INSERT,
+                  conditionsThatEstablishesTheDecision:
+                    item.conditionsThatEstablishesTheDecision?.map(
+                      (condition) => {
+                        if (condition.value !== undefined) {
+                          return {
+                            conditionName: condition.conditionName,
+                            value: condition.value,
+                            transactionOperation: ETransactionOperation.INSERT,
+                          };
+                        }
+                      },
+                    ) as IConditionsTheDecision[],
+                })),
+              )
+            : decision.decisionsByRule?.map((condition) => {
+                conditionGroupsData.push(
+                  condition.conditionGroups
+                    ? condition.conditionGroups.map((item) => ({
+                        conditionGroupId: item.ConditionGroupId,
+                        transactionOperation: ETransactionOperation.INSERT,
+                        conditionsThatEstablishesTheDecision:
+                          item.conditionsThatEstablishesTheDecision?.filter(
+                            (condition) => {
+                              if (condition.value !== undefined) {
+                                return {
+                                  conditionName:
+                                    translationToEnum[
+                                      condition.conditionName
+                                    ] ?? condition.conditionName,
+                                  value: condition.value,
+                                  transactionOperation:
+                                    ETransactionOperation.INSERT,
+                                };
+                              }
+                            },
+                          ) as IConditionsTheDecision[],
+                      }))
+                    : undefined,
+                );
 
-          const validUntil = condition.validUntil
-            ? formatDateDecision(condition.validUntil as string)
-            : undefined;
+                const validUntil = condition.validUntil
+                  ? formatDateDecision(condition.validUntil as string)
+                  : undefined;
 
-          return {
-            effectiveFrom: dateFrom
-              ? formatDateDecision(dateFrom)
-              : formatDateDecision(condition.effectiveFrom as string),
-            validUntil: validUntil,
-            value: condition.value,
-            transactionOperation: ETransactionOperation.INSERT,
-            decisionId: condition.decisionId,
-            conditionGroups: conditionGroups,
-          };
-        });
+                return {
+                  effectiveFrom: dateFrom
+                    ? formatDateDecision(dateFrom)
+                    : formatDateDecision(condition.effectiveFrom as string),
+                  validUntil: validUntil,
+                  value: condition.value,
+                  transactionOperation: ETransactionOperation.INSERT,
+                  decisionId: condition.decisionId,
+                  conditionGroups: conditionGroupsData,
+                };
+              });
 
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,

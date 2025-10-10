@@ -11,6 +11,7 @@ interface IConfigDecisions {
   typeDecision: string;
   validUntil: string;
   value: string;
+  labelName?: string;
 }
 
 export type { IConfigDecisions };

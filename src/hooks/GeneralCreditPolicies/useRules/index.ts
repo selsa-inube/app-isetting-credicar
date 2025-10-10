@@ -1,7 +1,6 @@
 import { ENameRules } from "@enum/nameRules";
 import { EBooleanText } from "@enum/booleanText";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
-import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { formatRuleDecisions } from "@utils/formatRuleDecisions";
 import { IUseRules } from "@ptypes/hooks/IUseRules";
 
@@ -28,7 +27,9 @@ const useRules = (props: IUseRules) => {
 
     return [
       {
-        value: data,
+        decisionsByRule: [
+          { effectiveFrom: dateVerification.date, value: data },
+        ],
         ruleName: ruleName,
       },
     ];
@@ -54,8 +55,7 @@ const useRules = (props: IUseRules) => {
   const methods = {
     ruleName: ENameRules.METHODS,
     decisionsByRule: methodsArray.map((method) => ({
-      effectiveFrom:
-        dateVerification?.date && formatDateDecision(dateVerification?.date),
+      effectiveFrom: dateVerification?.date && dateVerification?.date,
       value: method,
     })),
   };

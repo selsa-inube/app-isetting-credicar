@@ -1,9 +1,9 @@
 interface IConditionsTheDecision {
   conditionName: string;
   value: string;
+  labelName?: string;
   transactionOperation?: string;
   i18n?: string;
-  labelName?: string;
   conditionDataType?: string;
   howToSetTheCondition?: string;
 }
