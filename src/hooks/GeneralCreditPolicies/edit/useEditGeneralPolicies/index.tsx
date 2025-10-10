@@ -76,8 +76,6 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const decisionsGeneralRef = useRef<FormikProps<IDecisionsGeneralEntry>>(null);
 
   const navigate = useNavigate();
-
-  // Ensure decisionsByRule is always an array for type compatibility with IRules
   const fixDecisionsByRuleArray = (data: IRuleDecisionExtended[] | undefined) =>
     (data ?? []).map((item) => ({
       ...item,

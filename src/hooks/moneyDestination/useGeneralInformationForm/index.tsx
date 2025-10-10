@@ -189,14 +189,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       }
     };
     updateButton();
-  }, [
-    formik.values,
-    loading,
-    initialGeneralInfData,
-    formik.isValid,
-    initialValues,
-    editDataOption,
-  ]);
+  }, [formik.isValid, editDataOption]);
 
   const handleChangeCheck = (name: string, values: string) => {
     const updatedData = creditLineValues.map((entry) =>
