@@ -43,9 +43,10 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
       data.numberOfDaysForReceivingTheDiscounts ?? data.applicationDaysPayroll,
     company: data.payingEntityName,
     paymentSources: dataSourcesOfIncome(
-      data.configurationRequestData.incomeTypes,
+      data.incomeTypes ?? data.configurationRequestData.incomeTypes,
     ),
     payrollForDeductionAgreementCode:
+      data.payrollForDeductionAgreementCode ??
       data.configurationRequestData.payrollForDeductionAgreementCode,
   };
 
