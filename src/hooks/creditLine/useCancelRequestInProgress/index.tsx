@@ -6,24 +6,36 @@ import { cancelRequestInProgress } from "@services/requestInProgress/cancelReque
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
-import { cancelPayrollLabels } from "@config/payrollAgreement/requestsInProgressTab/cancelPayrollLabels";
-import { cancelRequestInProgressMessage } from "@config/generalCreditPolicies/requestsInProgressTab/generic/cancelRequestInProgressMessage";
+import { errorObject } from "@utils/errorObject";
+import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { notCancelStatus } from "@config/status/notCancelStatus";
-import { cancelRequestInProgressModal } from "@config/payrollAgreement/requestsInProgressTab/generic/cancelRequestInProgressModal";
 import { disabledModal } from "@config/disabledModal";
+import { cancelLabels } from "@config/creditLines/requestInProgressTab/cancelLabels";
+import { cancelRequestModal } from "@config/creditLines/requestInProgressTab/cancelRequestModal";
+import { deleteCreditModal } from "@config/creditLines/creditLinesTab/generic/deleteCreditModal";
+import { cancelRequestInProgressMessage } from "@config/creditLines/requestInProgressTab/cancelRequestInProgressMessage";
 import { cannotCancelledModal } from "@config/cannotCancelledModal";
-import { ICancelReqInProcRequest } from "@ptypes/payrollAgreement/requestInProgTab/ICancelReqInProcRequest";
-import { IUseCancelRequestInProgress } from "@ptypes/hooks/payrollAgreement/IUseCancelRequestInProgress";
+import { errorModal } from "@config/errorModal";
+import { ICancelRequest } from "@ptypes/creditLines/ICancelRequest";
+import { IUseCancelRequestInProgress } from "@ptypes/hooks/creditLines/IUseCancelRequestInProgress";
+import { IErrors } from "@ptypes/IErrors";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
-  const { businessUnit, data, userAccount, useCaseCancel, setEntryCanceled } =
-    props;
+  const {
+    businessUnit,
+    data,
+    userAccount,
+    useCaseCancel,
+    setEntryCanceled,
+    inConstruction = false,
+  } = props;
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [showDecision, setShowDecision] = useState(false);
   const [cannotCancelled, setCannotCancelled] = useState(false);
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const { addFlag } = useFlag();
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
@@ -51,12 +63,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     setShowInfoModal(!showInfoModal);
   };
 
-  useEffect(() => {
-    const decision = showInfoModal || showModal || cannotCancelled;
-    setShowDecision(decision);
-  }, [showInfoModal, showModal, cannotCancelled]);
-
-  const fetchCancelRequestData = async (data: ICancelReqInProcRequest) => {
+  const fetchCancelRequestData = async (data: ICancelRequest) => {
     setLoading(true);
     try {
       await cancelRequestInProgress(businessUnit, data);
@@ -71,26 +78,29 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     } catch (error) {
       console.info(error);
       setHasError(true);
-      addFlag({
-        title: cancelRequestInProgressMessage.error.title,
-        description: cancelRequestInProgressMessage.error.description,
-        appearance: cancelRequestInProgressMessage.error
-          .appearance as IFlagAppearance,
-        duration: cancelRequestInProgressMessage.error.duration,
-      });
+      setErrorData(errorObject(error));
     } finally {
       setLoading(false);
       setShowModal(false);
     }
   };
 
+  const handleToggleErrorModal = () => {
+    setHasError(!hasError);
+  };
+
   const handleClick = () => {
     fetchCancelRequestData({
-      removalJustification: `${cancelPayrollLabels.removalJustification} ${userAccount}`,
+      removalJustification: `${cancelLabels.removalJustification} ${userAccount}`,
       requestNumber: data.requestNumber,
       settingRequestId: data.settingRequestId,
     });
   };
+
+  useEffect(() => {
+    const decision = showInfoModal || showModal || cannotCancelled || hasError;
+    setShowDecision(decision);
+  }, [showInfoModal, showModal, cannotCancelled, hasError]);
 
   const modal = () => {
     const initial = {
@@ -98,6 +108,8 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       subtitle: "",
       description: "",
       actionText: "",
+      Icon: <></>,
+      withIcon: false,
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
@@ -111,17 +123,31 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
-    if (showModal) {
+    if (!inConstruction && showModal) {
       return {
-        ...cancelRequestInProgressModal,
+        ...cancelRequestModal,
         onCloseModal: handleToggleModal,
         onClick: handleClick,
         withCancelButton: true,
+        withIcon: false,
+        appearance: EComponentAppearance.DANGER,
+        appearanceButton: EComponentAppearance.DANGER,
+      };
+    }
+
+    if (inConstruction && showModal) {
+      return {
+        ...deleteCreditModal,
+        onCloseModal: handleToggleModal,
+        onClick: handleClick,
+        withCancelButton: true,
+        withIcon: false,
         appearance: EComponentAppearance.DANGER,
         appearanceButton: EComponentAppearance.DANGER,
       };
@@ -133,8 +159,21 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         onCloseModal: handleToggleCancelledModal,
         onClick: handleToggleModal,
         withCancelButton: false,
+        withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    if (!loading && hasError) {
+      return {
+        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 
@@ -154,6 +193,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     showInfoModal,
     showDecision,
     modalData,
+    errorData,
     handleToggleInfoModal,
     handleToggleModal,
     handleClick,

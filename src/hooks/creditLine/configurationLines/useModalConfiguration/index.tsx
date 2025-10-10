@@ -23,6 +23,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
     errorFetchRequest,
     showInfoErrorModal,
     hasErrorCheck,
+    errorCheckData,
     handleClickInfo,
     handleToggleSaveModal,
     handleSaveModal,
@@ -78,7 +79,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
 
     if (hasErrorCheck) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(messageErrorStatusRequest(errorCheckData.status)),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

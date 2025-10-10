@@ -2,7 +2,7 @@ interface IRulePayload {
   ruleName: string;
   decisionsByRule: {
     conditionGroups?: {
-      ConditionGroupId: string;
+      ConditionGroupId?: string;
       conditionsThatEstablishesTheDecision: {
         conditionName: string;
         value: string;

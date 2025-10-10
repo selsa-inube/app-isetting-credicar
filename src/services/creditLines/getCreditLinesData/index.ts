@@ -19,7 +19,7 @@ const getCreditLinesData = async (
     config,
   );
 
-  return mapCreditlinesToEntities(data);
+  return data ? mapCreditlinesToEntities(data) : [];
 };
 
 export { getCreditLinesData };
