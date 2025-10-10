@@ -18,7 +18,7 @@ const optionTitleConfiguration = (option: string) => {
     optionCrumb = configurationLabels.optionCrumbEdit;
   }
 
-  if (option === EUseCase.DETAILS) {
+  if (option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL) {
     title = configurationLabels.titleDetails;
     description = configurationLabels.descriptionDetails;
     optionCrumb = configurationLabels.optionCrumbDetails;

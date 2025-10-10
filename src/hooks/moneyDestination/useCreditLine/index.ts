@@ -26,9 +26,9 @@ const useCreditLine = () => {
 
   const optionsCreditLine: IServerDomain[] = creditLineData.map((item) => {
     return {
-      id: item.lineOfCreditId,
+      id: item.abbreviatedName,
       label: item.alias,
-      value: item.abbreviatedName,
+      value: item.lineOfCreditId,
     };
   });
 

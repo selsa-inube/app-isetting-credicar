@@ -1,5 +1,4 @@
-import { ValueDataType } from "@isettingkit/input";
-import { dataTranslations } from "@utils/dataTranslations";
+import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionIncomePortfolioConfig = (
@@ -36,27 +35,26 @@ const decisionIncomePortfolioConfig = (
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
-      conditionsThatEstablishesTheDecision: {
-        "group-primary": conditionsThatEstablishesTheDecision.map(
-          (condition) => ({
-            conditionName:
-              dataTranslations[condition.conditionName] ??
-              condition.conditionName,
-            labelName: String(
-              // condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
-            ),
-            descriptionUse: String(
-              // condition.i18n?.[language as keyof typeof i18n] ??
-              condition.descriptionUse,
-            ),
-            conditionDataType: condition.conditionDataType,
-            value: condition.value,
-            listOfPossibleValues: condition.listOfPossibleValues,
-            howToSetTheCondition: condition.howToSetTheCondition,
-          }),
-        ),
-      },
+      conditionGroups: [
+        {
+          conditionGroupId: "",
+          conditionsThatEstablishesTheDecision:
+            conditionsThatEstablishesTheDecision?.map((condition) => ({
+              conditionName: condition.conditionName,
+              labelName: String(
+                condition.i18n?.[language as keyof typeof i18n] ??
+                  condition.descriptionUse,
+              ),
+              descriptionUse: String(
+                condition.i18n?.[language as keyof typeof i18n] ??
+                  condition.descriptionUse,
+              ),
+              conditionDataType: condition.conditionDataType,
+              value: "",
+              howToSetTheCondition: ValueHowToSetUp.EQUAL,
+            })),
+        },
+      ],
     };
 
     return decisionTemplate;

@@ -37,6 +37,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     optionCrumb,
     disabledField,
     optionDetails,
+    optionIcon,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onCloseRequestStatus,
@@ -66,7 +67,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
           optionCrumb={optionCrumb}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}
-          withIcon={!optionDetails}
+          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
         {!loading && (

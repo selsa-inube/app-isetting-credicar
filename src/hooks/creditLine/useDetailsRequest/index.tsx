@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { ECreditLines } from "@enum/creditLines";
+import { EUseCase } from "@enum/useCase";
 import { mediaQueryTablet } from "@config/environment";
 import { detailsRequestModal } from "@config/creditLines/generic/detailsRequestModal";
 import { IUseDetailsRequest } from "@ptypes/hooks/creditLines/IUseDetailsRequest";
@@ -18,7 +19,7 @@ const useDetailsRequest = (props: IUseDetailsRequest) => {
         setShowModal(true);
       } else {
         navigate(`/credit-lines/edit-credit-lines`, {
-          state: { data: configurationData, option: "details" },
+          state: { data: configurationData, option: EUseCase.DETAILS },
         });
       }
     }

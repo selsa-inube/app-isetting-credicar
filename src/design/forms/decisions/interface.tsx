@@ -1,3 +1,4 @@
+import { IRuleDecision } from "@isettingkit/input";
 import { MdOutlineWarningAmber } from "react-icons/md";
 import { BusinessRulesWithGroup } from "@isettingkit/business-rules";
 import { Stack, Button } from "@inubekit/inubekit";
@@ -9,7 +10,6 @@ import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { portalId } from "@config/portalId";
 import { StyledContainer, StyledFormContent } from "./styles";
-import { IRuleDecision } from "@isettingkit/input";
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
   const {

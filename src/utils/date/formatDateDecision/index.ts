@@ -1,6 +1,5 @@
 const formatDateDecision = (value: string) => {
-  const [year, month, day] = value.split("-");
-
-  return `${year}-${month}-${day}`;
+  const datePart = value.split("T")[0];
+  return datePart;
 };
 export { formatDateDecision };

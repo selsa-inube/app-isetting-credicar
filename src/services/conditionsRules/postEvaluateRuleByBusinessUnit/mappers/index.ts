@@ -10,7 +10,7 @@ const mapEvaluateRuleByBusinessEntityToApi = (
   };
 };
 
-const mapEvaluateRuleByBusinessEntities = (data: IRules[] | undefined) => {
+const mapEvaluateRuleByBusinessEntities = (data: IRules[]) => {
   if (!data) return [];
   return data.map((item) => ({
     ...item,

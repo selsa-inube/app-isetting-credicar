@@ -24,6 +24,7 @@ interface INameAndDescriptionFormUI {
   unconfiguredRules: IPostCheckLineRule[];
   language: string;
   optionDetails: boolean;
+  optionIcon: boolean;
   title: string;
   description: string;
   optionCrumb: string;

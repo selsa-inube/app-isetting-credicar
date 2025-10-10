@@ -13,6 +13,7 @@ interface IUseBusinessRulesNewGeneral {
   customTitleContentAddCard?: string;
   onDecisionsChange?: (decisions: IRuleDecision[]) => void;
   formId?: string;
+  optionsConditionsCSV?: string;
 }
 
 export type { IUseBusinessRulesNewGeneral };

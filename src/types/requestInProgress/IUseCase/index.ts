@@ -1,4 +1,10 @@
-const useCase = ["add", "edit", "delete", "details"] as const;
+const useCase = [
+  "add",
+  "edit",
+  "delete",
+  "details",
+  "detailsConditional",
+] as const;
 
 type UseCase = (typeof useCase)[number];
 

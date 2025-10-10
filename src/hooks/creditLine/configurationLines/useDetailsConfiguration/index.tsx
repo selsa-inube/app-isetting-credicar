@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
+import { EUseCase } from "@enum/useCase";
 import { mediaQueryTablet } from "@config/environment";
 import { IUseDetailsConstruction } from "@ptypes/hooks/creditLines/IUseDetailsConstruction";
 
@@ -14,7 +15,7 @@ const useDetailsConfiguration = (props: IUseDetailsConstruction) => {
     }
 
     navigate(`/credit-lines/edit-credit-lines`, {
-      state: { data: configurationData, option: "details" },
+      state: { data: configurationData, option: EUseCase.DETAILS },
     });
   };
 

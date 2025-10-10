@@ -1,41 +1,23 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { translationToEnum } from "../translationToEnum";
-import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
-import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 
 const formatRuleDecisions = (
-  rule: IRuleDecision[],
+  rule: IRuleDecisionExtended[],
   dateEffectiveFrom: string,
 ) =>
   rule.map((decision) => {
-    const decisionsByRule: IDecisionsByRule = {
+    const decisionsByRule: Partial<IRuleDecisionExtended> = {
       effectiveFrom: dateEffectiveFrom && formatDateDecision(dateEffectiveFrom),
       value: decision.value,
+      conditionGroups: decision.conditionGroups,
     };
 
-    if (decision.conditionsThatEstablishesTheDecision) {
-      const conditionsThatEstablishesTheDecision =
-        decision.conditionsThatEstablishesTheDecision
-          .filter((condition) => condition.value !== undefined)
-          .map((condition) => ({
-            conditionName:
-              translationToEnum[condition.conditionName] ??
-              condition.conditionName,
-            value: condition.value,
-          })) as IConditionsTheDecision[];
-
-      decisionsByRule.conditionGroups = [
-        {
-          conditionsThatEstablishesTheDecision,
-        },
-      ];
+    if (decision.validUntil) {
+      decisionsByRule.validUntil =
+        decision.validUntil && formatDateDecision(String(decision.validUntil));
     }
 
-    return {
-      ruleName: decision.ruleName,
-      decisionsByRule: [decisionsByRule],
-    };
+    return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
   });
 
 export { formatRuleDecisions };

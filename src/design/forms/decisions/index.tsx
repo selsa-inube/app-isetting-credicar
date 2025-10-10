@@ -1,5 +1,4 @@
 import { useContext } from "react";
-
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useDecisionForm } from "@hooks/forms/useDecisionForm";
@@ -83,7 +82,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
   const getDecisionTemplate = () => {
     return decisionTemplateConfig(
       enumeratorsRules,
-      appData.language, // segundo parámetro: language
+      appData.language,
       nameRule,
       appData.businessUnit.publicCode,
     ) as unknown as IRuleDecisionExtended;
@@ -95,7 +94,8 @@ const DecisionsForm = (props: IDecisionsForm) => {
     <DecisionsFormUI
       attentionModal={attentionModal}
       decisions={decisions}
-      decisionTemplate={decisionTemplateConfig}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      decisionTemplate={decisionTemplate as any}
       deleteModal={deleteModal}
       isModalOpen={isModalOpen}
       loading={false}

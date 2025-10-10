@@ -19,6 +19,7 @@ interface IClientsSupportLineFormUI {
   description: string;
   optionCrumb: string;
   optionDetails: boolean;
+  optionIcon: boolean;
   onUnconfiguredModal: () => void;
   onToggleUnconfiguredRules: () => void;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;

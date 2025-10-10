@@ -32,6 +32,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     description,
     optionCrumb,
     optionDetails,
+    optionIcon,
     onUnconfiguredModal,
     onToggleUnconfiguredRules,
     onToggleInfoModal,
@@ -59,7 +60,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
           title={title}
           description={description}
           optionCrumb={optionCrumb}
-          withIcon={!optionDetails}
+          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
 

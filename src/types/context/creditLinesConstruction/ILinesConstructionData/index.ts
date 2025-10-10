@@ -1,12 +1,12 @@
-import { IRules } from "../IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface ILinesConstructionData {
-  abbreviatedName: string;
-  alias: string;
-  descriptionUse: string;
-  lineOfCreditId: string;
+  abbreviatedName?: string;
+  alias?: string;
+  descriptionUse?: string;
+  lineOfCreditId?: string;
   settingRequestId: string;
-  rules?: IRules[];
+  rules?: IRuleDecisionExtended[];
 }
 
 export type { ILinesConstructionData };

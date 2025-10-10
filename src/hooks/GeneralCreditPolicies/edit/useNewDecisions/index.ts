@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
-import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
 import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
 import { decisionWithoutConditions } from "@utils/decisionWithoutConditions";
 import { formatDate } from "@utils/date/formatDate";
+import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
 import { ENameRules } from "@enum/nameRules";

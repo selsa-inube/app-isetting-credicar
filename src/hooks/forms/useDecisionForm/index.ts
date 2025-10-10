@@ -50,24 +50,34 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     decisionTemplate: IRuleDecisionExtended,
   ) => {
     const isEditing = selectedDecision !== null;
+    const updatedConditionGroups = decisionTemplate.conditionGroups?.map(
+      (templateGroup) => {
+        const updatedConditions =
+          templateGroup.conditionsThatEstablishesTheDecision;
 
-    const updatedConditions =
-      decisionTemplate.conditionsThatEstablishesTheDecision
-        ?.map((templateCondition) => {
-          const existingCondition =
-            dataDecision.conditionsThatEstablishesTheDecision?.find(
-              (condition) =>
-                condition.conditionName === templateCondition.conditionName,
-            );
+        return {
+          ...templateGroup,
+          conditionGroupId: templateGroup.conditionGroupId || "",
+          conditionsThatEstablishesTheDecision: updatedConditions,
+        };
+      },
+    );
 
-          return existingCondition || templateCondition;
-        })
-        .filter(
-          (condition) =>
-            condition.value !== undefined &&
-            condition.value !== null &&
-            condition.value !== "",
-        );
+    const decisionsByRuleData = {
+      effectiveFrom:
+        typeof dataDecision.effectiveFrom === "string"
+          ? dataDecision.effectiveFrom
+          : dataDecision.effectiveFrom?.toString() || "",
+      validUntil:
+        typeof dataDecision.validUntil === "string"
+          ? dataDecision.validUntil
+          : dataDecision.validUntil?.toString() || "",
+      value: dataDecision.value,
+      conditionGroups: updatedConditionGroups,
+      decisionId: isEditing
+        ? selectedDecision.decisionId
+        : `Decisión ${decisions.length + 1}`,
+    };
 
     const newDecision = isEditing
       ? (revertModalDisplayData(
@@ -77,7 +87,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       : {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,
-          conditionsThatEstablishesTheDecision: updatedConditions,
+          decisionsByRule: [decisionsByRuleData],
         };
 
     const updatedDecisions = isEditing
@@ -87,7 +97,6 @@ const useDecisionForm = (props: IUseDecisionForm) => {
             : decision,
         )
       : [...decisions, newDecision];
-
     setDecisions(updatedDecisions);
     setCreditLineDecisions(updatedDecisions);
     handleCloseModal();
