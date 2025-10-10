@@ -64,7 +64,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     onClosePendingReqModal,
     onCloseProcess,
   } = props;
-  console.log('decisionContributionsPortfConfig: ',decisionContributionsPortfConfig);
+
   return (
     <BoxContainer
       direction="column"

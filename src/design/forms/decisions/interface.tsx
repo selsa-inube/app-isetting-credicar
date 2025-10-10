@@ -1,5 +1,6 @@
+import { IRuleDecision } from "@isettingkit/input";
 import { MdOutlineWarningAmber } from "react-icons/md";
-import { BusinessRulesWithGroup, EValueHowToSetUp } from "@isettingkit/business-rules";
+import { BusinessRulesWithGroup } from "@isettingkit/business-rules";
 import { Stack, Button } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
@@ -9,7 +10,6 @@ import { IDecisionsFormUI } from "@ptypes/design/IDecisionsFormUI";
 import { FloatingAddButton } from "@design/feedback/floatingAddButton";
 import { portalId } from "@config/portalId";
 import { StyledContainer, StyledFormContent } from "./styles";
-import { IRuleDecision, ValueDataType } from "@isettingkit/input";
 
 const DecisionsFormUI = (props: IDecisionsFormUI) => {
   const {
@@ -44,8 +44,6 @@ const DecisionsFormUI = (props: IDecisionsFormUI) => {
     onToggleDeleteModal,
     onSave,
   } = props;
-  console.log('decisionTemplate', decisionTemplate);
-  console.log('{decisions}: ',{decisions});
 
   return (
     <form>

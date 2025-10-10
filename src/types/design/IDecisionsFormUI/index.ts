@@ -1,7 +1,7 @@
 import { IRuleDecision } from "@isettingkit/input";
 import { IMessageModal } from "@ptypes/decisions/IMessageModal";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IDecisionsFormUI {
   decisions: IRuleDecisionExtended[];

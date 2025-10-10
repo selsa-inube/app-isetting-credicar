@@ -31,24 +31,26 @@ const decisionContributionsPortfConfig = (
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
-      conditionGroups:[{
-        conditionGroupId: "",
-        conditionsThatEstablishesTheDecision:
-        conditionsThatEstablishesTheDecision?.map((condition) => ({
-          conditionName: condition.conditionName,
-          labelName: String(
-            // condition.i18n?.[language as keyof typeof i18n] ??
-            condition.descriptionUse,
-          ),
-          descriptionUse: String(
-            // condition.i18n?.[language as keyof typeof i18n] ??
-            condition.descriptionUse,
-          ),
-          conditionDataType: condition.conditionDataType,
-          value: "",
-          howToSetTheCondition: ValueHowToSetUp.EQUAL,
-        })),
-      }]
+      conditionGroups: [
+        {
+          conditionGroupId: "",
+          conditionsThatEstablishesTheDecision:
+            conditionsThatEstablishesTheDecision?.map((condition) => ({
+              conditionName: condition.conditionName,
+              labelName: String(
+                condition.i18n?.[language as keyof typeof i18n] ??
+                  condition.descriptionUse,
+              ),
+              descriptionUse: String(
+                condition.i18n?.[language as keyof typeof i18n] ??
+                  condition.descriptionUse,
+              ),
+              conditionDataType: condition.conditionDataType,
+              value: "",
+              howToSetTheCondition: ValueHowToSetUp.EQUAL,
+            })),
+        },
+      ],
     };
 
     return decisionTemplate;

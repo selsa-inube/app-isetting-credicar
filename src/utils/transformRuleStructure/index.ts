@@ -1,25 +1,24 @@
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
- 
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const parseValue=(value: any)=> {
+const parseValue = (value: any) => {
   try {
     return JSON.parse(value);
   } catch (error) {
     console.error(error);
     return value;
   }
-}
- 
+};
+
 const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
   return inputArray.map((rule) => {
     const conditionGroups = [];
- 
+
     if (rule.conditionsThatEstablishesTheDecision) {
       for (const [
         groupId,
         conditionsThatEstablishesTheDecision,
       ] of Object.entries(rule.conditionsThatEstablishesTheDecision)) {
-        console.log({ conditionsThatEstablishesTheDecision });
         const conditionsArray = Array.isArray(
           conditionsThatEstablishesTheDecision,
         )
@@ -33,7 +32,7 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
             value: cond.value,
           };
         });
- 
+
         conditionGroups.push({
           conditionGroupId: groupId,
           conditionsThatEstablishesTheDecision: simplifiedConditions,
@@ -57,5 +56,5 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
     };
   });
 };
- 
+
 export { transformRuleStructure };

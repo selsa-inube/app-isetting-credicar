@@ -1,4 +1,4 @@
-import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface ILinesConstructionData {
   abbreviatedName: string;

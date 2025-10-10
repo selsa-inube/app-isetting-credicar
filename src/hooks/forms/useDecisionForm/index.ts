@@ -50,40 +50,33 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     decisionTemplate: IRuleDecisionExtended,
   ) => {
     const isEditing = selectedDecision !== null;
-    const updatedConditionGroups = decisionTemplate.conditionGroups?.map((templateGroup) => {
-      const updatedConditions = templateGroup.conditionsThatEstablishesTheDecision
-        ?.map((templateCondition) => {
-          const existingCondition = dataDecision.conditionGroups?.[0]?.conditionsThatEstablishesTheDecision?.find(
-            (condition) =>
-              condition.conditionName === templateCondition.conditionName,
-          );
+    const updatedConditionGroups = decisionTemplate.conditionGroups?.map(
+      (templateGroup) => {
+        const updatedConditions =
+          templateGroup.conditionsThatEstablishesTheDecision;
 
-          return existingCondition || templateCondition;
-        })
-        .filter(
-          (condition) =>
-            condition.value !== undefined &&
-            condition.value !== null &&
-            condition.value !== "",
-        );
-
-      return {
-        ...templateGroup,
-        conditionGroupId: templateGroup.conditionGroupId || "",
-        conditionsThatEstablishesTheDecision: updatedConditions,
-      };
-    });
+        return {
+          ...templateGroup,
+          conditionGroupId: templateGroup.conditionGroupId || "",
+          conditionsThatEstablishesTheDecision: updatedConditions,
+        };
+      },
+    );
 
     const decisionsByRuleData = {
-      effectiveFrom: typeof dataDecision.effectiveFrom === 'string' 
-        ? dataDecision.effectiveFrom 
-        : dataDecision.effectiveFrom?.toString() || "",
-      validUntil: typeof dataDecision.validUntil === 'string'
-        ? dataDecision.validUntil
-        : dataDecision.validUntil?.toString() || "",
+      effectiveFrom:
+        typeof dataDecision.effectiveFrom === "string"
+          ? dataDecision.effectiveFrom
+          : dataDecision.effectiveFrom?.toString() || "",
+      validUntil:
+        typeof dataDecision.validUntil === "string"
+          ? dataDecision.validUntil
+          : dataDecision.validUntil?.toString() || "",
       value: dataDecision.value,
       conditionGroups: updatedConditionGroups,
-      decisionId: isEditing ? selectedDecision.decisionId : `Decisión ${decisions.length + 1}`,
+      decisionId: isEditing
+        ? selectedDecision.decisionId
+        : `Decisión ${decisions.length + 1}`,
     };
 
     const newDecision = isEditing
@@ -104,7 +97,6 @@ const useDecisionForm = (props: IUseDecisionForm) => {
             : decision,
         )
       : [...decisions, newDecision];
-    console.log('submit updatedDecisions: ', decisions,' - ',updatedDecisions);
     setDecisions(updatedDecisions);
     setCreditLineDecisions(updatedDecisions);
     handleCloseModal();
@@ -154,7 +146,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
       setSavedDecisions(initialDecisions);
     }
   };
-  console.log('useDecisionForm', decisions, ' - ',normalizeEvaluateRuleData, ' initialValues ',initialValues );
+
   useEffect(() => {
     if (
       JSON.stringify(decisions) !== JSON.stringify(initialValues) ||
@@ -223,4 +215,3 @@ const useDecisionForm = (props: IUseDecisionForm) => {
 };
 
 export { useDecisionForm };
- 

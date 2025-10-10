@@ -1,5 +1,4 @@
-import { ValueDataType } from "@isettingkit/input";
-import { dataTranslations } from "@utils/dataTranslations";
+import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionScoreModelsConfig = (
@@ -13,68 +12,54 @@ const decisionScoreModelsConfig = (
     i18n,
   }: IRuleDecisionExtended,
   language: string,
-  nameRule?: string,
   businessUnit?: string,
 ) => {
-  if (!descriptionUse || !decisionDataType || !conditionsThatEstablishesTheDecision) {
+  if (
+    !descriptionUse ||
+    !decisionDataType ||
+    !conditionsThatEstablishesTheDecision
+  ) {
     return;
   }
-
-  const decisionDataKey = String(decisionDataType).toUpperCase();
-  const decisionDataEnum =
-    (decisionDataKey in ValueDataType
-      ? (ValueDataType as any)[decisionDataKey]
-      : ValueDataType.ALPHABETICAL);
-
-  const pickTopLabel = () => {
-    const cand = (i18n as any)?.[language];
-    if (typeof cand === "string" && cand.trim()) return cand;
-    return "Modelo de score";
-  };
-
-  const pickLabel = (c: any) => {
-    const cand = c?.i18n?.[language];
-    if (typeof cand === "string" && cand.trim()) return cand;
-    if (typeof c?.descriptionUse === "string" && c.descriptionUse.trim()) return c.descriptionUse;
-    return c?.conditionName ?? "";
-  };
-
+  const decisionData = decisionDataType.toLocaleUpperCase();
   const decisionTemplate = {
-    ruleName,
-    labelName: String(pickTopLabel()),
-    descriptionUse: String(pickTopLabel()),
-    decisionDataType: decisionDataEnum,
-    howToSetTheDecision,
-    value: nameRule ?? "",
+    ruleName: ruleName,
+    labelName: String(i18n?.[language as keyof typeof i18n] ?? descriptionUse),
+    descriptionUse: String(
+      i18n?.[language as keyof typeof i18n] ?? descriptionUse,
+    ),
+    decisionDataType: ValueDataType[decisionData as keyof typeof ValueDataType],
+    howToSetTheDecision: howToSetTheDecision,
+    value: "",
     effectiveFrom: "",
     validUntil: "",
-    listOfPossibleValues,
+    listOfPossibleValues: listOfPossibleValues,
     conditionGroups: [
       {
-        ConditionGroupId: "group-primary",
-        conditionsThatEstablishesTheDecision: conditionsThatEstablishesTheDecision.map(
-          (condition) => ({
-            conditionName:
-              dataTranslations[condition.conditionName] ?? condition.conditionName,
-            labelName: String(pickLabel(condition)),
-            descriptionUse: String(pickLabel(condition)),
+        conditionGroupId: "",
+        conditionsThatEstablishesTheDecision:
+          conditionsThatEstablishesTheDecision?.map((condition) => ({
+            conditionName: condition.conditionName,
+            labelName: String(
+              condition.i18n?.[language as keyof typeof i18n] ??
+                condition.descriptionUse,
+            ),
+            descriptionUse: String(
+              condition.i18n?.[language as keyof typeof i18n] ??
+                condition.descriptionUse,
+            ),
             conditionDataType: condition.conditionDataType,
-            howToSetTheCondition: condition.howToSetTheCondition,
             value:
               condition.conditionName === "BusinessUnit"
-                ? (businessUnit ?? "")
-                : (condition.value ?? ""),
-            listOfPossibleValues: condition.listOfPossibleValues,
-            hidden: condition.conditionName === "BusinessUnit",
-            i18n: (condition as any).i18n ?? undefined,
-          }),
-        ),
+                ? businessUnit
+                : condition.value,
+            howToSetTheCondition: ValueHowToSetUp.EQUAL,
+            hidden: condition.conditionName === "BusinessUnit" ? true : false,
+          })),
       },
     ],
   };
-
   return decisionTemplate;
 };
 
 export { decisionScoreModelsConfig };
- 

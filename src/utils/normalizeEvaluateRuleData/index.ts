@@ -1,25 +1,20 @@
-import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const normalizeEvaluateRuleData = (
   data: IRuleDecisionExtended[] | undefined,
   conditionRule?: string,
-) =>
-  data?.map((item) => ({
+): IRuleDecisionExtended[] | undefined => {
+  return data?.map((item) => ({
     ...item,
-    decisionsByRule: item.decisionsByRule?.map((decision) => ({
-      ...decision,
-      conditionGroups: decision.conditionGroups?.map((condition) => ({
+    conditionsThatEstablishesTheDecision:
+      item.conditionsThatEstablishesTheDecision?.map((condition) => ({
         ...condition,
-        conditionsThatEstablishesTheDecision:
-          condition.conditionsThatEstablishesTheDecision?.map((condition) => ({
-            ...condition,
-            hidden:
-              conditionRule && condition.conditionName === conditionRule
-                ? true
-                : false,
-          })),
+        hidden:
+          conditionRule && condition.conditionName === conditionRule
+            ? true
+            : false,
       })),
-    })),
   }));
+};
 
 export { normalizeEvaluateRuleData };

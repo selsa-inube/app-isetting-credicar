@@ -313,7 +313,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         ...r,
         decisionsByRule: r.decisionsByRule ?? [],
       };
-      console.log({ rule });
       return transformationDecisions(rule, { ruleDict, conditionDict });
     });
 

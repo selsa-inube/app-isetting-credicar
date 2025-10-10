@@ -3,7 +3,7 @@ import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
-import { getNewInsertDecisionsConfig } from "@src/utils/getNewInsertDecisionsConfigR";
+import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfigR";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { EUseCase } from "@enum/useCase";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
@@ -74,33 +74,21 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     normalizeEvaluateRuleData(configuredDecisions) ?? [],
     decisionsData,
   );
-  // console.log(
-  //   {
-  //     configuredDecisions,
-  //     decisionsData,
-  //     linesConstructionData,
-  //   },
-  //   "aquiiii",
-  // );
 
   useEffect(() => {
     const insertValues = [newInsertDecision].filter(
       (decision) => decision !== undefined,
     );
-    console.log({ newInsertDecision, insertValues });
 
     const deleteValues = [newDeleteDecision].filter(
       (decision) => decision !== undefined,
     );
-    console.log({ deleteValues });
     setNewDecisions(
       [...insertValues, ...deleteValues].flatMap(
         (item) => item as IRuleDecisionExtended,
       ),
     );
   }, [decisionsData]);
-
-  console.log({ newDecisions });
 
   useEffect(() => {
     if (
