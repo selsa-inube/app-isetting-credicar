@@ -4,14 +4,12 @@ import {
   EValueHowToSetUp,
   getConditionsByGroup,
   mapByGroup,
-  parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
-import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
@@ -192,11 +190,14 @@ const transformDecision = (
   d: IRuleDecision,
   language: "es" | "en" | undefined,
 ): IRuleDecision => {
+  const originalDecisionId = d.decisionId;
+
   const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
   const withSentences = withConditionSentences(loc);
+
   return {
     ...withSentences,
-    value: parseRangeFromString(withSentences.value),
+    decisionId: originalDecisionId,
     conditionsThatEstablishesTheDecision: mapByGroup(
       getConditionsByGroup(withSentences),
       (condition: {
@@ -207,7 +208,6 @@ const transformDecision = (
           condition as { labelName?: string; i18n?: Record<string, string> },
           language,
         ),
-        value: parseRangeFromString(condition.value),
       }),
     ),
   } as any;
@@ -259,19 +259,33 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     [decisionTemplate, language],
   );
 
-  const [decisions, setDecisions] = useState<IRuleDecision[]>(
-    ensureUniqueIds(
-      (initialDecisions ?? []).map((d) => transformDecision(d, language)),
-    ),
-  );
+  const [decisions, setDecisions] = useState<IRuleDecision[]>([]);
+
+  const initialDecisionsHash = useMemo(() => {
+    if (!initialDecisions?.length) return "";
+    return JSON.stringify(
+      initialDecisions.map((d) => ({
+        decisionId: d.decisionId,
+        value: d.value,
+      })),
+    );
+  }, [initialDecisions]);
 
   useEffect(() => {
-    if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
-      setDecisions(
-        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+    console.log("🔄 useEffect - initialDecisions:", initialDecisions);
+
+    if (initialDecisions?.length && decisions.length === 0) {
+      console.log("🎯 initialDecisions llegó después, actualizando decisions");
+      const transformed = initialDecisions.map((d) =>
+        transformDecision(d, language),
       );
+      setDecisions(transformed);
     }
-  }, [initialDecisions, language]);
+  }, [
+    initialDecisionsHash, // ← Hash estable en lugar de valores individuales
+    language,
+    decisions.length,
+  ]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
     useState<string>("");

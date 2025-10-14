@@ -8,7 +8,6 @@ const useValidateUseCase = (props: IUseValidateUseCase) => {
 
   const { appData } = useContext(AuthAndPortalData);
   const useCasesData = appData.useCasesByStaff;
-
   useEffect(() => {
     if (useCasesData) {
       const validateUseCase = useCasesData.includes(useCase);
