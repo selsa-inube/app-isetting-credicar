@@ -555,7 +555,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           ),
           lineOfCreditId: borrowerData.settingRequestId,
         };
-
         if (borrowerData.configurationRequestData?.rules) {
           normalizeData.rules = Object(
             borrowerData.configurationRequestData.rules,

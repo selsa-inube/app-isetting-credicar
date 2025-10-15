@@ -11,6 +11,7 @@ const formatRuleDecisionsConfig = (
 ) =>
   rule.map((decision) => {
     const decisionsByRule: Partial<IRuleDecisionExtended> = {
+      ...decision,
       effectiveFrom:
         decision.effectiveFrom &&
         formatDateDecision(String(decision.effectiveFrom)),
@@ -33,6 +34,7 @@ const formatRuleDecisionsConfig = (
         const items = asArray(rawList).filter((item) => !(item as any)?.hidden);
         const conditionGroup: any = {
           conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
+            ...condition,
             conditionName: condition?.conditionName ?? "",
             value: toValueString(condition?.value),
           })),
