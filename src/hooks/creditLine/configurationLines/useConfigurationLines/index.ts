@@ -308,7 +308,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setLinesEditData,
       setLinesData,
     });
-
   const initialDecisions: IRuleDecision[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
     .flatMap((r) => {
@@ -317,7 +316,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       };
       return transformationDecisions(rule);
     });
-
   const language = appData.language as ILanguage;
 
   const newData: {
@@ -557,7 +555,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           ),
           lineOfCreditId: borrowerData.settingRequestId,
         };
-
         if (borrowerData.configurationRequestData?.rules) {
           normalizeData.rules = Object(
             borrowerData.configurationRequestData.rules,

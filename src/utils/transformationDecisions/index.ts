@@ -6,12 +6,15 @@ import { IMeta } from "@ptypes/decisions/IMeta";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 
+const generateUUID = (): string => {
+  return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+};
+
 const transformationDecisions = (
   payload: IRuleDecisionExtended,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
-
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
   const {
@@ -61,9 +64,7 @@ const transformationDecisions = (
           value: decision.value,
           effectiveFrom,
           conditionsThatEstablishesTheDecision: groupedConditions,
-          decisionId: decisionByRuleArray?.decisionId
-            ? decisionByRuleArray?.decisionId
-            : `Decisión ${index + 1}`,
+          decisionId: decisionByRuleArray?.decisionId || generateUUID(),
         };
 
         if (decision.validUntil) {
