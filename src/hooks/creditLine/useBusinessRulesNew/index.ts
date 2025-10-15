@@ -272,20 +272,13 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   }, [initialDecisions]);
 
   useEffect(() => {
-    console.log("🔄 useEffect - initialDecisions:", initialDecisions);
-
     if (initialDecisions?.length && decisions.length === 0) {
-      console.log("🎯 initialDecisions llegó después, actualizando decisions");
       const transformed = initialDecisions.map((d) =>
         transformDecision(d, language),
       );
       setDecisions(transformed);
     }
-  }, [
-    initialDecisionsHash, // ← Hash estable en lugar de valores individuales
-    language,
-    decisions.length,
-  ]);
+  }, [initialDecisionsHash, language, decisions.length]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
     useState<string>("");

@@ -56,7 +56,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     formId,
     optionsConditionsCSV,
   });
-
   const optionDetailsCreditline =
     option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
       ? true
