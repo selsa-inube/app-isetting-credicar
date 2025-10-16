@@ -39,6 +39,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     selectedDecision,
     optionDetailsCreditline,
     message,
+    mesaggeEmpty,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -143,7 +144,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
               type="title"
               weight="bold"
             >
-              {newBusinessRulesLabels.NoStringAttached}
+              {mesaggeEmpty}
             </Text>
             <Text
               as="span"

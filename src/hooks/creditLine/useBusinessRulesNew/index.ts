@@ -557,6 +557,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
 
+  const mesaggeEmpty =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? newBusinessRulesLabels.NoDecision
+      : newBusinessRulesLabels.NoStringAttached;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -569,6 +574,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     decisionsSorted,
     responseForBackend,
     message,
+    mesaggeEmpty,
     optionDetailsCreditline,
     setSelectedConditionsCSV,
     setSelectedDecision,
