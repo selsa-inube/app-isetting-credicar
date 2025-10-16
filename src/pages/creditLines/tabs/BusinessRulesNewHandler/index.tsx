@@ -4,7 +4,6 @@ import { MdAdd, MdOutlineReportProblem } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
 import { BusinessRulesNew, Checkpicker } from "@isettingkit/business-rules";
 import { EComponentAppearance } from "@enum/appearances";
-import { EUseCase } from "@enum/useCase";
 import { tokens } from "@design/tokens";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
@@ -24,6 +23,9 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     textValues,
     option,
     optionsConditionsCSV,
+    remunerativerateRule,
+    showAddDecisionModal,
+    setShowLineModal,
     setDecisionData,
     formId,
   } = props;
@@ -35,6 +37,8 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     multipleChoicesOptions,
     selectedConditionsCSV,
     selectedDecision,
+    optionDetailsCreditline,
+    message,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -55,12 +59,11 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setDecisionData,
     formId,
     optionsConditionsCSV,
+    option,
+    remunerativerateRule,
+    showAddDecisionModal,
+    setShowLineModal,
   });
-  const optionDetailsCreditline =
-    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
-      ? true
-      : false;
-  const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
@@ -104,7 +107,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
       {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
         <BusinessRulesNew
           baseDecisionTemplate={localizedTemplate}
-          controls={controls}
+          controls={!optionDetailsCreditline}
           customMessageEmptyDecisions={customMessageEmptyDecisions}
           customTitleContentAddCard={customTitleContentAddCard}
           decisionTemplate={filteredDecisionTemplate as any}

@@ -282,6 +282,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     existingRules: IRuleDecision[] = [],
     newRules: IRuleDecision[] = [],
   ): IRuleDecision[] => {
+    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (!newRules || newRules.length === 0) {
       return existingRules;
     }
@@ -374,26 +375,32 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   }, [decisionsData]);
 
   useEffect(() => {
-    setLinesData((prev) => {
-      const existingRules =
-        (prev?.configurationRequestData?.rules as
-          | IRuleDecision[]
-          | undefined) ??
-        (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-        [];
+    const validate =
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL;
 
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        configurationRequestData: {
-          ...prev?.configurationRequestData,
-          alias: linesConstructionData.alias,
-          abbreviatedName: linesConstructionData.abbreviatedName,
-          descriptionUse: linesConstructionData.descriptionUse,
-          rules: mergeRules(existingRules, clientSupportData),
-        },
-      };
-    });
+    if (!validate) {
+      setLinesData((prev) => {
+        const existingRules =
+          (prev?.configurationRequestData?.rules as
+            | IRuleDecision[]
+            | undefined) ??
+          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+          [];
+
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          configurationRequestData: {
+            ...prev?.configurationRequestData,
+            alias: linesConstructionData.alias,
+            abbreviatedName: linesConstructionData.abbreviatedName,
+            descriptionUse: linesConstructionData.descriptionUse,
+            rules: mergeRules(existingRules, clientSupportData),
+          },
+        };
+      });
+    }
   }, [clientSupportData]);
 
   const loadingModifyRef = useRef(loadingModify);
@@ -507,7 +514,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
 
     if (
-      templateKey === "CreditLineByRiskProfile" &&
+      templateKey === ECreditLines.CLIENT_SUPPORT_RULE &&
       optionsIncluded.items.length === 0
     ) {
       return true;
@@ -555,6 +562,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           ),
           lineOfCreditId: borrowerData.settingRequestId,
         };
+
         if (borrowerData.configurationRequestData?.rules) {
           normalizeData.rules = Object(
             borrowerData.configurationRequestData.rules,
@@ -674,6 +682,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     optionDetails,
     optionIcon,
     optionsConditionsCSV,
+    clientSupportData,
+    linesConstructionData,
+    ruleLoadding,
+    linesData,
     handleClickInfo,
     setClientSupportData,
     handleToggleUnconfiguredRulesModal,

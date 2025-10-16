@@ -1,6 +1,5 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { formatDate } from "@utils/date/formatDate";
 import { EBooleanText } from "@enum/booleanText";
@@ -8,6 +7,7 @@ import { ECreditLines } from "@enum/creditLines";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { IUseClientsSupportLineForm } from "@ptypes/hooks/creditLines/IUseClientsSupportLineForm";
 import { ISide } from "@ptypes/ISide";
+import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
 
 const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
@@ -28,6 +28,9 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
     optionCrumb,
     optionDetails,
     optionIcon,
+    clientSupportData,
+    linesConstructionData,
+    ruleLoadding,
     setClientSupportData,
     handleToggleUnconfiguredRulesModal,
     handleUnconfiguredRules,
@@ -38,11 +41,8 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   } = useConfigurationLines({ templateKey });
 
   const { appData } = useContext(AuthAndPortalData);
-  const { linesConstructionData } = useContext(CreditLinesConstruction);
-
-  const [selectedConditionId, setSelectedConditionId] = useState<string | null>(
-    null,
-  );
+  const currentDate = useMemo(() => formatDate(new Date()), []);
+  const [loadingData, setLoadingData] = useState<boolean>(false);
 
   const { enumData: supportLine, loading: loadingSupportOptions } =
     useEnumeratorsCrediboard({
@@ -50,16 +50,58 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
       enumQuery: ECreditLines.SUPPORT_LINE,
     });
 
+  const lineData = useCallback(
+    (data: ILinesConstructionData) =>
+      data?.rules?.find(
+        (rule) => rule.ruleName === ECreditLines.CLIENT_SUPPORT_RULE,
+      ),
+    [],
+  );
+
+  const getConditionsOrganized = useCallback(
+    (data: ILinesConstructionData, id: string) => {
+      if (data.lineOfCreditId !== id) {
+        return [];
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result: any = [];
+
+      lineData(data)?.decisionsByRule?.forEach((decision) => {
+        decision.conditionGroups?.forEach((group) => {
+          group.conditionsThatEstablishesTheDecision.forEach((condition) => {
+            result.push(condition.value);
+          });
+        });
+      });
+      return result;
+    },
+    [linesConstructionData.rules],
+  );
+
   const supportIncludedOptions = () => {
-    const rulesSupport = linesConstructionData?.rules?.find(
-      (rule) => rule.ruleName === "CreditLineByRiskProfile",
-    )?.decisionsByRule;
+    const rulesSupport = [];
+
+    const conditionGroupsData = getConditionsOrganized(
+      linesConstructionData,
+      linesConstructionData.settingRequestId,
+    );
+
+    const validate = conditionGroupsData && conditionGroupsData?.length > 0;
+    if (validate) {
+      rulesSupport.push(conditionGroupsData);
+    } else {
+      const line = linesConstructionData?.rules?.find(
+        (rule) => rule.ruleName === ECreditLines.CLIENT_SUPPORT_RULE,
+      )?.decisionsByRule;
+
+      const lineOption = line?.map((rule) => String(rule?.value));
+
+      rulesSupport.push(lineOption);
+    }
 
     if (rulesSupport && rulesSupport.length > 0) {
-      const includedCodes = new Set(
-        rulesSupport.map((rule) => String(rule.value)),
-      );
-
+      const includedCodes = new Set(rulesSupport.flatMap((item) => item));
       const included = supportLine
         .filter((lineEnum) => includedCodes.has(lineEnum.code))
         .map(
@@ -68,7 +110,6 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
             line.description ??
             "",
         );
-
       const excluded = supportLine
         .filter((line) => !includedCodes.has(line.code))
         .map(
@@ -79,20 +120,20 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
         );
 
       return { includedOptions: included, excludedOptions: excluded };
+    } else {
+      const allOptions = supportLine.map(
+        (line) =>
+          line.i18n?.[appData.language as keyof typeof line.i18n] ??
+          line.description ??
+          "",
+      );
+
+      return { includedOptions: allOptions, excludedOptions: [] };
     }
-
-    const allOptions = supportLine.map(
-      (line) =>
-        line.i18n?.[appData.language as keyof typeof line.i18n] ??
-        line.description ??
-        "",
-    );
-
-    return { includedOptions: allOptions, excludedOptions: [] };
   };
 
   useEffect(() => {
-    if (supportLine.length > 0) {
+    if (!ruleLoadding && supportLine.length > 0) {
       const { includedOptions, excludedOptions } = supportIncludedOptions();
 
       setOptionsIncluded((prev) => ({
@@ -105,7 +146,14 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
         items: excludedOptions,
       }));
     }
-  }, [supportLine, linesConstructionData?.rules]);
+  }, [
+    supportLine,
+    ruleLoadding,
+    linesConstructionData.rules,
+    lineData,
+    optionsIncluded.items.length,
+    optionsExcluded.items.length,
+  ]);
 
   const targetInsertMode = EBooleanText.PREPEND;
 
@@ -155,50 +203,82 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   const information = infoRulesMessage();
 
   const message = String(
-    information["clientsSupported" as keyof typeof information] ||
+    information[ECreditLines.CLIENTS_SUPPORTED as keyof typeof information] ||
       information.Default,
   );
 
-  const supportIncludedData = () => {
-    if (optionsIncluded.items.length > 0) {
-      const includedCodes = new Set(
-        optionsIncluded.items.map((rule) => String(rule)),
-      );
-
-      const included = supportLine
-        .filter((lineEnum) =>
-          includedCodes.has(
-            lineEnum.i18n?.[appData.language as keyof typeof lineEnum.i18n] ??
-              lineEnum.description ??
-              "",
-          ),
-        )
-        .map((line) => line.code);
-
-      const transformJson = included.map((rule) => ({
-        effectiveFrom: formatDate(new Date()),
-        value: rule,
-      }));
-
-      return [
-        {
-          ruleName: templateKey,
-          decisionsByRule: transformJson,
-        },
-      ];
+  const supportIncludedData = useCallback(() => {
+    if (optionsIncluded.items.length === 0) {
+      return undefined;
     }
-  };
+
+    const includedCodes = new Set(
+      optionsIncluded.items.map((rule) => String(rule)),
+    );
+
+    const included = supportLine
+      .filter((lineEnum) =>
+        includedCodes.has(
+          lineEnum.i18n?.[appData.language as keyof typeof lineEnum.i18n] ??
+            lineEnum.description ??
+            "",
+        ),
+      )
+      .map((line) => line.code);
+
+    const transformJson = included.map((rule) => ({
+      value: rule,
+      effectiveFrom: currentDate,
+    }));
+
+    return [
+      {
+        ruleName: templateKey,
+        decisionsByRule: transformJson,
+      },
+    ];
+  }, [
+    optionsIncluded.items,
+    supportLine,
+    appData.language,
+    templateKey,
+    currentDate,
+  ]);
 
   useEffect(() => {
-    setClientSupportData(supportIncludedData);
-  }, [optionsIncluded]);
+    const data = supportIncludedData();
 
-  const loadingData =
-    loadingSupportOptions ||
-    (optionsIncluded.items.length === 0 && optionsExcluded.items.length === 0);
+    if (JSON.stringify(data) !== JSON.stringify(clientSupportData)) {
+      setClientSupportData(data);
+    }
+  }, [
+    supportIncludedData,
+    lineData,
+    optionsIncluded.items.length,
+    optionsExcluded.items.length,
+  ]);
+
+  useEffect(() => {
+    const loading =
+      ruleLoadding ||
+      loadingSupportOptions ||
+      (optionsIncluded.items.length === 0 &&
+        optionsExcluded.items.length === 0);
+
+    if (loading) {
+      setLoadingData(loading);
+      setTimeout(() => {
+        setLoadingData(false);
+      }, 2500);
+    }
+  }, [
+    ruleLoadding,
+    loadingSupportOptions,
+    optionsIncluded.items.length,
+    optionsExcluded.items.length,
+  ]);
 
   return {
-    selectedConditionId,
     optionsExcluded,
     optionsIncluded,
     showInfoModal,
@@ -222,7 +302,6 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
     handleMove,
     handleOpenModal,
     handleToggleInfoModal,
-    setSelectedConditionId,
   };
 };
 
