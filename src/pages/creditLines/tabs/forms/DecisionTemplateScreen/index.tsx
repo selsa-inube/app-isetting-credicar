@@ -10,11 +10,11 @@ import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfiguratio
 import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { EUseCase } from "@enum/useCase";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 import { portalId } from "@config/portalId";
-import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateGeneric";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { remunerativeRateLabels } from "@config/creditLines/creditLinesTab/generic/remunerativeRateLabels";
@@ -41,8 +41,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     requestSteps,
     showRequestProcessModal,
     showRequestStatusModal,
-    showUnconfiguredModal,
-    unconfiguredRules,
     title,
     description,
     optionCrumb,
@@ -50,9 +48,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     optionIcon,
     useCaseConfiguration,
     optionsConditionsCSV,
-
-    handleToggleUnconfiguredRulesModal,
-    handleUnconfiguredRules,
+    showSendModal,
+    submitModalData,
     handleClosePendingModal,
     handleCloseRequestStatus,
     handleCloseProcess,
@@ -154,15 +151,18 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             title={lineTypeDecision}
           />
         )}
-        {showUnconfiguredModal && (
+        {showSendModal && (
           <SubmitRequestModal
-            title={submitRequestLabels.title}
-            unconfiguredRules={unconfiguredRules}
-            description={submitRequestLabels.description}
-            onClick={handleUnconfiguredRules}
-            onCloseModal={handleToggleUnconfiguredRulesModal}
-            loading={loadingModify}
+            title={submitModalData.title}
+            unconfiguredRules={submitModalData.unconfiguredRules}
+            description={submitModalData.description}
+            onClick={submitModalData.onClick}
+            onCloseModal={submitModalData.onCloseModal}
+            loading={submitModalData.loading}
             language={language}
+            appearanceItemIcon={submitModalData.appearanceItemIcon}
+            itemIcon={submitModalData.itemIcon}
+            editOption={useCaseConfiguration === EUseCase.EDIT}
           />
         )}
 

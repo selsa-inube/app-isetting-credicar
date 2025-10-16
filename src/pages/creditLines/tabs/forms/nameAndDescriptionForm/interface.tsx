@@ -7,7 +7,6 @@ import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConf
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { getFieldState } from "@utils/getFieldState";
-import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { nameAndDescriptionLabels } from "@config/creditLines/configuration/nameAndDescriptionLabels";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { portalId } from "@config/portalId";
@@ -29,8 +28,6 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     saveData,
     showRequestProcessModal,
     showRequestStatusModal,
-    showUnconfiguredModal,
-    unconfiguredRules,
     language,
     title,
     description,
@@ -38,8 +35,9 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     disabledField,
     optionDetails,
     optionIcon,
-    onUnconfiguredModal,
-    onToggleUnconfiguredRules,
+    showSendModal,
+    submitModalData,
+    editOption,
     onCloseRequestStatus,
     onClosePendingModal,
     onCloseProcess,
@@ -157,15 +155,18 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             onCloseModal={onToggleInfoModal}
           />
         )}
-        {showUnconfiguredModal && (
+        {showSendModal && (
           <SubmitRequestModal
-            title={submitRequestLabels.title}
-            unconfiguredRules={unconfiguredRules}
-            description={submitRequestLabels.description}
-            onClick={onUnconfiguredModal}
-            onCloseModal={onToggleUnconfiguredRules}
-            loading={loading}
+            title={submitModalData.title}
+            unconfiguredRules={submitModalData.unconfiguredRules}
+            description={submitModalData.description}
+            onClick={submitModalData.onClick}
+            onCloseModal={submitModalData.onCloseModal}
+            loading={submitModalData.loading}
             language={language}
+            appearanceItemIcon={submitModalData.appearanceItemIcon}
+            itemIcon={submitModalData.itemIcon}
+            editOption={editOption}
           />
         )}
       </Stack>

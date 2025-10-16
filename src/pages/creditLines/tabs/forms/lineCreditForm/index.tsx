@@ -1,13 +1,13 @@
-import { useClientsSupportLineForm } from "@hooks/creditLine/useClientsSupportLineForm";
+import { useCreditLineForm } from "@hooks/creditLine/useCreditLineForm";
 import { EUseCase } from "@enum/useCase";
 import { IClientsSupportLineForm } from "@ptypes/creditLines/IClientsSupportLineForm";
-import { ClientsSupportLineFormUI } from "./interface";
+import { LineCreditFormFormUI } from "./interface";
 
-const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
+const LineCreditFormForm = (props: IClientsSupportLineForm) => {
   const { templateKey } = props;
   const {
-    optionsExcluded,
-    optionsIncluded,
+    creditOptionsIncluded,
+    creditOptionsExcluded,
     showInfoModal,
     loading,
     loadingModify,
@@ -27,14 +27,14 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     handleOpenModal,
     handleToggleInfoModal,
     handleMove,
-  } = useClientsSupportLineForm({ templateKey });
+  } = useCreditLineForm({ templateKey });
 
   return (
-    <ClientsSupportLineFormUI
+    <LineCreditFormFormUI
       showInfoModal={showInfoModal}
       onToggleInfoModal={handleToggleInfoModal}
-      optionsExcluded={optionsExcluded}
-      optionsIncluded={optionsIncluded}
+      optionsExcluded={creditOptionsIncluded}
+      optionsIncluded={creditOptionsExcluded}
       updateData={loadingModify}
       loading={loading}
       onOpenModal={handleOpenModal}
@@ -56,4 +56,4 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
   );
 };
 
-export { ClientsSupportLineForm };
+export { LineCreditFormForm };

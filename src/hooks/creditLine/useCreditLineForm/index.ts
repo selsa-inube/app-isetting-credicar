@@ -10,12 +10,12 @@ import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { useConfigurationLines } from "../configurationLines/useConfigurationLines";
 
-const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
+const useCreditLineForm = (props: IUseClientsSupportLineForm) => {
   const { templateKey } = props;
   const {
     showInfoModal,
-    optionsExcluded,
-    optionsIncluded,
+    creditOptionsExcluded,
+    creditOptionsIncluded,
     loading,
     nav,
     loadingModify,
@@ -29,12 +29,12 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
     optionDetails,
     useCaseConfiguration,
     optionIcon,
-    clientSupportData,
     linesConstructionData,
     ruleLoadding,
-    setClientSupportData,
-    setOptionsIncluded,
-    setOptionsExcluded,
+    creditLineData,
+    setCreditLineData,
+    setCreditOptionsIncluded,
+    setCreditOptionsExcluded,
     handleToggleInfoModal,
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
@@ -43,6 +43,7 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   const currentDate = useMemo(() => formatDate(new Date()), []);
   const [loadingData, setLoadingData] = useState<boolean>(false);
 
+  ///////////////////////////////////////
   const { enumData: supportLine, loading: loadingSupportOptions } =
     useEnumeratorsCrediboard({
       businessUnits: appData.businessUnit.publicCode,
@@ -52,7 +53,7 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   const lineData = useCallback(
     (data: ILinesConstructionData) =>
       data?.rules?.find(
-        (rule) => rule.ruleName === ECreditLines.CLIENT_SUPPORT_RULE,
+        (rule) => rule.ruleName === ECreditLines.CREDIT_LINE_RULE,
       ),
     [],
   );
@@ -91,7 +92,7 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
       rulesSupport.push(conditionGroupsData);
     } else {
       const line = linesConstructionData?.rules?.find(
-        (rule) => rule.ruleName === ECreditLines.CLIENT_SUPPORT_RULE,
+        (rule) => rule.ruleName === ECreditLines.CREDIT_LINE_RULE,
       )?.decisionsByRule;
 
       const lineOption = line?.map((rule) => String(rule?.value));
@@ -135,12 +136,12 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
     if (!ruleLoadding && supportLine.length > 0) {
       const { includedOptions, excludedOptions } = supportIncludedOptions();
 
-      setOptionsIncluded((prev) => ({
+      setCreditOptionsIncluded((prev) => ({
         ...prev,
         items: includedOptions,
       }));
 
-      setOptionsExcluded((prev) => ({
+      setCreditOptionsExcluded((prev) => ({
         ...prev,
         items: excludedOptions,
       }));
@@ -150,8 +151,8 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
     ruleLoadding,
     linesConstructionData.rules,
     lineData,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
+    creditOptionsIncluded.items.length,
+    creditOptionsExcluded.items.length,
   ]);
 
   const targetInsertMode = EBooleanText.PREPEND;
@@ -177,20 +178,20 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
       const { item, from, to } = payload;
 
       if (from === EBooleanText.LEFT && to === EBooleanText.RIGHT) {
-        setOptionsExcluded((prev) => ({
+        setCreditOptionsExcluded((prev) => ({
           ...prev,
           items: removeFrom(prev.items, item),
         }));
-        setOptionsIncluded((prev) => ({
+        setCreditOptionsIncluded((prev) => ({
           ...prev,
           items: insertInto(prev.items, item),
         }));
       } else if (from === EBooleanText.RIGHT && to === EBooleanText.LEFT) {
-        setOptionsExcluded((prev) => ({
+        setCreditOptionsExcluded((prev) => ({
           ...prev,
           items: insertInto(prev.items, item),
         }));
-        setOptionsIncluded((prev) => ({
+        setCreditOptionsIncluded((prev) => ({
           ...prev,
           items: removeFrom(prev.items, item),
         }));
@@ -207,12 +208,12 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   );
 
   const supportIncludedData = useCallback(() => {
-    if (optionsIncluded.items.length === 0) {
+    if (creditOptionsIncluded.items.length === 0) {
       return undefined;
     }
 
     const includedCodes = new Set(
-      optionsIncluded.items.map((rule) => String(rule)),
+      creditOptionsIncluded.items.map((rule) => String(rule)),
     );
 
     const included = supportLine
@@ -237,7 +238,7 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
       },
     ];
   }, [
-    optionsIncluded.items,
+    creditOptionsIncluded.items,
     supportLine,
     appData.language,
     templateKey,
@@ -247,22 +248,22 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   useEffect(() => {
     const data = supportIncludedData();
 
-    if (JSON.stringify(data) !== JSON.stringify(clientSupportData)) {
-      setClientSupportData(data);
+    if (JSON.stringify(data) !== JSON.stringify(creditLineData)) {
+      setCreditLineData(data);
     }
   }, [
     supportIncludedData,
     lineData,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
+    creditOptionsIncluded.items.length,
+    creditOptionsExcluded.items.length,
   ]);
 
   useEffect(() => {
     const loading =
       ruleLoadding ||
       loadingSupportOptions ||
-      (optionsIncluded.items.length === 0 &&
-        optionsExcluded.items.length === 0);
+      (creditOptionsIncluded.items.length === 0 &&
+        creditOptionsExcluded.items.length === 0);
 
     if (loading) {
       setLoadingData(loading);
@@ -273,13 +274,13 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   }, [
     ruleLoadding,
     loadingSupportOptions,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
+    creditOptionsIncluded.items.length,
+    creditOptionsExcluded.items.length,
   ]);
 
   return {
-    optionsExcluded,
-    optionsIncluded,
+    creditOptionsExcluded,
+    creditOptionsIncluded,
     showInfoModal,
     loading,
     loadingModify,
@@ -303,4 +304,4 @@ const useClientsSupportLineForm = (props: IUseClientsSupportLineForm) => {
   };
 };
 
-export { useClientsSupportLineForm };
+export { useCreditLineForm };
