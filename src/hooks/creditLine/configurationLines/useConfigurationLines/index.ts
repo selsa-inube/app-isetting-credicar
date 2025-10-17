@@ -537,13 +537,28 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { groups } = useGroupOptions();
 
+  const optionDetails =
+    useCaseConfiguration === EUseCase.DETAILS ||
+    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+      ? true
+      : false;
+
   const validateConfig = () => {
     if (loadingModify) {
       return true;
     }
 
     if (
+      !optionDetails &&
       templateKey === ECreditLines.CLIENT_SUPPORT_RULE &&
+      optionsIncluded.items.length === 0
+    ) {
+      return true;
+    }
+
+    if (
+      !optionDetails &&
+      templateKey === ECreditLines.CREDIT_LINE_RULE &&
       optionsIncluded.items.length === 0
     ) {
       return true;
@@ -667,12 +682,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     onToggleUnconfiguredRules: handleToggleUnconfiguredRulesModal,
     onUnconfiguredModal: handleUnconfiguredRules,
   });
-
-  const optionDetails =
-    useCaseConfiguration === EUseCase.DETAILS ||
-    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
-      ? true
-      : false;
 
   const optionIcon =
     useCaseConfiguration === EUseCase.DETAILS ||
