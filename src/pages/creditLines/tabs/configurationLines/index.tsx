@@ -19,7 +19,6 @@ const ConfigurationLines = () => {
   const { showDecision, modalData } = useConfigurationInitial({ data, option });
 
   const { groups } = useGroupOptions();
-
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
       <Grid alignContent="unset" templateColumns="auto 1fr">

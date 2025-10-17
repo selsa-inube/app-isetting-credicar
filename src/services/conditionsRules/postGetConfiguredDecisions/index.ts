@@ -24,7 +24,6 @@ const postGetConfiguredDecisions = async (
       rulesData as unknown as string[],
       credicarAxiosInstance,
     );
-
   return mapGetConfiguredEntities(data);
 };
 

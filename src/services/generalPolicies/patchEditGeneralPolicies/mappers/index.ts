@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { formatValueDecision } from "@utils/formatValueDecision";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 
@@ -30,9 +31,9 @@ const mapEditGeneralPoliciesToApi = (
         : undefined,
       decisionId: decision.decisionId,
       descriptionOfChange: decision.descriptionOfChange,
-      effectiveFrom: decision.effectiveFrom,
+      effectiveFrom: formatDateDecision(decision.effectiveFrom),
       transactionOperation: decision.transactionOperation,
-      validUntil: decision.validUntil,
+      validUntil: formatDateDecision(decision.validUntil),
       value: decision.value,
     })),
   }));

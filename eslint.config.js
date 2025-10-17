@@ -43,6 +43,7 @@ export default tseslint.config({
     "@typescript-eslint/prefer-nullish-coalescing": "off",
     "react-hooks/rules-of-hooks": "off",
     "react-hooks/exhaustive-deps": "off",
+    "@typescript-eslint/prefer-optional-chain": "off",
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },

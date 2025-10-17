@@ -1,11 +1,11 @@
 interface IPostCheckLineRule {
   ruleName: {
-    en: string;
     es: string;
+    en?: string;
   };
   errorMessage: {
-    en: string;
     es: string;
+    en?: string;
   };
 }
 

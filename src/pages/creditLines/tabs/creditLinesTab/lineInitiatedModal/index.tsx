@@ -6,11 +6,10 @@ import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { portalId } from "@config/portalId";
-import { lineInitiatedLabels } from "@config/creditLines/creditLinesTab/generic/lineInitiatedLabels";
 import { ILineInitiatedModal } from "@ptypes/creditLines/ILineInitiatedModal";
 
 const LineInitiatedModal = (props: ILineInitiatedModal) => {
-  const { onGoBack, onGoContinue } = props;
+  const { lineInitiatedLabels, onGoBack, onGoContinue } = props;
 
   const node = document.getElementById(portalId);
 

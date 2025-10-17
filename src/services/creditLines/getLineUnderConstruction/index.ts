@@ -10,7 +10,7 @@ const getLineUnderConstruction = async (
 ): Promise<ILineUnderConstructionData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "SearchAllConfiguartionRequest",
+      "X-Action": "SearchAllConfigurationRequest",
     },
   };
 

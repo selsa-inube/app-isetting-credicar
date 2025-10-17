@@ -1,17 +1,15 @@
 import { EComponentAppearance } from "@enum/appearances";
 import { IPostCheckLineRule } from "../ISaveDataRequest";
 
-interface ISubmitRequestModal {
-  description: string;
+interface ISubmitModalData {
   title: string;
+  description: string;
   unconfiguredRules: IPostCheckLineRule[];
-  loading: boolean;
-  language: string;
   appearanceItemIcon: EComponentAppearance;
+  loading: boolean;
   itemIcon: React.ReactNode;
-  editOption: boolean;
-  onClick: () => void;
   onCloseModal: () => void;
+  onClick: () => void;
 }
 
-export type { ISubmitRequestModal };
+export type { ISubmitModalData };

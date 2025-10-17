@@ -181,7 +181,9 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         if (linesData.configurationRequestData?.rules) {
           const existingRules =
             (prev?.rules as IRuleDecision[] | undefined) ?? [];
+
           const newRules = Object(linesData.configurationRequestData.rules);
+
           normalizeData.rules = mergeRules(existingRules, newRules);
         } else {
           normalizeData.rules = prev.rules;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
@@ -66,12 +67,12 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     const decisionsByRuleData = {
       effectiveFrom:
         typeof dataDecision.effectiveFrom === "string"
-          ? dataDecision.effectiveFrom
-          : dataDecision.effectiveFrom?.toString() || "",
+          ? formatDateDecision(dataDecision.effectiveFrom)
+          : formatDateDecision(dataDecision.effectiveFrom?.toString() || ""),
       validUntil:
         typeof dataDecision.validUntil === "string"
-          ? dataDecision.validUntil
-          : dataDecision.validUntil?.toString() || "",
+          ? formatDateDecision(dataDecision.validUntil)
+          : formatDateDecision(dataDecision.validUntil?.toString() || ""),
       value: dataDecision.value,
       conditionGroups: updatedConditionGroups,
       decisionId: isEditing

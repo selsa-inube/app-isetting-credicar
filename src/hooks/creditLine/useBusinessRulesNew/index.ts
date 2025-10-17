@@ -10,10 +10,12 @@ import {
 } from "@isettingkit/business-rules";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
+import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
+import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 
 const asArray = (v: unknown): any[] =>
@@ -242,6 +244,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     decisionTemplate,
     initialDecisions,
     language,
+    option,
+    remunerativerateRule,
+    showAddDecisionModal,
+    setShowLineModal,
     setDecisionData,
     onDecisionsChange,
     optionsConditionsCSV,
@@ -250,6 +256,12 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
+
+  useEffect(() => {
+    if (showAddDecisionModal) {
+      setIsModalOpen(true);
+    }
+  }, [showAddDecisionModal]);
 
   const localizedTemplate = useMemo(
     () =>
@@ -336,6 +348,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const submitForm = (dataDecision: any) => {
+    if (remunerativerateRule) {
+      setShowLineModal(true);
+    }
     const isEditing = selectedDecision !== null;
 
     const base = isEditing
@@ -535,6 +550,18 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setDecisionData(decisionsSorted);
   }, [decisionsSorted]);
 
+  const optionDetailsCreditline =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? true
+      : false;
+
+  const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
+
+  const mesaggeEmpty =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? newBusinessRulesLabels.NoDecision
+      : newBusinessRulesLabels.NoStringAttached;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -546,6 +573,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     multipleChoicesOptions,
     decisionsSorted,
     responseForBackend,
+    message,
+    mesaggeEmpty,
+    optionDetailsCreditline,
     setSelectedConditionsCSV,
     setSelectedDecision,
     openModal,

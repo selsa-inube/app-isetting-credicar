@@ -3,7 +3,7 @@ import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { INavigation } from "@ptypes/context/INavigation";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
-import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
+import { ISubmitModalData } from "@ptypes/creditLines/ISubmitModalData";
 import { INameAndDescriptionEntry } from "../INameAndDescriptionEntry";
 
 interface INameAndDescriptionFormUI {
@@ -20,8 +20,6 @@ interface INameAndDescriptionFormUI {
   requestSteps: IRequestSteps[];
   showRequestProcessModal: boolean;
   showRequestStatusModal: boolean;
-  showUnconfiguredModal: boolean;
-  unconfiguredRules: IPostCheckLineRule[];
   language: string;
   optionDetails: boolean;
   optionIcon: boolean;
@@ -29,8 +27,9 @@ interface INameAndDescriptionFormUI {
   description: string;
   optionCrumb: string;
   disabledField: boolean;
-  onUnconfiguredModal: () => void;
-  onToggleUnconfiguredRules: () => void;
+  showSendModal: boolean;
+  submitModalData: ISubmitModalData;
+  editOption: boolean;
   onCloseRequestStatus: () => void;
   onClosePendingModal: () => void;
   onCloseProcess: () => void;
