@@ -81,9 +81,9 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: addCreditLinesLabels.descriptionSaveData,
-      entityName: "CreditLines",
+      entityName: "CreditLine",
       requestDate: formatDate(new Date()),
-      useCaseName: ECreditLines.USE_CASE_NAME_ADD,
+      useCaseName: ECreditLines.USE_CASE_ADD,
       configurationRequestData: {
         abbreviatedName: updatedFormValues.information.values.nameLine,
         alias: updatedFormValues.information.values.aliasLine,

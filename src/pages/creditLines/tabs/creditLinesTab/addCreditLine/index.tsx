@@ -2,6 +2,7 @@ import { AddCreditLineForm } from "@pages/creditLines/tabs/forms/addCreditLineFo
 import { useAddCreditlines } from "@hooks/creditLine/useAddCreditLines";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
+import { lineInitiatedLabels } from "@config/creditLines/creditLinesTab/generic/lineInitiatedLabels";
 import { IAddCreditLine } from "@ptypes/creditLines/IAddCreditLine";
 import { LineInitiatedModal } from "../lineInitiatedModal";
 
@@ -55,6 +56,7 @@ const AddCreditLine = (props: IAddCreditLine) => {
         <LineInitiatedModal
           onGoBack={handleGoBack}
           onGoContinue={handleGoContinue}
+          lineInitiatedLabels={lineInitiatedLabels}
         />
       )}
     </>

@@ -1,4 +1,5 @@
 import { useNameAndDescriptionForm } from "@hooks/creditLine/useNameAndDescriptionForm";
+import { EUseCase } from "@enum/useCase";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { NameAndDescriptionFormUI } from "./interface";
@@ -16,16 +17,15 @@ const NameAndDescriptionForm = () => {
     requestSteps,
     showRequestProcessModal,
     showRequestStatusModal,
-    unconfiguredRules,
-    showUnconfiguredModal,
     language,
     title,
     description,
     optionCrumb,
     optionDetails,
     optionIcon,
-    handleToggleUnconfiguredRulesModal,
-    handleUnconfiguredRules,
+    showSendModal,
+    submitModalData,
+    useCaseConfiguration,
     handleClosePendingModal,
     handleCloseRequestStatus,
     handleCloseProcess,
@@ -62,10 +62,6 @@ const NameAndDescriptionForm = () => {
       onCloseRequestStatus={handleCloseRequestStatus}
       onCloseProcess={handleCloseProcess}
       onClosePendingModal={handleClosePendingModal}
-      onUnconfiguredModal={handleUnconfiguredRules}
-      onToggleUnconfiguredRules={handleToggleUnconfiguredRulesModal}
-      showUnconfiguredModal={showUnconfiguredModal}
-      unconfiguredRules={unconfiguredRules}
       language={language}
       title={title}
       description={description}
@@ -73,6 +69,9 @@ const NameAndDescriptionForm = () => {
       optionDetails={optionDetails}
       optionIcon={optionIcon}
       disabledField={optionDetails}
+      showSendModal={showSendModal}
+      submitModalData={submitModalData}
+      editOption={useCaseConfiguration === EUseCase.EDIT}
     />
   );
 };

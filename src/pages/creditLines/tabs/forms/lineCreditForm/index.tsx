@@ -1,22 +1,17 @@
-import { useContext } from "react";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
-import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { useDragAndDropBoxesForm } from "@hooks/creditLine/useDragAndDropBoxesForm";
+import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { IClientsSupportLineForm } from "@ptypes/creditLines/IClientsSupportLineForm";
-import { ClientsSupportLineFormUI } from "./interface";
+import { LineCreditFormFormUI } from "./interface";
 
-const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
+const LineCreditFormForm = (props: IClientsSupportLineForm) => {
   const { templateKey } = props;
-
-  const { appData } = useContext(AuthAndPortalData);
 
   const {
     showInfoModal,
-    optionsExcluded,
-    optionsIncluded,
+    creditOptionsExcluded,
+    creditOptionsIncluded,
     loading,
     nav,
     loadingModify,
@@ -30,45 +25,39 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     optionDetails,
     useCaseConfiguration,
     optionIcon,
-    clientSupportData,
+    creditLineData,
     linesConstructionData,
     ruleLoadding,
-    setClientSupportData,
-    setOptionsIncluded,
-    setOptionsExcluded,
+    setCreditLineData,
+    setCreditOptionsIncluded,
+    setCreditOptionsExcluded,
     handleToggleInfoModal,
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
 
-  const { enumData: supportLine, loading: loadingSupportOptions } =
-    useEnumeratorsCrediboard({
-      businessUnits: appData.businessUnit.publicCode,
-      enumQuery: ECreditLines.SUPPORT_LINE,
-    });
-
   const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
     templateKey,
-    clientSupportData,
+    clientSupportData: creditLineData,
     linesConstructionData,
     ruleLoadding,
-    ruleOption: ECreditLines.CLIENT_SUPPORT_RULE,
-    optionsIncluded,
-    optionsExcluded,
+    ruleOption: ECreditLines.CREDIT_LINE_RULE,
+    optionsIncluded: creditOptionsIncluded,
+    optionsExcluded: creditOptionsExcluded,
     useCaseConfiguration,
-    infoRuleName: ECreditLines.CLIENTS_SUPPORTED,
-    supportLine,
-    loadingSupportOptions,
-    setClientSupportData,
-    setOptionsIncluded,
-    setOptionsExcluded,
+    infoRuleName: ECreditLines.CREDIT_LINE_RULE,
+    supportLine: [],
+    loadingSupportOptions: false,
+    setClientSupportData: setCreditLineData,
+    setOptionsIncluded: setCreditOptionsIncluded,
+    setOptionsExcluded: setCreditOptionsExcluded,
   });
 
   return (
-    <ClientsSupportLineFormUI
+    <LineCreditFormFormUI
       showInfoModal={showInfoModal}
       onToggleInfoModal={handleToggleInfoModal}
-      optionsExcluded={optionsExcluded}
-      optionsIncluded={optionsIncluded}
+      optionsExcluded={creditOptionsIncluded}
+      optionsIncluded={creditOptionsExcluded}
       updateData={loadingModify}
       loading={loading}
       onOpenModal={handleOpenModal}
@@ -90,4 +79,4 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
   );
 };
 
-export { ClientsSupportLineForm };
+export { LineCreditFormForm };

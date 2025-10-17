@@ -4,14 +4,18 @@ import {
   EValueHowToSetUp,
   getConditionsByGroup,
   mapByGroup,
+  parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
 } from "@isettingkit/business-rules";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
+import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
+import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
+import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 
 const asArray = (v: unknown): any[] =>
@@ -190,14 +194,11 @@ const transformDecision = (
   d: IRuleDecision,
   language: "es" | "en" | undefined,
 ): IRuleDecision => {
-  const originalDecisionId = d.decisionId;
-
   const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
   const withSentences = withConditionSentences(loc);
-
   return {
     ...withSentences,
-    decisionId: originalDecisionId,
+    value: parseRangeFromString(withSentences.value),
     conditionsThatEstablishesTheDecision: mapByGroup(
       getConditionsByGroup(withSentences),
       (condition: {
@@ -208,6 +209,7 @@ const transformDecision = (
           condition as { labelName?: string; i18n?: Record<string, string> },
           language,
         ),
+        value: parseRangeFromString(condition.value),
       }),
     ),
   } as any;
@@ -242,6 +244,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     decisionTemplate,
     initialDecisions,
     language,
+    option,
+    remunerativerateRule,
+    showAddDecisionModal,
+    setShowLineModal,
     setDecisionData,
     onDecisionsChange,
     optionsConditionsCSV,
@@ -251,6 +257,12 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
 
+  useEffect(() => {
+    if (showAddDecisionModal) {
+      setIsModalOpen(true);
+    }
+  }, [showAddDecisionModal]);
+
   const localizedTemplate = useMemo(
     () =>
       ensureArrayGroupsDeep(
@@ -259,26 +271,19 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     [decisionTemplate, language],
   );
 
-  const [decisions, setDecisions] = useState<IRuleDecision[]>([]);
-
-  const initialDecisionsHash = useMemo(() => {
-    if (!initialDecisions?.length) return "";
-    return JSON.stringify(
-      initialDecisions.map((d) => ({
-        decisionId: d.decisionId,
-        value: d.value,
-      })),
-    );
-  }, [initialDecisions]);
+  const [decisions, setDecisions] = useState<IRuleDecision[]>(
+    ensureUniqueIds(
+      (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+    ),
+  );
 
   useEffect(() => {
-    if (initialDecisions?.length && decisions.length === 0) {
-      const transformed = initialDecisions.map((d) =>
-        transformDecision(d, language),
+    if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
+      setDecisions(
+        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
       );
-      setDecisions(transformed);
     }
-  }, [initialDecisionsHash, language, decisions.length]);
+  }, [initialDecisions, language]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
     useState<string>("");
@@ -343,6 +348,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const submitForm = (dataDecision: any) => {
+    if (remunerativerateRule) {
+      setShowLineModal(true);
+    }
     const isEditing = selectedDecision !== null;
 
     const base = isEditing
@@ -542,6 +550,18 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setDecisionData(decisionsSorted);
   }, [decisionsSorted]);
 
+  const optionDetailsCreditline =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? true
+      : false;
+
+  const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
+
+  const mesaggeEmpty =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? newBusinessRulesLabels.NoDecision
+      : newBusinessRulesLabels.NoStringAttached;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -553,6 +573,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     multipleChoicesOptions,
     decisionsSorted,
     responseForBackend,
+    message,
+    mesaggeEmpty,
+    optionDetailsCreditline,
     setSelectedConditionsCSV,
     setSelectedDecision,
     openModal,

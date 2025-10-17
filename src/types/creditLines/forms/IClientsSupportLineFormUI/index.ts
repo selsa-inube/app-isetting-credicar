@@ -1,7 +1,7 @@
 import { IDragAndDropColumn } from "@isettingkit/business-rules";
 import { ISide } from "@ptypes/ISide";
 import { INavigation } from "@ptypes/context/INavigation";
-import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
+import { ISubmitModalData } from "@ptypes/creditLines/ISubmitModalData";
 interface IClientsSupportLineFormUI {
   optionsExcluded: IDragAndDropColumn;
   optionsIncluded: IDragAndDropColumn;
@@ -11,8 +11,7 @@ interface IClientsSupportLineFormUI {
   navigation: INavigation;
   lineNameDecision: string;
   message: string;
-  showUnconfiguredModal: boolean;
-  unconfiguredRules: IPostCheckLineRule[];
+  showSendModal: boolean;
   loadingData: boolean;
   language: string;
   title: string;
@@ -20,8 +19,8 @@ interface IClientsSupportLineFormUI {
   optionCrumb: string;
   optionDetails: boolean;
   optionIcon: boolean;
-  onUnconfiguredModal: () => void;
-  onToggleUnconfiguredRules: () => void;
+  submitModalData: ISubmitModalData;
+  editOption: boolean;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
   onOpenModal: () => void;
   onToggleInfoModal: () => void;

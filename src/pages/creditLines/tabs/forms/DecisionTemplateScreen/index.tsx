@@ -1,21 +1,23 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Stack } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { BusinessRulesNewHandler } from "@pages/creditLines/tabs/BusinessRulesNewHandler";
+import { LineInitiatedModal } from "@pages/creditLines/tabs/creditLinesTab/lineInitiatedModal";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
 import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { EUseCase } from "@enum/useCase";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 import { portalId } from "@config/portalId";
-import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateGeneric";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
+import { remunerativeRateLabels } from "@config/creditLines/creditLinesTab/generic/remunerativeRateLabels";
 import { IDecisionTemplateScreen } from "@ptypes/decisions/IDecisionTemplateScreen";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { LineInformation } from "../lineInformation";
@@ -39,8 +41,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     requestSteps,
     showRequestProcessModal,
     showRequestStatusModal,
-    showUnconfiguredModal,
-    unconfiguredRules,
     title,
     description,
     optionCrumb,
@@ -48,8 +48,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     optionIcon,
     useCaseConfiguration,
     optionsConditionsCSV,
-    handleToggleUnconfiguredRulesModal,
-    handleUnconfiguredRules,
+    showSendModal,
+    submitModalData,
     handleClosePendingModal,
     handleCloseRequestStatus,
     handleCloseProcess,
@@ -59,6 +59,17 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
   } = useConfigurationLines({ templateKey });
 
   const { appData } = useContext(AuthAndPortalData);
+  const [showLineModal, setShowLineModal] = useState<boolean>(false);
+  const [showAddDecisionModal, setShowAddDecisionModal] =
+    useState<boolean>(false);
+
+  const handleGoBack = () => {
+    setShowLineModal(false);
+  };
+
+  const handleGoContinue = () => {
+    setShowAddDecisionModal(true);
+  };
 
   const formId = `credit-lines/${templateKey}`;
 
@@ -111,6 +122,9 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           textValues={commonTextValues}
           formId={formId as unknown as never}
           option={useCaseConfiguration}
+          remunerativerateRule={false}
+          setShowLineModal={setShowLineModal}
+          showAddDecisionModal={showAddDecisionModal}
         />
 
         {showDecision && (
@@ -137,15 +151,18 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             title={lineTypeDecision}
           />
         )}
-        {showUnconfiguredModal && (
+        {showSendModal && (
           <SubmitRequestModal
-            title={submitRequestLabels.title}
-            unconfiguredRules={unconfiguredRules}
-            description={submitRequestLabels.description}
-            onClick={handleUnconfiguredRules}
-            onCloseModal={handleToggleUnconfiguredRulesModal}
-            loading={loadingModify}
+            title={submitModalData.title}
+            unconfiguredRules={submitModalData.unconfiguredRules}
+            description={submitModalData.description}
+            onClick={submitModalData.onClick}
+            onCloseModal={submitModalData.onCloseModal}
+            loading={submitModalData.loading}
             language={language}
+            appearanceItemIcon={submitModalData.appearanceItemIcon}
+            itemIcon={submitModalData.itemIcon}
+            editOption={useCaseConfiguration === EUseCase.EDIT}
           />
         )}
 
@@ -158,6 +175,14 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           onCloseProcess={handleCloseProcess}
           onClosePendingModal={handleClosePendingModal}
         />
+
+        {showLineModal && (
+          <LineInitiatedModal
+            onGoBack={handleGoBack}
+            onGoContinue={handleGoContinue}
+            lineInitiatedLabels={remunerativeRateLabels}
+          />
+        )}
       </Stack>
 
       <StyledFloatButtonsContainer>

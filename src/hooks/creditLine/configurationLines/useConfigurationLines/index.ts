@@ -20,9 +20,11 @@ import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { optionTitleConfiguration } from "@utils/optionTitleConfiguration";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
+import { validateEditedRules } from "@utils/validateEditedRules";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
+import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { editCreditLabels } from "@config/creditLines/creditLinesTab/generic/editCreditLabels";
 import { IErrors } from "@ptypes/IErrors";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -38,6 +40,7 @@ import { useModalConfiguration } from "../useModalConfiguration";
 import { useGroupOptions } from "../useGroupOptions";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
+import { useModalOnSubmit } from "../useModalOnSubmit";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -59,7 +62,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [canRefresh, setCanRefresh] = useState(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [linesData, setLinesData] = useState<IModifyConstructionResponse>();
-
+  const [showEditSubmitModal, setShowEditSubmitModal] =
+    useState<boolean>(false);
   const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
   const [errorCheckData, setErrorCheckData] = useState<IErrors>({} as IErrors);
   const {
@@ -67,6 +71,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setLoadingInitial,
     linesConstructionData,
     useCaseConfiguration,
+    optionsAllRules,
   } = useContext(CreditLinesConstruction);
   const [data, setData] = useState<IModifyConstructionResponse>();
   const [editData, setEditData] = useState<ISaveDataRequest>();
@@ -80,6 +85,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const [showUnconfiguredModal, setShowUnconfiguredModal] =
     useState<boolean>(false);
   const [clientSupportData, setClientSupportData] = useState<IRules[]>();
+  const [creditLineData, setCreditLineData] = useState<IRules[]>();
   const [decisionsData, setDecisionData] = useState<IRuleDecisionExtended[]>(
     [],
   );
@@ -99,6 +105,22 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     emptyMessage: clientsSupportLineLabels.withoutExcluding,
     highlightFirst: false,
   });
+
+  const [creditOptionsExcluded, setCreditOptionsIncluded] =
+    useState<IDragAndDropColumn>({
+      legend: creditLineLabels.titleCustomerProfiles,
+      items: [],
+      emptyMessage: creditLineLabels.withoutIncluding,
+      highlightFirst: true,
+    });
+  const [creditOptionsIncluded, setCreditOptionsExcluded] =
+    useState<IDragAndDropColumn>({
+      legend: creditLineLabels.titleDoesNotApply,
+      items: [],
+      emptyMessage: creditLineLabels.withoutExcluding,
+      highlightFirst: false,
+    });
+
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -212,6 +234,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const handleClickInfo = () => {
     setShowInfoErrorModal(!showInfoErrorModal);
+  };
+
+  const handleEditSubmitModal = () => {
+    setShowEditSubmitModal(!showEditSubmitModal);
   };
 
   const onSubmit = () => {
@@ -374,26 +400,32 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   }, [decisionsData]);
 
   useEffect(() => {
-    setLinesData((prev) => {
-      const existingRules =
-        (prev?.configurationRequestData?.rules as
-          | IRuleDecision[]
-          | undefined) ??
-        (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-        [];
+    const validate =
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL;
 
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        configurationRequestData: {
-          ...prev?.configurationRequestData,
-          alias: linesConstructionData.alias,
-          abbreviatedName: linesConstructionData.abbreviatedName,
-          descriptionUse: linesConstructionData.descriptionUse,
-          rules: mergeRules(existingRules, clientSupportData),
-        },
-      };
-    });
+    if (!validate) {
+      setLinesData((prev) => {
+        const existingRules =
+          (prev?.configurationRequestData?.rules as
+            | IRuleDecision[]
+            | undefined) ??
+          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+          [];
+
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          configurationRequestData: {
+            ...prev?.configurationRequestData,
+            alias: linesConstructionData.alias,
+            abbreviatedName: linesConstructionData.abbreviatedName,
+            descriptionUse: linesConstructionData.descriptionUse,
+            rules: mergeRules(existingRules, clientSupportData),
+          },
+        };
+      });
+    }
   }, [clientSupportData]);
 
   const loadingModifyRef = useRef(loadingModify);
@@ -464,9 +496,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setShowSaveModal(false);
       setIsUpdated(false);
       setShowUnconfiguredModal(false);
+      setShowEditSubmitModal(false);
       return true;
     }
-
     if (useCaseConfiguration === EUseCase.ADD) {
       setIsUpdated(true);
       try {
@@ -494,6 +526,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
 
+    if (useCaseConfiguration === EUseCase.EDIT) {
+      setShowEditSubmitModal(true);
+    }
+
     return new Promise((resolve) => {
       savePromiseRef.current = resolve;
     });
@@ -501,13 +537,28 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { groups } = useGroupOptions();
 
+  const optionDetails =
+    useCaseConfiguration === EUseCase.DETAILS ||
+    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+      ? true
+      : false;
+
   const validateConfig = () => {
     if (loadingModify) {
       return true;
     }
 
     if (
-      templateKey === "CreditLineByRiskProfile" &&
+      !optionDetails &&
+      templateKey === ECreditLines.CLIENT_SUPPORT_RULE &&
+      optionsIncluded.items.length === 0
+    ) {
+      return true;
+    }
+
+    if (
+      !optionDetails &&
+      templateKey === ECreditLines.CREDIT_LINE_RULE &&
       optionsIncluded.items.length === 0
     ) {
       return true;
@@ -555,6 +606,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           ),
           lineOfCreditId: borrowerData.settingRequestId,
         };
+
         if (borrowerData.configurationRequestData?.rules) {
           normalizeData.rules = Object(
             borrowerData.configurationRequestData.rules,
@@ -617,11 +669,19 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     handleToggleErrorSaveModal,
   });
 
-  const optionDetails =
-    useCaseConfiguration === EUseCase.DETAILS ||
-    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
-      ? true
-      : false;
+  const { submitModalData, showSendModal } = useModalOnSubmit({
+    showConfigSubmitModal: showUnconfiguredModal,
+    showEditSubmitModal,
+    unconfiguredRules,
+    editedRules: validateEditedRules(
+      linesEditData,
+      optionsAllRules,
+    ) as IPostCheckLineRule[],
+    onSaveModal: handleSaveModal,
+    onEditSubmitModal: handleEditSubmitModal,
+    onToggleUnconfiguredRules: handleToggleUnconfiguredRulesModal,
+    onUnconfiguredModal: handleUnconfiguredRules,
+  });
 
   const optionIcon =
     useCaseConfiguration === EUseCase.DETAILS ||
@@ -663,8 +723,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     errorData,
     networkError,
     errorFetchRequest,
-    unconfiguredRules,
-    showUnconfiguredModal,
     showSaveModal,
     showInfoErrorModal,
     useCaseConfiguration,
@@ -674,10 +732,20 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     optionDetails,
     optionIcon,
     optionsConditionsCSV,
+    clientSupportData,
+    linesConstructionData,
+    ruleLoadding,
+    linesData,
+    submitModalData,
+    showSendModal,
+    creditOptionsExcluded,
+    creditOptionsIncluded,
+    creditLineData,
+    setCreditLineData,
+    setCreditOptionsIncluded,
+    setCreditOptionsExcluded,
     handleClickInfo,
     setClientSupportData,
-    handleToggleUnconfiguredRulesModal,
-    handleUnconfiguredRules,
     handleToggleErrorSaveModal,
     handleToggleErrorModal,
     handleCloseRequestStatus,

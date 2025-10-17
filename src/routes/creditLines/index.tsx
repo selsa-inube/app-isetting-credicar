@@ -5,6 +5,7 @@ import { ConfigurationLines } from "@pages/creditLines/tabs/configurationLines";
 import { ClientsSupportLineForm } from "@pages/creditLines/tabs/forms/clientsSupportLineForm";
 import { NameAndDescriptionForm } from "@pages/creditLines/tabs/forms/nameAndDescriptionForm";
 import { DecisionTemplateScreen } from "@pages/creditLines/tabs/forms/DecisionTemplateScreen";
+import { LineCreditFormForm } from "@pages/creditLines/tabs/forms/lineCreditForm";
 import { IRouteConfiguration } from "@ptypes/creditLines/IRouteConfiguration";
 
 const DECISION_ROUTES: IRouteConfiguration[] = [
@@ -30,7 +31,6 @@ const DECISION_ROUTES: IRouteConfiguration[] = [
     path: "adjustment-interest-payment-type",
     templateKey: "AdjustmentInterestPaymentType",
   },
-  { path: "line-credit", templateKey: "LineOfCredit" },
   {
     path: "channels-credit-by-Line",
     templateKey: "CreditPlacementChannelsByLine",
@@ -120,6 +120,10 @@ const CreditLinesRoutes = () => {
           element={
             <ClientsSupportLineForm templateKey="CreditLineByRiskProfile" />
           }
+        />
+        <Route
+          path="line-credit"
+          element={<LineCreditFormForm templateKey="LineOfCredit" />}
         />
         <Route
           path="line-Names-Descriptions"

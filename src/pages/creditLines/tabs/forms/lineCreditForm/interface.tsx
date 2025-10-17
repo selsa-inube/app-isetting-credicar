@@ -13,7 +13,7 @@ import { options } from "@config/creditLines/configuration/mainOptions";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
 
-const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
+const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
   const {
     optionsExcluded,
     optionsIncluded,
@@ -49,7 +49,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
       >
         <LineInformation
           lineName={lineNameDecision}
-          lineType={options.clientsSupported.links.clientsSupported.label}
+          lineType={options.conditionsUseProduct.links.lineOfCredit.label}
           updateData={updateData}
           loading={loading}
           withoutDecisions={true}
@@ -134,4 +134,4 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
   );
 };
 
-export { ClientsSupportLineFormUI };
+export { LineCreditFormFormUI };

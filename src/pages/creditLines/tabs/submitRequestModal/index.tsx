@@ -1,4 +1,4 @@
-import { MdClear, MdOutlineInfo } from "react-icons/md";
+import { MdClear } from "react-icons/md";
 import { createPortal } from "react-dom";
 import { useState } from "react";
 import { Blanket, Button, Icon, Stack, Text } from "@inubekit/inubekit";
@@ -10,6 +10,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { infoConfigurationLabels } from "@config/creditLines/creditLinesTab/generic/infoConfigurationLabels";
 import { infoErrorModal } from "@config/creditLines/generic/infoErrorModal";
 import { portalId } from "@config/portalId";
+import { IAppearenceBoxContainer } from "@ptypes/IAppearenceBoxContainer";
 import { ISubmitRequestModal } from "@ptypes/creditLines/ISubmitRequestModal";
 import { InformationBox } from "../creditLinesTab/InformationBox";
 
@@ -20,6 +21,9 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
     description,
     loading,
     language,
+    appearanceItemIcon,
+    itemIcon,
+    editOption,
     onClick,
     onCloseModal,
   } = props;
@@ -28,11 +32,13 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
   const [showDecisionModal, setShowDecisionModal] = useState<boolean>(false);
 
   const onClickInfo = (error?: string) => {
+    if (editOption) return;
     setDescriptionError(error || "");
     setShowDecisionModal(!showDecisionModal);
   };
 
   const onCloseDecisionModal = () => {
+    if (editOption) return;
     setShowDecisionModal(!showDecisionModal);
     setDescriptionError("");
   };
@@ -95,16 +101,16 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
             {unconfiguredRules.map((rule, index) => (
               <InformationBox
                 key={index}
-                icon={<MdOutlineInfo />}
-                appearanceIcon={EComponentAppearance.DANGER}
+                icon={itemIcon}
+                appearanceIcon={appearanceItemIcon}
                 description={
-                  rule.ruleName[language as keyof typeof rule.ruleName]
+                  rule.ruleName[language as keyof typeof rule.ruleName] ?? ""
                 }
                 descriptionModal={
                   rule.errorMessage[language as keyof typeof rule.errorMessage]
                 }
                 boxPadding={tokens.spacing.s100}
-                boxColor={EComponentAppearance.DANGER}
+                boxColor={appearanceItemIcon as IAppearenceBoxContainer}
                 sizeIcon="16px"
                 sizeDescription="medium"
                 ellipsisText
