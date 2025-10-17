@@ -14,6 +14,8 @@ const commonTextValues = {
   factsThatConditionIt: "Condiciones que lo determinan",
   criteria: "Criterios",
   terms: "Vigencia",
+  effectiveFrom: "Vigencia desde:",
+  validUntil: "Vigencia hasta:",
 };
 
 export { commonTextValues };

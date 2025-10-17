@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  buildEsConditionSentence,
-  EValueHowToSetUp,
   getConditionsByGroup,
   mapByGroup,
   parseRangeFromString,
@@ -134,68 +132,12 @@ const localizeDecision = (
   return cloned;
 };
 
-const normalizeHowToSet = (raw: unknown): EValueHowToSetUp => {
-  if (typeof raw === "string") {
-    const k = raw.toLowerCase();
-    if (k.includes("equal")) return EValueHowToSetUp.EQUAL;
-    if (k.includes("greater")) return EValueHowToSetUp.GREATER_THAN;
-    if (k.includes("less")) return EValueHowToSetUp.LESS_THAN;
-    if (k.includes("range") || k.includes("between"))
-      return EValueHowToSetUp.RANGE;
-    if (k.includes("multi")) return EValueHowToSetUp.LIST_OF_VALUES_MULTI;
-    if (k.includes("list_of_values") || k.includes("among") || k.includes("in"))
-      return EValueHowToSetUp.LIST_OF_VALUES;
-  }
-  return (raw as EValueHowToSetUp) ?? EValueHowToSetUp.EQUAL;
-};
-
-const withConditionSentences = (
-  decision: IRuleDecision,
-  isPrimaryFirst = true,
-): IRuleDecision => {
-  const d: IRuleDecision = JSON.parse(JSON.stringify(decision));
-  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
-
-  const orderedKeys = [
-    ...Object.keys(groups).filter((k) => k === "group-primary"),
-    ...Object.keys(groups).filter((k) => k !== "group-primary"),
-  ];
-
-  let firstUsed = !isPrimaryFirst;
-
-  const decorated = Object.fromEntries(
-    orderedKeys.map((g) => {
-      const list = asArray(groups[g]);
-      const mapped = list.map((c: any, idx: number) => {
-        const isFirst = !firstUsed && g === "group-primary" && idx === 0;
-        if (isFirst) firstUsed = true;
-
-        const how = normalizeHowToSet(
-          c.howToSetTheCondition ?? c.valueUse ?? EValueHowToSetUp.EQUAL,
-        );
-
-        const sentence = buildEsConditionSentence({
-          label: c.labelName || "",
-          howToSet: how as any,
-          isFirst,
-        });
-
-        return { ...c, labelName: sentence };
-      });
-      return [g, mapped];
-    }),
-  );
-
-  (d as any).conditionsThatEstablishesTheDecision = decorated as any;
-  return d;
-};
-
 const transformDecision = (
   d: IRuleDecision,
   language: "es" | "en" | undefined,
 ): IRuleDecision => {
   const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
-  const withSentences = withConditionSentences(loc);
+  const withSentences = loc;
   return {
     ...withSentences,
     value: parseRangeFromString(withSentences.value),
@@ -252,7 +194,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     onDecisionsChange,
     optionsConditionsCSV,
   } = props;
-
+  console.log("BusinessRulesNewHandler: ", initialDecisions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
@@ -465,9 +407,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       conditionsThatEstablishesTheDecision: filtered,
     };
 
-    return withConditionSentences(
-      ensureArrayGroupsDeep(withFiltered as unknown as IRuleDecision),
-    );
+    return ensureArrayGroupsDeep(withFiltered as unknown as IRuleDecision);
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(() => {
