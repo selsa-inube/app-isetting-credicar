@@ -122,7 +122,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           textValues={commonTextValues}
           formId={formId as unknown as never}
           option={useCaseConfiguration}
-          remunerativerateRule={true}
+          remunerativerateRule={false}
           setShowLineModal={setShowLineModal}
           showAddDecisionModal={showAddDecisionModal}
         />
