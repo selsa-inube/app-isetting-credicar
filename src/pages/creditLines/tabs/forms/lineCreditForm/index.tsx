@@ -1,33 +1,56 @@
-import { useCreditLineForm } from "@hooks/creditLine/useCreditLineForm";
+import { useDragAndDropBoxesForm } from "@hooks/creditLine/useDragAndDropBoxesForm";
+import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { EUseCase } from "@enum/useCase";
+import { ECreditLines } from "@enum/creditLines";
 import { IClientsSupportLineForm } from "@ptypes/creditLines/IClientsSupportLineForm";
 import { LineCreditFormFormUI } from "./interface";
 
 const LineCreditFormForm = (props: IClientsSupportLineForm) => {
   const { templateKey } = props;
+
   const {
-    creditOptionsIncluded,
-    creditOptionsExcluded,
     showInfoModal,
+    creditOptionsExcluded,
+    creditOptionsIncluded,
     loading,
-    loadingModify,
     nav,
+    loadingModify,
     lineNameDecision,
-    message,
-    loadingData,
+    showSendModal,
+    submitModalData,
     language,
     title,
     description,
     optionCrumb,
     optionDetails,
-    optionIcon,
-    showSendModal,
-    submitModalData,
     useCaseConfiguration,
-    handleOpenModal,
+    optionIcon,
+    creditLineData,
+    linesConstructionData,
+    ruleLoadding,
+    setCreditLineData,
+    setCreditOptionsIncluded,
+    setCreditOptionsExcluded,
     handleToggleInfoModal,
-    handleMove,
-  } = useCreditLineForm({ templateKey });
+    handleOpenModal,
+  } = useConfigurationLines({ templateKey });
+
+  const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
+    templateKey,
+    clientSupportData: creditLineData,
+    linesConstructionData,
+    ruleLoadding,
+    ruleOption: ECreditLines.CREDIT_LINE_RULE,
+    optionsIncluded: creditOptionsIncluded,
+    optionsExcluded: creditOptionsExcluded,
+    useCaseConfiguration,
+    infoRuleName: ECreditLines.CREDIT_LINE_RULE,
+    supportLine: [],
+    loadingSupportOptions: false,
+    setClientSupportData: setCreditLineData,
+    setOptionsIncluded: setCreditOptionsIncluded,
+    setOptionsExcluded: setCreditOptionsExcluded,
+  });
 
   return (
     <LineCreditFormFormUI
