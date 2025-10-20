@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 import { RefObject } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { FormikProps } from "formik";

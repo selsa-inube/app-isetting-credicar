@@ -2,8 +2,8 @@
 import {
   buildEsConditionSentence,
   EValueHowToSetUp,
-  getConditionsByGroup,
-  mapByGroup,
+  getConditionsByGroupNew,
+  mapByGroupNew,
   parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
@@ -32,7 +32,7 @@ const normalizeCondition = (c: any) => ({
 
 const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
-  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
   const normalizedGroups = Object.fromEntries(
     Object.entries(groups).map(([g, list]) => [
       g,
@@ -49,14 +49,14 @@ const isIRuleDecision = (v: unknown): v is IRuleDecision =>
 
 const toArrayConditionsDecision = (d: IRuleDecision): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(d ?? {}));
-  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
   const flat = Object.values(groups).flatMap(asArray);
   (cloned as any).conditionsThatEstablishesTheDecision = flat;
   return cloned;
 };
 
 const nameToGroupMapOf = (d: IRuleDecision) => {
-  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
+  const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
   const map = new Map<string, string>();
   Object.entries(groups).forEach(([group, list]) => {
     asArray(list).forEach((c: any) => {
@@ -120,7 +120,7 @@ const localizeDecision = (
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(raw ?? {}));
   cloned.labelName = localizeLabel(raw, lang);
 
-  const groups: Record<string, unknown> = getConditionsByGroup(cloned) ?? {};
+  const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
   const localizedGroups = Object.fromEntries(
     Object.entries(groups).map(([g, list]) => [
       g,
@@ -154,7 +154,7 @@ const withConditionSentences = (
   isPrimaryFirst = true,
 ): IRuleDecision => {
   const d: IRuleDecision = JSON.parse(JSON.stringify(decision));
-  const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
+  const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
 
   const orderedKeys = [
     ...Object.keys(groups).filter((k) => k === "group-primary"),
@@ -199,8 +199,8 @@ const transformDecision = (
   return {
     ...withSentences,
     value: parseRangeFromString(withSentences.value),
-    conditionsThatEstablishesTheDecision: mapByGroup(
-      getConditionsByGroup(withSentences),
+    conditionsThatEstablishesTheDecision: mapByGroupNew(
+      getConditionsByGroupNew(withSentences),
       (condition: {
         value: string | number | IValue | string[] | undefined;
       }) => ({
@@ -320,7 +320,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const multipleChoicesOptions = useMemo(() => {
-    const groups = (getConditionsByGroup(localizedTemplate) || {}) as Record<
+    const groups = (getConditionsByGroupNew(localizedTemplate) || {}) as Record<
       string,
       unknown
     >;
@@ -360,11 +360,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
           ...dataDecision,
         };
 
-    const tplGroups = (getConditionsByGroup(localizedTemplate) || {}) as Record<
-      string,
-      unknown
-    >;
-    const dataGroups = (getConditionsByGroup(dataDecision) || {}) as Record<
+    const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
+      {}) as Record<string, unknown>;
+    const dataGroups = (getConditionsByGroupNew(dataDecision) || {}) as Record<
       string,
       unknown
     >;
@@ -438,7 +436,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       nameToGroup,
     });
 
-    const tplGroups = (getConditionsByGroup(tpl) || {}) as Record<
+    const tplGroups = (getConditionsByGroupNew(tpl) || {}) as Record<
       string,
       unknown
     >;
