@@ -25,6 +25,7 @@ import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDes
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { II18n } from "@ptypes/i18n";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const useEditDestination = (props: IUseEditDestination) => {
   const { data, appData } = props;
@@ -125,8 +126,8 @@ const useEditDestination = (props: IUseEditDestination) => {
 
     return evaluateRuleData.map((decision) => {
       const dataEvalute = {
-        effectiveFrom: decision.decisionsByRule[0].effectiveFrom,
-        value: decision?.decisionsByRule[0].value,
+        effectiveFrom: decision.effectiveFrom,
+        value: decision?.value,
       };
       return {
         ruleName: decision.ruleName,
@@ -154,7 +155,9 @@ const useEditDestination = (props: IUseEditDestination) => {
   }, [transformDecision]);
 
   const getDeletedValues = useCallback(() => {
-    if (!arraysEqual(rules, tranformEvaluteDecision)) {
+    if (
+      !arraysEqual(rules, tranformEvaluteDecision as IRuleDecisionExtended[])
+    ) {
       return tranformEvaluteDecision
         .filter((decision) => !findDecision(rules, decision))
         .map((decision) => {
@@ -179,7 +182,9 @@ const useEditDestination = (props: IUseEditDestination) => {
   }, [rules, tranformEvaluteDecision, appData.user.userAccount]);
 
   const getInsertValues = useCallback(() => {
-    if (!arraysEqual(rules, tranformEvaluteDecision)) {
+    if (
+      !arraysEqual(rules, tranformEvaluteDecision as IRuleDecisionExtended[])
+    ) {
       return rules
         .filter((decision) => !findDecision(tranformEvaluteDecision, decision))
         .map((decision) => {
