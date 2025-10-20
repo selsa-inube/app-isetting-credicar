@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 
 import { evaluateRuleByBusinessUnit } from "@services/conditionsRules/postEvaluateRuleByBusinessUnit";
 import { IUseEvaluateRuleByUnit } from "@ptypes/hooks/IUseEvaluateRuleByUnit";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const useEvaluateRuleByBusinessUnit = (props: IUseEvaluateRuleByUnit) => {
   const { businessUnits, rulesData } = props;
   const [evaluateRuleData, setEvaluateRuleData] = useState<
-    IRules[] | undefined
+    IRuleDecisionExtended[] | undefined
   >([]);
   const [loading, setLoading] = useState(true);
   const [hasError, setHasError] = useState<boolean>();

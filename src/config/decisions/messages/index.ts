@@ -1,7 +1,7 @@
 const attentionModal = {
   title: "Atención",
   description:
-    "El destino de dinero debería tener al menos una (1) decisión, en caso contrario este destino de dinero NO será utilizable.",
+    "El destino de dinero debería tener al menos una (1) linea de credito, en caso contrario este destino de dinero NO será utilizable.",
   actionText: "Continuar aún así",
 };
 

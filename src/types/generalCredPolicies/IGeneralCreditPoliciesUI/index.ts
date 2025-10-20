@@ -1,7 +1,7 @@
 import { ITab } from "@inubekit/inubekit";
 import { ICardData } from "@ptypes/home/ICardData";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { IModalData } from "../IModalData";
+import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
 
 interface IGeneralCreditPoliciesUI {
   withoutPolicies: boolean;
@@ -21,12 +21,12 @@ interface IGeneralCreditPoliciesUI {
   handleOpenModal: () => void;
   onCloseGoBackModal: () => void;
   onGoBack: () => void;
-  contributionsData?: IRules[];
-  incomeData?: IRules[];
-  scoreModelsData?: IRules[];
-  methodsData?: IRules[];
-  additionalDebtorsData?: IRules[];
-  realGuaranteesData?: IRules[];
+  contributionsData?: IRuleDecisionExtended[];
+  incomeData?: IRuleDecisionExtended[];
+  scoreModelsData?: IRuleDecisionExtended[];
+  methodsData?: IRuleDecisionExtended[];
+  additionalDebtorsData?: IRuleDecisionExtended[];
+  realGuaranteesData?: IRuleDecisionExtended[];
 }
 
 export type { IGeneralCreditPoliciesUI };

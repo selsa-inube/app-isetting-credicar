@@ -1,19 +1,19 @@
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IUseNewDecisions {
   formValues: IDecisionsGeneralEntry;
   initialGeneralData: IDecisionsGeneralEntry;
-  prevContributionsRef: React.MutableRefObject<IRules[]>;
-  prevIncomesRef: React.MutableRefObject<IRules[]>;
-  prevScoreModelsRef: React.MutableRefObject<IRules[]>;
+  prevContributionsRef: React.MutableRefObject<IRuleDecisionExtended[]>;
+  prevIncomesRef: React.MutableRefObject<IRuleDecisionExtended[]>;
+  prevScoreModelsRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   user: string;
-  contributionsData?: IRules[];
-  incomeData?: IRules[];
-  scoreModelsData?: IRules[];
-  normalizedContributions?: IRules[];
-  normalizedIncome?: IRules[];
-  normalizedScoreModels?: IRules[];
+  contributionsData?: IRuleDecisionExtended[];
+  incomeData?: IRuleDecisionExtended[];
+  scoreModelsData?: IRuleDecisionExtended[];
+  normalizedContributions?: IRuleDecisionExtended[];
+  normalizedIncome?: IRuleDecisionExtended[];
+  normalizedScoreModels?: IRuleDecisionExtended[];
 }
 
 export type { IUseNewDecisions };

@@ -3,6 +3,8 @@ import { Grid, useMediaQuery } from "@inubekit/inubekit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useCreditLine } from "@hooks/moneyDestination/useCreditLine";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
 import { normalizeOptions } from "@utils/destination/normalizeOptions";
@@ -22,6 +24,17 @@ const RenderPersonalInfoVerification = (props: IPersonalInfoVerification) => {
   const { enumDestination } = useEnumsMoneyDestination({
     businessUnits: appData.businessUnit.publicCode,
   });
+
+  const { enumData: type } = useEnumeratorsCrediboard({
+    businessUnits: appData.businessUnit.publicCode,
+    enumQuery: EMoneyDestination.DESTINATION_TYPE,
+  });
+
+  const typeDestination = normalizeDestination(type, values.typeDestination);
+  const valueTypeDestination =
+    typeDestination?.i18n?.[
+      appData.language as keyof typeof typeDestination.i18n
+    ] ?? typeDestination?.description;
 
   const normalizeLine = values.creditLine
     .split(",")
@@ -48,7 +61,7 @@ const RenderPersonalInfoVerification = (props: IPersonalInfoVerification) => {
       <BoxAttribute
         direction="column"
         label={personalInfoVeriflabels.type}
-        value={values.typeDestination}
+        value={valueTypeDestination}
       />
       <BoxAttribute
         direction="column"

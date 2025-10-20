@@ -7,6 +7,7 @@ const mapAddMoneyDestinationEntityToApi = (
     abbreviatedName: data.abbreviatedName,
     descriptionUse: data.descriptionUse,
     iconReference: data.iconReference,
+    moneyDestinationType: data.moneyDestinationType,
     rules: data.rules,
     settingRequest: data.settingRequest,
   };
