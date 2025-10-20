@@ -4,8 +4,8 @@ import { withConditionSentences } from "../withConditionSentences";
 import { ensureArrayGroupsDeep } from "../ensureArrayGroupsDeep";
 import { localizeDecision } from "../localizeDecision";
 import {
-  getConditionsByGroup,
-  mapByGroup,
+  getConditionsByGroupNew,
+  mapByGroupNew,
   parseRangeFromString,
 } from "@isettingkit/business-rules";
 import { normalizeCondition } from "../normalizeCondition";
@@ -20,8 +20,8 @@ const transformDecision = (
   return {
     ...withSentences,
     value: parseRangeFromString(withSentences.value),
-    conditionsThatEstablishesTheDecision: mapByGroup(
-      getConditionsByGroup(withSentences),
+    conditionsThatEstablishesTheDecision: mapByGroupNew(
+      getConditionsByGroupNew(withSentences),
       (condition: {
         value: string | number | IValue | string[] | undefined;
       }) => ({

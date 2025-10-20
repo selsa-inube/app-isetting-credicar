@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getConditionsByGroup } from "@isettingkit/business-rules";
+import { getConditionsByGroupNew } from "@isettingkit/business-rules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
@@ -24,7 +24,7 @@ const formatRuleDecisionsConfig = (
       );
     }
 
-    const groups = (getConditionsByGroup(decision) || {}) as Record<
+    const groups = (getConditionsByGroupNew(decision) || {}) as Record<
       string,
       unknown
     >;

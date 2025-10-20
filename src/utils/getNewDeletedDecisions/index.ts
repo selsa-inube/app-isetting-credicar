@@ -21,12 +21,14 @@ const getNewDeletedDecisions = (
         const decisionsByRule =
           decision.conditionGroups && decision.conditionGroups?.length > 0
             ? conditionGroupsData.push(
-                decision.conditionGroups.map((item) => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                decision.conditionGroups.map((item: any) => ({
                   conditionGroupId: item.ConditionGroupId,
                   transactionOperation: ETransactionOperation.DELETE,
                   conditionsThatEstablishesTheDecision:
                     item.conditionsThatEstablishesTheDecision?.map(
-                      (condition) => {
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      (condition: any) => {
                         if (condition.value !== undefined) {
                           return {
                             conditionName: condition.conditionName,

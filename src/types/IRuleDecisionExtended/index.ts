@@ -7,7 +7,8 @@ import { IEvaluationStatistics } from "../decisions/IEvaluationStatistics";
 interface IRuleDecisionExtended extends IRuleDecision {
   i18n?: ILanguage;
   language?: string;
-  conditionGroups?: IConditionGroups[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  conditionGroups?: IConditionGroups[] | any;
   decisionsByRule?: IDecisionsByRule[];
   evaluationStatistics?: IEvaluationStatistics;
   parameterizedConditions?: string[];
