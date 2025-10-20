@@ -1,10 +1,10 @@
 const creditLineLabels = {
-  titleDoesNotApply: "Líneas de crédito para los que NO aplica la línea",
-  titleCustomerProfiles: "Líneas de crédito que puede usar la línea",
-  withoutExcluding: "No has excluido ninguna línea de crédito",
-  withoutIncluding: "No has incluido ninguna línea de crédito",
+  titleDoesNotApply: "Destinos de dinero para los que NO aplica la línea",
+  titleCustomerProfiles: "Destinos de dinero pa que puede usar la línea",
+  withoutExcluding: "No has excluido ningún destinos de dinero",
+  withoutIncluding: "No has incluido ningún destinos de dinero",
   infoText:
-    "Está línea estará disponible para TODAS las líneas de credito excepto las que defina acontinuación:",
+    "Este destino de dinero estará disponible para TODOS los detinos de dinero excepto los que defina acontinuación:",
 };
 
 export { creditLineLabels };

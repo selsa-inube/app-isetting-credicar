@@ -38,14 +38,14 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const initialMethodsData = () => {
     const hasReciprocity = methodsData?.some((condition) =>
-      reciprocity.includes(condition.decisionsByRule[0].value as string),
+      reciprocity.includes(condition.value as string),
     );
 
     const hasCalculation = methodsData?.some((condition) =>
-      calculation.includes(condition.decisionsByRule[0].value as string),
+      calculation.includes(condition.value as string),
     );
     const hasFactor = methodsData?.some((condition) =>
-      factor.includes(condition.decisionsByRule[0].value as string),
+      factor.includes(condition.value as string),
     );
 
     return { hasReciprocity, hasCalculation, hasFactor };

@@ -8,7 +8,7 @@ import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConf
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
-import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
+import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
@@ -67,7 +67,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
             <InformationBox
               icon={<MdOutlineInfo />}
               appearanceIcon={EComponentAppearance.PRIMARY}
-              description={clientsSupportLineLabels.infoText}
+              description={creditLineLabels.infoText}
               boxPadding={tokens.spacing.s250}
               boxColor={EComponentAppearance.HELP}
               sizeIcon="20px"
@@ -102,7 +102,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
         </Stack>
         {showInfoModal && (
           <InfoConfigurationModal
-            title={options.clientsSupported.links.clientsSupported.label}
+            title={options.conditionsUseProduct.links.lineOfCredit.label}
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
