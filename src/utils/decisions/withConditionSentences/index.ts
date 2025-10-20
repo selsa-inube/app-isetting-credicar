@@ -2,7 +2,7 @@
 import {
   buildEsConditionSentence,
   EValueHowToSetUp,
-  getConditionsByGroup,
+  getConditionsByGroupNew,
 } from "@isettingkit/business-rules";
 import { IRuleDecision } from "@isettingkit/input";
 import { asArray } from "../asArray";
@@ -13,7 +13,7 @@ const withConditionSentences = (
   isPrimaryFirst = true,
 ): IRuleDecision => {
   const decisionClone: IRuleDecision = JSON.parse(JSON.stringify(decision));
-  const groups = (getConditionsByGroup(decisionClone) || {}) as Record<
+  const groups = (getConditionsByGroupNew(decisionClone) || {}) as Record<
     string,
     unknown
   >;

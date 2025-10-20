@@ -10,7 +10,7 @@ interface IUseBusinessRulesNewGeneral {
   remunerativerateRule: boolean;
   showAddDecisionModal: boolean;
   setShowLineModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[]>>;
+  setDecisionData: any;
   controls?: boolean;
   customMessageEmptyDecisions?: string;
   customTitleContentAddCard?: string;

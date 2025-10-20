@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { getConditionsByGroup } from "@isettingkit/business-rules";
+import { getConditionsByGroupNew } from "@isettingkit/business-rules";
 import { IRuleDecision } from "@isettingkit/input";
 import { IRulePayload } from "@ptypes/creditLines/IRulePayload";
 
@@ -68,7 +68,7 @@ const mapDecisionsToRulePayload = (params: {
     "UnknownRule";
 
   const decisionsByRule = decisions.map((d) => {
-    const groups = (getConditionsByGroup(d) || {}) as Record<string, unknown>;
+    const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
 
     const conditionGroups = Object.entries(groups).map(
       ([groupKey, rawList]) => {

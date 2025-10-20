@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useLocation, useNavigate } from "react-router-dom";
 import { IRuleDecision } from "@isettingkit/input";
 import {
@@ -168,7 +169,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [initialData]);
-
+  console.log("BusinessRulesNewHandler: ", initialData);
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
     linesData: linesData,
@@ -334,7 +335,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setLinesEditData,
       setLinesData,
     });
-  const initialDecisions: IRuleDecision[] = (linesConstructionData.rules ?? [])
+  const initialDecisions: any[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
     .flatMap((r) => {
       const rule: IRuleDecisionExtended = {

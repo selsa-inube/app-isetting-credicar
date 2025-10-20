@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IRuleDecision } from "@isettingkit/input";
 import { ILanguage } from "../i18n";
 import { IConditionGroups } from "../context/creditLinesConstruction/IConditionGroups";
@@ -7,7 +8,7 @@ import { IEvaluationStatistics } from "../decisions/IEvaluationStatistics";
 interface IRuleDecisionExtended extends IRuleDecision {
   i18n?: ILanguage;
   language?: string;
-  conditionGroups?: IConditionGroups[];
+  conditionGroups?: IConditionGroups[]| any;
   decisionsByRule?: IDecisionsByRule[];
   evaluationStatistics?: IEvaluationStatistics;
   parameterizedConditions?: string[];
