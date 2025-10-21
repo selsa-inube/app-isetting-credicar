@@ -68,10 +68,7 @@ const mapDecisionsToRulePayload = (params: {
     "UnknownRule";
 
   const decisionsByRule = decisions.map((d) => {
-    const groups = (getConditionsByGroupNew(d) || {}) as Record<
-      string,
-      unknown
-    >;
+    const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
 
     const conditionGroups = Object.entries(groups).map(
       ([groupKey, rawList]) => {

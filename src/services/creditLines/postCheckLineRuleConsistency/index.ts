@@ -24,7 +24,7 @@ const postCheckLineRuleConsistency = async (
     mapCheckLineRuleEntityToApi(data) as unknown as string[],
     credicarAxiosInstance,
   );
-
+console.log('postCheckLineRuleConsistency: ', saveData)
   return saveData;
 };
 

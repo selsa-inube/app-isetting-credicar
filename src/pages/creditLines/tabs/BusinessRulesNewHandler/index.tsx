@@ -107,7 +107,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
 
       {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
         <BusinessRulesNew
-          cardTitle={false}
           baseDecisionTemplate={localizedTemplate}
           controls={!optionDetailsCreditline}
           customMessageEmptyDecisions={customMessageEmptyDecisions}

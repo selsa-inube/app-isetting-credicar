@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  buildEsConditionSentence,
-  EValueHowToSetUp,
   getConditionsByGroupNew,
   mapByGroupNew,
   parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
+  groupsRecordToArrayNew,
+  normalizeDecisionToNewShape,
 } from "@isettingkit/business-rules";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
@@ -18,13 +17,14 @@ import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const asArray = (v: unknown): any[] =>
   Array.isArray(v)
     ? v
     : v && typeof v === "object"
       ? Object.values(v as Record<string, unknown>)
       : [];
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const normalizeCondition = (c: any) => ({
   ...c,
   listOfPossibleValues: asArray(c?.listOfPossibleValues),
@@ -39,9 +39,16 @@ const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
       asArray(list).map(normalizeCondition),
     ]),
   );
-  (cloned as any).conditionsThatEstablishesTheDecision =
-    normalizedGroups as any;
-  return cloned;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const out: IRuleDecision = {
+    ...cloned,
+    conditionGroups: groupsRecordToArrayNew(
+      normalizedGroups as Record<string, any[]>,
+    ) as any,
+  };
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  delete (out as any).conditionsThatEstablishesTheDecision;
+  return out;
 };
 
 const isIRuleDecision = (v: unknown): v is IRuleDecision =>
@@ -51,13 +58,18 @@ const toArrayConditionsDecision = (d: IRuleDecision): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(d ?? {}));
   const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
   const flat = Object.values(groups).flatMap(asArray);
-  (cloned as any).conditionsThatEstablishesTheDecision = flat;
-  return cloned;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const tmp = {
+    ...cloned,
+    conditionsThatEstablishesTheDecision: flat,
+  } as any;
+  return tmp;
 };
 
 const nameToGroupMapOf = (d: IRuleDecision) => {
   const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
   const map = new Map<string, string>();
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   Object.entries(groups).forEach(([group, list]) => {
     asArray(list).forEach((c: any) => {
       if (c?.conditionName) map.set(c.conditionName, group);
@@ -77,26 +89,32 @@ const safeSortDisplayDataSampleSwitchPlaces = (input: {
     const nameToGroup = input.nameToGroup ?? nameToGroupMapOf(original);
 
     const flatTpl = toArrayConditionsDecision(original);
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const sorted = sortDisplayDataSampleSwitchPlaces({
       decisionTemplate: flatTpl,
     }) as any;
-
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const arr = Array.isArray(sorted?.conditionsThatEstablishesTheDecision)
       ? (sorted.conditionsThatEstablishesTheDecision as any[])
       : (((flatTpl as any).conditionsThatEstablishesTheDecision as
           | any[]
           | undefined) ?? []);
-
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const regrouped: Record<string, any[]> = {};
     for (const c of arr) {
       const g = nameToGroup.get(c?.conditionName) ?? "group-primary";
       (regrouped[g] ||= []).push(c);
     }
 
-    return {
-      ...(isIRuleDecision(sorted) ? sorted : original),
-      conditionsThatEstablishesTheDecision: regrouped as any,
-    } as IRuleDecision;
+    const base: IRuleDecision = isIRuleDecision(sorted) ? sorted : original;
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const out: IRuleDecision = {
+      ...base,
+      conditionGroups: groupsRecordToArrayNew(regrouped) as any,
+    };
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    delete (out as any).conditionsThatEstablishesTheDecision;
+    return out;
   } catch (err) {
     console.warn(
       "sortDisplayDataSampleSwitchPlaces failed, returning input:",
@@ -121,7 +139,8 @@ const localizeDecision = (
   cloned.labelName = localizeLabel(raw, lang);
 
   const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
-  const localizedGroups = Object.fromEntries(
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const localizedGroupsRecord = Object.fromEntries(
     Object.entries(groups).map(([g, list]) => [
       g,
       asArray(list).map((c: any) =>
@@ -130,64 +149,15 @@ const localizeDecision = (
     ]),
   );
 
-  (cloned as any).conditionsThatEstablishesTheDecision = localizedGroups as any;
-  return cloned;
-};
-
-const normalizeHowToSet = (raw: unknown): EValueHowToSetUp => {
-  if (typeof raw === "string") {
-    const k = raw.toLowerCase();
-    if (k.includes("equal")) return EValueHowToSetUp.EQUAL;
-    if (k.includes("greater")) return EValueHowToSetUp.GREATER_THAN;
-    if (k.includes("less")) return EValueHowToSetUp.LESS_THAN;
-    if (k.includes("range") || k.includes("between"))
-      return EValueHowToSetUp.RANGE;
-    if (k.includes("multi")) return EValueHowToSetUp.LIST_OF_VALUES_MULTI;
-    if (k.includes("list_of_values") || k.includes("among") || k.includes("in"))
-      return EValueHowToSetUp.LIST_OF_VALUES;
-  }
-  return (raw as EValueHowToSetUp) ?? EValueHowToSetUp.EQUAL;
-};
-
-const withConditionSentences = (
-  decision: IRuleDecision,
-  isPrimaryFirst = true,
-): IRuleDecision => {
-  const d: IRuleDecision = JSON.parse(JSON.stringify(decision));
-  const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
-
-  const orderedKeys = [
-    ...Object.keys(groups).filter((k) => k === "group-primary"),
-    ...Object.keys(groups).filter((k) => k !== "group-primary"),
-  ];
-
-  let firstUsed = !isPrimaryFirst;
-
-  const decorated = Object.fromEntries(
-    orderedKeys.map((g) => {
-      const list = asArray(groups[g]);
-      const mapped = list.map((c: any, idx: number) => {
-        const isFirst = !firstUsed && g === "group-primary" && idx === 0;
-        if (isFirst) firstUsed = true;
-
-        const how = normalizeHowToSet(
-          c.howToSetTheCondition ?? c.valueUse ?? EValueHowToSetUp.EQUAL,
-        );
-
-        const sentence = buildEsConditionSentence({
-          label: c.labelName || "",
-          howToSet: how as any,
-          isFirst,
-        });
-
-        return { ...c, labelName: sentence };
-      });
-      return [g, mapped];
-    }),
-  );
-
-  (d as any).conditionsThatEstablishesTheDecision = decorated as any;
-  return d;
+  const out: IRuleDecision = {
+    ...cloned,
+    conditionGroups: groupsRecordToArrayNew(
+      localizedGroupsRecord as Record<string, any[]>,
+    ) as any,
+  };
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  delete (out as any).conditionsThatEstablishesTheDecision;
+  return out;
 };
 
 const transformDecision = (
@@ -195,24 +165,30 @@ const transformDecision = (
   language: "es" | "en" | undefined,
 ): IRuleDecision => {
   const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
-  const withSentences = withConditionSentences(loc);
-  return {
+  const withSentences = loc;
+
+  const mappedRecord = mapByGroupNew(
+    getConditionsByGroupNew(withSentences),
+    (condition: {
+      value: string | number | IValue | string[] | undefined;
+    }) => ({
+      ...normalizeCondition(condition),
+      labelName: localizeLabel(
+        condition as { labelName?: string; i18n?: Record<string, string> },
+        language,
+      ),
+      value: parseRangeFromString(condition.value),
+    }),
+  );
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  const out: IRuleDecision = {
     ...withSentences,
     value: parseRangeFromString(withSentences.value),
-    conditionsThatEstablishesTheDecision: mapByGroupNew(
-      getConditionsByGroupNew(withSentences),
-      (condition: {
-        value: string | number | IValue | string[] | undefined;
-      }) => ({
-        ...normalizeCondition(condition),
-        labelName: localizeLabel(
-          condition as { labelName?: string; i18n?: Record<string, string> },
-          language,
-        ),
-        value: parseRangeFromString(condition.value),
-      }),
-    ),
+    conditionGroups: groupsRecordToArrayNew(mappedRecord),
   } as any;
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  delete (out as any).conditionsThatEstablishesTheDecision;
+  return out;
 };
 
 const stableStringify = (v: unknown) => {
@@ -236,6 +212,7 @@ const stableStringify = (v: unknown) => {
 
 const keyOf = (x: IRuleDecision) =>
   String(
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     (x as any).decisionId ?? (x as any).businessRuleId ?? (x as any).id ?? "",
   );
 
@@ -266,6 +243,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const localizedTemplate = useMemo(
     () =>
       ensureArrayGroupsDeep(
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         localizeDecision(decisionTemplate as any, language),
       ),
     [decisionTemplate, language],
@@ -324,13 +302,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       string,
       unknown
     >;
-    return Object.values(groups)
-      .flatMap(asArray)
-      .map((c: any) => ({
-        id: c.conditionName,
-        label: localizeLabel(c, language),
-        value: c.conditionName,
-      }));
+    return (
+      Object.values(groups)
+        .flatMap(asArray)
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        .map((c: any) => ({
+          id: c.conditionName,
+          label: localizeLabel(c, language),
+          value: c.conditionName,
+        }))
+    );
   }, [localizedTemplate, language]);
 
   const onMultipleChoicesChange = (_name: string, valueCSV: string) => {
@@ -338,7 +319,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
 
   const openModal = (decision: IRuleDecision | null = null) => {
-    setSelectedDecision(decision);
+    setSelectedDecision(
+      decision ? normalizeDecisionToNewShape(decision) : null,
+    );
     setIsModalOpen(true);
   };
 
@@ -346,7 +329,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setIsModalOpen(false);
     setSelectedDecision(null);
   };
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
     if (remunerativerateRule) {
       setShowLineModal(true);
@@ -370,7 +353,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     const mergedGroups = Object.fromEntries(
       Object.entries(tplGroups).map(([group, tplList]) => {
         const dataList = asArray(dataGroups[group]);
-
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         const merged = asArray(tplList).map((tplItem: any) => {
           const match = dataList.find(
             (d: any) => d?.conditionName === tplItem?.conditionName,
@@ -383,7 +366,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
               match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,
           });
         });
-
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         const finalList = merged.filter((m: any) => {
           const passesSelected =
             selectedIds.size === 0 || selectedIds.has(m.conditionName);
@@ -401,13 +384,17 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       : base.decisionId && !usedIds.has(base.decisionId)
         ? base.decisionId
         : nextDecisionLabel(usedIds);
-
     const newDecision: IRuleDecision = {
       ...base,
       decisionId: decisionIdForNew,
       labelName: localizeLabel(base, language),
-      conditionsThatEstablishesTheDecision: mergedGroups as any,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      conditionGroups: groupsRecordToArrayNew(
+        mergedGroups as Record<string, any[]>,
+      ),
     };
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    delete (newDecision as any).conditionsThatEstablishesTheDecision;
 
     const decisionWithSentences = transformDecision(newDecision, language);
 
@@ -444,6 +431,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     const filteredEntries = Object.entries(tplGroups).reduce(
       (acc, [group, list]) => {
         const kept = asArray(list).filter(
+          /* eslint-disable @typescript-eslint/no-explicit-any */
           (c: any) =>
             (selectedIds.size === 0 || selectedIds.has(c.conditionName)) &&
             !removedConditionNames.has(c.conditionName) &&
@@ -452,20 +440,25 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         if (kept.length > 0) acc.push([group, kept]);
         return acc;
       },
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       [] as [string, any[]][],
     );
 
     const filtered = Object.fromEntries(filteredEntries);
 
-    const withFiltered = {
+    const withFiltered: IRuleDecision = {
       ...tpl,
-      labelName: localizeLabel(tpl, language),
-      conditionsThatEstablishesTheDecision: filtered,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      labelName: localizeLabel(tpl as any, language),
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      conditionGroups: groupsRecordToArrayNew(
+        filtered as Record<string, any[]>,
+      ) as any,
     };
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    delete (withFiltered as any).conditionsThatEstablishesTheDecision;
 
-    return withConditionSentences(
-      ensureArrayGroupsDeep(withFiltered as unknown as IRuleDecision),
-    );
+    return ensureArrayGroupsDeep(withFiltered);
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(() => {
@@ -485,12 +478,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     const regrouped = safeSorted.map((dec, idx) => {
       const arr = Array.isArray(
+        /* eslint-disable @typescript-eslint/no-explicit-any */
         (dec as any).conditionsThatEstablishesTheDecision,
       )
-        ? ((dec as any).conditionsThatEstablishesTheDecision as any[])
+        ? /* eslint-disable @typescript-eslint/no-explicit-any */
+          ((dec as any).conditionsThatEstablishesTheDecision as any[])
         : [];
       const map = prepared[idx]?.map ?? new Map<string, string>();
-
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       const byGroup: Record<string, any[]> = {};
       for (const c of arr) {
         const g = map.get(c?.conditionName) ?? "group-primary";
@@ -498,11 +493,15 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       }
 
       const src = prepared[idx]?.original ?? {};
-      return {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      const out: IRuleDecision = {
         ...src,
         ...dec,
-        conditionsThatEstablishesTheDecision: byGroup as any,
-      } as IRuleDecision;
+        conditionGroups: groupsRecordToArrayNew(byGroup),
+      } as any;
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      delete (out as any).conditionsThatEstablishesTheDecision;
+      return out;
     });
 
     return regrouped;
@@ -515,7 +514,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     () => makeIdExtractor(() => renderedListRef.current),
     [],
   );
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   const deleteDecision = (...args: any[]) => {
     const id = extractId(...args);
     if (!id) return;
@@ -524,8 +523,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   const responseForBackend = useMemo(() => {
     const ruleNameFromTemplate =
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       (decisionTemplate as any)?.ruleName ||
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       (decisionTemplate as any)?.businessRuleName ||
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       (decisionTemplate as any)?.businessRuleId ||
       undefined;
 
@@ -549,9 +551,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   }, [decisionsSorted]);
 
   const optionDetailsCreditline =
-    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
-      ? true
-      : false;
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL;
 
   const message = optionDetailsCreditline ? "" : newBusinessRulesLabels.before;
 
