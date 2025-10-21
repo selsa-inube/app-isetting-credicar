@@ -29,10 +29,10 @@ const transformationDecisions = (
   } = ruleMeta;
 
   return payload.decisionsByRule
-    ? payload.decisionsByRule?.map((decision, index) => {
+    ? payload.decisionsByRule?.map((decision) => {
         const groupedConditions: Record<string, ICondition[]> = {};
-        decision.conditionGroups?.forEach((group) => {
-          const groupId = group.conditionGroupId ?? `Group-${index + 1}`;
+        decision.conditionGroups?.forEach((group, index) => {
+          const groupId = group.ConditionGroupId ?? `Group-${index + 1}`;
           groupedConditions[groupId as string] =
             group.conditionsThatEstablishesTheDecision.map((c) => {
               const condMeta: IConditionMeta =
