@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
@@ -53,7 +52,12 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   ) => {
     const isEditing = selectedDecision !== null;
     const updatedConditionGroups = decisionTemplate.conditionGroups?.map(
-      (templateGroup: { conditionsThatEstablishesTheDecision: any; conditionGroupId: any; }) => {
+      (templateGroup: {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        conditionsThatEstablishesTheDecision: any;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        conditionGroupId: any;
+      }) => {
         const updatedConditions =
           templateGroup.conditionsThatEstablishesTheDecision;
 

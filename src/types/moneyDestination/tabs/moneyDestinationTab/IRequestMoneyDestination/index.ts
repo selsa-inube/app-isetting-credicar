@@ -4,6 +4,7 @@ import { ISettingRequest } from "@ptypes/ISettingRequest";
 interface IRequestMoneyDestination {
   abbreviatedName?: string;
   descriptionUse?: string;
+  moneyDestinationType?: string;
   iconReference?: string;
   rules?: IRuleDecision[];
   moneyDestinationId?: string;

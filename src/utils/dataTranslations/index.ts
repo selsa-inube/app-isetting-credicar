@@ -30,6 +30,7 @@ const dataTranslations: Record<string, string> = {
   net: "Neto",
   Sunday: "Domingo",
   Monday: "Lunes",
+  LastDayOfTheMonth: "Último día del mes",
   Tuesday: "Martes",
   Wednesday: "Miércoles",
   Thursday: "Jueves",

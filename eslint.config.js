@@ -44,6 +44,7 @@ export default tseslint.config({
     "react-hooks/rules-of-hooks": "off",
     "react-hooks/exhaustive-deps": "off",
     "@typescript-eslint/prefer-optional-chain": "off",
+    "@typescript-eslint/no-redundant-type-constituents": "off",
     "react-refresh/only-export-components": [
       "warn",
       { allowConstantExport: true },

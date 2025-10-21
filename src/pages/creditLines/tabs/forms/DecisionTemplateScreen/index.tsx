@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Stack } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
+import { useDecisionTemplate } from "@hooks/creditLine/useDecisionTemplate";
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { BusinessRulesNewHandler } from "@pages/creditLines/tabs/BusinessRulesNewHandler";
 import { LineInitiatedModal } from "@pages/creditLines/tabs/creditLinesTab/lineInitiatedModal";
@@ -16,7 +17,6 @@ import { tokens } from "@design/tokens";
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 import { portalId } from "@config/portalId";
 import { decisionTemplateConfig } from "@config/decisions/decisionTemplateGeneric";
-import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { remunerativeRateLabels } from "@config/creditLines/creditLinesTab/generic/remunerativeRateLabels";
 import { IDecisionTemplateScreen } from "@ptypes/decisions/IDecisionTemplateScreen";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -59,25 +59,16 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
   } = useConfigurationLines({ templateKey });
 
   const { appData } = useContext(AuthAndPortalData);
-  const [showLineModal, setShowLineModal] = useState<boolean>(false);
-  const [showAddDecisionModal, setShowAddDecisionModal] =
-    useState<boolean>(false);
 
-  const handleGoBack = () => {
-    setShowLineModal(false);
-  };
-
-  const handleGoContinue = () => {
-    setShowAddDecisionModal(true);
-  };
-
-  const formId = `credit-lines/${templateKey}`;
-
-  const ruleLabel = `${ruleData.ruleName}`;
-  const information = infoRulesMessage(lineTypeDecision);
-  const message = String(
-    information[ruleLabel as keyof typeof information] || information.Default,
-  );
+  const {
+    formId,
+    message,
+    showLineModal,
+    showAddDecisionModal,
+    setShowLineModal,
+    handleGoBack,
+    handleGoContinue,
+  } = useDecisionTemplate({ templateKey, ruleData, lineTypeDecision });
 
   return (
     <>

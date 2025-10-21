@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
@@ -22,12 +21,14 @@ const getNewDeletedDecisions = (
         const decisionsByRule =
           decision.conditionGroups && decision.conditionGroups?.length > 0
             ? conditionGroupsData.push(
-                decision.conditionGroups.map((item: { ConditionGroupId: any; conditionsThatEstablishesTheDecision: { map: (arg0: (condition: { value: undefined; conditionName: any; }) => { conditionName: any; value: never; transactionOperation: ETransactionOperation; } | undefined) => IConditionsTheDecision[]; }; }) => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                decision.conditionGroups.map((item: any) => ({
                   conditionGroupId: item.ConditionGroupId,
                   transactionOperation: ETransactionOperation.DELETE,
                   conditionsThatEstablishesTheDecision:
                     item.conditionsThatEstablishesTheDecision?.map(
-                      (condition: { value: undefined; conditionName: any; }) => {
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      (condition: any) => {
                         if (condition.value !== undefined) {
                           return {
                             conditionName: condition.conditionName,
