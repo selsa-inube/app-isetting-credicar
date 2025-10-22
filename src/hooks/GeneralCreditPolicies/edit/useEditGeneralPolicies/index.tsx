@@ -30,6 +30,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     contributionsData,
     incomeData,
     scoreModelsData,
+    minimumIncomeData,
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
@@ -99,6 +100,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     ),
   );
 
+  const normalizedMinimumIncome = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(minimumIncomeData),
+  );
+
   const prevContributionsRef = useRef<IRules[]>([]);
   prevContributionsRef.current = normalizedContributions ?? [];
 
@@ -118,6 +123,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     newDecisions,
     showReciprocity,
     showFactor,
+    minimumIncomePercentage,
+    setMinimumIncomePercentage,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
@@ -301,6 +308,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     filteredTabs.contributionsPortfolio &&
     isSelected === filteredTabs.contributionsPortfolio.id;
 
+  const showMinimumIncome =
+    filteredTabs.minimumIncomePercentage &&
+    isSelected === filteredTabs.minimumIncomePercentage.id;
+
   const showIncomePort =
     filteredTabs.incomePortfolio &&
     isSelected === filteredTabs.incomePortfolio.id;
@@ -310,36 +321,44 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const heightContPageContribut =
     contributionsPortfolio.length === 0 ? "58vh" : "auto";
+
+  const heightContPageMinimum =
+    minimumIncomePercentage.length === 0 ? "58vh" : "auto";
+
   const heightContPageIncome = incomePortfolio.length === 0 ? "58vh" : "auto";
   const heightContPageScoreModels = scoreModels.length === 0 ? "58vh" : "auto";
 
   return {
-    formValues,
-    initialDecisionsGenData,
-    decisionsGeneralRef,
-    isSelected,
-    saveData,
-    showRequestProcessModal,
-    smallScreen,
     contributionsPortfolio,
-    showDateModal,
-    isCurrentFormValid,
-    incomePortfolio,
-    scoreModels,
-    filteredTabs,
-    showDecisionsGeneral,
-    showIncomePort,
-    showContributions,
-    showScoreModels,
-    showGoBackModal,
     dateDecisions,
+    decisionsGeneralRef,
+    filteredTabs,
+    formValues,
+    heightContPageContribut,
+    heightContPageIncome,
+    heightContPageMinimum,
+    heightContPageScoreModels,
+    incomePortfolio,
+    initialDecisionsGenData,
+    isCurrentFormValid,
+    isSelected,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
-    heightContPageContribut,
-    heightContPageIncome,
+    normalizedMinimumIncome,
+    saveData,
+    scoreModels,
+    minimumIncomePercentage,
+    showContributions,
+    showDateModal,
+    showDecisionsGeneral,
+    showGoBackModal,
+    showIncomePort,
     showInfoModal,
-    heightContPageScoreModels,
+    showMinimumIncome,
+    showRequestProcessModal,
+    showScoreModels,
+    smallScreen,
     handleToggleInfoModal,
     handleOpenModal,
     setShowReciprocity,
@@ -354,6 +373,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     setIncomePortfolio,
     setScoreModels,
     setContributionsPortfolio,
+    setMinimumIncomePercentage,
     handleReset,
     setIsCurrentFormValid,
     handleTabChange,

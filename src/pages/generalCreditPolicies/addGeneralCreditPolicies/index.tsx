@@ -22,6 +22,7 @@ const AddGenCreditPolicies = () => {
     incomePortfolio,
     formValid,
     scoreModels,
+    minimumIncomePercentage,
     showModal,
     showRequestProcessModal,
     dateVerification,
@@ -33,6 +34,7 @@ const AddGenCreditPolicies = () => {
     handleSubmitClick,
     setShowRequestProcessModal,
     setScoreModels,
+    setMinimumIncomePercentage,
     setCurrentStep,
     setIncomePortfolio,
     setContributionsPortfolio,
@@ -98,6 +100,8 @@ const AddGenCreditPolicies = () => {
       setIncomePortfolio={setIncomePortfolio}
       scoreModels={scoreModels}
       setScoreModels={setScoreModels}
+      minimumIncomePercentage={minimumIncomePercentage}
+      setMinimumIncomePercentage={setMinimumIncomePercentage}
       setCurrentStep={setCurrentStep}
       showModal={showModal}
       onCloseRequestStatus={handleCloseRequestStatus}

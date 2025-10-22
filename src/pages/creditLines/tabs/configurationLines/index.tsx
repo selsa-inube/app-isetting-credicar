@@ -1,49 +1,67 @@
-import {
-  DropdownMenuContainer,
-  IDropdownMenuGroup,
-} from "@isettingkit/business-rules";
+import { DropdownMenuContainer } from "@isettingkit/business-rules";
 import { Outlet, useLocation } from "react-router-dom";
-import { Grid, Stack } from "@inubekit/inubekit";
+import { Grid, Spinner, Stack, Text } from "@inubekit/inubekit";
 import { useConfigurationInitial } from "@hooks/creditLine/configurationLines/useConfigurationInitial";
 import { useGroupOptions } from "@hooks/creditLine/configurationLines/useGroupOptions";
 import { EComponentAppearance } from "@enum/appearances";
+import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
+import { loadingLabels } from "@config/loadingLabels";
 import { StyledDropdownMenuContainer } from "./styles";
 
 const ConfigurationLines = () => {
   const location = useLocation();
   const { data, option } = location.state ?? {};
 
-  const { showDecision, modalData } = useConfigurationInitial({ data, option });
+  const { showDecision, modalData, loadingAllRules } = useConfigurationInitial({
+    data,
+    option,
+  });
 
-  const { groups } = useGroupOptions();
+  const { groups, optionsAllRules } = useGroupOptions();
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
-      <Grid alignContent="unset" templateColumns="auto 1fr">
-        <BoxContainer
-          borderColor={EComponentAppearance.GRAY}
-          boxSizing="border-box"
+      {loadingAllRules && optionsAllRules.length === 0 ? (
+        <Stack
+          alignItems="center"
+          justifyContent="center"
           direction="column"
-          height="calc(100vh - 50px)"
-          overflowY="auto"
-          width="334px"
+          width="100%"
+          height="100%"
+          gap={tokens.spacing.s200}
         >
-          <Stack direction="column" height="100%">
-            <StyledDropdownMenuContainer>
-              <DropdownMenuContainer
-                defaultOpenId="lineNamesAndDescriptions"
-                groups={groups as unknown as IDropdownMenuGroup[]}
-              />
-            </StyledDropdownMenuContainer>
-          </Stack>
-        </BoxContainer>
-
-        <Stack direction="column">
-          <Outlet />
+          <Spinner size="large" />
+          <Text type="title" size="medium" textAlign="center">
+            {loadingLabels.loading}
+          </Text>
         </Stack>
-      </Grid>
+      ) : (
+        <Grid alignContent="unset" templateColumns="auto 1fr">
+          <BoxContainer
+            borderColor={EComponentAppearance.GRAY}
+            boxSizing="border-box"
+            direction="column"
+            height="calc(100vh - 50px)"
+            overflowY="auto"
+            width="334px"
+          >
+            <Stack direction="column" height="100%">
+              <StyledDropdownMenuContainer>
+                <DropdownMenuContainer
+                  defaultOpenId="lineNamesAndDescriptions"
+                  groups={groups}
+                />
+              </StyledDropdownMenuContainer>
+            </Stack>
+          </BoxContainer>
+
+          <Stack direction="column">
+            <Outlet />
+          </Stack>
+        </Grid>
+      )}
       {showDecision && (
         <DecisionModal
           portalId={portalId}

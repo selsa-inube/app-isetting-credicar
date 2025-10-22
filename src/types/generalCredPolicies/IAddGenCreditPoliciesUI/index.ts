@@ -26,11 +26,14 @@ interface IAddGenCreditPoliciesUI {
   dateVerification: IDateVerification;
   modalData: IModalData;
   showDecision: boolean;
+  minimumIncomePercentage: IRuleDecision[];
+  setMinimumIncomePercentage: React.Dispatch<
+    React.SetStateAction<IRuleDecision[]>
+  >;
   onOpenModal: () => void;
   setDateVerification: React.Dispatch<
     React.SetStateAction<IDateVerification | undefined>
   >;
-
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
   onFinishForm: () => void;

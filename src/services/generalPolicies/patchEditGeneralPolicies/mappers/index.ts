@@ -14,7 +14,7 @@ const mapEditGeneralPoliciesToApi = (
       conditionGroups: decision.conditionGroups
         ? decision.conditionGroups.map((decisionGroup: IConditionGroups) => ({
             ...decisionGroup,
-            conditionGroupId: decisionGroup.ConditionGroupId,
+            conditionGroupId: decisionGroup.conditionGroupId,
             transactionOperation: decisionGroup.transactionOperation,
             conditionsThatEstablishesTheDecision:
               decision.conditionsThatEstablishesTheDecision

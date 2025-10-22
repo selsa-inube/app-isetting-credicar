@@ -21,6 +21,7 @@ const useVerificationForm = (props: IUseVerificationForm) => {
   const contributionsPortf = updatedData.contributionsPortfolio.values;
   const incomePortfolio = updatedData.incomePortfolio.values;
   const scoreModels = updatedData.scoreModels.values;
+  const minimumIncome = updatedData.minimumIncomePercentage.values;
 
   const steps = addGenCredPoliciesSteps.filter((step) => {
     if (step.name.toLowerCase() === "verificación") return false;
@@ -30,6 +31,8 @@ const useVerificationForm = (props: IUseVerificationForm) => {
     if (incomePortfolio.length === 0 && step.id === 3) return false;
 
     if (scoreModels.length === 0 && step.id === 4) return false;
+
+    if (minimumIncome.length === 0 && step.id === 5) return false;
 
     return true;
   });

@@ -11,6 +11,8 @@ import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { EComponentAppearance } from "@enum/appearances";
 import { ENameRules } from "@enum/nameRules";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
+import { decisionMinimumIncomePercentage } from "@config/decisions/decisionMinimumIncomePercentage";
+import { minimumIncomeLabels } from "@config/generalCreditPolicies/assisted/minimumIncomeLabels";
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
 import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
 import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
@@ -37,18 +39,22 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     formValues,
     incomePortfolio,
     scoreModels,
+    minimumIncomePercentage,
     filteredTabsConfig,
     initialDecisionsData,
     showDecisionsGeneral,
     showIncomePort,
     showContributions,
     showScoreModels,
+    showMinimumIncome,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
+    normalizedMinimumIncome,
     heightContPageContribut,
     heightContPageIncome,
     heightContPageScoreModels,
+    heightContPageMinimum,
     modalData,
     showDecision,
     setShowFactor,
@@ -56,6 +62,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     onToggleDateModal,
     setIncomePortfolio,
     setScoreModels,
+    setMinimumIncomePercentage,
     setContributionsPortfolio,
     onTabChange,
     onReset,
@@ -168,6 +175,30 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               editDataOption
               normalizeEvaluateRuleData={normalizedScoreModels}
               heightContentPage={heightContPageScoreModels}
+              bottomAddButton="80px"
+            />
+          )}
+          {showMinimumIncome && (
+            <DecisionsForm
+              deleteModal={deleteModal}
+              textValuesBusinessRules={textValuesBusinessRules}
+              decisionTemplateConfig={decisionMinimumIncomePercentage}
+              onButtonClick={onToggleDateModal}
+              onPreviousStep={onReset}
+              initialValues={minimumIncomePercentage}
+              setDecisions={setMinimumIncomePercentage}
+              revertModalDisplayData={revertModalDisplayData}
+              labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
+              nameRule=""
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+              titleContentAddCard={minimumIncomeLabels.titleContentAddCard}
+              messageEmptyDecisions={
+                minimumIncomeLabels.messageEmptyDecisions as unknown as string
+              }
+              disabledButton={minimumIncomePercentage.length === 0}
+              editDataOption
+              normalizeEvaluateRuleData={normalizedMinimumIncome}
+              heightContentPage={heightContPageMinimum}
               bottomAddButton="80px"
             />
           )}

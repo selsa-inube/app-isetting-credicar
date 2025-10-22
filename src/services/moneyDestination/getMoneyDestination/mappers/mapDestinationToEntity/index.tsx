@@ -20,6 +20,7 @@ const mapMoneyDestinationToEntity = (
     name: String(data.abbreviatedName),
     typeDestination: String(data.typeDestination),
     creditLine: String(data.creditLine),
+    moneyDestinationType: String(data.moneyDestinationType),
   };
 
   return business;

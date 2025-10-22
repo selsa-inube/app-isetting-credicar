@@ -20,6 +20,7 @@ const useGeneralCreditPolicies = () => {
   const {
     contributionsData,
     incomeData,
+    minimumIncomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
@@ -177,6 +178,7 @@ const useGeneralCreditPolicies = () => {
     showrequestTab,
     policiesTabs,
     contributionsData,
+    minimumIncomeData,
     incomeData,
     scoreModelsData,
     methodsData,

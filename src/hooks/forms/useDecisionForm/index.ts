@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
+import { ENameRules } from "@enum/nameRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 
 const useDecisionForm = (props: IUseDecisionForm) => {
   const {
@@ -35,6 +38,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   );
 
   const [initialDecisions] = useState<IRuleDecision[]>(initialValues);
+  const { appData } = useContext(AuthAndPortalData);
 
   const handleOpenModal = () => {
     setSelectedDecision(null);
@@ -52,20 +56,24 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   ) => {
     const isEditing = selectedDecision !== null;
     const updatedConditionGroups = decisionTemplate.conditionGroups?.map(
-      (templateGroup: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        conditionsThatEstablishesTheDecision: any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        conditionGroupId: any;
-      }) => {
+      (templateGroup: IConditionGroups) => {
         const updatedConditions =
-          templateGroup.conditionsThatEstablishesTheDecision;
+          templateGroup?.conditionsThatEstablishesTheDecision?.map((group) => ({
+            ...group,
+            conditionName: group.conditionName,
+            value:
+              group.conditionName === "BusinessUnit"
+                ? appData.businessUnit.publicCode
+                : group.value,
+          }));
 
-        return {
-          ...templateGroup,
-          conditionGroupId: templateGroup.conditionGroupId || "",
-          conditionsThatEstablishesTheDecision: updatedConditions,
-        };
+        return [
+          {
+            ...templateGroup,
+            conditionGroupId: templateGroup.conditionGroupId || "",
+            conditionsThatEstablishesTheDecision: updatedConditions,
+          },
+        ];
       },
     );
 
@@ -85,6 +93,34 @@ const useDecisionForm = (props: IUseDecisionForm) => {
         : `Decisión ${decisions.length + 1}`,
     };
 
+    const getUpdatedConditionGroups = () => {
+      const existingConditions =
+        dataDecision?.conditionGroups?.conditionsThatEstablishesTheDecision ||
+        [];
+
+      const businessUnitCondition = {
+        conditionDataType: "Alphabetical",
+        conditionName: "BusinessUnit",
+        descriptionUse: "Business Unit",
+        hidden: true,
+        howToSetTheCondition: "EqualTo",
+        labelName: "Business Unit",
+        value: appData.businessUnit.publicCode,
+      };
+
+      const updatedConditions =
+        dataDecision.ruleName === ENameRules.SCORE_MODELS
+          ? [...existingConditions, businessUnitCondition]
+          : existingConditions;
+
+      return {
+        ...dataDecision.conditionGroups,
+        conditionsThatEstablishesTheDecision: updatedConditions,
+      };
+    };
+
+    const updatedConditionGroupsForDecision = getUpdatedConditionGroups();
+
     const newDecision = isEditing
       ? (revertModalDisplayData(
           dataDecision,
@@ -94,6 +130,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
           ...dataDecision,
           decisionId: `Decisión ${decisions.length + 1}`,
           decisionsByRule: [decisionsByRuleData],
+          conditionGroups: [updatedConditionGroupsForDecision],
         };
 
     const updatedDecisions = isEditing

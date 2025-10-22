@@ -169,7 +169,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [initialData]);
-  console.log("BusinessRulesNewHandler: ", initialData);
+
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
     linesData: linesData,

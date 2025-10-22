@@ -4,6 +4,7 @@ import { RenderDecisionsGenVerification } from "../decisionsGenVerification";
 import { RenderContributionsVerification } from "../contributionsPortfVerification";
 import { RenderIncomeVerification } from "../incomePortfVerification";
 import { RendersCoreModelsVerification } from "../scoreModelsVerification";
+import { RendersMinimumIncomeVerification } from "../minimumIncomeVerification";
 
 const VerificationBoxes = (props: IVerificationBoxes) => {
   const { updatedData, stepKey, isMobile } = props;
@@ -19,6 +20,10 @@ const VerificationBoxes = (props: IVerificationBoxes) => {
   const showScoreModels =
     stepKey === stepKeysPolicies.SCORE_MODELS &&
     updatedData.scoreModels.values.length > 0;
+
+  const showMinimumIncome =
+    stepKey === stepKeysPolicies.MINIMUM_INCOME_PERCENTAGE &&
+    updatedData.minimumIncomePercentage.values.length > 0;
 
   return (
     <>
@@ -45,6 +50,12 @@ const VerificationBoxes = (props: IVerificationBoxes) => {
       {showScoreModels && (
         <RendersCoreModelsVerification
           values={updatedData.scoreModels.values}
+          isMobile={isMobile}
+        />
+      )}
+      {showMinimumIncome && (
+        <RendersMinimumIncomeVerification
+          values={updatedData.minimumIncomePercentage.values}
           isMobile={isMobile}
         />
       )}

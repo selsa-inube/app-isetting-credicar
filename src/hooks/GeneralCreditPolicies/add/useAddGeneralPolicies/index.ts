@@ -8,7 +8,8 @@ import { useRules } from "@hooks/GeneralCreditPolicies/useRules";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
 import { EGeneralPolicies } from "@enum/generalPolicies";
-import { addPayrollAgreementSteps } from "@config/payrollAgreement/payrollAgreementTab/assisted/steps";
+import { mediaQueryTablet } from "@config/environment";
+import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
 import { IAddGenCredPoliciesForms } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesForms";
 import { IAddGenCredPoliciesRef } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesRef";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
@@ -39,6 +40,9 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const [contributionsPortfolio, setContributionsPortfolio] = useState<
     IRuleDecision[]
   >([]);
+  const [minimumIncomePercentage, setMinimumIncomePercentage] = useState<
+    IRuleDecision[]
+  >([]);
   const [scoreModels, setScoreModels] = useState<IRuleDecision[]>([]);
   const [incomePortfolio, setIncomePortfolio] = useState<IRuleDecision[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -48,7 +52,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
 
   const navigate = useNavigate();
 
-  const smallScreen = useMediaQuery("(max-width: 990px)");
+  const smallScreen = useMediaQuery(mediaQueryTablet);
 
   const decisionsGeneralRef = useRef<FormikProps<IDecisionsGeneralEntry>>(null);
 
@@ -75,9 +79,8 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const getNextStep = (step: number) => {
     const { PaymentCapacityBasedCreditLimit, ReciprocityBasedCreditLimit } =
       getValues();
-
     if (step === 2) return PaymentCapacityBasedCreditLimit ? 3 : 4;
-    if ([3, 4].includes(step)) return step + 1;
+    if ([3, 4, 5].includes(step)) return step + 1;
     if ([1].includes(step)) {
       if (ReciprocityBasedCreditLimit) return 2;
       return PaymentCapacityBasedCreditLimit ? 3 : 4;
@@ -98,13 +101,14 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
           ? 2
           : 1,
       5: 4,
+      6: 5,
     };
 
     return map[step] || step - 1;
   };
 
   const handleNextStep = () => {
-    if (currentStep >= addPayrollAgreementSteps.length) return;
+    if (currentStep >= addGenCredPoliciesSteps.length) return;
     updateFormValues();
     setCurrentStep(getNextStep(currentStep));
   };
@@ -127,6 +131,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     contributionsPortfolio,
     incomePortfolio,
     scoreModels,
+    minimumIncomePercentage,
   });
 
   const handleSubmitClick = () => {
@@ -208,6 +213,8 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     saveData,
     dateVerification,
     showGoBackModal,
+    minimumIncomePercentage,
+    setMinimumIncomePercentage,
     handleOpenModal,
     handleCloseGoBackModal,
     handleGoBack,

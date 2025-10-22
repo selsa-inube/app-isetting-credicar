@@ -8,6 +8,7 @@ interface IUseRules {
   incomePortfolio: IRuleDecision[];
   dateVerification: IDateVerification;
   scoreModels: IRuleDecision[];
+  minimumIncomePercentage: IRuleDecision[];
 }
 
 export type { IUseRules };
