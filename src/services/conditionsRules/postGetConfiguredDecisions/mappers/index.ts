@@ -2,7 +2,6 @@ import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { IGetConfiguredDecisions } from "@ptypes/decisions/IGetConfiguredDecisions";
 import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
 import { parseIfJSON } from "@utils/parseIfJSON";
-import { formatRangeValue } from "@utils/toRenderableValue";
 
 const mapGetConfiguredEntities = (
   data: IGetConfiguredDecisions,
@@ -16,10 +15,9 @@ const mapGetConfiguredEntities = (
           typeof decision.value === "string"
             ? parseIfJSON(decision.value)
             : decision.value;
-
         return {
           ...decision,
-          value: formatRangeValue(parsed),
+          value: parsed,
           effectiveFrom: formatDateDecision(decision.effectiveFrom),
         };
       }),
