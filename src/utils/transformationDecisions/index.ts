@@ -41,10 +41,16 @@ const transformationDecisions = (
                 conditionName: c.conditionName,
                 labelName: condMeta.labelName ?? c.conditionName,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
-                conditionDataType: condMeta.conditionDataType ?? "Alphabetical",
+                conditionDataType:
+                  condMeta.conditionDataType ??
+                  c.conditionDataType ??
+                  "Alphabetical",
                 value: c.value,
                 howToSetTheCondition:
-                  condMeta.howToSetTheCondition ?? "EqualTo",
+                  condMeta.howToSetTheCondition ??
+                  c.howToSetTheCondition ??
+                  "EqualTo",
+                TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
               };
             });
