@@ -21,7 +21,7 @@ import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
-import { mediaQueryTablet } from "@config/environment";
+import { mediaQueryMobileSmall } from "@config/environment";
 import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IUseExtraordinaryCyclesForm } from "@ptypes/hooks/IUseExtraordinaryCyclesForm";
@@ -86,7 +86,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     useValuesSelect();
   const [entryDeleted, setEntryDeleted] = useState<string | number>("");
 
-  const isMobile = useMediaQuery(mediaQueryTablet);
+  const isMobile = useMediaQuery(mediaQueryMobileSmall);
 
   const [dayOptions, setDayOptions] = useState<IServerDomain[] | undefined>([]);
 
@@ -228,7 +228,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
     ? cyclespaymentLabels.sendButton
     : cyclespaymentLabels.nextButton;
 
-  const columnWidths = isMobile ? [65, 12] : [40, 15, 15, 14];
+  const columnWidths = isMobile ? [65, 12] : [30, 20, 20, 20];
 
   useEffect(() => {
     eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
