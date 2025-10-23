@@ -44,6 +44,8 @@ const ExtraordinaryPaymentCyclesFormUI = (
     setEntryDeleted,
   } = props;
 
+  console.log(entries);
+
   return (
     <BoxContainer
       direction="column"
