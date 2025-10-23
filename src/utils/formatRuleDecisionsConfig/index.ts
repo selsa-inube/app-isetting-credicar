@@ -41,7 +41,7 @@ const formatRuleDecisionsConfig = (
         };
 
         if (validateUseEdit) {
-          conditionGroup.ConditionGroupId = groupKey;
+          conditionGroup.conditionGroupId = groupKey;
         }
 
         return conditionGroup;

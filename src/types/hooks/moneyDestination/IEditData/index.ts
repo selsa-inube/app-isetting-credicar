@@ -5,5 +5,6 @@ interface IEditData {
   description: string;
   icon: string;
   id: string;
+  moneyDestinationType?: string;
 }
 export type { IEditData };

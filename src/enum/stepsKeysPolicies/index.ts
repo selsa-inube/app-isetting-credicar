@@ -9,6 +9,7 @@ const stepKeysPolicies = {
       "# de veces los ingresos como cupo total de la cartera"
     ],
   SCORE_MODELS: stepKeyByNamePolicies["Modelos de score"],
+  MINIMUM_INCOME_PERCENTAGE: stepKeyByNamePolicies["Porcentaje mínimo ingreso"],
   VERIFICATION: stepKeyByNamePolicies["Verificación"],
 };
 

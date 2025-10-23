@@ -32,7 +32,7 @@ const transformationDecisions = (
     ? payload.decisionsByRule?.map((decision) => {
         const groupedConditions: Record<string, ICondition[]> = {};
         decision.conditionGroups?.forEach((group, index) => {
-          const groupId = group.ConditionGroupId ?? `Group-${index + 1}`;
+          const groupId = group.conditionGroupId ?? `Group-${index + 1}`;
           groupedConditions[groupId as string] =
             group.conditionsThatEstablishesTheDecision.map((c) => {
               const condMeta: IConditionMeta =
@@ -41,10 +41,16 @@ const transformationDecisions = (
                 conditionName: c.conditionName,
                 labelName: condMeta.labelName ?? c.conditionName,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
-                conditionDataType: condMeta.conditionDataType ?? "Alphabetical",
+                conditionDataType:
+                  condMeta.conditionDataType ??
+                  c.conditionDataType ??
+                  "Alphabetical",
                 value: c.value,
                 howToSetTheCondition:
-                  condMeta.howToSetTheCondition ?? "EqualTo",
+                  condMeta.howToSetTheCondition ??
+                  c.howToSetTheCondition ??
+                  "EqualTo",
+                TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
               };
             });

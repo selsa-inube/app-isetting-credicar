@@ -183,13 +183,13 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   useEffect(() => {
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqual);
+        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
       } else {
         setIsDisabledButton(!formik.isValid);
       }
     };
     updateButton();
-  }, [formik.isValid, editDataOption]);
+  }, [formik.isValid, editDataOption, valuesEqual, valuesEqualBoton]);
 
   const handleChangeCheck = (name: string, values: string) => {
     const updatedData = creditLineValues.map((entry) =>

@@ -22,15 +22,18 @@ interface IEditGeneralPoliciesUI {
   decisionsGeneralReference: React.RefObject<FormikProps<IDecisionsGeneralEntry> | null>;
   incomePortfolio: IRuleDecisionExtended[];
   scoreModels: IRuleDecisionExtended[];
+  minimumIncomePercentage: IRuleDecisionExtended[];
   showDecisionsGeneral: boolean;
   showIncomePort: boolean;
   showContributions: boolean;
   showScoreModels: boolean;
+  showMinimumIncome: boolean;
   showGoBackModal: boolean;
   isRequestStatusModal: boolean;
   heightContPageContribut: string;
   heightContPageIncome: string;
   heightContPageScoreModels: string;
+  heightContPageMinimum: string;
   modalData: IModalData;
   showDecision: boolean;
   onEditedModal: () => void;
@@ -39,6 +42,7 @@ interface IEditGeneralPoliciesUI {
   onToggleDateModal: () => void;
   setIncomePortfolio: (decisions: IRuleDecisionExtended[]) => void;
   setScoreModels: (decisions: IRuleDecisionExtended[]) => void;
+  setMinimumIncomePercentage: (decisions: IRuleDecisionExtended[]) => void;
   onTabChange: (id: string) => void;
   onReset: () => void;
   setContributionsPortfolio: (decisions: IRuleDecisionExtended[]) => void;
@@ -50,6 +54,7 @@ interface IEditGeneralPoliciesUI {
   normalizedContributions?: IRuleDecisionExtended[];
   normalizedIncome?: IRuleDecisionExtended[];
   normalizedScoreModels?: IRuleDecisionExtended[];
+  normalizedMinimumIncome?: IRuleDecisionExtended[];
 }
 
 export type { IEditGeneralPoliciesUI };

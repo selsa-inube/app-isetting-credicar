@@ -9,11 +9,13 @@ interface IUseNewDecisions {
   prevScoreModelsRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   user: string;
   contributionsData?: IRuleDecisionExtended[];
+  minimumIncomeData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
   scoreModelsData?: IRuleDecisionExtended[];
   normalizedContributions?: IRuleDecisionExtended[];
   normalizedIncome?: IRuleDecisionExtended[];
   normalizedScoreModels?: IRuleDecisionExtended[];
+  normalizedMinimumIncome?: IRuleDecisionExtended[];
 }
 
 export type { IUseNewDecisions };

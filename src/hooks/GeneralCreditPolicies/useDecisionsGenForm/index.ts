@@ -145,9 +145,9 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   useEffect(() => {
     if (handleFormValidChange) {
-      handleFormValidChange(!formik.isValid);
+      handleFormValidChange(isDisabledButton);
     }
-  }, [formik.isValid, handleFormValidChange]);
+  }, [formik.isValid, isDisabledButton, handleFormValidChange]);
 
   const isMobile = useMediaQuery(mediaQueryMobile);
 

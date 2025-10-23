@@ -6,6 +6,7 @@ interface IUpdateDataGenPolicies {
   contributionsPortfolio: { isValid: boolean; values: IRuleDecision[] };
   incomePortfolio: { isValid: boolean; values: IRuleDecision[] };
   scoreModels: { isValid: boolean; values: IRuleDecision[] };
+  minimumIncomePercentage: { isValid: boolean; values: IRuleDecision[] };
 }
 
 export type { IUpdateDataGenPolicies };

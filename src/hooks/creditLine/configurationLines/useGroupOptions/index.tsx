@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { IDropdownMenuGroup } from "@isettingkit/business-rules";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { options } from "@config/creditLines/configuration/mainOptions";
 import { toLinksArray } from "@utils/toLinksArray";
@@ -7,6 +8,8 @@ import { INavigationRule } from "@ptypes/creditLines/INavigationRule";
 
 const useGroupOptions = () => {
   const { optionsAllRules } = useContext(CreditLinesConstruction);
+
+  const [groups, setGroups] = useState<IDropdownMenuGroup[]>([]);
 
   const amortizationOptions = filterNavConfiguration(
     options.AmortizationCollectionDebt.links,
@@ -43,7 +46,7 @@ const useGroupOptions = () => {
     optionsAllRules as INavigationRule[],
   );
 
-  const groups = [
+  const groupData = [
     {
       id: "lineNamesAndDescriptions",
       title: "Nombres y descripción de la línea",
@@ -93,8 +96,13 @@ const useGroupOptions = () => {
     },
   ] as const;
 
+  useEffect(() => {
+    setGroups(groupData as unknown as IDropdownMenuGroup[]);
+  }, [optionsAllRules]);
+
   return {
     groups,
+    optionsAllRules,
   };
 };
 

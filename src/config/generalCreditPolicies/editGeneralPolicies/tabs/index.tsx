@@ -19,6 +19,11 @@ const editGeneralPoliciesTabsConfig = {
     isDisabled: false,
     label: "Modelos de score",
   },
+  minimumIncomePercentage: {
+    id: "minimumIncomePercentage",
+    isDisabled: false,
+    label: "Porcentaje mínimo ingreso",
+  },
 };
 
 export { editGeneralPoliciesTabsConfig };
