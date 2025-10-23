@@ -1,9 +1,10 @@
-import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IUseEditGeneralPolicies {
   contributionsData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
   scoreModelsData?: IRuleDecisionExtended[];
+  minimumIncomeData?: IRuleDecisionExtended[];
   methodsData?: IRuleDecisionExtended[];
   additionalDebtorsData?: IRuleDecisionExtended[];
   realGuaranteesData?: IRuleDecisionExtended[];

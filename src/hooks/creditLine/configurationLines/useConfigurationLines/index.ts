@@ -169,6 +169,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [initialData]);
+
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
     linesData: linesData,

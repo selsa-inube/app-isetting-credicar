@@ -61,6 +61,12 @@ const useValidateRules = () => {
     },
   ]);
 
+  const {
+    evaluateRuleData: minimumIncomeData,
+    loading: minimumIncomeLoadding,
+    hasError: minimumIncomeError,
+  } = getRule(ENameRules.MINIMUM_INCOME_PERCENTAGE);
+
   useEffect(() => {
     setWithoutPolicies(
       (methodsError &&
@@ -68,7 +74,8 @@ const useValidateRules = () => {
         GuaranteesError &&
         contributionsError &&
         incomeError &&
-        scoreModelsError) ??
+        scoreModelsError &&
+        minimumIncomeError) ??
         false,
     );
   }, [
@@ -76,6 +83,7 @@ const useValidateRules = () => {
     additionalError,
     GuaranteesError,
     contributionsError,
+    minimumIncomeError,
     incomeError,
     scoreModelsError,
   ]);
@@ -87,7 +95,8 @@ const useValidateRules = () => {
         realGuaLoadding ||
         contributionsLoadding ||
         incomeLoadding ||
-        scoreLoadding,
+        scoreLoadding ||
+        minimumIncomeLoadding,
     );
   }, [
     methodsLoadding,
@@ -96,11 +105,13 @@ const useValidateRules = () => {
     contributionsLoadding,
     incomeLoadding,
     scoreLoadding,
+    minimumIncomeLoadding,
   ]);
 
   return {
     contributionsData,
     incomeData,
+    minimumIncomeData,
     scoreModelsData,
     methodsData,
     additionalDebtorsData,

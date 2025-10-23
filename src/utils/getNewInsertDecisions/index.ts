@@ -23,7 +23,7 @@ const getNewInsertDecisions = (
             ? conditionGroupsData.push(
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 decision.conditionGroups.map((item: any) => ({
-                  conditionGroupId: item.ConditionGroupId,
+                  conditionGroupId: item.conditionGroupId,
                   transactionOperation: ETransactionOperation.INSERT,
                   conditionsThatEstablishesTheDecision:
                     item.conditionsThatEstablishesTheDecision?.map(
@@ -44,7 +44,7 @@ const getNewInsertDecisions = (
                 conditionGroupsData.push(
                   condition.conditionGroups
                     ? condition.conditionGroups.map((item) => ({
-                        conditionGroupId: item.ConditionGroupId,
+                        conditionGroupId: item.conditionGroupId,
                         transactionOperation: ETransactionOperation.INSERT,
                         conditionsThatEstablishesTheDecision:
                           item.conditionsThatEstablishesTheDecision?.filter(

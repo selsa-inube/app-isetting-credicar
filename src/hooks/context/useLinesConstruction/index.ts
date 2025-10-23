@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguration";
-import { ECreditLines } from "@enum/creditLines";
+import { useMemo, useState } from "react";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { INavigationRule } from "@ptypes/creditLines/INavigationRule";
+import { IErrors } from "@ptypes/IErrors";
 
 const useLinesConstruction = () => {
   const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
   const [optionsAllRules, setOptionsAllRules] = useState<INavigationRule[]>([]);
+  const [errorOptionsAllRules, setErrorOptionsAllRules] = useState<IErrors>(
+    {} as IErrors,
+  );
   const [useCaseConfiguration, setUseCaseConfiguration] = useState<string>("");
   const [linesConstructionData, setLinesConstructionData] =
     useState<ILinesConstructionData>({
@@ -22,22 +24,6 @@ const useLinesConstruction = () => {
     {} as ILinesConstructionData,
   );
 
-  const ruleCatalog = ECreditLines.RULE_CATALOG;
-  const catalogAction = ECreditLines.CATALOG_ACTION;
-
-  const { optionsAllRules: rules, enumRuleData } = useEnumAllRulesConfiguration(
-    {
-      ruleCatalog,
-      catalogAction,
-    },
-  );
-
-  useEffect(() => {
-    if (enumRuleData.length > 0) {
-      setOptionsAllRules(rules as INavigationRule[]);
-    }
-  }, [enumRuleData]);
-
   const constructionContainer = useMemo(
     () => ({
       linesConstructionData,
@@ -45,6 +31,8 @@ const useLinesConstruction = () => {
       optionsAllRules,
       useCaseConfiguration,
       linesEditData,
+      errorOptionsAllRules,
+      setErrorOptionsAllRules,
       setLinesConstructionData,
       setLoadingInitial,
       setOptionsAllRules,

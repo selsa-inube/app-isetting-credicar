@@ -9,6 +9,7 @@ import { revertModalDisplayData } from "@utils/revertModalDisplayData";
 import { addLabels } from "@config/generalCreditPolicies/assisted/addLabels";
 import { crumbsAddGenCredPolicies } from "@config/generalCreditPolicies/assisted/navigation";
 import { controlsAssisted } from "@config/controlsAssisted";
+import { decisionMinimumIncomePercentage } from "@config/decisions/decisionMinimumIncomePercentage";
 import { deleteModal } from "@config/decisions/messages";
 import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
 import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
@@ -16,6 +17,7 @@ import { portalId } from "@config/portalId";
 import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
 import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
 import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
+import { minimumIncomeLabels } from "@config/generalCreditPolicies/assisted/minimumIncomeLabels";
 import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
 import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
 import { IAddGenCreditPoliciesUI } from "@ptypes/generalCredPolicies/IAddGenCreditPoliciesUI";
@@ -42,8 +44,9 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     dateVerification,
     modalData,
     showDecision,
+    minimumIncomePercentage,
+    setMinimumIncomePercentage,
     onOpenModal,
-
     setDateVerification,
     onCloseRequestStatus,
     onClosePendingReqModal,
@@ -158,6 +161,25 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 }
               />
             )}
+            {currentStep === stepKeysPolicies.MINIMUM_INCOME_PERCENTAGE && (
+              <DecisionsForm
+                deleteModal={deleteModal}
+                textValuesBusinessRules={textValuesBusinessRules}
+                decisionTemplateConfig={decisionMinimumIncomePercentage}
+                onButtonClick={onNextStep}
+                onPreviousStep={onPreviousStep}
+                initialValues={minimumIncomePercentage}
+                setDecisions={setMinimumIncomePercentage}
+                revertModalDisplayData={revertModalDisplayData}
+                labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
+                nameRule=""
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+                titleContentAddCard={minimumIncomeLabels.titleContentAddCard}
+                messageEmptyDecisions={
+                  minimumIncomeLabels.messageEmptyDecisions as unknown as string
+                }
+              />
+            )}
             {currentStep === stepKeysPolicies.VERIFICATION && (
               <VerificationForm
                 updatedData={{
@@ -177,6 +199,10 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   scoreModels: {
                     isValid: formValid,
                     values: scoreModels,
+                  },
+                  minimumIncomePercentage: {
+                    isValid: formValid,
+                    values: minimumIncomePercentage,
                   },
                 }}
                 requestSteps={requestSteps}

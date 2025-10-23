@@ -13,7 +13,6 @@ const textValuesBusinessRules = {
   none: "Ninguno",
   factsThatConditionIt: "Condiciones que lo determinan",
   criteria: "Criterios",
-  terms: "Vigencia",
 };
 
 export { textValuesBusinessRules };

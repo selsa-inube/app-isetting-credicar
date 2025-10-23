@@ -28,6 +28,12 @@ const addGenCredPoliciesSteps: IAssistedStep[] = [
   {
     id: 5,
     number: 5,
+    name: "Porcentaje mínimo ingreso",
+    description: "Porcentaje mínimo de reserva por la fuente de ingreso.",
+  },
+  {
+    id: 6,
+    number: 6,
     name: "Verificación",
     description: "Confirma la información diligenciada en pasos anteriores.",
   },

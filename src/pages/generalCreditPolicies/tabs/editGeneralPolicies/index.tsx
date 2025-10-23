@@ -18,6 +18,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     scoreModelsData,
     methodsData,
     additionalDebtorsData,
+    minimumIncomeData,
     realGuaranteesData,
   } = props;
 
@@ -32,6 +33,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     contributionsPortfolio,
     incomePortfolio,
     scoreModels,
+    minimumIncomePercentage,
     filteredTabs,
     initialDecisionsGenData,
     showDecisionsGeneral,
@@ -47,6 +49,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     heightContPageIncome,
     heightContPageScoreModels,
     showInfoModal,
+    showMinimumIncome,
+    heightContPageMinimum,
+    normalizedMinimumIncome,
     handleFinishForm,
     handleToggleInfoModal,
     setShowReciprocity,
@@ -56,6 +61,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setIncomePortfolio,
     setScoreModels,
     setContributionsPortfolio,
+    setMinimumIncomePercentage,
     handleReset,
     handleGoBack,
     handleCloseGoBackModal,
@@ -70,6 +76,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
+    minimumIncomeData,
   });
 
   const {
@@ -148,15 +155,20 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       normalizedContributions={normalizedContributions}
       normalizedIncome={normalizedIncome}
       normalizedScoreModels={normalizedScoreModels}
+      normalizedMinimumIncome={normalizedMinimumIncome}
       isRequestStatusModal={isRequestStatusModal}
       setShowReciprocity={setShowReciprocity}
       setShowFactor={setShowFactor}
       heightContPageContribut={heightContPageContribut}
       heightContPageIncome={heightContPageIncome}
+      heightContPageMinimum={heightContPageMinimum}
+      showMinimumIncome={showMinimumIncome}
       heightContPageScoreModels={heightContPageScoreModels}
       onCloseProcess={handleCloseProcess}
       modalData={modalData as IModalData}
       showDecision={showDecision}
+      minimumIncomePercentage={minimumIncomePercentage}
+      setMinimumIncomePercentage={setMinimumIncomePercentage}
     />
   );
 };

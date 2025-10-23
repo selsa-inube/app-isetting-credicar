@@ -7,6 +7,7 @@ interface IEditGeneralPolicies {
   methodsData?: IRuleDecisionExtended[];
   additionalDebtorsData?: IRuleDecisionExtended[];
   realGuaranteesData?: IRuleDecisionExtended[];
+  minimumIncomeData?: IRuleDecisionExtended[];
 }
 
 export type { IEditGeneralPolicies };

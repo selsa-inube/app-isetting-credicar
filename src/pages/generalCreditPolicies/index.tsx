@@ -13,6 +13,7 @@ const GeneralCreditPolicies = () => {
     showPoliciesTab,
     policiesTabs,
     contributionsData,
+    minimumIncomeData,
     incomeData,
     scoreModelsData,
     methodsData,
@@ -36,6 +37,7 @@ const GeneralCreditPolicies = () => {
     incomeData,
     scoreModelsData,
     methodsData,
+    minimumIncomeData,
     additionalDebtorsData,
     realGuaranteesData,
   });
@@ -51,6 +53,7 @@ const GeneralCreditPolicies = () => {
       showrequestTab={showrequestTab}
       smallScreen={smallScreen}
       contributionsData={contributionsData}
+      minimumIncomeData={minimumIncomeData}
       incomeData={incomeData}
       scoreModelsData={scoreModelsData}
       methodsData={methodsData}

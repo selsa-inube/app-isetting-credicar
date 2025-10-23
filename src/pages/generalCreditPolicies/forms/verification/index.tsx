@@ -1,6 +1,7 @@
 import { MdOutlineArrowBack } from "react-icons/md";
 import { Button, Stack } from "@inubekit/inubekit";
 
+import { DateGeneralPolicies } from "@pages/generalCreditPolicies/dateGeneralPolicies";
 import { EComponentAppearance } from "@enum/appearances";
 import { Accordion } from "@design/data/accordions";
 import { tokens } from "@design/tokens";
@@ -14,7 +15,6 @@ import { requestProcessMessage } from "@config/generalCreditPolicies/generic/req
 import { useVerificationForm } from "@hooks/GeneralCreditPolicies/useVerificationForm";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { VerificationBoxes } from "./verificationBoxes";
-import { DateGeneralPolicies } from "../../dateGeneralPolicies";
 
 const VerificationForm = (props: IVerificationForm) => {
   const {
@@ -78,16 +78,11 @@ const VerificationForm = (props: IVerificationForm) => {
         </Accordion>
       ))}
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
-        <Button
-          fullwidth={isMobile}
-          onClick={onPreviousStep}
-          appearance={EComponentAppearance.GRAY}
-        >
+        <Button onClick={onPreviousStep} appearance={EComponentAppearance.GRAY}>
           {verificationFormLabels.previous}
         </Button>
 
         <Button
-          fullwidth={isMobile}
           onClick={onToggleModal}
           appearance={EComponentAppearance.PRIMARY}
         >

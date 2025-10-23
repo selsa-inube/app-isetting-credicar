@@ -19,9 +19,11 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     formValues,
     initialGeneralData,
     contributionsData,
+    minimumIncomeData,
     incomeData,
     scoreModelsData,
     normalizedContributions,
+    normalizedMinimumIncome,
     normalizedIncome,
     normalizedScoreModels,
     prevContributionsRef,
@@ -39,6 +41,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const [incomePortfolio, setIncomePortfolio] = useState<
     IRuleDecisionExtended[]
   >([]);
+  const [minimumIncomePercentage, setMinimumIncomePercentage] = useState<
+    IRuleDecisionExtended[]
+  >(minimumIncomeData ?? []);
   const [scoreModels, setScoreModels] = useState<IRuleDecisionExtended[]>([]);
   const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
   const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
@@ -119,6 +124,12 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       setScoreModels(normalizedScoreModels);
     }
   }, [scoreModelsData]);
+
+  useEffect(() => {
+    if (normalizedMinimumIncome) {
+      setMinimumIncomePercentage(normalizedMinimumIncome);
+    }
+  }, [minimumIncomePercentage]);
 
   const newInsertValContribution = getNewInsertDecisions(
     appData.user.userAccount,
@@ -225,6 +236,8 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     newDecisions,
     showReciprocity,
     showFactor,
+    minimumIncomePercentage,
+    setMinimumIncomePercentage,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,

@@ -7,7 +7,8 @@ import { IUseEnumAllRules } from "@ptypes/hooks/IUseEnumAllRules";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 
 const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
-  const { ruleCatalog, catalogAction } = props;
+  const { optionsContext, ruleCatalog, catalogAction } = props;
+  const [loading, setLoading] = useState<boolean>(false);
   const [enumRuleData, setEnumRuleData] = useState<IDecisionData[]>([]);
 
   const { appData } = useContext(AuthAndPortalData);
@@ -17,21 +18,26 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
 
   useEffect(() => {
     const fetchEnumData = async () => {
-      try {
-        const data = await getEnumeratorAllRules(
-          rulesData,
-          ruleCatalog,
-          catalogAction,
-          appData.businessUnit.publicCode,
-        );
-        setEnumRuleData(data);
-      } catch (error) {
-        console.info(error);
-        setHasError(true);
+      if (optionsContext.length === 0) {
+        setLoading(true);
+        try {
+          const data = await getEnumeratorAllRules(
+            rulesData,
+            ruleCatalog,
+            catalogAction,
+            appData.businessUnit.publicCode,
+          );
+          setEnumRuleData(data);
+        } catch (error) {
+          console.info(error);
+          setHasError(true);
+        } finally {
+          setLoading(false);
+        }
       }
     };
     fetchEnumData();
-  }, [ruleCatalog]);
+  }, [ruleCatalog, optionsContext]);
 
   const optionsAllRules =
     enumRuleData.length > 0
@@ -43,7 +49,7 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
         }))
       : [];
 
-  return { optionsAllRules, enumRuleData, hasError };
+  return { optionsAllRules, enumRuleData, loading, hasError, setHasError };
 };
 
 export { useEnumAllRulesConfiguration };

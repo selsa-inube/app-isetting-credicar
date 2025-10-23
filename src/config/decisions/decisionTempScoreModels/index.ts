@@ -9,6 +9,7 @@ const decisionScoreModelsConfig = (
     decisionDataType,
     conditionsThatEstablishesTheDecision,
     listOfPossibleValues,
+    value,
     i18n,
   }: IRuleDecisionExtended,
   language: string,
@@ -24,13 +25,15 @@ const decisionScoreModelsConfig = (
   const decisionData = decisionDataType.toLocaleUpperCase();
   const decisionTemplate = {
     ruleName: ruleName,
-    labelName: String(i18n?.[language as keyof typeof i18n] ?? descriptionUse),
+    labelName: String(
+      i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
+    ),
     descriptionUse: String(
-      i18n?.[language as keyof typeof i18n] ?? descriptionUse,
+      i18n?.[language as keyof typeof i18n] ?? "Modelo de score",
     ),
     decisionDataType: ValueDataType[decisionData as keyof typeof ValueDataType],
     howToSetTheDecision: howToSetTheDecision,
-    value: "",
+    value: value,
     effectiveFrom: "",
     validUntil: "",
     listOfPossibleValues: listOfPossibleValues,

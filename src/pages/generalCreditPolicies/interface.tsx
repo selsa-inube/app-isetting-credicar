@@ -21,6 +21,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     showrequestTab,
     smallScreen,
     contributionsData,
+    minimumIncomeData,
     incomeData,
     scoreModelsData,
     methodsData,
@@ -112,6 +113,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                       methodsData={methodsData}
                       additionalDebtorsData={additionalDebtorsData}
                       realGuaranteesData={realGuaranteesData}
+                      minimumIncomeData={minimumIncomeData}
                     />
                   )}
                   {showrequestTab && <RequestsInProgressTab />}

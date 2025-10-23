@@ -5,6 +5,7 @@ interface IEditPoliciesTabsConfig {
   contributionsPortfolio: ITabConfig;
   incomePortfolio: ITabConfig;
   scoreModels: ITabConfig;
+  minimumIncomePercentage: ITabConfig;
 }
 
 export type { IEditPoliciesTabsConfig };

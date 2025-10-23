@@ -3,6 +3,7 @@ interface IMoneyDestinationData {
   descriptionUse: string;
   iconReference: string;
   moneyDestinationId: string;
+  moneyDestinationType: string;
   id?: string | number;
   name?: string;
   typeDestination?: string;

@@ -11,6 +11,7 @@ const useRules = (props: IUseRules) => {
     contributionsPortfolio,
     incomePortfolio,
     scoreModels,
+    minimumIncomePercentage,
   } = props;
   const decisionGeneralData = formValues.decisionsGeneral.values;
 
@@ -84,12 +85,18 @@ const useRules = (props: IUseRules) => {
     dateVerification?.date,
   );
 
+  const ruleMinimumIncome = formatRuleDecisions(
+    minimumIncomePercentage,
+    dateVerification?.date,
+  );
+
   const rules = [
     methods,
     ...rulesContributions,
     ...rulesIncomes,
     ...ruleScoremodels,
     ...realGuarantees,
+    ...ruleMinimumIncome,
   ];
 
   return {
