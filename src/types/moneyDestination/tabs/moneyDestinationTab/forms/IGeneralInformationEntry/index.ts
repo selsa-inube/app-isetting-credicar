@@ -4,6 +4,7 @@ interface IGeneralInformationEntry {
   description: string;
   creditLine: string;
   icon: string;
+  id?: string;
 }
 
 export type { IGeneralInformationEntry };

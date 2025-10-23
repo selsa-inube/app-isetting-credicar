@@ -12,6 +12,7 @@ interface IDecisionsByRule {
   ruleDataType?: string;
   howToSetTheDecision?: string;
   decisionDataType?: string;
+  modifyJustification?: string;
 }
 
 export type { IDecisionsByRule };

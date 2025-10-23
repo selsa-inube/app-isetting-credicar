@@ -5,9 +5,11 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useCreditLine } from "@hooks/moneyDestination/useCreditLine";
+import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
 import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
 import { EMoneyDestination } from "@enum/moneyDestination";
+import { ECreditLines } from "@enum/creditLines";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
 import { normalizeOptions } from "@utils/destination/normalizeOptions";
@@ -19,6 +21,7 @@ import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDes
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { II18n } from "@ptypes/i18n";
+import { IDecisionWithConditions } from "@ptypes/creditLines/IDecisionWithConditions";
 
 const useAddDestination = () => {
   const initialValues = {
@@ -149,11 +152,41 @@ const useAddDestination = () => {
     return normalizeOptions(optionsCreditLine, item.trim());
   });
 
+  const { ruleData } = useEnumRules({
+    enumDestination: EMoneyDestination.LINE_OF_CREDIT,
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const condition = ruleData.conditionsThatEstablishesTheDecision?.find(
+    (condition) => condition.conditionName === "MoneyDestination",
+  )?.conditionName;
+
   const handleSubmitClick = () => {
-    const transformDecision = creditLineDecisions.map((rule) => ({
-      effectiveFrom: formatDate(new Date()),
-      value: rule?.id,
-    }));
+    const transformDecision: IDecisionWithConditions[] =
+      creditLineDecisions.map((rule) => {
+        const decision: IDecisionWithConditions = {
+          effectiveFrom: formatDate(new Date()),
+          value: rule?.id,
+        };
+
+        if (condition) {
+          decision.conditionGroups = [
+            {
+              conditionsThatEstablishesTheDecision: [
+                {
+                  conditionName: condition,
+                  value: valueName,
+                },
+              ],
+            },
+          ];
+        }
+
+        return decision;
+      });
+
     const rules = [
       {
         ruleName: EMoneyDestination.LINE_OF_CREDIT,
