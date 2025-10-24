@@ -45,8 +45,8 @@ const transformationDecisions = (
                 labelName: condMeta.labelName ?? c.conditionName,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
                 conditionDataType:
-                  condMeta.conditionDataType ??
-                  c.conditionDataType ??
+                  condMeta.conditionDataType?.toLocaleLowerCase() ??
+                  c.conditionDataType?.toLocaleLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
                 howToSetTheCondition:
@@ -54,6 +54,7 @@ const transformationDecisions = (
                   c.howToSetTheCondition ??
                   EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
+                timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
               };
             });
