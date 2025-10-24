@@ -39,7 +39,12 @@ const ErrorPage = (props: IErrorPage) => {
 
   return (
     <StyledContainer $isTablet={matches["(max-width: 1000px)"]}>
-      <Stack direction="column" gap={tokens.spacing.s300} height="100%">
+      <Stack
+        direction="column"
+        gap={tokens.spacing.s300}
+        height="100%"
+        width="100%"
+      >
         <Stack justifyContent="left" alignItems="start">
           <StyledCompanyLogo
             src={inubeLogo}
@@ -75,7 +80,12 @@ const ErrorPage = (props: IErrorPage) => {
           alt="error"
         />
         <StyledTextErrorContainer $isTablet={matches["(max-width: 770px)"]}>
-          <Stack direction="column" gap={tokens.spacing.s150} width="100%">
+          <Stack
+            direction="column"
+            gap={tokens.spacing.s150}
+            width="100%"
+            height="100%"
+          >
             <Text
               type="title"
               size="large"
@@ -101,7 +111,12 @@ const ErrorPage = (props: IErrorPage) => {
 
           <StyledDividerContainer $isTablet={matches["(max-width: 1000px)"]} />
 
-          <Stack direction="column" gap={tokens.spacing.s150} width="100%">
+          <Stack
+            direction="column"
+            gap={tokens.spacing.s150}
+            width="100%"
+            height="100%"
+          >
             <Text
               type="title"
               size="large"
