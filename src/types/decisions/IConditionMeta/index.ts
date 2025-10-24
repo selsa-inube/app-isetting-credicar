@@ -4,6 +4,7 @@ interface IConditionMeta {
   conditionDataType?: string;
   howToSetTheCondition?: string;
   TimeUnit?: string;
+  timeUnit?: string;
   listOfPossibleValues?: string[];
 }
 export type { IConditionMeta };
