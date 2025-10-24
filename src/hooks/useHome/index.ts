@@ -21,11 +21,12 @@ const useHome = () => {
   const { logout } = useIAuth();
   const [collapse, setCollapse] = useState(false);
   const [selectedClient, setSelectedClient] = useState<string>("");
+  const [dataExists, setDataExists] = useState<boolean>(false);
 
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
 
-  const { optionsCards, loading } = useOptionsByBusinessUnit({
+  const { optionsCards, loading, hasError } = useOptionsByBusinessUnit({
     businessUnit: businessUnitSigla,
     staffPortalId: appData.portal.publicCode,
   });
@@ -78,7 +79,15 @@ const useHome = () => {
 
   const hasMultipleBusinessUnits = businessUnitsToTheStaff.length > 1;
 
-  const dataExists = optionsCards && optionsCards?.length > 0;
+  useEffect(() => {
+    if (hasError) {
+      setDataExists(false);
+    }
+
+    if (optionsCards && optionsCards?.length > 0) {
+      setDataExists(true);
+    }
+  }, [optionsCards, hasError]);
 
   const padding = !dataExists
     ? tokens.spacing.s0
