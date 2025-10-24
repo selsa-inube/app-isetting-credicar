@@ -19,7 +19,6 @@ const transformationDecisions = (
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
-
   const {
     labelName: ruleLabelName = ruleName,
     descriptionUse: ruleDescriptionUse = ruleName,
@@ -77,7 +76,6 @@ const transformationDecisions = (
           conditionsThatEstablishesTheDecision: groupedConditions,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),
         };
-
         if (decision.validUntil) {
           out.validUntil = validUntil;
         }
