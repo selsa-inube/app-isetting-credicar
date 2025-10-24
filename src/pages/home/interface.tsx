@@ -160,10 +160,9 @@ const HomeUI = (props: IHomeUI) => {
                     </>
                   ) : (
                     <BoxContainer
-                      direction="column"
                       boxSizing="border-box"
                       width="100%"
-                      height="80vh"
+                      height="100%"
                     >
                       <ErrorPage errorCode={500} onClick={onlogout} />
                     </BoxContainer>

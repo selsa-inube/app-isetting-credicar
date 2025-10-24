@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getOptionsByBusinessUnit } from "@services/staffPortal/getOptionsByBusinessUnits";
@@ -19,45 +19,64 @@ const useOptionsByBusinessUnit = (props: IUseOptionsByBusinessUnit) => {
 
   useEffect(() => {
     const fetchOptionBusinessUnitData = async () => {
-      if (staffPortalId.length > 0) {
-        setLoading(true);
-        try {
-          const businessUnitSigla = JSON.parse(businessUnit ?? "{}");
+      const businessUnitSigla = JSON.parse(businessUnit ?? "{}");
 
-          const data = await getOptionsByBusinessUnit(
-            businessUnitSigla.publicCode,
-            staffPortalId,
-            appData.user.userAccount,
-          );
-          setOptionsBusinessUnit(data);
-        } catch (error) {
-          console.info(error);
-          setHasError(true);
-        } finally {
-          setLoading(false);
-        }
+      if (!businessUnitSigla.publicCode || staffPortalId.length === 0) {
+        setOptionsBusinessUnit([]);
+        setHasError(false);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setHasError(false);
+
+      try {
+        const data = await getOptionsByBusinessUnit(
+          businessUnitSigla.publicCode,
+          staffPortalId,
+          appData.user.userAccount,
+        );
+        setOptionsBusinessUnit(data);
+      } catch (error) {
+        console.info(error);
+        setHasError(true);
+        setOptionsBusinessUnit([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchOptionBusinessUnitData();
-  }, [businessUnit, staffPortalId]);
+  }, [businessUnit, staffPortalId, appData.user.userAccount]);
 
-  const optionsCards = optionsBusinessUnit
-    .filter((option) => normalizeOptionsByPublicCode(option.publicCode))
-    .map((option) => {
-      const normalizedOption = normalizeOptionsByPublicCode(option.publicCode);
-      return {
-        id: option.publicCode,
-        publicCode: option.abbreviatedName,
-        description: option.descriptionUse,
-        icon: getIcon(option.iconReference, 22, false) ?? "",
-        url: normalizedOption?.url ?? "",
-      };
-    });
+  const optionsCards = useMemo(() => {
+    if (hasError) {
+      return [];
+    }
 
-  const descriptionOptions =
-    optionName &&
-    optionsCards.find((option) => option.publicCode === optionName);
+    const cards = optionsBusinessUnit
+      .filter((option) => normalizeOptionsByPublicCode(option.publicCode))
+      .map((option) => {
+        const normalizedOption = normalizeOptionsByPublicCode(
+          option.publicCode,
+        );
+        return {
+          id: option.publicCode,
+          publicCode: option.abbreviatedName,
+          description: option.descriptionUse,
+          icon: getIcon(option.iconReference, 22, false) ?? "",
+          url: normalizedOption?.url ?? "",
+        };
+      });
+    return cards;
+  }, [hasError, optionsBusinessUnit]);
+
+  const descriptionOptions = useMemo(() => {
+    return optionName
+      ? optionsCards.find((option) => option.publicCode === optionName)
+      : undefined;
+  }, [optionName, optionsCards]);
 
   return {
     optionsCards,

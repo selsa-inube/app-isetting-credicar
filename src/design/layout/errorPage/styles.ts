@@ -20,12 +20,13 @@ const StyledContainer = styled.div<IStyledContainer>`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  box-sizing: border-box;
   width: 100%;
-  height: 90dvh;
+  height: 100%;
   padding: ${({ $isTablet }) =>
     $isTablet
       ? `${tokens.spacing.s250} ${tokens.spacing.s250} ${tokens.spacing.s0}`
-      : `${tokens.spacing.s400} ${tokens.spacing.s1000} ${tokens.spacing.s0}`};
+      : `${tokens.spacing.s100} ${tokens.spacing.s800} ${tokens.spacing.s0}`};
 `;
 
 const StyledCompanyLogo = styled.img<IStyledCompanyLogo>`
@@ -44,7 +45,7 @@ const StyledTextErrorContainer = styled.div<IStyledTextErrorContainer>`
   display: flex;
   flex-direction: ${({ $isTablet }) => ($isTablet ? "column" : "row")};
   justify-content: space-around;
-  height: auto;
+  height: 100%;
   gap: ${tokens.spacing.s300};
   padding: ${tokens.spacing.s250};
   border-radius: ${tokens.spacing.s100};
