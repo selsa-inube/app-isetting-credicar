@@ -1,4 +1,4 @@
-import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
+import { Breadcrumbs, Spinner, Stack, Tabs, Text } from "@inubekit/inubekit";
 
 import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
 import { Title } from "@design/data/title";
@@ -9,6 +9,7 @@ import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { EComponentAppearance } from "@enum/appearances";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
+import { loadingLabels } from "@config/loadingLabels";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
 import { portalId } from "@config/portalId";
@@ -30,6 +31,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     modalData,
     showDecision,
     creditLineValues,
+    loading,
     setCreditLineValues,
     onToggleEditedModal,
     onOpenModal,
@@ -51,7 +53,12 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           : `${tokens.spacing.s300} ${tokens.spacing.s800}`
       }
     >
-      <Stack gap={tokens.spacing.s300} direction="column">
+      <Stack
+        gap={tokens.spacing.s300}
+        direction="column"
+        height="100%"
+        width="100%"
+      >
         <Stack gap={tokens.spacing.s300} direction="column">
           <Breadcrumbs crumbs={crumbsEditDestination} />
           <Title
@@ -61,31 +68,56 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
             onClick={onOpenModal}
           />
         </Stack>
-        <Stack gap={tokens.spacing.s300} direction="column">
-          <Tabs
-            tabs={editDestinationTabsConfig}
-            selectedTab={isSelected}
-            onChange={onTabChange}
-          />
-          <Stack direction="column">
-            {showGeneralInformation && (
-              <GeneralInformationForm
-                ref={generalInformationRef}
-                initialValues={initialGeneralInformationValues}
-                onFormValid={setIsCurrentFormValid}
-                onButtonClick={onToggleEditedModal}
-                editDataOption
-                onReset={onReset}
-                initialGeneralInfData={initialGeneralInfData}
-                creditLineValues={creditLineValues}
-                setCreditLineValues={setCreditLineValues}
-                showDecisionModal={false}
-                setShowDecisionModal={() => void 0}
-              />
-            )}
+
+        {loading ? (
+          <Stack
+            alignItems="center"
+            justifyContent="center"
+            direction="column"
+            width="100%"
+            height="100%"
+            gap={tokens.spacing.s200}
+          >
+            <Spinner size="large" />
+            <Text type="title" size="medium" textAlign="center">
+              {loadingLabels.loading}
+            </Text>
           </Stack>
-        </Stack>
+        ) : (
+          <>
+            <Stack
+              gap={tokens.spacing.s300}
+              direction="column"
+              height="100%"
+              width="100%"
+            >
+              <Tabs
+                tabs={editDestinationTabsConfig}
+                selectedTab={isSelected}
+                onChange={onTabChange}
+              />
+              <Stack direction="column">
+                {showGeneralInformation && (
+                  <GeneralInformationForm
+                    ref={generalInformationRef}
+                    initialValues={initialGeneralInformationValues}
+                    onFormValid={setIsCurrentFormValid}
+                    onButtonClick={onToggleEditedModal}
+                    editDataOption
+                    onReset={onReset}
+                    initialGeneralInfData={initialGeneralInfData}
+                    creditLineValues={creditLineValues}
+                    setCreditLineValues={setCreditLineValues}
+                    showDecisionModal={false}
+                    setShowDecisionModal={() => void 0}
+                  />
+                )}
+              </Stack>
+            </Stack>
+          </>
+        )}
       </Stack>
+
       {showDecision && (
         <DecisionModal
           portalId={portalId}

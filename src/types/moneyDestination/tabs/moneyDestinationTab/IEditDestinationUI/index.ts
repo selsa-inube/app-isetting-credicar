@@ -19,6 +19,7 @@ interface IEditDestinationUI {
   showRequestStatus: string | false | undefined;
   modalData: IModalData;
   showDecision: boolean;
+  loading: boolean;
   creditLineValues: IServerDomain[];
   setCreditLineValues: React.Dispatch<React.SetStateAction<IServerDomain[]>>;
   onOpenModal: () => void;

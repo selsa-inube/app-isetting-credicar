@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { EComponentAppearance } from "@enum/appearances";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
+import { messageErrorEvaluateRule } from "@utils/messageErrorRule";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
@@ -18,18 +19,25 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
     networkError,
     errorFetchRequest,
     showEditedModal,
+    hasErrorRule,
+    descriptionError,
     handleToggleEditedModal,
     handleEditedModal,
     handleCloseGoBackModal,
     handleGoBack,
     handleToggleErrorModal,
+    handleToggleErrorRuleModal,
   } = props;
 
   const [showDecision, setShowDecision] = useState(false);
   useEffect(() => {
-    const decision = showEditedModal || showGoBackModal || hasError;
+    const decision =
+      showEditedModal ||
+      showGoBackModal ||
+      hasError ||
+      (hasErrorRule !== undefined && hasErrorRule);
     setShowDecision(decision);
-  }, [showEditedModal, showGoBackModal, hasError]);
+  }, [showEditedModal, showGoBackModal, hasError, hasErrorRule]);
 
   const modal = () => {
     const initial = {
@@ -71,6 +79,18 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (hasErrorRule) {
+      return {
+        ...errorModal(messageErrorEvaluateRule(descriptionError.status)),
+        onCloseModal: handleToggleErrorRuleModal,
+        onClick: handleToggleErrorRuleModal,
         withCancelButton: false,
         withIcon: true,
         appearance: EComponentAppearance.WARNING,

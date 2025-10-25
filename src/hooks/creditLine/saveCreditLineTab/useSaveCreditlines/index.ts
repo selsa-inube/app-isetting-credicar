@@ -24,6 +24,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     setSendData,
     sendData,
     setShowModal,
+    setEntryDeleted,
     useCase,
   } = props;
 
@@ -46,6 +47,9 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     setLoadingSendData(true);
     try {
       const saveData = await postSaveRequest(userAccount, data);
+      if (setEntryDeleted) {
+        setEntryDeleted(data.configurationRequestData.id as string);
+      }
       setSaveCreditLines(saveData);
     } catch (error) {
       console.info(error);
@@ -87,8 +91,8 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     try {
       if (useCase === EUseCase.DELETE) {
         const newData = await deleteCreditLineTab(
-          businessUnits,
           userAccount,
+          businessUnits,
           requestConfiguration as IRequestCreditLine,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);

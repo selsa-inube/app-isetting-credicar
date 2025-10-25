@@ -35,6 +35,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
     hasBusinessRules,
     pageLength,
     showAddModal,
+    setEntryDeleted,
     setShowUnderConstruction,
     setShowAddModal,
     onToggleAddModal,
@@ -126,7 +127,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
                     id={portalId}
                     titles={titles}
                     entries={[]}
-                    actions={actions}
+                    actions={actions(setEntryDeleted)}
                     breakpoints={breakPoints}
                     filter={searchCreditLines}
                     loading={true}
@@ -149,6 +150,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
                       loadingCreditLines={loadingCreditLines}
                       searchCreditLines={searchCreditLines}
                       pageLength={pageLength}
+                      setEntryDeleted={setEntryDeleted}
                     />
                   )}
                 </>

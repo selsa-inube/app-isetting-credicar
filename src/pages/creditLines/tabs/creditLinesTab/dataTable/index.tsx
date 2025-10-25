@@ -18,6 +18,7 @@ const DataTable = (props: IDataTable) => {
     entries,
     loadingCreditLines,
     searchCreditLines,
+    setEntryDeleted,
     pageLength,
   } = props;
 
@@ -39,7 +40,7 @@ const DataTable = (props: IDataTable) => {
             id={portalId}
             titles={titles}
             entries={entries}
-            actions={actions}
+            actions={actions(setEntryDeleted)}
             breakpoints={breakPoints}
             filter={searchCreditLines}
             loading={loadingCreditLines}

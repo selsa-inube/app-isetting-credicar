@@ -32,23 +32,57 @@ import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecis
 
 const useEditDestination = (props: IUseEditDestination) => {
   const { data, appData } = props;
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const initialGeneralInfData = {
-    nameDestination: data.nameDestination ?? "",
-    typeDestination: data.typeDestination,
-    moneyDestinationType: data.typeDestination ?? "",
-    creditLine: data.creditLine ?? "",
-    description: data.description ?? "",
-    icon: data.icon ?? "",
-    id: data.id ?? "",
-  };
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  }, []);
+
+  const getRule = () =>
+    useEvaluateRuleByBusinessUnit({
+      businessUnits: appData.businessUnit.publicCode,
+      rulesData: {
+        ruleName: EMoneyDestination.LINE_OF_CREDIT,
+        conditions: [
+          {
+            condition: "MoneyDestination",
+            value: data.nameDestination,
+          },
+        ],
+      },
+      language: appData.language,
+    });
+  const {
+    evaluateRuleData,
+    hasError: hasErrorRule,
+    setHasError: setHasErrorRule,
+    descriptionError,
+  } = getRule();
+
+  const dataEvaluate =
+    evaluateRuleData && evaluateRuleData?.length > 0
+      ? evaluateRuleData
+          .map((item) => {
+            return item.value;
+          })
+          .join(",")
+      : "";
 
   const [isSelected, setIsSelected] = useState<string>(
     editDestinationTabsConfig.generalInformation.id,
   );
-  const [formValues, setFormValues] = useState<IGeneralInformationEntry>(
-    initialGeneralInfData,
-  );
+
+  const [formValues, setFormValues] = useState<IGeneralInformationEntry>({
+    nameDestination: data.nameDestination ?? "",
+    typeDestination: data.typeDestination,
+    creditLine: "",
+    description: data.description ?? "",
+    icon: data.icon ?? "",
+    id: data.id ?? "",
+  });
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
@@ -57,24 +91,39 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [showModal, setShowModal] = useState(false);
   const [creditDecisions, setCreditDecisions] = useState<IServerDomain[]>([]);
 
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const navigate = useNavigate();
+  const navigatePage = "/money-destination";
+
+  useEffect(() => {
+    if (dataEvaluate && !isInitialized) {
+      setFormValues((prev) => ({
+        ...prev,
+        creditLine: dataEvaluate,
+      }));
+      setIsInitialized(true);
+    }
+  }, [dataEvaluate, isInitialized]);
+
+  const initialGeneralInfData = useMemo(
+    () => ({
+      nameDestination: data.nameDestination ?? "",
+      typeDestination: data.typeDestination,
+      moneyDestinationType: data.typeDestination ?? "",
+      creditLine: dataEvaluate ?? "",
+      description: data.description ?? "",
+      icon: data.icon ?? "",
+      id: data.id ?? "",
+    }),
+    [dataEvaluate, data],
+  );
+
   const { optionsCreditLine, creditLineData } = useCreditLine();
-
-  const getRule = (ruleName: string) =>
-    useEvaluateRuleByBusinessUnit({
-      businessUnits: appData.businessUnit.publicCode,
-      rulesData: {
-        ruleName,
-      },
-      language: appData.language,
-    });
-
-  const { evaluateRuleData } = getRule(EMoneyDestination.LINE_OF_CREDIT);
 
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
   const [creditLineValues, setCreditLineValues] = useState<IServerDomain[]>([]);
-
-  const navigate = useNavigate();
 
   const conditionRule = "MoneyDestination";
 
@@ -437,6 +486,11 @@ const useEditDestination = (props: IUseEditDestination) => {
   const showGeneralInformation =
     isSelected === editDestinationTabsConfig.generalInformation.id;
 
+  const handleToggleErrorRuleModal = () => {
+    setHasErrorRule(!hasErrorRule);
+    navigate(navigatePage);
+  };
+
   return {
     formValues,
     initialGeneralInfData,
@@ -450,6 +504,10 @@ const useEditDestination = (props: IUseEditDestination) => {
     showGeneralInformation,
     showGoBackModal,
     creditLineValues,
+    loading,
+    hasErrorRule,
+    descriptionError,
+    handleToggleErrorRuleModal,
     setCreditLineValues,
     handleOpenModal,
     handleCloseGoBackModal,

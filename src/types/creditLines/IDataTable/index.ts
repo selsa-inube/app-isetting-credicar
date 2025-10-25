@@ -7,6 +7,7 @@ interface IDataTable {
   loadingCreditLines: boolean;
   searchCreditLines: string;
   pageLength: number;
+  setEntryDeleted: React.Dispatch<React.SetStateAction<string | number>>;
 }
 
 export type { IDataTable };

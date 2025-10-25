@@ -9,12 +9,15 @@ const Details = (props: IDetails) => {
   const { data } = props;
   const { appData } = useContext(AuthAndPortalData);
 
-  const { showModal, handleToggleModal } = useDetailsDestination(appData, data);
+  const { showModal, handleToggleModal, dataDetails } = useDetailsDestination(
+    appData,
+    data,
+  );
 
   return (
     <>
       <DetailsMoneyDestination
-        data={data}
+        data={dataDetails}
         showModal={showModal}
         handleToggleModal={handleToggleModal}
       />
