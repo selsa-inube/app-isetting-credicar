@@ -42,6 +42,7 @@ const EditDestination = () => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowModal,
+    setValuesLine,
   } = useEditDestination({ data, appData });
 
   const {
@@ -116,6 +117,7 @@ const EditDestination = () => {
       creditLineValues={creditLineValues}
       setCreditLineValues={setCreditLineValues}
       loading={loading}
+      setValuesLine={setValuesLine}
     />
   );
 };

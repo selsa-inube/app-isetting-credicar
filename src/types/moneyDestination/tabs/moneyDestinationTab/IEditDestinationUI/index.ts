@@ -30,6 +30,7 @@ interface IEditDestinationUI {
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
   onCloseProcess: () => void;
+  setValuesLine?: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
 export type { IEditDestinationUI };

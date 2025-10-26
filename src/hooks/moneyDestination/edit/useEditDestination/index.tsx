@@ -16,8 +16,7 @@ import { compareObjects } from "@utils/compareObjects";
 import { arraysEqualWithoutDate } from "@utils/compareDecisionsWithoutDate";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
-import { normalizeOptions } from "@utils/destination/normalizeOptions";
-import { findDecision } from "@utils/destination/findDecision";
+import { findDecisionDestination } from "@utils/findDecisionDestination";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { mediaQueryTablet } from "@config/environment";
 import { editLabels } from "@config/moneyDestination/editDestination/editLabels";
@@ -89,12 +88,11 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [showModal, setShowModal] = useState(false);
-  const [creditDecisions, setCreditDecisions] = useState<IServerDomain[]>([]);
-
   const [isInitialized, setIsInitialized] = useState(false);
 
   const navigate = useNavigate();
   const navigatePage = "/money-destination";
+  const [valuesLine, setValuesLine] = useState<string>("");
 
   useEffect(() => {
     if (dataEvaluate && !isInitialized) {
@@ -103,6 +101,7 @@ const useEditDestination = (props: IUseEditDestination) => {
         creditLine: dataEvaluate,
       }));
       setIsInitialized(true);
+      setValuesLine(dataEvaluate);
     }
   }, [dataEvaluate, isInitialized]);
 
@@ -118,7 +117,6 @@ const useEditDestination = (props: IUseEditDestination) => {
     }),
     [dataEvaluate, data],
   );
-
   const { optionsCreditLine, creditLineData } = useCreditLine();
 
   const generalInformationRef =
@@ -130,23 +128,6 @@ const useEditDestination = (props: IUseEditDestination) => {
   useEffect(() => {
     setCreditLineValues(optionsCreditLine);
   }, [creditLineData]);
-
-  const memoizedOptionsCreditLine = useMemo(
-    () => optionsCreditLine,
-    [JSON.stringify(optionsCreditLine)],
-  );
-
-  useEffect(() => {
-    const option = generalInformationRef.current?.values.creditLine
-      .split(",")
-      .map((item) => normalizeOptions(memoizedOptionsCreditLine, item.trim()))
-      .filter((item): item is IServerDomain => item !== undefined);
-
-    setCreditDecisions(option ?? []);
-  }, [
-    generalInformationRef.current?.values.creditLine,
-    memoizedOptionsCreditLine,
-  ]);
 
   const { enumDestination } = useEnumsMoneyDestination({
     businessUnits: appData.businessUnit.publicCode,
@@ -187,82 +168,95 @@ const useEditDestination = (props: IUseEditDestination) => {
 
   const currentDate = useMemo(() => formatDate(new Date()), []);
 
-  const rules = useMemo(() => {
-    const optionSelected = formValues.creditLine.split(",");
-
-    const creditLineSelected = creditDecisions.filter((option) =>
-      optionSelected?.includes(option.id),
-    );
+  const getRulesFromCreditLine = (creditLine: string) => {
+    const creditLineSelected = creditLine
+      .split(",")
+      .filter((item) => item.trim());
 
     if (!creditLineSelected || creditLineSelected.length === 0) return [];
-
     return creditLineSelected.map((rule) => ({
       ruleName: EMoneyDestination.LINE_OF_CREDIT,
       decisionsByRule: [
         {
           effectiveFrom: currentDate,
-          value: rule?.id,
+          value: rule.trim(),
         },
       ],
     }));
-  }, [
-    creditDecisions,
-    generalInformationRef.current?.values.creditLine,
-    currentDate,
-  ]);
-
+  };
   const getInsertValues = () => {
+    const currentRules = getRulesFromCreditLine(valuesLine ?? "");
+    const evaluatedRules = tranformEvaluteDecision();
+
     if (
-      !arraysEqualWithoutDate(
-        rules as IRuleDecisionExtended[],
-        tranformEvaluteDecision() as IRuleDecisionExtended[],
+      arraysEqualWithoutDate(
+        currentRules as IRuleDecisionExtended[],
+        evaluatedRules as IRuleDecisionExtended[],
       )
     ) {
-      return rules
-        .filter(
-          (decision) => !findDecision(tranformEvaluteDecision(), decision),
-        )
-        .map((decision) => {
-          const decisionsByRule = decision.decisionsByRule?.map((condition) => {
-            const data: IDecisionsByRule = {
-              effectiveFrom: condition.effectiveFrom,
-              value: condition.value,
-              transactionOperation: ETransactionOperation.INSERT,
-            };
-
-            if (conditionDestination) {
-              data.conditionGroups = [
-                {
-                  conditionsThatEstablishesTheDecision: [
-                    {
-                      conditionName: conditionDestination,
-                      value: valueName(formValues.nameDestination),
-                    },
-                  ],
-                },
-              ];
-            }
-            return data;
-          });
-
-          return {
-            modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
-            ruleName: decision.ruleName,
-            decisionsByRule: decisionsByRule,
-          };
-        });
+      return [];
     }
-    return [];
+
+    return currentRules
+      .filter((decision) => {
+        return !findDecisionDestination(
+          evaluatedRules as IRuleDecisionExtended[],
+          decision,
+        );
+      })
+      .map((decision) => {
+        const decisionsByRule = decision.decisionsByRule?.map((condition) => {
+          const data: IDecisionsByRule = {
+            effectiveFrom: condition.effectiveFrom,
+            value: condition.value,
+            transactionOperation: ETransactionOperation.INSERT,
+          };
+
+          if (conditionDestination) {
+            data.conditionGroups = [
+              {
+                conditionsThatEstablishesTheDecision: [
+                  {
+                    conditionName: conditionDestination,
+                    value: valueName(formValues.nameDestination),
+                  },
+                ],
+              },
+            ];
+          }
+          return data;
+        });
+
+        return {
+          modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
+          ruleName: decision.ruleName,
+          decisionsByRule: decisionsByRule,
+        };
+      });
   };
 
   const getDeletedValues = () => {
+    const currentRules = getRulesFromCreditLine(valuesLine ?? "");
+    const evaluatedRules = tranformEvaluteDecision();
+
     if (
-      !arraysEqualWithoutDate(
-        rules as IRuleDecisionExtended[],
-        tranformEvaluteDecision() as IRuleDecisionExtended[],
+      arraysEqualWithoutDate(
+        currentRules as IRuleDecisionExtended[],
+        evaluatedRules as IRuleDecisionExtended[],
       )
     ) {
-      return tranformEvaluteDecision().map((decision) => {
+      return [];
+    }
+
+    return evaluatedRules
+      .filter(
+        (decision) =>
+          !findDecisionDestination(
+            currentRules,
+            decision as IRuleDecisionExtended,
+          ),
+      )
+      .map((decision) => {
         const decisionsByRule = decision.decisionsByRule?.map((condition) => {
           const data: IDecisionsByRule = {
             effectiveFrom: formatDateDecision(
@@ -292,8 +286,6 @@ const useEditDestination = (props: IUseEditDestination) => {
           decisionsByRule: decisionsByRule,
         };
       });
-    }
-    return [];
   };
 
   const newDecisions = useMemo(() => {
@@ -331,11 +323,7 @@ const useEditDestination = (props: IUseEditDestination) => {
     );
 
     return mergedDecisions;
-  }, [
-    creditDecisions,
-    generalInformationRef.current?.values.creditLine,
-    evaluateRuleData,
-  ]);
+  }, [valuesLine, evaluateRuleData, conditionDestination]);
 
   const onSubmit = () => {
     const currentValues = generalInformationRef.current?.values;
@@ -507,6 +495,7 @@ const useEditDestination = (props: IUseEditDestination) => {
     loading,
     hasErrorRule,
     descriptionError,
+    setValuesLine,
     handleToggleErrorRuleModal,
     setCreditLineValues,
     handleOpenModal,

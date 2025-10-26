@@ -41,6 +41,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     onCloseRequestStatus,
     onClosePendingReqModal,
     onCloseProcess,
+    setValuesLine,
   } = props;
 
   return (
@@ -110,6 +111,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
                     setCreditLineValues={setCreditLineValues}
                     showDecisionModal={false}
                     setShowDecisionModal={() => void 0}
+                    setValuesLine={setValuesLine}
                   />
                 )}
               </Stack>

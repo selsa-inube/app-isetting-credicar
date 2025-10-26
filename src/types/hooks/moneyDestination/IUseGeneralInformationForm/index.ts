@@ -16,6 +16,7 @@ interface IUseGeneralInformationForm {
   onSubmit: ((values: IGeneralInformationEntry) => void) | undefined;
   onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined;
   initialGeneralInfData?: IGeneralInformationEntry;
+  setValuesLine?: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
 export type { IUseGeneralInformationForm };
