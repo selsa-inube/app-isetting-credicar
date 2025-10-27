@@ -6,6 +6,7 @@ interface IDecisionWithConditions {
   value: string | number | string[] | IValue | undefined;
   transactionOperation?: string;
   conditionGroups?: IConditionGroups[];
+  decisionId?: string;
 }
 
 export type { IDecisionWithConditions };
