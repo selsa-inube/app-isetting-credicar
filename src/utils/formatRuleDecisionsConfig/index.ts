@@ -3,7 +3,6 @@ import { getConditionsByGroupNew } from "@isettingkit/business-rules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { toValueString } from "../toValueString";
 
 const formatRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
@@ -36,7 +35,7 @@ const formatRuleDecisionsConfig = (
           conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
             ...condition,
             conditionName: condition?.conditionName ?? "",
-            value: toValueString(condition?.value),
+            value: condition?.value,
           })),
         };
 

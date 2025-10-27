@@ -10,41 +10,6 @@ const asArray = (v: unknown): unknown[] =>
       ? Object.values(v as Record<string, unknown>)
       : [];
 
-const toValueString = (v: unknown): string => {
-  if (v == null) return "";
-
-  if (typeof v === "string") return v;
-  if (typeof v === "number" || typeof v === "boolean") return String(v);
-
-  if (Array.isArray(v)) return v.map(toValueString).join(",");
-
-  if (typeof v === "object") {
-    const o = v as Record<string, unknown>;
-    const minRaw = o.min ?? o.from ?? o.start ?? null;
-    const maxRaw = o.max ?? o.to ?? o.end ?? null;
-
-    if (minRaw != null || maxRaw != null) {
-      const minStr =
-        typeof minRaw === "string" || typeof minRaw === "number"
-          ? String(minRaw)
-          : "";
-      const maxStr =
-        typeof maxRaw === "string" || typeof maxRaw === "number"
-          ? String(maxRaw)
-          : "";
-      return `${minStr};${maxStr}`;
-    }
-
-    try {
-      return JSON.stringify(v);
-    } catch {
-      return "";
-    }
-  }
-
-  return "";
-};
-
 const pickDate = (d: IRuleDecision, ...candidates: any[]): string => {
   for (const k of candidates) {
     const v = (d as Record<string, unknown>)?.[k];
@@ -68,7 +33,10 @@ const mapDecisionsToRulePayload = (params: {
     "UnknownRule";
 
   const decisionsByRule = decisions.map((d) => {
-    const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
+    const groups = (getConditionsByGroupNew(d) || {}) as Record<
+      string,
+      unknown
+    >;
 
     const conditionGroups = Object.entries(groups).map(
       ([groupKey, rawList]) => {
@@ -76,7 +44,7 @@ const mapDecisionsToRulePayload = (params: {
 
         const conditionsThatEstablishesTheDecision = items.map((c: any) => ({
           conditionName: c?.conditionName ?? "",
-          value: toValueString(c?.value),
+          value: c?.value,
         }));
 
         return {
@@ -90,7 +58,7 @@ const mapDecisionsToRulePayload = (params: {
       conditionGroups,
       effectiveFrom: pickDate(d, "startDate", "effectiveFrom", "validFrom"),
       validUntil: pickDate(d, "endDate", "validUntil", "expiresAt"),
-      value: toValueString(d.value),
+      value: d.value,
     } as any;
   });
 

@@ -6,7 +6,6 @@ import { localizeDecision } from "../localizeDecision";
 import {
   getConditionsByGroupNew,
   mapByGroupNew,
-  parseRangeFromString,
 } from "@isettingkit/business-rules";
 import { normalizeCondition } from "../normalizeCondition";
 import { localizeLabel } from "../localizeLabel";
@@ -19,7 +18,7 @@ const transformDecision = (
   const withSentences = withConditionSentences(loc);
   return {
     ...withSentences,
-    value: parseRangeFromString(withSentences.value),
+    value: withSentences.value,
     conditionsThatEstablishesTheDecision: mapByGroupNew(
       getConditionsByGroupNew(withSentences),
       (condition: {
@@ -30,7 +29,7 @@ const transformDecision = (
           condition as { labelName?: string; i18n?: Record<string, string> },
           language,
         ),
-        value: parseRangeFromString(condition.value),
+        value: condition.value,
       }),
     ),
   } as any;
