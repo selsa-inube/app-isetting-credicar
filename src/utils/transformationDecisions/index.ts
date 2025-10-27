@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ValueDataType } from "@isettingkit/input";
+import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { ICondition } from "@ptypes/creditLines/ICondition";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { ValueDataType } from "@isettingkit/input";
-import { EValueHowToSetUp } from "@isettingkit/business-rules";
+import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 
 const generateUUID = (): string => {
   return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -14,6 +16,7 @@ const generateUUID = (): string => {
 
 const transformationDecisions = (
   payload: IRuleDecisionExtended,
+  conditionArray: IConditionTraduction[],
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
@@ -41,7 +44,10 @@ const transformationDecisions = (
                 meta?.conditionDict?.[c.conditionName] ?? {};
               return {
                 conditionName: c.conditionName,
-                labelName: condMeta.labelName ?? c.conditionName,
+                labelName: normalizeConditionTraduction(
+                  conditionArray,
+                  c.conditionName,
+                )?.label,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
                 conditionDataType:
                   condMeta.conditionDataType?.toLocaleLowerCase() ??

@@ -22,6 +22,7 @@ import { optionTitleConfiguration } from "@utils/optionTitleConfiguration";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
 import { validateEditedRules } from "@utils/validateEditedRules";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
@@ -125,6 +126,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const navigate = useNavigate();
 
   const location = useLocation();
+  const language = appData.language as ILanguage;
 
   useEffect(() => {
     setIsUpdated(false);
@@ -341,9 +343,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       const rule: IRuleDecisionExtended = {
         ...r,
       };
-      return transformationDecisions(rule);
+      return transformationDecisions(
+        rule,
+        getConditionsTraduction(ruleData, language),
+      );
     });
-  const language = appData.language as ILanguage;
 
   const newData: {
     abbreviatedName?: string;
