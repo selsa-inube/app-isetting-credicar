@@ -109,7 +109,6 @@ const useEditDestination = (props: IUseEditDestination) => {
     () => ({
       nameDestination: data.nameDestination ?? "",
       typeDestination: data.typeDestination,
-      moneyDestinationType: data.typeDestination ?? "",
       creditLine: dataEvaluate ?? "",
       description: data.description ?? "",
       icon: data.icon ?? "",
