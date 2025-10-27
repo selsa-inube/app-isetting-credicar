@@ -16,7 +16,6 @@ const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
     description: data.descriptionUse,
     icon: data.iconReference,
     typeDestination: data.typeDestination,
-    moneyDestinationType: data.moneyDestinationType,
     creditLine: data.creditLine,
   };
 

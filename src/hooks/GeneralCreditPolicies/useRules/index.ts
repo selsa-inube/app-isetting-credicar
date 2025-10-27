@@ -61,14 +61,14 @@ const useRules = (props: IUseRules) => {
     })),
   };
 
+  const additionalDebtorsValues = decisionWithoutConditions(
+    ENameRules.ADDITIONAL_DEBTORS,
+    decisionGeneralData.additionalDebtors,
+  );
+
   const realGuaranteesValues = decisionWithoutConditions(
     ENameRules.REAL_GUARANTEES,
     decisionGeneralData.realGuarantees,
-  );
-
-  const realGuarantees = formatRuleDecisions(
-    realGuaranteesValues,
-    dateVerification?.date,
   );
 
   const rulesContributions = formatRuleDecisions(
@@ -95,7 +95,8 @@ const useRules = (props: IUseRules) => {
     ...rulesContributions,
     ...rulesIncomes,
     ...ruleScoremodels,
-    ...realGuarantees,
+    ...additionalDebtorsValues,
+    ...realGuaranteesValues,
     ...ruleMinimumIncome,
   ];
 
