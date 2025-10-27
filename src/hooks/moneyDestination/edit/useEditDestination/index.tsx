@@ -156,10 +156,12 @@ const useEditDestination = (props: IUseEditDestination) => {
       const dataEvalute: IDecisionWithConditions = {
         effectiveFrom: formatDateDecision(String(decision.effectiveFrom)),
         value: decision?.value,
+        decisionId: decision.decisionId,
       };
 
       return {
         ruleName: decision.ruleName,
+        businessRuleId: decision.businessRuleId,
         decisionsByRule: [dataEvalute],
       };
     });
@@ -229,6 +231,7 @@ const useEditDestination = (props: IUseEditDestination) => {
         return {
           modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
           ruleName: decision.ruleName,
+          businessRuleId: undefined,
           decisionsByRule: decisionsByRule,
         };
       });
@@ -258,6 +261,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       .map((decision) => {
         const decisionsByRule = decision.decisionsByRule?.map((condition) => {
           const data: IDecisionsByRule = {
+            decisionId: condition.decisionId,
             effectiveFrom: formatDateDecision(
               condition.effectiveFrom as string,
             ),
@@ -282,6 +286,7 @@ const useEditDestination = (props: IUseEditDestination) => {
         return {
           modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
           ruleName: decision.ruleName,
+          businessRuleId: decision.businessRuleId,
           decisionsByRule: decisionsByRule,
         };
       });
@@ -303,7 +308,6 @@ const useEditDestination = (props: IUseEditDestination) => {
       allValues.reduce(
         (acc, decision) => {
           const rule = decision.ruleName;
-
           if (!acc[rule as string]) {
             acc[rule as string] = {
               ruleName: rule,
