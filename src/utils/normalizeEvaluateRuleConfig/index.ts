@@ -23,6 +23,7 @@ const normalizeEvaluateRuleConfig = (
             conditionName: cond.conditionName,
             howToSetTheCondition: cond.howToSetTheCondition,
             value: cond.value,
+            timeUnit: cond.timeUnit,
           })),
       })),
     })),

@@ -7,6 +7,7 @@ interface IConditionsTheDecision {
   conditionDataType?: string;
   howToSetTheCondition?: string;
   TimeUnit?: string;
+  timeUnit?: string;
 }
 
 export type { IConditionsTheDecision };

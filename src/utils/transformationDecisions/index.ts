@@ -5,6 +5,8 @@ import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
+import { ValueDataType } from "@isettingkit/input";
+import { EValueHowToSetUp } from "@isettingkit/business-rules";
 
 const generateUUID = (): string => {
   return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -20,12 +22,12 @@ const transformationDecisions = (
   const {
     labelName: ruleLabelName = ruleName,
     descriptionUse: ruleDescriptionUse = ruleName,
-    decisionDataType = decisionByRuleArray?.ruleDataType
-      ? decisionByRuleArray?.ruleDataType
-      : "Alphabetical",
+    decisionDataType = decisionByRuleArray?.ruleDataType?.toLocaleLowerCase() ??
+      decisionByRuleArray?.decisionDataType?.toLocaleLowerCase() ??
+      ValueDataType.ALPHABETICAL,
     howToSetTheDecision = decisionByRuleArray?.howToSetTheDecision
       ? decisionByRuleArray?.howToSetTheDecision
-      : "EqualTo",
+      : EValueHowToSetUp.EQUAL,
   } = ruleMeta;
 
   return payload.decisionsByRule
@@ -42,15 +44,16 @@ const transformationDecisions = (
                 labelName: condMeta.labelName ?? c.conditionName,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
                 conditionDataType:
-                  condMeta.conditionDataType ??
-                  c.conditionDataType ??
-                  "Alphabetical",
+                  condMeta.conditionDataType?.toLocaleLowerCase() ??
+                  c.conditionDataType?.toLocaleLowerCase() ??
+                  ValueDataType.ALPHABETICAL,
                 value: c.value,
                 howToSetTheCondition:
                   condMeta.howToSetTheCondition ??
                   c.howToSetTheCondition ??
-                  "EqualTo",
+                  EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
+                timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
               };
             });
@@ -66,13 +69,13 @@ const transformationDecisions = (
           labelName: ruleLabelName,
           descriptionUse: ruleDescriptionUse,
           decisionDataType,
+          ruleDataType: decisionByRuleArray?.ruleDataType,
           howToSetTheDecision,
           value: decision.value,
           effectiveFrom,
           conditionsThatEstablishesTheDecision: groupedConditions,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),
         };
-
         if (decision.validUntil) {
           out.validUntil = validUntil;
         }
