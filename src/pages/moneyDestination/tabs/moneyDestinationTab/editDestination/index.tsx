@@ -27,6 +27,10 @@ const EditDestination = () => {
     showModal,
     showGoBackModal,
     creditLineValues,
+    loading,
+    hasErrorRule,
+    descriptionError,
+    handleToggleErrorRuleModal,
     setCreditLineValues,
     handleOpenModal,
     handleCloseGoBackModal,
@@ -38,6 +42,7 @@ const EditDestination = () => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowModal,
+    setValuesLine,
   } = useEditDestination({ data, appData });
 
   const {
@@ -67,14 +72,17 @@ const EditDestination = () => {
     showGoBackModal,
     loading: loadingSendData,
     hasError,
+    hasErrorRule,
     errorData,
     networkError,
     errorFetchRequest,
     showEditedModal: showModal,
+    descriptionError,
     handleCloseGoBackModal,
     handleEditedModal,
     handleGoBack,
     handleToggleErrorModal,
+    handleToggleErrorRuleModal,
     handleToggleEditedModal,
   });
 
@@ -108,6 +116,8 @@ const EditDestination = () => {
       onToggleEditedModal={handleToggleEditedModal}
       creditLineValues={creditLineValues}
       setCreditLineValues={setCreditLineValues}
+      loading={loading}
+      setValuesLine={setValuesLine}
     />
   );
 };

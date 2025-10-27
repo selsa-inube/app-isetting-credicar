@@ -14,6 +14,7 @@ interface IGeneralInformationForm {
   onSubmit?: (values: IGeneralInformationEntry) => void;
   editDataOption?: boolean;
   initialGeneralInfData?: IGeneralInformationEntry;
+  setValuesLine?: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
 export type { IGeneralInformationForm };

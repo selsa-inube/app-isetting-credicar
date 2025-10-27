@@ -34,6 +34,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     setCreditLineValues,
     onSubmit,
     onFormValid,
+    setValuesLine,
     initialGeneralInfData,
   } = props;
 
@@ -196,6 +197,9 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       entry.id === name ? { ...entry, values } : entry,
     );
     formik.setFieldValue("creditLine", values.trim());
+    if (setValuesLine) {
+      setValuesLine(values);
+    }
     setCreditLineValues(updatedData);
   };
 

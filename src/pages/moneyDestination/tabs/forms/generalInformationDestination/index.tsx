@@ -26,6 +26,7 @@ const GeneralInformationForm = forwardRef<
       showDecisionModal,
       setShowDecisionModal,
       setCreditLineValues,
+      setValuesLine,
       loading = false,
       editDataOption = false,
     },
@@ -65,6 +66,7 @@ const GeneralInformationForm = forwardRef<
       showDecisionModal,
       setShowDecisionModal,
       setCreditLineValues,
+      setValuesLine,
     });
 
     return (
