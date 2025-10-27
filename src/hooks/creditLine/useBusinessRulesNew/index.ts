@@ -1,7 +1,6 @@
 import {
   getConditionsByGroupNew,
   mapByGroupNew,
-  parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
   groupsRecordToArrayNew,
@@ -177,13 +176,13 @@ const transformDecision = (
         condition as { labelName?: string; i18n?: Record<string, string> },
         language,
       ),
-      value: parseRangeFromString(condition.value),
+      value: condition.value,
     }),
   );
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...withSentences,
-    value: parseRangeFromString(withSentences.value),
+    value: withSentences.value,
     conditionGroups: groupsRecordToArrayNew(mappedRecord),
   } as any;
   /* eslint-disable @typescript-eslint/no-explicit-any */
