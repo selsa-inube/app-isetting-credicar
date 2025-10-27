@@ -16,6 +16,7 @@ import { dataTranslations } from "@utils/dataTranslations";
 import { getDayPayment } from "@utils/getDayPayment";
 import { transformToArray } from "@utils/transformToArray";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
+import { formatPaymentDayExtra } from "@utils/formatPaymentDayExtra";
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 import { mediaQueryMobile } from "@config/environment";
@@ -62,7 +63,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
       nameCycle: entry.abbreviatedName,
       typePayment: specialBenefitPayment[0],
-      payday: getDayPayment(entry.paymentDay),
+      payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
       numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
       laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
@@ -73,7 +74,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
       nameCycle: entry.abbreviatedName,
       typePayment: severancePay[0],
-      payday: getDayPayment(entry.paymentDay),
+      payday: formatPaymentDayExtra(entry.paymentDay),
       numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
       laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
@@ -247,7 +248,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   }, [incometype]);
 
   useEffect(() => {
-    if (generalInformationRef.current?.values) {
+    if (generalInformationRef.current) {
       setFormValues((prev) => ({
         ...prev,
         generalInformation: {
@@ -276,18 +277,16 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       return;
     }
 
-    if (generalInformationRef.current?.values) {
-      setFormValues((prev) => ({
-        ...prev,
-        generalInformation: {
-          ...prev.generalInformation,
-          values: {
-            ...prev.generalInformation.values,
-            ...generalInformationRef.current?.values,
-          },
+    setFormValues((prev) => ({
+      ...prev,
+      generalInformation: {
+        ...prev.generalInformation,
+        values: {
+          ...prev.generalInformation.values,
+          ...generalInformationRef.current?.values,
         },
-      }));
-    }
+      },
+    }));
     setIsSelected(tabId);
   };
 
@@ -333,7 +332,6 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const onSubmit = () => {
     const changedFields: {
       abbreviatedName?: string;
-      sourcesOfIncome?: string;
       applicationDaysPayroll?: string;
       numberOfDaysForReceivingTheDiscounts?: number;
       payrollForDeductionAgreementId?: string;
@@ -348,15 +346,15 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         .modifyJustification,
     };
 
-    (
-      ["abbreviatedName", "sourcesOfIncome", "applicationDaysPayroll"] as const
-    ).forEach((key) => {
-      if (formValues.generalInformation.values[key] !== initialValues[key]) {
-        changedFields[key] = formValues.generalInformation.values[key];
-      }
-    });
-
     const hasChanges = Object.keys(changedFields).length > 0;
+
+    if (
+      formValues.generalInformation.values.abbreviatedName !==
+      initialValues.abbreviatedName
+    ) {
+      changedFields.abbreviatedName =
+        formValues.generalInformation.values.abbreviatedName;
+    }
 
     if (
       formValues.generalInformation.values.applicationDaysPayroll !==
