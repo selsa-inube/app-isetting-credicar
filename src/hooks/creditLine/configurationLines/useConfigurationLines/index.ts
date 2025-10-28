@@ -307,6 +307,22 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       appData.language as keyof typeof ruleData.i18n
     ] as string) ?? "";
 
+  // const mergeRules = (
+  //   existingRules: IRuleDecision[] = [],
+  //   newRules: IRuleDecision[] = [],
+  // ): IRuleDecision[] => {
+  //   if (!newRules || newRules.length === 0) {
+  //     return existingRules;
+  //   }
+  //   const newRulesMap = new Map(newRules.map((rule) => [rule.ruleName, rule]));
+
+  //   const filteredExisting = existingRules.filter(
+  //     (rule) => !newRulesMap.has(rule.ruleName),
+  //   );
+
+  //   return [...filteredExisting, ...newRules];
+  // };
+
   const mergeRules = (
     existingRules: IRuleDecision[] = [],
     newRules: IRuleDecision[] = [],
@@ -315,15 +331,29 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return existingRules;
     }
 
-    const newRulesMap = new Map(newRules.map((rule) => [rule.ruleName, rule]));
+    console.log("🐷 newRules antes del merge...", newRules);
 
-    const filteredExisting = existingRules.filter(
-      (rule) => !newRulesMap.has(rule.ruleName),
+    const newRulesGrouped = newRules.reduce(
+      (acc, rule) => {
+        const key = rule.ruleName;
+        if (!acc[key as any]) {
+          acc[key as any] = [];
+        }
+        acc[key as any].push(rule);
+        return acc;
+      },
+      {} as Record<string, IRuleDecision[]>,
     );
 
-    return [...filteredExisting, ...newRules];
-  };
+    const newRuleNames = Object.keys(newRulesGrouped);
+    const filteredExisting = existingRules.filter(
+      (rule) => !newRuleNames.includes(rule.ruleName ?? ""),
+    );
 
+    const mergedNewRules = Object.values(newRulesGrouped).flat();
+
+    return [...filteredExisting, ...mergedNewRules];
+  };
   const { ruleError, ruleLoadding, ruleErrorData, optionsConditionsCSV } =
     useEditCreditLines({
       useCaseConfiguration,
@@ -343,6 +373,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       const rule: IRuleDecisionExtended = {
         ...r,
       };
+      console.log(
+        "🤖...",
+        transformationDecisions(
+          rule,
+          getConditionsTraduction(ruleData, language),
+        ),
+      );
       return transformationDecisions(
         rule,
         getConditionsTraduction(ruleData, language),
@@ -377,31 +414,32 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (decisionsData.length === 0) return;
 
     const validateUseEdit = useCaseConfiguration === EUseCase.EDIT;
+    if (useCaseConfiguration === EUseCase.ADD) {
+      const newFormattedRules = formatRuleDecisionsConfig(
+        decisionsData,
+        validateUseEdit,
+      );
+      setLinesData((prev) => {
+        const existingRules =
+          (prev?.configurationRequestData?.rules as
+            | IRuleDecision[]
+            | undefined) ??
+          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+          [];
 
-    const newFormattedRules = formatRuleDecisionsConfig(
-      decisionsData,
-      validateUseEdit,
-    );
-    setLinesData((prev) => {
-      const existingRules =
-        (prev?.configurationRequestData?.rules as
-          | IRuleDecision[]
-          | undefined) ??
-        (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-        [];
-
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        configurationRequestData: {
-          ...prev?.configurationRequestData,
-          alias: linesConstructionData.alias,
-          abbreviatedName: linesConstructionData.abbreviatedName,
-          descriptionUse: linesConstructionData.descriptionUse,
-          rules: mergeRules(existingRules, newFormattedRules),
-        },
-      };
-    });
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          configurationRequestData: {
+            ...prev?.configurationRequestData,
+            alias: linesConstructionData.alias,
+            abbreviatedName: linesConstructionData.abbreviatedName,
+            descriptionUse: linesConstructionData.descriptionUse,
+            rules: mergeRules(existingRules, newFormattedRules),
+          },
+        };
+      });
+    }
   }, [decisionsData]);
 
   useEffect(() => {

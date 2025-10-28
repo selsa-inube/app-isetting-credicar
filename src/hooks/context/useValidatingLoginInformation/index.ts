@@ -69,7 +69,7 @@ const useValidatingLoginInformation = () => {
       urlLogo: businessUnitData?.urlLogo ?? "",
     },
     user: {
-      userAccount: "",
+      userAccount: "102456897",
       userName: "",
       identificationDocumentNumber: "",
     },

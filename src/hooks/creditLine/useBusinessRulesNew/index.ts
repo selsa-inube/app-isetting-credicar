@@ -1,6 +1,7 @@
 import {
   getConditionsByGroupNew,
   mapByGroupNew,
+  parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
   sortDisplayDataSwitchPlaces,
   groupsRecordToArrayNew,
@@ -38,6 +39,7 @@ const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
       asArray(list).map(normalizeCondition),
     ]),
   );
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...cloned,
@@ -176,13 +178,13 @@ const transformDecision = (
         condition as { labelName?: string; i18n?: Record<string, string> },
         language,
       ),
-      value: condition.value,
+      value: parseRangeFromString(condition.value),
     }),
   );
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...withSentences,
-    value: withSentences.value,
+    value: parseRangeFromString(withSentences.value),
     conditionGroups: groupsRecordToArrayNew(mappedRecord),
   } as any;
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -396,7 +398,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     delete (newDecision as any).conditionsThatEstablishesTheDecision;
 
     const decisionWithSentences = transformDecision(newDecision, language);
-
     setDecisions((prev) => {
       if (isEditing && selectedDecision) {
         return prev.map((d) =>
@@ -408,7 +409,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     closeModal();
   };
-
   useEffect(() => {
     onDecisionsChange?.(decisions);
   }, [decisions, onDecisionsChange]);
@@ -466,7 +466,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       map: nameToGroupMapOf(d),
       original: d,
     }));
-
+    console.log("🐻‍❄️", { prepared });
     const sorted = sortDisplayDataSwitchPlaces({
       decisions: prepared.map((p) => p.flat),
     }) as unknown as IRuleDecision[];
@@ -474,6 +474,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     const safeSorted = Array.isArray(sorted)
       ? sorted
       : prepared.map((p) => p.flat);
+    console.log("🐭", { safeSorted });
 
     const regrouped = safeSorted.map((dec, idx) => {
       const arr = Array.isArray(
@@ -492,6 +493,12 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       }
 
       const src = prepared[idx]?.original ?? {};
+
+      console.log(
+        "👀groupsRecordToArrayNew...",
+        { byGroup, map },
+        groupsRecordToArrayNew(byGroup),
+      );
       /* eslint-disable @typescript-eslint/no-explicit-any */
       const out: IRuleDecision = {
         ...src,

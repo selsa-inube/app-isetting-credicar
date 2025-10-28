@@ -84,6 +84,8 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [configuredDecisions, decisionsData, useCaseConfiguration, ruleLoadding]);
 
+  console.log("☠️....", { linesData });
+
   const normalizeDecisionsArray = (data: any): IRuleDecisionExtended[] =>
     (Array.isArray(data) ? data : []).map((item) => ({
       ...item,
@@ -141,6 +143,66 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [useCaseConfiguration, newDecisions]);
 
+  // useEffect(() => {
+  //   if (
+  //     useCaseConfiguration === EUseCase.EDIT ||
+  //     useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
+  //   ) {
+  //     if (!linesData || linesData?.configurationRequestData.length === 0)
+  //       return;
+
+  //     setLinesConstructionData((prev) => {
+  //       const initialValues = nameLineRef.current?.initialValues;
+  //       const currentValues = nameLineRef.current?.values;
+
+  //       const hasNameChanged =
+  //         currentValues?.nameLine !== initialValues?.nameLine;
+  //       const hasAliasChanged =
+  //         currentValues?.aliasLine !== initialValues?.aliasLine;
+  //       const hasDescriptionChanged =
+  //         currentValues?.descriptionLine !== initialValues?.descriptionLine;
+
+  //       const normalizeData: ILinesConstructionData = {
+  //         settingRequestId:
+  //           prev.settingRequestId || linesConstructionData.settingRequestId,
+  //         lineOfCreditId: linesData.settingRequestId,
+
+  //         abbreviatedName: hasNameChanged
+  //           ? String(linesData.configurationRequestData?.abbreviatedName ?? "")
+  //           : (prev.abbreviatedName ?? ""),
+
+  //         alias: hasAliasChanged
+  //           ? String(linesData.configurationRequestData?.alias ?? "")
+  //           : (prev.alias ?? ""),
+
+  //         descriptionUse: hasDescriptionChanged
+  //           ? String(linesData.configurationRequestData?.descriptionUse ?? "")
+  //           : (prev.descriptionUse ?? ""),
+  //       };
+
+  //       if (linesData.configurationRequestData?.rules) {
+  //         const existingRules =
+  //           (prev?.rules as IRuleDecision[] | undefined) ?? [];
+
+  //         const newRules = Array.isArray(
+  //           linesData.configurationRequestData.rules,
+  //         )
+  //           ? linesData.configurationRequestData.rules
+  //           : [];
+
+  //         normalizeData.rules = mergeRules(existingRules, newRules);
+  //       } else {
+  //         normalizeData.rules = prev.rules;
+  //       }
+
+  //       return {
+  //         ...prev,
+  //         ...normalizeData,
+  //       };
+  //     });
+  //   }
+  // }, [linesData, useCaseConfiguration]);
+
   useEffect(() => {
     if (
       useCaseConfiguration === EUseCase.EDIT ||
@@ -164,26 +226,24 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
           settingRequestId:
             prev.settingRequestId || linesConstructionData.settingRequestId,
           lineOfCreditId: linesData.settingRequestId,
-
           abbreviatedName: hasNameChanged
             ? String(linesData.configurationRequestData?.abbreviatedName ?? "")
             : (prev.abbreviatedName ?? ""),
-
           alias: hasAliasChanged
             ? String(linesData.configurationRequestData?.alias ?? "")
             : (prev.alias ?? ""),
-
           descriptionUse: hasDescriptionChanged
             ? String(linesData.configurationRequestData?.descriptionUse ?? "")
             : (prev.descriptionUse ?? ""),
         };
 
         if (linesData.configurationRequestData?.rules) {
-          const existingRules =
-            (prev?.rules as IRuleDecision[] | undefined) ?? [];
-
-          const newRules = Object(linesData.configurationRequestData.rules);
-
+          const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+          const newRules = Array.isArray(
+            linesData.configurationRequestData.rules,
+          )
+            ? linesData.configurationRequestData.rules
+            : Object.values(linesData.configurationRequestData.rules ?? {});
           normalizeData.rules = mergeRules(existingRules, newRules);
         } else {
           normalizeData.rules = prev.rules;
@@ -196,6 +256,8 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       });
     }
   }, [linesData, useCaseConfiguration]);
+  console.log("😶‍🌫️", { linesConstructionData });
+
   return {
     optionsConditionsCSV,
     ruleError,
