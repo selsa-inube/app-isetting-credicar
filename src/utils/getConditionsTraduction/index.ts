@@ -1,3 +1,4 @@
+import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 
@@ -17,7 +18,11 @@ const getConditionsTraduction = (
   const ruleNameTraduction =
     data.i18n?.[language as keyof typeof data.i18n] ?? data.descriptionUse;
 
-  return { conditionTraduction, ruleNameTraduction };
+  const conditionCreditLine = conditionTraduction.find(
+    (condition) => condition.condition === ECreditLines.CREDIT_LINE_RULE,
+  )?.condition;
+
+  return { conditionTraduction, ruleNameTraduction, conditionCreditLine };
 };
 
 export { getConditionsTraduction };

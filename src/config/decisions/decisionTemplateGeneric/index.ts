@@ -1,4 +1,5 @@
 import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
+import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionTemplateConfig = (
@@ -47,6 +48,10 @@ const decisionTemplateConfig = (
             conditionDataType: condition.conditionDataType,
             value: "",
             howToSetTheCondition: ValueHowToSetUp.EQUAL,
+            hidden:
+              condition.conditionName === ECreditLines.CREDIT_LINE_RULE
+                ? true
+                : false,
           }),
         ),
       },

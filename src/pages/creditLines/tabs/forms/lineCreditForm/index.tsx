@@ -1,4 +1,7 @@
+import { useContext } from "react";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useDragAndDropBoxesForm } from "@hooks/creditLine/useDragAndDropBoxesForm";
+import { useEnumsPossibleValues } from "@hooks/useEnumsPossibleValues";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
@@ -7,6 +10,7 @@ import { LineCreditFormFormUI } from "./interface";
 
 const LineCreditFormForm = (props: IClientsSupportLineForm) => {
   const { templateKey } = props;
+  const { appData } = useContext(AuthAndPortalData);
 
   const {
     showInfoModal,
@@ -35,6 +39,10 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
 
+  const { valuesData, loading: loadingOptions } = useEnumsPossibleValues({
+    businessUnit: appData.businessUnit.publicCode,
+  });
+
   const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
     templateKey,
     clientSupportData: creditLineData,
@@ -45,8 +53,8 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     optionsExcluded: creditOptionsExcluded,
     useCaseConfiguration,
     infoRuleName: ECreditLines.CREDIT_LINE_RULE,
-    supportLine: [],
-    loadingSupportOptions: false,
+    supportLine: valuesData,
+    loadingSupportOptions: loadingOptions,
     setClientSupportData: setCreditLineData,
     setOptionsIncluded: setCreditOptionsIncluded,
     setOptionsExcluded: setCreditOptionsExcluded,

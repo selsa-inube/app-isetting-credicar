@@ -261,7 +261,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
         description: editCreditLabels.descriptionSaveData,
-        entityName: "CreditLine",
+        entityName: ECreditLines.CREDIT_LINE_ENTITY,
         requestDate: formatDate(new Date()),
         useCaseName: ECreditLines.USE_CASE_EDIT,
         configurationRequestData: dataWithoutId,
@@ -300,6 +300,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     catalogAction: capitalizeText(ECreditLines.RULE_CATALOG),
     businessUnits: appData.businessUnit.publicCode,
   });
+
+  const { conditionTraduction, ruleNameTraduction, conditionCreditLine } =
+    getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
   const lineTypeDecision =
@@ -357,8 +360,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       const rule: IRuleDecisionExtended = {
         ...r,
       };
-      const { conditionTraduction, ruleNameTraduction } =
-        getConditionsTraduction(ruleData, language);
 
       return transformationDecisions(
         rule,
@@ -393,12 +394,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   useEffect(() => {
     if (decisionsData.length === 0) return;
-
     const validateUseEdit = useCaseConfiguration === EUseCase.EDIT;
     if (useCaseConfiguration === EUseCase.ADD) {
       const newFormattedRules = formatRuleDecisionsConfig(
         decisionsData,
         validateUseEdit,
+        linesConstructionData.abbreviatedName as string,
+        conditionCreditLine,
       );
       setLinesData((prev) => {
         const existingRules =
@@ -421,7 +423,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         };
       });
     }
-  }, [decisionsData]);
+  }, [decisionsData, useCaseConfiguration]);
 
   useEffect(() => {
     const validate =

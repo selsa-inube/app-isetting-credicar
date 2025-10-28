@@ -3,12 +3,13 @@ import { useContext, useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
+import { EUseCase } from "@enum/useCase";
+import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
 import { transformRuleStructure } from "@utils/transformRuleStructure";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
-import { EUseCase } from "@enum/useCase";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -38,6 +39,12 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       businessUnits: appData.businessUnit.publicCode,
       ruleData: {
         ruleName,
+        conditions: [
+          {
+            condition: ECreditLines.CREDIT_LINE_RULE,
+            value: linesConstructionData.abbreviatedName as string,
+          },
+        ],
       },
     });
 
@@ -61,7 +68,13 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         if (decisionsData.length === 0 && setLinesData) {
           const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
           const optionConditions =
-            configuredDecisions[0].parameterizedConditions?.join(",").trim();
+            configuredDecisions[0].parameterizedConditions
+              ?.filter(
+                (parametrized) =>
+                  parametrized !== ECreditLines.CREDIT_LINE_RULE,
+              )
+              .join(",")
+              .trim();
           setOptionsConditionsCSV(optionConditions);
 
           setLinesData((prev) => {
