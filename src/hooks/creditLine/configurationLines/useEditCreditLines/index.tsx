@@ -164,26 +164,24 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
           settingRequestId:
             prev.settingRequestId || linesConstructionData.settingRequestId,
           lineOfCreditId: linesData.settingRequestId,
-
           abbreviatedName: hasNameChanged
             ? String(linesData.configurationRequestData?.abbreviatedName ?? "")
             : (prev.abbreviatedName ?? ""),
-
           alias: hasAliasChanged
             ? String(linesData.configurationRequestData?.alias ?? "")
             : (prev.alias ?? ""),
-
           descriptionUse: hasDescriptionChanged
             ? String(linesData.configurationRequestData?.descriptionUse ?? "")
             : (prev.descriptionUse ?? ""),
         };
 
         if (linesData.configurationRequestData?.rules) {
-          const existingRules =
-            (prev?.rules as IRuleDecision[] | undefined) ?? [];
-
-          const newRules = Object(linesData.configurationRequestData.rules);
-
+          const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+          const newRules = Array.isArray(
+            linesData.configurationRequestData.rules,
+          )
+            ? linesData.configurationRequestData.rules
+            : Object.values(linesData.configurationRequestData.rules ?? {});
           normalizeData.rules = mergeRules(existingRules, newRules);
         } else {
           normalizeData.rules = prev.rules;
@@ -196,6 +194,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       });
     }
   }, [linesData, useCaseConfiguration]);
+
   return {
     optionsConditionsCSV,
     ruleError,

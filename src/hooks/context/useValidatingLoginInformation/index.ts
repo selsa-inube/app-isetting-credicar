@@ -69,9 +69,9 @@ const useValidatingLoginInformation = () => {
       urlLogo: businessUnitData?.urlLogo ?? "",
     },
     user: {
-      userAccount: "",
-      userName: "",
-      identificationDocumentNumber: "",
+      userAccount: user.id || "",
+      userName: user.nickname || "",
+      identificationDocumentNumber: user.id || "",
     },
     useCasesByStaff: useCasesData ?? [],
     language: enviroment.VITE_LANGUAGE,
