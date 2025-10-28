@@ -1,8 +1,8 @@
 import {
   getConditionsByGroupNew,
   mapByGroupNew,
+  parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
-  sortDisplayDataSwitchPlaces,
   groupsRecordToArrayNew,
   normalizeDecisionToNewShape,
 } from "@isettingkit/business-rules";
@@ -38,6 +38,7 @@ const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
       asArray(list).map(normalizeCondition),
     ]),
   );
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...cloned,
@@ -176,13 +177,13 @@ const transformDecision = (
         condition as { labelName?: string; i18n?: Record<string, string> },
         language,
       ),
-      value: condition.value,
+      value: parseRangeFromString(condition.value),
     }),
   );
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...withSentences,
-    value: withSentences.value,
+    value: parseRangeFromString(withSentences.value),
     conditionGroups: groupsRecordToArrayNew(mappedRecord),
   } as any;
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -396,7 +397,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     delete (newDecision as any).conditionsThatEstablishesTheDecision;
 
     const decisionWithSentences = transformDecision(newDecision, language);
-
     setDecisions((prev) => {
       if (isEditing && selectedDecision) {
         return prev.map((d) =>
@@ -408,7 +408,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     closeModal();
   };
-
   useEffect(() => {
     onDecisionsChange?.(decisions);
   }, [decisions, onDecisionsChange]);
@@ -461,49 +460,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(() => {
-    const prepared = decisions.map((d) => ({
-      flat: toArrayConditionsDecision(d),
-      map: nameToGroupMapOf(d),
-      original: d,
-    }));
-
-    const sorted = sortDisplayDataSwitchPlaces({
-      decisions: prepared.map((p) => p.flat),
-    }) as unknown as IRuleDecision[];
-
-    const safeSorted = Array.isArray(sorted)
-      ? sorted
-      : prepared.map((p) => p.flat);
-
-    const regrouped = safeSorted.map((dec, idx) => {
-      const arr = Array.isArray(
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        (dec as any).conditionsThatEstablishesTheDecision,
-      )
-        ? /* eslint-disable @typescript-eslint/no-explicit-any */
-          ((dec as any).conditionsThatEstablishesTheDecision as any[])
-        : [];
-      const map = prepared[idx]?.map ?? new Map<string, string>();
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const byGroup: Record<string, any[]> = {};
-      for (const c of arr) {
-        const g = map.get(c?.conditionName) ?? "group-primary";
-        (byGroup[g] ||= []).push(c);
-      }
-
-      const src = prepared[idx]?.original ?? {};
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const out: IRuleDecision = {
-        ...src,
-        ...dec,
-        conditionGroups: groupsRecordToArrayNew(byGroup),
-      } as any;
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      delete (out as any).conditionsThatEstablishesTheDecision;
-      return out;
-    });
-
-    return regrouped;
+    return decisions;
   }, [decisions]);
 
   const renderedListRef = useRef<IRuleDecision[]>([]);

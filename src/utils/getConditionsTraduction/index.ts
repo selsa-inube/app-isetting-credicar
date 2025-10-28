@@ -14,7 +14,10 @@ const getConditionsTraduction = (
     });
   });
 
-  return conditionTraduction;
+  const ruleNameTraduction =
+    data.i18n?.[language as keyof typeof data.i18n] ?? data.descriptionUse;
+
+  return { conditionTraduction, ruleNameTraduction };
 };
 
 export { getConditionsTraduction };

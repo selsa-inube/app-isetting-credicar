@@ -1,4 +1,4 @@
-import { IConditionTraduction } from "@src/types/IConditionTraduction";
+import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 
 const normalizeConditionTraduction = (
   conditionsArray: IConditionTraduction[],
