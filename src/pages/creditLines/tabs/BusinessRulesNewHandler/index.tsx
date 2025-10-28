@@ -66,7 +66,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setShowLineModal,
   });
 
-  console.log("💩....", { decisionsSorted });
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!loading && (

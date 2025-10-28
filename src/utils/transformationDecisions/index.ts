@@ -17,13 +17,14 @@ const generateUUID = (): string => {
 const transformationDecisions = (
   payload: IRuleDecisionExtended,
   conditionArray: IConditionTraduction[],
+  ruleNameTraduction: string,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
   const {
-    labelName: ruleLabelName = ruleName,
+    labelName: ruleLabelName = ruleNameTraduction,
     descriptionUse: ruleDescriptionUse = ruleName,
     decisionDataType = decisionByRuleArray?.ruleDataType?.toLocaleLowerCase() ??
       decisionByRuleArray?.decisionDataType?.toLocaleLowerCase() ??

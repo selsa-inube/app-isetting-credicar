@@ -3,7 +3,6 @@ import {
   mapByGroupNew,
   parseRangeFromString,
   sortDisplayDataSampleSwitchPlaces,
-  sortDisplayDataSwitchPlaces,
   groupsRecordToArrayNew,
   normalizeDecisionToNewShape,
 } from "@isettingkit/business-rules";
@@ -461,56 +460,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(() => {
-    const prepared = decisions.map((d) => ({
-      flat: toArrayConditionsDecision(d),
-      map: nameToGroupMapOf(d),
-      original: d,
-    }));
-    console.log("🐻‍❄️", { prepared });
-    const sorted = sortDisplayDataSwitchPlaces({
-      decisions: prepared.map((p) => p.flat),
-    }) as unknown as IRuleDecision[];
-
-    const safeSorted = Array.isArray(sorted)
-      ? sorted
-      : prepared.map((p) => p.flat);
-    console.log("🐭", { safeSorted });
-
-    const regrouped = safeSorted.map((dec, idx) => {
-      const arr = Array.isArray(
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        (dec as any).conditionsThatEstablishesTheDecision,
-      )
-        ? /* eslint-disable @typescript-eslint/no-explicit-any */
-          ((dec as any).conditionsThatEstablishesTheDecision as any[])
-        : [];
-      const map = prepared[idx]?.map ?? new Map<string, string>();
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const byGroup: Record<string, any[]> = {};
-      for (const c of arr) {
-        const g = map.get(c?.conditionName) ?? "group-primary";
-        (byGroup[g] ||= []).push(c);
-      }
-
-      const src = prepared[idx]?.original ?? {};
-
-      console.log(
-        "👀groupsRecordToArrayNew...",
-        { byGroup, map },
-        groupsRecordToArrayNew(byGroup),
-      );
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      const out: IRuleDecision = {
-        ...src,
-        ...dec,
-        conditionGroups: groupsRecordToArrayNew(byGroup),
-      } as any;
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      delete (out as any).conditionsThatEstablishesTheDecision;
-      return out;
-    });
-
-    return regrouped;
+    return decisions;
   }, [decisions]);
 
   const renderedListRef = useRef<IRuleDecision[]>([]);

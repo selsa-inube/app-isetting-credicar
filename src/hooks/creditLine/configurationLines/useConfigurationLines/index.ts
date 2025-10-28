@@ -307,22 +307,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       appData.language as keyof typeof ruleData.i18n
     ] as string) ?? "";
 
-  // const mergeRules = (
-  //   existingRules: IRuleDecision[] = [],
-  //   newRules: IRuleDecision[] = [],
-  // ): IRuleDecision[] => {
-  //   if (!newRules || newRules.length === 0) {
-  //     return existingRules;
-  //   }
-  //   const newRulesMap = new Map(newRules.map((rule) => [rule.ruleName, rule]));
-
-  //   const filteredExisting = existingRules.filter(
-  //     (rule) => !newRulesMap.has(rule.ruleName),
-  //   );
-
-  //   return [...filteredExisting, ...newRules];
-  // };
-
   const mergeRules = (
     existingRules: IRuleDecision[] = [],
     newRules: IRuleDecision[] = [],
@@ -331,16 +315,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return existingRules;
     }
 
-    console.log("🐷 newRules antes del merge...", newRules);
-
     const newRulesGrouped = newRules.reduce(
-      (acc, rule) => {
+      (newRule, rule) => {
         const key = rule.ruleName;
-        if (!acc[key as any]) {
-          acc[key as any] = [];
+        if (!newRule[key as any]) {
+          newRule[key as any] = [];
         }
-        acc[key as any].push(rule);
-        return acc;
+        newRule[key as any].push(rule);
+        return newRule;
       },
       {} as Record<string, IRuleDecision[]>,
     );
@@ -354,6 +336,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
     return [...filteredExisting, ...mergedNewRules];
   };
+
   const { ruleError, ruleLoadding, ruleErrorData, optionsConditionsCSV } =
     useEditCreditLines({
       useCaseConfiguration,
@@ -367,22 +350,20 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       setLinesEditData,
       setLinesData,
     });
+
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
     .flatMap((r) => {
       const rule: IRuleDecisionExtended = {
         ...r,
       };
-      console.log(
-        "🤖...",
-        transformationDecisions(
-          rule,
-          getConditionsTraduction(ruleData, language),
-        ),
-      );
+      const { conditionTraduction, ruleNameTraduction } =
+        getConditionsTraduction(ruleData, language);
+
       return transformationDecisions(
         rule,
-        getConditionsTraduction(ruleData, language),
+        conditionTraduction,
+        ruleNameTraduction as string,
       );
     });
 
