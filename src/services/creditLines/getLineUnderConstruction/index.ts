@@ -7,6 +7,7 @@ import { mapLineInConstructionToEntities } from "./mappers/mapLineInConstruction
 const getLineUnderConstruction = async (
   businessManagerCode: string,
   requestStatus: string,
+  entity: string,
 ): Promise<ILineUnderConstructionData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
@@ -17,6 +18,8 @@ const getLineUnderConstruction = async (
   const queryParams = new URLSearchParams({
     businessManagerCode: businessManagerCode,
     requestStatus: requestStatus,
+    applicationName: "ifac",
+    entityName: entity,
     page: ".1",
     per_page: ".1",
     sort: "desc.requestDate",

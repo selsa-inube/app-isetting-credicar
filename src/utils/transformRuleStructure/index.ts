@@ -1,3 +1,4 @@
+import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { parseIfJSON } from "../parseIfJSON";
@@ -23,6 +24,10 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
             howToSetTheCondition: cond.howToSetTheCondition,
             conditionName: cond.conditionName,
             value: cond.value,
+            hidden:
+              cond.conditionName === ECreditLines.CREDIT_LINE_RULE
+                ? true
+                : false,
           };
         });
 

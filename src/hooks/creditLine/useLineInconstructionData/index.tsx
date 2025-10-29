@@ -24,6 +24,7 @@ const useLineInconstructionData = () => {
           const data = await getLineUnderConstruction(
             appData.businessManager.publicCode,
             ECreditLines.REQUEST_STATUS,
+            ECreditLines.CREDIT_LINE_ENTITY,
           );
           setlineUnderConstruction(data);
         } catch (error) {
