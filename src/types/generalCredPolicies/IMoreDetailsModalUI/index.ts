@@ -25,6 +25,10 @@ interface IMoreDetailsModalUI {
   showScoreModels: boolean;
   showScoreModelsInserted: boolean;
   showScoreModelsDeleted: boolean;
+  showMinimum: boolean;
+  showMinimumInserted: boolean;
+  showMinimumDeleted: boolean;
+  decisionsMinimum: IRuleDecision[];
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
   contribQuotaInserted?: IRuleDecision[];
@@ -33,6 +37,8 @@ interface IMoreDetailsModalUI {
   incomeQuotaDeleted?: IRuleDecision[];
   scoreModelsInserted?: IRuleDecision[];
   scoreModelsDeleted?: IRuleDecision[];
+  minimumInserted?: IRuleDecision[];
+  minimumDeleted?: IRuleDecision[];
 }
 
 export type { IMoreDetailsModalUI };

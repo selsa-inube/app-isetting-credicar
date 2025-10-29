@@ -10,6 +10,7 @@ interface IDetailsRequest {
   decisionsReciprocity: IRuleDecision[];
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];
+  decisionsMinimum: IRuleDecision[];
   decisionTemplate: IRuleDecision;
   defaultSelectedTab: string;
   detailsTabsConfig: IDetailsTabsConfig;
@@ -37,6 +38,8 @@ interface IDetailsRequest {
   onTabChange: (id: string) => void;
   onToggleModal: () => void;
   onToggleMoreDetailsModal: () => void;
+  minimumInserted?: IRuleDecision[];
+  minimumDeleted?: IRuleDecision[];
   contribQuotaInserted?: IRuleDecision[];
   contribQuotaDeleted?: IRuleDecision[];
   incomeQuotaInserted?: IRuleDecision[];

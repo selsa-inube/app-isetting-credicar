@@ -15,6 +15,7 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
     decisionsReciprocity,
     decisionsIncomePortfolio,
     decisionsScoreModels,
+    decisionsMinimum,
     isMoreDetails,
   } = props;
 
@@ -31,6 +32,8 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
   const incomeQuotaDeleted = newDeleted(decisionsIncomePortfolio);
   const scoreModelsInserted = newInserted(decisionsScoreModels);
   const scoreModelsDeleted = newDeleted(decisionsScoreModels);
+  const minimumInserted = newInserted(decisionsMinimum);
+  const minimumDeleted = newDeleted(decisionsMinimum);
 
   const generalData = generalDataKeys.reduce(
     (acc, prop) => {
@@ -110,6 +113,26 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
         return acc;
       }
 
+      if (
+        (isMoreDetails || decisionsMinimum.length === 0) &&
+        tab?.id === detailsTabsConfig.minimumIncome?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        minimumInserted.length === 0 &&
+        tab?.id === detailsTabsConfig.minimumIncomeIncluded?.id
+      ) {
+        return acc;
+      }
+      if (
+        minimumDeleted.length === 0 &&
+        tab?.id === detailsTabsConfig.minimumIncomeRemoved?.id
+      ) {
+        return acc;
+      }
+
       if (tab !== undefined) {
         acc[key as keyof IDetailsTabsConfig] = tab;
       }
@@ -139,6 +162,8 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
+    minimumInserted,
+    minimumDeleted,
     handleTabChange,
   };
 };

@@ -11,6 +11,9 @@ interface IDetailsTabsConfig {
   scoreModels?: ITabConfig;
   scoreModelsIncluded?: ITabConfig;
   scoreModelsRemoved?: ITabConfig;
+  minimumIncome?: ITabConfig;
+  minimumIncomeIncluded?: ITabConfig;
+  minimumIncomeRemoved?: ITabConfig;
 }
 
 export type { IDetailsTabsConfig };
