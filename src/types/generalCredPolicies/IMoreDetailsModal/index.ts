@@ -8,6 +8,7 @@ interface IMoreDetailsModal {
   decisionsReciprocity: IRuleDecision[];
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];
+  decisionsMinimum: IRuleDecision[];
   decisionTemplate: IRuleDecision;
   defaultSelectedTab: string;
   detailsTabsConfig: IDetailsTabsConfig;
@@ -19,6 +20,8 @@ interface IMoreDetailsModal {
   textValues: IRulesFormTextValues;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
+  minimumInserted?: IRuleDecision[];
+  minimumDeleted?: IRuleDecision[];
   contribQuotaInserted?: IRuleDecision[];
   contribQuotaDeleted?: IRuleDecision[];
   incomeQuotaInserted?: IRuleDecision[];

@@ -1,3 +1,4 @@
+import { useMoreDetailsModal } from "@hooks/GeneralCreditPolicies/useMoreDetailsModal";
 import { IMoreDetailsModal } from "@ptypes/generalCredPolicies/IMoreDetailsModal";
 import { MoreDetailsModalUI } from "./interface";
 
@@ -13,6 +14,9 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
+    decisionsMinimum,
+    minimumInserted,
+    minimumDeleted,
     decisionTemplate,
     defaultSelectedTab,
     detailsTabsConfig,
@@ -26,40 +30,29 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     onTabChange,
   } = props;
 
-  const showGeneralDecisionsTab =
-    isSelected === detailsTabsConfig.generalDecision?.id;
-
-  const showDecisionsRecip =
-    !isMoreDetails &&
-    isSelected === detailsTabsConfig.contributionQuota?.id &&
-    decisionsReciprocity.length > 0;
-
-  const showContribInserted =
-    isMoreDetails && isSelected === detailsTabsConfig.contribQuotaIncluded?.id;
-  const showContribDeleted =
-    isMoreDetails && isSelected === detailsTabsConfig.contribQuotaRemoved?.id;
-
-  const showDecisionsIncome =
-    !isMoreDetails &&
-    isSelected === detailsTabsConfig.incomeQuota?.id &&
-    decisionsIncomePortfolio.length > 0;
-
-  const showIncomeInserted =
-    isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaIncluded?.id;
-
-  const showIncomeDeleted =
-    isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaRemoved?.id;
-
-  const showScoreModels =
-    !isMoreDetails &&
-    isSelected === detailsTabsConfig.scoreModels?.id &&
-    decisionsScoreModels.length > 0;
-
-  const showScoreModelsInserted =
-    isMoreDetails && isSelected === detailsTabsConfig.scoreModelsIncluded?.id;
-
-  const showScoreModelsDeleted =
-    isMoreDetails && isSelected === detailsTabsConfig.scoreModelsRemoved?.id;
+  const {
+    showGeneralDecisionsTab,
+    showDecisionsRecip,
+    showContribInserted,
+    showContribDeleted,
+    showDecisionsIncome,
+    showIncomeInserted,
+    showIncomeDeleted,
+    showScoreModels,
+    showScoreModelsInserted,
+    showMinimum,
+    showMinimumInserted,
+    showMinimumDeleted,
+    showScoreModelsDeleted,
+  } = useMoreDetailsModal({
+    isSelected,
+    detailsTabsConfig,
+    isMoreDetails,
+    decisionsReciprocity,
+    decisionsIncomePortfolio,
+    decisionsScoreModels,
+    decisionsMinimum,
+  });
   return (
     <MoreDetailsModalUI
       data={data}
@@ -91,6 +84,12 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       showScoreModels={showScoreModels}
       showScoreModelsInserted={showScoreModelsInserted}
       showScoreModelsDeleted={showScoreModelsDeleted}
+      showMinimum={showMinimum}
+      showMinimumInserted={showMinimumInserted}
+      showMinimumDeleted={showMinimumDeleted}
+      decisionsMinimum={decisionsMinimum}
+      minimumInserted={minimumInserted}
+      minimumDeleted={minimumDeleted}
     />
   );
 };

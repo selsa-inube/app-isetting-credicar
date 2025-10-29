@@ -22,6 +22,12 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     showScoreModels,
     showScoreModelsInserted,
     showScoreModelsDeleted,
+    showMinimum,
+    showMinimumInserted,
+    showMinimumDeleted,
+    decisionsMinimum,
+    minimumInserted,
+    minimumDeleted,
     data,
     portalId,
     textValues,
@@ -121,6 +127,28 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showScoreModelsDeleted && (
           <DecisionTab
             data={scoreModelsDeleted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+
+        {showMinimum && (
+          <DecisionTab
+            data={decisionsMinimum}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showMinimumInserted && (
+          <DecisionTab
+            data={minimumInserted ?? []}
+            textValues={textValues}
+            decisionTemplate={decisionTemplate}
+          />
+        )}
+        {showMinimumDeleted && (
+          <DecisionTab
+            data={minimumDeleted ?? []}
             textValues={textValues}
             decisionTemplate={decisionTemplate}
           />

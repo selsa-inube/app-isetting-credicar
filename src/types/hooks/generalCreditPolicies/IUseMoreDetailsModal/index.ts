@@ -1,15 +1,14 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "@ptypes/generalCredPolicies/IDetailsTabsConfig";
 
-interface IUseDetailsPoliciesModal {
-  data: IEntry;
+interface IUseMoreDetailsModal {
+  isSelected: string;
   detailsTabsConfig: IDetailsTabsConfig;
+  isMoreDetails: boolean;
   decisionsReciprocity: IRuleDecision[];
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];
   decisionsMinimum: IRuleDecision[];
-  isMoreDetails?: boolean;
 }
 
-export type { IUseDetailsPoliciesModal };
+export type { IUseMoreDetailsModal };

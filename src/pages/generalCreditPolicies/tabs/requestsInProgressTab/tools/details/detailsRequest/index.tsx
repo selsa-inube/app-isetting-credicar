@@ -22,6 +22,9 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
+    decisionsMinimum,
+    minimumInserted,
+    minimumDeleted,
     decisionsReciprocity,
     decisionsIncomePortfolio,
     decisionsScoreModels,
@@ -118,6 +121,9 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           incomeQuotaDeleted={incomeQuotaDeleted}
           scoreModelsInserted={scoreModelsInserted}
           scoreModelsDeleted={scoreModelsDeleted}
+          decisionsMinimum={decisionsMinimum}
+          minimumInserted={minimumInserted}
+          minimumDeleted={minimumDeleted}
         />
       )}
 

@@ -1,8 +1,16 @@
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
+import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { formatDate } from "../date/formatDate";
 import { dataTranslations } from "../dataTranslations";
+import { IConditionTraduction } from "@ptypes/IConditionTraduction";
+import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
+import { parseIfJSON } from "../parseIfJSON";
 
-const formatDetailsDecisions = (data: IEntry) => {
+const formatDetailsDecisions = (
+  data: IEntry,
+  conditionsArray?: IConditionTraduction[],
+) => {
   return data.configurationRequestData.rules
     ? data.configurationRequestData.rules
         .filter((rule: IEntry) => rule)
@@ -22,25 +30,41 @@ const formatDetailsDecisions = (data: IEntry) => {
               ? formatDate(new Date(decisionByRule.validUntil))
               : undefined,
             transactionOperation: decisionByRule?.transactionOperation,
-            conditionsThatEstablishesTheDecision:
-              decisionByRule?.conditionsThatEstablishesTheDecision
-                ? decisionByRule.conditionsThatEstablishesTheDecision.map(
-                    (condition: IEntry) => {
-                      return {
-                        conditionName: condition.conditionName,
-                        labelName:
-                          dataTranslations[condition.labelName] ??
-                          condition.labelName,
-                        value: condition.value,
-                        conditionDataType: "Alphabetical",
-                        howToSetTheCondition:
-                          typeof condition.value === "string"
-                            ? "EqualTo"
-                            : "Range",
-                      };
-                    },
-                  )
-                : [],
+            conditionGroups: decisionByRule.conditionGroups
+              ? decisionByRule.conditionGroups.map(
+                  (decisionGroup: IConditionGroups) => ({
+                    ...decisionGroup,
+                    conditionGroupId: decisionGroup.conditionGroupId,
+                    transactionOperation: decisionGroup.transactionOperation,
+                    conditionsThatEstablishesTheDecision:
+                      decisionGroup.conditionsThatEstablishesTheDecision
+                        ? decisionGroup.conditionsThatEstablishesTheDecision.map(
+                            (condition: IConditionsTheDecision) => ({
+                              ...condition,
+                              value:
+                                typeof condition.value === "string"
+                                  ? parseIfJSON(condition.value)
+                                  : condition.value,
+                              conditionName: condition.conditionName,
+                              labelName: conditionsArray
+                                ? normalizeConditionTraduction(
+                                    conditionsArray,
+                                    condition.conditionName,
+                                  )?.label
+                                : condition.conditionName,
+                              conditionDataType: "Alphabetical",
+                              howToSetTheCondition:
+                                typeof condition.value === "string"
+                                  ? "EqualTo"
+                                  : "Range",
+                              transactionOperation:
+                                condition.transactionOperation,
+                            }),
+                          )
+                        : undefined,
+                  }),
+                )
+              : undefined,
           };
         })
     : [];

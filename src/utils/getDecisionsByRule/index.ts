@@ -7,17 +7,21 @@ const getDecisionsByRule = (
 ) =>
   decisions
     .filter((decision: IEntry) => decision.ruleName === ruleName)
-    .map((decision: IEntry, idx: number) => ({
-      ...decision,
-      decisionId: `Decisión ${idx + 1}`,
-      ...(conditionFilter && decision.conditionsThatEstablishesTheDecision
-        ? {
-            conditionsThatEstablishesTheDecision:
-              decision.conditionsThatEstablishesTheDecision.filter(
-                conditionFilter,
-              ),
-          }
-        : {}),
-    }));
+    .map((decision: IEntry, idx: number) => {
+      return {
+        ...decision,
+        decisionId: `Decisión ${idx + 1}`,
+        conditionsThatEstablishesTheDecision: decision.conditionGroups?.flatMap(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (group: any) => {
+            return conditionFilter
+              ? group.conditionsThatEstablishesTheDecision?.filter(
+                  conditionFilter,
+                )
+              : group.conditionsThatEstablishesTheDecision;
+          },
+        ),
+      };
+    });
 
 export { getDecisionsByRule };

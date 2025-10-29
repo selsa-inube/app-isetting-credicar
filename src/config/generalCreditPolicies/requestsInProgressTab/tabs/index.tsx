@@ -51,6 +51,21 @@ const detailsTabsConfig = {
     isDisabled: false,
     label: "Eliminadas Modelos de score",
   },
+  minimumIncome: {
+    id: "minimumIncome",
+    isDisabled: false,
+    label: "Porcentaje mínimo de reserva por la fuente de ingreso.",
+  },
+  minimumIncomeIncluded: {
+    id: "minimumIncomeIncluded",
+    isDisabled: false,
+    label: "Incluidas Porcentaje mínimo de reserva por la fuente de ingreso.",
+  },
+  minimumIncomeRemoved: {
+    id: "minimumIncomeRemoved",
+    isDisabled: false,
+    label: "Eliminadas Porcentaje mínimo de reserva por la fuente de ingreso",
+  },
 };
 
 export { detailsTabsConfig };

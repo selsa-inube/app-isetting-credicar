@@ -34,6 +34,7 @@ const Details = (props: IDetails) => {
     decisionsReciprocity,
     decisionsIncomePortfolio,
     decisionsScoreModels,
+    decisionsMinimum,
     isMoreDetails,
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress({ data });
@@ -50,12 +51,15 @@ const Details = (props: IDetails) => {
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
+    minimumInserted,
+    minimumDeleted,
   } = useDetailsPoliciesModal({
     data: moreDetailsData,
     detailsTabsConfig,
     decisionsReciprocity,
     decisionsIncomePortfolio,
     decisionsScoreModels,
+    decisionsMinimum,
     isMoreDetails,
   });
 
@@ -98,6 +102,9 @@ const Details = (props: IDetails) => {
       showDecision={showDecision}
       labelButton={statusRequestData.textButton}
       iconButton={statusRequestData.iconButton}
+      decisionsMinimum={decisionsMinimum}
+      minimumInserted={minimumInserted}
+      minimumDeleted={minimumDeleted}
     />
   );
 };
