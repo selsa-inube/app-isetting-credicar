@@ -7,8 +7,10 @@ import { formatDateDecision } from "../date/formatDateDecision";
 const formatRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
   validateUseEdit: boolean,
-) =>
-  rule.map((decision) => {
+  abbreviatedName: string,
+  conditionHidden?: string,
+) => {
+  return rule.map((decision) => {
     const decisionsByRule: Partial<IRuleDecisionExtended> = {
       ...decision,
       effectiveFrom:
@@ -43,11 +45,19 @@ const formatRuleDecisionsConfig = (
           conditionGroup.conditionGroupId = groupKey;
         }
 
+        if (conditionHidden) {
+          conditionGroup.conditionsThatEstablishesTheDecision.push({
+            conditionName: conditionHidden,
+            value: abbreviatedName,
+          });
+        }
+
         return conditionGroup;
       },
     );
 
     return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
   });
+};
 
 export { formatRuleDecisionsConfig };
