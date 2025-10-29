@@ -1,32 +1,85 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { IRuleDecision } from "@isettingkit/input";
-import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
-import { IEntry } from "@ptypes/design/table/IEntry";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
+import { ECreditLines } from "@enum/creditLines";
 import { ENameRules } from "@enum/nameRules";
+import { EGeneralPolicies } from "@enum/generalPolicies";
+import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
+import { EBooleanText } from "@enum/booleanText";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { IEntry } from "@ptypes/design/table/IEntry";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
-import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
-import { EGeneralPolicies } from "@enum/generalPolicies";
+import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
+  const { appData } = useContext(AuthAndPortalData);
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
-  let reference;
-  let methods;
   let additionalDebtors;
-  let sourcesIncome;
-  let financialObligations;
   let realGuarantees;
 
   const onToggleMoreDetailsModal = () => {
     setShowMoreDetailsModal(!showMoreDetailsModal);
   };
 
-  data.configurationRequestData.rules.map((rule: IEntry) => {
+  const { ruleData: ruleContribution } = useEnumRules({
+    enumDestination: ENameRules.CONTRIBUTIONS_PORTFOLIO,
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const { ruleData: ruleIncomePortfolio } = useEnumRules({
+    enumDestination: ENameRules.INCOME_PORTFOLIO,
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const { ruleData: ruleScoreModels } = useEnumRules({
+    enumDestination: ENameRules.SCORE_MODELS,
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+  const { ruleData: ruleMinimum } = useEnumRules({
+    enumDestination: ENameRules.MINIMUM_INCOME_PERCENTAGE,
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+  });
+
+  const { conditionTraduction: conditionContribution } =
+    getConditionsTraduction(ruleContribution, appData.language);
+  const { conditionTraduction: conditionIncomePortfolio } =
+    getConditionsTraduction(ruleIncomePortfolio, appData.language);
+  const { conditionTraduction: conditionScoreModels } = getConditionsTraduction(
+    ruleScoreModels,
+    appData.language,
+  );
+  const { conditionTraduction: conditionMinimum } = getConditionsTraduction(
+    ruleMinimum,
+    appData.language,
+  );
+
+  const methodsMap: Record<string, string> = {
+    [ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY]:
+      optionsMethods.CalculationByPaymentCapacity,
+    [ERulesOfDecisions.RISK_FACTOR]: optionsMethods.RiskFactor,
+    [ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS]:
+      optionsMethods.ReciprocityOfContributions,
+  };
+
+  const methodsArray: string[] = [];
+
+  data.configurationRequestData.rules.forEach((rule: IEntry) => {
     if (rule === null) return;
-    rule.decisionsByRule?.filter((decision: IRuleDecision) => {
+
+    rule.decisionsByRule?.forEach((decision: IRuleDecision) => {
       if (rule.ruleName === ENameRules.ADDITIONAL_DEBTORS) {
         additionalDebtors = decision.value;
       }
@@ -35,46 +88,41 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
         realGuarantees = decision.value;
       }
 
-      if (rule.ruleName === ENameRules.METHODS) {
-        const calculation =
-          decision.value ===
-            ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY &&
-          optionsMethods.CalculationByPaymentCapacity;
-        const factor =
-          decision.value === ERulesOfDecisions.RISK_FACTOR &&
-          optionsMethods.RiskFactor;
-        const reciprocity =
-          decision.value === ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS &&
-          optionsMethods.ReciprocityOfContributions;
-
-        methods = [calculation, factor, reciprocity].filter(Boolean).join(", ");
+      if (
+        rule.ruleName === ENameRules.METHODS &&
+        methodsMap[decision.value as string]
+      ) {
+        methodsArray.push(methodsMap[decision.value as string]);
       }
     });
   });
 
+  const methods = methodsArray.join(", ");
   const moreDetailsData = {
     id: data.id,
-    creditApplication: reference,
     methods: methods,
-    additionalDebtors: additionalDebtors,
-    sourcesIncome: sourcesIncome,
-    financialOblig: financialObligations,
-    guarantees: realGuarantees,
+    additionalDebtors: additionalDebtors ?? EBooleanText.NO,
+    guarantees: realGuarantees ?? EBooleanText.NO,
   };
-
   const decisionsReciprocity = getDecisionsByRule(
-    formatDetailsDecisions(data),
+    formatDetailsDecisions(data, conditionContribution),
     ENameRules.CONTRIBUTIONS_PORTFOLIO,
   );
   const decisionsIncomePortfolio = getDecisionsByRule(
-    formatDetailsDecisions(data),
+    formatDetailsDecisions(data, conditionIncomePortfolio),
     ENameRules.INCOME_PORTFOLIO,
   );
+
   const decisionsScoreModels = getDecisionsByRule(
-    formatDetailsDecisions(data),
+    formatDetailsDecisions(data, conditionScoreModels),
     ENameRules.SCORE_MODELS,
     (condition: IEntry) =>
       condition.conditionName !== EGeneralPolicies.CONDITION_BUSINESS_UNIT,
+  );
+
+  const decisionsMinimum = getDecisionsByRule(
+    formatDetailsDecisions(data, conditionMinimum),
+    ENameRules.MINIMUM_INCOME_PERCENTAGE,
   );
 
   const isMoreDetails = data.useCaseName === EGeneralPolicies.USE_CASE_EDIT;
@@ -86,6 +134,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     decisionsIncomePortfolio,
     decisionsScoreModels,
     isMoreDetails,
+    decisionsMinimum,
     onToggleMoreDetailsModal,
   };
 };
