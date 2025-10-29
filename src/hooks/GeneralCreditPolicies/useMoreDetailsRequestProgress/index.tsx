@@ -40,12 +40,6 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
-  const { ruleData: ruleScoreModels } = useEnumRules({
-    enumDestination: ENameRules.SCORE_MODELS,
-    ruleCatalog: ECreditLines.RULE_CATALOG,
-    catalogAction: ECreditLines.CATALOG_ACTION,
-    businessUnits: appData.businessUnit.publicCode,
-  });
   const { ruleData: ruleMinimum } = useEnumRules({
     enumDestination: ENameRules.MINIMUM_INCOME_PERCENTAGE,
     ruleCatalog: ECreditLines.RULE_CATALOG,
@@ -57,10 +51,6 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     getConditionsTraduction(ruleContribution, appData.language);
   const { conditionTraduction: conditionIncomePortfolio } =
     getConditionsTraduction(ruleIncomePortfolio, appData.language);
-  const { conditionTraduction: conditionScoreModels } = getConditionsTraduction(
-    ruleScoreModels,
-    appData.language,
-  );
   const { conditionTraduction: conditionMinimum } = getConditionsTraduction(
     ruleMinimum,
     appData.language,
@@ -114,7 +104,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   );
 
   const decisionsScoreModels = getDecisionsByRule(
-    formatDetailsDecisions(data, conditionScoreModels),
+    formatDetailsDecisions(data),
     ENameRules.SCORE_MODELS,
     (condition: IEntry) =>
       condition.conditionName !== EGeneralPolicies.CONDITION_BUSINESS_UNIT,

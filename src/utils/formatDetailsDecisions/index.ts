@@ -9,7 +9,7 @@ import { parseIfJSON } from "../parseIfJSON";
 
 const formatDetailsDecisions = (
   data: IEntry,
-  conditionsArray: IConditionTraduction[],
+  conditionsArray?: IConditionTraduction[],
 ) => {
   return data.configurationRequestData.rules
     ? data.configurationRequestData.rules
@@ -46,10 +46,12 @@ const formatDetailsDecisions = (
                                   ? parseIfJSON(condition.value)
                                   : condition.value,
                               conditionName: condition.conditionName,
-                              labelName: normalizeConditionTraduction(
-                                conditionsArray,
-                                condition.conditionName,
-                              )?.label,
+                              labelName: conditionsArray
+                                ? normalizeConditionTraduction(
+                                    conditionsArray,
+                                    condition.conditionName,
+                                  )?.label
+                                : condition.conditionName,
                               conditionDataType: "Alphabetical",
                               howToSetTheCondition:
                                 typeof condition.value === "string"
