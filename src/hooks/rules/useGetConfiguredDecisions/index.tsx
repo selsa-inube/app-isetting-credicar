@@ -13,7 +13,7 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
     IConfiguredDecisions[] | undefined
   >([]);
   const [hasError, setHasError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
 
   useEffect(() => {
@@ -41,7 +41,9 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
           setHasError(true);
           setErrorData(errorObject(error));
         } finally {
-          setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1200);
         }
       }
     };

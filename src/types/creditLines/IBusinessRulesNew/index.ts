@@ -8,6 +8,7 @@ interface IBusinessRulesNew extends IUseBusinessRulesNewGeneral {
   option: string;
   remunerativerateRule: boolean;
   showAddDecisionModal: boolean;
+  ruleLoadding: boolean;
   setShowLineModal: React.Dispatch<React.SetStateAction<boolean>>;
   terms?: boolean;
   controls?: boolean;

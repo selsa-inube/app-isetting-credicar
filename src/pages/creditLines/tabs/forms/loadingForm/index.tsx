@@ -13,7 +13,7 @@ import { SkeletonField } from "./SkeletonField";
 import { DecisionBox } from "./DecisionBox";
 
 const LoadingForm = (props: ILoadingForm) => {
-  const { withDecisions, withoutDecisions } = props;
+  const { withDecisions, withoutDecisions, addUseCase } = props;
 
   const fields = [
     { labelWidth: "180px", fieldHeight: "32px" },
@@ -55,31 +55,57 @@ const LoadingForm = (props: ILoadingForm) => {
 
       {withDecisions && (
         <>
-          <Fieldset
-            legend={configurationLabels.conditions}
-            height="auto"
-            spacing="compact"
-          >
-            <SkeletonLine width="100%" height="40px" animated />
-          </Fieldset>
+          {addUseCase ? (
+            <>
+              <Fieldset
+                legend={configurationLabels.conditions}
+                height="auto"
+                spacing="compact"
+              >
+                <SkeletonLine width="100%" height="40px" animated />
+              </Fieldset>
 
-          <Stack justifyContent="flex-end">
-            <Button iconBefore={<MdAdd />} spacing="compact" disabled>
-              {configurationLabels.addButton}
-            </Button>
-          </Stack>
+              <Stack justifyContent="flex-end">
+                <Button iconBefore={<MdAdd />} spacing="compact" disabled>
+                  {configurationLabels.addButton}
+                </Button>
+              </Stack>
 
-          <Fieldset
-            legend={configurationLabels.decisions}
-            height="auto"
-            spacing="compact"
-          >
-            <Stack direction="column" width="100%" gap={tokens.spacing.s200}>
-              {Array.from({ length: 4 }, (_, index) => (
-                <DecisionBox key={index} />
-              ))}
-            </Stack>
-          </Fieldset>
+              <Fieldset
+                legend={configurationLabels.decisions}
+                height="auto"
+                spacing="compact"
+              >
+                <Stack
+                  direction="column"
+                  width="100%"
+                  gap={tokens.spacing.s200}
+                >
+                  {Array.from({ length: 4 }, (_, index) => (
+                    <DecisionBox key={index} />
+                  ))}
+                </Stack>
+              </Fieldset>
+            </>
+          ) : (
+            <>
+              <Fieldset
+                legend={configurationLabels.decisions}
+                height="auto"
+                spacing="compact"
+              >
+                <Stack
+                  direction="column"
+                  width="100%"
+                  gap={tokens.spacing.s200}
+                >
+                  {Array.from({ length: 4 }, (_, index) => (
+                    <DecisionBox key={index} />
+                  ))}
+                </Stack>
+              </Fieldset>
+            </>
+          )}
         </>
       )}
     </Stack>

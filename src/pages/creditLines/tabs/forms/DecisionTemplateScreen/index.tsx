@@ -50,6 +50,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     optionsConditionsCSV,
     showSendModal,
     submitModalData,
+    ruleLoadding,
     handleClosePendingModal,
     handleCloseRequestStatus,
     handleCloseProcess,
@@ -65,10 +66,19 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     message,
     showLineModal,
     showAddDecisionModal,
+    optionAddCreditline,
+    componentLoading,
     setShowLineModal,
     handleGoBack,
     handleGoContinue,
-  } = useDecisionTemplate({ templateKey, ruleData, lineTypeDecision });
+  } = useDecisionTemplate({
+    templateKey,
+    ruleData,
+    lineTypeDecision,
+    useCaseConfiguration,
+    ruleLoadding,
+    loadingModify,
+  });
 
   return (
     <>
@@ -82,7 +92,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
         <LineInformation
           lineName={lineNameDecision}
           lineType={lineTypeDecision}
-          loading={loading}
+          loading={componentLoading}
+          addUseCase={optionAddCreditline}
           onOpenModal={handleOpenModal}
           onToggleInfoModal={handleToggleInfoModal}
           updateData={loadingModify}
@@ -116,6 +127,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           remunerativerateRule={false}
           setShowLineModal={setShowLineModal}
           showAddDecisionModal={showAddDecisionModal}
+          ruleLoadding={componentLoading}
         />
 
         {showDecision && (

@@ -29,6 +29,7 @@ const LineInformation = (props: ILineInformation) => {
     description,
     optionCrumb,
     withIcon,
+    addUseCase,
     onToggleInfoModal,
     onOpenModal,
     withBackModal,
@@ -57,6 +58,7 @@ const LineInformation = (props: ILineInformation) => {
           <LoadingForm
             withDecisions={withDecisions}
             withoutDecisions={withoutDecisions}
+            addUseCase={addUseCase}
           />
         ) : (
           <>
