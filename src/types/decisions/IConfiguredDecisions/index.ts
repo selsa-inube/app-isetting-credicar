@@ -15,6 +15,7 @@ interface IConfiguredDecisions {
     value: string | number | string[] | IValue | undefined;
   }[];
   parameterizedConditions?: string[];
+  valuesInCondition?: string[];
   ruleName?: string;
 }
 

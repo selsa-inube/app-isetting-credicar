@@ -25,6 +25,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     optionsConditionsCSV,
     remunerativerateRule,
     showAddDecisionModal,
+    ruleLoadding,
     setShowLineModal,
     setDecisionData,
     formId,
@@ -68,7 +69,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
-      {!loading && (
+      {!ruleLoadding && (
         <>
           {!optionDetailsCreditline && (
             <>
@@ -104,61 +105,64 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
           )}
         </>
       )}
-
-      {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
-        <BusinessRulesNew
-          baseDecisionTemplate={localizedTemplate}
-          controls={!optionDetailsCreditline}
-          customMessageEmptyDecisions={customMessageEmptyDecisions}
-          customTitleContentAddCard={customTitleContentAddCard}
-          decisionTemplate={filteredDecisionTemplate as any}
-          decisions={decisionsSorted}
-          handleCloseModal={closeModal}
-          handleDelete={deleteDecision}
-          handleOpenModal={openModal}
-          handleSubmitForm={submitForm}
-          isModalOpen={isModalOpen}
-          loading={!!loading}
-          onRemoveCondition={removeCondition}
-          onRestoreConditions={restoreConditions}
-          selectedDecision={selectedDecision}
-          textValues={textValues as IRulesFormTextValues}
-        />
-      ) : (
-        <Fieldset legend={newBusinessRulesLabels.decisionsTitle}>
-          <Stack
-            alignItems="center"
-            direction="column"
-            gap={tokens.spacing.s200}
-            justifyContent="center"
-            width="100%"
-          >
-            <Icon
-              appearance="warning"
-              icon={<MdOutlineReportProblem />}
-              size="40px"
+      {!ruleLoadding && (
+        <>
+          {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
+            <BusinessRulesNew
+              baseDecisionTemplate={localizedTemplate}
+              controls={!optionDetailsCreditline}
+              customMessageEmptyDecisions={customMessageEmptyDecisions}
+              customTitleContentAddCard={customTitleContentAddCard}
+              decisionTemplate={filteredDecisionTemplate as any}
+              decisions={decisionsSorted}
+              handleCloseModal={closeModal}
+              handleDelete={deleteDecision}
+              handleOpenModal={openModal}
+              handleSubmitForm={submitForm}
+              isModalOpen={isModalOpen}
+              loading={!!loading}
+              onRemoveCondition={removeCondition}
+              onRestoreConditions={restoreConditions}
+              selectedDecision={selectedDecision}
+              textValues={textValues as IRulesFormTextValues}
             />
-            <Text
-              appearance={EComponentAppearance.DARK}
-              size="medium"
-              type="title"
-              weight="bold"
-            >
-              {mesaggeEmpty}
-            </Text>
-            <Text
-              as="span"
-              appearance={EComponentAppearance.GRAY}
-              size="medium"
-            >
-              {customMessageEmptyDecisions ? (
-                customMessageEmptyDecisions
-              ) : (
-                <>{message}</>
-              )}
-            </Text>
-          </Stack>
-        </Fieldset>
+          ) : (
+            <Fieldset legend={newBusinessRulesLabels.decisionsTitle}>
+              <Stack
+                alignItems="center"
+                direction="column"
+                gap={tokens.spacing.s200}
+                justifyContent="center"
+                width="100%"
+              >
+                <Icon
+                  appearance="warning"
+                  icon={<MdOutlineReportProblem />}
+                  size="40px"
+                />
+                <Text
+                  appearance={EComponentAppearance.DARK}
+                  size="medium"
+                  type="title"
+                  weight="bold"
+                >
+                  {mesaggeEmpty}
+                </Text>
+                <Text
+                  as="span"
+                  appearance={EComponentAppearance.GRAY}
+                  size="medium"
+                >
+                  {customMessageEmptyDecisions ? (
+                    customMessageEmptyDecisions
+                  ) : (
+                    <>{message}</>
+                  )}
+                </Text>
+              </Stack>
+            </Fieldset>
+          )}
+        </>
       )}
     </Stack>
   );

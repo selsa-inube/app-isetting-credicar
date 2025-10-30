@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { postGetConfiguredDecisions } from "@services/conditionsRules/postGetConfiguredDecisions";
+import { getConfiguredDecisionsByValue } from "@services/conditionsRules/getConfiguredDecisionsByValue";
 import { EUseCase } from "@enum/useCase";
 import { errorObject } from "@utils/errorObject";
 import { rulesExcludedByEvaluate } from "@config/creditLines/configuration/rulesExcludedByEvaluate";
-import { IUseGetConfiguredDecisions } from "@ptypes/hooks/IUseGetConfiguredDecisions";
-import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
+import { IUseGetDecisionsByValue } from "@ptypes/hooks/creditLines/IUseGetDecisionsByValue";
 import { IErrors } from "@ptypes/IErrors";
+import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
 
-const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
-  const { businessUnits, ruleData, useCase, rule } = props;
+const useGetDecisionsByValue = (props: IUseGetDecisionsByValue) => {
+  const { ruleName, decisionValue, conditionName, businessUnit, useCase } =
+    props;
   const [configuredDecisions, setConfiguredDecisions] = useState<
     IConfiguredDecisions[] | undefined
   >([]);
@@ -18,22 +19,21 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!rule) return;
-
-      const validateRule = rulesExcludedByEvaluate.includes(rule);
+      const validateRule = rulesExcludedByEvaluate.includes(ruleName);
       const validate =
         (!useCase ||
           useCase === EUseCase.EDIT ||
           useCase === EUseCase.DETAILS_CONDITIONAL) &&
-        !validateRule;
+        validateRule;
 
       if (validate) {
         setLoading(true);
-
         try {
-          const data = await postGetConfiguredDecisions(
-            businessUnits,
-            ruleData,
+          const data = await getConfiguredDecisionsByValue(
+            ruleName,
+            decisionValue,
+            conditionName,
+            businessUnit,
           );
           setConfiguredDecisions(data);
         } catch (error) {
@@ -41,15 +41,13 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
           setHasError(true);
           setErrorData(errorObject(error));
         } finally {
-          setTimeout(() => {
-            setLoading(false);
-          }, 1200);
+          setLoading(false);
         }
       }
     };
 
     fetchData();
-  }, [rule, useCase]);
+  }, [useCase]);
 
   return {
     configuredDecisions,
@@ -59,4 +57,4 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
   };
 };
 
-export { useGetConfiguredDecisions };
+export { useGetDecisionsByValue };
