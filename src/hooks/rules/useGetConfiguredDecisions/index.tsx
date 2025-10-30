@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { postGetConfiguredDecisions } from "@services/conditionsRules/postGetConfiguredDecisions";
 import { EUseCase } from "@enum/useCase";
 import { errorObject } from "@utils/errorObject";
+import { rulesExcludedByEvaluate } from "@config/creditLines/configuration/rulesExcludedByEvaluate";
 import { IUseGetConfiguredDecisions } from "@ptypes/hooks/IUseGetConfiguredDecisions";
 import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
 import { IErrors } from "@ptypes/IErrors";
@@ -18,11 +19,15 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!rule) return;
-      if (
-        !useCase ||
-        useCase === EUseCase.EDIT ||
-        useCase === EUseCase.DETAILS_CONDITIONAL
-      ) {
+
+      const validateRule = rulesExcludedByEvaluate.includes(rule);
+      const validate =
+        (!useCase ||
+          useCase === EUseCase.EDIT ||
+          useCase === EUseCase.DETAILS_CONDITIONAL) &&
+        !validateRule;
+
+      if (validate) {
         setLoading(true);
 
         try {

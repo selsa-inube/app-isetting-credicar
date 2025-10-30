@@ -33,20 +33,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
   const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
-    // useGetConfiguredDecisions({
-    //   useCase: useCaseConfiguration,
-    //   rule: templateKey,
-    //   businessUnits: appData.businessUnit.publicCode,
-    //   ruleData: {
-    //     ruleName,
-    //     conditions: [
-    //       {
-    //         condition: ECreditLines.CREDIT_LINE_RULE,
-    //         value: linesConstructionData.abbreviatedName as string,
-    //       },
-    //     ],
-    //   },
-    // });
     useConfiguredDecision({
       ruleName,
       decisionValue: linesConstructionData.abbreviatedName as string,
