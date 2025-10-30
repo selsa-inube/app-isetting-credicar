@@ -1,13 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { EUseCase } from "@enum/useCase";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { IUseDecisionTemplate } from "@ptypes/hooks/creditLines/IUseDecisionTemplate";
 
 const useDecisionTemplate = (props: IUseDecisionTemplate) => {
-  const { templateKey, ruleData, lineTypeDecision } = props;
+  const {
+    templateKey,
+    ruleData,
+    lineTypeDecision,
+    useCaseConfiguration,
+    ruleLoadding,
+    loadingModify,
+  } = props;
 
   const [showLineModal, setShowLineModal] = useState<boolean>(false);
   const [showAddDecisionModal, setShowAddDecisionModal] =
     useState<boolean>(false);
+  const [componentLoading, setComponentLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (useCaseConfiguration === EUseCase.ADD) {
+      setComponentLoading(loadingModify);
+    } else {
+      setComponentLoading(ruleLoadding);
+    }
+  }, [useCaseConfiguration, loadingModify, ruleLoadding]);
 
   const handleGoBack = () => {
     setShowLineModal(false);
@@ -25,11 +42,15 @@ const useDecisionTemplate = (props: IUseDecisionTemplate) => {
     information[ruleLabel as keyof typeof information] || information.Default,
   );
 
+  const optionAddCreditline = useCaseConfiguration === EUseCase.ADD;
+
   return {
     formId,
     message,
     showLineModal,
     showAddDecisionModal,
+    optionAddCreditline,
+    componentLoading,
     setShowLineModal,
     handleGoBack,
     handleGoContinue,

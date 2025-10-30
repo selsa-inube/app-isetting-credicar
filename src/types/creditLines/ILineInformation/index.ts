@@ -12,6 +12,7 @@ interface ILineInformation {
   onToggleInfoModal: () => void;
   withDecisions?: boolean;
   withoutDecisions?: boolean;
+  addUseCase?: boolean;
 }
 
 export type { ILineInformation };
