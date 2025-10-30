@@ -14,7 +14,7 @@ const useGetDecisionsByValue = (props: IUseGetDecisionsByValue) => {
     IConfiguredDecisions[] | undefined
   >([]);
   const [hasError, setHasError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
 
   useEffect(() => {

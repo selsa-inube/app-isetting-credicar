@@ -57,7 +57,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     [linesConstructionData.rules],
   );
 
-  const supportIncludedOptions = () => {
+  const supportIncludedOptions = useCallback(() => {
     const conditionGroupsData = getConditionsOrganized(
       linesConstructionData,
       linesConstructionData.settingRequestId,
@@ -96,7 +96,14 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
       .map((line) => getLineLabel(line));
 
     return { includedOptions: included, excludedOptions: excluded };
-  };
+  }, [
+    linesConstructionData,
+    ruleOption,
+    useCaseConfiguration,
+    supportLine,
+    appData.language,
+    getConditionsOrganized,
+  ]);
 
   const getLineLabel = (line: IEnumerators): string => {
     return (
