@@ -2,7 +2,6 @@
 import { useContext, useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useGetConfiguredDecisions } from "@hooks/rules/useGetConfiguredDecisions";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
@@ -13,6 +12,7 @@ import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfi
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
+import { useConfiguredDecision } from "../useConfiguredDecision";
 
 const useEditCreditLines = (props: IUseEditCreditLines) => {
   const {
@@ -33,19 +33,25 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
   const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
-    useGetConfiguredDecisions({
-      useCase: useCaseConfiguration,
-      rule: templateKey,
-      businessUnits: appData.businessUnit.publicCode,
-      ruleData: {
-        ruleName,
-        conditions: [
-          {
-            condition: ECreditLines.CREDIT_LINE_RULE,
-            value: linesConstructionData.abbreviatedName as string,
-          },
-        ],
-      },
+    // useGetConfiguredDecisions({
+    //   useCase: useCaseConfiguration,
+    //   rule: templateKey,
+    //   businessUnits: appData.businessUnit.publicCode,
+    //   ruleData: {
+    //     ruleName,
+    //     conditions: [
+    //       {
+    //         condition: ECreditLines.CREDIT_LINE_RULE,
+    //         value: linesConstructionData.abbreviatedName as string,
+    //       },
+    //     ],
+    //   },
+    // });
+    useConfiguredDecision({
+      ruleName,
+      decisionValue: linesConstructionData.abbreviatedName as string,
+      useCaseConfiguration,
+      linesConstructionData,
     });
 
   const {
@@ -67,14 +73,16 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       ) {
         if (decisionsData.length === 0 && setLinesData) {
           const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
-          const optionConditions =
-            configuredDecisions[0].parameterizedConditions
-              ?.filter(
-                (parametrized) =>
-                  parametrized !== ECreditLines.CREDIT_LINE_RULE,
-              )
-              .join(",")
-              .trim();
+          const optionConditions = configuredDecisions[0]
+            .parameterizedConditions
+            ? configuredDecisions[0].parameterizedConditions
+                ?.filter(
+                  (parametrized) =>
+                    parametrized !== ECreditLines.CREDIT_LINE_RULE,
+                )
+                .join(",")
+                .trim()
+            : undefined;
           setOptionsConditionsCSV(optionConditions);
 
           setLinesData((prev) => {
