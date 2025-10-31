@@ -47,7 +47,7 @@ const decisionTemplateConfig = (
             ),
             conditionDataType: condition.conditionDataType,
             value: "",
-            howToSetTheCondition: ValueHowToSetUp.EQUAL,
+            howToSetTheCondition: condition.howToSetTheCondition,
             hidden:
               condition.conditionName === ECreditLines.CREDIT_LINE_RULE
                 ? true
