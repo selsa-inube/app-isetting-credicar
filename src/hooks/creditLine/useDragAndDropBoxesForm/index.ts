@@ -9,6 +9,7 @@ import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
@@ -118,7 +119,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   };
 
   useEffect(() => {
-    if (!ruleLoadding && supportLine.length > 0) {
+    if (supportLine.length > 0) {
       const { includedOptions, excludedOptions } = supportIncludedOptions();
 
       setOptionsIncluded((prev) => ({
@@ -131,14 +132,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         items: excludedOptions,
       }));
     }
-  }, [
-    supportLine,
-    ruleLoadding,
-    linesConstructionData.rules,
-    lineData,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
-  ]);
+  }, [supportLine, linesConstructionData?.rules]);
 
   const targetInsertMode = EBooleanText.PREPEND;
 
@@ -211,15 +205,25 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
       )
       .map((line) => line.code);
 
-    const transformJson = included.map((rule) => ({
-      value: rule,
-      effectiveFrom: currentDate,
-    }));
+    const transformJson = {
+      conditionGroups: included.map((rule) => ({
+        conditionsThatEstablishesTheDecision: [
+          {
+            conditionDataType: "Alphabetical",
+            conditionName: "CreditRiskProfile",
+            howToSetTheCondition: "EqualTo",
+            value: rule,
+          },
+        ],
+      })),
+    };
+
+    console.log("❤️❤️", { included, transformJson });
 
     return [
       {
         ruleName: templateKey,
-        decisionsByRule: transformJson,
+        decisionsByRule: [transformJson],
       },
     ];
   }, [
@@ -232,15 +236,17 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
 
   useEffect(() => {
     const data = supportIncludedData();
+    console.log("🥶", { data });
+    setClientSupportData(data as IRules[]);
 
     if (JSON.stringify(data) !== JSON.stringify(clientSupportData)) {
-      setClientSupportData(data);
+      console.log("🐯", { data });
     }
   }, [
     supportIncludedData,
     lineData,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
+    optionsIncluded.items,
+    optionsExcluded.items,
   ]);
 
   useEffect(() => {
@@ -259,8 +265,8 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   }, [
     ruleLoadding,
     loadingSupportOptions,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
+    optionsIncluded.items,
+    optionsExcluded.items,
   ]);
 
   return {

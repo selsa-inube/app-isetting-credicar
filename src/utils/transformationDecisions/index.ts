@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
+import { ECreditLines } from "@enum/creditLines";
 import { ICondition } from "@ptypes/creditLines/ICondition";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
@@ -39,6 +40,7 @@ const transformationDecisions = (
         const groupedConditions: Record<string, ICondition[]> = {};
         decision.conditionGroups?.forEach((group, index) => {
           const groupId = group.conditionGroupId ?? `Group-${index + 1}`;
+          console.log("🎃", { group });
           groupedConditions[groupId as string] =
             group.conditionsThatEstablishesTheDecision.map((c) => {
               const condMeta: IConditionMeta =
@@ -62,11 +64,17 @@ const transformationDecisions = (
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
+                hidden:
+                  c.conditionName === ECreditLines.CREDIT_LINE_RULE
+                    ? true
+                    : false,
               };
             });
         });
 
-        const effectiveFrom = formatDateDecision(decision.effectiveFrom);
+        const effectiveFrom = formatDateDecision(
+          decision.effectiveFrom ?? String(new Date()),
+        );
         const validUntil = decision.validUntil
           ? formatDateDecision(decision.validUntil ?? "")
           : undefined;

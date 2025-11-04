@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
@@ -6,9 +5,10 @@ import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
 import { transformRuleStructure } from "@utils/transformRuleStructure";
+import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
-import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
+import { getUpdateDecisionsConfig } from "@utils/getUpdateDecisionsConfig";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -20,10 +20,8 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     templateKey,
     decisionsData,
     linesConstructionData,
-    linesData,
-    nameLineRef,
+    clientSupportData,
     setLinesConstructionData,
-    setLinesData,
     setLinesEditData,
     mergeRules,
   } = props;
@@ -57,33 +55,32 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         configuredDecisions &&
         configuredDecisions.length > 0
       ) {
-        if (decisionsData.length === 0 && setLinesData) {
-          const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
-          const optionConditions = configuredDecisions[0]
-            .parameterizedConditions
-            ? configuredDecisions[0].parameterizedConditions
-                ?.filter(
-                  (parametrized) =>
-                    parametrized !== ECreditLines.CREDIT_LINE_RULE,
-                )
-                .join(",")
-                .trim()
-            : undefined;
-          setOptionsConditionsCSV(optionConditions);
+        const optionConditions = configuredDecisions[0]?.parameterizedConditions
+          ?.filter(
+            (parametrized) => parametrized !== ECreditLines.CREDIT_LINE_RULE,
+          )
+          .join(",")
+          .trim();
 
-          setLinesData((prev) => {
-            const existingRules =
-              (prev?.configurationRequestData?.rules as
-                | IRuleDecision[]
-                | undefined) ?? [];
+        if (optionConditions) {
+          setOptionsConditionsCSV(optionConditions);
+        }
+        if (decisionsData.length === 0) {
+          const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
+
+          setLinesConstructionData((prev) => {
+            const normalizeData: ILinesConstructionData = {
+              settingRequestId:
+                prev.settingRequestId || linesConstructionData.settingRequestId,
+            };
+            const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+            const newRules = normalized;
+
+            normalizeData.rules = mergeRules(existingRules, newRules);
 
             return {
               ...prev,
-              settingRequestId: linesConstructionData.settingRequestId,
-              configurationRequestData: {
-                ...prev?.configurationRequestData,
-                rules: mergeRules(existingRules, normalized),
-              },
+              ...normalizeData,
             };
           });
         }
@@ -91,30 +88,30 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [configuredDecisions, decisionsData, useCaseConfiguration, ruleLoadding]);
 
-  const normalizeDecisionsArray = (data: any): IRuleDecisionExtended[] =>
-    (Array.isArray(data) ? data : []).map((item) => ({
-      ...item,
-      decisionsByRule: Array.isArray(item.decisionsByRule)
-        ? item.decisionsByRule.map((dbr: any) => ({
-            ...dbr,
-            effectiveFrom: formatDateDecision(dbr.effectiveFrom),
-          }))
-        : [],
-    }));
-
-  const newInsertDecision = getNewInsertDecisionsConfig(
-    appData.user.userAccount,
-    normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
-    normalizeDecisionsArray(transformRuleStructure(decisionsData)),
-  );
-
-  const newDeleteDecision = getNewDeletedDecisionsConfig(
-    appData.user.userAccount,
-    normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
-    normalizeDecisionsArray(transformRuleStructure(decisionsData)),
-  );
-
   useEffect(() => {
+    if (ruleLoadding && decisionsData.length === 0) return;
+
+    const newInsertDecision = getNewInsertDecisionsConfig(
+      appData.user.userAccount,
+      normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+      transformRuleStructure(decisionsData),
+      linesConstructionData.abbreviatedName as string,
+    );
+
+    const newUpdateDecision = getUpdateDecisionsConfig(
+      appData.user.userAccount,
+      normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+      transformRuleStructure(decisionsData),
+      linesConstructionData.abbreviatedName as string,
+    );
+
+    const newDeleteDecision = getNewDeletedDecisionsConfig(
+      appData.user.userAccount,
+      normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
+      transformRuleStructure(decisionsData),
+    );
+
+    console.log("😈", { newInsertDecision, newDeleteDecision });
     const insertValues = [newInsertDecision].filter(
       (decision) => decision !== undefined,
     );
@@ -122,12 +119,22 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     const deleteValues = [newDeleteDecision].filter(
       (decision) => decision !== undefined,
     );
+
+    const updateValues = [newUpdateDecision].filter(
+      (decision) => decision !== undefined,
+    );
+
     setNewDecisions(
-      [...insertValues, ...deleteValues].flatMap(
+      [...insertValues, ...updateValues, ...deleteValues].flatMap(
         (item) => item as IRuleDecisionExtended,
       ),
     );
-  }, [decisionsData]);
+  }, [
+    decisionsData,
+    configuredDecisions,
+    appData.user.userAccount,
+    ruleLoadding,
+  ]);
 
   useEffect(() => {
     if (
@@ -149,58 +156,57 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
   }, [useCaseConfiguration, newDecisions]);
 
   useEffect(() => {
-    if (
-      useCaseConfiguration === EUseCase.EDIT ||
-      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
-    ) {
-      if (!linesData || linesData?.configurationRequestData.length === 0)
-        return;
-
+    const validate = useCaseConfiguration === EUseCase.EDIT;
+    if (validate) {
+      const newFormattedRules = formatRuleDecisionsConfig(
+        decisionsData,
+        false,
+        linesConstructionData.abbreviatedName as string,
+      );
       setLinesConstructionData((prev) => {
-        const initialValues = nameLineRef.current?.initialValues;
-        const currentValues = nameLineRef.current?.values;
-
-        const hasNameChanged =
-          currentValues?.nameLine !== initialValues?.nameLine;
-        const hasAliasChanged =
-          currentValues?.aliasLine !== initialValues?.aliasLine;
-        const hasDescriptionChanged =
-          currentValues?.descriptionLine !== initialValues?.descriptionLine;
-
-        const normalizeData: ILinesConstructionData = {
-          settingRequestId:
-            prev.settingRequestId || linesConstructionData.settingRequestId,
-          lineOfCreditId: linesData.settingRequestId,
-          abbreviatedName: hasNameChanged
-            ? String(linesData.configurationRequestData?.abbreviatedName ?? "")
-            : (prev.abbreviatedName ?? ""),
-          alias: hasAliasChanged
-            ? String(linesData.configurationRequestData?.alias ?? "")
-            : (prev.alias ?? ""),
-          descriptionUse: hasDescriptionChanged
-            ? String(linesData.configurationRequestData?.descriptionUse ?? "")
-            : (prev.descriptionUse ?? ""),
-        };
-
-        if (linesData.configurationRequestData?.rules) {
-          const existingRules = (prev?.rules ?? []) as IRuleDecision[];
-          const newRules = Array.isArray(
-            linesData.configurationRequestData.rules,
-          )
-            ? linesData.configurationRequestData.rules
-            : Object.values(linesData.configurationRequestData.rules ?? {});
-          normalizeData.rules = mergeRules(existingRules, newRules);
-        } else {
-          normalizeData.rules = prev.rules;
-        }
+        const existingRules =
+          (prev?.rules as IRuleDecision[] | undefined) ??
+          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+          [];
 
         return {
           ...prev,
-          ...normalizeData,
+          settingRequestId: linesConstructionData.settingRequestId,
+          rules: mergeRules(existingRules, newFormattedRules),
         };
       });
     }
-  }, [linesData, useCaseConfiguration]);
+  }, [decisionsData, useCaseConfiguration]);
+
+  useEffect(() => {
+    const validate = useCaseConfiguration === EUseCase.EDIT;
+
+    if (validate) {
+      console.log("🐻‍❄️ ingreso clientSupportData.....");
+      setLinesEditData((prev) => {
+        const existingRules =
+          (prev?.rules as IRuleDecision[] | undefined) ?? [];
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          lineOfCreditId: linesConstructionData.settingRequestId,
+          rules: mergeRules(existingRules, clientSupportData),
+        };
+      });
+      setLinesConstructionData((prev) => {
+        const existingRules =
+          (prev?.rules as IRuleDecision[] | undefined) ??
+          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+          [];
+
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          rules: mergeRules(existingRules, clientSupportData),
+        };
+      });
+    }
+  }, [clientSupportData]);
 
   return {
     optionsConditionsCSV,

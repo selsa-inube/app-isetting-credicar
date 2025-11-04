@@ -345,13 +345,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       useCaseConfiguration,
       templateKey: templateKey || "",
       decisionsData,
-      linesData,
-      nameLineRef,
       setLinesConstructionData,
       linesConstructionData,
+      clientSupportData,
       mergeRules,
       setLinesEditData,
-      setLinesData,
     });
 
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
@@ -394,11 +392,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   useEffect(() => {
     if (decisionsData.length === 0) return;
-    const validateUseEdit = useCaseConfiguration === EUseCase.EDIT;
-    if (useCaseConfiguration === EUseCase.ADD) {
+    const validate = useCaseConfiguration === EUseCase.ADD;
+    if (validate) {
       const newFormattedRules = formatRuleDecisionsConfig(
         decisionsData,
-        validateUseEdit,
+        false,
         linesConstructionData.abbreviatedName as string,
         conditionCreditLine,
       );
@@ -718,6 +716,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
+
+  console.log("👀", { linesConstructionData, linesEditData });
 
   return {
     loading,

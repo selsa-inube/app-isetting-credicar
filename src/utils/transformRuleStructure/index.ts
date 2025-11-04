@@ -1,58 +1,47 @@
-import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
+import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { parseIfJSON } from "../parseIfJSON";
+import { capitalizeText } from "../capitalizeText";
 
 const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
   return inputArray.map((rule) => {
-    const conditionGroups = [];
+    const decisionsByRule: IDecisionsByRule[] = [];
+    console.log("🐷🐷", { rule });
+    const conditionGroups = rule.conditionGroups
+      ? rule.conditionGroups.map((item: IConditionGroups) => ({
+          conditionGroupId: item.conditionGroupId ?? item.ConditionGroupId,
+          conditionsThatEstablishesTheDecision:
+            item.conditionsThatEstablishesTheDecision?.map((condition) => ({
+              conditionDataType: capitalizeText(
+                condition.conditionDataType as string,
+              ),
+              conditionName: condition.conditionName,
+              howToSetTheCondition: condition.howToSetTheCondition,
+              value: condition.value,
+            })),
+        }))
+      : undefined;
 
-    if (rule.conditionsThatEstablishesTheDecision) {
-      for (const [
-        groupId,
-        conditionsThatEstablishesTheDecision,
-      ] of Object.entries(rule.conditionsThatEstablishesTheDecision)) {
-        const conditionsArray = Array.isArray(
-          conditionsThatEstablishesTheDecision,
-        )
-          ? conditionsThatEstablishesTheDecision
-          : [conditionsThatEstablishesTheDecision];
+    const validUntil = rule.validUntil
+      ? formatDateDecision(rule.validUntil as string)
+      : undefined;
 
-        const simplifiedConditions = conditionsArray.map((cond) => {
-          return {
-            conditionDataType: cond.conditionDataType,
-            howToSetTheCondition: cond.howToSetTheCondition,
-            conditionName: cond.conditionName,
-            value: cond.value,
-            hidden:
-              cond.conditionName === ECreditLines.CREDIT_LINE_RULE
-                ? true
-                : false,
-          };
-        });
+    decisionsByRule.push({
+      decisionId: rule.decisionId,
+      ruleName: rule.ruleName,
+      ruleDataType: rule.ruleDataType,
+      value: rule.value,
+      howToSetTheDecision: rule.howToSetTheDecision,
+      effectiveFrom: rule.effectiveFrom
+        ? formatDateDecision(rule.effectiveFrom as string)
+        : formatDateDecision(String(new Date())),
+      validUntil: validUntil,
+      conditionGroups: conditionGroups,
+    });
 
-        conditionGroups.push({
-          conditionGroupId: groupId,
-          conditionsThatEstablishesTheDecision: simplifiedConditions,
-        });
-      }
-    }
     return {
-      decisionsByRule: [
-        {
-          decisionId: rule.decisionId,
-          ruleName: rule.ruleName,
-          ruleDataType: rule.decisionDataType
-            ? rule.decisionDataType
-            : "Alphabetical",
-          value: parseIfJSON(rule.value),
-          howToSetTheDecision: rule.howToSetTheDecision,
-          effectiveFrom:
-            rule.effectiveFrom &&
-            formatDateDecision(String(rule.effectiveFrom)),
-          conditionGroups: conditionGroups,
-        },
-      ],
+      decisionsByRule: decisionsByRule,
       ruleName: rule.ruleName,
     };
   });
