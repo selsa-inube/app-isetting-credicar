@@ -43,7 +43,7 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
         } finally {
           setTimeout(() => {
             setLoading(false);
-          }, 1200);
+          }, 300);
         }
       }
     };
