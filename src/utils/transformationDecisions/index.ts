@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
+import { ECreditLines } from "@enum/creditLines";
 import { ICondition } from "@ptypes/creditLines/ICondition";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
@@ -62,6 +63,10 @@ const transformationDecisions = (
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
+                hidden:
+                  c.conditionName === ECreditLines.CREDIT_LINE_RULE
+                    ? true
+                    : false,
               };
             });
         });

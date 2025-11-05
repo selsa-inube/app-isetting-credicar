@@ -1,4 +1,4 @@
-import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
+import { ValueDataType } from "@isettingkit/input";
 import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
@@ -9,6 +9,7 @@ const decisionTemplateConfig = (
     conditionsThatEstablishesTheDecision,
     i18n,
     descriptionUse,
+    howToSetTheDecision,
   }: IRuleDecisionExtended,
   language: string,
 ) => {
@@ -29,7 +30,7 @@ const decisionTemplateConfig = (
       ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
-      howToSetTheDecision: ValueHowToSetUp.EQUAL,
+      howToSetTheDecision: howToSetTheDecision,
       value: "",
       effectiveFrom: "",
       validUntil: "",
@@ -45,9 +46,9 @@ const decisionTemplateConfig = (
               condition.i18n?.[language as keyof typeof i18n] ??
                 condition.descriptionUse,
             ),
-            conditionDataType: condition.conditionDataType,
+            conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
             value: "",
-            howToSetTheCondition: ValueHowToSetUp.EQUAL,
+            howToSetTheCondition: condition.howToSetTheCondition,
             hidden:
               condition.conditionName === ECreditLines.CREDIT_LINE_RULE
                 ? true
