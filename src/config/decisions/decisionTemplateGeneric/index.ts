@@ -20,45 +20,54 @@ const decisionTemplateConfig = (
   ) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
-    const decisionTemplate = {
-      ruleName: ruleName,
-      labelName: String(
-        i18n?.[language as keyof typeof i18n] ?? descriptionUse,
-      ),
-      descriptionUse: String(
-        i18n?.[language as keyof typeof i18n] ?? descriptionUse,
-      ),
+    const localLabel = String(
+      i18n?.[language as keyof typeof i18n] ?? descriptionUse,
+    );
+
+    const buildGroup = (ConditionGroupId: string) => ({
+      ConditionGroupId,
+      conditionsThatEstablishesTheDecision:
+        conditionsThatEstablishesTheDecision.map((condition) => ({
+          conditionName: condition.conditionName,
+          labelName: String(
+            condition.i18n?.[language as keyof typeof condition.i18n] ??
+              condition.descriptionUse,
+          ),
+          descriptionUse: String(
+            condition.i18n?.[language as keyof typeof condition.i18n] ??
+              condition.descriptionUse,
+          ),
+          conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
+          value: "",
+          listOfPossibleValues: Array.isArray(condition.listOfPossibleValues)
+            ? condition.listOfPossibleValues
+            : [],
+          howToSetTheCondition: condition.howToSetTheCondition,
+          hidden:
+            condition.conditionName === ECreditLines.CREDIT_LINE_RULE
+              ? true
+              : false,
+        })),
+    });
+
+    return {
+      ruleName,
+      labelName: localLabel,
+      descriptionUse: localLabel,
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
-      howToSetTheDecision: howToSetTheDecision,
+      howToSetTheDecision,
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      conditionsThatEstablishesTheDecision: {
-        "group-primary": conditionsThatEstablishesTheDecision.map(
-          (condition) => ({
-            conditionName: condition.conditionName,
-            labelName: String(
-              condition.i18n?.[language as keyof typeof i18n] ??
-                condition.descriptionUse,
-            ),
-            descriptionUse: String(
-              condition.i18n?.[language as keyof typeof i18n] ??
-                condition.descriptionUse,
-            ),
-            conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
-            value: "",
-            howToSetTheCondition: condition.howToSetTheCondition,
-            hidden:
-              condition.conditionName === ECreditLines.CREDIT_LINE_RULE
-                ? true
-                : false,
-          }),
-        ),
-      },
+      conditionGroups: [
+        buildGroup("group-primary"),
+        buildGroup("additional-group-1"),
+        buildGroup("additional-group-2"),
+      ],
     };
-    return decisionTemplate;
   }
+  return undefined;
 };
 
 export { decisionTemplateConfig };

@@ -67,44 +67,84 @@ const toArrayConditionsDecision = (d: IRuleDecision): IRuleDecision => {
   return tmp;
 };
 
-const nameToGroupMapOf = (d: IRuleDecision) => {
-  const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
-  const map = new Map<string, string>();
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  Object.entries(groups).forEach(([group, list]) => {
-    asArray(list).forEach((c: any) => {
-      if (c?.conditionName) map.set(c.conditionName, group);
-    });
-  });
-  return map;
+// const nameToGroupMapOf = (d: IRuleDecision) => {
+//   const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
+//   const map = new Map<string, string>();
+//   /* eslint-disable @typescript-eslint/no-explicit-any */
+//   Object.entries(groups).forEach(([group, list]) => {
+//     asArray(list).forEach((c: any) => {
+//       if (c?.conditionName) map.set(c.conditionName, group);
+//     });
+//   });
+//   return map;
+// };
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const nameToGroupOccurrences = (d: IRuleDecision) => {
+  const occ = new Map<string, string[]>();
+  const cgArray: any[] = Array.isArray((d as any)?.conditionGroups)
+    ? ((d as any).conditionGroups as any[])
+    : (groupsRecordToArrayNew(
+        (getConditionsByGroupNew(d) ?? {}) as any,
+      ) as any[]);
+
+  for (const groupEntry of cgArray) {
+    const groupId =
+      groupEntry?.ConditionGroupId ?? groupEntry?.groupId ?? "group-primary";
+
+    const list = asArray(
+      groupEntry?.conditionsThatEstablishesTheDecision ??
+        groupEntry?.conditions ??
+        (getConditionsByGroupNew(d) as any)?.[groupId],
+    );
+
+    for (const c of list) {
+      if (!c?.conditionName) continue;
+      const current = occ.get(c.conditionName) ?? [];
+      current.push(groupId);
+      occ.set(c.conditionName, current);
+    }
+  }
+
+  return occ;
 };
 
 const safeSortDisplayDataSampleSwitchPlaces = (input: {
   decisionTemplate?: IRuleDecision | null;
-  nameToGroup?: Map<string, string>;
 }): IRuleDecision => {
   try {
     const original = ensureArrayGroupsDeep(
       input.decisionTemplate ?? ({} as IRuleDecision),
     );
-    const nameToGroup = input.nameToGroup ?? nameToGroupMapOf(original);
+
+    const occurrences = nameToGroupOccurrences(original);
 
     const flatTpl = toArrayConditionsDecision(original);
+
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const sorted = sortDisplayDataSampleSwitchPlaces({
       decisionTemplate: flatTpl,
     }) as any;
+
     /* eslint-disable @typescript-eslint/no-explicit-any */
     const arr = Array.isArray(sorted?.conditionsThatEstablishesTheDecision)
       ? (sorted.conditionsThatEstablishesTheDecision as any[])
       : (((flatTpl as any).conditionsThatEstablishesTheDecision as
           | any[]
           | undefined) ?? []);
-    /* eslint-disable @typescript-eslint/no-explicit-any */
+
     const regrouped: Record<string, any[]> = {};
+    const indexByName = new Map<string, number>();
+
     for (const c of arr) {
-      const g = nameToGroup.get(c?.conditionName) ?? "group-primary";
-      (regrouped[g] ||= []).push(c);
+      const name = c?.conditionName;
+      const seq = (name && occurrences.get(name)) ?? ["group-primary"];
+
+      const i = indexByName.get(name) ?? 0;
+      const gid = seq[Math.min(i, seq.length - 1)];
+      indexByName.set(name, i + 1);
+
+      (regrouped[gid] ||= []).push(c);
     }
 
     const base: IRuleDecision = isIRuleDecision(sorted) ? sorted : original;
@@ -303,9 +343,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       string,
       unknown
     >;
+
+    const primaryGroup = groups["group-primary"] || [];
+
     return (
-      Object.values(groups)
-        .flatMap(asArray)
+      asArray(primaryGroup)
         /* eslint-disable @typescript-eslint/no-explicit-any */
         .map((c: any) => ({
           id: c.conditionName,
@@ -416,18 +458,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   const filteredDecisionTemplate = useMemo(() => {
     const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
-    const nameToGroup = nameToGroupMapOf(normalizedTemplate);
+    // const nameToGroup = nameToGroupMapOf(normalizedTemplate);
 
     const tpl = safeSortDisplayDataSampleSwitchPlaces({
       decisionTemplate: normalizedTemplate,
-      nameToGroup,
     });
 
     const tplGroups = (getConditionsByGroupNew(tpl) || {}) as Record<
       string,
       unknown
     >;
-
     const filteredEntries = Object.entries(tplGroups).reduce(
       (acc, [group, list]) => {
         const kept = asArray(list).filter(
