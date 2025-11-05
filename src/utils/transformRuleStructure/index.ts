@@ -7,7 +7,6 @@ import { capitalizeText } from "../capitalizeText";
 const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
   return inputArray.map((rule) => {
     const decisionsByRule: IDecisionsByRule[] = [];
-    console.log("🐷🐷", { rule });
     const conditionGroups = rule.conditionGroups
       ? rule.conditionGroups.map((item: IConditionGroups) => ({
           conditionGroupId: item.conditionGroupId ?? item.ConditionGroupId,

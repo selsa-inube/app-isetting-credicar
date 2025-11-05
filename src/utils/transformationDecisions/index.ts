@@ -40,7 +40,6 @@ const transformationDecisions = (
         const groupedConditions: Record<string, ICondition[]> = {};
         decision.conditionGroups?.forEach((group, index) => {
           const groupId = group.conditionGroupId ?? `Group-${index + 1}`;
-          console.log("🎃", { group });
           groupedConditions[groupId as string] =
             group.conditionsThatEstablishesTheDecision.map((c) => {
               const condMeta: IConditionMeta =

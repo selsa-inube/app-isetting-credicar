@@ -7,6 +7,7 @@ interface IUseEditCreditLines {
   templateKey: string;
   decisionsData: IRuleDecisionExtended[];
   linesConstructionData: ILinesConstructionData;
+  linesEditData: ILinesConstructionData;
   clientSupportData: IRules[] | undefined;
 
   setLinesEditData: React.Dispatch<

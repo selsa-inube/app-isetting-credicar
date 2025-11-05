@@ -21,13 +21,13 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     decisionsData,
     linesConstructionData,
     clientSupportData,
+    linesEditData,
     setLinesConstructionData,
     setLinesEditData,
     mergeRules,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
-  const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
   const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
@@ -111,7 +111,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       transformRuleStructure(decisionsData),
     );
 
-    console.log("😈", { newInsertDecision, newDeleteDecision });
     const insertValues = [newInsertDecision].filter(
       (decision) => decision !== undefined,
     );
@@ -124,36 +123,36 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       (decision) => decision !== undefined,
     );
 
-    setNewDecisions(
-      [...insertValues, ...updateValues, ...deleteValues].flatMap(
-        (item) => item as IRuleDecisionExtended,
-      ),
-    );
-  }, [
-    decisionsData,
-    configuredDecisions,
-    appData.user.userAccount,
-    ruleLoadding,
-  ]);
+    const allDecisions = [
+      ...insertValues,
+      ...updateValues,
+      ...deleteValues,
+    ].flatMap((item) => item as IRuleDecisionExtended);
 
-  useEffect(() => {
-    if (
-      useCaseConfiguration === EUseCase.EDIT &&
-      newDecisions &&
-      newDecisions.length > 0
-    ) {
+    console.log("🏠", {
+      newInsertDecision,
+      newUpdateDecision,
+      newDeleteDecision,
+    });
+
+    if (useCaseConfiguration === EUseCase.EDIT && allDecisions.length > 0) {
       setLinesEditData((prev) => {
         const existingRules =
           (prev?.rules as IRuleDecision[] | undefined) ?? [];
-        return {
+
+        const mergedRules = mergeRules(existingRules, allDecisions);
+
+        const newState = {
           ...prev,
           settingRequestId: linesConstructionData.settingRequestId,
           lineOfCreditId: linesConstructionData.settingRequestId,
-          rules: mergeRules(existingRules, newDecisions),
+          rules: mergedRules,
         };
+
+        return newState;
       });
     }
-  }, [useCaseConfiguration, newDecisions]);
+  }, [decisionsData, ruleLoadding]);
 
   useEffect(() => {
     const validate = useCaseConfiguration === EUseCase.EDIT;
@@ -182,7 +181,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     const validate = useCaseConfiguration === EUseCase.EDIT;
 
     if (validate) {
-      console.log("🐻‍❄️ ingreso clientSupportData.....");
       setLinesEditData((prev) => {
         const existingRules =
           (prev?.rules as IRuleDecision[] | undefined) ?? [];
@@ -208,6 +206,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [clientSupportData]);
 
+  console.log({ linesEditData });
   return {
     optionsConditionsCSV,
     ruleError,

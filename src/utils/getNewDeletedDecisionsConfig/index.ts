@@ -11,11 +11,12 @@ const getNewDeletedDecisionsConfig = (
   prevRef: IRuleDecisionExtended[],
   newDecision: IRuleDecisionExtended[],
 ) => {
-  console.log("😈", { prevRef, newDecision });
   if (!arraysEqual(prevRef, newDecision)) {
+    console.log("😈 hook", { prevRef, newDecision });
     return prevRef
       .filter((decision) => !findDecision(newDecision, decision))
       .map((decision) => {
+        console.log("   📒 hook - map", { decision });
         const decisionsByRule = decision.decisionsByRule?.map((condition) => {
           const conditionGroups = condition.conditionGroups
             ? condition.conditionGroups.map((item) => ({
@@ -36,7 +37,6 @@ const getNewDeletedDecisionsConfig = (
                   ) as IConditionsTheDecision[],
               }))
             : undefined;
-
           const validUntil = condition.validUntil
             ? formatDateDecision(condition.validUntil as string)
             : undefined;
@@ -52,6 +52,7 @@ const getNewDeletedDecisionsConfig = (
             conditionGroups: conditionGroups,
           };
         });
+
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
           ruleName: decision.ruleName,

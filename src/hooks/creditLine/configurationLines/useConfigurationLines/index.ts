@@ -336,7 +336,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     );
 
     const mergedNewRules = Object.values(newRulesGrouped).flat();
-
+    console.log("😒 mergeRules", { filteredExisting, mergedNewRules });
     return [...filteredExisting, ...mergedNewRules];
   };
 
@@ -350,8 +350,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       clientSupportData,
       mergeRules,
       setLinesEditData,
+      linesEditData,
     });
-
+  console.log("🍕 UseEffect - newDecisions", { linesEditData });
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
     .flatMap((r) => {
@@ -716,8 +717,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
-
-  console.log("👀", { linesConstructionData, linesEditData });
 
   return {
     loading,
