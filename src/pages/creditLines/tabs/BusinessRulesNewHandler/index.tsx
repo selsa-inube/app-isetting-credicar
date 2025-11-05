@@ -67,15 +67,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setShowLineModal,
   });
 
-  console.log(
-    "filteredDecisionTemplate: ",
-    filteredDecisionTemplate,
-    " decisionsSorted: ",
-    decisionsSorted,
-    " localizedTemplate: ",
-    localizedTemplate,
-  );
-
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (

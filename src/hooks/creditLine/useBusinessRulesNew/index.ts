@@ -557,7 +557,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
       ? newBusinessRulesLabels.NoDecision
       : newBusinessRulesLabels.NoStringAttached;
-  console.log("filteredDecisionTemplate: ", filteredDecisionTemplate);
+
   return {
     isModalOpen,
     selectedDecision,
