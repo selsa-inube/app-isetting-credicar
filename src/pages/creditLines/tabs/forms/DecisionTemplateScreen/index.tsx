@@ -130,7 +130,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           remunerativerateRule={false}
           setShowLineModal={setShowLineModal}
           showAddDecisionModal={showAddDecisionModal}
-          ruleLoadding={componentLoading}
+          ruleLoading={componentLoading}
           setAddDecision={setAddDecision}
           setEditDecision={setEditDecision}
           setDeleteDecision={setDeleteDecision}

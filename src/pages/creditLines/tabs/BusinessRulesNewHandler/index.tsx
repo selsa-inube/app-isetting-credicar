@@ -25,7 +25,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     optionsConditionsCSV,
     remunerativerateRule,
     showAddDecisionModal,
-    ruleLoadding,
+    ruleLoading,
     setShowLineModal,
     setDecisionData,
     formId,
@@ -75,7 +75,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
-      {!ruleLoadding && (
+      {!ruleLoading && (
         <>
           {!optionDetailsCreditline && (
             <>
@@ -111,7 +111,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
           )}
         </>
       )}
-      {!ruleLoadding && (
+      {!ruleLoading && (
         <>
           {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
             <BusinessRulesNew
