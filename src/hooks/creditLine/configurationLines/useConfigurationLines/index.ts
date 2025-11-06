@@ -691,6 +691,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
 
+  console.log("🍕", { linesEditData });
+  console.log("🎁🌭", { linesConstructionData });
+
   return {
     loading,
     initialValues,

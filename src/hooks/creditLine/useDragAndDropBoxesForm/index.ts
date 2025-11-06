@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { IRuleDecision } from "@isettingkit/input";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { formatDate } from "@utils/date/formatDate";
+import { mergeEditRules } from "@utils/mergeEditRules";
 import { EBooleanText } from "@enum/booleanText";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
+import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
-import { mergeEditRules } from "@utils/mergeEditRules";
-import { IRuleDecision } from "@isettingkit/input";
-import { decisionsLabels } from "@src/config/decisions/decisionsLabels";
-import { ETransactionOperation } from "@src/enum/transactionOperation";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
@@ -217,10 +217,10 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         ),
       )
       .map((line) => line.code);
-
     return included;
   }, [
     optionsIncluded.items,
+    optionsExcluded.items,
     supportLine,
     appData.language,
     templateKey,
@@ -243,7 +243,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
       value: data?.[0].value,
       howToSetTheDecision: data?.[0].howToSetTheDecision,
       effectiveFrom: formatDateDecision(String(new Date())),
-      transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+      transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
 
       conditionGroups: included?.map((rule) => ({
         conditionsThatEstablishesTheDecision: [
@@ -252,7 +252,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
             conditionName: "CreditRiskProfile",
             howToSetTheCondition: "EqualTo",
             value: rule,
-            transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+            transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
           },
         ],
       })),

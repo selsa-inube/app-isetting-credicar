@@ -22,7 +22,7 @@ const getUpdateDecisionsConfig = (
           const conditionGroups = condition.conditionGroups
             ? condition.conditionGroups.map((item) => ({
                 conditionGroupId: item.conditionGroupId,
-                transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+                transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
                 conditionsThatEstablishesTheDecision: [
                   ...(item.conditionsThatEstablishesTheDecision
                     ?.filter((condition) => condition.value !== undefined)
@@ -32,12 +32,13 @@ const getUpdateDecisionsConfig = (
                       howToSetTheCondition: condition.howToSetTheCondition,
                       value: condition.value,
                       transactionOperation:
-                        ETransactionOperation.PARTIAL_UPDATE,
+                        ETransactionOperation.INSERT_OR_UPDATE,
                     })) || []),
                   {
                     conditionName: ECreditLines.CREDIT_LINE_RULE,
                     value: abbreviatedName,
-                    transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+                    transactionOperation:
+                      ETransactionOperation.INSERT_OR_UPDATE,
                   },
                 ] as IConditionsTheDecision[],
               }))
@@ -53,7 +54,7 @@ const getUpdateDecisionsConfig = (
             ),
             validUntil: validUntil,
             value: condition.value,
-            transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+            transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
             decisionId: condition.decisionId,
             conditionGroups: conditionGroups,
           };
