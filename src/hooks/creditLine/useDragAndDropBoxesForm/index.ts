@@ -1,30 +1,32 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { formatDate } from "@utils/date/formatDate";
 import { EBooleanText } from "@enum/booleanText";
 import { EUseCase } from "@enum/useCase";
+import { ECreditLines } from "@enum/creditLines";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
-import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { mergeEditRules } from "@utils/mergeEditRules";
+import { IRuleDecision } from "@isettingkit/input";
+import { decisionsLabels } from "@src/config/decisions/decisionsLabels";
+import { ETransactionOperation } from "@src/enum/transactionOperation";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
-    clientSupportData,
     infoRuleName,
-    linesConstructionData,
     optionsExcluded,
     optionsIncluded,
     ruleLoadding,
     ruleOption,
     templateKey,
-    useCaseConfiguration,
     supportLine,
     loadingSupportOptions,
-    setClientSupportData,
     setOptionsIncluded,
     setOptionsExcluded,
   } = props;
@@ -32,6 +34,14 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const { appData } = useContext(AuthAndPortalData);
   const currentDate = useMemo(() => formatDate(new Date()), []);
   const [loadingData, setLoadingData] = useState<boolean>(false);
+  const [move, setMove] = useState<boolean>(false);
+
+  const {
+    setLinesConstructionData,
+    setLinesEditData,
+    linesConstructionData,
+    useCaseConfiguration,
+  } = useContext(CreditLinesConstruction);
 
   const lineData = useCallback(
     (data: ILinesConstructionData) =>
@@ -155,8 +165,10 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const handleMove = useCallback(
     (payload: { item: string; from: ISide; to: ISide }) => {
       const { item, from, to } = payload;
+      setMove(false);
 
       if (from === EBooleanText.LEFT && to === EBooleanText.RIGHT) {
+        setMove(true);
         setOptionsExcluded((prev) => ({
           ...prev,
           items: removeFrom(prev.items, item),
@@ -166,6 +178,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
           items: insertInto(prev.items, item),
         }));
       } else if (from === EBooleanText.RIGHT && to === EBooleanText.LEFT) {
+        setMove(true);
         setOptionsExcluded((prev) => ({
           ...prev,
           items: insertInto(prev.items, item),
@@ -205,27 +218,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
       )
       .map((line) => line.code);
 
-    const transformJson = {
-      conditionGroups: included.map((rule) => ({
-        conditionsThatEstablishesTheDecision: [
-          {
-            conditionDataType: "Alphabetical",
-            conditionName: "CreditRiskProfile",
-            howToSetTheCondition: "EqualTo",
-            value: rule,
-          },
-        ],
-      })),
-    };
-
-    console.log("❤️❤️", { included, transformJson });
-
-    return [
-      {
-        ruleName: templateKey,
-        decisionsByRule: [transformJson],
-      },
-    ];
+    return included;
   }, [
     optionsIncluded.items,
     supportLine,
@@ -235,19 +228,63 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   ]);
 
   useEffect(() => {
-    const data = supportIncludedData();
-    console.log("🥶", { data });
-    setClientSupportData(data as IRules[]);
+    if (!move || useCaseConfiguration !== EUseCase.EDIT) return;
 
-    if (JSON.stringify(data) !== JSON.stringify(clientSupportData)) {
-      console.log("🐯", { data });
-    }
-  }, [
-    supportIncludedData,
-    lineData,
-    optionsIncluded.items,
-    optionsExcluded.items,
-  ]);
+    const included = supportIncludedData();
+
+    const data = linesConstructionData?.rules?.find(
+      (rule) => rule.ruleName === ruleOption,
+    )?.decisionsByRule;
+
+    const transformJson = {
+      decisionId: data?.[0].decisionId,
+      ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
+      ruleDataType: data?.[0].ruleDataType,
+      value: data?.[0].value,
+      howToSetTheDecision: data?.[0].howToSetTheDecision,
+      effectiveFrom: formatDateDecision(String(new Date())),
+      transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+
+      conditionGroups: included?.map((rule) => ({
+        conditionsThatEstablishesTheDecision: [
+          {
+            conditionDataType: "Alphabetical",
+            conditionName: "CreditRiskProfile",
+            howToSetTheCondition: "EqualTo",
+            value: rule,
+            transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+          },
+        ],
+      })),
+    };
+
+    const newValues = [
+      {
+        ruleName: templateKey,
+        modifyJustification: `${decisionsLabels.modifyJustification} ${appData.user.userAccount}`,
+        decisionsByRule: [transformJson],
+      },
+    ];
+
+    setLinesEditData((prev) => {
+      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        lineOfCreditId: linesConstructionData.settingRequestId,
+        rules: mergeEditRules(existingRules, newValues),
+      };
+    });
+
+    setLinesConstructionData((prev) => {
+      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        rules: mergeEditRules(existingRules, newValues),
+      };
+    });
+  }, [move, useCaseConfiguration]);
 
   useEffect(() => {
     const loading =

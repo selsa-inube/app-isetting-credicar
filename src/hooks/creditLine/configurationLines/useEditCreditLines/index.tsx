@@ -9,6 +9,7 @@ import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { getUpdateDecisionsConfig } from "@utils/getUpdateDecisionsConfig";
+import { rulesExcludedByEvaluate } from "@config/creditLines/configuration/rulesExcludedByEvaluate";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
@@ -20,11 +21,12 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     templateKey,
     decisionsData,
     linesConstructionData,
-    clientSupportData,
-    linesEditData,
     setLinesConstructionData,
     setLinesEditData,
     mergeRules,
+    addDecision,
+    editDecision,
+    deleteDecision,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -65,7 +67,33 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         if (optionConditions) {
           setOptionsConditionsCSV(optionConditions);
         }
-        if (decisionsData.length === 0) {
+
+        const clientSupportFiltered = linesConstructionData.rules?.filter(
+          (rule) => rule.ruleName === ECreditLines.CLIENT_SUPPORT_RULE,
+        );
+
+        const creditLineFiltered = linesConstructionData.rules?.filter(
+          (rule) => rule.ruleName === ECreditLines.CREDIT_LINE_RULE,
+        );
+
+        const isClientSupportMissing =
+          templateKey === ECreditLines.CLIENT_SUPPORT_RULE &&
+          (!clientSupportFiltered || clientSupportFiltered.length === 0);
+
+        const isCreditLineMissing =
+          templateKey === ECreditLines.CREDIT_LINE_RULE &&
+          (!creditLineFiltered || creditLineFiltered.length === 0);
+
+        const validateRulesExcluded =
+          rulesExcludedByEvaluate.includes(templateKey);
+
+        const decisionsValidate =
+          !validateRulesExcluded && decisionsData.length === 0;
+
+        const shouldNormalize =
+          decisionsValidate || isClientSupportMissing || isCreditLineMissing;
+
+        if (shouldNormalize) {
           const normalized = normalizeEvaluateRuleConfig(configuredDecisions);
 
           setLinesConstructionData((prev) => {
@@ -86,12 +114,19 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         }
       }
     }
-  }, [configuredDecisions, decisionsData, useCaseConfiguration, ruleLoadding]);
+  }, [
+    configuredDecisions,
+    decisionsData,
+    useCaseConfiguration,
+    ruleLoadding,
+    templateKey,
+  ]);
 
   useEffect(() => {
     if (ruleLoadding && decisionsData.length === 0) return;
 
     const newInsertDecision = getNewInsertDecisionsConfig(
+      addDecision,
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
@@ -99,6 +134,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     );
 
     const newUpdateDecision = getUpdateDecisionsConfig(
+      editDecision,
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
@@ -106,6 +142,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     );
 
     const newDeleteDecision = getNewDeletedDecisionsConfig(
+      deleteDecision,
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
@@ -129,12 +166,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       ...deleteValues,
     ].flatMap((item) => item as IRuleDecisionExtended);
 
-    console.log("🏠", {
-      newInsertDecision,
-      newUpdateDecision,
-      newDeleteDecision,
-    });
-
     if (useCaseConfiguration === EUseCase.EDIT && allDecisions.length > 0) {
       setLinesEditData((prev) => {
         const existingRules =
@@ -152,7 +183,14 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
         return newState;
       });
     }
-  }, [decisionsData, ruleLoadding]);
+  }, [
+    useCaseConfiguration,
+    decisionsData,
+    addDecision,
+    editDecision,
+    deleteDecision,
+    ruleLoadding,
+  ]);
 
   useEffect(() => {
     const validate = useCaseConfiguration === EUseCase.EDIT;
@@ -177,36 +215,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     }
   }, [decisionsData, useCaseConfiguration]);
 
-  useEffect(() => {
-    const validate = useCaseConfiguration === EUseCase.EDIT;
-
-    if (validate) {
-      setLinesEditData((prev) => {
-        const existingRules =
-          (prev?.rules as IRuleDecision[] | undefined) ?? [];
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
-          lineOfCreditId: linesConstructionData.settingRequestId,
-          rules: mergeRules(existingRules, clientSupportData),
-        };
-      });
-      setLinesConstructionData((prev) => {
-        const existingRules =
-          (prev?.rules as IRuleDecision[] | undefined) ??
-          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-          [];
-
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
-          rules: mergeRules(existingRules, clientSupportData),
-        };
-      });
-    }
-  }, [clientSupportData]);
-
-  console.log({ linesEditData });
   return {
     optionsConditionsCSV,
     ruleError,

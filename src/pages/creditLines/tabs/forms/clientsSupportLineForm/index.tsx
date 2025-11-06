@@ -30,10 +30,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     optionDetails,
     useCaseConfiguration,
     optionIcon,
-    clientSupportData,
-    linesConstructionData,
     ruleLoadding,
-    setClientSupportData,
     setOptionsIncluded,
     setOptionsExcluded,
     handleToggleInfoModal,
@@ -48,17 +45,13 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
 
   const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
     templateKey,
-    clientSupportData,
-    linesConstructionData,
     ruleLoadding,
     ruleOption: ECreditLines.CLIENT_SUPPORT_RULE,
     optionsIncluded,
     optionsExcluded,
-    useCaseConfiguration,
     infoRuleName: ECreditLines.CLIENTS_SUPPORTED,
     supportLine,
     loadingSupportOptions,
-    setClientSupportData,
     setOptionsIncluded,
     setOptionsExcluded,
   });

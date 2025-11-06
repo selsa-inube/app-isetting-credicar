@@ -29,6 +29,9 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setShowLineModal,
     setDecisionData,
     formId,
+    setAddDecision,
+    setEditDecision,
+    setDeleteDecision,
   } = props;
 
   const {
@@ -65,6 +68,9 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     remunerativerateRule,
     showAddDecisionModal,
     setShowLineModal,
+    setAddDecision,
+    setEditDecision,
+    setDeleteDecision,
   });
 
   return (

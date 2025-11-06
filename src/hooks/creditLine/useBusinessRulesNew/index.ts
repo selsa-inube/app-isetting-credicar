@@ -229,11 +229,20 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setDecisionData,
     onDecisionsChange,
     optionsConditionsCSV,
+    setAddDecision,
+    setEditDecision,
+    setDeleteDecision,
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
+
+  useEffect(() => {
+    setAddDecision(false);
+    setEditDecision(false);
+    setDeleteDecision(false);
+  }, []);
 
   useEffect(() => {
     if (showAddDecisionModal) {
@@ -333,6 +342,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   };
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
+    if (selectedDecision === null) {
+      setAddDecision(true);
+    } else {
+      setAddDecision(false);
+    }
     if (remunerativerateRule) {
       setShowLineModal(true);
     }
@@ -474,6 +488,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   );
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const deleteDecision = (...args: any[]) => {
+    setDeleteDecision(true);
     const id = extractId(...args);
     if (!id) return;
     setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));

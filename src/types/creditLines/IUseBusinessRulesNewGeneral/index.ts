@@ -9,6 +9,9 @@ interface IUseBusinessRulesNewGeneral {
   textValues: IRulesFormTextValues;
   remunerativerateRule: boolean;
   showAddDecisionModal: boolean;
+  setAddDecision: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditDecision: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteDecision: React.Dispatch<React.SetStateAction<boolean>>;
   setShowLineModal: React.Dispatch<React.SetStateAction<boolean>>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;

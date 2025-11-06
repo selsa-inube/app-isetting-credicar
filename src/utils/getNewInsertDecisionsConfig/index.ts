@@ -3,17 +3,18 @@ import { ECreditLines } from "@enum/creditLines";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
-import { arraysEqual } from "../destination/arraysEqual";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { findDecision } from "../destination/findDecision";
+import { arraysEqual } from "../destination/arraysEqual";
 
 const getNewInsertDecisionsConfig = (
+  useCase: boolean,
   user: string,
   prevRef: IRuleDecisionExtended[],
   decision: IRuleDecisionExtended[],
   abbreviatedName: string,
 ) => {
-  if (!arraysEqual(prevRef, decision)) {
+  if (useCase && !arraysEqual(prevRef, decision)) {
     return decision
       .filter((decision) => !findDecision(prevRef, decision))
       .map((decision) => {
@@ -26,7 +27,9 @@ const getNewInsertDecisionsConfig = (
                   ...(item.conditionsThatEstablishesTheDecision
                     ?.filter((condition) => condition.value !== undefined)
                     .map((condition) => ({
+                      conditionDataType: condition.conditionDataType,
                       conditionName: condition.conditionName,
+                      howToSetTheCondition: condition.howToSetTheCondition,
                       value: condition.value,
                       transactionOperation: ETransactionOperation.INSERT,
                     })) || []),

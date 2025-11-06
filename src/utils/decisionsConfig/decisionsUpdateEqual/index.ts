@@ -5,7 +5,11 @@ const decisionsUpdateEqual = (
   dec1: IRuleDecisionExtended,
   dec2: IRuleDecisionExtended,
 ) => {
-  if (dec1.ruleName !== dec2.ruleName && dec1.decisionId !== dec2.decisionId) {
+  if (dec1.ruleName !== dec2.ruleName) {
+    return false;
+  }
+
+  if (dec1.decisionId !== dec2.decisionId) {
     return false;
   }
 

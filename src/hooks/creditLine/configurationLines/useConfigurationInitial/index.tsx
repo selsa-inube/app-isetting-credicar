@@ -24,6 +24,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     optionsAllRules,
     setOptionsAllRules,
     setLinesConstructionData,
+    setLinesEditData,
     setLoadingInitial,
     setUseCaseConfiguration,
   } = useContext(CreditLinesConstruction);
@@ -60,6 +61,10 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     catalogAction,
     optionsContext: optionsAllRules,
   });
+
+  useEffect(() => {
+    setLinesEditData({} as ILinesConstructionData);
+  }, []);
 
   useEffect(() => {
     if (enumRuleData.length > 0) {
