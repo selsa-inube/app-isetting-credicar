@@ -1,29 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { IRuleDecision } from "@isettingkit/input";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { formatDate } from "@utils/date/formatDate";
+import { mergeEditRules } from "@utils/mergeEditRules";
 import { EBooleanText } from "@enum/booleanText";
 import { EUseCase } from "@enum/useCase";
+import { ECreditLines } from "@enum/creditLines";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
+import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
-    clientSupportData,
     infoRuleName,
-    linesConstructionData,
     optionsExcluded,
     optionsIncluded,
     ruleLoadding,
     ruleOption,
     templateKey,
-    useCaseConfiguration,
     supportLine,
+    condition,
     loadingSupportOptions,
-    setClientSupportData,
     setOptionsIncluded,
     setOptionsExcluded,
   } = props;
@@ -31,6 +35,14 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const { appData } = useContext(AuthAndPortalData);
   const currentDate = useMemo(() => formatDate(new Date()), []);
   const [loadingData, setLoadingData] = useState<boolean>(false);
+  const [move, setMove] = useState<boolean>(false);
+
+  const {
+    setLinesConstructionData,
+    setLinesEditData,
+    linesConstructionData,
+    useCaseConfiguration,
+  } = useContext(CreditLinesConstruction);
 
   const lineData = useCallback(
     (data: ILinesConstructionData) =>
@@ -118,7 +130,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   };
 
   useEffect(() => {
-    if (!ruleLoadding && supportLine.length > 0) {
+    if (supportLine.length > 0) {
       const { includedOptions, excludedOptions } = supportIncludedOptions();
 
       setOptionsIncluded((prev) => ({
@@ -131,14 +143,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         items: excludedOptions,
       }));
     }
-  }, [
-    supportLine,
-    ruleLoadding,
-    linesConstructionData.rules,
-    lineData,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
-  ]);
+  }, [supportLine, linesConstructionData?.rules]);
 
   const targetInsertMode = EBooleanText.PREPEND;
 
@@ -161,8 +166,10 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const handleMove = useCallback(
     (payload: { item: string; from: ISide; to: ISide }) => {
       const { item, from, to } = payload;
+      setMove(false);
 
       if (from === EBooleanText.LEFT && to === EBooleanText.RIGHT) {
+        setMove(true);
         setOptionsExcluded((prev) => ({
           ...prev,
           items: removeFrom(prev.items, item),
@@ -172,6 +179,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
           items: insertInto(prev.items, item),
         }));
       } else if (from === EBooleanText.RIGHT && to === EBooleanText.LEFT) {
+        setMove(true);
         setOptionsExcluded((prev) => ({
           ...prev,
           items: insertInto(prev.items, item),
@@ -210,20 +218,10 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         ),
       )
       .map((line) => line.code);
-
-    const transformJson = included.map((rule) => ({
-      value: rule,
-      effectiveFrom: currentDate,
-    }));
-
-    return [
-      {
-        ruleName: templateKey,
-        decisionsByRule: transformJson,
-      },
-    ];
+    return included;
   }, [
     optionsIncluded.items,
+    optionsExcluded.items,
     supportLine,
     appData.language,
     templateKey,
@@ -231,17 +229,63 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   ]);
 
   useEffect(() => {
-    const data = supportIncludedData();
+    if (!move || useCaseConfiguration !== EUseCase.EDIT) return;
 
-    if (JSON.stringify(data) !== JSON.stringify(clientSupportData)) {
-      setClientSupportData(data);
-    }
-  }, [
-    supportIncludedData,
-    lineData,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
-  ]);
+    const included = supportIncludedData();
+
+    const data = linesConstructionData?.rules?.find(
+      (rule) => rule.ruleName === ruleOption,
+    )?.decisionsByRule;
+
+    const transformJson = {
+      decisionId: data?.[0].decisionId,
+      ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
+      ruleDataType: data?.[0].ruleDataType,
+      value: data?.[0].value,
+      howToSetTheDecision: data?.[0].howToSetTheDecision,
+      effectiveFrom: formatDateDecision(String(new Date())),
+      transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
+
+      conditionGroups: included?.map((rule) => ({
+        conditionsThatEstablishesTheDecision: [
+          {
+            conditionDataType: "Alphabetical",
+            conditionName: condition,
+            howToSetTheCondition: "EqualTo",
+            value: rule,
+            transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
+          },
+        ],
+      })),
+    };
+
+    const newValues = [
+      {
+        ruleName: templateKey,
+        modifyJustification: `${decisionsLabels.modifyJustification} ${appData.user.userAccount}`,
+        decisionsByRule: [transformJson],
+      },
+    ];
+
+    setLinesEditData((prev) => {
+      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        lineOfCreditId: linesConstructionData.settingRequestId,
+        rules: mergeEditRules(existingRules, newValues),
+      };
+    });
+
+    setLinesConstructionData((prev) => {
+      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        rules: mergeEditRules(existingRules, newValues),
+      };
+    });
+  }, [move, useCaseConfiguration]);
 
   useEffect(() => {
     const loading =
@@ -259,8 +303,8 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   }, [
     ruleLoadding,
     loadingSupportOptions,
-    optionsIncluded.items.length,
-    optionsExcluded.items.length,
+    optionsIncluded.items,
+    optionsExcluded.items,
   ]);
 
   return {

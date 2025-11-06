@@ -10,6 +10,9 @@ interface IBusinessRulesNew extends IUseBusinessRulesNewGeneral {
   showAddDecisionModal: boolean;
   ruleLoading: boolean;
   setShowLineModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setAddDecision: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditDecision: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteDecision: React.Dispatch<React.SetStateAction<boolean>>;
   terms?: boolean;
   controls?: boolean;
   customMessageEmptyDecisions?: string;
