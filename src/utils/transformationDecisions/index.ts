@@ -71,7 +71,9 @@ const transformationDecisions = (
             });
         });
 
-        const effectiveFrom = formatDateDecision(decision.effectiveFrom);
+        const effectiveFrom = formatDateDecision(
+          decision.effectiveFrom ?? String(new Date()),
+        );
         const validUntil = decision.validUntil
           ? formatDateDecision(decision.validUntil ?? "")
           : undefined;

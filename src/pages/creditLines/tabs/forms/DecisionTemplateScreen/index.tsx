@@ -51,6 +51,9 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     showSendModal,
     submitModalData,
     ruleLoadding,
+    setAddDecision,
+    setEditDecision,
+    setDeleteDecision,
     handleClosePendingModal,
     handleCloseRequestStatus,
     handleCloseProcess,
@@ -128,6 +131,9 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           setShowLineModal={setShowLineModal}
           showAddDecisionModal={showAddDecisionModal}
           ruleLoading={componentLoading}
+          setAddDecision={setAddDecision}
+          setEditDecision={setEditDecision}
+          setDeleteDecision={setDeleteDecision}
         />
 
         {showDecision && (

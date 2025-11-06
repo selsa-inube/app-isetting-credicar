@@ -86,8 +86,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     useState<boolean>(false);
   const [showUnconfiguredModal, setShowUnconfiguredModal] =
     useState<boolean>(false);
-  const [clientSupportData, setClientSupportData] = useState<IRules[]>();
-  const [creditLineData, setCreditLineData] = useState<IRules[]>();
   const [decisionsData, setDecisionData] = useState<IRuleDecisionExtended[]>(
     [],
   );
@@ -100,14 +98,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     emptyMessage: clientsSupportLineLabels.withoutIncluding,
     highlightFirst: true,
   });
-
+  const [addDecision, setAddDecision] = useState<boolean>(false);
+  const [editDecision, setEditDecision] = useState<boolean>(false);
+  const [deleteDecision, setDeleteDecision] = useState<boolean>(false);
   const [optionsExcluded, setOptionsExcluded] = useState<IDragAndDropColumn>({
     legend: clientsSupportLineLabels.titleDoesNotApply,
     items: [],
     emptyMessage: clientsSupportLineLabels.withoutExcluding,
     highlightFirst: false,
   });
-
   const [creditOptionsExcluded, setCreditOptionsIncluded] =
     useState<IDragAndDropColumn>({
       legend: creditLineLabels.titleCustomerProfiles,
@@ -127,6 +126,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const location = useLocation();
   const language = appData.language as ILanguage;
+
+  useEffect(() => {
+    setAddDecision(false);
+    setEditDecision(false);
+    setDeleteDecision(false);
+  }, []);
 
   useEffect(() => {
     setIsUpdated(false);
@@ -336,7 +341,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     );
 
     const mergedNewRules = Object.values(newRulesGrouped).flat();
-
     return [...filteredExisting, ...mergedNewRules];
   };
 
@@ -345,13 +349,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       useCaseConfiguration,
       templateKey: templateKey || "",
       decisionsData,
-      linesData,
-      nameLineRef,
       setLinesConstructionData,
       linesConstructionData,
       mergeRules,
       setLinesEditData,
-      setLinesData,
+      linesEditData,
+      addDecision,
+      editDecision,
+      deleteDecision,
     });
 
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
@@ -394,11 +399,11 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   useEffect(() => {
     if (decisionsData.length === 0) return;
-    const validateUseEdit = useCaseConfiguration === EUseCase.EDIT;
-    if (useCaseConfiguration === EUseCase.ADD) {
+    const validate = useCaseConfiguration === EUseCase.ADD;
+    if (validate) {
       const newFormattedRules = formatRuleDecisionsConfig(
         decisionsData,
-        validateUseEdit,
+        false,
         linesConstructionData.abbreviatedName as string,
         conditionCreditLine,
       );
@@ -424,35 +429,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       });
     }
   }, [decisionsData, useCaseConfiguration]);
-
-  useEffect(() => {
-    const validate =
-      useCaseConfiguration === EUseCase.EDIT ||
-      useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL;
-
-    if (!validate) {
-      setLinesData((prev) => {
-        const existingRules =
-          (prev?.configurationRequestData?.rules as
-            | IRuleDecision[]
-            | undefined) ??
-          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-          [];
-
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
-          configurationRequestData: {
-            ...prev?.configurationRequestData,
-            alias: linesConstructionData.alias,
-            abbreviatedName: linesConstructionData.abbreviatedName,
-            descriptionUse: linesConstructionData.descriptionUse,
-            rules: mergeRules(existingRules, clientSupportData),
-          },
-        };
-      });
-    }
-  }, [clientSupportData]);
 
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
@@ -481,13 +457,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           currentFormValues.descriptionLine !==
             (initialData.descriptionUse || ""));
 
-      setHasUnsavedChanges(
-        Boolean(
-          hasFormChanges || decisionsData.length > 0 || clientSupportData,
-        ),
-      );
+      setHasUnsavedChanges(Boolean(hasFormChanges || decisionsData.length > 0));
     }
-  }, [nameLineRef.current?.values, decisionsData, clientSupportData]);
+  }, [nameLineRef.current?.values, decisionsData]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -585,7 +557,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (
       !optionDetails &&
       templateKey === ECreditLines.CREDIT_LINE_RULE &&
-      optionsIncluded.items.length === 0
+      creditOptionsIncluded.items.length === 0
     ) {
       return true;
     }
@@ -719,6 +691,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
 
+  console.log("🍕", { linesEditData });
+  console.log("🎁🌭", { linesConstructionData });
+
   return {
     loading,
     initialValues,
@@ -758,7 +733,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     optionDetails,
     optionIcon,
     optionsConditionsCSV,
-    clientSupportData,
     linesConstructionData,
     ruleLoadding,
     linesData,
@@ -766,12 +740,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     showSendModal,
     creditOptionsExcluded,
     creditOptionsIncluded,
-    creditLineData,
-    setCreditLineData,
+    setAddDecision,
+    setEditDecision,
+    setDeleteDecision,
     setCreditOptionsIncluded,
     setCreditOptionsExcluded,
     handleClickInfo,
-    setClientSupportData,
     handleToggleErrorSaveModal,
     handleToggleErrorModal,
     handleCloseRequestStatus,

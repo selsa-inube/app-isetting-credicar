@@ -3,32 +3,31 @@ import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { arraysEqual } from "../destination/arraysEqual";
 import { findDecision } from "../destination/findDecision";
-import { translationToEnum } from "../translationToEnum";
+import { arraysEqual } from "../destination/arraysEqual";
 
 const getNewDeletedDecisionsConfig = (
+  useCase: boolean,
   user: string,
   prevRef: IRuleDecisionExtended[],
-  decision: IRuleDecisionExtended[],
+  newDecision: IRuleDecisionExtended[],
 ) => {
-  if (!arraysEqual(prevRef, decision)) {
+  if (useCase && !arraysEqual(prevRef, newDecision)) {
     return prevRef
-      .filter((decision) => !findDecision(prevRef, decision))
+      .filter((decision) => !findDecision(newDecision, decision))
       .map((decision) => {
         const decisionsByRule = decision.decisionsByRule?.map((condition) => {
           const conditionGroups = condition.conditionGroups
             ? condition.conditionGroups.map((item) => ({
-                conditionGroupId: item.conditionGroupId,
+                conditionGroupId:
+                  item.conditionGroupId ?? item.ConditionGroupId,
                 transactionOperation: ETransactionOperation.DELETE,
                 conditionsThatEstablishesTheDecision:
                   item.conditionsThatEstablishesTheDecision?.filter(
                     (condition) => {
                       if (condition.value !== undefined) {
                         return {
-                          conditionName:
-                            translationToEnum[condition.conditionName] ??
-                            condition.conditionName,
+                          conditionName: condition.conditionName,
                           value: condition.value,
                           transactionOperation: ETransactionOperation.DELETE,
                         };
@@ -37,7 +36,6 @@ const getNewDeletedDecisionsConfig = (
                   ) as IConditionsTheDecision[],
               }))
             : undefined;
-
           const validUntil = condition.validUntil
             ? formatDateDecision(condition.validUntil as string)
             : undefined;
@@ -53,10 +51,11 @@ const getNewDeletedDecisionsConfig = (
             conditionGroups: conditionGroups,
           };
         });
+
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
           ruleName: decision.ruleName,
-          decisionsByRule: [decisionsByRule],
+          decisionsByRule: decisionsByRule,
         };
       });
   }

@@ -29,10 +29,7 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     optionDetails,
     useCaseConfiguration,
     optionIcon,
-    creditLineData,
-    linesConstructionData,
     ruleLoadding,
-    setCreditLineData,
     setCreditOptionsIncluded,
     setCreditOptionsExcluded,
     handleToggleInfoModal,
@@ -45,17 +42,13 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
 
   const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
     templateKey,
-    clientSupportData: creditLineData,
-    linesConstructionData,
     ruleLoadding,
     ruleOption: ECreditLines.CREDIT_LINE_RULE,
     optionsIncluded: creditOptionsIncluded,
     optionsExcluded: creditOptionsExcluded,
-    useCaseConfiguration,
     infoRuleName: ECreditLines.CREDIT_LINE_RULE,
     supportLine: valuesData,
     loadingSupportOptions: loadingOptions,
-    setClientSupportData: setCreditLineData,
     setOptionsIncluded: setCreditOptionsIncluded,
     setOptionsExcluded: setCreditOptionsExcluded,
   });

@@ -7,7 +7,7 @@ import { formatDateDecision } from "../date/formatDateDecision";
 const formatRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
   validateUseEdit: boolean,
-  abbreviatedName: string,
+  abbreviatedName?: string,
   conditionHidden?: string,
 ) => {
   return rule.map((decision) => {

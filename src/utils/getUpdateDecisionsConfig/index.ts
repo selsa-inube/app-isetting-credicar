@@ -4,10 +4,10 @@ import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { findDecision } from "../destination/findDecision";
+import { findUpdateDecision } from "../decisionsConfig/findUpdateDecision";
 import { arraysEqual } from "../destination/arraysEqual";
 
-const getNewInsertDecisionsConfig = (
+const getUpdateDecisionsConfig = (
   useCase: boolean,
   user: string,
   prevRef: IRuleDecisionExtended[],
@@ -16,13 +16,13 @@ const getNewInsertDecisionsConfig = (
 ) => {
   if (useCase && !arraysEqual(prevRef, decision)) {
     return decision
-      .filter((decision) => !findDecision(prevRef, decision))
+      .filter((decision) => !findUpdateDecision(prevRef, decision))
       .map((decision) => {
         const decisionsByRule = decision.decisionsByRule?.map((condition) => {
           const conditionGroups = condition.conditionGroups
             ? condition.conditionGroups.map((item) => ({
                 conditionGroupId: item.conditionGroupId,
-                transactionOperation: ETransactionOperation.INSERT,
+                transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
                 conditionsThatEstablishesTheDecision: [
                   ...(item.conditionsThatEstablishesTheDecision
                     ?.filter((condition) => condition.value !== undefined)
@@ -31,12 +31,14 @@ const getNewInsertDecisionsConfig = (
                       conditionName: condition.conditionName,
                       howToSetTheCondition: condition.howToSetTheCondition,
                       value: condition.value,
-                      transactionOperation: ETransactionOperation.INSERT,
+                      transactionOperation:
+                        ETransactionOperation.INSERT_OR_UPDATE,
                     })) || []),
                   {
                     conditionName: ECreditLines.CREDIT_LINE_RULE,
                     value: abbreviatedName,
-                    transactionOperation: ETransactionOperation.INSERT,
+                    transactionOperation:
+                      ETransactionOperation.INSERT_OR_UPDATE,
                   },
                 ] as IConditionsTheDecision[],
               }))
@@ -52,7 +54,7 @@ const getNewInsertDecisionsConfig = (
             ),
             validUntil: validUntil,
             value: condition.value,
-            transactionOperation: ETransactionOperation.INSERT,
+            transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
             decisionId: condition.decisionId,
             conditionGroups: conditionGroups,
           };
@@ -66,4 +68,4 @@ const getNewInsertDecisionsConfig = (
   }
 };
 
-export { getNewInsertDecisionsConfig };
+export { getUpdateDecisionsConfig };
