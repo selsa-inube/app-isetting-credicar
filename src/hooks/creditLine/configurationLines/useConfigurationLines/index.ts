@@ -107,14 +107,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     emptyMessage: clientsSupportLineLabels.withoutExcluding,
     highlightFirst: false,
   });
-  const [creditOptionsExcluded, setCreditOptionsIncluded] =
+  const [creditOptionsIncluded, setCreditOptionsIncluded] =
     useState<IDragAndDropColumn>({
       legend: creditLineLabels.titleCustomerProfiles,
       items: [],
       emptyMessage: creditLineLabels.withoutIncluding,
       highlightFirst: true,
     });
-  const [creditOptionsIncluded, setCreditOptionsExcluded] =
+  const [creditOptionsExcluded, setCreditOptionsExcluded] =
     useState<IDragAndDropColumn>({
       legend: creditLineLabels.titleDoesNotApply,
       items: [],

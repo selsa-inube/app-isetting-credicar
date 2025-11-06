@@ -54,6 +54,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     loadingSupportOptions,
     setOptionsIncluded,
     setOptionsExcluded,
+    condition: "CreditRiskProfile",
   });
 
   return (

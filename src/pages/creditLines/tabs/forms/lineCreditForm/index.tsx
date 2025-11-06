@@ -51,14 +51,15 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     loadingSupportOptions: loadingOptions,
     setOptionsIncluded: setCreditOptionsIncluded,
     setOptionsExcluded: setCreditOptionsExcluded,
+    condition: "MoneyDestination",
   });
 
   return (
     <LineCreditFormFormUI
       showInfoModal={showInfoModal}
       onToggleInfoModal={handleToggleInfoModal}
-      optionsExcluded={creditOptionsIncluded}
-      optionsIncluded={creditOptionsExcluded}
+      optionsExcluded={creditOptionsExcluded}
+      optionsIncluded={creditOptionsIncluded}
       updateData={loadingModify}
       loading={loading}
       onOpenModal={handleOpenModal}

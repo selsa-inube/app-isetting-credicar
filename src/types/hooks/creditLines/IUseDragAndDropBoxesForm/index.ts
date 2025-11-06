@@ -10,6 +10,7 @@ interface IUseDragAndDropBoxesForm {
   infoRuleName: string;
   supportLine: IEnumerators[];
   loadingSupportOptions: boolean;
+  condition: string;
   setOptionsIncluded: React.Dispatch<React.SetStateAction<IDragAndDropColumn>>;
   setOptionsExcluded: React.Dispatch<React.SetStateAction<IDragAndDropColumn>>;
 }

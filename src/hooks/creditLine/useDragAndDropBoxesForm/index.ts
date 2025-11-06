@@ -26,6 +26,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     ruleOption,
     templateKey,
     supportLine,
+    condition,
     loadingSupportOptions,
     setOptionsIncluded,
     setOptionsExcluded,
@@ -249,7 +250,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         conditionsThatEstablishesTheDecision: [
           {
             conditionDataType: "Alphabetical",
-            conditionName: "CreditRiskProfile",
+            conditionName: condition,
             howToSetTheCondition: "EqualTo",
             value: rule,
             transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
