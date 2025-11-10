@@ -40,19 +40,20 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     businessUnit: appData.businessUnit.publicCode,
   });
 
-  const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
-    templateKey,
-    ruleLoadding,
-    ruleOption: ECreditLines.CREDIT_LINE_RULE,
-    optionsIncluded: creditOptionsIncluded,
-    optionsExcluded: creditOptionsExcluded,
-    infoRuleName: ECreditLines.CREDIT_LINE_RULE,
-    supportLine: valuesData,
-    loadingSupportOptions: loadingOptions,
-    setOptionsIncluded: setCreditOptionsIncluded,
-    setOptionsExcluded: setCreditOptionsExcluded,
-    condition: "MoneyDestination",
-  });
+  const { message, loadingData, showInfo, handleMove } =
+    useDragAndDropBoxesForm({
+      templateKey,
+      ruleLoadding,
+      ruleOption: ECreditLines.CREDIT_LINE_RULE,
+      optionsIncluded: creditOptionsIncluded,
+      optionsExcluded: creditOptionsExcluded,
+      infoRuleName: ECreditLines.CREDIT_LINE_RULE,
+      supportLine: valuesData,
+      loadingSupportOptions: loadingOptions,
+      setOptionsIncluded: setCreditOptionsIncluded,
+      setOptionsExcluded: setCreditOptionsExcluded,
+      condition: "MoneyDestination",
+    });
 
   return (
     <LineCreditFormFormUI
@@ -77,6 +78,7 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       optionDetails={optionDetails}
       optionIcon={optionIcon}
       editOption={useCaseConfiguration === EUseCase.EDIT}
+      showInfo={showInfo}
     />
   );
 };

@@ -4,7 +4,7 @@ const creditLineLabels = {
   withoutExcluding: "No has excluido ningún destinos de dinero",
   withoutIncluding: "No has incluido ningún destinos de dinero",
   infoText:
-    "Este destino de dinero estará disponible para TODOS los detinos de dinero excepto los que defina acontinuación:",
+    "Los destinos de dinero que se definan a continuación se podrán usar en la línea.",
 };
 
 export { creditLineLabels };
