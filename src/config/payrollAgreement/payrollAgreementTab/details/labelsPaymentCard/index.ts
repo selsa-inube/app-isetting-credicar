@@ -23,6 +23,10 @@ const labelsPaymentCard = [
     id: "numberDays",
     titleName: "No. de días para el corte",
   },
+  {
+    id: "regulatoryFrameworkCode",
+    titleName: "Marco normativo laboral",
+  },
 ];
 
 export { labelsPaymentCard };

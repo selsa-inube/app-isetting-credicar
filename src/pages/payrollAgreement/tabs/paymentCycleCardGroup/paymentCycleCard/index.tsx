@@ -2,11 +2,11 @@ import { MdCurrencyExchange } from "react-icons/md";
 import { Divider, Icon, Stack, Text, useMediaQuery } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
-import { mediaQueryMobile } from "@config/environment";
-import { EComponentAppearance } from "@enum/appearances";
-import { IPaymentCycleCard } from "@ptypes/design/IPaymentCycleCard";
 import { BoxContainer } from "@design/layout/boxContainer";
+import { EComponentAppearance } from "@enum/appearances";
+import { mediaQueryMobile } from "@config/environment";
 import { addCycleLabels } from "@config/payrollAgreement/payrollAgreementTab/generic/addCycleLabels";
+import { IPaymentCycleCard } from "@ptypes/design/IPaymentCycleCard";
 
 const PaymentCycleCard = (props: IPaymentCycleCard) => {
   const { data, numberCard, labels } = props;
@@ -18,13 +18,14 @@ const PaymentCycleCard = (props: IPaymentCycleCard) => {
     <BoxContainer
       direction="column"
       backgroundColor={EComponentAppearance.LIGHT}
-      width="290px"
-      height="282px"
+      width={isMobile ? "250px" : "290px"}
+      height={isMobile ? "auto" : "284px"}
       borderRadius={tokens.spacing.s100}
       padding={tokens.spacing.s200}
       gap={isMobile ? `${tokens.spacing.s050}` : `${tokens.spacing.s150}`}
       boxSizing="border-box"
       boxShadow={EComponentAppearance.DARK}
+      overflowY="auto"
     >
       <Stack gap={isMobile ? tokens.spacing.s050 : tokens.spacing.s150}>
         <Icon

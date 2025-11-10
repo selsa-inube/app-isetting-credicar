@@ -3,11 +3,14 @@ import { Button, Fieldset, Icon, Stack, Text } from "@inubekit/inubekit";
 import { MdAdd, MdOutlineReportProblem } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
 import { BusinessRulesNew, Checkpicker } from "@isettingkit/business-rules";
+import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
+import { useAlertDecisionModal } from "@hooks/creditLine/configurationLines/useAlertDecisionModal";
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
+import { portalId } from "@config/portalId";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
-import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { StyledMultipleChoiceContainer } from "./styles";
 
@@ -44,6 +47,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     optionDetailsCreditline,
     message,
     mesaggeEmpty,
+    showAlertModal,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -51,6 +55,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     removeCondition,
     restoreConditions,
     submitForm,
+    handleToggleModal,
     decisionsSorted,
   } = useBusinessRulesNew({
     controls,
@@ -71,6 +76,11 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setAddDecision,
     setEditDecision,
     setDeleteDecision,
+  });
+
+  const { alertModal, showDecision } = useAlertDecisionModal({
+    showAlertModal,
+    handleToggleModal,
   });
 
   return (
@@ -167,6 +177,22 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
                 </Text>
               </Stack>
             </Fieldset>
+          )}
+
+          {showDecision && (
+            <DecisionModal
+              portalId={portalId}
+              appearance={alertModal.appearance}
+              appearanceButton={alertModal.appearanceButton}
+              actionText={alertModal.actionText}
+              description={alertModal.description}
+              icon={alertModal.icon}
+              onClick={alertModal.onClick}
+              onCloseModal={alertModal.onCloseModal}
+              title={alertModal.title}
+              withCancelButton={alertModal.withCancelButton}
+              withIcon={alertModal.withIcon}
+            />
           )}
         </>
       )}

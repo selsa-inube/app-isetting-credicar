@@ -5,7 +5,7 @@ import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
 import { EpayrollDetails } from "@enum/payrollDetails";
 import { normalizeEnumName } from "@utils/normalizeEnumName";
-import { getDayPayment } from "@utils/getDayPayment";
+import { formatPaymentDayExtra } from "@utils/formatPaymentDayExtra";
 import { dataTranslations } from "@utils/dataTranslations";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { mediaQueryMobile, mediaQueryTablet } from "@config/environment";
@@ -62,8 +62,9 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     name: item.regularPaymentCycleName ?? item.nameCycle,
     periodicity:
       normalizeEnumName(item.schedule) ?? normalizeEnumName(item.periodicity),
-    dayPayment: getDayPayment(item.paymentDay ?? item.payday),
+    dayPayment: formatPaymentDayExtra(item.paymentDay ?? item.payday),
     numberDays: item.numberOfDaysBeforePaymentToBill ?? item.numberDaysUntilCut,
+    regulatoryFrameworkCode: item.regulatoryFrameworkCode ?? "",
   });
 
   const ordinaryPaymentData = () => {
@@ -101,8 +102,9 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     id: index,
     name: item.abbreviatedName,
     typePayment,
-    paymentDay: item.paymentDay,
+    paymentDay: formatPaymentDayExtra(item.paymentDay),
     numberDays: item.numberOfDaysBeforePaymentToBill,
+    regulatoryFrameworkCode: item.regulatoryFrameworkCode ?? "",
   });
 
   const extraordinaryPaymentData = () => {
