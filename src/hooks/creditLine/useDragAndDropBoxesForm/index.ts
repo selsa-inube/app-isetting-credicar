@@ -202,7 +202,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
 
   const supportIncludedData = useCallback(() => {
     if (optionsIncluded.items.length === 0) {
-      return undefined;
+      return;
     }
 
     const includedCodes = new Set(
