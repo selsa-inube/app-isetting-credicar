@@ -245,6 +245,8 @@ const keyOf = (x: IRuleDecision) =>
     (x as any).decisionId ?? (x as any).businessRuleId ?? (x as any).id ?? "",
   );
 
+const originalName = (name: string) => name?.split(".").pop() || name;
+
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
     decisionTemplate,
@@ -319,9 +321,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   >(new Set());
 
   const removeCondition = (conditionName: string) => {
+    const key = originalName(conditionName);
     setRemovedConditionNames((prev) => {
       const next = new Set(prev);
-      next.add(conditionName);
+      next.add(key);
       return next;
     });
   };
@@ -331,7 +334,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setRemovedConditionNames((prev) => {
       if (prev.size === 0) return prev;
       const next = new Set(prev);
-      names.forEach((n) => next.delete(n));
+      names.map(originalName).forEach((n) => next.delete(n));
       return next;
     });
   };
