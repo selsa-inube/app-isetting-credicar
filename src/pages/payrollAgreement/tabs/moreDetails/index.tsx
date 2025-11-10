@@ -109,11 +109,11 @@ const MoreDetails = (props: IMoreDetails) => {
           direction="column"
           width="100%"
           height={isMobile ? "auto" : "135px"}
-          boxSizing="initial"
-          overflowY="auto"
+          boxSizing="border-box"
+          overflowY={isMobile ? "none" : "auto"}
         >
           <Grid
-            templateColumns={isMobile ? "auto" : "repeat(2,auto)"}
+            templateColumns={isMobile ? "1fr" : "repeat(2,auto)"}
             templateRows={isMobile ? "repeat(5,auto)" : "repeat(3,auto)"}
             gap={tokens.spacing.s150}
             width="100%"

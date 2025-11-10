@@ -14,6 +14,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { IModalWrapper } from "@ptypes/design/IModalWrapper";
+import { StyledModalContainer } from "./styles";
 
 const ModalWrapper = (props: IModalWrapper) => {
   const {
@@ -61,108 +62,110 @@ const ModalWrapper = (props: IModalWrapper) => {
   }
 
   return createPortal(
-    <Blanket>
-      <BoxContainer
-        width={width}
-        height={height}
-        direction="column"
-        backgroundColor={EComponentAppearance.LIGHT}
-        borderRadius={borderRadius}
-        borderColor={EComponentAppearance.DARK}
-        padding={padding}
-        gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
-        boxSizing="border-box"
-        minHeight={minHeight}
-        maxHeight={maxHeight}
-      >
-        <Stack direction="column" gap={tokens.spacing.s150}>
-          <Grid templateColumns="1fr auto" templateRows="1fr">
-            <Text
-              type={typeTitle}
-              size={sizeTitle}
-              appearance={EComponentAppearance.DARK}
-              weight={weightTitle}
-            >
-              {title}
-            </Text>
-
-            <Button
-              spacing="compact"
-              appearance={EComponentAppearance.DARK}
-              variant="none"
-              onClick={onCloseModal}
-              iconAfter={
-                <Icon
-                  appearance={EComponentAppearance.DARK}
-                  icon={<MdClear />}
-                />
-              }
-            >
-              {labelCloseModal}
-            </Button>
-          </Grid>
-          {subtitle && (
-            <Text size="medium" appearance={EComponentAppearance.GRAY}>
-              {subtitle}
-            </Text>
-          )}
-          <Divider dashed={dashed} />
-        </Stack>
-
-        <Stack
-          height="100%"
-          width="100%"
+    <StyledModalContainer>
+      <Blanket>
+        <BoxContainer
+          width={width}
+          height={height}
           direction="column"
-          gap={tokens.spacing.s200}
+          backgroundColor={EComponentAppearance.LIGHT}
+          borderRadius={borderRadius}
+          borderColor={EComponentAppearance.DARK}
+          padding={padding}
+          gap={isMobile ? `${tokens.spacing.s150}` : `${tokens.spacing.s250}`}
+          boxSizing="border-box"
+          minHeight={minHeight}
+          maxHeight={maxHeight}
         >
-          {children}
-        </Stack>
+          <Stack direction="column" gap={tokens.spacing.s150}>
+            <Grid templateColumns="1fr auto" templateRows="1fr">
+              <Text
+                type={typeTitle}
+                size={sizeTitle}
+                appearance={EComponentAppearance.DARK}
+                weight={weightTitle}
+              >
+                {title}
+              </Text>
 
-        <Stack
-          gap={tokens.spacing.s250}
-          justifyContent="flex-end"
-          direction={isMobile && fullwidthbutton ? "column-reverse" : "row"}
-        >
-          {withCancelButton && (
+              <Button
+                spacing="compact"
+                appearance={EComponentAppearance.DARK}
+                variant="none"
+                onClick={onCloseModal}
+                iconAfter={
+                  <Icon
+                    appearance={EComponentAppearance.DARK}
+                    icon={<MdClear />}
+                  />
+                }
+              >
+                {labelCloseModal}
+              </Button>
+            </Grid>
+            {subtitle && (
+              <Text size="medium" appearance={EComponentAppearance.GRAY}>
+                {subtitle}
+              </Text>
+            )}
+            <Divider dashed={dashed} />
+          </Stack>
+
+          <Stack
+            height="100%"
+            width="100%"
+            direction="column"
+            gap={tokens.spacing.s200}
+          >
+            {children}
+          </Stack>
+
+          <Stack
+            gap={tokens.spacing.s250}
+            justifyContent="flex-end"
+            direction={isMobile && fullwidthbutton ? "column-reverse" : "row"}
+          >
+            {withCancelButton && (
+              <Button
+                spacing="wide"
+                appearance={EComponentAppearance.GRAY}
+                fullwidth={isMobile && fullwidthbutton}
+                variant={variantCancel}
+                onClick={onCloseModal}
+              >
+                {labelCloseButton}
+              </Button>
+            )}
+            {withThirdButton && (
+              <Button
+                spacing="wide"
+                appearance={appearanceThirdButton}
+                iconBefore={iconThirdButton ?? <></>}
+                fullwidth={isMobile && fullwidthbutton}
+                variant="filled"
+                onClick={onClickThirdButton}
+                loading={loadingThirdButton}
+              >
+                {labelThirdButton}
+              </Button>
+            )}
+
             <Button
               spacing="wide"
-              appearance={EComponentAppearance.GRAY}
-              fullwidth={isMobile && fullwidthbutton}
-              variant={variantCancel}
-              onClick={onCloseModal}
-            >
-              {labelCloseButton}
-            </Button>
-          )}
-          {withThirdButton && (
-            <Button
-              spacing="wide"
-              appearance={appearanceThirdButton}
-              iconBefore={iconThirdButton ?? <></>}
+              appearance={appearanceButton}
               fullwidth={isMobile && fullwidthbutton}
               variant="filled"
-              onClick={onClickThirdButton}
-              loading={loadingThirdButton}
+              onClick={onClick}
+              loading={loading}
+              iconBefore={iconBeforeButton ?? <></>}
+              disabled={disabledActionButton}
             >
-              {labelThirdButton}
+              {labelActionButton}
             </Button>
-          )}
-
-          <Button
-            spacing="wide"
-            appearance={appearanceButton}
-            fullwidth={isMobile && fullwidthbutton}
-            variant="filled"
-            onClick={onClick}
-            loading={loading}
-            iconBefore={iconBeforeButton ?? <></>}
-            disabled={disabledActionButton}
-          >
-            {labelActionButton}
-          </Button>
-        </Stack>
-      </BoxContainer>
-    </Blanket>,
+          </Stack>
+        </BoxContainer>
+      </Blanket>
+    </StyledModalContainer>,
     node,
   );
 };
