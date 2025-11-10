@@ -43,19 +43,20 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       enumQuery: ECreditLines.SUPPORT_LINE,
     });
 
-  const { message, loadingData, handleMove } = useDragAndDropBoxesForm({
-    templateKey,
-    ruleLoadding,
-    ruleOption: ECreditLines.CLIENT_SUPPORT_RULE,
-    optionsIncluded,
-    optionsExcluded,
-    infoRuleName: ECreditLines.CLIENTS_SUPPORTED,
-    supportLine,
-    loadingSupportOptions,
-    setOptionsIncluded,
-    setOptionsExcluded,
-    condition: "CreditRiskProfile",
-  });
+  const { message, loadingData, showInfo, handleMove } =
+    useDragAndDropBoxesForm({
+      templateKey,
+      ruleLoadding,
+      ruleOption: ECreditLines.CLIENT_SUPPORT_RULE,
+      optionsIncluded,
+      optionsExcluded,
+      infoRuleName: ECreditLines.CLIENTS_SUPPORTED,
+      supportLine,
+      loadingSupportOptions,
+      setOptionsIncluded,
+      setOptionsExcluded,
+      condition: "CreditRiskProfile",
+    });
 
   return (
     <ClientsSupportLineFormUI
@@ -80,6 +81,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       optionDetails={optionDetails}
       optionIcon={optionIcon}
       editOption={useCaseConfiguration === EUseCase.EDIT}
+      showInfo={showInfo}
     />
   );
 };

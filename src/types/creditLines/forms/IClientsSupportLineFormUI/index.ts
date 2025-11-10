@@ -21,6 +21,7 @@ interface IClientsSupportLineFormUI {
   optionIcon: boolean;
   submitModalData: ISubmitModalData;
   editOption: boolean;
+  showInfo: boolean;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
   onOpenModal: () => void;
   onToggleInfoModal: () => void;

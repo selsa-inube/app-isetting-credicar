@@ -7,7 +7,7 @@ const configurationLabels = {
   titleEdit: "Edición de la línea de crédito",
   titleDetails: "Detalles de la línea de crédito",
   descriptionAdd: "Ajusta los parámetros de la línea de crédito.",
-  descriptionEdit: "Edita los parámetros de la línea de crédito.",
+  descriptionEdit: "Edita los parámetros de los destino de dinero.",
   descriptionDetails: "Visualiza los parámetros de la línea de crédito.",
   optionCrumbAdd: "Configurar",
   optionCrumbEdit: "Editar",
