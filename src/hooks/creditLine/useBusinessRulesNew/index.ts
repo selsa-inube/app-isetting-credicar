@@ -67,18 +67,6 @@ const toArrayConditionsDecision = (d: IRuleDecision): IRuleDecision => {
   return tmp;
 };
 
-// const nameToGroupMapOf = (d: IRuleDecision) => {
-//   const groups = (getConditionsByGroupNew(d) || {}) as Record<string, unknown>;
-//   const map = new Map<string, string>();
-//   /* eslint-disable @typescript-eslint/no-explicit-any */
-//   Object.entries(groups).forEach(([group, list]) => {
-//     asArray(list).forEach((c: any) => {
-//       if (c?.conditionName) map.set(c.conditionName, group);
-//     });
-//   });
-//   return map;
-// };
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const nameToGroupOccurrences = (d: IRuleDecision) => {
   const occ = new Map<string, string[]>();
@@ -275,6 +263,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
 
@@ -378,102 +367,111 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setIsModalOpen(true);
   };
 
+  const handleToggleModal = () => {
+    setShowAlertModal(!showAlertModal);
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDecision(null);
   };
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
-    if (selectedDecision === null) {
-      setAddDecision(true);
-    } else {
-      setAddDecision(false);
-    }
-    if (remunerativerateRule) {
-      setShowLineModal(true);
-    }
-    const isEditing = selectedDecision !== null;
-
-    const base = isEditing
-      ? { ...selectedDecision, ...dataDecision }
-      : {
-          ...localizedTemplate,
-          ...dataDecision,
-        };
-
-    const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
-      {}) as Record<string, unknown>;
-    const dataGroups = (getConditionsByGroupNew(dataDecision) || {}) as Record<
-      string,
-      unknown
-    >;
-
-    const mergedGroups = Object.fromEntries(
-      Object.entries(tplGroups).map(([group, tplList]) => {
-        const dataList = asArray(dataGroups[group]);
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const merged = asArray(tplList).map((tplItem: any) => {
-          const match = dataList.find(
-            (d: any) => d?.conditionName === tplItem?.conditionName,
-          );
-          return normalizeCondition({
-            ...tplItem,
-            labelName: localizeLabel(tplItem, language),
-            value: match?.value ?? tplItem.value,
-            listOfPossibleValues:
-              match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,
-          });
-        });
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        const finalList = merged.filter((m: any) => {
-          const passesSelected =
-            selectedIds.size === 0 || selectedIds.has(m.conditionName);
-          const notRemoved = !removedConditionNames.has(m.conditionName);
-          return passesSelected && notRemoved;
-        });
-
-        return [group, finalList];
-      }),
+    const validateValue = decisionsSorted.filter(
+      (decision) => decision.value === dataDecision.value,
     );
 
-    const usedIds = new Set(decisions.map((d) => String(d.decisionId ?? "")));
-    const decisionIdForNew = isEditing
-      ? base.decisionId
-      : base.decisionId && !usedIds.has(base.decisionId)
-        ? base.decisionId
-        : nextDecisionLabel(usedIds);
-    const newDecision: IRuleDecision = {
-      ...base,
-      decisionId: decisionIdForNew,
-      labelName: localizeLabel(base, language),
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      conditionGroups: groupsRecordToArrayNew(
-        mergedGroups as Record<string, any[]>,
-      ),
-    };
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    delete (newDecision as any).conditionsThatEstablishesTheDecision;
-
-    const decisionWithSentences = transformDecision(newDecision, language);
-    setDecisions((prev) => {
-      if (isEditing && selectedDecision) {
-        return prev.map((d) =>
-          keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
-        );
+    if (validateValue.length > 0 && selectedDecision === null) {
+      setShowAlertModal(true);
+    } else {
+      if (selectedDecision === null) {
+        setAddDecision(true);
+      } else {
+        setAddDecision(false);
       }
-      return [...prev, decisionWithSentences];
-    });
+      if (remunerativerateRule) {
+        setShowLineModal(true);
+      }
+      const isEditing = selectedDecision !== null;
 
-    closeModal();
+      const base = isEditing
+        ? { ...selectedDecision, ...dataDecision }
+        : {
+            ...localizedTemplate,
+            ...dataDecision,
+          };
+
+      const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
+        {}) as Record<string, unknown>;
+      const dataGroups = (getConditionsByGroupNew(dataDecision) ||
+        {}) as Record<string, unknown>;
+
+      const mergedGroups = Object.fromEntries(
+        Object.entries(tplGroups).map(([group, tplList]) => {
+          const dataList = asArray(dataGroups[group]);
+          /* eslint-disable @typescript-eslint/no-explicit-any */
+          const merged = asArray(tplList).map((tplItem: any) => {
+            const match = dataList.find(
+              (d: any) => d?.conditionName === tplItem?.conditionName,
+            );
+            return normalizeCondition({
+              ...tplItem,
+              labelName: localizeLabel(tplItem, language),
+              value: match?.value ?? tplItem.value,
+              listOfPossibleValues:
+                match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,
+            });
+          });
+          /* eslint-disable @typescript-eslint/no-explicit-any */
+          const finalList = merged.filter((m: any) => {
+            const passesSelected =
+              selectedIds.size === 0 || selectedIds.has(m.conditionName);
+            const notRemoved = !removedConditionNames.has(m.conditionName);
+            return passesSelected && notRemoved;
+          });
+
+          return [group, finalList];
+        }),
+      );
+
+      const usedIds = new Set(decisions.map((d) => String(d.decisionId ?? "")));
+      const decisionIdForNew = isEditing
+        ? base.decisionId
+        : base.decisionId && !usedIds.has(base.decisionId)
+          ? base.decisionId
+          : nextDecisionLabel(usedIds);
+      const newDecision: IRuleDecision = {
+        ...base,
+        decisionId: decisionIdForNew,
+        labelName: localizeLabel(base, language),
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        conditionGroups: groupsRecordToArrayNew(
+          mergedGroups as Record<string, any[]>,
+        ),
+      };
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      delete (newDecision as any).conditionsThatEstablishesTheDecision;
+
+      const decisionWithSentences = transformDecision(newDecision, language);
+      setDecisions((prev) => {
+        if (isEditing && selectedDecision) {
+          return prev.map((d) =>
+            keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+          );
+        }
+        return [...prev, decisionWithSentences];
+      });
+
+      closeModal();
+    }
   };
+
   useEffect(() => {
     onDecisionsChange?.(decisions);
   }, [decisions, onDecisionsChange]);
 
   const filteredDecisionTemplate = useMemo(() => {
     const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
-    // const nameToGroup = nameToGroupMapOf(normalizedTemplate);
-
     const tpl = safeSortDisplayDataSampleSwitchPlaces({
       decisionTemplate: normalizedTemplate,
     });
@@ -587,6 +585,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     message,
     mesaggeEmpty,
     optionDetailsCreditline,
+    showAlertModal,
+    handleToggleModal,
     setSelectedConditionsCSV,
     setSelectedDecision,
     openModal,
