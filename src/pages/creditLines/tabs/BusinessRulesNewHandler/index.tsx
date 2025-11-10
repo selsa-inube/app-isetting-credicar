@@ -2,9 +2,10 @@
 import { Button, Fieldset, Icon, Stack, Text } from "@inubekit/inubekit";
 import { MdAdd, MdOutlineReportProblem } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
-import { BusinessRulesNew, Checkpicker } from "@isettingkit/business-rules";
-import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
+import { BusinessRulesNew } from "@isettingkit/business-rules";
+import { Checkpicker as Checkpick } from "@isettingkit/input";
 import { useAlertDecisionModal } from "@hooks/creditLine/configurationLines/useAlertDecisionModal";
+import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
@@ -91,7 +92,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             <>
               <Fieldset legend={newBusinessRulesLabels.conditionsTitle}>
                 <StyledMultipleChoiceContainer>
-                  <Checkpicker
+                  <Checkpick
                     fullwidth
                     id="conditionsPicker"
                     label=""
