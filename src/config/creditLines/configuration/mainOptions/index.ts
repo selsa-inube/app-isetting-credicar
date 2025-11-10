@@ -1,3 +1,5 @@
+import { ECreditLines } from "@enum/creditLines";
+
 const options = {
   lineNamesAndDescriptions: {},
   lineNames: {
@@ -80,7 +82,7 @@ const options = {
       lineOfCredit: {
         id: "LineOfCredit",
         number: 12,
-        label: "Líneas de crédito",
+        label: ECreditLines.CREDIT_LINE_STEP,
         path: "/credit-lines/edit-credit-lines/line-credit",
       },
       channelsCreditByLine: {

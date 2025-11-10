@@ -307,10 +307,15 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     optionsExcluded.items,
   ]);
 
+  const showInfo =
+    useCaseConfiguration === EUseCase.EDIT ||
+    useCaseConfiguration === EUseCase.ADD;
+
   return {
     message,
     loadingSupportOptions,
     loadingData,
+    showInfo,
     useCaseConfiguration,
     handleMove,
   };

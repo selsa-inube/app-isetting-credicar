@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getEnumeratorAllRules } from "@services/conditionsRules/getEnumeratorAllRules";
+import { ECreditLines } from "@enum/creditLines";
 import { rules } from "@config/creditLines/configuration/rules";
 import { IUseEnumAllRules } from "@ptypes/hooks/IUseEnumAllRules";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
@@ -44,8 +45,11 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
       ? enumRuleData.map((ruleData) => ({
           rule: ruleData.ruleName,
           label:
-            ruleData.i18n?.[appData.language as keyof typeof ruleData.i18n] ??
-            ruleData.descriptionUse,
+            ruleData.ruleName === ECreditLines.CREDIT_LINE_RULE
+              ? ECreditLines.CREDIT_LINE_STEP
+              : (ruleData.i18n?.[
+                  appData.language as keyof typeof ruleData.i18n
+                ] ?? ruleData.descriptionUse),
         }))
       : [];
 

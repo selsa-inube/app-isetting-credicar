@@ -5,6 +5,7 @@ enum ECreditLines {
   SUPPORT_LINE = "ecreditriskprofile",
   CLIENT_SUPPORT_RULE = "CreditLineByRiskProfile",
   CREDIT_LINE_RULE = "LineOfCredit",
+  CREDIT_LINE_STEP = "Destino de dinero",
   RULE_CATALOG = "crediboard",
   CREDIT_LINE_ENTITY = "CreditLine",
   CATALOG_ACTION = "Crediboard",

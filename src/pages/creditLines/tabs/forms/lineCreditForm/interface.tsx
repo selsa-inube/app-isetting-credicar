@@ -17,6 +17,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
   const {
     optionsExcluded,
     optionsIncluded,
+    showInfo,
     showInfoModal,
     updateData,
     loading,
@@ -63,17 +64,19 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
         />
 
         <Stack direction="column" gap={tokens.spacing.s200}>
-          <Stack>
-            <InformationBox
-              icon={<MdOutlineInfo />}
-              appearanceIcon={EComponentAppearance.PRIMARY}
-              description={creditLineLabels.infoText}
-              boxPadding={tokens.spacing.s250}
-              boxColor={EComponentAppearance.HELP}
-              sizeIcon="20px"
-              sizeDescription="large"
-            />
-          </Stack>
+          {showInfo && (
+            <Stack>
+              <InformationBox
+                icon={<MdOutlineInfo />}
+                appearanceIcon={EComponentAppearance.PRIMARY}
+                description={creditLineLabels.infoText}
+                boxPadding={tokens.spacing.s250}
+                boxColor={EComponentAppearance.HELP}
+                sizeIcon="20px"
+                sizeDescription="large"
+              />
+            </Stack>
+          )}
           {loadingData ? (
             <Stack
               width="100%"
