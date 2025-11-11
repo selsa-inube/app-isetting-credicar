@@ -51,7 +51,8 @@ const decisionIncomePortfolioConfig = (
               ),
               conditionDataType: condition.conditionDataType,
               value: "",
-              howToSetTheCondition: ValueHowToSetUp.EQUAL,
+              howToSetTheCondition:
+                condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL,
             })),
         },
       ],

@@ -52,11 +52,18 @@ const formatDetailsDecisions = (
                                     condition.conditionName,
                                   )?.label
                                 : condition.conditionName,
-                              conditionDataType: "Alphabetical",
-                              howToSetTheCondition:
-                                typeof condition.value === "string"
-                                  ? "EqualTo"
-                                  : "Range",
+                              conditionDataType: conditionsArray
+                                ? normalizeConditionTraduction(
+                                    conditionsArray,
+                                    condition.conditionName,
+                                  )?.conditionDataType
+                                : "Alphabetical",
+                              howToSetTheCondition: conditionsArray
+                                ? normalizeConditionTraduction(
+                                    conditionsArray,
+                                    condition.conditionName,
+                                  )?.howToSetTheCondition
+                                : "EqualTo",
                               transactionOperation:
                                 condition.transactionOperation,
                             }),
