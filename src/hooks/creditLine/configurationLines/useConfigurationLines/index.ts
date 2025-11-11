@@ -344,20 +344,25 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     return [...filteredExisting, ...mergedNewRules];
   };
 
-  const { ruleError, ruleLoadding, ruleErrorData, optionsConditionsCSV } =
-    useEditCreditLines({
-      useCaseConfiguration,
-      templateKey: templateKey || "",
-      decisionsData,
-      setLinesConstructionData,
-      linesConstructionData,
-      mergeRules,
-      setLinesEditData,
-      linesEditData,
-      addDecision,
-      editDecision,
-      deleteDecision,
-    });
+  const {
+    ruleError,
+    ruleLoadding,
+    ruleErrorData,
+    optionsConditionsCSV,
+    configuredDecisions,
+  } = useEditCreditLines({
+    useCaseConfiguration,
+    templateKey: templateKey || "",
+    decisionsData,
+    setLinesConstructionData,
+    linesConstructionData,
+    mergeRules,
+    setLinesEditData,
+    linesEditData,
+    addDecision,
+    editDecision,
+    deleteDecision,
+  });
 
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
@@ -737,6 +742,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     showSendModal,
     creditOptionsExcluded,
     creditOptionsIncluded,
+    configuredDecisions,
     setAddDecision,
     setEditDecision,
     setDeleteDecision,
