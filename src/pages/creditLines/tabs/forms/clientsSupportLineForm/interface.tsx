@@ -33,6 +33,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     optionIcon,
     editOption,
     submitModalData,
+    showInfo,
     onToggleInfoModal,
     onOpenModal,
     onMove,
@@ -63,17 +64,20 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
         />
 
         <Stack direction="column" gap={tokens.spacing.s200}>
-          <Stack>
-            <InformationBox
-              icon={<MdOutlineInfo />}
-              appearanceIcon={EComponentAppearance.PRIMARY}
-              description={clientsSupportLineLabels.infoText}
-              boxPadding={tokens.spacing.s250}
-              boxColor={EComponentAppearance.HELP}
-              sizeIcon="20px"
-              sizeDescription="large"
-            />
-          </Stack>
+          {showInfo && (
+            <Stack>
+              <InformationBox
+                icon={<MdOutlineInfo />}
+                appearanceIcon={EComponentAppearance.PRIMARY}
+                description={clientsSupportLineLabels.infoText}
+                boxPadding={tokens.spacing.s250}
+                boxColor={EComponentAppearance.HELP}
+                sizeIcon="20px"
+                sizeDescription="large"
+              />
+            </Stack>
+          )}
+
           {loadingData ? (
             <Stack
               width="100%"
