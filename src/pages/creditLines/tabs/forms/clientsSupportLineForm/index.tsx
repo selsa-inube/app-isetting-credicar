@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
-import { useDragAndDropBoxesForm } from "@hooks/creditLine/useDragAndDropBoxesForm";
+import { useDragAndDropBoxesForm } from "@hooks/creditLine/dragAndDropBoxesForm/useDragAndDropBoxesForm";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { IClientsSupportLineForm } from "@ptypes/creditLines/IClientsSupportLineForm";
@@ -31,6 +31,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     useCaseConfiguration,
     optionIcon,
     ruleLoadding,
+    configuredDecisions,
     setOptionsIncluded,
     setOptionsExcluded,
     handleToggleInfoModal,
@@ -56,6 +57,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       setOptionsIncluded,
       setOptionsExcluded,
       condition: "CreditRiskProfile",
+      configuredDecisions,
     });
 
   return (

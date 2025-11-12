@@ -220,6 +220,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     ruleError,
     ruleErrorData,
     ruleLoadding,
+    configuredDecisions,
   };
 };
 
