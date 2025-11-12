@@ -475,7 +475,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       ) {
         setIsUpdated(true);
       }
-    }, 5000);
+    }, 25000);
   }, [useCaseConfiguration, hasUnsavedChanges, isUpdated]);
 
   const handleStep = async (click: boolean): Promise<boolean> => {
