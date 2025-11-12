@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { formatDateDecision } from "@utils/date/formatDateDecision";
-import { formatDate } from "@utils/date/formatDate";
-import { mergeEditRules } from "@utils/mergeEditRules";
 import { EBooleanText } from "@enum/booleanText";
 import { EUseCase } from "@enum/useCase";
-import { ECreditLines } from "@enum/creditLines";
-import { ETransactionOperation } from "@enum/transactionOperation";
 import { infoRulesMessage } from "@config/creditLines/configuration/infoRulesMessage";
 import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
-import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
+import { useUpateData } from "../useUpateData";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
@@ -28,26 +22,57 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     supportLine,
     condition,
     loadingSupportOptions,
+    configuredDecisions,
     setOptionsIncluded,
     setOptionsExcluded,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
-  const currentDate = useMemo(() => formatDate(new Date()), []);
   const [loadingData, setLoadingData] = useState<boolean>(false);
   const [move, setMove] = useState<boolean>(false);
+  const [itemInsert, setItemInsert] = useState<string[]>([]);
+  const [itemDelete, setItemDelete] = useState<string[]>([]);
 
-  const {
-    setLinesConstructionData,
-    setLinesEditData,
-    linesConstructionData,
-    useCaseConfiguration,
-  } = useContext(CreditLinesConstruction);
+  const { linesConstructionData, useCaseConfiguration } = useContext(
+    CreditLinesConstruction,
+  );
+
+  const translationToCodeMap = useMemo(() => {
+    const map = new Map<string, string>();
+    supportLine.forEach((line) => {
+      const label =
+        line.i18n?.[appData.language as keyof typeof line.i18n] ??
+        line.description ??
+        "";
+      if (label) {
+        map.set(label, line.code);
+      }
+    });
+    return map;
+  }, [supportLine, appData.language]);
+
+  const getLineLabel = useCallback(
+    (line: IEnumerators): string => {
+      return (
+        line.i18n?.[appData.language as keyof typeof line.i18n] ??
+        line.description ??
+        ""
+      );
+    },
+    [appData.language],
+  );
+
+  const mapSupportLinesToLanguage = useCallback(
+    (lines: IEnumerators[]): string[] => {
+      return lines.map((line) => getLineLabel(line));
+    },
+    [getLineLabel],
+  );
 
   const lineData = useCallback(
     (data: ILinesConstructionData) =>
       data?.rules?.find((rule) => rule.ruleName === ruleOption),
-    [],
+    [ruleOption],
   );
 
   const getConditionsOrganized = useCallback(
@@ -66,7 +91,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
       });
       return result;
     },
-    [linesConstructionData.rules],
+    [lineData],
   );
 
   const supportIncludedOptions = useCallback(() => {
@@ -113,21 +138,10 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     ruleOption,
     useCaseConfiguration,
     supportLine,
-    appData.language,
     getConditionsOrganized,
+    mapSupportLinesToLanguage,
+    getLineLabel,
   ]);
-
-  const getLineLabel = (line: IEnumerators): string => {
-    return (
-      line.i18n?.[appData.language as keyof typeof line.i18n] ??
-      line.description ??
-      ""
-    );
-  };
-
-  const mapSupportLinesToLanguage = (lines: IEnumerators[]): string[] => {
-    return lines.map((line) => getLineLabel(line));
-  };
 
   useEffect(() => {
     if (supportLine.length > 0) {
@@ -143,7 +157,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         items: excludedOptions,
       }));
     }
-  }, [supportLine, linesConstructionData?.rules]);
+  }, [supportLine, linesConstructionData?.rules, supportIncludedOptions]);
 
   const targetInsertMode = EBooleanText.PREPEND;
 
@@ -170,6 +184,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
 
       if (from === EBooleanText.LEFT && to === EBooleanText.RIGHT) {
         setMove(true);
+        setItemInsert((prev) => [...prev, item]);
         setOptionsExcluded((prev) => ({
           ...prev,
           items: removeFrom(prev.items, item),
@@ -180,6 +195,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
         }));
       } else if (from === EBooleanText.RIGHT && to === EBooleanText.LEFT) {
         setMove(true);
+        setItemDelete((prev) => [...prev, item]);
         setOptionsExcluded((prev) => ({
           ...prev,
           items: insertInto(prev.items, item),
@@ -193,100 +209,47 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     [insertInto, removeFrom],
   );
 
-  const information = infoRulesMessage();
+  const information = useMemo(() => infoRulesMessage(), []);
 
-  const message = String(
-    information[infoRuleName as keyof typeof information] ||
-      information.Default,
+  const message = useMemo(
+    () =>
+      String(
+        information[infoRuleName as keyof typeof information] ||
+          information.Default,
+      ),
+    [information, infoRuleName],
   );
 
   const supportIncludedData = useCallback(() => {
     if (optionsIncluded.items.length === 0) {
-      return undefined;
+      return [];
     }
 
-    const includedCodes = new Set(
-      optionsIncluded.items.map((rule) => String(rule)),
-    );
+    const includedCodes = optionsIncluded.items
+      .map((item) => translationToCodeMap.get(String(item)))
+      .filter((code): code is string => code !== undefined);
 
-    const included = supportLine
-      .filter((lineEnum) =>
-        includedCodes.has(
-          lineEnum.i18n?.[appData.language as keyof typeof lineEnum.i18n] ??
-            lineEnum.description ??
-            "",
-        ),
-      )
-      .map((line) => line.code);
-    return included;
-  }, [
-    optionsIncluded.items,
-    optionsExcluded.items,
-    supportLine,
-    appData.language,
-    templateKey,
-    currentDate,
-  ]);
+    return includedCodes;
+  }, [optionsIncluded.items, translationToCodeMap]);
 
-  useEffect(() => {
-    if (!move || useCaseConfiguration !== EUseCase.EDIT) return;
-
-    const included = supportIncludedData();
-
-    const data = linesConstructionData?.rules?.find(
+  const currentRuleData = useMemo(() => {
+    return linesConstructionData?.rules?.find(
       (rule) => rule.ruleName === ruleOption,
-    )?.decisionsByRule;
+    );
+  }, [linesConstructionData?.rules, ruleOption]);
 
-    const transformJson = {
-      decisionId: data?.[0].decisionId,
-      ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
-      ruleDataType: data?.[0].ruleDataType,
-      value: data?.[0].value,
-      howToSetTheDecision: data?.[0].howToSetTheDecision,
-      effectiveFrom: formatDateDecision(String(new Date())),
-      transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
-
-      conditionGroups: included?.map((rule) => ({
-        conditionsThatEstablishesTheDecision: [
-          {
-            conditionDataType: "Alphabetical",
-            conditionName: condition,
-            howToSetTheCondition: "EqualTo",
-            value: rule,
-            transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
-          },
-        ],
-      })),
-    };
-
-    const newValues = [
-      {
-        ruleName: templateKey,
-        modifyJustification: `${decisionsLabels.modifyJustification} ${appData.user.userAccount}`,
-        decisionsByRule: [transformJson],
-      },
-    ];
-
-    setLinesEditData((prev) => {
-      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        lineOfCreditId: linesConstructionData.settingRequestId,
-        rules: mergeEditRules(existingRules, newValues),
-      };
-    });
-
-    setLinesConstructionData((prev) => {
-      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        rules: mergeEditRules(existingRules, newValues),
-      };
-    });
-  }, [move, useCaseConfiguration]);
-
+  useUpateData({
+    condition,
+    configuredDecisions,
+    currentRuleData,
+    itemDelete,
+    itemInsert,
+    move,
+    supportLine,
+    templateKey,
+    setMove,
+    supportIncludedData,
+  });
   useEffect(() => {
     const loading =
       ruleLoadding ||
@@ -303,8 +266,8 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   }, [
     ruleLoadding,
     loadingSupportOptions,
-    optionsIncluded.items,
-    optionsExcluded.items,
+    optionsIncluded.items.length,
+    optionsExcluded.items.length,
   ]);
 
   const showInfo =

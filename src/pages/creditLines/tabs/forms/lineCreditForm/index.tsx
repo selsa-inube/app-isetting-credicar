@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useDragAndDropBoxesForm } from "@hooks/creditLine/useDragAndDropBoxesForm";
+import { useDragAndDropBoxesForm } from "@hooks/creditLine/dragAndDropBoxesForm/useDragAndDropBoxesForm";
 import { useEnumsPossibleValues } from "@hooks/useEnumsPossibleValues";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { EUseCase } from "@enum/useCase";

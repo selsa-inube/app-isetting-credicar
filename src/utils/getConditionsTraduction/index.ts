@@ -10,6 +10,8 @@ const getConditionsTraduction = (
   data.conditionsThatEstablishesTheDecision?.forEach((cond) => {
     conditionTraduction.push({
       condition: cond.conditionName,
+      conditionDataType: cond.conditionDataType,
+      howToSetTheCondition: cond.howToSetTheCondition,
       label:
         cond.i18n?.[language as keyof typeof cond.i18n] ?? cond.conditionName,
     });

@@ -8,6 +8,7 @@ const mapEditPayrollnEntityToApi = (
     payrollForDeductionAgreementType: data.payrollForDeductionAgreementType,
     numberOfDaysForReceivingTheDiscounts: Number(data.applicationDaysPayroll),
     payrollForDeductionAgreementCode: data.payrollForDeductionAgreementCode,
+    incomeTypes: data.incomeTypes,
     payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
     payrollSpecialBenefitPaymentCycles: data.payrollSpecialBenefitPaymentCycles,
     regularPaymentCycles: data.regularPaymentCycles,
