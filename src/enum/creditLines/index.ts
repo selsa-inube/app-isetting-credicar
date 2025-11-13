@@ -4,6 +4,7 @@ enum ECreditLines {
   REQUEST_STATUS = "RequestInConstruction",
   SUPPORT_LINE = "ecreditriskprofile",
   CLIENT_SUPPORT_RULE = "CreditLineByRiskProfile",
+  LINE_DESCRIPTIONS = "LineNamesAndDescriptions",
   CREDIT_LINE_RULE = "LineOfCredit",
   CREDIT_LINE_STEP = "Destino de dinero",
   RULE_CATALOG = "crediboard",

@@ -11,6 +11,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { postCheckLineRuleConsistency } from "@services/creditLines/postCheckLineRuleConsistency";
+import { useGroupRules } from "@hooks/creditLine/useGroupRules";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
@@ -39,7 +40,6 @@ import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { useModalConfiguration } from "../useModalConfiguration";
-import { useGroupOptions } from "../useGroupOptions";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
 import { useModalOnSubmit } from "../useModalOnSubmit";
@@ -533,8 +533,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     });
   };
 
-  const { groups } = useGroupOptions();
-
   const optionDetails =
     useCaseConfiguration === EUseCase.DETAILS ||
     useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
@@ -579,8 +577,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       Object.entries(linesEditData).length === 0,
   );
 
+  const { groupsData } = useGroupRules();
+
   const nav = useStepNavigation({
-    groups: groups as unknown as IDropdownMenuGroup[],
+    groups: groupsData as unknown as IDropdownMenuGroup[],
     disabledButtons: validateDisabled,
     disabledButtonSend: validateButtonSend,
     handleStep,

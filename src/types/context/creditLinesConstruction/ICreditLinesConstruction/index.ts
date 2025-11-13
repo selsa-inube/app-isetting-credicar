@@ -7,6 +7,8 @@ interface ICreditLinesConstruction {
   optionsAllRules: INavigationRule[];
   useCaseConfiguration: string;
   linesEditData: ILinesConstructionData;
+  allValidRules: string[];
+  setAllValidRules: React.Dispatch<React.SetStateAction<string[]>>;
   setLinesConstructionData: React.Dispatch<
     React.SetStateAction<ILinesConstructionData>
   >;

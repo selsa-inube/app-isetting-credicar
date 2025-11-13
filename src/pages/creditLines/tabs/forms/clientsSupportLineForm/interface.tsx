@@ -9,9 +9,10 @@ import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfigurati
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
-import { options } from "@config/creditLines/configuration/mainOptions";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
+import { titleOptionConfigLine } from "@src/utils/titleOptionConfigLine";
+import { ECreditLines } from "@src/enum/creditLines";
 
 const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
   const {
@@ -50,7 +51,9 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
       >
         <LineInformation
           lineName={lineNameDecision}
-          lineType={options.clientsSupported.links.clientsSupported.label}
+          lineType={
+            titleOptionConfigLine(ECreditLines.CLIENT_SUPPORT_RULE) || ""
+          }
           updateData={updateData}
           loading={loading}
           withoutDecisions={true}
@@ -106,7 +109,9 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
         </Stack>
         {showInfoModal && (
           <InfoConfigurationModal
-            title={options.clientsSupported.links.clientsSupported.label}
+            title={
+              titleOptionConfigLine(ECreditLines.CLIENT_SUPPORT_RULE) || ""
+            }
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}

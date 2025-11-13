@@ -4,6 +4,7 @@ import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
 import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguration";
+import { useGroupRules } from "@hooks/creditLine/useGroupRules";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { errorObject } from "@utils/errorObject";
 import { EComponentAppearance } from "@enum/appearances";
@@ -22,6 +23,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const { appData } = useContext(AuthAndPortalData);
   const {
     optionsAllRules,
+    allValidRules,
     setOptionsAllRules,
     setLinesConstructionData,
     setLinesEditData,
@@ -49,6 +51,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
   const ruleCatalog = ECreditLines.RULE_CATALOG;
   const catalogAction = ECreditLines.CATALOG_ACTION;
+  const { optionsGroups } = useGroupRules();
 
   const {
     optionsAllRules: rules,
@@ -60,6 +63,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     ruleCatalog,
     catalogAction,
     optionsContext: optionsAllRules,
+    validRules: allValidRules,
   });
 
   useEffect(() => {
@@ -287,6 +291,8 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const modalData = modal();
 
   return {
+    groups: optionsGroups,
+    optionsAllRules,
     loadingAllRules,
     showDecision,
     modalData,

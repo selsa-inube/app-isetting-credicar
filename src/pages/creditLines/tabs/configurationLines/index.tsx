@@ -2,7 +2,6 @@ import { DropdownMenuContainer } from "@isettingkit/business-rules";
 import { Outlet, useLocation } from "react-router-dom";
 import { Grid, Spinner, Stack, Text } from "@inubekit/inubekit";
 import { useConfigurationInitial } from "@hooks/creditLine/configurationLines/useConfigurationInitial";
-import { useGroupOptions } from "@hooks/creditLine/configurationLines/useGroupOptions";
 import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
@@ -15,12 +14,12 @@ const ConfigurationLines = () => {
   const location = useLocation();
   const { data, option } = location.state ?? {};
 
-  const { showDecision, modalData, loadingAllRules } = useConfigurationInitial({
-    data,
-    option,
-  });
+  const { showDecision, modalData, loadingAllRules, groups, optionsAllRules } =
+    useConfigurationInitial({
+      data,
+      option,
+    });
 
-  const { groups, optionsAllRules } = useGroupOptions();
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
       {loadingAllRules && optionsAllRules.length === 0 ? (
@@ -51,7 +50,7 @@ const ConfigurationLines = () => {
               <StyledDropdownMenuContainer>
                 <DropdownMenuContainer
                   defaultOpenId="lineNamesAndDescriptions"
-                  groups={groups}
+                  groups={groups ?? []}
                 />
               </StyledDropdownMenuContainer>
             </Stack>
