@@ -6,13 +6,13 @@ import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/Informati
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
+import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { tokens } from "@design/tokens";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
-import { titleOptionConfigLine } from "@src/utils/titleOptionConfigLine";
-import { ECreditLines } from "@src/enum/creditLines";
 
 const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
   const {

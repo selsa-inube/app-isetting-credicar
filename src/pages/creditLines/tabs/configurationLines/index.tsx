@@ -14,15 +14,22 @@ const ConfigurationLines = () => {
   const location = useLocation();
   const { data, option } = location.state ?? {};
 
-  const { showDecision, modalData, loadingAllRules, groups, optionsAllRules } =
-    useConfigurationInitial({
-      data,
-      option,
-    });
+  const {
+    showDecision,
+    modalData,
+    loadingAllRules,
+    groups,
+    optionsAllRules,
+    loadingGroupRules,
+  } = useConfigurationInitial({
+    data,
+    option,
+  });
 
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
-      {loadingAllRules && optionsAllRules.length === 0 ? (
+      {(loadingGroupRules || loadingAllRules) &&
+      optionsAllRules.length === 0 ? (
         <Stack
           alignItems="center"
           justifyContent="center"

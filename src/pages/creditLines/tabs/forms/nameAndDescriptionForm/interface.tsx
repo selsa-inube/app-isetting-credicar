@@ -4,15 +4,15 @@ import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
+import { ECreditLines } from "@enum/creditLines";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { getFieldState } from "@utils/getFieldState";
+import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { nameAndDescriptionLabels } from "@config/creditLines/configuration/nameAndDescriptionLabels";
 import { portalId } from "@config/portalId";
 import { INameAndDescriptionFormUI } from "@ptypes/creditLines/forms/INameAndDescriptionFormUI";
 import { LineInformation } from "../lineInformation";
-import { titleOptionConfigLine } from "@src/utils/titleOptionConfigLine";
-import { ECreditLines } from "@src/enum/creditLines";
 
 const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
   const {

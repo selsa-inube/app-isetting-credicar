@@ -107,6 +107,61 @@ const DECISION_ROUTES: IRouteConfiguration[] = [
     templateKey: "BondCalculationFactorByAmount",
   },
   { path: "requirement", templateKey: "Requirement" },
+
+  { path: "has-automatic-collection", templateKey: "HasAutomaticCollection" },
+  { path: "customer-age-range", templateKey: "CustomerAgeRangeRequirement" },
+  { path: "minimum-loan-amount", templateKey: "MinimumLoanAmountRequirement" },
+  { path: "minimum-seniority", templateKey: "MinimumSeniorityRequirement" },
+  {
+    path: "percentage-paid-collected",
+    templateKey: "PercentagePaidOfCollectedObligationRequirement",
+  },
+  {
+    path: "number-installments-paid-collected",
+    templateKey: "NumberOfInstallmentsPaidOnCollectedObligationRequirement",
+  },
+  {
+    path: "minimum-number-months-delinquency",
+    templateKey: "MinimumNumberOfMonthsSinceLastDelinquency",
+  },
+  {
+    path: "highest-default-score-borrower",
+    templateKey: "HighestDefaultScoreOfABorrowerLoan",
+  },
+  {
+    path: "Maximum-number-active-credits",
+    templateKey: "MaximumNumberOfActiveCreditsPerLine",
+  },
+  {
+    path: "no-control-organism-involvement",
+    templateKey: "NoControlOrganismInvolvement",
+  },
+  { path: "spouse-cannot-coBorrower", templateKey: "SpouseCannotBeCoBorrower" },
+  {
+    path: "minimum-installment-amount",
+    templateKey: "MinimumInstallmentAmount",
+  },
+  {
+    path: "maximum-number-days-delinquency",
+    templateKey: "MaximumNumberOfDaysInDelinquencyAllowed",
+  },
+  {
+    path: "maximum-number-delinquencies-in-past-year",
+    templateKey: "MaximumNumberOfDelinquenciesInThePastYear",
+  },
+  {
+    path: "maximum-overdraft-value-allowed",
+    templateKey: "MaximumOverdraftValueAllowed",
+  },
+  {
+    path: "maximum-overdraft-total-debt-ratio",
+    templateKey: "MaximumOverdraftToTotalDebtRatio",
+  },
+  {
+    path: "credit-limit-is-not-exceeded",
+    templateKey: "CreditLimitIsNotExceeded",
+  },
+  { path: "increment-frequency", templateKey: "IncrementFrequency" },
 ];
 
 const CreditLinesRoutes = () => {

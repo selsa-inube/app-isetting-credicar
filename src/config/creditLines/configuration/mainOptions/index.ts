@@ -166,7 +166,7 @@ const mainOptions = [
   {
     id: "HasAtomaticCollection",
     number: 27,
-    label: "La línea de crédito tienen} recogida automática",
+    label: "La línea de crédito tienen recogida automática",
     path: "/credit-lines/edit-credit-lines/has-atomatic-collection",
   },
   {
@@ -243,6 +243,117 @@ const mainOptions = [
     number: 39,
     label: "Clientes que soporta la línea",
     path: "/credit-lines/edit-credit-lines/clients-supported",
+  },
+  {
+    id: "HasAutomaticCollection",
+    number: 40,
+    label: "La línea de crédito tiene recogida automática",
+    path: "/credit-lines/edit-credit-lines/has-automatic-collection",
+  },
+  {
+    id: "CustomerAgeRangeRequirement",
+    number: 41,
+    label: "Requisito: Edad del cliente",
+    path: "/credit-lines/edit-credit-lines/customer-age-range",
+  },
+  {
+    id: "MinimumLoanAmountRequirement",
+    number: 42,
+    label: "Requisito: Monto mínimo",
+    path: "/credit-lines/edit-credit-lines/minimum-loan-amount",
+  },
+  {
+    id: "MinimumSeniorityRequirement",
+    number: 43,
+    label: "Requisito: Antigüedad mínima",
+    path: "/credit-lines/edit-credit-lines/minimum-seniority",
+  },
+  {
+    id: "PercentagePaidOfCollectedObligationRequirement",
+    number: 44,
+    label: "Requisito: Porcentaje pagado de la obligación recogida",
+    path: "/credit-lines/edit-credit-lines/percentage-paid-collected",
+  },
+  {
+    id: "NumberOfInstallmentsPaidOnCollectedObligationRequirement",
+    number: 45,
+    label: "Requisito: Cantidad de cuotas pagadas de una obligación recogida",
+    path: "/credit-lines/edit-credit-lines/number-installments-paid-collected",
+  },
+  {
+    id: "MinimumNumberOfMonthsSinceLastDelinquency",
+    number: 46,
+    label: "Requisito: Tiempo mínimo desde la última mora del crédito recogido",
+    path: "/credit-lines/edit-credit-lines/minimum-number-months-delinquency",
+  },
+  {
+    id: "HighestDefaultScoreOfABorrowerLoan",
+    number: 47,
+    label:
+      "Requisito: Calificación máxima de incumplimiento de los créditos de un deudor",
+    path: "/credit-lines/edit-credit-lines/highest-default-score-borrower",
+  },
+  {
+    id: "MaximumNumberOfActiveCreditsPerLine",
+    number: 48,
+    label:
+      "Requisito: Cantidad máxima de créditos vigentes por línea de crédito",
+    path: "/credit-lines/edit-credit-lines/Maximum-number-active-credits",
+  },
+  {
+    id: "NoControlOrganismInvolvement",
+    number: 49,
+    label:
+      "Requisito: Deudores o codeudores no están en un organismo de control",
+    path: "/credit-lines/edit-credit-lines/no-control-organism-involvement",
+  },
+  {
+    id: "SpouseCannotBeCoBorrower",
+    number: 50,
+    label: "Requisito: Cónyuge no puede ser codeudor",
+    path: "/credit-lines/edit-credit-lines/spouse-cannot-coBorrower",
+  },
+  {
+    id: "MinimumInstallmentAmount",
+    number: 51,
+    label: "Requisito: Cuota mínima permitida",
+    path: "/credit-lines/edit-credit-lines/minimum-installment-amount",
+  },
+  {
+    id: "MaximumNumberOfDaysInDelinquencyAllowed",
+    number: 52,
+    label: "Requisito: Cantidad máxima de días en mora",
+    path: "/credit-lines/edit-credit-lines/maximum-number-days-delinquency",
+  },
+  {
+    id: "MaximumNumberOfDelinquenciesInThePastYear",
+    number: 53,
+    label: "Requisito: Cantidad máxima de veces en mora en el último año",
+    path: "/credit-lines/edit-credit-lines/maximum-number-delinquencies-in-past-year",
+  },
+  {
+    id: "MaximumOverdraftValueAllowed",
+    number: 54,
+    label: "Requisito: Descubierto máximo",
+    path: "/credit-lines/edit-credit-lines/maximum-overdraft-value-allowed",
+  },
+  {
+    id: "MaximumOverdraftToTotalDebtRatio",
+    number: 55,
+    label: "Requisito: Máxima razón Descubierto - Deuda total",
+    path: "/credit-lines/edit-credit-lines/maximum-overdraft-total-debt-ratio",
+  },
+  {
+    id: "CreditLimitIsNotExceeded",
+    number: 56,
+    label: "Requisito: No usar más del cupo disponible",
+    path: "/credit-lines/edit-credit-lines/credit-limit-is-not-exceeded",
+  },
+  {
+    id: "IncrementFrequency",
+    number: 57,
+    label: "Perodicidad de incremento",
+    path: "/credit-lines/edit-credit-lines/increment-frequency",
   },
 ];
 
