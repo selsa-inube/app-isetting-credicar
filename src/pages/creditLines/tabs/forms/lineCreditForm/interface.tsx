@@ -6,10 +6,11 @@ import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/Informati
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
+import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { tokens } from "@design/tokens";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
-import { options } from "@config/creditLines/configuration/mainOptions";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
 
@@ -50,7 +51,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
       >
         <LineInformation
           lineName={lineNameDecision}
-          lineType={options.conditionsUseProduct.links.lineOfCredit.label}
+          lineType={titleOptionConfigLine(ECreditLines.CREDIT_LINE_RULE) || ""}
           updateData={updateData}
           loading={loading}
           withoutDecisions={true}
@@ -105,7 +106,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
         </Stack>
         {showInfoModal && (
           <InfoConfigurationModal
-            title={options.conditionsUseProduct.links.lineOfCredit.label}
+            title={titleOptionConfigLine(ECreditLines.CREDIT_LINE_RULE) || ""}
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
