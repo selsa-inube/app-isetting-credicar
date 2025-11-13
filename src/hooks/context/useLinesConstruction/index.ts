@@ -6,6 +6,7 @@ import { IErrors } from "@ptypes/IErrors";
 const useLinesConstruction = () => {
   const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
   const [optionsAllRules, setOptionsAllRules] = useState<INavigationRule[]>([]);
+  const [allValidRules, setAllValidRules] = useState<string[]>([]);
   const [errorOptionsAllRules, setErrorOptionsAllRules] = useState<IErrors>(
     {} as IErrors,
   );
@@ -32,6 +33,8 @@ const useLinesConstruction = () => {
       useCaseConfiguration,
       linesEditData,
       errorOptionsAllRules,
+      allValidRules,
+      setAllValidRules,
       setErrorOptionsAllRules,
       setLinesConstructionData,
       setLoadingInitial,

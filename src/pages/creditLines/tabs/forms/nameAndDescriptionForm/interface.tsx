@@ -4,11 +4,12 @@ import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
+import { ECreditLines } from "@enum/creditLines";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { getFieldState } from "@utils/getFieldState";
+import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { nameAndDescriptionLabels } from "@config/creditLines/configuration/nameAndDescriptionLabels";
-import { options } from "@config/creditLines/configuration/mainOptions";
 import { portalId } from "@config/portalId";
 import { INameAndDescriptionFormUI } from "@ptypes/creditLines/forms/INameAndDescriptionFormUI";
 import { LineInformation } from "../lineInformation";
@@ -56,7 +57,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
       >
         <LineInformation
           lineName={lineName}
-          lineType={options.lineNames.links.namesAndDescriptions.label}
+          lineType={titleOptionConfigLine(ECreditLines.LINE_DESCRIPTIONS) || ""}
           updateData={isUpdated}
           loading={loading}
           withoutDecisions={true}
@@ -149,7 +150,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
         )}
         {showInfoModal && (
           <InfoConfigurationModal
-            title={options.lineNames.links.namesAndDescriptions.label}
+            title={titleOptionConfigLine(ECreditLines.LINE_DESCRIPTIONS) || ""}
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}

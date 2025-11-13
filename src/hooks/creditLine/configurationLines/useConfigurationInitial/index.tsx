@@ -4,24 +4,23 @@ import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
 import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguration";
-import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
+import { useGroupRules } from "@hooks/creditLine/useGroupRules";
 import { errorObject } from "@utils/errorObject";
-import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
-import { errorModal } from "@config/errorModal";
-import { withoutDataModal } from "@config/withoutData";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { IUseConfigurationInitial } from "@ptypes/hooks/creditLines/IUseConfigurationInitial";
 import { IErrors } from "@ptypes/IErrors";
 import { INavigationRule } from "@ptypes/creditLines/INavigationRule";
+import { useModalConfigurationInitial } from "../useModalConfigurationInitial";
 
 const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const { data, option } = props;
   const { appData } = useContext(AuthAndPortalData);
   const {
     optionsAllRules,
+    allValidRules,
     setOptionsAllRules,
     setLinesConstructionData,
     setLinesEditData,
@@ -34,7 +33,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
   const [showWithoutDataModal, setShowWithoutDataModal] =
     useState<boolean>(false);
-  const [showDecision, setShowDecision] = useState<boolean>(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [linesData, setLinesData] = useState<any>();
   const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
@@ -49,6 +48,12 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
   const ruleCatalog = ECreditLines.RULE_CATALOG;
   const catalogAction = ECreditLines.CATALOG_ACTION;
+  const {
+    optionsGroups,
+    loading: loadingGroupRules,
+    hasError: hasErrorGroupRules,
+    errorData: errorDataGroupRules,
+  } = useGroupRules();
 
   const {
     optionsAllRules: rules,
@@ -60,6 +65,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     ruleCatalog,
     catalogAction,
     optionsContext: optionsAllRules,
+    validRules: allValidRules,
   });
 
   useEffect(() => {
@@ -219,75 +225,31 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     setShowWithoutDataModal(!showWithoutDataModal);
     navigate("/credit-lines");
   };
-  useEffect(() => {
-    const decision =
-      showErrorModal ||
-      showWithoutDataModal ||
-      hasError ||
-      hasErrorAllRules ||
-      showErrorRulesModal ||
-      withoutData;
-    setShowDecision(decision);
-  }, [showErrorModal, showWithoutDataModal, hasError, hasErrorAllRules]);
 
-  const modal = () => {
-    const initial = {
-      title: "",
-      subtitle: "",
-      description: "",
-      actionText: "",
-      icon: <></>,
-      onCloseModal: () => void 0,
-      onClick: () => void 0,
-      withCancelButton: false,
-      withIcon: false,
-      appearance: EComponentAppearance.PRIMARY,
-      appearanceButton: EComponentAppearance.PRIMARY,
-    };
-
-    if (!loading && hasError) {
-      return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
-        onCloseModal: handleToggleErrorModal,
-        onClick: handleToggleErrorModal,
-        withCancelButton: false,
-        withIcon: true,
-        appearance: EComponentAppearance.WARNING,
-        appearanceButton: EComponentAppearance.WARNING,
-      };
-    }
-
-    if (!loadingAllRules && hasErrorAllRules) {
-      return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
-        onCloseModal: handleToggleErrorRulesModal,
-        onClick: handleToggleErrorRulesModal,
-        withCancelButton: false,
-        withIcon: true,
-        appearance: EComponentAppearance.WARNING,
-        appearanceButton: EComponentAppearance.WARNING,
-      };
-    }
-
-    if (data === undefined && !hasErrorAllRules) {
-      return {
-        ...withoutDataModal,
-        onCloseModal: handleToggleWithouDataModal,
-        onClick: handleToggleWithouDataModal,
-        withCancelButton: false,
-        withIcon: true,
-        appearance: EComponentAppearance.WARNING,
-        appearanceButton: EComponentAppearance.WARNING,
-      };
-    }
-
-    return initial;
-  };
-
-  const modalData = modal();
+  const { showDecision, modalData } = useModalConfigurationInitial({
+    errorData,
+    showErrorModal,
+    showErrorRulesModal,
+    loadingGroupRules,
+    loading,
+    data,
+    showWithoutDataModal,
+    withoutData,
+    hasError,
+    hasErrorAllRules,
+    loadingAllRules,
+    hasErrorGroupRules,
+    errorDataGroupRules,
+    handleToggleErrorModal,
+    handleToggleWithouDataModal,
+    handleToggleErrorRulesModal,
+  });
 
   return {
+    groups: optionsGroups,
+    optionsAllRules,
     loadingAllRules,
+    loadingGroupRules,
     showDecision,
     modalData,
   };

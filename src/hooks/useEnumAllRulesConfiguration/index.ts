@@ -3,25 +3,23 @@ import { useState, useEffect, useContext } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getEnumeratorAllRules } from "@services/conditionsRules/getEnumeratorAllRules";
 import { ECreditLines } from "@enum/creditLines";
-import { rules } from "@config/creditLines/configuration/rules";
 import { IUseEnumAllRules } from "@ptypes/hooks/IUseEnumAllRules";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 
 const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
-  const { optionsContext, ruleCatalog, catalogAction } = props;
+  const { optionsContext, ruleCatalog, catalogAction, validRules } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [enumRuleData, setEnumRuleData] = useState<IDecisionData[]>([]);
 
   const { appData } = useContext(AuthAndPortalData);
   const [hasError, setHasError] = useState(false);
 
-  const rulesData = rules.join(",");
-
   useEffect(() => {
     const fetchEnumData = async () => {
-      if (optionsContext.length === 0) {
+      if (optionsContext.length === 0 && validRules.length > 0) {
         setLoading(true);
         try {
+          const rulesData = validRules.join(",");
           const data = await getEnumeratorAllRules(
             rulesData,
             ruleCatalog,
@@ -38,7 +36,7 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
       }
     };
     fetchEnumData();
-  }, [ruleCatalog, optionsContext]);
+  }, [ruleCatalog, optionsContext, validRules]);
 
   const optionsAllRules =
     enumRuleData.length > 0

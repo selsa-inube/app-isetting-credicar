@@ -4,6 +4,7 @@ interface IUseEnumAllRules {
   ruleCatalog: string;
   catalogAction: string;
   optionsContext: INavigationRule[];
+  validRules: string[];
 }
 
 export type { IUseEnumAllRules };
