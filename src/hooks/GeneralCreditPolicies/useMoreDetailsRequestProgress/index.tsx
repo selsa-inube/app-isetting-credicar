@@ -87,12 +87,17 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     });
   });
 
+  const valueBoolean = (value: string) =>
+    value === EBooleanText.Y || value === EBooleanText.YES
+      ? EBooleanText.YES
+      : EBooleanText.NO;
+
   const methods = methodsArray.join(", ");
   const moreDetailsData = {
     id: data.id,
     methods: methods,
-    additionalDebtors: additionalDebtors ?? EBooleanText.NO,
-    guarantees: realGuarantees ?? EBooleanText.NO,
+    additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
+    guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
   };
   const decisionsReciprocity = getDecisionsByRule(
     formatDetailsDecisions(data, conditionContribution),

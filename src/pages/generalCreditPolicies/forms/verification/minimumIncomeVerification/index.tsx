@@ -4,6 +4,7 @@ import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { EComponentAppearance } from "@enum/appearances";
 import { columnsAttribute } from "@utils/columnsAttribute";
+import { formatValueOfCondition } from "@utils/formatValueOfCondition";
 import { rowsAttribute } from "@utils/rowsAttribute";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IRenderContributionsVerification } from "@ptypes/generalCredPolicies/forms/IRenderContributionsVerification";
@@ -35,7 +36,7 @@ const RendersMinimumIncomeVerification = (
               key={item.businessRuleId}
               direction="column"
               label={item.decisionId ?? ""}
-              value={`${item.labelName}: ${String(item.value ?? "")}`}
+              value={`${item.labelName}: ${formatValueOfCondition(item.value)}`}
             />
           ))}
         </Grid>

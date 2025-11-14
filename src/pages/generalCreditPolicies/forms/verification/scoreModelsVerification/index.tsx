@@ -3,6 +3,7 @@ import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
 import { columnsAttribute } from "@utils/columnsAttribute";
 import { rowsAttribute } from "@utils/rowsAttribute";
+import { formatValueOfCondition } from "@utils/formatValueOfCondition";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { IRenderContributionsVerification } from "@ptypes/generalCredPolicies/forms/IRenderContributionsVerification";
@@ -35,7 +36,7 @@ const RendersCoreModelsVerification = (
               key={item.businessRuleId}
               direction="column"
               label={item.decisionId ?? ""}
-              value={`${item.labelName}: ${String(item.value ?? "")}`}
+              value={`${item.labelName}: ${formatValueOfCondition(item.value)}`}
             />
           ))}
         </Grid>

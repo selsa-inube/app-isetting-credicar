@@ -1,3 +1,4 @@
+import { formatValueOfCondition } from "@utils/formatValueOfCondition";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
@@ -5,7 +6,6 @@ import { formatDate } from "../date/formatDate";
 import { dataTranslations } from "../dataTranslations";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
-import { parseIfJSON } from "../parseIfJSON";
 
 const formatDetailsDecisions = (
   data: IEntry,
@@ -22,7 +22,7 @@ const formatDetailsDecisions = (
           return {
             labelName: dataTranslations[rule.ruleName] ?? rule.ruleName,
             ruleName: rule.ruleName,
-            value: decisionByRule?.value,
+            value: formatValueOfCondition(decisionByRule?.value),
             effectiveFrom: decisionByRule?.effectiveFrom
               ? formatDate(new Date(decisionByRule.effectiveFrom))
               : undefined,
@@ -41,10 +41,7 @@ const formatDetailsDecisions = (
                         ? decisionGroup.conditionsThatEstablishesTheDecision.map(
                             (condition: IConditionsTheDecision) => ({
                               ...condition,
-                              value:
-                                typeof condition.value === "string"
-                                  ? parseIfJSON(condition.value)
-                                  : condition.value,
+                              value: formatValueOfCondition(condition.value),
                               conditionName: condition.conditionName,
                               labelName: conditionsArray
                                 ? normalizeConditionTraduction(
@@ -52,18 +49,8 @@ const formatDetailsDecisions = (
                                     condition.conditionName,
                                   )?.label
                                 : condition.conditionName,
-                              conditionDataType: conditionsArray
-                                ? normalizeConditionTraduction(
-                                    conditionsArray,
-                                    condition.conditionName,
-                                  )?.conditionDataType
-                                : "Alphabetical",
-                              howToSetTheCondition: conditionsArray
-                                ? normalizeConditionTraduction(
-                                    conditionsArray,
-                                    condition.conditionName,
-                                  )?.howToSetTheCondition
-                                : "EqualTo",
+                              conditionDataType: "Alphabetical",
+                              howToSetTheCondition: "EqualTo",
                               transactionOperation:
                                 condition.transactionOperation,
                             }),

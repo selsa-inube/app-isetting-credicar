@@ -36,6 +36,7 @@ const useGeneralCreditPolicies = () => {
     IRequestsInProgress[]
   >([]);
   const [loadingRequest, setLoadingRequest] = useState<boolean>(false);
+  const [showAddPolicies, setShowAddPolicies] = useState<boolean>(false);
   const smallScreen = useMediaQuery(mediaQueryTablet);
   const smallScreenTab = useMediaQuery(mediaQueryMobileSmall);
 
@@ -85,10 +86,8 @@ const useGeneralCreditPolicies = () => {
     if (withoutPoliciesData) {
       setShowModal(!showModal);
     }
+    setShowAddPolicies(withoutPolicies !== undefined && withoutPolicies);
   }, [withoutPoliciesData]);
-
-  const showAddPolicies =
-    withoutPoliciesData !== undefined && withoutPoliciesData;
 
   const filteredTabsConfig = useMemo(() => {
     return Object.keys(tabs).reduce((tabOption, key) => {
