@@ -37,7 +37,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const normalizeData = {
     ...data,
     request: data.useCaseName,
-    responsable: "",
+    responsable: data.staffName ?? "",
     status: data.requestStatus,
     traceability: data.configurationRequestsTraceability.map(
       (traceability: IEntry) => ({

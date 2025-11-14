@@ -102,7 +102,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
         <MoreDetailsModal
           data={moreDetailsData}
           detailsTabsConfig={detailsTabsConfig}
-          portalId="portal"
+          portalId={portalId}
           onCloseModal={onToggleMoreDetailsModal}
           textValues={textValuesBusinessRules}
           decisionTemplate={decisionTemplate}

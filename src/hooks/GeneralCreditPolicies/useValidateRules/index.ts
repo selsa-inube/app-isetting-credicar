@@ -69,16 +69,23 @@ const useValidateRules = () => {
 
   useEffect(() => {
     setWithoutPolicies(
-      (methodsError &&
-        additionalError &&
-        GuaranteesError &&
-        contributionsError &&
-        incomeError &&
-        scoreModelsError &&
-        minimumIncomeError) ??
+      ((methodsData?.length === 0 || methodsError) &&
+        (additionalDebtorsData?.length === 0 || additionalError) &&
+        (realGuaranteesData?.length === 0 || GuaranteesError) &&
+        (contributionsData?.length === 0 || contributionsError) &&
+        (incomeData?.length === 0 || incomeError) &&
+        (scoreModelsData?.length === 0 || scoreModelsError) &&
+        (minimumIncomeData?.length === 0 || minimumIncomeError)) ??
         false,
     );
   }, [
+    methodsData,
+    additionalDebtorsData,
+    realGuaranteesData,
+    contributionsData,
+    incomeData,
+    scoreModelsData,
+    minimumIncomeData,
     methodsError,
     additionalError,
     GuaranteesError,
