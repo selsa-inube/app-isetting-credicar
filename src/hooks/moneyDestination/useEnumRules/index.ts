@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorByRules";
-import { IDecisionData } from "@ptypes/decisions/IDecision";
+import { getListPossibleValues } from "@services/enums/getListPossibleValues";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IDecisionData } from "@ptypes/decisions/IDecision";
+import { IValue } from "@ptypes/decisions/IValue";
 
 const useEnumRules = (props: IUseEnumRules) => {
   const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
@@ -14,6 +17,7 @@ const useEnumRules = (props: IUseEnumRules) => {
     {} as IRuleDecisionExtended,
   );
   const [hasError, setHasError] = useState(false);
+  const [hasListError, setHasListError] = useState(false);
 
   useEffect(() => {
     const fetchEnumData = async () => {
@@ -34,13 +38,82 @@ const useEnumRules = (props: IUseEnumRules) => {
       }
     };
     fetchEnumData();
-  }, [enumDestination, ruleCatalog, businessUnits]);
+  }, [enumDestination, ruleCatalog, catalogAction, businessUnits]);
+
+  const fetchListValues = async (pathListPossibleValues: string) => {
+    try {
+      if (
+        pathListPossibleValues !== "undefined" &&
+        pathListPossibleValues.length > 0
+      ) {
+        const data = await getListPossibleValues(
+          businessUnits,
+          pathListPossibleValues,
+        );
+        return data.map((val) => val.value);
+      }
+      return [];
+    } catch (error) {
+      console.info(error);
+      setHasListError(true);
+      return [];
+    }
+  };
 
   useEffect(() => {
-    setRuleData({ ...enumRuleData } as IRuleDecisionExtended);
-  }, [enumRuleData]);
+    const processEnumData = async () => {
+      if (hasError || !enumRuleData || Object.keys(enumRuleData).length === 0) {
+        return;
+      }
 
-  return { ruleData, hasError };
+      try {
+        let rootListValues: string[] = [];
+        if (enumRuleData.listOfPossibleValues) {
+          rootListValues = (await fetchListValues(
+            enumRuleData.listOfPossibleValues as string,
+          )) as string[];
+        }
+
+        let processedConditions =
+          enumRuleData.conditionsThatEstablishesTheDecision;
+        if (Array.isArray(processedConditions)) {
+          processedConditions = await Promise.all(
+            processedConditions.map(async (condition) => {
+              if (condition.listOfPossibleValues) {
+                const conditionListValues = (await fetchListValues(
+                  condition.listOfPossibleValues as string,
+                )) as string[];
+                return {
+                  ...condition,
+                  /////////////QUITAR//////////////////////////
+                  howToSetTheCondition: EGeneralPolicies.LIST_OF_VALUES,
+                  /////////////////////////////////////
+                  listOfPossibleValues: conditionListValues as IValue,
+                };
+              }
+              return condition;
+            }),
+          );
+        }
+
+        setRuleData({
+          ...enumRuleData,
+          listOfPossibleValues: rootListValues,
+
+          conditionsThatEstablishesTheDecision: processedConditions,
+        } as IRuleDecisionExtended);
+      } catch (error) {
+        console.info(error);
+        setHasError(true);
+      }
+    };
+
+    processEnumData();
+  }, [enumRuleData, hasError, businessUnits]);
+
+  console.log("🦄", { ruleData });
+
+  return { ruleData, hasError, hasListError };
 };
 
 export { useEnumRules };
