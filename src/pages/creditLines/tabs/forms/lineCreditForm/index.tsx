@@ -4,6 +4,7 @@ import { useDragAndDropBoxesForm } from "@hooks/creditLine/dragAndDropBoxesForm/
 import { useEnumsPossibleValues } from "@hooks/useEnumsPossibleValues";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { EUseCase } from "@enum/useCase";
+import { EPathListOfPossibleValues } from "@enum/pathListOfPossibleValues";
 import { ECreditLines } from "@enum/creditLines";
 import { IClientsSupportLineForm } from "@ptypes/creditLines/IClientsSupportLineForm";
 import { LineCreditFormFormUI } from "./interface";
@@ -38,6 +39,7 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
 
   const { valuesData, loading: loadingOptions } = useEnumsPossibleValues({
     businessUnit: appData.businessUnit.publicCode,
+    path: EPathListOfPossibleValues.MONEY_DESTINATION,
   });
 
   const { message, loadingData, showInfo, handleMove } =

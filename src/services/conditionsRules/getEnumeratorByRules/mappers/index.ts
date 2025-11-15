@@ -7,7 +7,6 @@ const mapEnumeratorsRulesApiToEntity = (
     conditionsThatEstablishesTheDecision: Object(
       enumerator.conditionThatEstablishesTheDecision,
     ),
-    conditionDataType: enumerator.conditionDataType,
     decisionDataType: enumerator.decisionDataType,
     descriptionUse: String(enumerator.descriptionUse),
     howToSetTheDecision: enumerator.howToSetTheDecision,

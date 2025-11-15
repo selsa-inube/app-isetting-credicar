@@ -1,6 +1,6 @@
 const alertDecisionModal = {
   title: "Alerta",
-  description: `Encontramos una decisión ya creada con el mismo nombre que escribiste. Por favor ingrese otro nombre.`,
+  description: `Encontramos una decisión ya creada con el mismo valor que escribiste. Por favor ingrese otro valor.`,
   actionText: "Entendido",
 };
 
