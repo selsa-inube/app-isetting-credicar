@@ -46,6 +46,8 @@ const dataTranslations: Record<string, string> = {
   ReciprocityFactorForCreditLimit: "Número de veces los aportes",
   RiskScoreFactorForCreditLimit: "Número de veces los ingresos",
   CreditRiskScoringModel: "Modelo de score",
+  MaximumLimitCalculationMethod:
+    "Métodos para calcular cupo global por cliente",
 };
 
 export { dataTranslations };
