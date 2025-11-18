@@ -5,7 +5,7 @@ import { getListPossibleValues } from "@services/enums/getListPossibleValues";
 import { IUseEnumsPossibleValues } from "@ptypes/hooks/IUseEnumsPossibleValues";
 
 const useEnumsPossibleValues = (props: IUseEnumsPossibleValues) => {
-  const { businessUnit } = props;
+  const { businessUnit, path } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [valuesData, setValuesData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
@@ -16,7 +16,7 @@ const useEnumsPossibleValues = (props: IUseEnumsPossibleValues) => {
     const fetchEnumData = async () => {
       setLoading(true);
       try {
-        const data = await getListPossibleValues(businessUnit);
+        const data = await getListPossibleValues(businessUnit, path);
         setValuesData(data);
       } catch (error) {
         console.info(error);

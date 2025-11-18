@@ -1,3 +1,5 @@
+import { IValue } from "@isettingkit/input";
+
 interface IConditionsTheDecision {
   conditionName: string;
   value: string;
@@ -6,6 +8,7 @@ interface IConditionsTheDecision {
   i18n?: string;
   conditionDataType?: string;
   howToSetTheCondition?: string;
+  listOfPossibleValues?: IValue;
   TimeUnit?: string;
   timeUnit?: string;
 }
