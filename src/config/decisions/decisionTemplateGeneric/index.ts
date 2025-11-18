@@ -40,12 +40,9 @@ const decisionTemplateConfig = (
           ),
           conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
           value: "",
-          // listOfPossibleValues: condition.listOfPossibleValues
-          //   ? condition.listOfPossibleValues
-          //   : [],
-          listOfPossibleValues: {
-            list: ["Muy alto", "Alto", "Medio", "Bajo", "Muy bajo"],
-          },
+          listOfPossibleValues: condition.listOfPossibleValues
+            ? { list: condition.listOfPossibleValues }
+            : [],
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden:
             condition.conditionName === ECreditLines.CREDIT_LINE_RULE
@@ -53,8 +50,6 @@ const decisionTemplateConfig = (
               : false,
         })),
     });
-
-    console.log("🐔🐸", { listOfPossibleValues }, buildGroup("group-primary"));
 
     return {
       ruleName,

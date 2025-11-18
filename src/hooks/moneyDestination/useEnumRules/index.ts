@@ -110,8 +110,6 @@ const useEnumRules = (props: IUseEnumRules) => {
     processEnumData();
   }, [enumRuleData, hasError, businessUnits]);
 
-  console.log("🦄", { ruleData });
-
   return { ruleData, hasError, hasListError };
 };
 
