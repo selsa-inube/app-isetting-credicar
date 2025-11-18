@@ -40,9 +40,12 @@ const decisionTemplateConfig = (
           ),
           conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
           value: "",
-          listOfPossibleValues: condition.listOfPossibleValues
-            ? condition.listOfPossibleValues
-            : [],
+          // listOfPossibleValues: condition.listOfPossibleValues
+          //   ? condition.listOfPossibleValues
+          //   : [],
+          listOfPossibleValues: {
+            list: ["Muy alto", "Alto", "Medio", "Bajo", "Muy bajo"],
+          },
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden:
             condition.conditionName === ECreditLines.CREDIT_LINE_RULE
@@ -63,7 +66,9 @@ const decisionTemplateConfig = (
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      listOfPossibleValues: listOfPossibleValues ? listOfPossibleValues : [],
+      listOfPossibleValues: listOfPossibleValues
+        ? { list: listOfPossibleValues }
+        : [],
       conditionGroups: [
         buildGroup("group-primary"),
         buildGroup("additional-group-1"),

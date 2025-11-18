@@ -99,7 +99,6 @@ const useEnumRules = (props: IUseEnumRules) => {
         setRuleData({
           ...enumRuleData,
           listOfPossibleValues: rootListValues,
-
           conditionsThatEstablishesTheDecision: processedConditions,
         } as IRuleDecisionExtended);
       } catch (error) {
