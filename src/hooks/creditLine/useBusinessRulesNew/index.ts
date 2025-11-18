@@ -27,7 +27,6 @@ const asArray = (v: unknown): any[] =>
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const normalizeCondition = (c: any) => ({
   ...c,
-  listOfPossibleValues: asArray(c?.listOfPossibleValues),
 });
 
 const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {

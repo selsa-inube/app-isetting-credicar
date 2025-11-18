@@ -41,7 +41,7 @@ const decisionTemplateConfig = (
           conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
           value: "",
           listOfPossibleValues: condition.listOfPossibleValues
-            ? condition.listOfPossibleValues
+            ? { list: condition.listOfPossibleValues }
             : [],
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden:
@@ -50,8 +50,6 @@ const decisionTemplateConfig = (
               : false,
         })),
     });
-
-    console.log("🐔🐸", { listOfPossibleValues }, buildGroup("group-primary"));
 
     return {
       ruleName,
@@ -63,7 +61,9 @@ const decisionTemplateConfig = (
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      listOfPossibleValues: listOfPossibleValues ? listOfPossibleValues : [],
+      listOfPossibleValues: listOfPossibleValues
+        ? { list: listOfPossibleValues }
+        : [],
       conditionGroups: [
         buildGroup("group-primary"),
         buildGroup("additional-group-1"),
