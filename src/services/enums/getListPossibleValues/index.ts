@@ -6,6 +6,7 @@ import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getListPossibleValues = async (
   businessUnit: string,
+  path: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
@@ -15,7 +16,7 @@ const getListPossibleValues = async (
 
   const data: IEnumerators[] = await getWithRetries<IEnumerators[]>(
     credicarAxiosInstance,
-    `/list-of-possible-values/money-destination`,
+    `${path}`,
     config,
   );
 

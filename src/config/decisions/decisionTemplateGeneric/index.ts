@@ -10,6 +10,7 @@ const decisionTemplateConfig = (
     i18n,
     descriptionUse,
     howToSetTheDecision,
+    listOfPossibleValues,
   }: IRuleDecisionExtended,
   language: string,
 ) => {
@@ -39,8 +40,8 @@ const decisionTemplateConfig = (
           ),
           conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
           value: "",
-          listOfPossibleValues: Array.isArray(condition.listOfPossibleValues)
-            ? condition.listOfPossibleValues
+          listOfPossibleValues: condition.listOfPossibleValues
+            ? { list: condition.listOfPossibleValues }
             : [],
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden:
@@ -60,6 +61,9 @@ const decisionTemplateConfig = (
       value: "",
       effectiveFrom: "",
       validUntil: "",
+      listOfPossibleValues: listOfPossibleValues
+        ? { list: listOfPossibleValues }
+        : [],
       conditionGroups: [
         buildGroup("group-primary"),
         buildGroup("additional-group-1"),
