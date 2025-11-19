@@ -16,10 +16,10 @@ import { IEntry } from "@ptypes/design/table/IEntry";
 import { IErrors } from "@ptypes/IErrors";
 import { ICreditLinesData } from "@ptypes/creditLines/ICreditLinesData";
 import { IUseCreditLinesTab } from "@ptypes/hooks/creditLines/IUseCreditLinesTab";
+import { useValidateRules } from "../useValidateRules";
 
 const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const { businessUnits } = props;
-  const [businessRules] = useState<string[]>([]);
   const [creditLines, setCreditLines] = useState<ICreditLinesData[]>([]);
   const [loadingRules] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
@@ -47,6 +47,8 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
       rules: [],
     });
   }, []);
+
+  const { businessRules } = useValidateRules();
 
   useEffect(() => {
     if (!loadingRules && businessRules && businessRules.length > 0) {

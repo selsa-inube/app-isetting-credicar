@@ -1,8 +1,11 @@
 import styled from "styled-components";
+interface IStyledModalContainer {
+  changeZIndex: boolean;
+}
 
-const StyledModalContainer = styled.div`
+const StyledModalContainer = styled.div<IStyledModalContainer>`
   & > div {
-    z-index: 3;
+    z-index: ${({ changeZIndex }) => (changeZIndex ? 3 : 1)};
   }
 `;
 

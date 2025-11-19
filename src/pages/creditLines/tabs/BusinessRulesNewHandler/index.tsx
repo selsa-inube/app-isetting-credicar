@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Fieldset, Icon, Stack, Text } from "@inubekit/inubekit";
-import { MdAdd, MdOutlineReportProblem } from "react-icons/md";
+import { Button, Fieldset, Stack } from "@inubekit/inubekit";
+import { MdAdd } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
 import { BusinessRulesNew } from "@isettingkit/business-rules";
 import { Checkpicker as Checkpick } from "@isettingkit/input";
 import { useAlertDecisionModal } from "@hooks/creditLine/configurationLines/useAlertDecisionModal";
 import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
-import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
@@ -14,6 +13,7 @@ import { portalId } from "@config/portalId";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { StyledMultipleChoiceContainer } from "./styles";
+import { AlertMessage } from "../forms/alertMessage";
 
 const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const {
@@ -48,7 +48,11 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     optionDetailsCreditline,
     message,
     mesaggeEmpty,
+    dataEmpty,
+    conditionEmpty,
     showAlertModal,
+    iconMessage,
+    iconAppearance,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -111,7 +115,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
                 <Button
                   appearance="primary"
                   cursorHover
-                  disabled={selectedConditionsCSV.length === 0}
+                  disabled={false}
                   iconBefore={<MdAdd />}
                   onClick={() => openModal()}
                 >
@@ -124,61 +128,33 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
       )}
       {!ruleLoading && (
         <>
-          {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
-            <BusinessRulesNew
-              baseDecisionTemplate={localizedTemplate}
-              controls={!optionDetailsCreditline}
-              customMessageEmptyDecisions={customMessageEmptyDecisions}
-              customTitleContentAddCard={customTitleContentAddCard}
-              decisionTemplate={filteredDecisionTemplate as any}
-              decisions={decisionsSorted}
-              handleCloseModal={closeModal}
-              handleDelete={deleteDecision}
-              handleOpenModal={openModal}
-              handleSubmitForm={submitForm}
-              isModalOpen={isModalOpen}
-              loading={!!loading}
-              onRemoveCondition={removeCondition}
-              onRestoreConditions={restoreConditions}
-              selectedDecision={selectedDecision}
-              textValues={textValues as IRulesFormTextValues}
+          {conditionEmpty && (
+            <AlertMessage
+              mesaggeEmpty={mesaggeEmpty}
+              icon={iconMessage}
+              iconAppearance={iconAppearance}
+              message={customMessageEmptyDecisions ?? message}
             />
-          ) : (
-            <Fieldset legend={newBusinessRulesLabels.decisionsTitle}>
-              <Stack
-                alignItems="center"
-                direction="column"
-                gap={tokens.spacing.s200}
-                justifyContent="center"
-                width="100%"
-              >
-                <Icon
-                  appearance="warning"
-                  icon={<MdOutlineReportProblem />}
-                  size="40px"
-                />
-                <Text
-                  appearance={EComponentAppearance.DARK}
-                  size="medium"
-                  type="title"
-                  weight="bold"
-                >
-                  {mesaggeEmpty}
-                </Text>
-                <Text
-                  as="span"
-                  appearance={EComponentAppearance.GRAY}
-                  size="medium"
-                >
-                  {customMessageEmptyDecisions ? (
-                    customMessageEmptyDecisions
-                  ) : (
-                    <>{message}</>
-                  )}
-                </Text>
-              </Stack>
-            </Fieldset>
           )}
+          <BusinessRulesNew
+            baseDecisionTemplate={localizedTemplate}
+            controls={!optionDetailsCreditline}
+            customMessageEmptyDecisions={customMessageEmptyDecisions}
+            customTitleContentAddCard={customTitleContentAddCard}
+            decisionTemplate={filteredDecisionTemplate as any}
+            decisions={decisionsSorted}
+            handleCloseModal={closeModal}
+            handleDelete={deleteDecision}
+            handleOpenModal={openModal}
+            handleSubmitForm={submitForm}
+            isModalOpen={isModalOpen}
+            loading={!!loading}
+            onRemoveCondition={removeCondition}
+            onRestoreConditions={restoreConditions}
+            selectedDecision={selectedDecision}
+            textValues={textValues as IRulesFormTextValues}
+            shouldRenderEmptyMessage={dataEmpty || decisionsSorted.length > 0}
+          />
 
           {showDecision && (
             <DecisionModal
@@ -193,6 +169,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
               title={alertModal.title}
               withCancelButton={alertModal.withCancelButton}
               withIcon={alertModal.withIcon}
+              changeZIndex
             />
           )}
         </>

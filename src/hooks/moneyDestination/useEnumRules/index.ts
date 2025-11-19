@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorByRules";
 import { getListPossibleValues } from "@services/enums/getListPossibleValues";
-import { EGeneralPolicies } from "@enum/generalPolicies";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
@@ -85,9 +84,6 @@ const useEnumRules = (props: IUseEnumRules) => {
                 )) as string[];
                 return {
                   ...condition,
-                  /////////////QUITAR//////////////////////////
-                  howToSetTheCondition: EGeneralPolicies.LIST_OF_VALUES,
-                  /////////////////////////////////////
                   listOfPossibleValues: conditionListValues as IValue,
                 };
               }
