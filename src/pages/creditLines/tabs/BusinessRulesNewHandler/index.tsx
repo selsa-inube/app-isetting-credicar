@@ -169,6 +169,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
               title={alertModal.title}
               withCancelButton={alertModal.withCancelButton}
               withIcon={alertModal.withIcon}
+              changeZIndex
             />
           )}
         </>
