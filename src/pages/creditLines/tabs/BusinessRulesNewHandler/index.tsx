@@ -48,6 +48,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     optionDetailsCreditline,
     message,
     mesaggeEmpty,
+    dataEmpty,
     showAlertModal,
     closeModal,
     deleteDecision,
@@ -111,7 +112,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
                 <Button
                   appearance="primary"
                   cursorHover
-                  disabled={selectedConditionsCSV.length === 0}
+                  disabled={false}
                   iconBefore={<MdAdd />}
                   onClick={() => openModal()}
                 >
@@ -124,26 +125,25 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
       )}
       {!ruleLoading && (
         <>
-          {selectedConditionsCSV.length > 0 || decisionsSorted.length > 0 ? (
-            <BusinessRulesNew
-              baseDecisionTemplate={localizedTemplate}
-              controls={!optionDetailsCreditline}
-              customMessageEmptyDecisions={customMessageEmptyDecisions}
-              customTitleContentAddCard={customTitleContentAddCard}
-              decisionTemplate={filteredDecisionTemplate as any}
-              decisions={decisionsSorted}
-              handleCloseModal={closeModal}
-              handleDelete={deleteDecision}
-              handleOpenModal={openModal}
-              handleSubmitForm={submitForm}
-              isModalOpen={isModalOpen}
-              loading={!!loading}
-              onRemoveCondition={removeCondition}
-              onRestoreConditions={restoreConditions}
-              selectedDecision={selectedDecision}
-              textValues={textValues as IRulesFormTextValues}
-            />
-          ) : (
+          <BusinessRulesNew
+            baseDecisionTemplate={localizedTemplate}
+            controls={!optionDetailsCreditline}
+            customMessageEmptyDecisions={customMessageEmptyDecisions}
+            customTitleContentAddCard={customTitleContentAddCard}
+            decisionTemplate={filteredDecisionTemplate as any}
+            decisions={decisionsSorted}
+            handleCloseModal={closeModal}
+            handleDelete={deleteDecision}
+            handleOpenModal={openModal}
+            handleSubmitForm={submitForm}
+            isModalOpen={isModalOpen}
+            loading={!!loading}
+            onRemoveCondition={removeCondition}
+            onRestoreConditions={restoreConditions}
+            selectedDecision={selectedDecision}
+            textValues={textValues as IRulesFormTextValues}
+          />
+          {dataEmpty && (
             <Fieldset legend={newBusinessRulesLabels.decisionsTitle}>
               <Stack
                 alignItems="center"

@@ -573,6 +573,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       ? newBusinessRulesLabels.NoDecision
       : newBusinessRulesLabels.NoStringAttached;
 
+  const dataEmpty = selectedConditionsCSV.length === 0;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -588,6 +590,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     mesaggeEmpty,
     optionDetailsCreditline,
     showAlertModal,
+    dataEmpty,
     handleToggleModal,
     setSelectedConditionsCSV,
     setSelectedDecision,
