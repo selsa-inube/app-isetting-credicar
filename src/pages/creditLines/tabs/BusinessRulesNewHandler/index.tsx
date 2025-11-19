@@ -153,7 +153,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             onRestoreConditions={restoreConditions}
             selectedDecision={selectedDecision}
             textValues={textValues as IRulesFormTextValues}
-            shouldRenderEmptyMessage={dataEmpty}
+            shouldRenderEmptyMessage={dataEmpty || decisionsSorted.length > 0}
           />
 
           {showDecision && (
