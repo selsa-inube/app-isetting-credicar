@@ -575,7 +575,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       ? newBusinessRulesLabels.NoDecision
       : newBusinessRulesLabels.NoStringAttached;
 
-  const conditionEmpty = selectedConditionsCSV.length === 0;
+  const conditionEmpty =
+    selectedConditionsCSV.length === 0 && decisionsSorted.length === 0;
 
   const dataEmpty =
     selectedConditionsCSV.length > 0 && decisionsSorted.length === 0;
