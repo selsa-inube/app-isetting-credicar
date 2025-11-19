@@ -575,7 +575,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       ? newBusinessRulesLabels.NoDecision
       : newBusinessRulesLabels.NoStringAttached;
 
-  const dataEmpty = selectedConditionsCSV.length === 0;
+  const conditionEmpty = selectedConditionsCSV.length === 0;
+
+  const dataEmpty =
+    selectedConditionsCSV.length > 0 && decisionsSorted.length === 0;
+
   const iconMessage =
     option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL ? (
       <MdInfoOutline />
@@ -606,6 +610,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     dataEmpty,
     iconMessage,
     iconAppearance,
+    conditionEmpty,
     handleToggleModal,
     setSelectedConditionsCSV,
     setSelectedDecision,

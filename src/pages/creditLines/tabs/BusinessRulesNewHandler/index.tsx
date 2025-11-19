@@ -49,6 +49,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     message,
     mesaggeEmpty,
     dataEmpty,
+    conditionEmpty,
     showAlertModal,
     iconMessage,
     iconAppearance,
@@ -127,6 +128,14 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
       )}
       {!ruleLoading && (
         <>
+          {conditionEmpty && (
+            <AlertMessage
+              mesaggeEmpty={mesaggeEmpty}
+              icon={iconMessage}
+              iconAppearance={iconAppearance}
+              message={customMessageEmptyDecisions ?? message}
+            />
+          )}
           <BusinessRulesNew
             baseDecisionTemplate={localizedTemplate}
             controls={!optionDetailsCreditline}
@@ -144,15 +153,8 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             onRestoreConditions={restoreConditions}
             selectedDecision={selectedDecision}
             textValues={textValues as IRulesFormTextValues}
+            shouldRenderEmptyMessage={dataEmpty}
           />
-          {!dataEmpty && (
-            <AlertMessage
-              mesaggeEmpty={mesaggeEmpty}
-              icon={iconMessage}
-              iconAppearance={iconAppearance}
-              message={customMessageEmptyDecisions ?? message}
-            />
-          )}
 
           {showDecision && (
             <DecisionModal
