@@ -33,6 +33,7 @@ interface IModalWrapper {
   iconThirdButton?: React.ReactElement;
   loadingThirdButton?: boolean;
   fullwidthbutton?: boolean;
+  changeZIndex?: boolean;
   onClickThirdButton?: () => void;
   onCloseModal?: () => void;
 }

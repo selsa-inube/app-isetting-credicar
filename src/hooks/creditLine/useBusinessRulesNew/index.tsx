@@ -16,6 +16,8 @@ import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
 import { conditionsHidden } from "@config/creditLines/configuration/conditionsHidden";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
+import { MdInfoOutline, MdOutlineReportProblem } from "react-icons/md";
+import { EComponentAppearance } from "@src/enum/appearances";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const asArray = (v: unknown): any[] =>
@@ -573,6 +575,24 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       ? newBusinessRulesLabels.NoDecision
       : newBusinessRulesLabels.NoStringAttached;
 
+  const conditionEmpty =
+    selectedConditionsCSV.length === 0 && decisionsSorted.length === 0;
+
+  const dataEmpty =
+    selectedConditionsCSV.length > 0 && decisionsSorted.length === 0;
+
+  const iconMessage =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL ? (
+      <MdInfoOutline />
+    ) : (
+      <MdOutlineReportProblem />
+    );
+
+  const iconAppearance =
+    option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
+      ? EComponentAppearance.HELP
+      : EComponentAppearance.WARNING;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -588,6 +608,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     mesaggeEmpty,
     optionDetailsCreditline,
     showAlertModal,
+    dataEmpty,
+    iconMessage,
+    iconAppearance,
+    conditionEmpty,
     handleToggleModal,
     setSelectedConditionsCSV,
     setSelectedDecision,
