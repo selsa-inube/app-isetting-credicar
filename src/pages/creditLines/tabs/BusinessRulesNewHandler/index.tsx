@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Fieldset, Icon, Stack, Text } from "@inubekit/inubekit";
-import { MdAdd, MdOutlineReportProblem } from "react-icons/md";
+import { Button, Fieldset, Stack } from "@inubekit/inubekit";
+import { MdAdd } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
 import { BusinessRulesNew } from "@isettingkit/business-rules";
 import { Checkpicker as Checkpick } from "@isettingkit/input";
 import { useAlertDecisionModal } from "@hooks/creditLine/configurationLines/useAlertDecisionModal";
 import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
-import { EComponentAppearance } from "@enum/appearances";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
@@ -14,6 +13,7 @@ import { portalId } from "@config/portalId";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { StyledMultipleChoiceContainer } from "./styles";
+import { AlertMessage } from "../forms/alertMessage";
 
 const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const {
@@ -50,6 +50,8 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     mesaggeEmpty,
     dataEmpty,
     showAlertModal,
+    iconMessage,
+    iconAppearance,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -143,41 +145,13 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             selectedDecision={selectedDecision}
             textValues={textValues as IRulesFormTextValues}
           />
-          {dataEmpty && (
-            <Fieldset legend={newBusinessRulesLabels.decisionsTitle}>
-              <Stack
-                alignItems="center"
-                direction="column"
-                gap={tokens.spacing.s200}
-                justifyContent="center"
-                width="100%"
-              >
-                <Icon
-                  appearance="warning"
-                  icon={<MdOutlineReportProblem />}
-                  size="40px"
-                />
-                <Text
-                  appearance={EComponentAppearance.DARK}
-                  size="medium"
-                  type="title"
-                  weight="bold"
-                >
-                  {mesaggeEmpty}
-                </Text>
-                <Text
-                  as="span"
-                  appearance={EComponentAppearance.GRAY}
-                  size="medium"
-                >
-                  {customMessageEmptyDecisions ? (
-                    customMessageEmptyDecisions
-                  ) : (
-                    <>{message}</>
-                  )}
-                </Text>
-              </Stack>
-            </Fieldset>
+          {!dataEmpty && (
+            <AlertMessage
+              mesaggeEmpty={mesaggeEmpty}
+              icon={iconMessage}
+              iconAppearance={iconAppearance}
+              message={customMessageEmptyDecisions ?? message}
+            />
           )}
 
           {showDecision && (

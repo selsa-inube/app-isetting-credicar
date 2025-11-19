@@ -42,7 +42,7 @@ const decisionTemplateConfig = (
           value: "",
           listOfPossibleValues: condition.listOfPossibleValues
             ? { list: condition.listOfPossibleValues }
-            : [],
+            : undefined,
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden:
             condition.conditionName === ECreditLines.CREDIT_LINE_RULE
@@ -61,9 +61,10 @@ const decisionTemplateConfig = (
       value: "",
       effectiveFrom: "",
       validUntil: "",
-      listOfPossibleValues: listOfPossibleValues
-        ? { list: listOfPossibleValues }
-        : [],
+      listOfPossibleValues:
+        Object.values(listOfPossibleValues || []).length > 0
+          ? { list: listOfPossibleValues }
+          : undefined,
       conditionGroups: [
         buildGroup("group-primary"),
         buildGroup("additional-group-1"),
