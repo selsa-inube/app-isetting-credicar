@@ -25,6 +25,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     configuredDecisions,
     setOptionsIncluded,
     setOptionsExcluded,
+    setLinesData,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -105,11 +106,9 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
       ?.decisionsByRule?.map((rule) => String(rule?.value));
 
     const rulesToInclude =
-      useCaseConfiguration === EUseCase.ADD
-        ? lineDecisions
-        : (conditionGroupsData?.length ?? 0) > 0
-          ? conditionGroupsData
-          : lineDecisions;
+      (conditionGroupsData?.length ?? 0) > 0
+        ? conditionGroupsData
+        : lineDecisions;
 
     if (!rulesToInclude || rulesToInclude.length === 0) {
       return {
@@ -249,7 +248,9 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     templateKey,
     setMove,
     supportIncludedData,
+    setLinesData,
   });
+
   useEffect(() => {
     const loading =
       ruleLoadding ||

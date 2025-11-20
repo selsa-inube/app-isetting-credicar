@@ -1,4 +1,5 @@
 import { IValue } from "@isettingkit/input";
+import { IEnumerators } from "@ptypes/IEnumerators";
 
 interface IConditionsTheDecision {
   conditionName: string;
@@ -9,6 +10,7 @@ interface IConditionsTheDecision {
   conditionDataType?: string;
   howToSetTheCondition?: string;
   listOfPossibleValues?: IValue;
+  enumValues?: IEnumerators[];
   TimeUnit?: string;
   timeUnit?: string;
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueDataType } from "@isettingkit/input";
 import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
@@ -11,6 +12,7 @@ const decisionTemplateConfig = (
     descriptionUse,
     howToSetTheDecision,
     listOfPossibleValues,
+    enumValues,
   }: IRuleDecisionExtended,
   language: string,
 ) => {
@@ -43,6 +45,8 @@ const decisionTemplateConfig = (
           listOfPossibleValues: condition.listOfPossibleValues
             ? { list: condition.listOfPossibleValues }
             : undefined,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          enumValues: (condition as any).enumValues,
           howToSetTheCondition: condition.howToSetTheCondition,
           hidden:
             condition.conditionName === ECreditLines.CREDIT_LINE_RULE
@@ -65,6 +69,7 @@ const decisionTemplateConfig = (
         Object.values(listOfPossibleValues || []).length > 0
           ? { list: listOfPossibleValues }
           : undefined,
+      enumValues: enumValues,
       conditionGroups: [
         buildGroup("group-primary"),
         buildGroup("additional-group-1"),

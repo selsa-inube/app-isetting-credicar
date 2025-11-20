@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ValueDataType } from "@isettingkit/input";
+import { IValue, ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { ECreditLines } from "@enum/creditLines";
 import { ICondition } from "@ptypes/creditLines/ICondition";
@@ -8,8 +8,10 @@ import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
+import { IEnumerators } from "@ptypes/IEnumerators";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
+import { isRangeObject } from "../formatValueOfCondition";
 
 const generateUUID = (): string => {
   return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -19,6 +21,8 @@ const transformationDecisions = (
   payload: IRuleDecisionExtended,
   conditionArray: IConditionTraduction[],
   ruleNameTraduction: string,
+  listValuesDecision?: IValue,
+  enumValuesDecision?: IEnumerators[],
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
@@ -32,7 +36,11 @@ const transformationDecisions = (
       ValueDataType.ALPHABETICAL,
     howToSetTheDecision = decisionByRuleArray?.howToSetTheDecision
       ? decisionByRuleArray?.howToSetTheDecision
-      : EValueHowToSetUp.EQUAL,
+      : isRangeObject(decisionByRuleArray?.value)
+        ? EValueHowToSetUp.RANGE
+        : Array.isArray(decisionByRuleArray?.value)
+          ? EValueHowToSetUp.LIST_OF_VALUES
+          : EValueHowToSetUp.EQUAL,
   } = ruleMeta;
 
   return payload.decisionsByRule
@@ -57,12 +65,21 @@ const transformationDecisions = (
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
                 howToSetTheCondition:
-                  condMeta.howToSetTheCondition ??
-                  c.howToSetTheCondition ??
-                  EValueHowToSetUp.EQUAL,
+                  (c.howToSetTheCondition ?? isRangeObject(c.value))
+                    ? EValueHowToSetUp.RANGE
+                    : Array.isArray(c.value)
+                      ? EValueHowToSetUp.LIST_OF_VALUES
+                      : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
-                listOfPossibleValues: condMeta.listOfPossibleValues ?? [],
+                listOfPossibleValues: normalizeConditionTraduction(
+                  conditionArray,
+                  c.conditionName,
+                )?.listPossibleValues,
+                enumValues: normalizeConditionTraduction(
+                  conditionArray,
+                  c.conditionName,
+                )?.enumValues,
                 hidden:
                   c.conditionName === ECreditLines.CREDIT_LINE_RULE
                     ? true
@@ -87,6 +104,8 @@ const transformationDecisions = (
           howToSetTheDecision,
           value: decision.value,
           effectiveFrom,
+          listOfPossibleValues: listValuesDecision,
+          enumValues: enumValuesDecision,
           conditionsThatEstablishesTheDecision: groupedConditions,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),
         };

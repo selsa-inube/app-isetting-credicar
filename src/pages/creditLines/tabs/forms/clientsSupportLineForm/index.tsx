@@ -32,6 +32,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     optionIcon,
     ruleLoadding,
     configuredDecisions,
+    setLinesData,
     setOptionsIncluded,
     setOptionsExcluded,
     handleToggleInfoModal,
@@ -58,6 +59,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       setOptionsExcluded,
       condition: "CreditRiskProfile",
       configuredDecisions,
+      setLinesData,
     });
 
   return (

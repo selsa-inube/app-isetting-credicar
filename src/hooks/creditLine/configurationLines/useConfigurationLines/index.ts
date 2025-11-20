@@ -39,6 +39,7 @@ import { ILanguage } from "@ptypes/i18n";
 import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IValue } from "@ptypes/decisions/IValue";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
@@ -179,7 +180,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
-    linesData: linesData,
+    linesData,
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
     setIsUpdated,
@@ -306,8 +307,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
-  const { conditionTraduction, ruleNameTraduction, conditionCreditLine } =
-    getConditionsTraduction(ruleData, language);
+  const {
+    conditionTraduction,
+    ruleNameTraduction,
+    conditionCreditLine,
+    listValuesDecision,
+    enumValuesDecision,
+  } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
   const lineTypeDecision =
@@ -375,6 +381,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         rule,
         conditionTraduction,
         ruleNameTraduction as string,
+        listValuesDecision as IValue,
+        enumValuesDecision,
       );
     });
 
@@ -462,9 +470,21 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           currentFormValues.descriptionLine !==
             (initialData.descriptionUse || ""));
 
-      setHasUnsavedChanges(Boolean(hasFormChanges || decisionsData.length > 0));
+      setHasUnsavedChanges(
+        Boolean(
+          hasFormChanges ||
+            decisionsData.length > 0 ||
+            creditOptionsIncluded.items.length > 0 ||
+            optionsIncluded.items.length > 0,
+        ),
+      );
     }
-  }, [nameLineRef.current?.values, decisionsData]);
+  }, [
+    nameLineRef.current?.values,
+    decisionsData,
+    creditOptionsIncluded.items,
+    optionsIncluded.items,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -485,6 +505,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
 
     if (useCaseConfiguration === EUseCase.ADD && hasUnsavedChanges) {
+      if (!linesData?.configurationRequestData?.rules) {
+        return true;
+      }
+
+      if (loadingModify) {
+        return new Promise((resolve) => {
+          savePromiseRef.current = resolve;
+        });
+      }
       setIsUpdated(true);
 
       return new Promise((resolve) => {
@@ -578,7 +607,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const validateDisabled = validateConfig();
 
   const validateButtonSend = Boolean(
-    useCaseConfiguration === EUseCase.EDIT &&
+    (useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.ADD) &&
       Object.entries(linesEditData).length === 0,
   );
 
@@ -743,6 +773,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     creditOptionsExcluded,
     creditOptionsIncluded,
     configuredDecisions,
+    setLinesData,
     setAddDecision,
     setEditDecision,
     setDeleteDecision,
