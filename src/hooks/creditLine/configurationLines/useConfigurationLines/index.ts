@@ -39,6 +39,7 @@ import { ILanguage } from "@ptypes/i18n";
 import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IValue } from "@ptypes/decisions/IValue";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
@@ -380,7 +381,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         rule,
         conditionTraduction,
         ruleNameTraduction as string,
-        listValuesDecision,
+        listValuesDecision as IValue,
         enumValuesDecision,
       );
     });

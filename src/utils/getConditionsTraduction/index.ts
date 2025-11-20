@@ -13,7 +13,9 @@ const getConditionsTraduction = (
       condition: cond.conditionName,
       conditionDataType: cond.conditionDataType,
       howToSetTheCondition: cond.howToSetTheCondition,
-      listPossibleValues: cond.listOfPossibleValues,
+      listPossibleValues: {
+        list: cond.listOfPossibleValues as unknown as string[],
+      },
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       enumValues: (cond as any).enumValues,
       label:
@@ -28,7 +30,7 @@ const getConditionsTraduction = (
     (condition) => condition.condition === ECreditLines.CREDIT_LINE_RULE,
   )?.condition;
 
-  const listValuesDecision = data.listOfPossibleValues;
+  const listValuesDecision = { list: data.listOfPossibleValues };
 
   const enumValuesDecision = data.enumValues;
 
