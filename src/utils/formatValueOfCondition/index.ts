@@ -64,4 +64,4 @@ const formatValueOfCondition = (value: PossibleValues) => {
   return "";
 };
 
-export { formatValueOfCondition };
+export { formatValueOfCondition, isRangeObject };

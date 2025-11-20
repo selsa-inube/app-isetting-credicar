@@ -31,6 +31,7 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     useCaseConfiguration,
     optionIcon,
     ruleLoadding,
+    setLinesData,
     setCreditOptionsIncluded,
     setCreditOptionsExcluded,
     handleToggleInfoModal,
@@ -55,6 +56,7 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       setOptionsIncluded: setCreditOptionsIncluded,
       setOptionsExcluded: setCreditOptionsExcluded,
       condition: "MoneyDestination",
+      setLinesData,
     });
 
   return (
