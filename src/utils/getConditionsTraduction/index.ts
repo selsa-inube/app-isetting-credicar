@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
@@ -12,6 +13,9 @@ const getConditionsTraduction = (
       condition: cond.conditionName,
       conditionDataType: cond.conditionDataType,
       howToSetTheCondition: cond.howToSetTheCondition,
+      listPossibleValues: cond.listOfPossibleValues,
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      enumValues: (cond as any).enumValues,
       label:
         cond.i18n?.[language as keyof typeof cond.i18n] ?? cond.conditionName,
     });
@@ -24,7 +28,17 @@ const getConditionsTraduction = (
     (condition) => condition.condition === ECreditLines.CREDIT_LINE_RULE,
   )?.condition;
 
-  return { conditionTraduction, ruleNameTraduction, conditionCreditLine };
+  const listValuesDecision = data.listOfPossibleValues;
+
+  const enumValuesDecision = data.enumValues;
+
+  return {
+    conditionTraduction,
+    ruleNameTraduction,
+    conditionCreditLine,
+    listValuesDecision,
+    enumValuesDecision,
+  };
 };
 
 export { getConditionsTraduction };

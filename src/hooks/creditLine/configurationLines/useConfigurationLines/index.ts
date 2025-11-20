@@ -306,8 +306,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     businessUnits: appData.businessUnit.publicCode,
   });
 
-  const { conditionTraduction, ruleNameTraduction, conditionCreditLine } =
-    getConditionsTraduction(ruleData, language);
+  const {
+    conditionTraduction,
+    ruleNameTraduction,
+    conditionCreditLine,
+    listValuesDecision,
+    enumValuesDecision,
+  } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
   const lineTypeDecision =
@@ -375,6 +380,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         rule,
         conditionTraduction,
         ruleNameTraduction as string,
+        listValuesDecision,
+        enumValuesDecision,
       );
     });
 
