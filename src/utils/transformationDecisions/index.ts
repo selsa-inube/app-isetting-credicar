@@ -10,6 +10,7 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
+import { isRangeObject } from "../formatValueOfCondition";
 
 const generateUUID = (): string => {
   return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -32,7 +33,11 @@ const transformationDecisions = (
       ValueDataType.ALPHABETICAL,
     howToSetTheDecision = decisionByRuleArray?.howToSetTheDecision
       ? decisionByRuleArray?.howToSetTheDecision
-      : EValueHowToSetUp.EQUAL,
+      : isRangeObject(decisionByRuleArray?.value)
+        ? EValueHowToSetUp.RANGE
+        : Array.isArray(decisionByRuleArray?.value)
+          ? EValueHowToSetUp.LIST_OF_VALUES
+          : EValueHowToSetUp.EQUAL,
   } = ruleMeta;
 
   return payload.decisionsByRule
@@ -57,9 +62,11 @@ const transformationDecisions = (
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
                 howToSetTheCondition:
-                  condMeta.howToSetTheCondition ??
-                  c.howToSetTheCondition ??
-                  EValueHowToSetUp.EQUAL,
+                  (c.howToSetTheCondition ?? isRangeObject(c.value))
+                    ? EValueHowToSetUp.RANGE
+                    : Array.isArray(c.value)
+                      ? EValueHowToSetUp.LIST_OF_VALUES
+                      : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: condMeta.listOfPossibleValues ?? [],

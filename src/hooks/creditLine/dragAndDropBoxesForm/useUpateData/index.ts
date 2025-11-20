@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
@@ -24,6 +24,7 @@ const useUpateData = (props: IUseUpateData) => {
     templateKey,
     setMove,
     supportIncludedData,
+    setLinesData,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -34,26 +35,30 @@ const useUpateData = (props: IUseUpateData) => {
     useCaseConfiguration,
   } = useContext(CreditLinesConstruction);
 
+  const getSupportIncludedData = useCallback(() => {
+    return supportIncludedData();
+  }, [supportIncludedData]);
+
   useEffect(() => {
-    if (!move || useCaseConfiguration !== EUseCase.EDIT) return;
+    const option =
+      useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.ADD;
 
-    const included = supportIncludedData();
-
-    if (!currentRuleData?.decisionsByRule?.[0]) {
-      console.warn("No rule data found");
+    if (!move || !option) {
       return;
     }
 
-    const firstDecision = currentRuleData?.decisionsByRule[0];
+    const included = getSupportIncludedData();
+
+    const firstDecision = currentRuleData?.decisionsByRule?.[0];
 
     const transformJson = {
-      decisionId: firstDecision.decisionId,
+      decisionId: firstDecision?.decisionId ?? "",
       ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
-      ruleDataType: firstDecision.ruleDataType,
-      value: firstDecision.value,
-      howToSetTheDecision: firstDecision.howToSetTheDecision,
+      ruleDataType: firstDecision?.ruleDataType ?? "Alphabetical",
+      value: firstDecision?.value ?? linesConstructionData.abbreviatedName,
+      howToSetTheDecision: firstDecision?.howToSetTheDecision ?? "EqualTo",
       effectiveFrom: formatDate(new Date()),
-      transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
       conditionGroups: included?.map((rule) => ({
         conditionsThatEstablishesTheDecision: [
           {
@@ -82,6 +87,7 @@ const useUpateData = (props: IUseUpateData) => {
             value.i18n?.[appData.language as keyof typeof value.i18n] ===
             condition,
         );
+
       const initiaConditionGroups = configuredDecisions?.flatMap(
         (config) => config.decisionsByRule || [],
       );
@@ -136,11 +142,11 @@ const useUpateData = (props: IUseUpateData) => {
     };
 
     const transformEditJson = {
-      decisionId: firstDecision.decisionId,
+      decisionId: firstDecision?.decisionId,
       ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
-      ruleDataType: firstDecision.ruleDataType,
-      value: firstDecision.value,
-      howToSetTheDecision: firstDecision.howToSetTheDecision,
+      ruleDataType: firstDecision?.ruleDataType,
+      value: firstDecision?.value,
+      howToSetTheDecision: firstDecision?.howToSetTheDecision,
       effectiveFrom: formatDate(new Date()),
       transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
       conditionGroups: editCondition(),
@@ -154,32 +160,51 @@ const useUpateData = (props: IUseUpateData) => {
       },
     ];
 
-    setLinesConstructionData((prev: any) => {
-      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        lineOfCreditId: linesConstructionData.settingRequestId,
-        rules: mergeEditRules(existingRules, newValues),
-      };
-    });
+    if (useCaseConfiguration === EUseCase.ADD) {
+      setLinesData((prev: any) => {
+        const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+        const updatedRules = mergeEditRules(existingRules, newValues);
 
-    setLinesEditData((prev: any) => {
-      const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          configurationRequestData: {
+            ...prev?.configurationRequestData,
+            rules: updatedRules,
+          },
+        };
+      });
+    }
 
-      return {
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        lineOfCreditId: linesConstructionData.settingRequestId,
-        rules: mergeEditClientRules(existingRules, newEditValues),
-      };
-    });
+    if (useCaseConfiguration === EUseCase.EDIT) {
+      setLinesEditData((prev: any) => {
+        const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          lineOfCreditId: linesConstructionData.settingRequestId,
+          rules: mergeEditClientRules(existingRules, newEditValues),
+        };
+      });
+
+      setLinesConstructionData((prev: any) => {
+        const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+        return {
+          ...prev,
+          settingRequestId: linesConstructionData.settingRequestId,
+          lineOfCreditId: linesConstructionData.settingRequestId,
+          rules: mergeEditRules(existingRules, newValues),
+        };
+      });
+    }
 
     setMove(false);
   }, [
     move,
     useCaseConfiguration,
-    supportIncludedData,
+    getSupportIncludedData,
+    setLinesData,
     currentRuleData,
     condition,
     templateKey,

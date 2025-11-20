@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorByRules";
 import { getListPossibleValues } from "@services/enums/getListPossibleValues";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { IValue } from "@ptypes/decisions/IValue";
+import { IEnumerators } from "@ptypes/IEnumerators";
 
 const useEnumRules = (props: IUseEnumRules) => {
   const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
+  const { appData } = useContext(AuthAndPortalData);
   const [enumRuleData, setEnumRuleData] = useState<IDecisionData>(
     {} as IDecisionData,
   );
@@ -49,7 +52,7 @@ const useEnumRules = (props: IUseEnumRules) => {
           businessUnits,
           pathListPossibleValues,
         );
-        return data.map((val) => val.value);
+        return data;
       }
       return [];
     } catch (error) {
@@ -66,11 +69,17 @@ const useEnumRules = (props: IUseEnumRules) => {
       }
 
       try {
+        let dataDecision: IEnumerators[] = [];
         let rootListValues: string[] = [];
         if (enumRuleData.listOfPossibleValues) {
-          rootListValues = (await fetchListValues(
+          dataDecision = (await fetchListValues(
             enumRuleData.listOfPossibleValues as string,
-          )) as string[];
+          )) as IEnumerators[];
+          rootListValues = dataDecision.map(
+            (val) =>
+              val.i18n?.[appData.language as keyof typeof val.i18n] ??
+              val.description,
+          ) as string[];
         }
 
         let processedConditions =
@@ -79,12 +88,18 @@ const useEnumRules = (props: IUseEnumRules) => {
           processedConditions = await Promise.all(
             processedConditions.map(async (condition) => {
               if (condition.listOfPossibleValues) {
-                const conditionListValues = (await fetchListValues(
+                const dataCondition = (await fetchListValues(
                   condition.listOfPossibleValues as string,
-                )) as string[];
+                )) as IEnumerators[];
+                const conditionListValues = dataCondition.map(
+                  (val) =>
+                    val.i18n?.[appData.language as keyof typeof val.i18n] ??
+                    val.description,
+                );
                 return {
                   ...condition,
                   listOfPossibleValues: conditionListValues as IValue,
+                  enumValues: dataCondition,
                 };
               }
               return condition;
@@ -95,6 +110,7 @@ const useEnumRules = (props: IUseEnumRules) => {
         setRuleData({
           ...enumRuleData,
           listOfPossibleValues: rootListValues,
+          enumValues: dataDecision,
           conditionsThatEstablishesTheDecision: processedConditions,
         } as IRuleDecisionExtended);
       } catch (error) {

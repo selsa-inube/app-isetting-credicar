@@ -20,7 +20,7 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
       setErrorData({} as IErrors);
       setBorrowerData({} as IModifyConstructionResponse);
 
-      if (option && withNeWData && linesData) {
+      if (option && withNeWData && linesData?.configurationRequestData) {
         setLoading(true);
         try {
           const data = await patchModifyConstruction(userAccount, linesData);
@@ -41,7 +41,7 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
     };
 
     fetchLinesConstructiontData();
-  }, [option, withNeWData, userAccount, linesData?.settingRequestId]);
+  }, [option, withNeWData, userAccount, linesData?.configurationRequestData]);
 
   return {
     borrowerData,

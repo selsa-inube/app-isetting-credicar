@@ -179,7 +179,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
-    linesData: linesData,
+    linesData,
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
     setIsUpdated,
@@ -462,9 +462,21 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           currentFormValues.descriptionLine !==
             (initialData.descriptionUse || ""));
 
-      setHasUnsavedChanges(Boolean(hasFormChanges || decisionsData.length > 0));
+      setHasUnsavedChanges(
+        Boolean(
+          hasFormChanges ||
+            decisionsData.length > 0 ||
+            creditOptionsIncluded.items.length > 0 ||
+            optionsIncluded.items.length > 0,
+        ),
+      );
     }
-  }, [nameLineRef.current?.values, decisionsData]);
+  }, [
+    nameLineRef.current?.values,
+    decisionsData,
+    creditOptionsIncluded.items,
+    optionsIncluded.items,
+  ]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -578,7 +590,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const validateDisabled = validateConfig();
 
   const validateButtonSend = Boolean(
-    useCaseConfiguration === EUseCase.EDIT &&
+    (useCaseConfiguration === EUseCase.EDIT ||
+      useCaseConfiguration === EUseCase.ADD) &&
       Object.entries(linesEditData).length === 0,
   );
 
@@ -696,6 +709,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
 
+  console.log("❤️‍🩹❤️‍🩹", { linesData });
+  console.log("🐔", { initialDecisions });
+  console.log("🐷😻", { linesConstructionData });
+
   return {
     loading,
     initialValues,
@@ -743,6 +760,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     creditOptionsExcluded,
     creditOptionsIncluded,
     configuredDecisions,
+    setLinesData,
     setAddDecision,
     setEditDecision,
     setDeleteDecision,
