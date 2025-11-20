@@ -248,6 +248,16 @@ const keyOf = (x: IRuleDecision) =>
 
 const originalName = (name: string) => name?.split(".").pop() || name;
 
+const todayInBogotaISO = () =>
+  new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Bogota",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(new Date())
+    .replace(/\//g, "-");
+
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
     decisionTemplate,
@@ -379,6 +389,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setIsModalOpen(false);
     setSelectedDecision(null);
   };
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
     const validateValue = decisionsSorted.filter(
@@ -396,14 +407,13 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       if (remunerativerateRule) {
         setShowLineModal(true);
       }
+
       const isEditing = selectedDecision !== null;
 
-      const base = isEditing
-        ? { ...selectedDecision, ...dataDecision }
-        : {
-            ...localizedTemplate,
-            ...dataDecision,
-          };
+      const base = {
+        ...localizedTemplate,
+        ...dataDecision,
+      };
 
       const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
         {}) as Record<string, unknown>;
@@ -439,15 +449,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       );
 
       const usedIds = new Set(decisions.map((d) => String(d.decisionId ?? "")));
-      const decisionIdForNew = isEditing
-        ? base.decisionId
-        : base.decisionId && !usedIds.has(base.decisionId)
+      const decisionIdForNew =
+        base.decisionId && !usedIds.has(base.decisionId)
           ? base.decisionId
           : nextDecisionLabel(usedIds);
+
       const newDecision: IRuleDecision = {
         ...base,
         decisionId: decisionIdForNew,
         labelName: localizeLabel(base, language),
+        validUntil: "",
         /* eslint-disable @typescript-eslint/no-explicit-any */
         conditionGroups: groupsRecordToArrayNew(
           mergedGroups as Record<string, any[]>,
@@ -457,13 +468,21 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       delete (newDecision as any).conditionsThatEstablishesTheDecision;
 
       const decisionWithSentences = transformDecision(newDecision, language);
+
+      const today = todayInBogotaISO();
+
       setDecisions((prev) => {
+        let updatedPrev = prev;
+
         if (isEditing && selectedDecision) {
-          return prev.map((d) =>
-            keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+          updatedPrev = prev.map((d) =>
+            keyOf(d) === keyOf(selectedDecision)
+              ? { ...d, validUntil: today }
+              : d,
           );
         }
-        return [...prev, decisionWithSentences];
+
+        return [...updatedPrev, decisionWithSentences];
       });
 
       closeModal();
