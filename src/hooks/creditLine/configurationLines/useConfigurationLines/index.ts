@@ -497,6 +497,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
 
     if (useCaseConfiguration === EUseCase.ADD && hasUnsavedChanges) {
+      if (!linesData?.configurationRequestData?.rules) {
+        return true;
+      }
+
+      if (loadingModify) {
+        return new Promise((resolve) => {
+          savePromiseRef.current = resolve;
+        });
+      }
       setIsUpdated(true);
 
       return new Promise((resolve) => {
@@ -708,10 +717,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
-
-  console.log("❤️‍🩹❤️‍🩹", { linesData });
-  console.log("🐔", { initialDecisions });
-  console.log("🐷😻", { linesConstructionData });
 
   return {
     loading,

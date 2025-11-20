@@ -80,7 +80,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       applicationName: "ifac",
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: addCreditLinesLabels.descriptionSaveData,
+      description: `${addCreditLinesLabels.descriptionSaveData} ${updatedFormValues.information.values.nameLine}`,
       entityName: "CreditLine",
       requestDate: formatDate(new Date()),
       useCaseName: ECreditLines.USE_CASE_ADD,
