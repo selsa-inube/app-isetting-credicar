@@ -12,7 +12,6 @@ import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
-import { makeIdExtractor } from "@utils/decisions/makeIdExtractor";
 import { conditionsHidden } from "@config/creditLines/configuration/conditionsHidden";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
@@ -279,7 +278,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
-
+  const [hydratedFromProps, setHydratedFromProps] = useState(false);
   useEffect(() => {
     setAddDecision(false);
     setEditDecision(false);
@@ -307,13 +306,24 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     ),
   );
 
+  // useEffect(() => {
+  //   if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
+  //     setDecisions(
+  //       (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+  //     );
+  //   }
+  // }, [initialDecisions, language]);
+
   useEffect(() => {
-    if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
+    if (!hydratedFromProps && (initialDecisions?.length ?? 0) > 0) {
       setDecisions(
-        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+        ensureUniqueIds(
+          (initialDecisions ?? []).map((d) => transformDecision(d, language)),
+        ),
       );
+      setHydratedFromProps(true);
     }
-  }, [initialDecisions, language]);
+  }, [initialDecisions, language, hydratedFromProps]);
 
   const [selectedConditionsCSV, setSelectedConditionsCSV] =
     useState<string>("");
@@ -543,16 +553,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const renderedListRef = useRef<IRuleDecision[]>([]);
   renderedListRef.current = decisionsSorted;
 
-  const extractId = useMemo(
-    () => makeIdExtractor(() => renderedListRef.current),
-    [],
-  );
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  const deleteDecision = (...args: any[]) => {
-    setDeleteDecision(true);
-    const id = extractId(...args);
-    if (!id) return;
-    setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
+  // const extractId = useMemo(
+  //   () => makeIdExtractor(() => renderedListRef.current),
+  //   [],
+  // );
+  const deleteDecision = (id: string) => {
+    // setDeleteDecision(true);
+    // const id = extractId(...args);
+    // if (!id) return;
+    // setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
+    setDecisions((prev) => prev.filter((d) => d.decisionId !== id));
   };
 
   const responseForBackend = useMemo(() => {
