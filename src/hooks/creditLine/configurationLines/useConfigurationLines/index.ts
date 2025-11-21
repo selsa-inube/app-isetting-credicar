@@ -525,12 +525,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
     return true;
   };
-  console.log("😻", {
-    rules: (linesConstructionData.rules || []).map((rule) => ({
-      ...rule,
-      decisionsByRule: rule.decisionsByRule ?? [],
-    })) as IRules[],
-  });
+
   const handleSave = async (click: boolean): Promise<boolean> => {
     if (!click) {
       setShowSaveModal(false);
