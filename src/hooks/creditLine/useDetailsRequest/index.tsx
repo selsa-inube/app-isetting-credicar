@@ -15,7 +15,7 @@ const useDetailsRequest = (props: IUseDetailsRequest) => {
 
   useEffect(() => {
     if (configurationData) {
-      if (useNameRequest !== ECreditLines.USE_CASE_NAME_ADD) {
+      if (useNameRequest !== ECreditLines.USE_CASE_ADD) {
         setShowModal(true);
       } else {
         navigate(`/credit-lines/edit-credit-lines`, {

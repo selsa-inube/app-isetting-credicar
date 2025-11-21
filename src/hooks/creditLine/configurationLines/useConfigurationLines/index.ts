@@ -383,6 +383,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         ruleNameTraduction as string,
         listValuesDecision as IValue,
         enumValuesDecision,
+        useCaseConfiguration,
       );
     });
 
@@ -412,7 +413,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   useEffect(() => {
     if (decisionsData.length === 0) return;
-    const validate = useCaseConfiguration === EUseCase.ADD;
+    const dragForm =
+      templateKey === ECreditLines.CREDIT_LINE_RULE ||
+      templateKey === ECreditLines.CREDIT_LINE_RULE;
+    const validate = useCaseConfiguration === EUseCase.ADD && !dragForm;
     if (validate) {
       const newFormattedRules = formatRuleDecisionsConfig(
         decisionsData,
@@ -606,18 +610,36 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const validateDisabled = validateConfig();
 
-  const validateButtonSend = Boolean(
-    (useCaseConfiguration === EUseCase.EDIT ||
-      useCaseConfiguration === EUseCase.ADD) &&
-      Object.entries(linesEditData).length === 0,
-  );
+  const validateButtonSend = () => {
+    if (useCaseConfiguration === EUseCase.EDIT) {
+      const shouldDisable = Object.entries(linesEditData).length === 0;
+      return shouldDisable;
+    }
+
+    if (useCaseConfiguration === EUseCase.ADD) {
+      if (templateKey === ECreditLines.CREDIT_LINE_RULE) {
+        const shouldDisable = creditOptionsIncluded.items.length === 0;
+        return shouldDisable;
+      }
+
+      if (templateKey === ECreditLines.CLIENT_SUPPORT_RULE) {
+        const shouldDisable = optionsIncluded.items.length === 0;
+        return shouldDisable;
+      }
+
+      if (Object.keys(linesData ?? {}).length === 0) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const { groupsData } = useGroupRules();
 
   const nav = useStepNavigation({
     groups: groupsData as unknown as IDropdownMenuGroup[],
     disabledButtons: validateDisabled,
-    disabledButtonSend: validateButtonSend,
+    disabledButtonSend: validateButtonSend(),
     handleStep,
     handleSave,
   });

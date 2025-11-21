@@ -162,7 +162,12 @@ const useUpateData = (props: IUseUpateData) => {
 
     if (useCaseConfiguration === EUseCase.ADD) {
       setLinesData((prev: any) => {
-        const existingRules = (prev?.rules ?? []) as IRuleDecision[];
+        const existingRules =
+          (prev?.configurationRequestData?.rules as
+            | IRuleDecision[]
+            | undefined) ??
+          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
+          [];
         const updatedRules = mergeEditRules(existingRules, newValues);
 
         return {
