@@ -2,6 +2,7 @@
 import { IValue, ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { ECreditLines } from "@enum/creditLines";
+import { EUseCase } from "@enum/useCase";
 import { ICondition } from "@ptypes/creditLines/ICondition";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
@@ -23,6 +24,7 @@ const transformationDecisions = (
   ruleNameTraduction: string,
   listValuesDecision?: IValue,
   enumValuesDecision?: IEnumerators[],
+  useCaseConfiguration?: string,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
@@ -65,21 +67,21 @@ const transformationDecisions = (
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
                 howToSetTheCondition:
-                  (c.howToSetTheCondition ?? isRangeObject(c.value))
-                    ? EValueHowToSetUp.RANGE
-                    : Array.isArray(c.value)
-                      ? EValueHowToSetUp.LIST_OF_VALUES
-                      : EValueHowToSetUp.EQUAL,
+                  useCaseConfiguration !== EUseCase.ADD
+                    ? c.howToSetTheCondition
+                    : (c.howToSetTheCondition ?? isRangeObject(c.value))
+                      ? EValueHowToSetUp.RANGE
+                      : Array.isArray(c.value)
+                        ? EValueHowToSetUp.LIST_OF_VALUES
+                        : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
-                listOfPossibleValues: normalizeConditionTraduction(
-                  conditionArray,
-                  c.conditionName,
-                )?.listPossibleValues,
-                enumValues: normalizeConditionTraduction(
-                  conditionArray,
-                  c.conditionName,
-                )?.enumValues,
+                listOfPossibleValues:
+                  normalizeConditionTraduction(conditionArray, c.conditionName)
+                    ?.listPossibleValues ?? [],
+                enumValues:
+                  normalizeConditionTraduction(conditionArray, c.conditionName)
+                    ?.enumValues ?? [],
                 hidden:
                   c.conditionName === ECreditLines.CREDIT_LINE_RULE
                     ? true
@@ -104,7 +106,7 @@ const transformationDecisions = (
           howToSetTheDecision,
           value: decision.value,
           effectiveFrom,
-          listOfPossibleValues: listValuesDecision,
+          listOfPossibleValues: listValuesDecision ?? [],
           enumValues: enumValuesDecision,
           conditionsThatEstablishesTheDecision: groupedConditions,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),

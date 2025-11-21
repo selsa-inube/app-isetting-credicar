@@ -6,7 +6,9 @@ const StyledContentImg = styled(Link)`
 `;
 
 const StyledLogo = styled.img`
-  max-width: 80px;
+  max-width: 100px;
+  max-height: 32px;
+  height: auto;
 `;
 
 export { StyledContentImg, StyledLogo };
