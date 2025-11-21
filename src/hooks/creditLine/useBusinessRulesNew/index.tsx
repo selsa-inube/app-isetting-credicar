@@ -557,7 +557,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   //   () => makeIdExtractor(() => renderedListRef.current),
   //   [],
   // );
-  /* eslint-disable @typescript-eslint/no-explicit-any */
   const deleteDecision = (id: string) => {
     // setDeleteDecision(true);
     // const id = extractId(...args);
