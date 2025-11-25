@@ -26,6 +26,7 @@ import { validateEditedRules } from "@utils/validateEditedRules";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
+import { changeValueCondition } from "@utils/decisions/changeValueCondition";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { editCreditLabels } from "@config/creditLines/creditLinesTab/generic/editCreditLabels";
@@ -368,6 +369,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     addDecision,
     editDecision,
     deleteDecision,
+    conditionTraduction,
+    listValuesDecision: listValuesDecision as IValue,
+    enumValuesDecision,
   });
 
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
@@ -421,6 +425,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       const newFormattedRules = formatRuleDecisionsConfig(
         decisionsData,
         false,
+        conditionTraduction,
+        listValuesDecision as IValue,
+        enumValuesDecision,
         linesConstructionData.abbreviatedName as string,
         conditionCreditLine,
       );
@@ -538,10 +545,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (useCaseConfiguration === EUseCase.ADD) {
       setIsUpdated(true);
       try {
+        const newData = changeValueCondition(
+          linesConstructionData.rules as IRules[],
+          appData.language,
+        );
         const result = await postCheckLineRuleConsistency(
           appData.user.userAccount,
           {
-            rules: (linesConstructionData.rules || []).map((rule) => ({
+            rules: newData.map((rule) => ({
               ...rule,
               decisionsByRule: rule.decisionsByRule ?? [],
             })) as IRules[],

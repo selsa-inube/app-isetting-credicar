@@ -1,4 +1,5 @@
 import { IValue } from "@isettingkit/input";
+import { IEnumerators } from "@ptypes/IEnumerators";
 import { IConditionGroups } from "../IConditionGroups";
 
 interface IDecisionsByRule {
@@ -10,6 +11,8 @@ interface IDecisionsByRule {
   decisionId?: string;
   ruleName?: string;
   ruleDataType?: string;
+  listOfPossibleValues?: IValue;
+  enumValues?: IEnumerators[];
   howToSetTheDecision?: string;
   decisionDataType?: string;
   modifyJustification?: string;

@@ -24,9 +24,12 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     setLinesConstructionData,
     setLinesEditData,
     mergeRules,
+    conditionTraduction,
     addDecision,
     editDecision,
     deleteDecision,
+    listValuesDecision,
+    enumValuesDecision,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -131,8 +134,8 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
       linesConstructionData.abbreviatedName as string,
+      appData.language,
     );
-
     const newUpdateDecision = getUpdateDecisionsConfig(
       editDecision,
       appData.user.userAccount,
@@ -146,6 +149,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
+      appData.language,
     );
 
     const insertValues = [newInsertDecision].filter(
@@ -198,6 +202,9 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       const newFormattedRules = formatRuleDecisionsConfig(
         decisionsData,
         false,
+        conditionTraduction,
+        listValuesDecision,
+        enumValuesDecision,
         linesConstructionData.abbreviatedName as string,
       );
       setLinesConstructionData((prev) => {

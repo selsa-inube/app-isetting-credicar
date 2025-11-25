@@ -12,6 +12,7 @@ interface IConfiguredDecisions {
     ruleName: string;
     typeDecision: string;
     validUntil: string;
+    listOfPossibleValues?: IValue;
     value: string | number | string[] | IValue | undefined;
   }[];
   parameterizedConditions?: string[];

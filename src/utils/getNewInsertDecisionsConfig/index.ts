@@ -6,6 +6,7 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { findDecision } from "../destination/findDecision";
 import { arraysEqual } from "../destination/arraysEqual";
+import { normalizeValueCondition } from "../decisions/normalizeValueCondition";
 
 const getNewInsertDecisionsConfig = (
   useCase: boolean,
@@ -13,6 +14,7 @@ const getNewInsertDecisionsConfig = (
   prevRef: IRuleDecisionExtended[],
   decision: IRuleDecisionExtended[],
   abbreviatedName: string,
+  language: string,
 ) => {
   if (useCase && !arraysEqual(prevRef, decision)) {
     return decision
@@ -30,7 +32,12 @@ const getNewInsertDecisionsConfig = (
                       conditionDataType: condition.conditionDataType,
                       conditionName: condition.conditionName,
                       howToSetTheCondition: condition.howToSetTheCondition,
-                      value: condition.value,
+                      value:
+                        normalizeValueCondition(
+                          condition.enumValues ?? [],
+                          language,
+                          condition.value,
+                        )?.code ?? condition.value,
                       transactionOperation: ETransactionOperation.INSERT,
                     })) || []),
                   {
@@ -51,7 +58,12 @@ const getNewInsertDecisionsConfig = (
               condition.effectiveFrom as string,
             ),
             validUntil: validUntil,
-            value: condition.value,
+            value:
+              normalizeValueCondition(
+                condition.enumValues ?? [],
+                language,
+                condition.value,
+              )?.code ?? condition.value,
             transactionOperation: ETransactionOperation.INSERT,
             decisionId: condition.decisionId,
             conditionGroups: conditionGroups,

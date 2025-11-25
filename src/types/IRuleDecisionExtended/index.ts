@@ -4,6 +4,7 @@ import { IConditionGroups } from "../context/creditLinesConstruction/IConditionG
 import { IDecisionsByRule } from "../context/creditLinesConstruction/IDecisionsByRule";
 import { IEvaluationStatistics } from "../decisions/IEvaluationStatistics";
 import { IEnumerators } from "../IEnumerators";
+import { IValue } from "../decisions/IValue";
 
 interface IRuleDecisionExtended extends IRuleDecision {
   i18n?: ILanguage;
@@ -15,6 +16,7 @@ interface IRuleDecisionExtended extends IRuleDecision {
   evaluationStatistics?: IEvaluationStatistics;
   parameterizedConditions?: string[];
   modifyJustification?: string;
+  listOfPossibleValues?: IValue;
 }
 
 export type { IRuleDecisionExtended };

@@ -5,12 +5,14 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { findDecision } from "../destination/findDecision";
 import { arraysEqual } from "../destination/arraysEqual";
+import { normalizeValueCondition } from "../decisions/normalizeValueCondition";
 
 const getNewDeletedDecisionsConfig = (
   useCase: boolean,
   user: string,
   prevRef: IRuleDecisionExtended[],
   newDecision: IRuleDecisionExtended[],
+  language: string,
 ) => {
   if (useCase && !arraysEqual(prevRef, newDecision)) {
     return prevRef
@@ -28,7 +30,12 @@ const getNewDeletedDecisionsConfig = (
                       if (condition.value !== undefined) {
                         return {
                           conditionName: condition.conditionName,
-                          value: condition.value,
+                          value:
+                            normalizeValueCondition(
+                              condition.enumValues ?? [],
+                              language,
+                              condition.value,
+                            )?.code ?? condition.value,
                           transactionOperation: ETransactionOperation.DELETE,
                         };
                       }
@@ -45,7 +52,12 @@ const getNewDeletedDecisionsConfig = (
               condition.effectiveFrom as string,
             ),
             validUntil: validUntil,
-            value: condition.value,
+            value:
+              normalizeValueCondition(
+                condition.enumValues ?? [],
+                language,
+                condition.value,
+              )?.code ?? condition.value,
             transactionOperation: ETransactionOperation.DELETE,
             decisionId: condition.decisionId,
             conditionGroups: conditionGroups,

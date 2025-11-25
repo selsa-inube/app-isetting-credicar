@@ -9,6 +9,8 @@ const normalizeEvaluateRuleConfig = (
       decisionId: decision.decisionId,
       ruleName: decision.ruleName,
       ruleDataType: decision.ruleDataType,
+      enumValues: decision.enumValues,
+      listOfPossibleValues: decision.listOfPossibleValues,
       value: decision.value,
       howToSetTheDecision: decision.howToSetTheDecision,
       effectiveFrom:
@@ -22,6 +24,8 @@ const normalizeEvaluateRuleConfig = (
             conditionDataType: cond.conditionDataType,
             conditionName: cond.conditionName,
             howToSetTheCondition: cond.howToSetTheCondition,
+            listOfPossibleValues: cond.listOfPossibleValues,
+            enumValues: cond.enumValues,
             value: cond.value,
             timeUnit: cond.timeUnit,
           })),

@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { IValue } from "@isettingkit/input";
 import { getConditionsByGroupNew } from "@isettingkit/business-rules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IConditionTraduction } from "@ptypes/IConditionTraduction";
+import { IEnumerators } from "@ptypes/IEnumerators";
 import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
+import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 
 const formatRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
   validateUseEdit: boolean,
+  conditionArray: IConditionTraduction[],
+  listValuesDecision?: IValue,
+  enumValuesDecision?: IEnumerators[],
   abbreviatedName?: string,
   conditionHidden?: string,
 ) => {
@@ -17,6 +24,8 @@ const formatRuleDecisionsConfig = (
         decision.effectiveFrom &&
         formatDateDecision(String(decision.effectiveFrom)),
       value: decision.value,
+      listOfPossibleValues: listValuesDecision,
+      enumValues: enumValuesDecision,
     };
 
     if (decision.validUntil) {
@@ -37,10 +46,19 @@ const formatRuleDecisionsConfig = (
           conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
             ...condition,
             conditionName: condition?.conditionName ?? "",
+            listOfPossibleValues:
+              normalizeConditionTraduction(
+                conditionArray,
+                condition.conditionName,
+              )?.listPossibleValues ?? [],
+            enumValues:
+              normalizeConditionTraduction(
+                conditionArray,
+                condition.conditionName,
+              )?.enumValues ?? [],
             value: condition?.value,
           })),
         };
-
         if (validateUseEdit) {
           conditionGroup.conditionGroupId = groupKey;
         }

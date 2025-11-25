@@ -16,6 +16,8 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
                 condition.conditionDataType as string,
               ),
               conditionName: condition.conditionName,
+              listOfPossibleValues: condition.listOfPossibleValues,
+              enumValues: condition.enumValues,
               howToSetTheCondition: condition.howToSetTheCondition,
               value: condition.value,
             })),
@@ -31,6 +33,8 @@ const transformRuleStructure = (inputArray: IRuleDecisionExtended[]) => {
       ruleName: rule.ruleName,
       ruleDataType: rule.ruleDataType,
       value: rule.value,
+      listOfPossibleValues: rule.listOfPossibleValues,
+      enumValues: rule.enumValues,
       howToSetTheDecision: rule.howToSetTheDecision,
       effectiveFrom: rule.effectiveFrom
         ? formatDateDecision(rule.effectiveFrom as string)
