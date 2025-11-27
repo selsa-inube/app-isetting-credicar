@@ -7,9 +7,11 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useCreditLine } from "@hooks/moneyDestination/useCreditLine";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useEnumsMoneyDestination } from "@hooks/useEnumsMoneyDestination";
+import { EGeneral } from "@enum/general";
 import { EStepsKeysMoneyDestination } from "@enum/stepsKeysMoneyDest";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { ECreditLines } from "@enum/creditLines";
+import { ERequestType } from "@enum/requestType";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
 import { normalizeOptions } from "@utils/destination/normalizeOptions";
@@ -212,7 +214,8 @@ const useAddDestination = () => {
     }
 
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.ADD,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: addMoneyLabels.description,

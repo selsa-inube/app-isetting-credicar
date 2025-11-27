@@ -8,6 +8,7 @@ import {
 } from "@isettingkit/business-rules";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
+import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
@@ -16,7 +17,6 @@ import { conditionsHidden } from "@config/creditLines/configuration/conditionsHi
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
 import { MdInfoOutline, MdOutlineReportProblem } from "react-icons/md";
-import { EComponentAppearance } from "@src/enum/appearances";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const asArray = (v: unknown): any[] =>

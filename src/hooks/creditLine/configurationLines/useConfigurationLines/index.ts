@@ -26,7 +26,9 @@ import { validateEditedRules } from "@utils/validateEditedRules";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
+import { ERequestType } from "@enum/requestType";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
+import { EGeneral } from "@enum/general";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { editCreditLabels } from "@config/creditLines/creditLinesTab/generic/editCreditLabels";
 import { IErrors } from "@ptypes/IErrors";
@@ -264,7 +266,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (useCaseConfiguration === EUseCase.EDIT) {
       const { settingRequestId, ...dataWithoutId } = linesEditData;
       setEditData({
-        applicationName: "ifac",
+        applicationName: EGeneral.APPLICATION_NAME,
+        requestType: ERequestType.MODIFY,
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
         description: editCreditLabels.descriptionSaveData,

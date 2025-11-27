@@ -3,7 +3,9 @@ import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
 import { EMoneyDestination } from "@enum/moneyDestination";
+import { EGeneral } from "@enum/general";
 import { EModalState } from "@enum/modalState";
+import { ERequestType } from "@enum/requestType";
 import { deleteDestinationLabels } from "@config/moneyDestination/deleteDestination/deleteDestinationLabels";
 import { IUseDeleteDestination } from "@ptypes/hooks/moneyDestination/IUseDeleteDestination";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -34,7 +36,8 @@ const useDeleteDestination = (props: IUseDeleteDestination) => {
 
   const handleClick = () => {
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.REMOVE,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: deleteDestinationLabels.descriptionSave,
