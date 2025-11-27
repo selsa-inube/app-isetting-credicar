@@ -4,8 +4,10 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
+import { removeDeleteTransactions } from "@utils/removeDeleteTransactions";
 import { mediaQueryTablet } from "@config/environment";
 import { detailsRequestModal } from "@config/creditLines/generic/detailsRequestModal";
+import { deleteUseCaseLabels } from "@config/creditLines/requestInProgressTab/deleteUseCaseLabels";
 import { IUseDetailsRequest } from "@ptypes/hooks/creditLines/IUseDetailsRequest";
 import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
 
@@ -23,10 +25,11 @@ const useDetailsRequest = (props: IUseDetailsRequest) => {
         const filterData = configurationData.configurationRequestData.rules
           .map((item: IDecisionsByRule) => item.ruleName)
           .filter((item: IDecisionsByRule) => item !== undefined);
-
+        const removeDeleteTransOperation =
+          removeDeleteTransactions(configurationData);
         setFilterRules(filterData);
         navigate(`/credit-lines/edit-credit-lines`, {
-          state: { data: configurationData, option: EUseCase.DETAILS },
+          state: { data: removeDeleteTransOperation, option: EUseCase.DETAILS },
         });
       }
     }
@@ -56,7 +59,9 @@ const useDetailsRequest = (props: IUseDetailsRequest) => {
         onClick: handleToggleModal,
         withCancelButton: false,
         withIcon: true,
-        description: configurationData.modifyJustification,
+        description: deleteUseCaseLabels(
+          configurationData.configurationRequestData.abbreviatedName,
+        ).description,
       };
     }
     return initial;

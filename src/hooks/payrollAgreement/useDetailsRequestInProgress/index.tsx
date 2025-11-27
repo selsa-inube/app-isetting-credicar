@@ -156,7 +156,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const modalData = modal();
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.useCaseName}`;
 
   const withErrorRequest = approvalRequest || executeRequest;
 
