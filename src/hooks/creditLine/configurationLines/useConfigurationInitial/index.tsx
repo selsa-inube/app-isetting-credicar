@@ -21,6 +21,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const {
     optionsAllRules,
     allValidRules,
+    filterRules,
     setOptionsAllRules,
     setLinesConstructionData,
     setLinesEditData,
@@ -53,7 +54,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     loading: loadingGroupRules,
     hasError: hasErrorGroupRules,
     errorData: errorDataGroupRules,
-  } = useGroupRules();
+  } = useGroupRules({ filterRules });
 
   const {
     optionsAllRules: rules,

@@ -24,10 +24,8 @@ const useLineInConstructionTab = () => {
     errorData,
   } = useLineInconstructionData();
 
-  const { setLinesConstructionData, setLinesEditData } = useContext(
-    CreditLinesConstruction,
-  );
-
+  const { setLinesConstructionData, setLinesEditData, setFilterRules } =
+    useContext(CreditLinesConstruction);
   useEffect(() => {
     setLinesConstructionData({
       settingRequestId: "",
@@ -38,6 +36,7 @@ const useLineInConstructionTab = () => {
       rules: [],
     });
     setLinesEditData({} as ILinesConstructionData);
+    setFilterRules([]);
   }, []);
 
   useEffect(() => {

@@ -75,6 +75,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     linesConstructionData,
     useCaseConfiguration,
     optionsAllRules,
+    filterRules,
   } = useContext(CreditLinesConstruction);
   const [data, setData] = useState<IModifyConstructionResponse>();
   const [editData, setEditData] = useState<ISaveDataRequest>();
@@ -634,7 +635,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     return false;
   };
 
-  const { groupsData } = useGroupRules();
+  const { groupsData } = useGroupRules({ filterRules });
 
   const nav = useStepNavigation({
     groups: groupsData as unknown as IDropdownMenuGroup[],

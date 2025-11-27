@@ -1,29 +1,36 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
 import { mediaQueryTablet } from "@config/environment";
 import { detailsRequestModal } from "@config/creditLines/generic/detailsRequestModal";
 import { IUseDetailsRequest } from "@ptypes/hooks/creditLines/IUseDetailsRequest";
+import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
 
 const useDetailsRequest = (props: IUseDetailsRequest) => {
   const { configurationData, useNameRequest } = props;
-
+  const { setFilterRules } = useContext(CreditLinesConstruction);
   const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (configurationData) {
-      if (useNameRequest !== ECreditLines.USE_CASE_ADD) {
+    if (configurationData?.configurationRequestData) {
+      if (useNameRequest === ECreditLines.USE_CASE_DELETE) {
         setShowModal(true);
       } else {
+        const filterData = configurationData.configurationRequestData.rules
+          .map((item: IDecisionsByRule) => item.ruleName)
+          .filter((item: IDecisionsByRule) => item !== undefined);
+
+        setFilterRules(filterData);
         navigate(`/credit-lines/edit-credit-lines`, {
           state: { data: configurationData, option: EUseCase.DETAILS },
         });
       }
     }
-  }, [useNameRequest]);
+  }, [configurationData, useNameRequest]);
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 
