@@ -39,7 +39,7 @@ const useHome = () => {
     }
   }, [appData]);
 
-  const { useCases } = useCaseForStaff({
+  const { useCases: useCases } = useCaseForStaff({
     businessUnitPrevious: appData.businessUnit.publicCode,
     useCasesByStaff: appData.useCasesByStaff,
     businessUnit: businessUnitSigla,
@@ -55,11 +55,11 @@ const useHome = () => {
   };
 
   useEffect(() => {
-    if (useCases.length > 0) {
+    if (businessUnitSigla && useCases.length > 0) {
       const useCasesJSON = JSON.stringify(useCases);
       setUseCases(useCasesJSON);
     }
-  }, [useCases]);
+  }, [businessUnitSigla, useCases, setUseCases]);
 
   const username = appData.user.userName.split(" ")[0];
 

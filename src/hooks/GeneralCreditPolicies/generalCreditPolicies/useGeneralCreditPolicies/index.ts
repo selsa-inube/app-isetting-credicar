@@ -5,14 +5,12 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { useValidateRules } from "@hooks/GeneralCreditPolicies/useValidateRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { mediaQueryMobileSmall, mediaQueryTablet } from "@config/environment";
 import { generalPoliciesTabsConfig } from "@config/generalCreditPolicies/tabs";
-import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
-import { disabledModal } from "@config/disabledModal";
 import { IGeneralPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IGeneralPoliciesTabsConfig";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
-import { useValidateRules } from "../useValidateRules";
 
 const useGeneralCreditPolicies = () => {
   const { businessUnitSigla, appData } = useContext(AuthAndPortalData);
@@ -86,6 +84,7 @@ const useGeneralCreditPolicies = () => {
     if (withoutPoliciesData) {
       setShowModal(!showModal);
     }
+
     setShowAddPolicies(withoutPolicies !== undefined && withoutPolicies);
   }, [withoutPoliciesData]);
 
@@ -132,6 +131,11 @@ const useGeneralCreditPolicies = () => {
     navigate("/general-credit-policies/add-general-credit-policies");
   };
 
+  const handleEmptyData = () => {
+    setShowModal(false);
+    navigate("/");
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
     navigate("/");
@@ -147,20 +151,12 @@ const useGeneralCreditPolicies = () => {
     setIsSelected(tabId);
   };
 
-  const modalData =
-    withoutPrivilegesAdd && showAddPolicies
-      ? {
-          ...disabledModal,
-          withCancelButton: false,
-          onCloseModal: handleCloseModal,
-          onClick: handleCloseModal,
-        }
-      : {
-          ...notPoliciesModal,
-          withCancelButton: true,
-          onCloseModal: handleCloseModal,
-          onClick: handlePolicies,
-        };
+  const emptyData = Boolean(
+    !loadingPolicies &&
+      !withoutPrivilegesAdd &&
+      !showAddPolicies &&
+      defaultSelectedTab === undefined,
+  );
 
   const showPoliciesTab = isSelected === tabs.generalPolicies.id;
 
@@ -185,8 +181,14 @@ const useGeneralCreditPolicies = () => {
     realGuaranteesData,
     loadingPolicies,
     showAddPolicies,
-    modalData,
+    emptyData,
     loadingRequest,
+    withoutPrivilegesAdd,
+    showModal,
+    defaultSelectedTab,
+    handleEmptyData,
+    handleCloseModal,
+    handlePolicies,
     handleTabChange,
   };
 };

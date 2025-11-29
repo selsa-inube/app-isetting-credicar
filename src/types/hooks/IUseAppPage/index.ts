@@ -6,6 +6,7 @@ interface IUseAppPage {
   appData: IAppData;
   location: Location<any>;
   businessUnitSigla: string;
+  setUseCases: React.Dispatch<React.SetStateAction<string>>;
   setBusinessUnitSigla: React.Dispatch<React.SetStateAction<string>>;
 }
 

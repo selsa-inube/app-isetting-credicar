@@ -5,7 +5,6 @@ import { tokens } from "@design/tokens";
 import { crumbsGeneralpolicies } from "@config/generalCreditPolicies/navigation";
 import { loadingLabels } from "@config/loadingLabels";
 import { descriptionTitle } from "@config/generalCreditPolicies/descriptionTitle";
-import { goBackModal } from "@config/goBackModal";
 import { portalId } from "@config/portalId";
 import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
 import { AddGenCreditPolicies } from "./addGeneralCreditPolicies";
@@ -31,9 +30,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     showAddPolicies,
     loadingRequest,
     modalData,
-    showGoBackModal,
-    onCloseGoBackModal,
-    onGoBack,
+    showDecision,
     handleOpenModal,
     onTabChange,
   } = props;
@@ -119,14 +116,21 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                   {showrequestTab && <RequestsInProgressTab />}
                 </Stack>
               </Stack>
-              {showGoBackModal && (
+
+              {showDecision && (
                 <DecisionModal
                   portalId={portalId}
-                  title={goBackModal.title}
-                  description={goBackModal.description}
-                  actionText={goBackModal.actionText}
-                  onCloseModal={onCloseGoBackModal}
-                  onClick={onGoBack}
+                  title={modalData.title}
+                  actionText={modalData.actionText}
+                  description={modalData.description}
+                  subtitle={modalData?.subtitle ? modalData.subtitle : ""}
+                  onCloseModal={modalData.onCloseModal}
+                  onClick={modalData.onClick}
+                  icon={modalData.icon}
+                  withIcon={modalData.withIcon}
+                  withCancelButton={modalData.withCancelButton}
+                  appearance={modalData.appearance}
+                  appearanceButton={modalData.appearanceButton}
                 />
               )}
             </Stack>

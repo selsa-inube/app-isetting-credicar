@@ -1,4 +1,5 @@
-import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/useGeneralCreditPolicies";
+import { useGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/generalCreditPolicies/useGeneralCreditPolicies";
+import { useModalGeneralCreditPolicies } from "@hooks/GeneralCreditPolicies/generalCreditPolicies/useModalGeneralCreditPolicies";
 import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEditGeneralPolicies";
 import { ICardData } from "@ptypes/home/ICardData";
 import { GeneralCreditPoliciesUI } from "./interface";
@@ -22,8 +23,13 @@ const GeneralCreditPolicies = () => {
     loadingPolicies,
     showAddPolicies,
     showrequestTab,
-    modalData,
     loadingRequest,
+    emptyData,
+    withoutPrivilegesAdd,
+    defaultSelectedTab,
+    handleEmptyData,
+    handleCloseModal,
+    handlePolicies,
     handleTabChange,
   } = useGeneralCreditPolicies();
 
@@ -40,6 +46,19 @@ const GeneralCreditPolicies = () => {
     minimumIncomeData,
     additionalDebtorsData,
     realGuaranteesData,
+  });
+
+  const { showDecision, modalData } = useModalGeneralCreditPolicies({
+    emptyData,
+    withoutPrivilegesAdd,
+    showAddPolicies,
+    showGoBackModal,
+    defaultSelectedTab,
+    handleCloseGoBackModal,
+    handleGoBack,
+    handleEmptyData,
+    handleCloseModal,
+    handlePolicies,
   });
 
   return (
@@ -64,10 +83,8 @@ const GeneralCreditPolicies = () => {
       showAddPolicies={showAddPolicies ?? false}
       modalData={modalData}
       handleOpenModal={handleOpenModal}
-      showGoBackModal={showGoBackModal}
-      onCloseGoBackModal={handleCloseGoBackModal}
-      onGoBack={handleGoBack}
       loadingRequest={loadingRequest}
+      showDecision={showDecision}
     />
   );
 };

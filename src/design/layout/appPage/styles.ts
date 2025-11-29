@@ -1,5 +1,4 @@
 import { inube } from "@inubekit/inubekit";
-import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 interface IStyledCollapseIcon {
@@ -72,15 +71,6 @@ const StyledMain = styled.main<IStyledMain>`
 const StyledHeaderContainer = styled.div`
   position: relative;
 `;
-const StyledContentImg = styled(Link)`
-  width: 100px;
-`;
-
-const StyledLogo = styled.img`
-  max-width: 100px;
-  max-height: 32px;
-  height: auto;
-`;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
@@ -102,8 +92,6 @@ export {
   StyledAppPage,
   StyledContainer,
   StyledHeaderContainer,
-  StyledContentImg,
-  StyledLogo,
   StyledMain,
   StyledCollapseIcon,
   StyledCollapse,
