@@ -10,7 +10,9 @@ import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { compareObjects } from "@utils/compareObjects";
+import { ERequestType } from "@enum/requestType";
 import { EGeneralPolicies } from "@enum/generalPolicies";
+import { EGeneral } from "@enum/general";
 import { factor } from "@config/generalCreditPolicies/editGeneralPolicies/factor";
 import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/editGeneralPolicies/tabs";
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
@@ -236,7 +238,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     }
 
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.MODIFY,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: editLabels.title,

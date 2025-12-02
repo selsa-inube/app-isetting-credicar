@@ -35,7 +35,9 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     useCase: ECreditLines.USE_CASE_ADD,
   });
 
-  const { setLinesConstructionData } = useContext(CreditLinesConstruction);
+  const { setLinesConstructionData, setFilterRules } = useContext(
+    CreditLinesConstruction,
+  );
 
   useEffect(() => {
     setLinesConstructionData({
@@ -46,6 +48,8 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
       lineOfCreditId: "",
       rules: [],
     });
+
+    setFilterRules([]);
   }, []);
 
   const { businessRules } = useValidateRules();

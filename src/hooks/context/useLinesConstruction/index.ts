@@ -7,6 +7,8 @@ const useLinesConstruction = () => {
   const [loadingInitial, setLoadingInitial] = useState<boolean>(false);
   const [optionsAllRules, setOptionsAllRules] = useState<INavigationRule[]>([]);
   const [allValidRules, setAllValidRules] = useState<string[]>([]);
+  const [filterRules, setFilterRules] = useState<string[]>([]);
+
   const [errorOptionsAllRules, setErrorOptionsAllRules] = useState<IErrors>(
     {} as IErrors,
   );
@@ -34,6 +36,8 @@ const useLinesConstruction = () => {
       linesEditData,
       errorOptionsAllRules,
       allValidRules,
+      filterRules,
+      setFilterRules,
       setAllValidRules,
       setErrorOptionsAllRules,
       setLinesConstructionData,

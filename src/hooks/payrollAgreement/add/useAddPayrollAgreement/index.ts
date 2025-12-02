@@ -5,6 +5,7 @@ import { FormikProps } from "formik";
 
 import { useLegalPerson } from "@hooks/payrollAgreement/useLegalPerson";
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
+import { EGeneral } from "@enum/general";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { stepKeysPayroll } from "@enum/stepsKeysPayroll";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
@@ -38,6 +39,7 @@ import { IPayrollSpecialBenefit } from "@ptypes/payrollAgreement/payrollAgreemen
 import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreementTab/ISeverancePaymentCycles";
 import { IUseAddPayrollAgreement } from "@ptypes/hooks/IUseAddPayrollAgreement";
 import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes";
+import { ERequestType } from "@enum/requestType";
 
 const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
   const { appData } = props;
@@ -473,7 +475,8 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     }
 
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.ADD,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: addPayrollLabels.descriptionSaveData,

@@ -11,6 +11,8 @@ import { useEvaluateRuleByBusinessUnit } from "@hooks/rules/useEvaluateRuleByBus
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { ECreditLines } from "@enum/creditLines";
+import { EGeneral } from "@enum/general";
+import { ERequestType } from "@enum/requestType";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
 import { arraysEqualWithoutDate } from "@utils/compareDecisionsWithoutDate";
@@ -383,7 +385,8 @@ const useEditDestination = (props: IUseEditDestination) => {
     }
 
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.MODIFY,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: editLabels.description,

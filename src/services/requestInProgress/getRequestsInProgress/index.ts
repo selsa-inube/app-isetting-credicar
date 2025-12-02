@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { queryProcessAxiosInstance } from "@api/isettingProcess";
+import { EGeneral } from "@enum/general";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { mapRequestsInProgressToEntities } from "./mappers/mapRequestsToEntities";
 
@@ -18,7 +19,7 @@ const getRequestsInProgress = async (
   const queryParams = new URLSearchParams({
     businessManagerCode: businessManagerCode,
     businessUnitCode: businessUnit,
-    applicationName: "ifac",
+    applicationName: EGeneral.APPLICATION_NAME,
     entityName: entity,
     page: ".1",
     per_page: ".1",

@@ -8,8 +8,10 @@ import { normalizeGroupRules } from "@utils/normalizeGroupRules";
 import { descriptionLineOption } from "@config/creditLines/configuration/descriptionLineOption";
 import { IErrors } from "@ptypes/IErrors";
 import { IAllEgroupRuleType } from "@ptypes/creditLines/IAllEgroupRuleType";
+import { IUseGroupRules } from "@ptypes/hooks/creditLines/IUseGroupRules";
 
-const useGroupRules = () => {
+const useGroupRules = (props: IUseGroupRules) => {
+  const { filterRules } = props;
   const { appData } = useContext(AuthAndPortalData);
   const { optionsAllRules, allValidRules, setAllValidRules } = useContext(
     CreditLinesConstruction,
@@ -58,17 +60,15 @@ const useGroupRules = () => {
   }, [allValidRules, validRules]);
 
   const optionsGroups = useMemo(() => {
-    if (hasError) {
-      return [];
-    }
-
-    if (groupRules.length > 0) {
-      const options: IDropdownMenuGroup[] =
-        groupRules?.map((group) => {
+    const options: IDropdownMenuGroup[] =
+      groupRules
+        ?.map((group) => {
           const rules = normalizeGroupRules(
             group.ruleNameType,
             optionsAllRules,
+            filterRules,
           );
+
           return {
             id: group.code,
             title:
@@ -78,19 +78,24 @@ const useGroupRules = () => {
             links: rules,
             rulesNames: group.ruleNameType,
           };
+        })
+        .filter((group) => {
+          if (filterRules && filterRules.length > 0) {
+            return group.links.length > 0;
+          }
+          return true;
         }) ?? [];
 
-      options.unshift({
-        id: descriptionLineOption.id,
-        title: descriptionLineOption.title,
-        path: descriptionLineOption.path,
-        links: [],
-      });
+    options.unshift({
+      id: descriptionLineOption.id,
+      title: descriptionLineOption.title,
+      path: descriptionLineOption.path,
+      links: [],
+    });
 
-      setGroupsData(options as unknown as IDropdownMenuGroup[]);
-      return options;
-    }
-  }, [groupRules, hasError, optionsAllRules]);
+    setGroupsData(options as unknown as IDropdownMenuGroup[]);
+    return options;
+  }, [groupRules, hasError, optionsAllRules, filterRules, appData.language]);
 
   return {
     optionsGroups,

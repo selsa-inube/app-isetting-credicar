@@ -12,6 +12,8 @@ import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assis
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { ERequestType } from "@enum/requestType";
+import { EGeneral } from "@enum/general";
 import { dataTranslations } from "@utils/dataTranslations";
 import { getDayPayment } from "@utils/getDayPayment";
 import { transformToArray } from "@utils/transformToArray";
@@ -391,7 +393,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       newExtraordinaryPayment().payrollSpeBenPayment.length > 0
     ) {
       setSaveData({
-        applicationName: "ifac",
+        applicationName: EGeneral.APPLICATION_NAME,
+        requestType: ERequestType.MODIFY,
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
         description: jsonLabels(appData.user.userAccount).modifyJustification,
