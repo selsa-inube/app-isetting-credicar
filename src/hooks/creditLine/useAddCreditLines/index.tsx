@@ -7,6 +7,8 @@ import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest"
 import { postAddRequestInConstruction } from "@services/creditLines/postAddRequestInConstruction";
 import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
+import { EGeneral } from "@enum/general";
+import { ERequestType } from "@enum/requestType";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
@@ -77,7 +79,8 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
     };
 
     const data = {
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.ADD,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: `${addCreditLinesLabels.descriptionSaveData} ${updatedFormValues.information.values.nameLine}`,

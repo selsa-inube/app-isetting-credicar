@@ -5,6 +5,7 @@ const mapSaveAddRequestEntityToApi = (
 ): ISaveDataRequest => {
   return {
     applicationName: data.applicationName,
+    requestType: data.requestType,
     businessManagerCode: data.businessManagerCode,
     businessUnitCode: data.businessUnitCode,
     description: data.description,

@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { formatDate } from "@utils/date/formatDate";
 import { eventBus } from "@events/eventBus";
+import { EGeneral } from "@enum/general";
 import { ECreditLines } from "@enum/creditLines";
+import { ERequestType } from "@enum/requestType";
 import { EModalState } from "@enum/modalState";
 import { deleteCreditLabels } from "@config/creditLines/creditLinesTab/generic/deleteCreditLabels";
 import { IUseDeletePayroll } from "@ptypes/hooks/IUseDeletePayroll";
@@ -35,7 +37,8 @@ const useDeleteCreditLine = (props: IUseDeletePayroll) => {
 
   const handleClick = () => {
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.REMOVE,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: deleteCreditLabels.descriptionSaveData,

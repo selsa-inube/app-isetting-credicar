@@ -27,6 +27,10 @@ const transformationDecisions = (
   useCaseConfiguration?: string,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
+  const useCaseValidate =
+    useCaseConfiguration === EUseCase.ADD ||
+    useCaseConfiguration === EUseCase.DETAILS;
+
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
@@ -66,14 +70,13 @@ const transformationDecisions = (
                   c.conditionDataType?.toLocaleLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
-                howToSetTheCondition:
-                  useCaseConfiguration !== EUseCase.ADD
-                    ? c.howToSetTheCondition
-                    : (c.howToSetTheCondition ?? isRangeObject(c.value))
-                      ? EValueHowToSetUp.RANGE
-                      : Array.isArray(c.value)
-                        ? EValueHowToSetUp.LIST_OF_VALUES
-                        : EValueHowToSetUp.EQUAL,
+                howToSetTheCondition: !useCaseValidate
+                  ? c.howToSetTheCondition
+                  : (c.howToSetTheCondition ?? isRangeObject(c.value))
+                    ? EValueHowToSetUp.RANGE
+                    : Array.isArray(c.value)
+                      ? EValueHowToSetUp.LIST_OF_VALUES
+                      : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues:

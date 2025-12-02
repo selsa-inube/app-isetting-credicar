@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import { queryProcessAxiosInstance } from "@api/isettingProcess";
 import { getWithRetries } from "@services/core/getWithRetries";
+import { EGeneral } from "@enum/general";
 import { ILineUnderConstructionData } from "@ptypes/creditLines/ILineUnderConstructionData";
 import { mapLineInConstructionToEntities } from "./mappers/mapLineInConstructionToEntities";
 
@@ -18,7 +19,7 @@ const getLineUnderConstruction = async (
   const queryParams = new URLSearchParams({
     businessManagerCode: businessManagerCode,
     requestStatus: requestStatus,
-    applicationName: "ifac",
+    applicationName: EGeneral.APPLICATION_NAME,
     entityName: entity,
     page: ".1",
     per_page: ".1",
