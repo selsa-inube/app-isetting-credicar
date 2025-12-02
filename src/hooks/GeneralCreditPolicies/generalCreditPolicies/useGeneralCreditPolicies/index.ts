@@ -28,8 +28,6 @@ const useGeneralCreditPolicies = () => {
   } = useValidateRules();
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [withoutPoliciesData, setWithoutPoliciesData] =
-    useState<boolean>(false);
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -76,23 +74,17 @@ const useGeneralCreditPolicies = () => {
       !loadingPolicies && withoutRequestsData && withoutPolicies !== undefined;
 
     if (validatePolicies) {
-      setWithoutPoliciesData(withoutPolicies);
-    }
-  }, [loadingPolicies, withoutPolicies, requestsInProgress]);
-
-  useEffect(() => {
-    if (withoutPoliciesData) {
       setShowModal(!showModal);
     }
 
-    setShowAddPolicies(withoutPolicies !== undefined && withoutPolicies);
-  }, [withoutPoliciesData]);
+    setShowAddPolicies(validatePolicies && withoutPolicies);
+  }, [loadingPolicies, withoutPolicies, requestsInProgress]);
 
   const filteredTabsConfig = useMemo(() => {
     return Object.keys(tabs).reduce((tabOption, key) => {
       const tab = tabs[key as keyof typeof tabs];
 
-      if (key === tabs.generalPolicies.id && showAddPolicies) {
+      if (key === tabs.generalPolicies.id && withoutPolicies) {
         return tabOption;
       }
 
@@ -123,8 +115,12 @@ const useGeneralCreditPolicies = () => {
   const defaultSelectedTab = getFirstFilteredTab(filteredTabsConfig)?.id;
 
   const [isSelected, setIsSelected] = useState<string>(
-    defaultSelectedTab ?? tabs.requestsInProgress.id,
+    defaultSelectedTab ?? "",
   );
+
+  useEffect(() => {
+    setIsSelected(defaultSelectedTab ?? "");
+  }, [defaultSelectedTab]);
 
   const handlePolicies = () => {
     setShowModal(false);
@@ -158,13 +154,13 @@ const useGeneralCreditPolicies = () => {
       defaultSelectedTab === undefined,
   );
 
-  const showPoliciesTab = isSelected === tabs.generalPolicies.id;
+  const showPoliciesTab =
+    !withoutPolicies && isSelected === tabs.generalPolicies.id;
 
   const showrequestTab = isSelected === tabs.requestsInProgress.id;
 
   return {
     withoutPolicies,
-    withoutPoliciesData,
     isSelected,
     descriptionOptions,
     smallScreen,

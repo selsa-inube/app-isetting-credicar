@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useState, useEffect } from "react";
 
@@ -22,6 +23,8 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     businessUnits,
     enumerator: ERequestInProgress.REQUEST_STATUS,
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (enumsRequests.length === 0) return;
@@ -50,11 +53,19 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
 
   useEffect(() => {
     if (entryCanceled) {
-      setRequestsInProgress((prev) =>
-        prev.filter((entry) => entry.settingRequestId !== entryCanceled),
-      );
+      setRequestsInProgress((prev) => {
+        const updatedRequests = prev.filter(
+          (entry) => entry.settingRequestId !== entryCanceled,
+        );
+
+        if (updatedRequests.length === 0) {
+          navigate("/");
+        }
+
+        return updatedRequests;
+      });
     }
-  }, [entryCanceled]);
+  }, [entryCanceled, navigate]);
 
   const handleSearchRequestsInProgress = (
     e: React.ChangeEvent<HTMLInputElement>,
