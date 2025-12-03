@@ -316,7 +316,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
-    enumValuesDecision,
   } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
@@ -386,7 +385,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         conditionTraduction,
         ruleNameTraduction as string,
         listValuesDecision as IValue,
-        enumValuesDecision,
         useCaseConfiguration,
       );
     });

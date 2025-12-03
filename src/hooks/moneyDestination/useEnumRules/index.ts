@@ -1,13 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useContext } from "react";
-
+import { IValue } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getEnumeratorsRules } from "@services/conditionsRules/getEnumeratorByRules";
 import { getListPossibleValues } from "@services/enums/getListPossibleValues";
 import { IUseEnumRules } from "@ptypes/hooks/IUseEnumRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
-import { IValue } from "@ptypes/decisions/IValue";
-import { IEnumerators } from "@ptypes/IEnumerators";
+import { IServerDomain } from "@ptypes/IServerDomain";
 
 const useEnumRules = (props: IUseEnumRules) => {
   const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
@@ -52,7 +52,13 @@ const useEnumRules = (props: IUseEnumRules) => {
           businessUnits,
           pathListPossibleValues,
         );
-        return data;
+        return data.map((item) => ({
+          id: item.code,
+          label:
+            item.i18n?.[appData.language as keyof typeof item.i18n] ??
+            item.description,
+          value: item.code,
+        }));
       }
       return [];
     } catch (error) {
@@ -69,37 +75,26 @@ const useEnumRules = (props: IUseEnumRules) => {
       }
 
       try {
-        let dataDecision: IEnumerators[] = [];
-        let rootListValues: string[] = [];
+        let rootListValues: IServerDomain[] = [];
         if (enumRuleData.listOfPossibleValues) {
-          dataDecision = (await fetchListValues(
+          rootListValues = (await fetchListValues(
             enumRuleData.listOfPossibleValues as string,
-          )) as IEnumerators[];
-          rootListValues = dataDecision.map(
-            (val) =>
-              val.i18n?.[appData.language as keyof typeof val.i18n] ??
-              val.description,
-          ) as string[];
+          )) as IServerDomain[];
         }
 
-        let processedConditions =
+        let processedConditions: any =
           enumRuleData.conditionsThatEstablishesTheDecision;
         if (Array.isArray(processedConditions)) {
           processedConditions = await Promise.all(
-            processedConditions.map(async (condition) => {
+            processedConditions.map(async (condition: any) => {
               if (condition.listOfPossibleValues) {
-                const dataCondition = (await fetchListValues(
+                const dataCondition = await fetchListValues(
                   condition.listOfPossibleValues as string,
-                )) as IEnumerators[];
-                const conditionListValues = dataCondition.map(
-                  (val) =>
-                    val.i18n?.[appData.language as keyof typeof val.i18n] ??
-                    val.description,
                 );
+
                 return {
                   ...condition,
-                  listOfPossibleValues: conditionListValues as IValue,
-                  enumValues: dataCondition,
+                  listOfPossibleValues: { list: dataCondition as IValue[] },
                 };
               }
               return condition;
@@ -109,8 +104,7 @@ const useEnumRules = (props: IUseEnumRules) => {
 
         setRuleData({
           ...enumRuleData,
-          listOfPossibleValues: rootListValues,
-          enumValues: dataDecision,
+          listOfPossibleValues: { list: rootListValues as IValue },
           conditionsThatEstablishesTheDecision: processedConditions,
         } as IRuleDecisionExtended);
       } catch (error) {
