@@ -2,6 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useNavigate } from "react-router-dom";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
+import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { mainNavigation } from "@config/mainNavigation";
 import {
@@ -14,7 +15,13 @@ import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPor
 import { IUseAppPage } from "@ptypes/hooks/IUseAppPage";
 
 const useAppPage = (props: IUseAppPage) => {
-  const { appData, businessUnitSigla, setBusinessUnitSigla, location } = props;
+  const {
+    appData,
+    businessUnitSigla,
+    location,
+    setUseCases,
+    setBusinessUnitSigla,
+  } = props;
   const [collapse, setCollapse] = useState(false);
   const collapseMenuRef = useRef<HTMLDivElement>(null);
   const businessUnitChangeRef = useRef<HTMLDivElement>(null);
@@ -36,13 +43,30 @@ const useAppPage = (props: IUseAppPage) => {
     }
   }, [appData]);
 
+  const { useCases } = useCaseForStaff({
+    businessUnitPrevious: appData.businessUnit.publicCode,
+    useCasesByStaff: appData.useCasesByStaff,
+    businessUnit: businessUnitSigla,
+    userAccount: appData.user.userAccount,
+    businessManagerCode: appData.businessManager.publicCode,
+  });
+
   const handleLogoClick = (businessUnit: IBusinessUnitsPortalStaff) => {
     const selectJSON = JSON.stringify(businessUnit);
     setBusinessUnitSigla(selectJSON);
     setSelectedClient(businessUnit.abbreviatedName);
     setCollapse(false);
-    navigate("/");
+    setTimeout(() => {
+      navigate("/");
+    }, 200);
   };
+
+  useEffect(() => {
+    if (useCases.length > 0) {
+      const useCasesJSON = JSON.stringify(useCases);
+      setUseCases(useCasesJSON);
+    }
+  }, [useCases]);
 
   const isTablet = useMediaQuery(mediaQueryTablet);
   const isTabletMain = useMediaQuery(mediaQueryTabletMain);
@@ -61,7 +85,7 @@ const useAppPage = (props: IUseAppPage) => {
     } else {
       setMaxWidthPage(maxWidthOtherPages);
     }
-  }, [location.pathname]);
+  }, [location.pathname, setMaxWidthPage]);
 
   return {
     collapse,

@@ -15,12 +15,10 @@ interface IGeneralCreditPoliciesUI {
   isSelected: string;
   loadingPolicies: boolean;
   showAddPolicies?: boolean;
-  showGoBackModal: boolean;
+  showDecision: boolean;
   modalData: IModalData;
   onTabChange: (id: string) => void;
   handleOpenModal: () => void;
-  onCloseGoBackModal: () => void;
-  onGoBack: () => void;
   contributionsData?: IRuleDecisionExtended[];
   minimumIncomeData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
