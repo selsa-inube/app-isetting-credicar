@@ -306,14 +306,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     ),
   );
 
-  // useEffect(() => {
-  //   if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
-  //     setDecisions(
-  //       (initialDecisions ?? []).map((d) => transformDecision(d, language)),
-  //     );
-  //   }
-  // }, [initialDecisions, language]);
-
   useEffect(() => {
     if (!hydratedFromProps && (initialDecisions?.length ?? 0) > 0) {
       setDecisions(
@@ -553,15 +545,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const renderedListRef = useRef<IRuleDecision[]>([]);
   renderedListRef.current = decisionsSorted;
 
-  // const extractId = useMemo(
-  //   () => makeIdExtractor(() => renderedListRef.current),
-  //   [],
-  // );
   const deleteDecision = (id: string) => {
-    // setDeleteDecision(true);
-    // const id = extractId(...args);
-    // if (!id) return;
-    // setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
     setDecisions((prev) => prev.filter((d) => d.decisionId !== id));
   };
 

@@ -69,7 +69,13 @@ const DecisionModal = (props: IDecisionModal) => {
         </Text>
       )}
 
-      <Text appearance={EComponentAppearance.DARK} type="body" size="medium">
+      <Text
+        appearance={
+          moreDetails ? EComponentAppearance.GRAY : EComponentAppearance.DARK
+        }
+        type="body"
+        size="medium"
+      >
         {description}
       </Text>
 

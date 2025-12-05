@@ -51,6 +51,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
         setEntryDeleted(data.configurationRequestData.id as string);
       }
       setSaveCreditLines(saveData);
+      setShowModal(false);
     } catch (error) {
       console.info(error);
       setSendData(false);
@@ -58,7 +59,6 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
       setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
-      setShowModal(false);
     }
   };
 
@@ -163,6 +163,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+    setShowModal(false);
     if (errorFetchRequest && hasError) {
       setChangeTab(true);
     }

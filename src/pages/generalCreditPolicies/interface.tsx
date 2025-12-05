@@ -59,6 +59,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
               <DecisionModal
                 portalId={portalId}
                 title={modalData.title}
+                moreDetails={modalData.moreDetails}
                 actionText={modalData.actionText}
                 description={modalData.description}
                 subtitle={modalData?.subtitle ? modalData.subtitle : ""}
@@ -125,6 +126,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                   description={modalData.description}
                   subtitle={modalData?.subtitle ? modalData.subtitle : ""}
                   onCloseModal={modalData.onCloseModal}
+                  moreDetails={modalData.moreDetails}
                   onClick={modalData.onClick}
                   icon={modalData.icon}
                   withIcon={modalData.withIcon}

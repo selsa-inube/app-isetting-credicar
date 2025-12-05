@@ -124,6 +124,7 @@ const DetailsUI = (props: IDetailsUI) => {
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
           withIcon={modalData.withIcon}
+          moreDetails={modalData.moreDetails}
           icon={modalData.icon}
           appearance={modalData.appearance}
           appearanceButton={modalData.appearanceButton}

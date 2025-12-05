@@ -118,6 +118,7 @@ const AddDestinationUI = (props: IAddDestinationUI) => {
         <DecisionModal
           portalId={portalId}
           title={modalData.title}
+          moreDetails={modalData.moreDetails}
           description={modalData.description}
           actionText={modalData.actionText}
           onCloseModal={modalData.onCloseModal}

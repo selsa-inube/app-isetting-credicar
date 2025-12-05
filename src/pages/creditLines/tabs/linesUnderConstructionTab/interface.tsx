@@ -112,6 +112,7 @@ const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
             subtitle={modalData.subtitle}
             onCloseModal={modalData.onCloseModal}
             onClick={modalData.onClick}
+            moreDetails={modalData.moreDetails}
             withCancelButton={modalData.withCancelButton}
             withIcon={modalData.withIcon}
             icon={modalData.icon}

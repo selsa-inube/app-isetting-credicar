@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { deletePayrollAgreModal } from "@config/payrollAgreement/payrollAgreementTab/generic/deletePayrollAgreModal";
 import { errorModal } from "@config/errorModal";
@@ -36,6 +37,7 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -48,7 +50,12 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -65,6 +72,7 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
             networkError.status,
             operationTypes.deleteError,
             EPayrollAgreement.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -81,6 +89,7 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         ...disabledModal,
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
+        moreDetails: "",
         withCancelButton: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
@@ -93,6 +102,7 @@ const useModalDeletePayroll = (props: IUseModalDeletePayroll) => {
         onCloseModal: handleToggleModal,
         onClick: handleClick,
         withCancelButton: true,
+        moreDetails: "",
         loading: loading,
         withIcon: false,
         appearance: EComponentAppearance.DANGER,

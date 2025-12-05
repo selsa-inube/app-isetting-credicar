@@ -3,6 +3,7 @@ import { EGeneralPolicies } from "@enum/generalPolicies";
 import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
@@ -33,6 +34,7 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -44,7 +46,12 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -61,6 +68,7 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
             networkError.status,
             operationTypes.addError,
             EGeneralPolicies.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -77,6 +85,7 @@ const useModalAddGeneral = (props: IUseModalAddPayroll) => {
         ...goBackModal,
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
+        moreDetails: "",
         withCancelButton: true,
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,

@@ -9,6 +9,7 @@ import { operationTypes } from "@config/useCase";
 import { sendEditedModal } from "@config/moneyDestination/moneyDestinationTab/generics/sendEditModal";
 import { goBackModal } from "@config/goBackModal";
 import { IUseModalEditDestination } from "@ptypes/hooks/moneyDestination/IUseModalEditDestination";
+import { getDescriptionError } from "@utils/getDescriptionError";
 
 const useModalEditDestination = (props: IUseModalEditDestination) => {
   const {
@@ -58,7 +59,12 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -75,6 +81,7 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
             networkError.status,
             operationTypes.editError,
             EMoneyDestination.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -88,7 +95,12 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
 
     if (hasErrorRule) {
       return {
-        ...errorModal(messageErrorEvaluateRule(descriptionError.status)),
+        ...errorModal(
+          messageErrorEvaluateRule(
+            descriptionError.status,
+            getDescriptionError(descriptionError.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorRuleModal,
         onClick: handleToggleErrorRuleModal,
         withCancelButton: false,
@@ -105,6 +117,7 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         onClick: handleGoBack,
         withCancelButton: true,
         withIcon: false,
+        moreDetails: "",
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
       };
@@ -118,6 +131,7 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
         withCancelButton: true,
         loading: loading,
         withIcon: false,
+        moreDetails: "",
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
       };

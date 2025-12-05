@@ -156,6 +156,7 @@ const PayrollAgreementTabUI = (props: IpayrollAgreementTabUI) => {
           description={modalData.description}
           subtitle={modalData.subtitle}
           onCloseModal={modalData.onCloseModal}
+          moreDetails={modalData.moreDetails}
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
           withIcon={modalData.withIcon}
