@@ -274,7 +274,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         entityName: ECreditLines.CREDIT_LINE_ENTITY,
         requestDate: formatDate(new Date()),
         useCaseName: ECreditLines.USE_CASE_EDIT,
-        configurationRequestData: dataWithoutId,
+        configurationRequestData: {
+          ...dataWithoutId,
+          modifyJustification: `${editCreditLabels.removalJustification} ${appData.user.userAccount}`,
+        },
       });
     }
     setShowRequestProcessModal(true);
@@ -316,7 +319,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
-    enumValuesDecision,
   } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
@@ -386,7 +388,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         conditionTraduction,
         ruleNameTraduction as string,
         listValuesDecision as IValue,
-        enumValuesDecision,
         useCaseConfiguration,
       );
     });
