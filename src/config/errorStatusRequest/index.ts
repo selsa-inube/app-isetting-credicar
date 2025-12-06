@@ -1,5 +1,4 @@
 const errorStatusRequest = (description?: string) => {
-  console.log("🦽🐻", description);
   return {
     status0: "La petición tardó demasiado tiempo.",
     status400: description
