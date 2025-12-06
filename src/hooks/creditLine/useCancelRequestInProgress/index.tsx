@@ -41,7 +41,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
 
-  const notCancel = notCancelStatus.includes(data.requestStatus);
+  const notCancel = notCancelStatus.includes(data.requestStatusCode);
 
   const handleToggleModal = () => {
     if (disabledButton) {
