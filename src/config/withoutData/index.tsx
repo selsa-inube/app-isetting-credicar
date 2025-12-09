@@ -1,11 +1,11 @@
-import { MdOutlineReportProblem } from "react-icons/md";
+import { MdOutlineReport } from "react-icons/md";
 
 const withoutDataModal = {
-  title: "Importante",
+  title: "Error",
   description:
     "Error al consultar la información de configuración de la línea de crédito",
   actionText: "Entendido",
-  icon: <MdOutlineReportProblem />,
+  icon: <MdOutlineReport />,
 };
 
 export { withoutDataModal };
