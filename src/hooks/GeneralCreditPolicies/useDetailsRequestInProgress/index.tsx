@@ -61,7 +61,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const fetchRequestData = async () => {
     setLoading(true);
     try {
-      if (data.useCaseName === EGeneralPolicies.ADD_GENERAL_CREDIT_POLICIES) {
+      if (data.useCaseName === EGeneralPolicies.USE_CASE_ADD) {
         await postAddGeneralPolicies(
           appData.businessUnit.publicCode,
           appData.user.userAccount,
@@ -70,9 +70,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         setShowModal(false);
         navigate(-1);
       }
-      if (
-        data.useCaseName === EGeneralPolicies.MODIFY_GENERAL_CREDIT_POLICIES
-      ) {
+      if (data.useCaseName === EGeneralPolicies.USE_CASE_EDIT) {
         await patchEditGeneralPolicies(
           appData.businessUnit.publicCode,
           appData.user.userAccount,
