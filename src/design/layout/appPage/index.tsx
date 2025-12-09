@@ -4,6 +4,7 @@ import { MdOutlineChevronRight } from "react-icons/md";
 import { Icon, Grid, Header, Nav } from "@inubekit/inubekit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useAppPage } from "@hooks/design/useAppPage";
+import { RenderLogo } from "@design/feedback/renderLogo";
 import { BusinessUnitChange } from "@design/inputs/BusinessUnitChange";
 import { userMenu } from "@config/menuMainConfiguration";
 import { actionsConfig } from "@config/mainActionLogout";
@@ -12,23 +13,14 @@ import {
   StyledCollapse,
   StyledCollapseIcon,
   StyledContainer,
-  StyledContentImg,
   StyledHeaderContainer,
-  StyledLogo,
   StyledMain,
 } from "./styles";
-
-const renderLogo = (imgUrl: string) => {
-  return (
-    <StyledContentImg to="/">
-      <StyledLogo src={imgUrl} />
-    </StyledContentImg>
-  );
-};
 
 const AppPage = () => {
   const {
     appData,
+    setUseCases,
     businessUnitsToTheStaff,
     setBusinessUnitSigla,
     businessUnitSigla,
@@ -52,6 +44,7 @@ const AppPage = () => {
     businessUnitSigla,
     setBusinessUnitSigla,
     location,
+    setUseCases,
   });
 
   const hasbusinessUnits = businessUnitsToTheStaff.length > 1;
@@ -66,7 +59,7 @@ const AppPage = () => {
               username: appData.user.userName,
               breakpoint: "1281px",
             }}
-            logoURL={renderLogo(appData.businessUnit.urlLogo)}
+            logoURL={RenderLogo({ imgUrl: appData.businessUnit.urlLogo })}
             menu={userMenu}
           />
         </StyledHeaderContainer>

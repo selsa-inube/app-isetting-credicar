@@ -40,6 +40,7 @@ const CancelRecord = (props: ICancelRecord) => {
           onClick={modalData.onClick}
           onCloseModal={modalData.onCloseModal}
           icon={modalData.icon}
+          moreDetails={modalData.moreDetails}
           withIcon
           withCancelButton={modalData.withCancelButton}
           appearance={

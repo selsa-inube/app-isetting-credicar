@@ -7,6 +7,9 @@ import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest"
 import { postAddRequestInConstruction } from "@services/creditLines/postAddRequestInConstruction";
 import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
+import { EGeneral } from "@enum/general";
+import { ERequestType } from "@enum/requestType";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
@@ -77,7 +80,8 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
     };
 
     const data = {
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.ADD,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: `${addCreditLinesLabels.descriptionSaveData} ${updatedFormValues.information.values.nameLine}`,
@@ -111,6 +115,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -122,7 +127,12 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

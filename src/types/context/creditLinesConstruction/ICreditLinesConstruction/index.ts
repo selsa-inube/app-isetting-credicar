@@ -8,6 +8,8 @@ interface ICreditLinesConstruction {
   useCaseConfiguration: string;
   linesEditData: ILinesConstructionData;
   allValidRules: string[];
+  filterRules: string[];
+  setFilterRules: React.Dispatch<React.SetStateAction<string[]>>;
   setAllValidRules: React.Dispatch<React.SetStateAction<string[]>>;
   setLinesConstructionData: React.Dispatch<
     React.SetStateAction<ILinesConstructionData>

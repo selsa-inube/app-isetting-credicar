@@ -46,6 +46,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     try {
       const saveData = await postSaveRequest(userAccount, data);
       setSaveGeneralPolicies(saveData);
+      setShowModal(false);
     } catch (error) {
       console.info(error);
       setSendData(false);
@@ -53,7 +54,6 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
-      setShowModal(false);
     }
   };
 
@@ -159,6 +159,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+    setShowModal(false);
     if (errorFetchRequest && hasError) {
       setChangeTab(true);
     }

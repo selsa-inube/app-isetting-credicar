@@ -26,7 +26,9 @@ import { validateEditedRules } from "@utils/validateEditedRules";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
+import { ERequestType } from "@enum/requestType";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
+import { EGeneral } from "@enum/general";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { editCreditLabels } from "@config/creditLines/creditLinesTab/generic/editCreditLabels";
 import { IErrors } from "@ptypes/IErrors";
@@ -75,6 +77,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     linesConstructionData,
     useCaseConfiguration,
     optionsAllRules,
+    filterRules,
   } = useContext(CreditLinesConstruction);
   const [data, setData] = useState<IModifyConstructionResponse>();
   const [editData, setEditData] = useState<ISaveDataRequest>();
@@ -263,14 +266,18 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (useCaseConfiguration === EUseCase.EDIT) {
       const { settingRequestId, ...dataWithoutId } = linesEditData;
       setEditData({
-        applicationName: "ifac",
+        applicationName: EGeneral.APPLICATION_NAME,
+        requestType: ERequestType.MODIFY,
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
         description: editCreditLabels.descriptionSaveData,
         entityName: ECreditLines.CREDIT_LINE_ENTITY,
         requestDate: formatDate(new Date()),
         useCaseName: ECreditLines.USE_CASE_EDIT,
-        configurationRequestData: dataWithoutId,
+        configurationRequestData: {
+          ...dataWithoutId,
+          modifyJustification: `${editCreditLabels.removalJustification} ${appData.user.userAccount}`,
+        },
       });
     }
     setShowRequestProcessModal(true);
@@ -312,7 +319,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
-    enumValuesDecision,
   } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
@@ -382,7 +388,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         conditionTraduction,
         ruleNameTraduction as string,
         listValuesDecision as IValue,
-        enumValuesDecision,
         useCaseConfiguration,
       );
     });
@@ -634,7 +639,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     return false;
   };
 
-  const { groupsData } = useGroupRules();
+  const { groupsData } = useGroupRules({ filterRules });
 
   const nav = useStepNavigation({
     groups: groupsData as unknown as IDropdownMenuGroup[],

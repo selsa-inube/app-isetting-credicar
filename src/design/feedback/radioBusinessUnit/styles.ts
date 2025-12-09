@@ -28,7 +28,8 @@ const StyledRadio = styled.input`
 `;
 
 const StyledImage = styled.img<IStyledImage>`
-  width: 100px;
+  max-width: 100px;
+  max-height: 32px;
   height: auto;
   transition: filter 500ms ease-out;
   filter: grayscale(100%);

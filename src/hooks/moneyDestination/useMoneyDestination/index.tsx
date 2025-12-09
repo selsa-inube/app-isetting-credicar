@@ -9,6 +9,7 @@ import { EMoneyDestination } from "@enum/moneyDestination";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorObject } from "@utils/errorObject";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { tabLabels } from "@config/moneyDestination/moneyDestinationTab/tabLabels";
 import { disabledModal } from "@config/disabledModal";
@@ -114,6 +115,7 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -125,7 +127,12 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -141,6 +148,7 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,

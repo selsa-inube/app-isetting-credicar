@@ -8,6 +8,8 @@ import { useRules } from "@hooks/GeneralCreditPolicies/useRules";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
 import { EGeneralPolicies } from "@enum/generalPolicies";
+import { ERequestType } from "@enum/requestType";
+import { EGeneral } from "@enum/general";
 import { mediaQueryTablet } from "@config/environment";
 import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
 import { IAddGenCredPoliciesForms } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesForms";
@@ -136,7 +138,8 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
 
   const handleSubmitClick = () => {
     setSaveData({
-      applicationName: "ifac",
+      applicationName: EGeneral.APPLICATION_NAME,
+      requestType: ERequestType.ADD,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
       description: "Solicitud de creación de politicas generales de credito",

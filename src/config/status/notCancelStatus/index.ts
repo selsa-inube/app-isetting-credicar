@@ -7,6 +7,7 @@ const notCancelStatus = [
   ERequestStatus.REQUEST_PROCESSED,
   ERequestStatus.PROCESSING_REQUEST,
   ERequestStatus.REQUEST_READY_TO_PROCESS,
+  ERequestStatus.REQUEST_IN_PROCESS,
 ];
 
 export { notCancelStatus };

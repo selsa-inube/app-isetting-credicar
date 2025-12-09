@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
 import { creditTabLabels } from "@config/creditLines/creditLinesTab/generic/creditTabLabels";
@@ -24,10 +25,8 @@ const useLineInConstructionTab = () => {
     errorData,
   } = useLineInconstructionData();
 
-  const { setLinesConstructionData, setLinesEditData } = useContext(
-    CreditLinesConstruction,
-  );
-
+  const { setLinesConstructionData, setLinesEditData, setFilterRules } =
+    useContext(CreditLinesConstruction);
   useEffect(() => {
     setLinesConstructionData({
       settingRequestId: "",
@@ -38,6 +37,7 @@ const useLineInConstructionTab = () => {
       rules: [],
     });
     setLinesEditData({} as ILinesConstructionData);
+    setFilterRules([]);
   }, []);
 
   useEffect(() => {
@@ -68,6 +68,7 @@ const useLineInConstructionTab = () => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -79,7 +80,12 @@ const useLineInConstructionTab = () => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

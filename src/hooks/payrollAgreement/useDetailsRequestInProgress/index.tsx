@@ -11,6 +11,7 @@ import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorObject } from "@utils/errorObject";
 import { mediaQueryMobile, mediaQueryTablet } from "@config/environment";
@@ -130,6 +131,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -141,7 +143,12 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -156,7 +163,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const modalData = modal();
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.useCaseName}`;
 
   const withErrorRequest = approvalRequest || executeRequest;
 

@@ -3,6 +3,7 @@ import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorModal } from "@config/errorModal";
 import { goBackModal } from "@config/goBackModal";
 import { infoErrorModal } from "@config/creditLines/generic/infoErrorModal";
@@ -58,6 +59,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -69,7 +71,12 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -81,7 +88,12 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
 
     if (hasErrorCheck) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorCheckData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorCheckData.status,
+            getDescriptionError(errorCheckData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -97,6 +109,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        moreDetails: "",
         withIcon: false,
         icon: <></>,
         appearance: EComponentAppearance.PRIMARY,
@@ -110,6 +123,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         onCloseModal: handleToggleSaveModal,
         onClick: handleSaveModal,
         withCancelButton: true,
+        moreDetails: "",
         loading: loadingSendData,
         withIcon: false,
         icon: <></>,
@@ -120,7 +134,12 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
 
     if (!errorFetchRequest && hasErrorRequest) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorSaveModal,
         onClick: handleToggleErrorSaveModal,
         withCancelButton: false,
@@ -137,6 +156,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
             networkError.status,
             operationTypes.editConfiguration,
             ECreditLines.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorSaveModal,
@@ -154,6 +174,7 @@ const useModalConfiguration = (props: IUseModalConfiguration) => {
         onCloseModal: handleClickInfo,
         onClick: handleClickInfo,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: true,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,

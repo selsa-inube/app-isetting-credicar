@@ -6,6 +6,7 @@ import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { mediaQueryMobile } from "@config/environment";
@@ -35,7 +36,9 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     useCase: ECreditLines.USE_CASE_ADD,
   });
 
-  const { setLinesConstructionData } = useContext(CreditLinesConstruction);
+  const { setLinesConstructionData, setFilterRules } = useContext(
+    CreditLinesConstruction,
+  );
 
   useEffect(() => {
     setLinesConstructionData({
@@ -46,6 +49,8 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
       lineOfCreditId: "",
       rules: [],
     });
+
+    setFilterRules([]);
   }, []);
 
   const { businessRules } = useValidateRules();
@@ -119,7 +124,12 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
 
     if (!loadingCreditLines && hasError) {
       return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

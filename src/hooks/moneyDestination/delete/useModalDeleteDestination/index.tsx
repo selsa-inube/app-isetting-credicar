@@ -8,6 +8,7 @@ import { operationTypes } from "@config/useCase";
 import { deleteMoneyDestinationModal } from "@config/moneyDestination/moneyDestinationTab/generics/deleteMoneyDestinationModal";
 import { disabledModal } from "@config/disabledModal";
 import { IUseModalDeleteDestination } from "@ptypes/hooks/moneyDestination/IUseModalDeleteDestination";
+import { getDescriptionError } from "@utils/getDescriptionError";
 
 const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
   const {
@@ -36,6 +37,7 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -48,7 +50,12 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -65,6 +72,7 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
             networkError.status,
             operationTypes.deleteError,
             EPayrollAgreement.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -82,6 +90,7 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
@@ -93,6 +102,7 @@ const useModalDeleteDestination = (props: IUseModalDeleteDestination) => {
         ...deleteMoneyDestinationModal,
         onCloseModal: handleToggleModal,
         onClick: handleClick,
+        moreDetails: "",
         withCancelButton: true,
         loading: loading,
         withIcon: false,

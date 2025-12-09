@@ -3,6 +3,7 @@ import { EMoneyDestination } from "@enum/moneyDestination";
 import { EComponentAppearance } from "@enum/appearances";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
@@ -33,6 +34,7 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -44,10 +46,16 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: true,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,
@@ -61,6 +69,7 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
             networkError.status,
             operationTypes.addError,
             EMoneyDestination.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -78,6 +87,7 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
         onCloseModal: handleCloseModal,
         onClick: handleGoBack,
         withCancelButton: true,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,

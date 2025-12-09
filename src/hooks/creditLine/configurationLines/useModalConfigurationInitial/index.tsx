@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
 import { withoutDataModal } from "@config/withoutData";
@@ -51,6 +52,7 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -62,7 +64,12 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -74,7 +81,12 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
 
     if (!loadingAllRules && hasErrorAllRules) {
       return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorRulesModal,
         onClick: handleToggleErrorRulesModal,
         withCancelButton: false,
@@ -87,7 +99,10 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
     if (!loadingGroupRules && hasErrorGroupRules) {
       return {
         ...errorModal(
-          messageErrorStatusConsultation(errorDataGroupRules.status),
+          messageErrorStatusConsultation(
+            errorDataGroupRules.status,
+            getDescriptionError(errorData.response),
+          ),
         ),
         onCloseModal: handleToggleErrorRulesModal,
         onClick: handleToggleErrorRulesModal,
@@ -103,6 +118,8 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
         ...withoutDataModal,
         onCloseModal: handleToggleWithouDataModal,
         onClick: handleToggleWithouDataModal,
+        actionText: "",
+        moreDetails: "",
         withCancelButton: false,
         withIcon: true,
         appearance: EComponentAppearance.WARNING,

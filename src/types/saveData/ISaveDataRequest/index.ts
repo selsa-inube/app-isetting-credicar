@@ -7,6 +7,7 @@ interface ISaveDataRequest {
   entityName: string;
   requestDate: string;
   useCaseName: string;
+  requestType: string;
 }
 
 export type { ISaveDataRequest };

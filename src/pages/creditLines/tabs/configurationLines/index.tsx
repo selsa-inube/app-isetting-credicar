@@ -75,6 +75,7 @@ const ConfigurationLines = () => {
           actionText={modalData.actionText}
           description={modalData.description}
           onCloseModal={modalData.onCloseModal}
+          moreDetails={modalData.moreDetails}
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
           withIcon={modalData.withIcon}

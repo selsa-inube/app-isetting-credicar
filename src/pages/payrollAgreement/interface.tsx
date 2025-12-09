@@ -53,6 +53,7 @@ const PayrollAgreementUI = (props: IPayrollAgreementUI) => {
               title={descriptionOptions?.publicCode ?? ""}
               description={descriptionTitle}
               sizeTitle="large"
+              navigatePage="/"
             />
             {smallScreen && (
               <StyledMenuContainer>

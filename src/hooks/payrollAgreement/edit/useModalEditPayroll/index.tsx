@@ -2,6 +2,7 @@ import { MdOutlineWarningAmber } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorModal } from "@config/errorModal";
@@ -44,6 +45,7 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       onCloseModal: () => void 0,
       onClick: () => void 0,
       withCancelButton: false,
@@ -56,7 +58,12 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -73,6 +80,7 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
             networkError.status,
             operationTypes.editError,
             EPayrollAgreement.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -89,6 +97,7 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
         ...goBackModal,
         onCloseModal: handleCloseGoBackModal,
         onClick: handleGoBack,
+        moreDetails: "",
         withCancelButton: true,
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
@@ -101,6 +110,7 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
         ...sendEditedModal,
         onCloseModal: handleToggleEditedModal,
         onClick: handleEditedModal,
+        moreDetails: "",
         withCancelButton: true,
         loading: loadingSendData,
         withIcon: false,
@@ -116,6 +126,7 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
         onClick: handleToggleDeletedAlertModal,
         withCancelButton: false,
         withIcon: true,
+        moreDetails: "",
         icon: <MdOutlineWarningAmber />,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,

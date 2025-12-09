@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@inubekit/inubekit";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { ERequestInProgress } from "@enum/requestInProgress";
 import { mediaQueryMobile } from "@config/environment";
@@ -17,6 +18,11 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
     useState<string>("");
   const [loading, setLoading] = useState(true);
   const [entryCanceled, setEntryCanceled] = useState<string | number>("");
+  const { setFilterRules } = useContext(CreditLinesConstruction);
+
+  useEffect(() => {
+    setFilterRules([]);
+  }, []);
 
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {

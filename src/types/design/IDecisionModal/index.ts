@@ -1,10 +1,11 @@
 import { IIconAppearance } from "@inubekit/inubekit";
 import { EComponentAppearance } from "@enum/appearances";
+import { ReactNode } from "react";
 
 interface IDecisionModal {
   actionText: string;
   portalId: string;
-  description: string;
+  description: string | ReactNode;
   title: string;
   onCloseModal: () => void;
   onClick?: () => void;

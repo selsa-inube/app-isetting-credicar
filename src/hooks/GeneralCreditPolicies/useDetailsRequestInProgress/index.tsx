@@ -8,6 +8,7 @@ import { useRequestDetails } from "@hooks/useRequestDetails";
 import { eventBus } from "@events/eventBus";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { errorObject } from "@utils/errorObject";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { EModalState } from "@enum/modalState";
 import { EGeneralPolicies } from "@enum/generalPolicies";
@@ -121,6 +122,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -132,7 +134,12 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

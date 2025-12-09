@@ -1,29 +1,39 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@inubekit/inubekit";
+import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
+import { removeDeleteTransactions } from "@utils/removeDeleteTransactions";
 import { mediaQueryTablet } from "@config/environment";
 import { detailsRequestModal } from "@config/creditLines/generic/detailsRequestModal";
+import { deleteUseCaseLabels } from "@config/creditLines/requestInProgressTab/deleteUseCaseLabels";
 import { IUseDetailsRequest } from "@ptypes/hooks/creditLines/IUseDetailsRequest";
+import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
 
 const useDetailsRequest = (props: IUseDetailsRequest) => {
   const { configurationData, useNameRequest } = props;
-
+  const { setFilterRules } = useContext(CreditLinesConstruction);
   const [showModal, setShowModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (configurationData) {
-      if (useNameRequest !== ECreditLines.USE_CASE_ADD) {
+    if (configurationData?.configurationRequestData) {
+      if (useNameRequest === ECreditLines.USE_CASE_DELETE) {
         setShowModal(true);
       } else {
+        const filterData = configurationData.configurationRequestData.rules
+          .map((item: IDecisionsByRule) => item.ruleName)
+          .filter((item: IDecisionsByRule) => item !== undefined);
+        const removeDeleteTransOperation =
+          removeDeleteTransactions(configurationData);
+        setFilterRules(filterData);
         navigate(`/credit-lines/edit-credit-lines`, {
-          state: { data: configurationData, option: EUseCase.DETAILS },
+          state: { data: removeDeleteTransOperation, option: EUseCase.DETAILS },
         });
       }
     }
-  }, [useNameRequest]);
+  }, [configurationData, useNameRequest]);
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 
@@ -49,7 +59,9 @@ const useDetailsRequest = (props: IUseDetailsRequest) => {
         onClick: handleToggleModal,
         withCancelButton: false,
         withIcon: true,
-        description: configurationData.modifyJustification,
+        description: deleteUseCaseLabels(
+          configurationData.configurationRequestData.abbreviatedName,
+        ).description,
       };
     }
     return initial;

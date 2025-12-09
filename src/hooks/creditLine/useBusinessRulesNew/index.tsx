@@ -6,8 +6,10 @@ import {
   groupsRecordToArrayNew,
   normalizeDecisionToNewShape,
 } from "@isettingkit/business-rules";
+import { MdInfoOutline, MdOutlineReportProblem } from "react-icons/md";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { IRuleDecision, IValue } from "@isettingkit/input";
+import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
@@ -15,8 +17,6 @@ import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { conditionsHidden } from "@config/creditLines/configuration/conditionsHidden";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { IUseBusinessRulesNewGeneral } from "@ptypes/creditLines/IUseBusinessRulesNewGeneral";
-import { MdInfoOutline, MdOutlineReportProblem } from "react-icons/md";
-import { EComponentAppearance } from "@src/enum/appearances";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const asArray = (v: unknown): any[] =>
@@ -306,14 +306,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     ),
   );
 
-  // useEffect(() => {
-  //   if ((initialDecisions?.length ?? 0) > 0 && decisions.length === 0) {
-  //     setDecisions(
-  //       (initialDecisions ?? []).map((d) => transformDecision(d, language)),
-  //     );
-  //   }
-  // }, [initialDecisions, language]);
-
   useEffect(() => {
     if (!hydratedFromProps && (initialDecisions?.length ?? 0) > 0) {
       setDecisions(
@@ -553,15 +545,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const renderedListRef = useRef<IRuleDecision[]>([]);
   renderedListRef.current = decisionsSorted;
 
-  // const extractId = useMemo(
-  //   () => makeIdExtractor(() => renderedListRef.current),
-  //   [],
-  // );
   const deleteDecision = (id: string) => {
-    // setDeleteDecision(true);
-    // const id = extractId(...args);
-    // if (!id) return;
-    // setDecisions((prev) => prev.filter((d) => keyOf(d) !== id));
     setDecisions((prev) => prev.filter((d) => d.decisionId !== id));
   };
 

@@ -9,7 +9,6 @@ import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
 import { IMeta } from "@ptypes/decisions/IMeta";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
-import { IEnumerators } from "@ptypes/IEnumerators";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 import { isRangeObject } from "../formatValueOfCondition";
@@ -23,10 +22,13 @@ const transformationDecisions = (
   conditionArray: IConditionTraduction[],
   ruleNameTraduction: string,
   listValuesDecision?: IValue,
-  enumValuesDecision?: IEnumerators[],
   useCaseConfiguration?: string,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
+  const useCaseValidate =
+    useCaseConfiguration === EUseCase.ADD ||
+    useCaseConfiguration === EUseCase.DETAILS;
+
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
@@ -48,12 +50,21 @@ const transformationDecisions = (
   return payload.decisionsByRule
     ? payload.decisionsByRule?.map((decision) => {
         const groupedConditions: Record<string, ICondition[]> = {};
+
         decision.conditionGroups?.forEach((group, index) => {
           const groupId = group.conditionGroupId ?? `Group-${index + 1}`;
-          groupedConditions[groupId as string] =
-            group.conditionsThatEstablishesTheDecision.map((c) => {
+
+          const filteredConditions = group.conditionsThatEstablishesTheDecision
+            .filter((c) => {
+              if (c.conditionName === ECreditLines.CREDIT_LINE_RULE) {
+                return false;
+              }
+              return Object.values(c.value).length > 0 ? true : false;
+            })
+            .map((c) => {
               const condMeta: IConditionMeta =
                 meta?.conditionDict?.[c.conditionName] ?? {};
+
               return {
                 conditionName: c.conditionName,
                 labelName: normalizeConditionTraduction(
@@ -66,28 +77,25 @@ const transformationDecisions = (
                   c.conditionDataType?.toLocaleLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
-                howToSetTheCondition:
-                  useCaseConfiguration !== EUseCase.ADD
-                    ? c.howToSetTheCondition
-                    : (c.howToSetTheCondition ?? isRangeObject(c.value))
-                      ? EValueHowToSetUp.RANGE
-                      : Array.isArray(c.value)
-                        ? EValueHowToSetUp.LIST_OF_VALUES
-                        : EValueHowToSetUp.EQUAL,
+                howToSetTheCondition: !useCaseValidate
+                  ? c.howToSetTheCondition
+                  : (c.howToSetTheCondition ?? isRangeObject(c.value))
+                    ? EValueHowToSetUp.RANGE
+                    : Array.isArray(c.value)
+                      ? EValueHowToSetUp.LIST_OF_VALUES
+                      : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues:
                   normalizeConditionTraduction(conditionArray, c.conditionName)
                     ?.listPossibleValues ?? [],
-                enumValues:
-                  normalizeConditionTraduction(conditionArray, c.conditionName)
-                    ?.enumValues ?? [],
-                hidden:
-                  c.conditionName === ECreditLines.CREDIT_LINE_RULE
-                    ? true
-                    : false,
+                hidden: false,
               };
             });
+
+          if (filteredConditions.length > 0) {
+            groupedConditions[groupId as string] = filteredConditions;
+          }
         });
 
         const effectiveFrom = formatDateDecision(
@@ -107,13 +115,14 @@ const transformationDecisions = (
           value: decision.value,
           effectiveFrom,
           listOfPossibleValues: listValuesDecision ?? [],
-          enumValues: enumValuesDecision,
           conditionsThatEstablishesTheDecision: groupedConditions,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),
         };
+
         if (decision.validUntil) {
           out.validUntil = validUntil;
         }
+
         return out;
       })
     : [];
