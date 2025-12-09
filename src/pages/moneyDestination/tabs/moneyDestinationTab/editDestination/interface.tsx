@@ -125,6 +125,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           portalId={portalId}
           title={modalData.title}
           description={modalData.description}
+          moreDetails={modalData.moreDetails}
           actionText={modalData.actionText}
           withCancelButton={modalData.withCancelButton}
           onCloseModal={modalData.onCloseModal}

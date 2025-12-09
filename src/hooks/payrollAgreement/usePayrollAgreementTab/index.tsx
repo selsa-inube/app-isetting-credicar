@@ -3,6 +3,7 @@ import { useMediaQuery } from "@inubekit/inubekit";
 import { getPayrollAgreementData } from "@services/payrollAgreement/getPayrollAgreement";
 import { useEmptyDataMessage } from "@hooks/emptyDataMessage";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
@@ -89,6 +90,7 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -100,7 +102,12 @@ const usePayrollAgreementTab = (props: IUsePayrollAgreementTab) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

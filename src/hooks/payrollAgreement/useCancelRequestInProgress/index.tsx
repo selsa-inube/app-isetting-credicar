@@ -6,6 +6,7 @@ import { cancelRequestInProgress } from "@services/requestInProgress/cancelReque
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorObject } from "@utils/errorObject";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { cancelPayrollLabels } from "@config/payrollAgreement/requestsInProgressTab/cancelPayrollLabels";
@@ -33,7 +34,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
 
-  const notCancel = notCancelStatus.includes(data.requestStatus);
+  const notCancel = notCancelStatus.includes(data.requestStatusCode);
 
   const handleToggleModal = () => {
     if (disabledButton) {
@@ -61,6 +62,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     try {
       await cancelRequestInProgress(businessUnit, data);
       setEntryCanceled(data.settingRequestId);
+      setShowModal(false);
       addFlag({
         title: cancelRequestInProgressMessage.success.title,
         description: cancelRequestInProgressMessage.success.description,
@@ -74,12 +76,12 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       setErrorData(errorObject(error));
     } finally {
       setLoading(false);
-      setShowModal(false);
     }
   };
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+    setShowModal(false);
   };
 
   const handleClick = () => {
@@ -101,6 +103,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       withIcon: false,
       onCloseModal: () => void 0,
@@ -110,12 +113,30 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       appearanceButton: EComponentAppearance.PRIMARY,
     };
 
+    if (hasError) {
+      return {
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
     if (showInfoModal) {
       return {
         ...disabledModal,
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
@@ -127,6 +148,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         ...cancelRequestInProgressModal,
         onCloseModal: handleToggleModal,
         onClick: handleClick,
+        moreDetails: "",
         withCancelButton: true,
         withIcon: false,
         appearance: EComponentAppearance.DANGER,
@@ -139,22 +161,11 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         ...cannotCancelledModal,
         onCloseModal: handleToggleCancelledModal,
         onClick: handleToggleModal,
+        moreDetails: "",
         withCancelButton: false,
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
-      };
-    }
-
-    if (!loading && hasError) {
-      return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
-        onCloseModal: handleToggleErrorModal,
-        onClick: handleToggleErrorModal,
-        withCancelButton: false,
-        withIcon: true,
-        appearance: EComponentAppearance.WARNING,
-        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 

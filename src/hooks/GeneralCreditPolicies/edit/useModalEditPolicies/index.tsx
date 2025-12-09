@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { EComponentAppearance } from "@enum/appearances";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { errorModal } from "@config/errorModal";
@@ -41,6 +42,7 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -53,7 +55,12 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
 
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -70,6 +77,7 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
             networkError.status,
             operationTypes.editError,
             EGeneralPolicies.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -86,6 +94,7 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         ...goBackModal,
         onCloseModal: handleCloseGoBackModal,
         onClick: handleGoBack,
+        moreDetails: "",
         withCancelButton: true,
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
@@ -98,6 +107,7 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         ...disabledModal,
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
+        moreDetails: "",
         withCancelButton: false,
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
@@ -110,6 +120,7 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         ...sendEditedModal,
         onCloseModal: handleToggleDateModal,
         onClick: handleFinishForm,
+        moreDetails: "",
         withCancelButton: false,
       };
     }

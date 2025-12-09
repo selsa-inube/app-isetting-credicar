@@ -7,6 +7,7 @@ import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorObject } from "@utils/errorObject";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { notCancelStatus } from "@config/status/notCancelStatus";
 import { disabledModal } from "@config/disabledModal";
@@ -40,7 +41,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
 
-  const notCancel = notCancelStatus.includes(data.requestStatus);
+  const notCancel = notCancelStatus.includes(data.requestStatusCode);
 
   const handleToggleModal = () => {
     if (disabledButton) {
@@ -68,6 +69,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     try {
       await cancelRequestInProgress(businessUnit, data);
       setEntryCanceled(data.settingRequestId);
+      setShowModal(false);
       addFlag({
         title: cancelRequestInProgressMessage.success.title,
         description: cancelRequestInProgressMessage.success.description,
@@ -81,12 +83,12 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       setErrorData(errorObject(error));
     } finally {
       setLoading(false);
-      setShowModal(false);
     }
   };
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+    setShowModal(false);
   };
 
   const handleClick = () => {
@@ -108,6 +110,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       Icon: <></>,
       withIcon: false,
       onCloseModal: () => void 0,
@@ -117,12 +120,30 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
       appearanceButton: EComponentAppearance.PRIMARY,
     };
 
+    if (hasError) {
+      return {
+        ...errorModal(
+          messageErrorStatusConsultation(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
     if (showInfoModal) {
       return {
         ...disabledModal,
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
@@ -134,6 +155,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         ...cancelRequestModal,
         onCloseModal: handleToggleModal,
         onClick: handleClick,
+        moreDetails: "",
         withCancelButton: true,
         withIcon: false,
         appearance: EComponentAppearance.DANGER,
@@ -147,6 +169,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         onCloseModal: handleToggleModal,
         onClick: handleClick,
         withCancelButton: true,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.DANGER,
         appearanceButton: EComponentAppearance.DANGER,
@@ -159,21 +182,10 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         onCloseModal: handleToggleCancelledModal,
         onClick: handleToggleModal,
         withCancelButton: false,
+        moreDetails: "",
         withIcon: false,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
-      };
-    }
-
-    if (!loading && hasError) {
-      return {
-        ...errorModal(messageErrorStatusConsultation(errorData.status)),
-        onCloseModal: handleToggleErrorModal,
-        onClick: handleToggleErrorModal,
-        withCancelButton: false,
-        withIcon: true,
-        appearance: EComponentAppearance.WARNING,
-        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 

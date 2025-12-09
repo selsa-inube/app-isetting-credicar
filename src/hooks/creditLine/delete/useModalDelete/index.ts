@@ -3,6 +3,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { disabledModal } from "@config/disabledModal";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
@@ -36,6 +37,7 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       onCloseModal: () => void 0,
       onClick: () => void 0,
       loading: false,
@@ -44,31 +46,14 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
       appearanceButton: EComponentAppearance.PRIMARY,
     };
 
-    if (showInfoModal) {
-      return {
-        ...disabledModal,
-        onCloseModal: handleToggleInfoModal,
-        onClick: handleToggleInfoModal,
-        withCancelButton: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
-      };
-    }
-
-    if (showModal) {
-      return {
-        ...deleteCreditModal,
-        onCloseModal: handleToggleModal,
-        onClick: handleClick,
-        withCancelButton: true,
-        loading: loading,
-        appearance: EComponentAppearance.DANGER,
-        appearanceButton: EComponentAppearance.DANGER,
-      };
-    }
     if (!loading && !errorFetchRequest && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
@@ -85,6 +70,7 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
             networkError.status,
             operationTypes.deleteError,
             ECreditLines.OPTION_NAME,
+            getDescriptionError(errorData.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,
@@ -93,6 +79,31 @@ const useModalDeleteCreditLine = (props: IUseModalDeleteCredit) => {
         withIcon: true,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (showInfoModal) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+        moreDetails: "",
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    if (showModal) {
+      return {
+        ...deleteCreditModal,
+        onCloseModal: handleToggleModal,
+        onClick: handleClick,
+        withCancelButton: true,
+        moreDetails: "",
+        loading: loading,
+        appearance: EComponentAppearance.DANGER,
+        appearanceButton: EComponentAppearance.DANGER,
       };
     }
 

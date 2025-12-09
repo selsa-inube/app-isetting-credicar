@@ -60,6 +60,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     try {
       const saveData = await postSaveRequest(userAccount, data);
       setSavePayrollAgreement(saveData);
+      setShowModal(false);
     } catch (error) {
       console.info(error);
       if (setErrorFetchSaveData) {
@@ -70,7 +71,6 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
       setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
-      setShowModal(false);
     }
   };
 
@@ -331,6 +331,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+    setShowModal(false);
     if (errorFetchRequest && hasError) {
       setChangeTab(true);
     }

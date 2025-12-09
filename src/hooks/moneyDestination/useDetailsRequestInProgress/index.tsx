@@ -10,6 +10,7 @@ import { eventBus } from "@events/eventBus";
 import { errorObject } from "@utils/errorObject";
 import { formatDateTable } from "@utils/date/formatDateTable";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { EModalState } from "@enum/modalState";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { EComponentAppearance } from "@enum/appearances";
@@ -123,6 +124,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
       subtitle: "",
       description: "",
       actionText: "",
+      moreDetails: "",
       icon: <></>,
       onCloseModal: () => void 0,
       onClick: () => void 0,
@@ -134,7 +136,12 @@ const useDetailsRequestInProgress = (data: IEntry) => {
 
     if (!loading && hasError) {
       return {
-        ...errorModal(messageErrorStatusRequest(errorData.status)),
+        ...errorModal(
+          messageErrorStatusRequest(
+            errorData.status,
+            getDescriptionError(errorData.response),
+          ),
+        ),
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,

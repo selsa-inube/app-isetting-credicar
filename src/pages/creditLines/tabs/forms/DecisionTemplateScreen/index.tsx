@@ -144,6 +144,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             description={modalData.description}
             icon={modalData.icon}
             onClick={modalData.onClick}
+            moreDetails={modalData.moreDetails}
             onCloseModal={modalData.onCloseModal}
             portalId={portalId}
             title={modalData.title}

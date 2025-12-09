@@ -58,6 +58,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     try {
       const saveData = await postSaveRequest(userAccount, data);
       setSaveMoneyDestination(saveData);
+      setShowModal(false);
     } catch (error) {
       console.info(error);
       setSendData(false);
@@ -65,7 +66,6 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
       setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
-      setShowModal(false);
     }
   };
 
@@ -323,6 +323,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
+    setShowModal(false);
     if (errorFetchRequest && hasError) {
       setChangeTab(true);
     }
