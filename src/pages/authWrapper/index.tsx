@@ -1,28 +1,23 @@
 import { ReactNode } from "react";
 import { IAuthProvider } from "@inube/iauth-react";
-import { usePortalData } from "@hooks/staffPortal/usePortalData";
-import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
 import { enviroment } from "@config/environment";
-import { decrypt } from "@utils/crypto/decrypt";
-
-const storedPortal = localStorage.getItem("portalCode");
 
 interface IAuthWrapper {
   children: ReactNode;
 }
 
 const AuthWrapper = ({ children }: IAuthWrapper) => {
-  const { portalData } = usePortalData(decrypt(String(storedPortal)));
-  const { businessManagersData } = useBusinessManagers(portalData);
-
   return (
     <IAuthProvider
       originatorId={enviroment.ORIGINATOR_ID}
       callbackUrl={enviroment.REDIRECT_URI}
       iAuthUrl={enviroment.IAUTH_URL}
-      clientId={decrypt(businessManagersData.clientId)}
-      clientSecret={decrypt(businessManagersData.clientSecret)}
       serviceUrl={enviroment.IAUTH_SERVICE_URL}
+      codeVerifier={enviroment.CODE_VERIFIER}
+      codeChallenge={enviroment.CODE_CHALLENGE}
+      state={enviroment.STATE}
+      applicationName={enviroment.APPLICATION_NAME}
+      originatorCode={enviroment.ORIGINATOR_CODE}
     >
       {children}
     </IAuthProvider>
