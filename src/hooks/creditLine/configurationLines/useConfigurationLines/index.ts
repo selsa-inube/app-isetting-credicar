@@ -495,17 +495,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     optionsIncluded.items,
   ]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        useCaseConfiguration === EUseCase.ADD &&
-        !isUpdated &&
-        hasUnsavedChanges
-      ) {
-        setIsUpdated(true);
-      }
-    }, 25000);
-  }, [useCaseConfiguration, hasUnsavedChanges, isUpdated]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (
+  //       useCaseConfiguration === EUseCase.ADD &&
+  //       !isUpdated &&
+  //       hasUnsavedChanges
+  //     ) {
+  //       setIsUpdated(true);
+  //     }
+  //   }, 25000);
+  // }, [useCaseConfiguration, hasUnsavedChanges, isUpdated]);
 
   const handleStep = async (click: boolean): Promise<boolean> => {
     if (!click) {
