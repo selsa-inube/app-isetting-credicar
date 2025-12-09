@@ -146,12 +146,9 @@ const useRequestDetails = (props: IUseRequestDetails) => {
   return {
     approvalRequest,
     defaultSelectedTab,
-
     executeRequest,
     filteredRequestTabs,
-
     isSelected,
-
     showErrorData,
     showTrazabilityData,
     statusRequestData,

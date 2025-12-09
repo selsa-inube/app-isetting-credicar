@@ -118,7 +118,6 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
         ...withoutDataModal,
         onCloseModal: handleToggleWithouDataModal,
         onClick: handleToggleWithouDataModal,
-        actionText: "",
         moreDetails: "",
         withCancelButton: false,
         withIcon: true,

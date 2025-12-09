@@ -1,4 +1,4 @@
-import { useDetailsRequestInProgress } from "@hooks/payrollAgreement/useDetailsRequestInProgress";
+import { useDetailsRequestInProgress } from "@hooks/creditLine/useDetailsRequestInProgress";
 import { labelsOfRequest } from "@config/creditLines/requestInProgressTab/labelsOfRequest";
 import { IDetails } from "@ptypes/payrollAgreement/requestInProgTab/IDetails";
 import { DetailsUI } from "./interface";

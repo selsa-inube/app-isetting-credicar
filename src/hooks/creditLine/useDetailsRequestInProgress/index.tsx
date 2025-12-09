@@ -29,6 +29,8 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const [showDecision, setShowDecision] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showMoreDetailsModal, setShowMoreDetailsModal] =
+    useState<boolean>(false);
   const { appData } = useContext(AuthAndPortalData);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const navigate = useNavigate();
@@ -111,6 +113,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     setLoading,
   });
 
+  const onMoreDetails = () => {
+    setShowMoreDetailsModal(!showMoreDetailsModal);
+  };
+
   useEffect(() => {
     eventBus.emit(EModalState.SECOND_MODAL_STATE, showModal);
   }, [showModal]);
@@ -161,9 +167,17 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const modalData = modal();
 
+  const useCaseName = data.useCaseName;
+
   const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
 
   const withErrorRequest = approvalRequest || executeRequest;
+
+  const normalizeDetails = {
+    id: data.settingRequestId,
+    settingRequestId: data.settingRequestId,
+    configurationRequestData: data.configurationRequestData,
+  };
 
   return {
     showModal,
@@ -182,6 +196,10 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
     showDecision,
     title,
     statusRequestData,
+    showMoreDetailsModal,
+    useCaseName,
+    normalizeDetails,
+    onMoreDetails,
     handleTabRequestChange,
     handleToggleModal,
     normalizeData,
