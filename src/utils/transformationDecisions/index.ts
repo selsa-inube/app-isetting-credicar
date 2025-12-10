@@ -2,7 +2,6 @@
 import { IValue, ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { ECreditLines } from "@enum/creditLines";
-import { EUseCase } from "@enum/useCase";
 import { ICondition } from "@ptypes/creditLines/ICondition";
 import { IRuleMeta } from "@ptypes/decisions/IRuleMeta";
 import { IConditionMeta } from "@ptypes/decisions/IConditionMeta";
@@ -22,13 +21,8 @@ const transformationDecisions = (
   conditionArray: IConditionTraduction[],
   ruleNameTraduction: string,
   listValuesDecision?: IValue,
-  useCaseConfiguration?: string,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
-  const useCaseValidate =
-    useCaseConfiguration === EUseCase.ADD ||
-    useCaseConfiguration === EUseCase.DETAILS;
-
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
@@ -38,13 +32,11 @@ const transformationDecisions = (
     decisionDataType = decisionByRuleArray?.ruleDataType?.toLocaleLowerCase() ??
       decisionByRuleArray?.decisionDataType?.toLocaleLowerCase() ??
       ValueDataType.ALPHABETICAL,
-    howToSetTheDecision = decisionByRuleArray?.howToSetTheDecision
-      ? decisionByRuleArray?.howToSetTheDecision
-      : isRangeObject(decisionByRuleArray?.value)
-        ? EValueHowToSetUp.RANGE
-        : Array.isArray(decisionByRuleArray?.value)
-          ? EValueHowToSetUp.LIST_OF_VALUES
-          : EValueHowToSetUp.EQUAL,
+    howToSetTheDecision = isRangeObject(decisionByRuleArray?.value)
+      ? EValueHowToSetUp.RANGE
+      : listValuesDecision?.list && listValuesDecision.list.length > 0
+        ? EValueHowToSetUp.LIST_OF_VALUES
+        : EValueHowToSetUp.EQUAL,
   } = ruleMeta;
 
   return payload.decisionsByRule
@@ -65,6 +57,11 @@ const transformationDecisions = (
               const condMeta: IConditionMeta =
                 meta?.conditionDict?.[c.conditionName] ?? {};
 
+              const listValues = normalizeConditionTraduction(
+                conditionArray,
+                c.conditionName,
+              )?.listPossibleValues?.list;
+
               return {
                 conditionName: c.conditionName,
                 labelName: normalizeConditionTraduction(
@@ -77,13 +74,11 @@ const transformationDecisions = (
                   c.conditionDataType?.toLocaleLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
-                howToSetTheCondition: !useCaseValidate
-                  ? c.howToSetTheCondition
-                  : (c.howToSetTheCondition ?? isRangeObject(c.value))
-                    ? EValueHowToSetUp.RANGE
-                    : Array.isArray(c.value)
-                      ? EValueHowToSetUp.LIST_OF_VALUES
-                      : EValueHowToSetUp.EQUAL,
+                howToSetTheCondition: isRangeObject(c.value)
+                  ? EValueHowToSetUp.RANGE
+                  : listValues && listValues.length > 0
+                    ? EValueHowToSetUp.LIST_OF_VALUES
+                    : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues:
