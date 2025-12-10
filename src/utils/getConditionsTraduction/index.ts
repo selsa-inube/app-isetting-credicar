@@ -1,4 +1,5 @@
 import { ECreditLines } from "@enum/creditLines";
+import { IValue } from "@ptypes/decisions/IValue";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 
@@ -12,9 +13,7 @@ const getConditionsTraduction = (
       condition: cond.conditionName,
       conditionDataType: cond.conditionDataType,
       howToSetTheCondition: cond.howToSetTheCondition,
-      listPossibleValues: {
-        list: cond.listOfPossibleValues as unknown as string[],
-      },
+      listPossibleValues: cond.listOfPossibleValues as IValue,
       label:
         cond.i18n?.[language as keyof typeof cond.i18n] ?? cond.conditionName,
     });
@@ -27,7 +26,7 @@ const getConditionsTraduction = (
     (condition) => condition.condition === ECreditLines.CREDIT_LINE_RULE,
   )?.condition;
 
-  const listValuesDecision = { list: data.listOfPossibleValues };
+  const listValuesDecision = data.listOfPossibleValues;
 
   return {
     conditionTraduction,
