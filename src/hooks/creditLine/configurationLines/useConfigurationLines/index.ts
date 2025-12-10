@@ -388,7 +388,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         conditionTraduction,
         ruleNameTraduction as string,
         listValuesDecision as IValue,
-        useCaseConfiguration,
       );
     });
 
