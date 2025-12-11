@@ -33,7 +33,6 @@ const useMoreDetailsRequestProgress = (data: IEntry) => {
         const decisionByRule = rule.decisionsByRule?.find(
           (decision: IEntry) => decision,
         );
-
         return {
           decisionId: `Decisión ${index + 1}`,
           labelName: dataTranslations[rule.ruleName] ?? rule.ruleName,

@@ -38,7 +38,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     handleToggleInfoModal,
     handleOpenModal,
   } = useConfigurationLines({ templateKey });
-
   const { enumData: supportLine, loading: loadingSupportOptions } =
     useEnumeratorsCrediboard({
       businessUnits: appData.businessUnit.publicCode,
