@@ -62,7 +62,6 @@ const transformationDecisions = (
                 c.conditionName,
               );
 
-              console.log("as", normalized, "qwq");
               const listValues = normalized?.listPossibleValues?.list;
               return {
                 conditionName: c.conditionName,
