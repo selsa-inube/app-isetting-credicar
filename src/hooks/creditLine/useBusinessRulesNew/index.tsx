@@ -273,7 +273,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setEditDecision,
     setDeleteDecision,
   } = props;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [selectedDecision, setSelectedDecision] =

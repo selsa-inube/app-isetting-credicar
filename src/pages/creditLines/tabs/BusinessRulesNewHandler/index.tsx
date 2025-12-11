@@ -82,7 +82,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     setEditDecision,
     setDeleteDecision,
   });
-
   const { alertModal, showDecision } = useAlertDecisionModal({
     showAlertModal,
     handleToggleModal,

@@ -26,6 +26,7 @@ const transformationDecisions = (
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
+
   const {
     labelName: ruleLabelName = ruleNameTraduction,
     descriptionUse: ruleDescriptionUse = ruleName,
@@ -56,34 +57,31 @@ const transformationDecisions = (
             .map((c) => {
               const condMeta: IConditionMeta =
                 meta?.conditionDict?.[c.conditionName] ?? {};
-
-              const listValues = normalizeConditionTraduction(
+              const normalized = normalizeConditionTraduction(
                 conditionArray,
                 c.conditionName,
-              )?.listPossibleValues?.list;
+              );
 
+              console.log("as", normalized, "qwq");
+              const listValues = normalized?.listPossibleValues?.list;
               return {
                 conditionName: c.conditionName,
-                labelName: normalizeConditionTraduction(
-                  conditionArray,
-                  c.conditionName,
-                )?.label,
+                labelName: normalized?.label,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
                 conditionDataType:
                   condMeta.conditionDataType?.toLocaleLowerCase() ??
                   c.conditionDataType?.toLocaleLowerCase() ??
+                  normalized?.conditionDataType?.toLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
                 howToSetTheCondition: isRangeObject(c.value)
                   ? EValueHowToSetUp.RANGE
                   : listValues && listValues.length > 0
                     ? EValueHowToSetUp.LIST_OF_VALUES
-                    : EValueHowToSetUp.EQUAL,
+                    : conditionArray,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
-                listOfPossibleValues:
-                  normalizeConditionTraduction(conditionArray, c.conditionName)
-                    ?.listPossibleValues ?? [],
+                listOfPossibleValues: normalized?.listPossibleValues ?? [],
                 hidden: false,
               };
             });
