@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { enviroment, fetchTimeoutServices } from "@config/environment";
 
 const isaasPerAxiosInstance: AxiosInstance = axios.create({
-  baseURL: enviroment.ISAAS_PERSISTENCE_PROCESS_SERVICE,
+  baseURL: enviroment.ISETTING_PERSISTENCE_PROCESS_SERVICE,
   timeout: fetchTimeoutServices,
   headers: {
     "Content-type": "application/json; charset=UTF-8",
