@@ -47,6 +47,7 @@ const HomeUI = (props: IHomeUI) => {
   return (
     <>
       <BoxContainer
+        width="100%"
         direction="column"
         boxSizing="border-box"
         padding={padding}
@@ -92,83 +93,87 @@ const HomeUI = (props: IHomeUI) => {
           )}
         </StyledHeaderContainer>
         <BoxContainer
-          direction="column"
-          padding={
-            screenMobile ? `${tokens.spacing.s200}` : `${tokens.spacing.s0}`
-          }
-          gap={screenMobile ? `${tokens.spacing.s300}` : `${tokens.spacing.s0}`}
-          backgroundColor={EComponentAppearance.LIGHT}
-          boxSizing="initial"
+          alignItems="center"
+          justifyContent="center"
+          gap={tokens.spacing.s600}
+          boxSizing="border-box"
+          padding={tokens.spacing.s200}
         >
-          {(loading || dataExists) && (
-            <StyledTitle $isTablet={screenTablet}>
-              <Title
-                title={`${homeLabels.welcome} ${username}`}
-                description={homeLabels.description}
-                icon={<MdOutlineDoorFront />}
-                sizeTitle="large"
-              />
-            </StyledTitle>
-          )}
           <BoxContainer
-            direction="row"
-            boxSizing="border-box"
-            padding={
-              screenTablet
-                ? `${tokens.spacing.s0}`
-                : `${tokens.spacing.s0} 120px ${tokens.spacing.s400}`
+            direction="column"
+            gap={
+              screenMobile ? `${tokens.spacing.s300}` : `${tokens.spacing.s0}`
             }
-            justifyContent={screenTablet ? "center" : "flex-start"}
-            wrap="wrap"
-            gap={tokens.spacing.s400}
             backgroundColor={EComponentAppearance.LIGHT}
+            maxWidth="1064px"
+            minWidth="328px"
+            boxSizing="border-box"
           >
+            {(loading || dataExists) && (
+              <StyledTitle $isTablet={screenTablet}>
+                <Title
+                  title={`${homeLabels.welcome} ${username}`}
+                  description={homeLabels.description}
+                  icon={<MdOutlineDoorFront />}
+                  sizeTitle="large"
+                />
+              </StyledTitle>
+            )}
             <BoxContainer
               direction="row"
               boxSizing="border-box"
-              padding={tokens.spacing.s200}
               justifyContent={screenTablet ? "center" : "flex-start"}
               wrap="wrap"
-              width="100%"
-              gap={tokens.spacing.s250}
+              gap={tokens.spacing.s400}
               backgroundColor={EComponentAppearance.LIGHT}
-              borderColor={EComponentAppearance.DARK}
-              borderRadius={tokens.spacing.s100}
             >
-              {loading ? (
-                <AppCard
-                  label={""}
-                  description={""}
-                  icon={""}
-                  url={""}
-                  loading
-                />
-              ) : (
-                <>
-                  {dataExists ? (
-                    <>
-                      {data?.map((card) => (
-                        <AppCard
-                          key={card.id}
-                          label={card.publicCode}
-                          description={card.description}
-                          icon={card.icon}
-                          url={card.url}
-                          loading={false}
-                        />
-                      ))}
-                    </>
-                  ) : (
-                    <BoxContainer
-                      boxSizing="border-box"
-                      width="100%"
-                      height="100%"
-                    >
-                      <ErrorPage errorCode={500} onClick={onlogout} />
-                    </BoxContainer>
-                  )}
-                </>
-              )}
+              <BoxContainer
+                direction="row"
+                boxSizing="border-box"
+                padding={tokens.spacing.s200}
+                justifyContent={screenTablet ? "center" : "flex-start"}
+                wrap="wrap"
+                width="100%"
+                gap={tokens.spacing.s250}
+                backgroundColor={EComponentAppearance.LIGHT}
+                borderColor={EComponentAppearance.DARK}
+                borderRadius={tokens.spacing.s100}
+              >
+                {loading ? (
+                  <AppCard
+                    label={""}
+                    description={""}
+                    icon={""}
+                    url={""}
+                    loading
+                  />
+                ) : (
+                  <>
+                    {dataExists ? (
+                      <>
+                        {data?.map((card) => (
+                          <AppCard
+                            key={card.id}
+                            label={card.publicCode}
+                            description={card.description}
+                            icon={card.icon}
+                            url={card.url}
+                            loading={false}
+                          />
+                        ))}
+                      </>
+                    ) : (
+                      <BoxContainer
+                        boxSizing="border-box"
+                        width="100%"
+                        height="100%"
+                      >
+                        <ErrorPage errorCode={500} onClick={onlogout} />
+                      </BoxContainer>
+                    )}
+                  </>
+                )}
+              </BoxContainer>
             </BoxContainer>
           </BoxContainer>
         </BoxContainer>

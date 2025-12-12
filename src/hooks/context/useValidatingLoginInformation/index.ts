@@ -70,7 +70,7 @@ const useValidatingLoginInformation = () => {
     },
     user: {
       userAccount: user.id || "",
-      userName: user.nickname || "",
+      userName: user.username || "",
       identificationDocumentNumber: user.id || "",
     },
     useCasesByStaff: useCasesData ?? [],
@@ -84,7 +84,7 @@ const useValidatingLoginInformation = () => {
           user: {
             ...prev.user,
             userAccount: user.id || "",
-            userName: user.nickname || "",
+            userName: user.username || "",
             identificationDocumentNumber: user.id || "",
           },
         }));

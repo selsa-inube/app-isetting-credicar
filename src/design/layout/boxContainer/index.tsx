@@ -24,6 +24,8 @@ const BoxContainer = (props: IBoxContainer) => {
     boxShadow,
     minHeight,
     maxHeight,
+    maxWidth,
+    minWidth,
   } = props;
 
   return (
@@ -47,6 +49,8 @@ const BoxContainer = (props: IBoxContainer) => {
       $boxShadow={boxShadow}
       $minHeight={minHeight}
       $maxHeight={maxHeight}
+      $maxWidth={maxWidth}
+      $minWidth={minWidth}
     >
       {children}
     </StyledFlex>

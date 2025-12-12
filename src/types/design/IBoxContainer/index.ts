@@ -28,6 +28,8 @@ interface IBoxContainer {
   boxShadow?: IAppearenceBoxContainer;
   minHeight?: string;
   maxHeight?: string;
+  maxWidth?: string;
+  minWidth?: string;
 }
 
 export type { IBoxContainer };
