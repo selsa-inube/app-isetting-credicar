@@ -11,6 +11,7 @@ import { mergeEditClientRules } from "@utils/mergeEditClientRules";
 import { mergeEditRules } from "@utils/mergeEditRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseUpateData } from "@ptypes/hooks/creditLines/IUseUpateData";
+import { EValueHowToSetUp } from "@isettingkit/business-rules";
 
 const useUpateData = (props: IUseUpateData) => {
   const {
@@ -57,7 +58,8 @@ const useUpateData = (props: IUseUpateData) => {
       ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
       ruleDataType: firstDecision?.ruleDataType ?? "Alphabetical",
       value: firstDecision?.value ?? linesConstructionData.abbreviatedName,
-      howToSetTheDecision: firstDecision?.howToSetTheDecision ?? "EqualTo",
+      howToSetTheDecision:
+        firstDecision?.howToSetTheDecision ?? EValueHowToSetUp.EQUAL,
       effectiveFrom: formatDate(new Date()),
       conditionGroups: included?.map((rule) => ({
         conditionsThatEstablishesTheDecision: [
