@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import { IAuthProvider } from "@inube/iauth-react";
+import { ReactNode } from "react";
 import { enviroment } from "@config/environment";
 
 interface IAuthWrapper {
