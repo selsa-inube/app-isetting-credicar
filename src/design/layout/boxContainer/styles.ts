@@ -23,6 +23,8 @@ interface IStyledFlex {
   $overflowX?: string;
   $minHeight?: string;
   $maxHeight?: string;
+  $maxWidth?: string;
+  $minWidth?: string;
 }
 
 const StyledFlex = styled.div<IStyledFlex>`
@@ -51,6 +53,8 @@ const StyledFlex = styled.div<IStyledFlex>`
     `1px 1px 4px 2px ${theme?.boxContainer?.[$boxShadow].border?.color ?? tokensBoxContainer[$boxShadow].border.color}`};
   min-height: ${({ $minHeight }) => $minHeight};
   max-height: ${({ $maxHeight }) => $maxHeight};
+  max-width: ${({ $maxWidth }) => $maxWidth};
+  min-width: ${({ $minWidth }) => $minWidth};
 `;
 
 export { StyledFlex };

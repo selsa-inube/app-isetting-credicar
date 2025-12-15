@@ -59,7 +59,7 @@ const StyledTitle = styled.div<IStyledTitle>`
   padding: ${({ $isTablet }) =>
     $isTablet
       ? `var(--spacing-S200, ${tokens.spacing.s200})`
-      : `${tokens.spacing.s600} ${tokens.spacing.s1600} ${tokens.spacing.s300}`};
+      : `${tokens.spacing.s400} ${tokens.spacing.s0} ${tokens.spacing.s200}`};
   display: flex;
   flex-direction: column;
   align-items: ${({ $isTablet }) => $isTablet && "flex-start"};
