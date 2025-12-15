@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { MdPending } from "react-icons/md";
 import { Icon } from "@inubekit/inubekit";
 
@@ -7,23 +7,30 @@ import { ActionsModal } from "@design/modals/actionsModal";
 import { useOutsideClick } from "@hooks/useOutsideClick";
 import { EComponentAppearance } from "@enum/appearances";
 import { IActionMobile } from "@ptypes/design/IActionMobile";
-import { StyledContainer, StyledContainerIcon } from "./styles";
+import {
+  StyledActionModal,
+  StyledContainer,
+  StyledContainerIcon,
+} from "./styles";
+import { IModalPos } from "@ptypes/design/IModalPos";
 
 const ActionMobile = (props: IActionMobile) => {
   const { actions, entry } = props;
+
   const [showModal, setShowModal] = useState(false);
+  const [modalPos, seIModalPos] = useState<IModalPos>({ top: 0, left: 0 });
+
   const modalRef = useRef<HTMLDivElement>(null);
+  const iconRef = useRef<HTMLDivElement>(null);
+
   const [isSecondModalOpen, setIsSecondModalOpen] = useState(false);
   const [isThirdModalOpen, setIsThirdModalOpen] = useState(false);
 
   useEffect(() => {
-    const handleSecondModalState = (state: boolean) => {
+    const handleSecondModalState = (state: boolean) =>
       setIsSecondModalOpen(state);
-    };
-
-    const handleThirdModalState = (state: boolean) => {
+    const handleThirdModalState = (state: boolean) =>
       setIsThirdModalOpen(state);
-    };
 
     eventBus.on("secondModalState", handleSecondModalState);
     eventBus.on("thirdModalState", handleThirdModalState);
@@ -34,27 +41,56 @@ const ActionMobile = (props: IActionMobile) => {
     };
   }, []);
 
-  const handleToggleModal = () => setShowModal(true);
+  const calculateModalPos = () => {
+    const iconEl = iconRef.current;
+    if (!iconEl) return;
+
+    const rect = iconEl.getBoundingClientRect();
+
+    const GAP_PX = 8;
+    const ALIGN_LEFT = 22;
+    const top = rect.bottom + GAP_PX;
+    const left = rect.left + ALIGN_LEFT;
+
+    seIModalPos({ top, left });
+  };
+
+  const handleToggleModal = () => {
+    setShowModal(true);
+  };
+
   const handleCloseModal = () => setShowModal(false);
+
+  useLayoutEffect(() => {
+    if (!showModal) return;
+    calculateModalPos();
+  }, [showModal]);
+
+  useEffect(() => {
+    if (!showModal) return;
+
+    const onUpdate = () => calculateModalPos();
+    window.addEventListener("resize", onUpdate);
+    window.addEventListener("scroll", onUpdate, true);
+
+    return () => {
+      window.removeEventListener("resize", onUpdate);
+      window.removeEventListener("scroll", onUpdate, true);
+    };
+  }, [showModal]);
 
   useOutsideClick({
     primaryRef: modalRef,
-    isSecondModalOpen: isSecondModalOpen,
-    isThirdModalOpen: isThirdModalOpen,
+    isSecondModalOpen,
+    isThirdModalOpen,
     callback: () => {
-      if (!isSecondModalOpen) {
-        handleCloseModal();
-      }
-
-      if (!isThirdModalOpen) {
-        handleCloseModal();
-      }
+      if (!isSecondModalOpen && !isThirdModalOpen) handleCloseModal();
     },
   });
 
   return (
     <StyledContainer>
-      <StyledContainerIcon>
+      <StyledContainerIcon id="iconMenu" ref={iconRef}>
         <Icon
           appearance={EComponentAppearance.PRIMARY}
           icon={<MdPending />}
@@ -63,14 +99,20 @@ const ActionMobile = (props: IActionMobile) => {
           cursorHover
         />
       </StyledContainerIcon>
+
       {showModal && (
-        <div id="actionModal" ref={modalRef}>
+        <StyledActionModal
+          id="actionModal"
+          ref={modalRef}
+          top={modalPos.top}
+          left={modalPos.left}
+        >
           <ActionsModal
             actions={actions}
             entry={entry}
             onClose={handleCloseModal}
           />
-        </div>
+        </StyledActionModal>
       )}
     </StyledContainer>
   );
