@@ -2,11 +2,16 @@ const getDescriptionError = (response: string): string => {
   if (!response) {
     return "";
   }
-  const responseObject = JSON.parse(response);
-  if (responseObject.i18n) {
-    return `${responseObject.i18n} - ${responseObject.errors[0].message ?? ""}`;
+
+  try {
+    const { errors, i18n, description } = JSON.parse(response);
+    const errorMessage = errors?.[0]?.message || "";
+    const prefix = i18n || description || "";
+
+    return prefix && errorMessage ? `${prefix} - ${errorMessage}` : prefix;
+  } catch {
+    return "";
   }
-  return `${responseObject.description} - ${responseObject.errors[0].message ?? ""}`;
 };
 
 export { getDescriptionError };
