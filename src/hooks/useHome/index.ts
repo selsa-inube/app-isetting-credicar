@@ -39,7 +39,7 @@ const useHome = () => {
     }
   }, [appData]);
 
-  const { useCases: useCases } = useCaseForStaff({
+  const { useCases } = useCaseForStaff({
     businessUnitPrevious: appData.businessUnit.publicCode,
     useCasesByStaff: appData.useCasesByStaff,
     businessUnit: businessUnitSigla,
