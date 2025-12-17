@@ -62,11 +62,11 @@ const useAppPage = (props: IUseAppPage) => {
   };
 
   useEffect(() => {
-    if (useCases.length > 0) {
+    if (businessUnitSigla && useCases.length > 0) {
       const useCasesJSON = JSON.stringify(useCases);
       setUseCases(useCasesJSON);
     }
-  }, [useCases]);
+  }, [businessUnitSigla, useCases, setUseCases]);
 
   const isTablet = useMediaQuery(mediaQueryTablet);
   const isTabletMain = useMediaQuery(mediaQueryTabletMain);
