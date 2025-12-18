@@ -606,6 +606,26 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       ? EComponentAppearance.HELP
       : EComponentAppearance.WARNING;
 
+  const emptyConditionsTemplate = useMemo(() => {
+    const groups = (getConditionsByGroupNew(localizedTemplate) || {}) as Record<
+      string,
+      unknown
+    >;
+
+    const groupKeys = Object.keys(groups);
+    const emptyRecord =
+      groupKeys.length > 0
+        ? Object.fromEntries(groupKeys.map((k) => [k, []]))
+        : { "group-primary": [] };
+
+    return {
+      ...localizedTemplate,
+      conditionGroups: groupsRecordToArrayNew(
+        emptyRecord as Record<string, any[]>,
+      ),
+    } as any;
+  }, [localizedTemplate]);
+
   return {
     isModalOpen,
     selectedDecision,
@@ -635,6 +655,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     onMultipleChoicesChange,
     removeCondition,
     restoreConditions,
+    emptyConditionsTemplate,
   };
 };
 
