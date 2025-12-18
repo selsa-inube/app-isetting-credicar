@@ -1,6 +1,6 @@
 import vitesconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import react from "@vitejs/plugin-react-swc";
 import federation from "@originjs/vite-plugin-federation";
 import path from "path";
 
@@ -10,29 +10,41 @@ export default defineConfig({
     react(),
     vitesconfigPaths(),
     federation({
-      name: "remote_a",
+      name: "remote_app",
       filename: "remoteEntry.js",
       exposes: {
-        "./App": "./src/App",
+        // "./App": "./src/App",
         // "./usePortalData": "./src/hooks/usePortalData",
         // "./ErrorPage": "./src/components/layout/ErrorPage",
         // "./SelectBusinessUnitsRoutes": "./src/routes/selectBusinessunits",
+        "./MainNavigation": "./src/routes/mainNavigation",
+        "./Accordion": "./src/design/data/accordions",
+        "./BoxAttribute":
+          "./src/design/feedback/boxAttributes/containerAttribute",
+        // "./CreditLinesConstructionProvider": "./src/context/creditLinesConstruction",
+        // "./FlagProvider": "./src/context/flagProvider",
+        // "./AuthAndPortalDataProvider": "./src/context/authAndPortalDataProvider",
+        // "./ChangeToRequestTabProvider": "./src/context/changeToRequestTab",
+        // "./ThemeProviderWrapper": "./src/context/theme",
+        // "./useAppData": "./src/hooks/useAppData",
       },
-      remotes: {
-        hostApp: "http://localhost:3000/dist/assets/remoteEntry.js",
-      },
-      shared: ["react", "react-dom", "react-router-dom", "@inube/iauth-react"],
+      shared: ["react", "react-dom", "react-router-dom"],
     }),
   ],
-  server: {
-    open: true,
-    port: 3000,
-  },
+  // server: {
+  //   open: true,
+  //   port: 3000,
+  // },
   build: {
     modulePreload: false,
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+  },
+  preview: {
+    port: 3000,
+    strictPort: true,
+    cors: true,
   },
   resolve: {
     alias: {
