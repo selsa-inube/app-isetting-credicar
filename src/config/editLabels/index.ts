@@ -1,5 +1,5 @@
 const editLabels = {
-  title: "Editar",
+  title: "Solicitud de modificación de las politicas generales por",
 };
 
 export { editLabels };

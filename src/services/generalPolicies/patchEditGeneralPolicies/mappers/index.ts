@@ -33,7 +33,8 @@ const mapEditGeneralPoliciesToApi = (
       descriptionOfChange: decision.descriptionOfChange,
       effectiveFrom: formatDateDecision(decision.effectiveFrom),
       transactionOperation: decision.transactionOperation,
-      validUntil: formatDateDecision(decision.validUntil),
+      validUntil:
+        decision.validUntil && formatDateDecision(decision.validUntil),
       value: decision.value,
     })),
   }));
