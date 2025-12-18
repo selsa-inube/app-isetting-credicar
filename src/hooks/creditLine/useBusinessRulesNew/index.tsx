@@ -441,7 +441,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
           /* eslint-disable @typescript-eslint/no-explicit-any */
           const finalList = merged.filter((m: any) => {
             const passesSelected =
-              selectedIds.size > 0 && selectedIds.has(m.conditionName);
+              selectedIds.size === 0 || selectedIds.has(m.conditionName);
             const notRemoved = !removedConditionNames.has(m.conditionName);
             return passesSelected && notRemoved;
           });
