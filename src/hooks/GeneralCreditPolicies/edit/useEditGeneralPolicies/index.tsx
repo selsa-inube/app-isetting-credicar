@@ -18,7 +18,7 @@ import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/edi
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { mediaQueryTablet } from "@config/environment";
-import { editLabels } from "@config/editLabels";
+
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -26,6 +26,7 @@ import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { useNewDecisions } from "../useNewDecisions";
+import { editLabels } from "@src/config/generalCreditPolicies/editGeneralPolicies/editLabels";
 
 const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const {
@@ -230,7 +231,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       rules?: IRuleDecision[];
     } = {
       moneyDestinationId: "",
-      modifyJustification: `${editLabels.title} ${appData.user.userAccount}`,
+      modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
     };
 
     if (newDecisions && newDecisions.length > 0) {
@@ -242,7 +243,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       requestType: ERequestType.MODIFY,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: `${editLabels.title} ${appData.user.userAccount}`,
+      description: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
       useCaseName: EGeneralPolicies.USE_CASE_EDIT,
