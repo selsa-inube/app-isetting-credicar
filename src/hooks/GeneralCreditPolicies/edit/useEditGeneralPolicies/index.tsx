@@ -242,7 +242,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       requestType: ERequestType.MODIFY,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: editLabels.title,
+      description: `${editLabels.title} ${appData.user.userAccount}`,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
       useCaseName: EGeneralPolicies.USE_CASE_EDIT,
