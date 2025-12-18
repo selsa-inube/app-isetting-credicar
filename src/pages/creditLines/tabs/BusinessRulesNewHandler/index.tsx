@@ -62,6 +62,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     submitForm,
     handleToggleModal,
     decisionsSorted,
+    emptyConditionsTemplate,
   } = useBusinessRulesNew({
     controls,
     customMessageEmptyDecisions,
@@ -86,7 +87,10 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     showAlertModal,
     handleToggleModal,
   });
-
+  const decisionTemplateForBusinessRules =
+    !selectedDecision && selectedConditionsCSV.length === 0
+      ? emptyConditionsTemplate
+      : filteredDecisionTemplate;
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
@@ -140,7 +144,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             controls={!optionDetailsCreditline}
             customMessageEmptyDecisions={customMessageEmptyDecisions}
             customTitleContentAddCard={customTitleContentAddCard}
-            decisionTemplate={filteredDecisionTemplate as any}
+            decisionTemplate={decisionTemplateForBusinessRules as any}
             decisions={decisionsSorted}
             handleCloseModal={closeModal}
             handleDelete={deleteDecision}
