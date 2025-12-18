@@ -273,7 +273,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setEditDecision,
     setDeleteDecision,
   } = props;
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [selectedDecision, setSelectedDecision] =
@@ -510,7 +509,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         const kept = asArray(list).filter(
           /* eslint-disable @typescript-eslint/no-explicit-any */
           (c: any) =>
-            (selectedIds.size === 0 || selectedIds.has(c.conditionName)) &&
+            selectedIds.size > 0 &&
+            selectedIds.has(c.conditionName) &&
             !removedConditionNames.has(c.conditionName) &&
             !c?.hidden,
         );

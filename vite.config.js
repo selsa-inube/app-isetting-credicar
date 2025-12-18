@@ -9,19 +9,19 @@ export default defineConfig({
     react(),
     vitesconfigPaths(),
     federation({
-      name: "remote_a",
+      name: "remote_app",
       filename: "remoteEntry.js",
       exposes: {
-        "./App": "./src/App",
+        // "./App": "./src/App",
         // "./usePortalData": "./src/hooks/usePortalData",
         // "./ErrorPage": "./src/components/layout/ErrorPage",
         // "./SelectBusinessUnitsRoutes": "./src/routes/selectBusinessunits",
-        // "./AppContext": "./src/context/AppContext/index.tsx",
+        "./MainNavigation": "./src/routes/mainNavigation",
+        "./Accordion": "./src/design/data/accordions/index.tsx",
+        "./BoxAttribute":
+          "./src/design/feedback/boxAttributes/containerAttribute/index.tsx",
       },
-      remotes: {
-        hostApp: "http://localhost:3000/assets/remoteEntry.js",
-      },
-      shared: ["react", "react-dom", "react-router-dom", "@inube/iauth-react"],
+      shared: ["react", "react-dom", "react-router-dom"],
     }),
   ],
   server: {
@@ -33,6 +33,11 @@ export default defineConfig({
     target: "esnext",
     minify: false,
     cssCodeSplit: false,
+  },
+  preview: {
+    port: 3000,
+    strictPort: true,
+    cors: true,
   },
   resolve: {
     alias: {
