@@ -11,9 +11,10 @@ function MoneyDestinationTab() {
   const { appData } = useContext(AuthAndPortalData);
 
   const {
-    moneyDestination,
+    transformedMoneyDestination,
     searchMoneyDestination,
     loading,
+    loadingEnum,
     smallScreen,
     columnWidths,
     emptyDataMessage,
@@ -31,8 +32,8 @@ function MoneyDestinationTab() {
     <MoneyDestinationTabUI
       onSearchMoneyDestination={handleSearchMoneyDestination}
       searchMoneyDestination={searchMoneyDestination}
-      loading={loading}
-      entries={moneyDestination as IEntry[]}
+      loading={loading || loadingEnum}
+      entries={transformedMoneyDestination as IEntry[]}
       setEntryDeleted={setEntryDeleted}
       smallScreen={smallScreen}
       columnWidths={columnWidths}

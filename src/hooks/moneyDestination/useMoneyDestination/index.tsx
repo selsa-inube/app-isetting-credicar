@@ -1,5 +1,5 @@
 import { useMediaQuery } from "@inubekit/inubekit";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
@@ -45,27 +45,11 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   });
 
   useEffect(() => {
-    const fetchEnumData = async () => {
+    const fetchData = async () => {
       setLoading(true);
       try {
         const data = await getMoneyDestinationData(businessUnits);
-        const destinationData = data.map((destination) => {
-          const typeDestination = normalizeDestination(
-            type,
-            destination.typeDestination ?? "",
-          );
-          const valueTypeDestination =
-            typeDestination?.i18n?.[
-              appData.language as keyof typeof typeDestination.i18n
-            ] ?? typeDestination?.description;
-
-          return {
-            ...destination,
-            typeDestination:
-              valueTypeDestination ?? destination.typeDestination,
-          };
-        });
-        setMoneyDestination(destinationData);
+        setMoneyDestination(data);
       } catch (error) {
         console.info(error);
         setHasError(true);
@@ -75,8 +59,30 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
       }
     };
 
-    fetchEnumData();
-  }, [loadingEnum, type]);
+    fetchData();
+  }, [businessUnits]);
+
+  const transformedMoneyDestination = useMemo(() => {
+    if (loadingEnum || !type || type.length === 0) {
+      return moneyDestination;
+    }
+
+    return moneyDestination.map((destination) => {
+      const typeDestination = normalizeDestination(
+        type,
+        destination.typeDestination ?? "",
+      );
+      const valueTypeDestination =
+        typeDestination?.i18n?.[
+          appData.language as keyof typeof typeDestination.i18n
+        ] ?? typeDestination?.description;
+
+      return {
+        ...destination,
+        typeDestination: valueTypeDestination ?? destination.typeDestination,
+      };
+    });
+  }, [moneyDestination, type, loadingEnum, appData.language]);
 
   useEffect(() => {
     if (entryDeleted) {
@@ -175,9 +181,11 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
 
   return {
     moneyDestination,
+    transformedMoneyDestination,
     hasError,
     searchMoneyDestination,
     loading,
+    loadingEnum,
     smallScreen,
     columnWidths,
     emptyDataMessage,
