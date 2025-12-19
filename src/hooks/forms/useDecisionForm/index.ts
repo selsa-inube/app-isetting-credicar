@@ -9,6 +9,17 @@ import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 
+const isDecisionLabelEs = (value: unknown) =>
+  typeof value === "string" && /^Decisión\s+\d+$/i.test(value.trim());
+
+const normalizeDecisionIds = <T extends { decisionId?: string }>(list: T[]) =>
+  list.map((item, index) => ({
+    ...item,
+    decisionId: isDecisionLabelEs(item.decisionId)
+      ? item.decisionId
+      : `Decisión ${index + 1}`,
+  }));
+
 const useDecisionForm = (props: IUseDecisionForm) => {
   const {
     initialValues,
@@ -28,8 +39,11 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
-  const [decisions, setDecisions] =
-    useState<IRuleDecisionExtended[]>(initialValues);
+
+  const [decisions, setDecisions] = useState<IRuleDecisionExtended[]>(
+    normalizeDecisionIds(initialValues as IRuleDecisionExtended[]),
+  );
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
@@ -37,7 +51,10 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     [],
   );
 
-  const [initialDecisions] = useState<IRuleDecision[]>(initialValues);
+  const [initialDecisions] = useState<IRuleDecision[]>(
+    normalizeDecisionIds(initialValues as IRuleDecision[]),
+  );
+
   const { appData } = useContext(AuthAndPortalData);
 
   const handleOpenModal = () => {
