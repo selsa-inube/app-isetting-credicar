@@ -7,6 +7,7 @@ import { mapLineInConstructionToEntities } from "./mappers/mapLineInConstruction
 
 const getLineUnderConstruction = async (
   businessManagerCode: string,
+  businessUnitcode: string,
   requestStatus: string,
   entity: string,
 ): Promise<ILineUnderConstructionData[]> => {
@@ -18,6 +19,7 @@ const getLineUnderConstruction = async (
 
   const queryParams = new URLSearchParams({
     businessManagerCode: businessManagerCode,
+    businessUnitCode: businessUnitcode,
     requestStatus: requestStatus,
     applicationName: EGeneral.APPLICATION_NAME,
     entityName: entity,
@@ -29,7 +31,6 @@ const getLineUnderConstruction = async (
   const data: ILineUnderConstructionData[] = await getWithRetries<
     ILineUnderConstructionData[]
   >(queryProcessAxiosInstance, `/requests?${queryParams}`, config);
-
   return mapLineInConstructionToEntities(data);
 };
 

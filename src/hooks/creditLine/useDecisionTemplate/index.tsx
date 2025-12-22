@@ -19,10 +19,17 @@ const useDecisionTemplate = (props: IUseDecisionTemplate) => {
   const [componentLoading, setComponentLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (useCaseConfiguration === EUseCase.ADD) {
-      setComponentLoading(loadingModify);
+    const isLoading =
+      useCaseConfiguration === EUseCase.ADD ? loadingModify : ruleLoadding;
+
+    if (isLoading) {
+      setComponentLoading(true);
     } else {
-      setComponentLoading(ruleLoadding);
+      const timer = setTimeout(() => {
+        setComponentLoading(false);
+      }, 500);
+
+      return () => clearTimeout(timer);
     }
   }, [useCaseConfiguration, loadingModify, ruleLoadding]);
 

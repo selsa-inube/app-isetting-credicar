@@ -39,7 +39,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   } = props;
 
   const {
-    filteredDecisionTemplate,
     isModalOpen,
     localizedTemplate,
     multipleChoicesOptions,
@@ -62,7 +61,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     submitForm,
     handleToggleModal,
     decisionsSorted,
-    emptyConditionsTemplate,
+    decisionTemplateForBusinessRules,
   } = useBusinessRulesNew({
     controls,
     customMessageEmptyDecisions,
@@ -87,10 +86,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     showAlertModal,
     handleToggleModal,
   });
-  const decisionTemplateForBusinessRules =
-    !selectedDecision && selectedConditionsCSV.length === 0
-      ? emptyConditionsTemplate
-      : filteredDecisionTemplate;
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
@@ -131,14 +126,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
       )}
       {!ruleLoading && (
         <>
-          {conditionEmpty && (
-            <AlertMessage
-              mesaggeEmpty={mesaggeEmpty}
-              icon={iconMessage}
-              iconAppearance={iconAppearance}
-              message={customMessageEmptyDecisions ?? message}
-            />
-          )}
           <BusinessRulesNew
             baseDecisionTemplate={localizedTemplate}
             controls={!optionDetailsCreditline}
@@ -158,6 +145,14 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             textValues={textValues as IRulesFormTextValues}
             shouldRenderEmptyMessage={dataEmpty || decisionsSorted.length > 0}
           />
+          {conditionEmpty && (
+            <AlertMessage
+              mesaggeEmpty={mesaggeEmpty}
+              icon={iconMessage}
+              iconAppearance={iconAppearance}
+              message={customMessageEmptyDecisions ?? message}
+            />
+          )}
 
           {showDecision && (
             <DecisionModal

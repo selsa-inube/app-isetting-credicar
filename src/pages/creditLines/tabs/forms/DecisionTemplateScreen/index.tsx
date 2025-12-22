@@ -27,7 +27,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
 
   const {
     showInfoModal,
-    loading,
     modalData,
     showDecision,
     ruleData,
@@ -99,7 +98,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           addUseCase={optionAddCreditline}
           onOpenModal={handleOpenModal}
           onToggleInfoModal={handleToggleInfoModal}
-          updateData={loadingModify}
+          updateData={componentLoading}
           withDecisions
           title={title}
           description={description}
@@ -122,7 +121,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           }
           initialDecisions={initialDecisions}
           language={language as "es" | "en"}
-          loading={loading}
+          loading={loadingModify}
           setDecisionData={setDecisionData}
           textValues={commonTextValues}
           formId={formId as unknown as never}

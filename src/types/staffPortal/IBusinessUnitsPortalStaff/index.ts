@@ -1,10 +1,11 @@
 interface IBusinessUnitsPortalStaff {
   publicCode: string;
-  languageId: string;
   abbreviatedName: string;
   descriptionUse: string;
   urlLogo: string;
   firstMonthOfFiscalYear?: string;
+  languageId?: string;
+  languageiso?: string;
   [key: string]: string | undefined;
 }
 

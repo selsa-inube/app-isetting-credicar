@@ -319,6 +319,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
+    dataType,
   } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
@@ -388,6 +389,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         conditionTraduction,
         ruleNameTraduction as string,
         listValuesDecision as IValue,
+        dataType as string,
       );
     });
 

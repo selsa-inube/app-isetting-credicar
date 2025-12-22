@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getConditionsByGroupNew } from "@isettingkit/business-rules";
+import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
@@ -30,8 +31,8 @@ const formatRuleDecisionsConfig = (
       unknown
     >;
 
-    decisionsByRule.conditionGroups = Object.entries(groups).map(
-      ([groupKey, rawList]) => {
+    decisionsByRule.conditionGroups = Object.entries(groups)
+      .map(([groupKey, rawList]) => {
         const items = asArray(rawList).filter((item) => !(item as any)?.hidden);
         const conditionGroup: any = {
           conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
@@ -53,8 +54,25 @@ const formatRuleDecisionsConfig = (
         }
 
         return conditionGroup;
-      },
-    );
+      })
+      .filter((group) => {
+        const conditionsToValidate =
+          group.conditionsThatEstablishesTheDecision.filter(
+            (condition: any) =>
+              condition.conditionName !== ECreditLines.CREDIT_LINE_RULE,
+          );
+
+        if (conditionsToValidate.length === 0) {
+          return false;
+        }
+
+        return conditionsToValidate.every(
+          (condition: any) =>
+            condition.value !== undefined &&
+            condition.value !== null &&
+            condition.value !== "",
+        );
+      });
 
     return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
   });
