@@ -8,7 +8,6 @@ import { transformRuleStructure } from "@utils/transformRuleStructure";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
-import { getUpdateDecisionsConfig } from "@utils/getUpdateDecisionsConfig";
 import { rulesExcludedByEvaluate } from "@config/creditLines/configuration/rulesExcludedByEvaluate";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
@@ -133,14 +132,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       linesConstructionData.abbreviatedName as string,
     );
 
-    const newUpdateDecision = getUpdateDecisionsConfig(
-      editDecision,
-      appData.user.userAccount,
-      normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
-      transformRuleStructure(decisionsData),
-      linesConstructionData.abbreviatedName as string,
-    );
-
     const newDeleteDecision = getNewDeletedDecisionsConfig(
       deleteDecision,
       appData.user.userAccount,
@@ -156,15 +147,9 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       (decision) => decision !== undefined,
     );
 
-    const updateValues = [newUpdateDecision].filter(
-      (decision) => decision !== undefined,
+    const allDecisions = [...insertValues, ...deleteValues].flatMap(
+      (item) => item as IRuleDecisionExtended,
     );
-
-    const allDecisions = [
-      ...insertValues,
-      ...updateValues,
-      ...deleteValues,
-    ].flatMap((item) => item as IRuleDecisionExtended);
 
     if (useCaseConfiguration === EUseCase.EDIT && allDecisions.length > 0) {
       setLinesEditData((prev) => {

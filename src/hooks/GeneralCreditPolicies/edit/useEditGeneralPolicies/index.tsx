@@ -18,7 +18,7 @@ import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/edi
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { mediaQueryTablet } from "@config/environment";
-
+import { editLabels } from "@config/generalCreditPolicies/editGeneralPolicies/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
@@ -26,7 +26,6 @@ import { IUseEditGeneralPolicies } from "@ptypes/hooks/IUseEditGeneralPolicies";
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { useNewDecisions } from "../useNewDecisions";
-import { editLabels } from "@src/config/generalCreditPolicies/editGeneralPolicies/editLabels";
 
 const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const {

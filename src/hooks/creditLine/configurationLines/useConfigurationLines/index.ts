@@ -319,6 +319,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
+    dataType,
   } = getConditionsTraduction(ruleData, language);
 
   const lineNameDecision = formValues.nameAndDescription.nameLine;
@@ -388,6 +389,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         conditionTraduction,
         ruleNameTraduction as string,
         listValuesDecision as IValue,
+        dataType as string,
       );
     });
 
@@ -652,7 +654,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (loadingModify) {
       setLoadingInitial(true);
     } else {
-      setLoadingInitial(false);
+      setTimeout(() => {
+        setLoadingInitial(false);
+      }, 1000);
+      //  setLoadingInitial(false);
       if (borrowerData?.settingRequestId) {
         const normalizeData: ILinesConstructionData = {
           settingRequestId: linesConstructionData.settingRequestId,
@@ -678,6 +683,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
+
+  console.log("🦄", linesConstructionData);
 
   const {
     saveCreditLines,

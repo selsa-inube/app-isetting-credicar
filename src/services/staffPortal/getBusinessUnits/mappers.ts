@@ -5,7 +5,7 @@ const mapBusinessUnitsPortalStaffApiToEntity = (
 ): IBusinessUnitsPortalStaff => {
   const businessUnitData: IBusinessUnitsPortalStaff = {
     publicCode: String(businessUnit.businessUnitPublicCode),
-    languageId: String(businessUnit.languageId),
+    languageId: String(businessUnit.languageiso),
     abbreviatedName: String(businessUnit.abbreviatedName),
     descriptionUse: String(businessUnit.descriptionUse),
     firstMonthOfFiscalYear: String(businessUnit.firstMonthOfFiscalYear),
