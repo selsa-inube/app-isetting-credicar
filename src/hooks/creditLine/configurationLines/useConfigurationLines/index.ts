@@ -654,10 +654,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     if (loadingModify) {
       setLoadingInitial(true);
     } else {
-      setTimeout(() => {
-        setLoadingInitial(false);
-      }, 1000);
-      //  setLoadingInitial(false);
+      setLoadingInitial(false);
       if (borrowerData?.settingRequestId) {
         const normalizeData: ILinesConstructionData = {
           settingRequestId: linesConstructionData.settingRequestId,
@@ -683,8 +680,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       }
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
-
-  console.log("🦄", linesConstructionData);
 
   const {
     saveCreditLines,
