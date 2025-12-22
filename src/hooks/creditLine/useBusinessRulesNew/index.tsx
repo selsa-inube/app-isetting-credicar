@@ -578,6 +578,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setDecisionData(decisionsSorted);
   }, [decisionsSorted]);
 
+  const conditionEmpty = useMemo(() => {
+    return selectedConditionsCSV.length === 0 && decisionsSorted.length === 0;
+  }, [decisionsSorted, selectedConditionsCSV]);
+
+  const dataEmpty = useMemo(() => {
+    return selectedConditionsCSV.length > 0 && decisionsSorted.length === 0;
+  }, [decisionsSorted, selectedConditionsCSV]);
+
   const optionDetailsCreditline =
     option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL;
 
@@ -587,12 +595,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL
       ? newBusinessRulesLabels.NoDecision
       : newBusinessRulesLabels.NoStringAttached;
-
-  const conditionEmpty =
-    selectedConditionsCSV.length === 0 && decisionsSorted.length === 0;
-
-  const dataEmpty =
-    selectedConditionsCSV.length > 0 && decisionsSorted.length === 0;
 
   const iconMessage =
     option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL ? (
@@ -626,6 +628,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     } as any;
   }, [localizedTemplate]);
 
+  const decisionTemplateForBusinessRules =
+    !selectedDecision && selectedConditionsCSV.length === 0
+      ? emptyConditionsTemplate
+      : filteredDecisionTemplate;
+
   return {
     isModalOpen,
     selectedDecision,
@@ -655,7 +662,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     onMultipleChoicesChange,
     removeCondition,
     restoreConditions,
-    emptyConditionsTemplate,
+    decisionTemplateForBusinessRules,
   };
 };
 

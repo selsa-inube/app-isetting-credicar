@@ -23,6 +23,7 @@ const useLineInconstructionData = () => {
         try {
           const data = await getLineUnderConstruction(
             appData.businessManager.publicCode,
+            appData.businessUnit.publicCode,
             ECreditLines.REQUEST_STATUS,
             ECreditLines.CREDIT_LINE_ENTITY,
           );

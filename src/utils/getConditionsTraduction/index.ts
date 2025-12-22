@@ -19,6 +19,8 @@ const getConditionsTraduction = (
     });
   });
 
+  const dataType = data.decisionDataType;
+
   const ruleNameTraduction =
     data.i18n?.[language as keyof typeof data.i18n] ?? data.descriptionUse;
 
@@ -33,6 +35,7 @@ const getConditionsTraduction = (
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
+    dataType,
   };
 };
 

@@ -21,18 +21,17 @@ const transformationDecisions = (
   conditionArray: IConditionTraduction[],
   ruleNameTraduction: string,
   listValuesDecision?: IValue,
+  dataType?: string,
+
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
   const ruleMeta: IRuleMeta = meta?.ruleDict?.[ruleName || ""] ?? {};
   const decisionByRuleArray = payload.decisionsByRule?.[0];
-
   const {
     labelName: ruleLabelName = ruleNameTraduction,
     descriptionUse: ruleDescriptionUse = ruleName,
-    decisionDataType = decisionByRuleArray?.ruleDataType?.toLocaleLowerCase() ??
-      decisionByRuleArray?.decisionDataType?.toLocaleLowerCase() ??
-      ValueDataType.ALPHABETICAL,
+    decisionDataType = dataType?.toLocaleLowerCase(),
     howToSetTheDecision = isRangeObject(decisionByRuleArray?.value)
       ? EValueHowToSetUp.RANGE
       : listValuesDecision?.list && listValuesDecision.list.length > 0
@@ -62,22 +61,21 @@ const transformationDecisions = (
                 c.conditionName,
               );
 
-              const listValues = normalized?.listPossibleValues?.list;
               return {
                 conditionName: c.conditionName,
                 labelName: normalized?.label,
                 descriptionUse: condMeta.descriptionUse ?? c.conditionName,
                 conditionDataType:
-                  condMeta.conditionDataType?.toLocaleLowerCase() ??
                   c.conditionDataType?.toLocaleLowerCase() ??
                   normalized?.conditionDataType?.toLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
-                howToSetTheCondition: isRangeObject(c.value)
+                howToSetTheCondition: isRangeObject(c?.value)
                   ? EValueHowToSetUp.RANGE
-                  : listValues && listValues.length > 0
+                  : normalized?.listPossibleValues?.list &&
+                      normalized.listPossibleValues.list.length > 0
                     ? EValueHowToSetUp.LIST_OF_VALUES
-                    : conditionArray,
+                    : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: normalized?.listPossibleValues ?? [],
