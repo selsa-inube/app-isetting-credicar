@@ -9,6 +9,8 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { portalId } from "@config/portalId";
 import { loadingLabels } from "@config/loadingLabels";
 import { StyledDropdownMenuContainer } from "./styles";
+import React from "react";
+import { IBeforeNavigate } from "@ptypes/creditLines/IBeforeNavigate";
 
 const ConfigurationLines = () => {
   const location = useLocation();
@@ -25,6 +27,10 @@ const ConfigurationLines = () => {
     data,
     option,
   });
+
+  const [beforeDropdownNavigate, setBeforeDropdownNavigate] = React.useState<
+    IBeforeNavigate | undefined
+  >(undefined);
 
   return (
     <Stack direction="column" width="-webkit-fill-available" height="100%">
@@ -58,13 +64,14 @@ const ConfigurationLines = () => {
                 <DropdownMenuContainer
                   defaultOpenId="lineNamesAndDescriptions"
                   groups={groups ?? []}
+                  onBeforeNavigate={beforeDropdownNavigate}
                 />
               </StyledDropdownMenuContainer>
             </Stack>
           </BoxContainer>
 
           <Stack direction="column">
-            <Outlet />
+            <Outlet context={{ setBeforeDropdownNavigate }} />
           </Stack>
         </Grid>
       )}

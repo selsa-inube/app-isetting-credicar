@@ -3,8 +3,14 @@ import { EUseCase } from "@enum/useCase";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { NameAndDescriptionFormUI } from "./interface";
+import { useOutletContext } from "react-router-dom";
+import React from "react";
+import { IOutletCtx } from "@ptypes/creditLines/IOutletCtx";
+import { INavGuard } from "@ptypes/creditLines/INavGuard";
 
 const NameAndDescriptionForm = () => {
+  const { setBeforeDropdownNavigate } = useOutletContext<IOutletCtx>();
+
   const {
     showInfoModal,
     loading,
@@ -33,7 +39,22 @@ const NameAndDescriptionForm = () => {
     nameLineRef,
     handleToggleInfoModal,
     handleOpenModal,
+    beforeDropdownNavigate,
   } = useConfigurationLines({});
+
+  const guardRef = React.useRef(beforeDropdownNavigate);
+
+  React.useEffect(() => {
+    guardRef.current = beforeDropdownNavigate;
+  }, [beforeDropdownNavigate]);
+
+  React.useEffect(() => {
+    const stableGuard: INavGuard = (to) => guardRef.current(to);
+
+    setBeforeDropdownNavigate(() => stableGuard);
+
+    return () => setBeforeDropdownNavigate(undefined);
+  }, [setBeforeDropdownNavigate]);
 
   const { formik, message } = useNameAndDescriptionForm({
     initialValues: formValues.nameAndDescription,
