@@ -46,6 +46,7 @@ import { useModalConfiguration } from "../useModalConfiguration";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
 import { useModalOnSubmit } from "../useModalOnSubmit";
+import { IBeforeNavigate } from "@ptypes/creditLines/IBeforeNavigate";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -754,6 +755,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { title, description, optionCrumb } =
     optionTitleConfiguration(useCaseConfiguration);
 
+  const beforeDropdownNavigate: IBeforeNavigate = async (_to) => {
+    return await handleStep(true);
+  };
+
   return {
     loading,
     initialValues,
@@ -820,6 +825,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setOptionsExcluded,
     handleToggleInfoModal,
     handleOpenModal,
+    beforeDropdownNavigate,
   };
 };
 

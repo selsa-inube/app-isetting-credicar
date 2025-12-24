@@ -21,10 +21,14 @@ import { remunerativeRateLabels } from "@config/creditLines/creditLinesTab/gener
 import { IDecisionTemplateScreen } from "@ptypes/decisions/IDecisionTemplateScreen";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { LineInformation } from "../lineInformation";
+import { useOutletContext } from "react-router-dom";
+import React from "react";
+import { INavGuard } from "@ptypes/creditLines/INavGuard";
+import { IOutletCtx } from "@ptypes/creditLines/IOutletCtx";
 
 const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
   const { templateKey } = props;
-
+  const { setBeforeDropdownNavigate } = useOutletContext<IOutletCtx>();
   const {
     showInfoModal,
     modalData,
@@ -59,8 +63,20 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,
+    beforeDropdownNavigate,
   } = useConfigurationLines({ templateKey });
+  const guardRef = React.useRef(beforeDropdownNavigate);
+  React.useEffect(() => {
+    guardRef.current = beforeDropdownNavigate;
+  }, [beforeDropdownNavigate]);
 
+  React.useEffect(() => {
+    const stableGuard: INavGuard = (to) => guardRef.current(to);
+
+    setBeforeDropdownNavigate(() => stableGuard);
+
+    return () => setBeforeDropdownNavigate(undefined);
+  }, [setBeforeDropdownNavigate]);
   const { appData } = useContext(AuthAndPortalData);
 
   const {
