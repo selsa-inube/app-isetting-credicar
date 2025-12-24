@@ -38,7 +38,6 @@ const transformationDecisions = (
         ? EValueHowToSetUp.LIST_OF_VALUES
         : EValueHowToSetUp.EQUAL,
   } = ruleMeta;
-
   return payload.decisionsByRule
     ? payload.decisionsByRule?.map((decision) => {
         const groupedConditions: Record<string, ICondition[]> = {};
@@ -60,7 +59,6 @@ const transformationDecisions = (
                 conditionArray,
                 c.conditionName,
               );
-
               return {
                 conditionName: c.conditionName,
                 labelName: normalized?.label,
@@ -72,10 +70,7 @@ const transformationDecisions = (
                 value: c.value,
                 howToSetTheCondition: isRangeObject(c?.value)
                   ? EValueHowToSetUp.RANGE
-                  : normalized?.listPossibleValues?.list &&
-                      normalized.listPossibleValues.list.length > 0
-                    ? EValueHowToSetUp.LIST_OF_VALUES
-                    : EValueHowToSetUp.EQUAL,
+                  : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: normalized?.listPossibleValues ?? [],
