@@ -16,6 +16,7 @@ const CreditLines = () => {
     showLinesRequestTab,
     showLinesUnderConstructionTab,
     creditLinesTabs,
+    modalData,
     handleTabChange,
     setShowUnderConstruction,
   } = useCreditLinePage(businessUnitSigla);
@@ -31,6 +32,7 @@ const CreditLines = () => {
       showLinesUnderConstructionTab={showLinesUnderConstructionTab}
       creditLinesTabs={creditLinesTabs}
       setShowUnderConstruction={setShowUnderConstruction}
+      modalData={modalData}
     />
   );
 };

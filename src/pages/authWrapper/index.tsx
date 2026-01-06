@@ -1,12 +1,11 @@
-import { ReactNode } from "react";
 import { IAuthProvider } from "@inube/iauth-react";
+import { useAuthWrapper } from "@hooks/authentication/useAuthWrapper";
 import { enviroment } from "@config/environment";
-
-interface IAuthWrapper {
-  children: ReactNode;
-}
+import { IAuthWrapper } from "@ptypes/IAuthWrapper";
 
 const AuthWrapper = ({ children }: IAuthWrapper) => {
+  useAuthWrapper();
+
   return (
     <IAuthProvider
       originatorId={enviroment.ORIGINATOR_ID}
