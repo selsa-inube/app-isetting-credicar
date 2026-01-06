@@ -13,11 +13,18 @@ const usePortalData = (portalCode: string | null) => {
   const [errorCode, setErrorCode] = useState<number>(0);
 
   useEffect(() => {
+    if (!portalCode) {
+      setHasError(true);
+      setErrorCode(1000);
+      return;
+    }
+    localStorage.setItem("portalCode", encrypt(portalCode));
+  }, [portalCode]);
+
+  useEffect(() => {
     const fetchPortalData = async () => {
       try {
         if (!portalCode) {
-          setHasError(true);
-          setErrorCode(1000);
           return;
         }
 
@@ -36,8 +43,6 @@ const usePortalData = (portalCode: string | null) => {
           setErrorCode(1002);
           return;
         }
-        const encryptedParamValue = encrypt(portalCode);
-        localStorage.setItem("portalCode", encryptedParamValue);
         setPortalData(StaffPortalData[0]);
       } catch (error) {
         console.info(error);
