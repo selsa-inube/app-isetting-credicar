@@ -1,12 +1,16 @@
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { MdOutlineWarningAmber } from "react-icons/md";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { ERequestInProgress } from "@enum/requestInProgress";
+import { EComponentAppearance } from "@enum/appearances";
 import { ECreditLines } from "@enum/creditLines";
 import { mediaQueryTablet } from "@config/environment";
+import { showOptionModal } from "@config/creditLines/showOptionModal";
 import { creditLinesTabsConfig } from "@config/creditLines/tabs";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { ICreditTabsConfig } from "@ptypes/creditLines/ICreditTabsConfig";
@@ -16,10 +20,14 @@ const useCreditLinePage = (businessUnitSigla: string) => {
   const { appData } = useContext(AuthAndPortalData);
   const [showUnderConstruction, setShowUnderConstruction] =
     useState<boolean>(false);
+  const [showDecision, setShowModal] = useState<boolean>(false);
+  const [showModal, setShowDecision] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
-  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   const tabs = creditLinesTabsConfig;
 
@@ -120,6 +128,50 @@ const useCreditLinePage = (businessUnitSigla: string) => {
 
   const smallScreen = useMediaQuery(mediaQueryTablet);
 
+  const handleToggleModal = () => {
+    setShowModal(!showModal);
+    navigate("/");
+  };
+
+  useEffect(() => {
+    const decision = showModal;
+
+    setShowDecision(decision);
+  }, [showModal]);
+
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      icon: <></>,
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
+    };
+
+    if (smallScreen) {
+      return {
+        ...showOptionModal,
+        onCloseModal: handleToggleModal,
+        onClick: handleToggleModal,
+        withCancelButton: false,
+        withIcon: true,
+        icon: <MdOutlineWarningAmber />,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    return initial;
+  };
+
+  const modalData = modal();
+
   return {
     isSelected,
     descriptionOptions,
@@ -129,6 +181,8 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     showLinesUnderConstructionTab,
     loading,
     creditLinesTabs,
+    showDecision,
+    modalData,
     handleTabChange,
     setShowUnderConstruction,
   };

@@ -1,6 +1,8 @@
 import { Stack, Breadcrumbs, Tabs } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { Title } from "@design/data/title";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
 import { crumbsCreditLines } from "@config/creditLines/navigation";
 import { ICreditLinesUI } from "@ptypes/creditLines/ICreditLinesUI";
 import { CreditLinesTab } from "./tabs/creditLinesTab";
@@ -16,6 +18,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
     showCreditLinesTab,
     showRequestsInProgressTab,
     showLinesUnderConstructionTab,
+    modalData,
     setShowUnderConstruction,
     handleTabChange,
   } = props;
@@ -30,31 +33,47 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
           : `${tokens.spacing.s400} ${tokens.spacing.s800}`
       }
     >
-      <Stack gap={tokens.spacing.s300} direction="column">
+      {smallScreen ? (
+        <DecisionModal
+          portalId={portalId}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          onClick={modalData.onClick}
+          onCloseModal={modalData.onCloseModal}
+          withCancelButton={modalData.withCancelButton}
+          icon={modalData.icon}
+          withIcon={modalData.withIcon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
+        />
+      ) : (
         <Stack gap={tokens.spacing.s300} direction="column">
-          <Breadcrumbs crumbs={crumbsCreditLines} />
-          <Title
-            title={descriptionOptions?.publicCode ?? ""}
-            description={descriptionOptions?.description ?? ""}
-            sizeTitle="large"
-          />
-        </Stack>
-
-        <Stack gap={tokens.spacing.s300} direction="column" width="100%">
-          <Tabs
-            tabs={creditLinesTabs}
-            selectedTab={isSelected}
-            onChange={handleTabChange}
-          />
-          {showCreditLinesTab && (
-            <CreditLinesTab
-              setShowUnderConstruction={setShowUnderConstruction}
+          <Stack gap={tokens.spacing.s300} direction="column">
+            <Breadcrumbs crumbs={crumbsCreditLines} />
+            <Title
+              title={descriptionOptions?.publicCode ?? ""}
+              description={descriptionOptions?.description ?? ""}
+              sizeTitle="large"
             />
-          )}
-          {showRequestsInProgressTab && <RequestsInProgressTab />}
-          {showLinesUnderConstructionTab && <LinesUnderConstructionTab />}
+          </Stack>
+
+          <Stack gap={tokens.spacing.s300} direction="column" width="100%">
+            <Tabs
+              tabs={creditLinesTabs}
+              selectedTab={isSelected}
+              onChange={handleTabChange}
+            />
+            {showCreditLinesTab && (
+              <CreditLinesTab
+                setShowUnderConstruction={setShowUnderConstruction}
+              />
+            )}
+            {showRequestsInProgressTab && <RequestsInProgressTab />}
+            {showLinesUnderConstructionTab && <LinesUnderConstructionTab />}
+          </Stack>
         </Stack>
-      </Stack>
+      )}
     </Stack>
   );
 };
