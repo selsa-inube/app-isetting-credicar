@@ -12,6 +12,7 @@ import { formatDateDecision } from "../date/formatDateDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 import { isRangeObject } from "../formatValueOfCondition";
 import { getGroupName } from "../getGroupName";
+import { getGroupNameInitial } from "../getGroupNameInitial";
 
 const generateUUID = (): string => {
   return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -44,7 +45,9 @@ const transformationDecisions = (
         const groupedConditions: Record<string, ICondition[]> = {};
 
         decision.conditionGroups?.forEach((group, index) => {
-          const groupId = group.conditionGroupId ?? getGroupName(index);
+          const groupId =
+            getGroupNameInitial(index, group.conditionGroupId) ??
+            getGroupName(index);
 
           const filteredConditions = group.conditionsThatEstablishesTheDecision
             .filter((c) => {
@@ -80,7 +83,7 @@ const transformationDecisions = (
             });
 
           if (filteredConditions.length > 0) {
-            groupedConditions[groupId as string] = filteredConditions;
+            groupedConditions[groupId] = filteredConditions;
           }
         });
 
