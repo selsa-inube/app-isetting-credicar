@@ -13,6 +13,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
+import { getNextDay } from "@utils/getNextDay";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { conditionsHidden } from "@config/creditLines/configuration/conditionsHidden";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
@@ -30,7 +31,10 @@ const normalizeCondition = (c: any) => ({
   ...c,
 });
 
-const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
+const ensureArrayGroupsDeep = (
+  decision: IRuleDecision,
+  editDecision?: boolean,
+): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
   const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
   const normalizedGroups = Object.fromEntries(
@@ -43,6 +47,9 @@ const ensureArrayGroupsDeep = (decision: IRuleDecision): IRuleDecision => {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...cloned,
+    effectiveFrom: editDecision
+      ? getNextDay(cloned.effectiveFrom as string)
+      : cloned.effectiveFrom,
     conditionGroups: groupsRecordToArrayNew(
       normalizedGroups as Record<string, any[]>,
     ) as any,
@@ -192,10 +199,13 @@ const localizeDecision = (
 const transformDecision = (
   d: IRuleDecision,
   language: "es" | "en" | undefined,
+  editDecision?: boolean,
 ): IRuleDecision => {
-  const loc = ensureArrayGroupsDeep(localizeDecision(d, language));
+  const loc = ensureArrayGroupsDeep(
+    localizeDecision(d, language),
+    editDecision,
+  );
   const withSentences = loc;
-
   const mappedRecord = mapByGroupNew(
     getConditionsByGroupNew(withSentences),
     (condition: {
@@ -402,8 +412,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     } else {
       if (selectedDecision === null) {
         setAddDecision(true);
+        setEditDecision(false);
       } else {
         setAddDecision(false);
+        setEditDecision(true);
       }
       if (remunerativerateRule) {
         setShowLineModal(true);
@@ -465,10 +477,12 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
           mergedGroups as Record<string, any[]>,
         ),
       };
-      /* eslint-disable @typescript-eslint/no-explicit-any */
-      delete (newDecision as any).conditionsThatEstablishesTheDecision;
 
-      const decisionWithSentences = transformDecision(newDecision, language);
+      const decisionWithSentences = transformDecision(
+        newDecision,
+        language,
+        isEditing,
+      );
 
       const today = todayInBogotaISO();
 
@@ -489,7 +503,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       closeModal();
     }
   };
-
   useEffect(() => {
     onDecisionsChange?.(decisions);
   }, [decisions, onDecisionsChange]);
@@ -539,7 +552,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   }, [localizedTemplate, language, selectedIds, removedConditionNames]);
 
   const decisionsSorted = useMemo(() => {
-    return decisions;
+    return [...decisions];
   }, [decisions]);
 
   const renderedListRef = useRef<IRuleDecision[]>([]);
