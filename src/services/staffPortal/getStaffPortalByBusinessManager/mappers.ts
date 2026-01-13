@@ -11,7 +11,7 @@ const mapStaffPortalByBusinessManagerApiToEntity = (
     abbreviatedName: String(resend.abbreviatedName),
     businessManagerCode: String(resend.businessManagerCode),
     businessManagerName: String(resend.businessManagerName),
-
+    clientId: String(resend.clientId),
     descriptionUse: String(resend.descriptionUse),
     publicCode: String(resend.publicCode),
     staffPortalCatalogCode: String(resend.staffPortalCatalogCode),

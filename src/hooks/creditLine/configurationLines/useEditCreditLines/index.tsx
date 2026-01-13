@@ -13,6 +13,7 @@ import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLin
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { useConfiguredDecision } from "../useConfiguredDecision";
+import { getUpdateDecisionsConfig } from "@src/utils/getUpdateDecisionsConfig";
 
 const useEditCreditLines = (props: IUseEditCreditLines) => {
   const {
@@ -132,7 +133,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       linesConstructionData.abbreviatedName as string,
     );
 
-    const newUpdateDecision = getNewInsertDecisionsConfig(
+    const newUpdateDecision = getUpdateDecisionsConfig(
       editDecision,
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],

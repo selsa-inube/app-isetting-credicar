@@ -8,6 +8,7 @@ interface IStaffPortalByBusinessManager {
   publicCode: string;
   staffPortalCatalogCode: string;
   staffPortalId: string;
+  clientId: string;
   url: string;
   brandImageUrl: string;
   optionsByStaffPortalBusinessManager?: IOptionsByStaffPortalBusinessManager[];

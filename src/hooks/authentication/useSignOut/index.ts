@@ -5,7 +5,13 @@ export const useSignOut = () => {
   const { logout } = useIAuth();
 
   const signOut = (redirect?: string) => {
-    localStorage.clear();
+    const keysToRemove = [
+      "businessUnitSigla",
+      "businessUnitsToTheStaff",
+      "useCasesByStaff",
+      "portalCode",
+    ];
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
     if (!redirect) {
       logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
     } else {

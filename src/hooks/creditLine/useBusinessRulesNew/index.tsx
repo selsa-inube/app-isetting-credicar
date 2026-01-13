@@ -14,6 +14,9 @@ import { EUseCase } from "@enum/useCase";
 import { mapDecisionsToRulePayload } from "@utils/mapDecisionsToRulePayload";
 import { ensureUniqueIds } from "@utils/decisions/ensureUniqueIds";
 import { getNextDay } from "@utils/getNextDay";
+import { getAfterDay } from "@utils/getAfterDay";
+import { isDateBeforeSimple } from "@utils/isDateBeforeSimpleDecision";
+import { compareValueDecision } from "@utils/compareValueDecision";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { conditionsHidden } from "@config/creditLines/configuration/conditionsHidden";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
@@ -34,6 +37,7 @@ const normalizeCondition = (c: any) => ({
 const ensureArrayGroupsDeep = (
   decision: IRuleDecision,
   editDecision?: boolean,
+  initialDecision?: IRuleDecision,
 ): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
   const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
@@ -48,7 +52,7 @@ const ensureArrayGroupsDeep = (
   const out: IRuleDecision = {
     ...cloned,
     effectiveFrom: editDecision
-      ? getNextDay(cloned.effectiveFrom as string)
+      ? getNextDay(cloned.effectiveFrom as string, initialDecision)
       : cloned.effectiveFrom,
     conditionGroups: groupsRecordToArrayNew(
       normalizedGroups as Record<string, any[]>,
@@ -200,10 +204,12 @@ const transformDecision = (
   d: IRuleDecision,
   language: "es" | "en" | undefined,
   editDecision?: boolean,
+  initialDecision?: IRuleDecision,
 ): IRuleDecision => {
   const loc = ensureArrayGroupsDeep(
     localizeDecision(d, language),
     editDecision,
+    initialDecision,
   );
   const withSentences = loc;
   const mappedRecord = mapByGroupNew(
@@ -257,16 +263,6 @@ const keyOf = (x: IRuleDecision) =>
 
 const originalName = (name: string) => name?.split(".").pop() || name;
 
-const todayInBogotaISO = () =>
-  new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Bogota",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  })
-    .format(new Date())
-    .replace(/\//g, "-");
-
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
     decisionTemplate,
@@ -285,6 +281,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   } = props;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
+  const [showAlertDateModal, setShowAlertDateModal] = useState<boolean>(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
   const [hydratedFromProps, setHydratedFromProps] = useState(false);
@@ -396,6 +393,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setShowAlertModal(!showAlertModal);
   };
 
+  const handleToggleDateModal = () => {
+    setShowAlertDateModal(!showAlertDateModal);
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDecision(null);
@@ -403,10 +404,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
+    let hasDateError = false;
     const validateValue = decisionsSorted.filter(
       (decision) => decision.value === dataDecision.value,
     );
-
     if (validateValue.length > 0 && selectedDecision === null) {
       setShowAlertModal(true);
     } else {
@@ -471,7 +472,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         ...base,
         decisionId: decisionIdForNew,
         labelName: localizeLabel(base, language),
-        validUntil: "",
         /* eslint-disable @typescript-eslint/no-explicit-any */
         conditionGroups: groupsRecordToArrayNew(
           mergedGroups as Record<string, any[]>,
@@ -482,27 +482,42 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         newDecision,
         language,
         isEditing,
+        compareValueDecision(initialDecisions, newDecision),
       );
-
-      const today = todayInBogotaISO();
 
       setDecisions((prev) => {
         let updatedPrev = prev;
 
         if (isEditing && selectedDecision) {
-          updatedPrev = prev.map((d) =>
-            keyOf(d) === keyOf(selectedDecision)
-              ? { ...d, validUntil: today }
-              : d,
-          );
+          updatedPrev = prev.map((d) => {
+            if (
+              isDateBeforeSimple(
+                decisionWithSentences.effectiveFrom as string,
+                d.effectiveFrom as string,
+              )
+            ) {
+              hasDateError = true;
+              setShowAlertDateModal(true);
+            }
+            return keyOf(d) === keyOf(selectedDecision)
+              ? {
+                  ...d,
+                  validUntil: getAfterDay(
+                    decisionWithSentences.effectiveFrom as string,
+                  ),
+                }
+              : d;
+          });
         }
-
         return [...updatedPrev, decisionWithSentences];
       });
 
-      closeModal();
+      if (!hasDateError) {
+        closeModal();
+      }
     }
   };
+
   useEffect(() => {
     onDecisionsChange?.(decisions);
   }, [decisions, onDecisionsChange]);
@@ -665,6 +680,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     iconMessage,
     iconAppearance,
     conditionEmpty,
+    showAlertDateModal,
+    handleToggleDateModal,
     handleToggleModal,
     setSelectedConditionsCSV,
     setSelectedDecision,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getBusinessManagers } from "@services/staffPortal/getBusinessManager";
+import { storeEncryptedData } from "@utils/storeEncryptedData";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 import { IBusinessManagers } from "@ptypes/staffPortal/IBusinessManagers";
 
@@ -26,6 +27,13 @@ const useBusinessManagers = (
           const newData = await getBusinessManagers(
             portalPublicCode.businessManagerCode,
           );
+
+          storeEncryptedData({
+            originatorId: newData.clientId,
+            originatorCode: newData.publicCode,
+            aplicationName: portalPublicCode.publicCode,
+          });
+
           setBusinessManagersData(newData);
         }
       } catch (error) {
