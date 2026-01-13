@@ -8,6 +8,7 @@ import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
 import { decrypt } from "@utils/crypto/decrypt";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
+import { enviroment } from "@src/config/environment";
 
 const useValidatingLoginInformation = () => {
   const { user, isLoading: isIAuthLoading } = useIAuth();
@@ -73,7 +74,7 @@ const useValidatingLoginInformation = () => {
       identificationDocumentNumber: user.id || "",
     },
     useCasesByStaff: useCasesData ?? [],
-    language: "es",
+    language: enviroment.VITE_LANGUAGE,
   });
   useEffect(() => {
     if (!isIAuthLoading) {
@@ -171,7 +172,7 @@ const useValidatingLoginInformation = () => {
   useEffect(() => {
     setAppData((prev) => ({
       ...prev,
-      language: appData.businessUnit.languageId ?? languageBrowser,
+      language: languageBrowser ?? enviroment.VITE_LANGUAGE,
     }));
   }, [languageBrowser]);
 
