@@ -402,119 +402,150 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setSelectedDecision(null);
   };
 
+  const validateEditionMode: "classic" | "versioned" =
+    option === EUseCase.EDIT ? "versioned" : "classic";
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
     let hasDateError = false;
+
     const validateValue = decisionsSorted.filter(
       (decision) => decision.value === dataDecision.value,
     );
-    if (validateValue.length > 0 && selectedDecision === null) {
+
+    const isDuplicateNewDecision =
+      validateValue.length > 0 && selectedDecision === null;
+
+    if (isDuplicateNewDecision) {
       setShowAlertModal(true);
+      setAddDecision(false);
+      setEditDecision(false);
+      return;
+    }
+
+    const isEditing = selectedDecision !== null;
+
+    if (!isEditing) {
+      setAddDecision(true);
+      setEditDecision(false);
     } else {
-      if (selectedDecision === null) {
-        setAddDecision(true);
-        setEditDecision(false);
-      } else {
-        setAddDecision(false);
-        setEditDecision(true);
-      }
-      if (remunerativerateRule) {
-        setShowLineModal(true);
-      }
+      setAddDecision(false);
+      setEditDecision(true);
+    }
 
-      const isEditing = selectedDecision !== null;
+    if (remunerativerateRule) {
+      setShowLineModal(true);
+    }
 
-      const base = {
-        ...localizedTemplate,
-        ...dataDecision,
-      };
+    const base = {
+      ...localizedTemplate,
+      ...dataDecision,
+    };
 
-      const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
-        {}) as Record<string, unknown>;
-      const dataGroups = (getConditionsByGroupNew(dataDecision) ||
-        {}) as Record<string, unknown>;
+    const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
+      {}) as Record<string, unknown>;
+    const dataGroups = (getConditionsByGroupNew(dataDecision) || {}) as Record<
+      string,
+      unknown
+    >;
 
-      const mergedGroups = Object.fromEntries(
-        Object.entries(tplGroups).map(([group, tplList]) => {
-          const dataList = asArray(dataGroups[group]);
-          /* eslint-disable @typescript-eslint/no-explicit-any */
-          const merged = asArray(tplList).map((tplItem: any) => {
-            const match = dataList.find(
-              (d: any) => d?.conditionName === tplItem?.conditionName,
-            );
-            return normalizeCondition({
-              ...tplItem,
-              labelName: localizeLabel(tplItem, language),
-              value: match?.value ?? tplItem.value,
-              listOfPossibleValues:
-                match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,
-            });
-          });
-          /* eslint-disable @typescript-eslint/no-explicit-any */
-          const finalList = merged.filter((m: any) => {
-            const passesSelected =
-              selectedIds.size === 0 || selectedIds.has(m.conditionName);
-            const notRemoved = !removedConditionNames.has(m.conditionName);
-            return passesSelected && notRemoved;
-          });
-
-          return [group, finalList];
-        }),
-      );
-
-      const usedIds = new Set(decisions.map((d) => String(d.decisionId ?? "")));
-      const decisionIdForNew =
-        base.decisionId && !usedIds.has(base.decisionId)
-          ? base.decisionId
-          : nextDecisionLabel(usedIds);
-
-      const newDecision: IRuleDecision = {
-        ...base,
-        decisionId: decisionIdForNew,
-        labelName: localizeLabel(base, language),
+    const mergedGroups = Object.fromEntries(
+      Object.entries(tplGroups).map(([group, tplList]) => {
+        const dataList = asArray(dataGroups[group]);
         /* eslint-disable @typescript-eslint/no-explicit-any */
-        conditionGroups: groupsRecordToArrayNew(
-          mergedGroups as Record<string, any[]>,
-        ),
-      };
+        const merged = asArray(tplList).map((tplItem: any) => {
+          const match = dataList.find(
+            (d: any) => d?.conditionName === tplItem?.conditionName,
+          );
+          return normalizeCondition({
+            ...tplItem,
+            labelName: localizeLabel(tplItem, language),
+            value: match?.value ?? tplItem.value,
+            listOfPossibleValues:
+              match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,
+          });
+        });
+        /* eslint-disable @typescript-eslint/no-explicit-any */
+        const finalList = merged.filter((m: any) => {
+          const passesSelected =
+            selectedIds.size === 0 || selectedIds.has(m.conditionName);
+          const notRemoved = !removedConditionNames.has(m.conditionName);
+          return passesSelected && notRemoved;
+        });
 
-      const decisionWithSentences = transformDecision(
-        newDecision,
-        language,
-        isEditing,
-        compareValueDecision(initialDecisions, newDecision),
-      );
+        return [group, finalList];
+      }),
+    );
 
-      setDecisions((prev) => {
-        let updatedPrev = prev;
+    const usedIds = new Set(decisions.map((d) => String(d.decisionId ?? "")));
+    const decisionIdForNew =
+      base.decisionId && !usedIds.has(base.decisionId)
+        ? base.decisionId
+        : nextDecisionLabel(usedIds);
 
-        if (isEditing && selectedDecision) {
-          updatedPrev = prev.map((d) => {
+    const newDecision: IRuleDecision = {
+      ...base,
+      decisionId: decisionIdForNew,
+      labelName: localizeLabel(base, language),
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      conditionGroups: groupsRecordToArrayNew(
+        mergedGroups as Record<string, any[]>,
+      ),
+    };
+
+    const decisionWithSentences = transformDecision(
+      newDecision,
+      language,
+      validateEditionMode === "versioned" && isEditing,
+      compareValueDecision(initialDecisions, newDecision),
+    );
+
+    setDecisions((prev) => {
+      if (isEditing && selectedDecision) {
+        if (validateEditionMode === "versioned") {
+          let localHasDateError = false;
+
+          const updatedPrev = prev.map((d) => {
+            if (keyOf(d) !== keyOf(selectedDecision)) {
+              return d;
+            }
+
             if (
               isDateBeforeSimple(
                 decisionWithSentences.effectiveFrom as string,
                 d.effectiveFrom as string,
               )
             ) {
-              hasDateError = true;
+              localHasDateError = true;
               setShowAlertDateModal(true);
+              return d;
             }
-            return keyOf(d) === keyOf(selectedDecision)
-              ? {
-                  ...d,
-                  validUntil: getAfterDay(
-                    decisionWithSentences.effectiveFrom as string,
-                  ),
-                }
-              : d;
-          });
-        }
-        return [...updatedPrev, decisionWithSentences];
-      });
 
-      if (!hasDateError) {
-        closeModal();
+            return {
+              ...d,
+              validUntil: getAfterDay(
+                decisionWithSentences.effectiveFrom as string,
+              ),
+            };
+          });
+
+          if (localHasDateError) {
+            hasDateError = true;
+            return prev;
+          }
+
+          return [...updatedPrev, decisionWithSentences];
+        }
+        return prev.map((d) =>
+          keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+        );
       }
+
+      return [...prev, decisionWithSentences];
+    });
+
+    if (!hasDateError) {
+      closeModal();
     }
   };
 
@@ -682,6 +713,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     iconAppearance,
     conditionEmpty,
     showAlertDateModal,
+    validateEditionMode,
     handleToggleDateModal,
     handleToggleModal,
     setSelectedConditionsCSV,

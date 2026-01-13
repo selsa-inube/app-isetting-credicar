@@ -12,6 +12,7 @@ import { formatDateDecision } from "../date/formatDateDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 import { isRangeObject } from "../formatValueOfCondition";
 import { getGroupName } from "../getGroupName";
+import { geti18nValueDecision } from "../geti18nValueDecision";
 
 const generateUUID = (): string => {
   return `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -39,6 +40,7 @@ const transformationDecisions = (
         ? EValueHowToSetUp.LIST_OF_VALUES
         : EValueHowToSetUp.EQUAL,
   } = ruleMeta;
+
   return payload.decisionsByRule
     ? payload.decisionsByRule?.map((decision) => {
         const groupedConditions: Record<string, ICondition[]> = {};
@@ -100,6 +102,10 @@ const transformationDecisions = (
           howToSetTheDecision,
           value: decision.value,
           effectiveFrom,
+          i18nValue: geti18nValueDecision(
+            decision.value,
+            listValuesDecision?.list as any,
+          ),
           listOfPossibleValues: listValuesDecision ?? [],
           conditionsThatEstablishesTheDecision: groupedConditions,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),

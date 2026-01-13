@@ -6,8 +6,8 @@ import { statusCloseModal } from "@config/status/statusCloseModal";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
 import { operationTypes } from "@config/useCase";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
+import { flowAutomaticMessagesDecision } from "@config/creditLines/generic/flowAutomaticMessages";
 import { requestStepsNames } from "@config/requestStepsNames";
-import { flowAutomaticMessages } from "@config/generalCreditPolicies/generic/flowAutomaticMessages";
 import { requestStepsInitial } from "@config/requestSteps";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IUseRequest } from "@ptypes/hooks/IUseRequest";
@@ -156,23 +156,24 @@ const useRequest = (props: IUseRequest) => {
       if (isStatusCloseModal()) {
         setChangeTab(true);
         addFlag({
-          title: flowAutomaticMessages().errorCreateRequest.title,
-          description: flowAutomaticMessages().errorCreateRequest.description,
-          appearance: flowAutomaticMessages().errorCreateRequest
+          title: flowAutomaticMessagesDecision().errorCreateRequest.title,
+          description:
+            flowAutomaticMessagesDecision().errorCreateRequest.description,
+          appearance: flowAutomaticMessagesDecision().errorCreateRequest
             .appearance as IFlagAppearance,
-          duration: flowAutomaticMessages().errorCreateRequest.duration,
+          duration: flowAutomaticMessagesDecision().errorCreateRequest.duration,
         });
       }
 
       if (isStatusRequestFinished()) {
         addFlag({
-          title: flowAutomaticMessages(operationTypes[useCase])
+          title: flowAutomaticMessagesDecision(operationTypes[useCase])
             .successfulCreateRequest.title,
-          description: flowAutomaticMessages(operationTypes[useCase])
+          description: flowAutomaticMessagesDecision(operationTypes[useCase])
             .successfulCreateRequest.description,
-          appearance: flowAutomaticMessages(operationTypes[useCase])
+          appearance: flowAutomaticMessagesDecision(operationTypes[useCase])
             .successfulCreateRequest.appearance as IFlagAppearance,
-          duration: flowAutomaticMessages(operationTypes[useCase])
+          duration: flowAutomaticMessagesDecision(operationTypes[useCase])
             .successfulCreateRequest.duration,
         });
       }
