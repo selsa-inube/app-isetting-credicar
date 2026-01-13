@@ -37,7 +37,6 @@ const enviroment = {
     .VITE_ISETTING_PERSISTENCE_PROCESS_SERVICE,
   ISAAS_TOKEN_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_ISAAS_TOKEN_QUERY_PROCESS_SERVICE,
-  VITE_LANGUAGE: import.meta.env.VITE_LANGUAGE as string,
   IAUTH_URL: import.meta.env.VITE_IAUTH_URL as string,
   IAUTH_SERVICE_URL: import.meta.env.VITE_IAUTH_SERVICE_URL as string,
   CODE_VERIFIER: import.meta.env.VITE_AUTH_CODE_VERIFIER as string,
