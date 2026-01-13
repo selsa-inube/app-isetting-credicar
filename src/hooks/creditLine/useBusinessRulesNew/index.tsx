@@ -402,6 +402,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setSelectedDecision(null);
   };
 
+  const validateEditionMode: "classic" | "versioned" =
+    option === EUseCase.EDIT ? "versioned" : "classic";
+
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
     let hasDateError = false;
@@ -481,16 +484,16 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       const decisionWithSentences = transformDecision(
         newDecision,
         language,
-        isEditing,
+        validateEditionMode === "versioned" && isEditing,
         compareValueDecision(initialDecisions, newDecision),
       );
 
       setDecisions((prev) => {
         let updatedPrev = prev;
-
         if (isEditing && selectedDecision) {
           updatedPrev = prev.map((d) => {
             if (
+              validateEditionMode === "versioned" &&
               isDateBeforeSimple(
                 decisionWithSentences.effectiveFrom as string,
                 d.effectiveFrom as string,
@@ -499,17 +502,30 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
               hasDateError = true;
               setShowAlertDateModal(true);
             }
-            return keyOf(d) === keyOf(selectedDecision)
-              ? {
-                  ...d,
-                  validUntil: getAfterDay(
-                    decisionWithSentences.effectiveFrom as string,
-                  ),
-                }
-              : d;
+
+            if (keyOf(d) !== keyOf(selectedDecision)) {
+              return d;
+            }
+
+            if (validateEditionMode === "versioned") {
+              return {
+                ...d,
+                validUntil: getAfterDay(
+                  decisionWithSentences.effectiveFrom as string,
+                ),
+              };
+            }
+
+            return decisionWithSentences;
           });
+
+          if (validateEditionMode === "versioned") {
+            updatedPrev = [...updatedPrev, decisionWithSentences];
+          }
+
+          return updatedPrev;
         }
-        return [...updatedPrev, decisionWithSentences];
+        return [...prev, decisionWithSentences];
       });
 
       if (!hasDateError) {
@@ -517,7 +533,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       }
     }
   };
-
   useEffect(() => {
     onDecisionsChange?.(decisions);
   }, [decisions, onDecisionsChange]);
@@ -682,6 +697,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     iconAppearance,
     conditionEmpty,
     showAlertDateModal,
+    validateEditionMode,
     handleToggleDateModal,
     handleToggleModal,
     setSelectedConditionsCSV,

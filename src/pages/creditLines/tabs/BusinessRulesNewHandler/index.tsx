@@ -62,6 +62,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     submitForm,
     handleToggleModal,
     handleToggleDateModal,
+    validateEditionMode,
     decisionsSorted,
     decisionTemplateForBusinessRules,
   } = useBusinessRulesNew({
@@ -90,6 +91,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     handleToggleDateModal,
     handleToggleModal,
   });
+
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
@@ -143,6 +145,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             handleSubmitForm={submitForm}
             isModalOpen={isModalOpen}
             loading={!!loading}
+            editionMode={validateEditionMode}
             onRemoveCondition={removeCondition}
             onRestoreConditions={restoreConditions}
             selectedDecision={selectedDecision}
