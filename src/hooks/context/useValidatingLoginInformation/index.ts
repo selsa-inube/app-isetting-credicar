@@ -4,11 +4,11 @@ import { useIAuth } from "@inube/iauth-react";
 import { usePortalData } from "@hooks/staffPortal/usePortalData";
 import { useLanguage } from "@hooks/useLanguage";
 import { useBusinessManagers } from "@hooks/staffPortal/useBusinessManagers";
+import { enviroment } from "@config/environment";
 
 import { decrypt } from "@utils/crypto/decrypt";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
-import { enviroment } from "@src/config/environment";
 
 const useValidatingLoginInformation = () => {
   const { user, isLoading: isIAuthLoading } = useIAuth();

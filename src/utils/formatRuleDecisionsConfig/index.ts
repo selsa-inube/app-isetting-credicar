@@ -4,6 +4,7 @@ import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
+import { geti18nValueDecision } from "../geti18nValueDecision";
 
 const formatRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
@@ -18,6 +19,10 @@ const formatRuleDecisionsConfig = (
         decision.effectiveFrom &&
         formatDateDecision(String(decision.effectiveFrom)),
       value: decision.value,
+      i18nValue: geti18nValueDecision(
+        decision.value,
+        decision.listOfPossibleValues?.list as any,
+      ),
     };
 
     if (decision.validUntil) {
