@@ -277,7 +277,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         useCaseName: ECreditLines.USE_CASE_EDIT,
         configurationRequestData: {
           ...dataWithoutId,
-          modifyJustification: `${editCreditLabels.removalJustification} ${appData.user.userAccount}`,
+          modifyJustification: `${editCreditLabels.removalJustification} ${dataWithoutId.abbreviatedName}`,
         },
       });
     }

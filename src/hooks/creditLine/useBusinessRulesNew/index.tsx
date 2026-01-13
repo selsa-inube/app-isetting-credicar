@@ -574,6 +574,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   renderedListRef.current = decisionsSorted;
 
   const deleteDecision = (id: string) => {
+    setDeleteDecision(true);
     setDecisions((prev) => prev.filter((d) => d.decisionId !== id));
   };
 

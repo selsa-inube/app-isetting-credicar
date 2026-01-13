@@ -21,27 +21,21 @@ const useSave = (props: IUseSave) => {
   const { appData } = useContext(AuthAndPortalData);
   const isEdit = useCaseConfiguration === EUseCase.EDIT;
 
-  const addResult = useSaveCreditlines({
-    useCase: useCaseConfiguration as EUseCase,
+  const commonParams = {
     businessUnits: appData.businessUnit.publicCode,
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
-    data: data || ({} as IModifyConstructionResponse),
     setSendData: setShowRequestProcessModal,
-    setShowModal: setShowSaveModal,
-  });
-
-  const editResult = useSaveCreditlinesTab({
-    useCase: EUseCase.EDIT,
-    businessUnits: appData.businessUnit.publicCode,
-    userAccount: appData.user.userAccount,
-    sendData: showRequestProcessModal,
-    data: editData as ISaveDataRequest,
-    setSendData: setShowRequestProcessModal,
-    setShowModal,
-  });
+  };
 
   if (isEdit) {
+    const editResult = useSaveCreditlinesTab({
+      ...commonParams,
+      useCase: EUseCase.EDIT,
+      data: editData as ISaveDataRequest,
+      setShowModal,
+    });
+
     return {
       saveCreditLines: editResult.saveCreditLines,
       requestSteps: editResult.requestSteps,
@@ -58,6 +52,13 @@ const useSave = (props: IUseSave) => {
       handleClosePendingModal: editResult.handleClosePendingModal,
     };
   }
+
+  const addResult = useSaveCreditlines({
+    ...commonParams,
+    useCase: useCaseConfiguration as EUseCase,
+    data: data || ({} as IModifyConstructionResponse),
+    setShowModal: setShowSaveModal,
+  });
 
   return {
     saveCreditLines: addResult.saveCreditLines,
