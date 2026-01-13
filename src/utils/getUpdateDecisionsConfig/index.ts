@@ -22,7 +22,7 @@ const getUpdateDecisionsConfig = (
           const conditionGroups = condition.conditionGroups
             ? condition.conditionGroups.map((item) => ({
                 conditionGroupId: item.conditionGroupId,
-                transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
+                transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
                 conditionsThatEstablishesTheDecision: [
                   ...(item.conditionsThatEstablishesTheDecision
                     ?.filter((condition) => condition.value !== undefined)
