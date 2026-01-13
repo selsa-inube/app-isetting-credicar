@@ -1,7 +1,6 @@
 import { useContext, useEffect } from "react";
 
 import { IUser } from "@ptypes/app.types";
-import { validateAndTrimString } from "@utils/validateAndTrimString";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useAuthRedirect } from "../authentication/useAuthRedirect";
 import { usePortalData } from "../staffPortal/usePortalData";
@@ -28,7 +27,7 @@ const useAppData = (
       setAppData((prev) => ({
         ...prev,
         user: {
-          userAccount: validateAndTrimString(user.email),
+          userAccount: user.email,
           userName: user.name,
         },
       }));

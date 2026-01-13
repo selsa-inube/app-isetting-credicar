@@ -13,7 +13,7 @@ const mapBusinessManagerApiToEntity = (
     urlBrand: String(businessManager.urlBrand),
     urlLogo: String(businessManager.urlLogo),
     customerId: String(businessManager.customerId),
-    clientId: encrypt(String(businessManager.clientId)),
+    clientId: String(businessManager.clientId),
     clientSecret: encrypt(String(businessManager.clientSecret)),
   };
   return business;

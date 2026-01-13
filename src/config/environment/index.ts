@@ -38,14 +38,11 @@ const enviroment = {
   ISAAS_TOKEN_QUERY_PROCESS_SERVICE: import.meta.env
     .VITE_ISAAS_TOKEN_QUERY_PROCESS_SERVICE,
   VITE_LANGUAGE: import.meta.env.VITE_LANGUAGE as string,
-  ORIGINATOR_ID: import.meta.env.VITE_ORIGINATOR_ID as string,
   IAUTH_URL: import.meta.env.VITE_IAUTH_URL as string,
   IAUTH_SERVICE_URL: import.meta.env.VITE_IAUTH_SERVICE_URL as string,
   CODE_VERIFIER: import.meta.env.VITE_AUTH_CODE_VERIFIER as string,
   CODE_CHALLENGE: import.meta.env.VITE_AUTH_CODE_CHALLENGE as string,
   STATE: import.meta.env.VITE_AUTH_STATE as string,
-  APPLICATION_NAME: import.meta.env.VITE_APPLICATION_NAME as string,
-  ORIGINATOR_CODE: import.meta.env.VITE_ORIGINATOR_CODE as string,
 };
 
 export {
