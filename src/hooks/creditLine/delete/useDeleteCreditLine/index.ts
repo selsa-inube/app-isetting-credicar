@@ -47,7 +47,7 @@ const useDeleteCreditLine = (props: IUseDeletePayroll) => {
       useCaseName: ECreditLines.USE_CASE_DELETE,
       configurationRequestData: {
         ...data,
-        removalJustification: `${deleteCreditLabels.removalJustification} ${appData.user.userAccount}`,
+        removalJustification: `${deleteCreditLabels.removalJustification} ${data.id}`,
       },
     });
     setShowRequestProcessModal(true);

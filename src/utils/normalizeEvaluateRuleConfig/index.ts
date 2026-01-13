@@ -1,3 +1,4 @@
+import { ECreditLines } from "@enum/creditLines";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 
@@ -18,13 +19,17 @@ const normalizeEvaluateRuleConfig = (
       conditionGroups: decision.conditionGroups?.map((condition) => ({
         conditionGroupId: condition.conditionGroupId,
         conditionsThatEstablishesTheDecision:
-          condition.conditionsThatEstablishesTheDecision?.map((cond) => ({
-            conditionDataType: cond.conditionDataType,
-            conditionName: cond.conditionName,
-            howToSetTheCondition: cond.howToSetTheCondition,
-            value: cond.value,
-            timeUnit: cond.timeUnit,
-          })),
+          condition.conditionsThatEstablishesTheDecision
+            ?.filter(
+              (cond) => cond.conditionName !== ECreditLines.CREDIT_LINE_RULE,
+            )
+            ?.map((cond) => ({
+              conditionDataType: cond.conditionDataType,
+              conditionName: cond.conditionName,
+              howToSetTheCondition: cond.howToSetTheCondition,
+              value: cond.value,
+              timeUnit: cond.timeUnit,
+            })),
       })),
     })),
     ruleName: item.ruleName,

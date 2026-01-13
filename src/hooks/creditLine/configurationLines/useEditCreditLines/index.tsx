@@ -6,6 +6,7 @@ import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
 import { transformRuleStructure } from "@utils/transformRuleStructure";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
+import { getUpdateDecisionsConfig } from "@utils/getUpdateDecisionsConfig";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { rulesExcludedByEvaluate } from "@config/creditLines/configuration/rulesExcludedByEvaluate";
@@ -13,7 +14,6 @@ import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLin
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { useConfiguredDecision } from "../useConfiguredDecision";
-import { getUpdateDecisionsConfig } from "@src/utils/getUpdateDecisionsConfig";
 
 const useEditCreditLines = (props: IUseEditCreditLines) => {
   const {

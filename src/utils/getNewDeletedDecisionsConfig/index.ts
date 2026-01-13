@@ -16,9 +16,9 @@ const getNewDeletedDecisionsConfig = (
     return prevRef
       .filter((decision) => !findDecision(newDecision, decision))
       .map((decision) => {
-        const decisionsByRule = decision.decisionsByRule?.map((condition) => {
-          const conditionGroups = condition.conditionGroups
-            ? condition.conditionGroups.map((item) => ({
+        const decisionsByRule = decision.decisionsByRule?.map((decision) => {
+          const conditionGroups = decision.conditionGroups
+            ? decision.conditionGroups.map((item) => ({
                 conditionGroupId:
                   item.conditionGroupId ?? item.ConditionGroupId,
                 transactionOperation: ETransactionOperation.DELETE,
@@ -36,18 +36,15 @@ const getNewDeletedDecisionsConfig = (
                   ) as IConditionsTheDecision[],
               }))
             : undefined;
-          const validUntil = condition.validUntil
-            ? formatDateDecision(condition.validUntil as string)
+          const validUntil = decision.validUntil
+            ? formatDateDecision(decision.validUntil as string)
             : undefined;
-
           return {
-            effectiveFrom: formatDateDecision(
-              condition.effectiveFrom as string,
-            ),
+            effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
             validUntil: validUntil,
-            value: condition.value,
+            value: decision.value,
             transactionOperation: ETransactionOperation.DELETE,
-            decisionId: condition.decisionId,
+            decisionId: decision.decisionId,
             conditionGroups: conditionGroups,
           };
         });
