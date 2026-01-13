@@ -1,13 +1,8 @@
-import { IRuleDecision } from "@isettingkit/input";
 import { formatDateDecision } from "../formatDateDecision";
 
-const getNextDay = (dateString: string, initial?: IRuleDecision): string => {
+const getAfterDay = (dateString: string): string => {
   const { isValidDateFormat, formatDate } = formatDateDecision();
   if (!isValidDateFormat(dateString)) {
-    return dateString;
-  }
-
-  if (!initial || initial.effectiveFrom !== dateString) {
     return dateString;
   }
 
@@ -19,9 +14,9 @@ const getNextDay = (dateString: string, initial?: IRuleDecision): string => {
     return dateString;
   }
 
-  date.setDate(date.getDate() + 1);
+  date.setDate(date.getDate() - 1);
 
   return formatDate(date);
 };
 
-export { getNextDay };
+export { getAfterDay };

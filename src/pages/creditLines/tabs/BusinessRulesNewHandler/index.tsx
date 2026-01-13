@@ -52,6 +52,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     showAlertModal,
     iconMessage,
     iconAppearance,
+    showAlertDateModal,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -60,6 +61,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     restoreConditions,
     submitForm,
     handleToggleModal,
+    handleToggleDateModal,
     decisionsSorted,
     decisionTemplateForBusinessRules,
   } = useBusinessRulesNew({
@@ -84,6 +86,8 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   });
   const { alertModal, showDecision } = useAlertDecisionModal({
     showAlertModal,
+    showAlertDateModal,
+    handleToggleDateModal,
     handleToggleModal,
   });
   return (
