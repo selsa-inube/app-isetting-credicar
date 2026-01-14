@@ -38,7 +38,7 @@ const formatRuleDecisionsConfig = (
 
     decisionsByRule.conditionGroups = Object.entries(groups)
       .map(([groupKey, rawList]) => {
-        const items = asArray(rawList).filter((item) => !(item as any)?.hidden);
+        const items = asArray(rawList).filter((item) => !item?.hidden);
         const conditionGroup: any = {
           conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
             ...condition,
