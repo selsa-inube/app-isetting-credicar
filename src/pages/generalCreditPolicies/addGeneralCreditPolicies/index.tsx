@@ -67,6 +67,7 @@ const AddGenCreditPolicies = () => {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
+    token: appData.token,
   });
 
   const { modalData, showDecision } = useModalAddGeneral({

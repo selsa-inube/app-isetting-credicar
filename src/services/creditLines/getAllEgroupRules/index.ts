@@ -7,11 +7,13 @@ import { mapAllEgroupRulesToEntities } from "./mappers/mapAllEgroupRulesToEntiti
 
 const getAllEgroupRules = async (
   businessUnits: string,
+  token: string,
 ): Promise<IAllEgroupRuleType[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetAllEnumEgroupRuleType",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: IEgroupRuleType = await getWithRetries<IEgroupRuleType>(

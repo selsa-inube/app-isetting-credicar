@@ -11,7 +11,11 @@ import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPor
 import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 
 const useValidatingLoginInformation = () => {
-  const { user, isLoading: isIAuthLoading } = useIAuth();
+  const {
+    user,
+    isLoading: isIAuthLoading,
+    getAccessTokenSilently,
+  } = useIAuth();
   const portalCode = decrypt(localStorage.getItem("portalCode") ?? "");
   const { portalData } = usePortalData(portalCode);
   const { businessManagersData } = useBusinessManagers(portalData);
@@ -75,6 +79,7 @@ const useValidatingLoginInformation = () => {
     },
     useCasesByStaff: useCasesData ?? [],
     language: enviroment.VITE_LANGUAGE,
+    token: "",
   });
   useEffect(() => {
     if (!isIAuthLoading) {
@@ -175,6 +180,21 @@ const useValidatingLoginInformation = () => {
       language: languageBrowser ?? enviroment.VITE_LANGUAGE,
     }));
   }, [languageBrowser]);
+
+  useEffect(() => {
+    const obtenerDatos = async () => {
+      try {
+        const tokenData = await getAccessTokenSilently();
+        setAppData((prev) => ({
+          ...prev,
+          token: tokenData,
+        }));
+      } catch (error) {
+        console.error("Error Token:", error);
+      }
+    };
+    obtenerDatos();
+  }, [getAccessTokenSilently]);
 
   const authAndPortalDataContainer = useMemo(
     () => ({

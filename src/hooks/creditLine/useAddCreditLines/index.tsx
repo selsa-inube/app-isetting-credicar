@@ -54,6 +54,7 @@ const useAddCreditlines = (props: IUseAddCreditlines) => {
       const result = await postAddRequestInConstruction(
         appData.user.userAccount,
         data,
+        appData.token,
       );
       setSaveLine(result);
       setShowLineInitiatedModal(!showLineInitiatedModal);

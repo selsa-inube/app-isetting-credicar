@@ -70,6 +70,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const { enumData: type } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EMoneyDestination.DESTINATION_TYPE,
+    token: appData.token,
   });
   const typeDestinationOptions: IServerDomain[] = type.map(
     (item: IEnumerators) => {

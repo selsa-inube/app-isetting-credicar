@@ -9,11 +9,13 @@ import { mapGetConfiguredEntities } from "./mappers";
 const postGetConfiguredDecisions = async (
   businessUnits: string,
   rulesData: IEvaluateRuleRequest,
+  token: string,
 ): Promise<IConfiguredDecisions[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetConfiguredDecisions",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
 

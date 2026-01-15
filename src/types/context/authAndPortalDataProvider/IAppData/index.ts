@@ -10,6 +10,7 @@ interface IAppData {
   user: IUser;
   useCasesByStaff: string[];
   language: string;
+  token: string;
 }
 
 export type { IAppData };

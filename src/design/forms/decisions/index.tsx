@@ -75,6 +75,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
     ruleCatalog,
     catalogAction: capitalizeText(ruleCatalog),
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const enumeratorsRules = ruleData as unknown as IRuleDecisionExtended;

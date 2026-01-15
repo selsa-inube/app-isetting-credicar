@@ -8,12 +8,14 @@ const patchEditGeneralPolicies = async (
   businessUnit: string,
   user: string,
   data: IRequestGeneralPol,
+  token: string,
 ): Promise<IRequestGeneralPol> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "ModifyGeneralPortfolioPolicies",
       "X-Business-Unit": businessUnit,
       "X-User-Name": user,
+      Authorization: token,
     },
   };
 

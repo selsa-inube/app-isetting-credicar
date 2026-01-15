@@ -30,7 +30,10 @@ const CreditLinesTab = (props: ICreditLinesTab) => {
     handleSearchCreditLines,
     handleToggleInfoModal,
     setEntryDeleted,
-  } = useCreditLinesTab({ businessUnits: appData.businessUnit.publicCode });
+  } = useCreditLinesTab({
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
 
   const pageLength = usePageLength();
 

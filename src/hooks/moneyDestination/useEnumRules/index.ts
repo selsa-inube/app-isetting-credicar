@@ -10,7 +10,8 @@ import { IDecisionData } from "@ptypes/decisions/IDecision";
 import { IServerDomain } from "@ptypes/IServerDomain";
 
 const useEnumRules = (props: IUseEnumRules) => {
-  const { enumDestination, ruleCatalog, catalogAction, businessUnits } = props;
+  const { enumDestination, ruleCatalog, catalogAction, businessUnits, token } =
+    props;
   const { appData } = useContext(AuthAndPortalData);
   const [enumRuleData, setEnumRuleData] = useState<IDecisionData>(
     {} as IDecisionData,
@@ -32,6 +33,7 @@ const useEnumRules = (props: IUseEnumRules) => {
           ruleCatalog,
           catalogAction,
           businessUnits,
+          token,
         );
         setEnumRuleData(data);
       } catch (error) {
@@ -51,6 +53,7 @@ const useEnumRules = (props: IUseEnumRules) => {
         const data = await getListPossibleValues(
           businessUnits,
           pathListPossibleValues,
+          token,
         );
         return data.map((item) => ({
           id: item.code,

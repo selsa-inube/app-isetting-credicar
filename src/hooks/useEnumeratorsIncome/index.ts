@@ -5,7 +5,7 @@ import { getEnumeratorsIncome } from "@services/enums/getEnumeratorsIncome";
 import { IUseEnumeratorsIncome } from "@ptypes/hooks/IUseEnumeratorsIncome";
 
 const useEnumeratorsIncome = (props: IUseEnumeratorsIncome) => {
-  const { businessUnits } = props;
+  const { businessUnits, token } = props;
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
   );
@@ -14,7 +14,7 @@ const useEnumeratorsIncome = (props: IUseEnumeratorsIncome) => {
   useEffect(() => {
     const fetchEnumData = async () => {
       try {
-        const data = await getEnumeratorsIncome(businessUnits);
+        const data = await getEnumeratorsIncome(businessUnits, token);
         setEnumData(data);
       } catch (error) {
         console.info(error);

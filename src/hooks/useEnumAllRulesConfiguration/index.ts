@@ -25,6 +25,7 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
             ruleCatalog,
             catalogAction,
             appData.businessUnit.publicCode,
+            appData.token,
           );
           setEnumRuleData(data);
         } catch (error) {

@@ -5,7 +5,7 @@ import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseEnumeratorsIsaas } from "@ptypes/hooks/IUseEnumeratorsIsaas";
 
 const useEnumeratorsIsaas = (props: IUseEnumeratorsIsaas) => {
-  const { enumIsaas } = props;
+  const { enumIsaas, token } = props;
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
   );
@@ -17,6 +17,7 @@ const useEnumeratorsIsaas = (props: IUseEnumeratorsIsaas) => {
         const data = await getEnumeratorsIsaas(
           enumIsaas,
           EPayrollAgreement.COUNTRY_IDENTIFICATION,
+          token,
         );
         setEnumData(data);
       } catch (error) {

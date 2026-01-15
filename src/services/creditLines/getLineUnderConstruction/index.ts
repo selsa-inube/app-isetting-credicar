@@ -10,10 +10,12 @@ const getLineUnderConstruction = async (
   businessUnitcode: string,
   requestStatus: string,
   entity: string,
+  token: string,
 ): Promise<ILineUnderConstructionData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllConfigurationRequest",
+      Authorization: token,
     },
   };
 

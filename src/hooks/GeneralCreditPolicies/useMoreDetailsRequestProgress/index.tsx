@@ -9,11 +9,11 @@ import { EGeneralPolicies } from "@enum/generalPolicies";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
 import { EBooleanText } from "@enum/booleanText";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
-import { IEntry } from "@ptypes/design/table/IEntry";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
+import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
@@ -31,6 +31,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: ECreditLines.CATALOG_ACTION,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const { ruleData: ruleIncomePortfolio } = useEnumRules({
@@ -38,6 +39,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: ECreditLines.CATALOG_ACTION,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const { ruleData: ruleMinimum } = useEnumRules({
@@ -45,6 +47,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: ECreditLines.CATALOG_ACTION,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const { conditionTraduction: conditionContribution } =

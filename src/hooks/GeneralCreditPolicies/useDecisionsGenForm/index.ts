@@ -58,6 +58,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const { enumData: methods } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EGeneralPolicies.METHODS,
+    token: appData.token,
   });
   const methodsOptions: IServerDomain[] = methods
     .filter((entry) => generalMethods.includes(entry.code))

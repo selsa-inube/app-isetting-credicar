@@ -19,6 +19,7 @@ const RenderCompanyVerification = (props: IRenderCompanyVerification) => {
   const isCompanySelected = values.companySelected !== "addCompany";
   const { enumData: typeIdentification } = useEnumeratorsIsaas({
     enumIsaas: ECyclesPayroll.TYPE_IDENTIFICATION_COMPANY,
+    token: appData.token,
   });
   const value = `${normalizeDestination(typeIdentification, values.companyTypeIdent ?? "")?.i18n?.[appData.language as ILanguage]} - ${values.companyNumberIdent} - ${values.companyCountry}`;
   return (

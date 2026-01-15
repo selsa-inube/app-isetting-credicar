@@ -6,11 +6,13 @@ import { mapMoneyDestinationToEntities } from "./mappers/mapDestinationToEntitie
 
 const getMoneyDestinationData = async (
   businessUnits: string,
+  token: string,
 ): Promise<IMoneyDestinationData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllMoneyDestination",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: IMoneyDestinationData[] = await getWithRetries<

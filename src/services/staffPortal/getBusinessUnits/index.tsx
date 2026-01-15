@@ -7,10 +7,12 @@ import { mapBusinessUnitsPortalStaffToEntities } from "./mappers";
 const getBusinessUnitsPortalStaff = async (
   portalPublicCode: string,
   userAccount: string,
+  token: string,
 ): Promise<IBusinessUnitsPortalStaff[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchBusinessUnitsForAnOfficer",
+      Authorization: token,
     },
   };
   const data: IBusinessUnitsPortalStaff[] = await getWithRetries<

@@ -93,6 +93,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const { enumData: months } = useEnumerators({
     enumDestination: ECyclesPayroll.MONTHS,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
   const monthOptions = optionsFromEnumI18n(
     appData.language as ILanguage,
@@ -103,6 +104,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const { enumData } = useEnumerators({
     enumDestination: ECyclesPayroll.EXTRAORDINARY_TYPE,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const typePaymentOptions = optionsFromEnumerators(enumData);
@@ -110,6 +112,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const { enumData: laborRegulator } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.COLOMBIAN_LABOR_LEGAL,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const laborRegulatorOptions = optionsEnumCodeI18n(

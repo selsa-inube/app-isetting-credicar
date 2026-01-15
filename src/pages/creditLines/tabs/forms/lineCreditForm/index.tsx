@@ -61,6 +61,7 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
   const { valuesData, loading: loadingOptions } = useEnumsPossibleValues({
     businessUnit: appData.businessUnit.publicCode,
     path: EPathListOfPossibleValues.MONEY_DESTINATION,
+    token: appData.token,
   });
 
   const { message, loadingData, showInfo, handleMove } =

@@ -8,12 +8,14 @@ const postAddGeneralPolicies = async (
   businessUnit: string,
   user: string,
   data: IRequestGeneralPol,
+  token: string,
 ): Promise<IRequestGeneralPol> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "AddGeneralPortfolioPolicess",
       "X-Business-Unit": businessUnit,
       "X-User-Name": user,
+      Authorization: token,
     },
   };
 

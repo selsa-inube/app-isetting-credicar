@@ -17,6 +17,7 @@ const Delete = (props: ICancel) => {
       userAccount: appData.user.userAccount,
       setEntryCanceled,
       inConstruction: true,
+      token: appData.token,
     });
 
   return (

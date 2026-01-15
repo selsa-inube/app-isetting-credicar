@@ -4,6 +4,7 @@ interface IUseCaseForStaff {
   businessUnit: string;
   userAccount: string;
   businessManagerCode: string;
+  token: string;
 }
 
 export type { IUseCaseForStaff };

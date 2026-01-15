@@ -27,7 +27,10 @@ const useGroupRules = (props: IUseGroupRules) => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await getAllEgroupRules(appData.businessUnit.publicCode);
+        const data = await getAllEgroupRules(
+          appData.businessUnit.publicCode,
+          appData.token,
+        );
         setGroupRules(data);
       } catch (error) {
         console.info(error);

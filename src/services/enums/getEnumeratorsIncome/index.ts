@@ -7,11 +7,13 @@ import { IEnumeratorsIncome } from "@ptypes/hooks/IEnumeratorsIncome";
 
 const getEnumeratorsIncome = async (
   businessUnits: string,
+  token: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetAllEnumsIncomeType",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: IEnumeratorsIncome = await getWithRetries<IEnumeratorsIncome>(

@@ -13,7 +13,10 @@ const useCreditLine = () => {
   useEffect(() => {
     const fetchCreditLineData = async () => {
       try {
-        const data = await getLineOfCreditData(appData.businessUnit.publicCode);
+        const data = await getLineOfCreditData(
+          appData.businessUnit.publicCode,
+          appData.token,
+        );
         setCreditLineData(data);
       } catch (error) {
         console.info(error);

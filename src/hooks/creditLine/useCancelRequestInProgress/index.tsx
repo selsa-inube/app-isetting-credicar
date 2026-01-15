@@ -29,6 +29,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     useCaseCancel,
     setEntryCanceled,
     inConstruction = false,
+    token,
   } = props;
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -67,7 +68,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   const fetchCancelRequestData = async (data: ICancelRequest) => {
     setLoading(true);
     try {
-      await cancelRequestInProgress(businessUnit, data);
+      await cancelRequestInProgress(businessUnit, data, token);
       setEntryCanceled(data.settingRequestId);
       setShowModal(false);
       addFlag({

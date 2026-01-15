@@ -6,10 +6,12 @@ import { mapBusinessManagerApiToEntity } from "./mappers";
 
 const getBusinessManagers = async (
   publicCode: string,
+  token: string,
 ): Promise<IBusinessManagers> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllBusinessManager",
+      Authorization: token,
     },
   };
 

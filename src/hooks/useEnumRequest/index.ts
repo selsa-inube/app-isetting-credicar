@@ -5,13 +5,17 @@ import { getEnumeratorsRequest } from "@services/requestInProgress/getEnumerator
 import { IUseEnumRequest } from "@ptypes/hooks/IUseEnumRequest";
 
 const useEnumRequest = (props: IUseEnumRequest) => {
-  const { businessUnits, enumerator } = props;
+  const { businessUnits, enumerator, token } = props;
   const [enumsRequests, setEnumsRequests] = useState<IEnumerators[]>([]);
 
   useEffect(() => {
     const fetchEnumsData = async () => {
       try {
-        const data = await getEnumeratorsRequest(enumerator, businessUnits);
+        const data = await getEnumeratorsRequest(
+          enumerator,
+          businessUnits,
+          token,
+        );
         setEnumsRequests(data);
       } catch (error) {
         console.info(error);

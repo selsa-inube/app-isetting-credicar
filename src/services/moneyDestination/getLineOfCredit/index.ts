@@ -6,11 +6,13 @@ import { mapCreditLineToEntities } from "./mappers/mapCreditLineToEntities";
 
 const getLineOfCreditData = async (
   businessUnits: string,
+  token: string,
 ): Promise<ICreditLineData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllLineOfCredit",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: ICreditLineData[] = await getWithRetries<ICreditLineData[]>(

@@ -6,6 +6,7 @@ import { mapStaffPortalByBusinessManagerApiToEntities } from "./mappers";
 
 const staffPortalByBusinessManager = async (
   portalCode: string,
+  token: string,
 ): Promise<IStaffPortalByBusinessManager[]> => {
   const queryParams = new URLSearchParams({
     staffPortalId: portalCode,
@@ -13,6 +14,7 @@ const staffPortalByBusinessManager = async (
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllStaffPortalsByBusinessManager",
+      Authorization: token,
     },
   };
   const data: IStaffPortalByBusinessManager[] = await getWithRetries<

@@ -188,6 +188,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
     setIsUpdated,
+    token: appData.token,
   });
 
   const handleToggleInfoModal = () => {
@@ -313,6 +314,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: capitalizeText(ECreditLines.RULE_CATALOG),
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const {
@@ -542,6 +544,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
             })) as IRules[],
           },
           appData.businessUnit.publicCode,
+          appData.token,
         );
         setUnconfiguredRules(result);
 

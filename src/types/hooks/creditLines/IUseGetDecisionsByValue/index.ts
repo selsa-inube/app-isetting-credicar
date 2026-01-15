@@ -4,6 +4,7 @@ interface IUseGetDecisionsByValue {
   conditionName: string;
   businessUnit: string;
   useCase: string;
+  token: string;
 }
 
 export type { IUseGetDecisionsByValue };

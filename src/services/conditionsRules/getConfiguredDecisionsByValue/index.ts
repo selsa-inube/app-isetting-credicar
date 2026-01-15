@@ -11,11 +11,13 @@ const getConfiguredDecisionsByValue = async (
   decisionValue: string,
   conditionName: string,
   businessUnit: string,
+  token: string,
 ): Promise<IConfiguredDecisions[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": `GetConfiguredDecisionsByDecisionValue`,
       "X-Business-unit": businessUnit,
+      Authorization: token,
     },
   };
 

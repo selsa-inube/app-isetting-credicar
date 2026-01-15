@@ -8,11 +8,13 @@ import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 const getEnumeratorsRequest = async (
   enumRequest: string,
   businessUnits: string,
+  token: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetEnum",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: IEnumerators[] = await getWithRetries<IEnumerators[]>(

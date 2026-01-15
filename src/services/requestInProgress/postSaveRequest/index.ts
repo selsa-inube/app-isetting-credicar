@@ -8,11 +8,13 @@ import { mapSavePayrollAgreementEntityToApi } from "./mappers/mapSaveMoneyDestEn
 const postSaveRequest = async (
   userAccount: string,
   data: ISaveDataRequest,
+  token: string,
 ): Promise<ISaveDataResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SaveSettingRequest",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

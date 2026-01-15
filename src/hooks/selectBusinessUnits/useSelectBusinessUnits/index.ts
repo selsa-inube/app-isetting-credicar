@@ -19,6 +19,7 @@ const useSelectBusinessUnits = (
       validateBusinessUnities(
         appData.portal.publicCode,
         appData.user.identificationDocumentNumber || "",
+        appData.token,
       ).then((data) => {
         setBusinessUnitsToTheStaff(data);
       });

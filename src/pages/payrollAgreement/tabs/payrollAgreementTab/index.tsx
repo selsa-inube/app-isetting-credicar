@@ -23,6 +23,7 @@ const PayrollAgreementTab = () => {
     handleSearchPayrollAgreement,
   } = usePayrollAgreementTab({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const pageLength = usePageLength();

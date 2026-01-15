@@ -15,6 +15,7 @@ const Cancel = (props: ICancel) => {
       businessUnit: appData.businessUnit.publicCode,
       data,
       userAccount: appData.user.userAccount,
+      token: appData.token,
       setEntryCanceled,
     });
 

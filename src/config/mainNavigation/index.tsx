@@ -38,10 +38,10 @@ const mainNavigation = (optionsCards: ICardData[], location?: Location) => {
 
           isOpen: false,
           onClose: () => {
-            console.log();
+            void 0;
           },
           onToggle: () => {
-            console.log();
+            void 0;
           },
         },
       ],

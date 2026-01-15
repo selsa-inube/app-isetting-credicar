@@ -20,6 +20,7 @@ const RenderMethodTags = (props: IRenderMethodTags) => {
   const { enumData: enumMethods, loading } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EGeneralPolicies.METHODS,
+    token: appData.token,
   });
 
   const labels = (method: string) => {

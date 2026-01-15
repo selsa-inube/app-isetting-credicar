@@ -24,6 +24,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     sendData,
     setShowModal,
     useCase,
+    token,
   } = props;
 
   const [saveGeneralPolicies, setSaveGeneralPolicies] =
@@ -44,7 +45,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const fetchSaveGeneralData = async () => {
     setLoadingSendData(true);
     try {
-      const saveData = await postSaveRequest(userAccount, data);
+      const saveData = await postSaveRequest(userAccount, data, token);
       setSaveGeneralPolicies(saveData);
       setShowModal(false);
     } catch (error) {
@@ -89,6 +90,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
           businessUnits,
           userAccount,
           requestConfiguration as IRequestGeneralPol,
+          token,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
@@ -97,6 +99,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
           businessUnits,
           userAccount,
           requestConfiguration as IRequestGeneralPol,
+          token,
         );
 
         setStatusRequest(newData.settingRequest?.requestStatus);
