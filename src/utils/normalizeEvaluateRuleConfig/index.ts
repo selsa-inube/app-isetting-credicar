@@ -16,21 +16,27 @@ const normalizeEvaluateRuleConfig = (
         decision.effectiveFrom && formatDateDecision(decision.effectiveFrom),
       validUntil:
         decision.validUntil && formatDateDecision(decision.validUntil),
-      conditionGroups: decision.conditionGroups?.map((condition) => ({
-        conditionGroupId: condition.conditionGroupId,
-        conditionsThatEstablishesTheDecision:
-          condition.conditionsThatEstablishesTheDecision
-            ?.filter(
-              (cond) => cond.conditionName !== ECreditLines.CREDIT_LINE_RULE,
-            )
-            ?.map((cond) => ({
-              conditionDataType: cond.conditionDataType,
-              conditionName: cond.conditionName,
-              howToSetTheCondition: cond.howToSetTheCondition,
-              value: cond.value,
-              timeUnit: cond.timeUnit,
-            })),
-      })),
+      conditionGroups: decision.conditionGroups
+        ?.map((condition) => ({
+          conditionGroupId: condition.conditionGroupId,
+          conditionsThatEstablishesTheDecision:
+            condition.conditionsThatEstablishesTheDecision
+              ?.filter(
+                (cond) => cond.conditionName !== ECreditLines.CREDIT_LINE_RULE,
+              )
+              ?.map((cond) => ({
+                conditionDataType: cond.conditionDataType,
+                conditionName: cond.conditionName,
+                howToSetTheCondition: cond.howToSetTheCondition,
+                value: cond.value,
+                timeUnit: cond.timeUnit,
+              })),
+        }))
+        ?.filter(
+          (condition) =>
+            condition.conditionsThatEstablishesTheDecision &&
+            condition.conditionsThatEstablishesTheDecision.length > 0,
+        ),
     })),
     ruleName: item.ruleName,
   }));
