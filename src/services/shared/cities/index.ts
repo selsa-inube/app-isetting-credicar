@@ -5,10 +5,11 @@ import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { ICity } from "@ptypes/ICity";
 import { mapCitiesToEntities } from "./mappers";
 
-const getCitiesData = async (): Promise<ICity[]> => {
+const getCitiesData = async (token: string): Promise<ICity[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllCityCatalog",
+      Authorization: token,
     },
   };
   const data: ICity[] = await getWithRetries<ICity[]>(

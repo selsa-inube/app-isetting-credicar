@@ -36,14 +36,13 @@ const defaultContextValue = {
     },
     useCasesByStaff: [],
     language: "es",
+    token: "",
   },
-  setBusinessUnitSigla: (value: React.SetStateAction<string>) => {
-    console.log(
-      `Business unit sigla set to: ${typeof value === "function" ? value("") : value}`,
-    );
+  setBusinessUnitSigla: () => {
+    void 0;
   },
   setUseCases: () => {
-    console.log(`Business unit sigla set to:`);
+    void 0;
   },
   businessUnitSigla: "",
   useCases: "",
@@ -60,7 +59,7 @@ const Default = () => {
         <BusinessUnitChange
           businessUnits={businessUnitDataMock}
           selectedClient={"Cooservunal"}
-          onLogoClick={() => console.log("Logo clicked")}
+          onLogoClick={() => void 0}
         />
       </Stack>
     </AuthAndPortalData.Provider>

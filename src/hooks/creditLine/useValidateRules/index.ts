@@ -16,6 +16,7 @@ const useValidateRules = () => {
         ruleName,
       },
       language: appData.language,
+      token: appData.token,
     });
 
   const {

@@ -16,7 +16,7 @@ import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgre
 import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
-  const { businessUnitSigla, businessUnits, businessManager } = props;
+  const { businessUnitSigla, businessUnits, businessManager, token } = props;
   const smallScreen = useMediaQuery(mediaQueryTablet);
   const tabs = moneyDestinationTabsConfig(smallScreen);
   const [isSelected, setIsSelected] = useState<string>(
@@ -84,6 +84,7 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
             businessManager,
             businessUnits,
             EMoneyDestination.ENTITY,
+            token,
           );
           setRequestsInProgress(data);
         }

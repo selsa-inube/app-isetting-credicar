@@ -5,7 +5,7 @@ import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseEnumeratorsCrediboard } from "@ptypes/hooks/IUseEnumeratorsCrediboard";
 
 const useEnumeratorsCrediboard = (props: IUseEnumeratorsCrediboard) => {
-  const { businessUnits, enumQuery } = props;
+  const { businessUnits, enumQuery, token } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
@@ -16,7 +16,7 @@ const useEnumeratorsCrediboard = (props: IUseEnumeratorsCrediboard) => {
     const fetchEnumData = async () => {
       setLoading(true);
       try {
-        const data = await getEnumsCrediboard(businessUnits, enumQuery);
+        const data = await getEnumsCrediboard(businessUnits, enumQuery, token);
         setEnumData(data);
       } catch (error) {
         console.info(error);

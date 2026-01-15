@@ -50,6 +50,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
   const { appData } = useContext(AuthAndPortalData);
   const { legalPersonOptions, legalPersonData } = useLegalPerson({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
   const { optionsCountries } = useCountries();
   const [showModal, setShowModal] = useState(false);
@@ -61,6 +62,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
 
   const { enumData: typeIdentification } = useEnumeratorsIsaas({
     enumIsaas: ECyclesPayroll.TYPE_IDENTIFICATION_COMPANY,
+    token: appData.token,
   });
 
   const optionsIdentification = optionsFromEnumI18n(

@@ -64,6 +64,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.user.userAccount,
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestPayrollAgre,
+          appData.token,
         );
         setShowModal(false);
         navigate("/payroll-agreement");
@@ -73,6 +74,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.user.userAccount,
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestPayrollAgre,
+          appData.token,
         );
         setShowModal(false);
         navigate("/payroll-agreement");
@@ -82,6 +84,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.user.userAccount,
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestPayrollAgre,
+          appData.token,
         );
         setShowModal(false);
         navigate("/payroll-agreement");

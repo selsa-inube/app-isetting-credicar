@@ -6,10 +6,12 @@ import { mapCitySubdivisionToEntities } from "./mappers";
 
 const getCitySubdivisionCountry = async (
   countryName: string,
+  token: string,
 ): Promise<ICountrySubdivisionCity[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchCitySubdivisionCountry",
+      Authorization: token,
     },
   };
 

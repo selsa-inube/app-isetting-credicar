@@ -8,11 +8,13 @@ const getOptionsByBusinessUnit = async (
   businessUnitPublicCode: string,
   staffPortalId: string,
   userAccount: string,
+  token: string,
 ): Promise<IOptionsByBusinessUnits[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchOptionForStaff",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

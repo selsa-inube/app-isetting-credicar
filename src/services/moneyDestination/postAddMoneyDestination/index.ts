@@ -8,11 +8,13 @@ import { mapAddMoneyDestinationEntityToApi } from "./mappers";
 const postAddMoneyDestination = async (
   businessUnit: string,
   data: IRequestMoneyDestination,
+  token: string,
 ): Promise<IRequestMoneyDestination> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "AddMoneyDestination",
       "X-Business-Unit": businessUnit,
+      Authorization: token,
     },
   };
 

@@ -4,6 +4,7 @@ interface IUseEvaluateRuleByUnit {
   businessUnits: string;
   rulesData: IEvaluateRuleRequest;
   language: string;
+  token: string;
 }
 
 export type { IUseEvaluateRuleByUnit };

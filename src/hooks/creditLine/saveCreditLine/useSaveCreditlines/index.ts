@@ -23,6 +23,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     sendData,
     setShowModal,
     useCase,
+    token,
   } = props;
 
   const [saveCreditLines, setSaveCreditLines] = useState<ISaveDataResponse>();
@@ -42,7 +43,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
   const fetchSaveGeneralData = async () => {
     setLoadingSendData(true);
     try {
-      const saveData = await patchConfirmConstruction(userAccount, data);
+      const saveData = await patchConfirmConstruction(userAccount, data, token);
       setSaveCreditLines(saveData);
     } catch (error) {
       console.info(error);
@@ -87,6 +88,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
           userAccount,
           businessUnits,
           requestConfiguration as ILineUnderConstructionRequest,
+          token,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }

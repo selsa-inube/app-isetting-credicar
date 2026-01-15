@@ -20,7 +20,7 @@ import { IUseCreditLinesTab } from "@ptypes/hooks/creditLines/IUseCreditLinesTab
 import { useValidateRules } from "../useValidateRules";
 
 const useCreditLinesTab = (props: IUseCreditLinesTab) => {
-  const { businessUnits } = props;
+  const { businessUnits, token } = props;
   const [creditLines, setCreditLines] = useState<ICreditLinesData[]>([]);
   const [loadingRules] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
@@ -62,7 +62,7 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     const fetchCreditLinesData = async () => {
       setLoadingCreditLines(true);
       try {
-        const data = await getCreditLinesData(businessUnits);
+        const data = await getCreditLinesData(businessUnits, token);
         setCreditLines(data);
       } catch (error) {
         console.info(error);

@@ -8,7 +8,7 @@ import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/I
 import { IUseRequestsInProgress } from "@ptypes/hooks/payrollAgreement/IUseRequestsInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessUnits, businessManager } = props;
+  const { businessUnits, businessManager, token } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -27,6 +27,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
             businessManager,
             businessUnits,
             ERequestInProgress.PAYROLL_AGREEMENT,
+            token,
           );
           setRequestsInProgress(data as IRequestsInProgress[]);
         }

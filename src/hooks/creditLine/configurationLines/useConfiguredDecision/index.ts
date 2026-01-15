@@ -29,12 +29,14 @@ const useConfiguredDecision = (props: IUseConfiguredDecision) => {
     conditionName,
     businessUnit: appData.businessUnit.publicCode,
     useCase: useCaseConfiguration,
+    token: appData.token,
   });
 
   const decisions = useGetConfiguredDecisions({
     useCase: useCaseConfiguration,
     rule: ruleName,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
     ruleData: {
       ruleName,
       conditions: [

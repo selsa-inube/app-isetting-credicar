@@ -16,6 +16,7 @@ const Cancel = (props: ICancel) => {
       data,
       userAccount: appData.user.userAccount,
       setEntryCanceled,
+      token: appData.token,
     });
 
   return (

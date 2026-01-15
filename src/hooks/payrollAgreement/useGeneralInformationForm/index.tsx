@@ -32,6 +32,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const { appData } = useContext(AuthAndPortalData);
   const { payrollAgreement } = usePayrollAgreementData({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const codeExists = (code: string) => {
@@ -87,6 +88,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   const { enumData: typePayroll } = useEnumerators({
     enumDestination: EPayrollAgreement.TYPE_PAYROLL,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const typePayrollOptions = optionsFromEnumerators(typePayroll);

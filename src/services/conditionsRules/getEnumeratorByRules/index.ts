@@ -10,11 +10,13 @@ const getEnumeratorsRules = async (
   ruleCatalog: string,
   catalogAction: string,
   businessUnits: string,
+  token: string,
 ): Promise<IDecisionData> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": `GetByIdBusinessRuleCatalog${catalogAction}`,
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
 

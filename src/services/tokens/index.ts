@@ -5,10 +5,14 @@ import { ITokens } from "@ptypes/ITokens";
 import { axiosInstance } from "@api/isaasToken";
 import { mapTokensToEntities } from "./mappers";
 
-const getTokens = async (businessUnit: string): Promise<ITokens[]> => {
+const getTokens = async (
+  businessUnit: string,
+  token: string,
+): Promise<ITokens[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Business-unit": businessUnit,
+      Authorization: token,
     },
   };
 

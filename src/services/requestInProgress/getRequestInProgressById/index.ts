@@ -8,11 +8,13 @@ import { mapRequestsInProgressToEntity } from "./mappers/mapRequestsInProgToEnti
 const getRequestInProgressById = async (
   businessUnits: string,
   settingRequestId: string,
+  token: string,
 ): Promise<IRequestsInProgress> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchByIdConfigurationRequestsByBusinessUnit",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
 

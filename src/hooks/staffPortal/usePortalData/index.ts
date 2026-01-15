@@ -28,7 +28,10 @@ const usePortalData = (portalCode: string | null) => {
           return;
         }
 
-        const StaffPortalData = await staffPortalByBusinessManager(portalCode);
+        const StaffPortalData = await staffPortalByBusinessManager(
+          portalCode,
+          "",
+        );
         if (!StaffPortalData) {
           setHasError(true);
           setErrorCode(1001);

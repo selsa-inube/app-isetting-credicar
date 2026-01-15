@@ -96,6 +96,7 @@ const useOrdinaryCyclesForm = (props: IUseOrdinaryCyclesForm) => {
   const { enumData: laborRegulator } = useEnumeratorsICardes({
     enumCredicar: ECyclesPayroll.COLOMBIAN_LABOR_LEGAL,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const laborRegulatorOptions = optionsEnumCodeI18n(

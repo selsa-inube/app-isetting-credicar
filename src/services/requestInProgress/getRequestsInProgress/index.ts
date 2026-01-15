@@ -9,10 +9,12 @@ const getRequestsInProgress = async (
   businessManagerCode: string,
   businessUnit: string,
   entity: string,
+  token: string,
 ): Promise<IRequestsInProgress[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchPendingConfigurationRequest",
+      Authorization: token,
     },
   };
 

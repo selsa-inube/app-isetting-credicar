@@ -24,7 +24,10 @@ function MoneyDestinationTab() {
     handleToggleInfoModal,
     handleSearchMoneyDestination,
     setEntryDeleted,
-  } = useMoneyDestination({ businessUnits: appData.businessUnit.publicCode });
+  } = useMoneyDestination({
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
 
   const pageLength = usePageLength();
 

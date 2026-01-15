@@ -9,6 +9,7 @@ interface IAppData {
   businessUnit: IBusinessUnit;
   user: IUser;
   language: string;
+  token: string;
 }
 
 export type { IAppData };

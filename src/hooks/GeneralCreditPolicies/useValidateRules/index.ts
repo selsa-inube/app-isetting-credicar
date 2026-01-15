@@ -18,6 +18,7 @@ const useValidateRules = () => {
         ...(conditions && { conditions }),
       },
       language: appData.language,
+      token: appData.token,
     });
 
   const {

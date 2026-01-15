@@ -10,7 +10,7 @@ import { IUseRequestsInProgress } from "@ptypes/hooks/IUseRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessManager, businessUnits } = props;
+  const { businessManager, businessUnits, token } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -22,6 +22,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
   const { enumsRequests } = useEnumRequest({
     businessUnits,
     enumerator: ERequestInProgress.REQUEST_STATUS,
+    token,
   });
 
   const navigate = useNavigate();
@@ -37,6 +38,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
             businessManager,
             businessUnits,
             ERequestInProgress.GENERAL_CREDIT_POLICIES,
+            token,
           );
           setRequestsInProgress(data);
         }

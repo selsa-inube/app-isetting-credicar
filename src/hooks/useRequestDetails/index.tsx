@@ -57,11 +57,15 @@ const useRequestDetails = (props: IUseRequestDetails) => {
   const fetchApprovalRequestData = async () => {
     setLoading(true);
     try {
-      await patchApprovalConfiguration(appData.user.userAccount, {
-        requestNumber: data.requestNumber,
-        modifyJustification: `${detailsRequest.modifyJustification} ${appData.user.userAccount}`,
-        settingRequestId: data.settingRequestId,
-      });
+      await patchApprovalConfiguration(
+        appData.user.userAccount,
+        {
+          requestNumber: data.requestNumber,
+          modifyJustification: `${detailsRequest.modifyJustification} ${appData.user.userAccount}`,
+          settingRequestId: data.settingRequestId,
+        },
+        appData.token,
+      );
       setShowModal(false);
       navigate(-1);
     } catch (error) {

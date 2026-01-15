@@ -38,21 +38,22 @@ const useContext = {
     },
     useCasesByStaff: [],
     language: "es",
+    token: "",
   },
   businessUnitSigla: "IProcess",
   setAppData: () => {
-    console.log("");
+    void 0;
   },
   setBusinessUnitSigla: () => {
-    console.log("");
+    void 0;
   },
   setUseCases: () => {
-    console.log("");
+    void 0;
   },
   useCases: "",
   businessUnitsToTheStaff: [],
   setBusinessUnitsToTheStaff: () => {
-    console.log("");
+    void 0;
   },
 };
 

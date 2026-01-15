@@ -8,12 +8,14 @@ const patchModifyCreditLine = async (
   businessUnits: string,
   userAccount: string,
   data: IModifyCreditLine,
+  token: string,
 ): Promise<IModifyCreditLine> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "ModifyLineOfCredit",
       "X-User-Name": userAccount,
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
 

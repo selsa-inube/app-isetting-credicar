@@ -4,7 +4,7 @@ import { getUseCaseForStaff } from "@services/staffPortal/getUseCaseForStaff";
 import { IUseCaseForStaff } from "@ptypes/hooks/IUseCaseForStaff";
 
 const useCaseForStaff = (props: IUseCaseForStaff) => {
-  const { businessUnit, userAccount, businessManagerCode } = props;
+  const { businessUnit, userAccount, businessManagerCode, token } = props;
   const [useCases, setUseCases] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState(false);
@@ -22,6 +22,7 @@ const useCaseForStaff = (props: IUseCaseForStaff) => {
               businessUnitSigla.publicCode,
               userAccount,
               businessManagerCode,
+              token,
             );
             setUseCases(data);
           }

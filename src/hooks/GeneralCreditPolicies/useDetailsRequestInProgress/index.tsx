@@ -66,6 +66,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.businessUnit.publicCode,
           appData.user.userAccount,
           requestConfiguration as IRequestGeneralPol,
+          appData.token,
         );
         setShowModal(false);
         navigate(-1);
@@ -75,6 +76,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.businessUnit.publicCode,
           appData.user.userAccount,
           requestConfiguration as IRequestGeneralPol,
+          appData.token,
         );
         setShowModal(false);
         navigate(-1);

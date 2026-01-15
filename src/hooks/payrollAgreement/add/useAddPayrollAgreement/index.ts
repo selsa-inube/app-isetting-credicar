@@ -124,10 +124,12 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
 
   const { legalPersonData } = useLegalPerson({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const { enumData: incometype } = useEnumeratorsIncome({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
   const navigate = useNavigate();
 

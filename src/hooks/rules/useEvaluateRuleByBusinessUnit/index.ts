@@ -7,7 +7,7 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IErrors } from "@ptypes/IErrors";
 
 const useEvaluateRuleByBusinessUnit = (props: IUseEvaluateRuleByUnit) => {
-  const { businessUnits, rulesData } = props;
+  const { businessUnits, rulesData, token } = props;
   const [evaluateRuleData, setEvaluateRuleData] = useState<
     IRuleDecisionExtended[] | undefined
   >([]);
@@ -21,7 +21,11 @@ const useEvaluateRuleByBusinessUnit = (props: IUseEvaluateRuleByUnit) => {
     const fetchEvaluateRule = async () => {
       setLoading(true);
       try {
-        const data = await evaluateRuleByBusinessUnit(businessUnits, rulesData);
+        const data = await evaluateRuleByBusinessUnit(
+          businessUnits,
+          rulesData,
+          token,
+        );
 
         setEvaluateRuleData(data);
         setHasError(false);

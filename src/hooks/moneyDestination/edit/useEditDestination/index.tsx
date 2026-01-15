@@ -55,6 +55,7 @@ const useEditDestination = (props: IUseEditDestination) => {
         ],
       },
       language: appData.language,
+      token: appData.token,
     });
   const {
     evaluateRuleData,
@@ -132,6 +133,7 @@ const useEditDestination = (props: IUseEditDestination) => {
 
   const { enumDestination } = useEnumsMoneyDestination({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const valueName = (name: string) => {
@@ -144,6 +146,7 @@ const useEditDestination = (props: IUseEditDestination) => {
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: ECreditLines.CATALOG_ACTION,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const conditionDestination =

@@ -113,6 +113,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
           const data = await patchModifyConstruction(
             appData.user.userAccount,
             linesData,
+            appData.token,
           );
           setBorrowerData(data);
         } catch (error) {

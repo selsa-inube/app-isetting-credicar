@@ -21,8 +21,14 @@ import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICanc
 import { IErrors } from "@ptypes/IErrors";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
-  const { businessUnit, data, userAccount, useCaseCancel, setEntryCanceled } =
-    props;
+  const {
+    businessUnit,
+    data,
+    userAccount,
+    useCaseCancel,
+    token,
+    setEntryCanceled,
+  } = props;
   const [showModal, setShowModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
@@ -63,7 +69,7 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   ) => {
     setLoading(true);
     try {
-      await cancelRequestInProgress(businessUnit, data);
+      await cancelRequestInProgress(businessUnit, data, token);
       setEntryCanceled(data.settingRequestId);
       setShowModal(false);
       addFlag({
