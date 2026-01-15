@@ -47,6 +47,7 @@ import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
 import { useModalOnSubmit } from "../useModalOnSubmit";
 import { IBeforeNavigate } from "@ptypes/creditLines/IBeforeNavigate";
+import { mapDecisionIdsFromConfigured } from "@src/utils/mapDecisionIdsFromConfigured";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -103,6 +104,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     emptyMessage: clientsSupportLineLabels.withoutIncluding,
     highlightFirst: true,
   });
+  const [hasSyncedDecisionIds, setHasSyncedDecisionIds] =
+    useState<boolean>(false);
   const [addDecision, setAddDecision] = useState<boolean>(false);
   const [editDecision, setEditDecision] = useState<boolean>(false);
   const [deleteDecision, setDeleteDecision] = useState<boolean>(false);
@@ -141,6 +144,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   useEffect(() => {
     setIsUpdated(false);
     setDecisionData([]);
+    setHasSyncedDecisionIds(false);
   }, [location.pathname, templateKey]);
 
   const {
@@ -380,6 +384,32 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     deleteDecision,
   });
 
+  useEffect(() => {
+    if (hasSyncedDecisionIds) return;
+    if (!configuredDecisions || configuredDecisions.length === 0) return;
+    if (!decisionsData || decisionsData.length === 0) return;
+
+    const updated = mapDecisionIdsFromConfigured(
+      configuredDecisions,
+      decisionsData,
+    );
+    const hasChanges =
+      updated.length !== decisionsData.length ||
+      updated.some(
+        (d, index) =>
+          d.decisionId !== decisionsData[index].decisionId ||
+          d._originalDecisionId !== decisionsData[index]._originalDecisionId,
+      );
+
+    if (!hasChanges) {
+      setHasSyncedDecisionIds(true);
+      return;
+    }
+
+    setDecisionData(updated);
+    setHasSyncedDecisionIds(true);
+  }, [configuredDecisions, decisionsData, hasSyncedDecisionIds]);
+
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)
     .flatMap((r) => {
@@ -418,7 +448,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           ...newData,
         },
       }));
-  }, [nameLineRef.current?.values]);
+  }, [nameLineRef.current?.values, linesConstructionData.settingRequestId]);
 
   useEffect(() => {
     if (decisionsData.length === 0) return;
@@ -454,7 +484,18 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         };
       });
     }
-  }, [decisionsData, useCaseConfiguration]);
+  }, [
+    decisionsData,
+    useCaseConfiguration,
+    templateKey,
+    linesConstructionData.abbreviatedName,
+    linesConstructionData.alias,
+    linesConstructionData.descriptionUse,
+    linesConstructionData.rules,
+    linesConstructionData.settingRequestId,
+    conditionCreditLine,
+    mergeRules,
+  ]);
 
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
@@ -671,7 +712,13 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         }));
       }
     }
-  }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
+  }, [
+    loadingModify,
+    borrowerData?.settingRequestId,
+    borrowerData?.configurationRequestData,
+    setLinesConstructionData,
+    linesConstructionData.settingRequestId,
+  ]);
 
   const {
     saveCreditLines,

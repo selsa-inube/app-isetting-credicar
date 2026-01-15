@@ -13,6 +13,7 @@ interface IRuleDecisionExtended extends IRuleDecision {
   evaluationStatistics?: IEvaluationStatistics;
   parameterizedConditions?: string[];
   modifyJustification?: string;
+  _originalDecisionId?: string;
 }
 
 export type { IRuleDecisionExtended };

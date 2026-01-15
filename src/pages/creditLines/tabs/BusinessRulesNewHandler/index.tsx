@@ -91,7 +91,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     handleToggleDateModal,
     handleToggleModal,
   });
-  console.log("selectedConditionsCSV: ", selectedConditionsCSV);
+
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
