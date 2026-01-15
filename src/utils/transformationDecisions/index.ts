@@ -62,6 +62,11 @@ const transformationDecisions = (
                 conditionArray,
                 c.conditionName,
               );
+
+              const listValues = normalizeConditionTraduction(
+                conditionArray,
+                c.conditionName,
+              )?.listPossibleValues?.list;
               return {
                 conditionName: c.conditionName,
                 labelName: normalized?.label,
@@ -71,9 +76,11 @@ const transformationDecisions = (
                   normalized?.conditionDataType?.toLowerCase() ??
                   ValueDataType.ALPHABETICAL,
                 value: c.value,
-                howToSetTheCondition: isRangeObject(c?.value)
+                howToSetTheCondition: isRangeObject(c.value)
                   ? EValueHowToSetUp.RANGE
-                  : EValueHowToSetUp.EQUAL,
+                  : listValues && listValues.length > 0
+                    ? EValueHowToSetUp.LIST_OF_VALUES
+                    : EValueHowToSetUp.EQUAL,
                 TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: normalized?.listPossibleValues ?? [],

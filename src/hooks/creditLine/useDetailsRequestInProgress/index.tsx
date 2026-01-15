@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useRequestDetails } from "@hooks/useRequestDetails";
 import { deleteCreditLineTab } from "@services/creditLines/deleteCreditLineTab";
+import { postLineUnderConstruction } from "@services/creditLines/postLineUnderConstruction";
 import { patchModifyCreditLine } from "@services/creditLines/patchModifyCreditLine";
 import { eventBus } from "@events/eventBus";
 import { EModalState } from "@enum/modalState";
@@ -22,6 +23,7 @@ import { IEntry } from "@ptypes/design/table/IEntry";
 import { IErrors } from "@ptypes/IErrors";
 import { IRequestCreditLine } from "@ptypes/creditLines/IRequestCreditLine";
 import { IModifyCreditLine } from "@ptypes/creditLines/IModifyCreditLine";
+import { ILineUnderConstructionRequest } from "@ptypes/creditLines/ILineUnderConstructionRequest";
 
 const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const { data } = props;
@@ -65,6 +67,16 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const fetchRequestData = async () => {
     setLoading(true);
     try {
+      if (data.useCaseName === ECreditLines.USE_CASE_ADD) {
+        await postLineUnderConstruction(
+          appData.user.userAccount,
+          appData.businessUnit.publicCode,
+          requestConfiguration as ILineUnderConstructionRequest,
+          appData.token,
+        );
+        setShowModal(false);
+        navigate("/credit-lines");
+      }
       if (data.useCaseName === ECreditLines.USE_CASE_DELETE) {
         await deleteCreditLineTab(
           appData.businessUnit.publicCode,
