@@ -53,6 +53,7 @@ const useGeneralCreditPolicies = () => {
             appData.businessManager.publicCode,
             appData.businessUnit.publicCode,
             EGeneralPolicies.ENTITY,
+            appData.token,
           );
           setRequestsInProgress(data);
         }

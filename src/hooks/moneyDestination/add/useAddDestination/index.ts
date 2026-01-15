@@ -57,6 +57,7 @@ const useAddDestination = () => {
 
   const { enumDestination } = useEnumsMoneyDestination({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const normalizeData = normalizeDestination(
@@ -159,6 +160,7 @@ const useAddDestination = () => {
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: ECreditLines.CATALOG_ACTION,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const condition = ruleData.conditionsThatEstablishesTheDecision?.find(

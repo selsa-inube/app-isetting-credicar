@@ -8,8 +8,14 @@ import { IErrors } from "@ptypes/IErrors";
 import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
 
 const useGetDecisionsByValue = (props: IUseGetDecisionsByValue) => {
-  const { ruleName, decisionValue, conditionName, businessUnit, useCase } =
-    props;
+  const {
+    ruleName,
+    decisionValue,
+    conditionName,
+    businessUnit,
+    useCase,
+    token,
+  } = props;
   const [configuredDecisions, setConfiguredDecisions] = useState<
     IConfiguredDecisions[] | undefined
   >([]);
@@ -34,6 +40,7 @@ const useGetDecisionsByValue = (props: IUseGetDecisionsByValue) => {
             decisionValue,
             conditionName,
             businessUnit,
+            token,
           );
           setConfiguredDecisions(data);
         } catch (error) {

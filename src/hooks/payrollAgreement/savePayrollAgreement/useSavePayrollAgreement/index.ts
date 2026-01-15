@@ -36,6 +36,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     setShowModal,
     setErrorFetchSaveData,
     setEntryDeleted,
+    token,
   } = props;
 
   const [savePayrollAgreement, setSavePayrollAgreement] =
@@ -58,7 +59,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const fetchSavePayrollData = async () => {
     setLoadingSendData(true);
     try {
-      const saveData = await postSaveRequest(userAccount, data);
+      const saveData = await postSaveRequest(userAccount, data, token);
       setSavePayrollAgreement(saveData);
       setShowModal(false);
     } catch (error) {
@@ -92,6 +93,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
+          token,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
@@ -100,6 +102,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
+          token,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
@@ -108,6 +111,7 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
           userAccount,
           businessUnits,
           requestConfiguration as IRequestPayrollAgre,
+          token,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }

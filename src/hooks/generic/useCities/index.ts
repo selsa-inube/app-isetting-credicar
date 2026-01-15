@@ -1,17 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
-import { ICity } from "@ptypes/ICity";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getCitiesData } from "@services/shared/cities";
+import { ICity } from "@ptypes/ICity";
 import { IServerDomain } from "@ptypes/IServerDomain";
 
 const useCities = () => {
   const [citiesData, setCitiesData] = useState<ICity[]>([] as ICity[]);
   const [hasError, setHasError] = useState(false);
+  const { appData } = useContext(AuthAndPortalData);
 
   useEffect(() => {
     const fetchCitiesData = async () => {
       try {
-        const data = await getCitiesData();
+        const data = await getCitiesData(appData.token);
 
         setCitiesData(data);
       } catch (error) {

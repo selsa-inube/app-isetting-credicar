@@ -15,7 +15,7 @@ import { IPayrollTabsConfig } from "@ptypes/payrollAgreement/IPayrollTabsConfig"
 import { IMenuOptions } from "@ptypes/design/IMenuOptions";
 
 const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
-  const { businessUnitSigla, businessUnits, businessManager } = props;
+  const { businessUnitSigla, businessUnits, businessManager, token } = props;
 
   const { appData } = useContext(AuthAndPortalData);
   const smallScreen = useMediaQuery(mediaQueryTablet);
@@ -78,6 +78,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
             businessManager,
             businessUnits,
             EPayrollAgreement.CONDITION_RULE,
+            token,
           );
           setRequestsInProgress(data as IRequestsInProgress[]);
         }

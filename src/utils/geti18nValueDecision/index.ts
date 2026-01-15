@@ -1,4 +1,4 @@
-import { IValue } from "@src/types/decisions/IValue";
+import { IValue } from "@ptypes/decisions/IValue";
 
 const geti18nValueDecision = (
   value: string | number | string[] | IValue | undefined,

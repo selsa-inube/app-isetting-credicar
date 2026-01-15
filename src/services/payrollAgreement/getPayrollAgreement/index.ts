@@ -6,11 +6,13 @@ import { mapPayrollAgreementToEntities } from "./mappers/mapPayrollAgreementToEn
 
 const getPayrollAgreementData = async (
   businessUnits: string,
+  token: string,
 ): Promise<IPayrollAgreementData[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllPayrollForDeductionAgreement",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: IPayrollAgreementData[] = await getWithRetries<

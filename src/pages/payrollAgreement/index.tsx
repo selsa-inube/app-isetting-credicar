@@ -26,6 +26,7 @@ const PayrollAgreement = () => {
     businessUnitSigla,
     businessManager: appData.businessManager.publicCode,
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   return (

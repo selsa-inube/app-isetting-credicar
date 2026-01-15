@@ -23,11 +23,13 @@ const RenderPersonalInfoVerification = (props: IPersonalInfoVerification) => {
   const { optionsCreditLine } = useCreditLine();
   const { enumDestination } = useEnumsMoneyDestination({
     businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
   });
 
   const { enumData: type } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EMoneyDestination.DESTINATION_TYPE,
+    token: appData.token,
   });
 
   const typeDestination = normalizeDestination(type, values.typeDestination);

@@ -9,12 +9,14 @@ const postLineUnderConstruction = async (
   userAcount: string,
   businessUnit: string,
   data: ILineUnderConstructionRequest,
+  token: string,
 ): Promise<IRequestPayrollAgre> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "AddLineOfCredit",
       "X-Business-Unit": businessUnit,
       "X-User-Name": userAcount,
+      Authorization: token,
     },
   };
 

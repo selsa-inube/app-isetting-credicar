@@ -36,6 +36,7 @@ const GeneralInformationForm = forwardRef<
 
     const { enumDestination } = useEnumsMoneyDestination({
       businessUnits: appData.businessUnit.publicCode,
+      token: appData.token,
     });
 
     const {

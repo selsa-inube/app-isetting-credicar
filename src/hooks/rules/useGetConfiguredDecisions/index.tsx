@@ -8,7 +8,7 @@ import { IConfiguredDecisions } from "@ptypes/decisions/IConfiguredDecisions";
 import { IErrors } from "@ptypes/IErrors";
 
 const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
-  const { businessUnits, ruleData, useCase, rule } = props;
+  const { businessUnits, ruleData, useCase, rule, token } = props;
   const [configuredDecisions, setConfiguredDecisions] = useState<
     IConfiguredDecisions[] | undefined
   >([]);
@@ -34,6 +34,7 @@ const useGetConfiguredDecisions = (props: IUseGetConfiguredDecisions) => {
           const data = await postGetConfiguredDecisions(
             businessUnits,
             ruleData,
+            token,
           );
           setConfiguredDecisions(data);
         } catch (error) {

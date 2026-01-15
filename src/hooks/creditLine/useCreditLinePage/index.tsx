@@ -50,6 +50,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
             appData.businessManager.publicCode,
             appData.businessUnit.publicCode,
             ERequestInProgress.CREDIT_LINE,
+            appData.token,
           );
           setRequestsInProgress(data as IRequestsInProgress[]);
         }

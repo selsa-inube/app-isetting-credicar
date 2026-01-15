@@ -6,11 +6,13 @@ import { mapLegalPersonsToEntities } from "./mappers/mapLegalPersonsToEntities";
 
 const getLegalPersonsData = async (
   businessUnits: string,
+  token: string,
 ): Promise<ILegalPerson[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllPayingEntity",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
   const data: ILegalPerson[] = await getWithRetries<ILegalPerson[]>(

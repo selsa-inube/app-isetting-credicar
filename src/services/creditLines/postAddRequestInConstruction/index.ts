@@ -8,11 +8,13 @@ import { mapSaveAddRequestEntityToApi } from "./mappers/mapSaveAddRequestEntityT
 const postAddRequestInConstruction = async (
   userAccount: string,
   data: ISaveDataRequest,
+  token: string,
 ): Promise<ISaveDataResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "AddARequestInConstruction",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

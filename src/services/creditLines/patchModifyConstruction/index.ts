@@ -8,11 +8,13 @@ import { mapModifyConstructionEntityToApi } from "./mappers";
 const patchModifyConstruction = async (
   userAccount: string,
   data: IModifyConstructionRequest,
+  token: string,
 ): Promise<IModifyConstructionResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "ModifyARequestInConstruction",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

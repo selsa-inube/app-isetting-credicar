@@ -9,7 +9,7 @@ import { IUseRequestsInProgress } from "@ptypes/hooks/creditLines/IUseRequestsIn
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessUnits, businessManager } = props;
+  const { businessUnits, businessManager, token } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -33,6 +33,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
             businessManager,
             businessUnits,
             ERequestInProgress.CREDIT_LINE,
+            token,
           );
           setRequestsInProgress(data as IRequestsInProgress[]);
         }

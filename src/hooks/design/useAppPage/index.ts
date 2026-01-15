@@ -49,6 +49,7 @@ const useAppPage = (props: IUseAppPage) => {
     businessUnit: businessUnitSigla,
     userAccount: appData.user.userAccount,
     businessManagerCode: appData.businessManager.publicCode,
+    token: appData.token,
   });
 
   const handleLogoClick = (businessUnit: IBusinessUnitsPortalStaff) => {

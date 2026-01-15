@@ -70,6 +70,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.businessUnit.publicCode,
           appData.user.userAccount,
           requestConfiguration as IRequestCreditLine,
+          appData.token,
         );
         setShowModal(false);
         navigate("/credit-lines");
@@ -79,6 +80,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.businessUnit.publicCode,
           appData.user.userAccount,
           requestConfiguration as IModifyCreditLine,
+          appData.token,
         );
         setShowModal(false);
         navigate(-1);

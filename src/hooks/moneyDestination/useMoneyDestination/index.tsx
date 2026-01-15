@@ -21,7 +21,7 @@ import { IErrors } from "@ptypes/IErrors";
 import { IEntry } from "@ptypes/design/table/IEntry";
 
 const useMoneyDestination = (props: IUseMoneyDestination) => {
-  const { businessUnits } = props;
+  const { businessUnits, token } = props;
 
   const { appData } = useContext(AuthAndPortalData);
   const [moneyDestination, setMoneyDestination] = useState<
@@ -42,13 +42,14 @@ const useMoneyDestination = (props: IUseMoneyDestination) => {
   const { enumData: type, loading: loadingEnum } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EMoneyDestination.DESTINATION_TYPE,
+    token: appData.token,
   });
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await getMoneyDestinationData(businessUnits);
+        const data = await getMoneyDestinationData(businessUnits, token);
         setMoneyDestination(data);
       } catch (error) {
         console.info(error);

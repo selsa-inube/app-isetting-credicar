@@ -101,6 +101,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal: setShowDateModal,
+    token: appData.token,
   });
 
   const { modalData, showDecision } = useModalEditPolicies({

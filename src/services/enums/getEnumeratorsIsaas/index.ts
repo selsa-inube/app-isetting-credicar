@@ -7,10 +7,12 @@ import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 const getEnumeratorsIsaas = async (
   enumerator: string,
   country: string,
+  token: string,
 ): Promise<IEnumerators[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "GetEnum",
+      Authorization: token,
     },
   };
 

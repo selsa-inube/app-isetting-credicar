@@ -8,12 +8,14 @@ const postAddPayrollAgreement = async (
   userAcount: string,
   businessUnit: string,
   data: IRequestPayrollAgre,
+  token: string,
 ): Promise<IRequestPayrollAgre> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "AddPayrollForDeductionAgreement",
       "X-Business-Unit": businessUnit,
       "X-User-Name": userAcount,
+      Authorization: token,
     },
   };
 

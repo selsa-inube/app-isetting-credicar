@@ -78,6 +78,7 @@ const EditPayrollAgreement = () => {
     data: saveData as ISaveDataRequest,
     setSendData: setShowRequestProcessModal,
     setShowModal,
+    token: appData.token,
   });
 
   const { modalData, showDecision } = useModalEditPayroll({

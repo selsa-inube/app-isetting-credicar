@@ -8,11 +8,13 @@ import { mapApprovalRequestEntityToApi } from "./mappers";
 const patchApprovalConfiguration = async (
   userAccount: string,
   data: IApprovalRequest,
+  token: string,
 ): Promise<IApprovalResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "ApprovalOfAConfigurationRequest",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

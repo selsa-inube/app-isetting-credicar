@@ -8,11 +8,13 @@ import { mapEvaluateRuleByBusinessEntities } from "./mappers";
 const evaluateRuleByBusinessUnit = async (
   businessUnits: string,
   rulesData: IEvaluateRuleRequest,
+  token: string,
 ): Promise<IRuleDecisionExtended[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "EvaluateRuleByBusinessUnit",
       "X-Business-unit": businessUnits,
+      Authorization: token,
     },
   };
 

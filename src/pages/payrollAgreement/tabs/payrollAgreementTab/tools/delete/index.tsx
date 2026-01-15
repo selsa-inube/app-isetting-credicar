@@ -56,6 +56,7 @@ const Delete = (props: IDelete) => {
     setShowModal,
     setShowPendingReq,
     setEntryDeleted,
+    token: appData.token,
   });
 
   const { modalData, showDecision } = useModalDeletePayroll({

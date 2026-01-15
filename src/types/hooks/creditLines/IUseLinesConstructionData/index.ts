@@ -7,6 +7,7 @@ interface IUseLinesConstructionData {
   linesData?: IModifyConstructionRequest;
   debounceMs?: number;
   saveOn?: string | number;
+  token: string;
   setIsUpdated?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

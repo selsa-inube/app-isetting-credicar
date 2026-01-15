@@ -26,6 +26,7 @@ const useBusinessManagers = (
         ) {
           const newData = await getBusinessManagers(
             portalPublicCode.businessManagerCode,
+            "",
           );
 
           storeEncryptedData({

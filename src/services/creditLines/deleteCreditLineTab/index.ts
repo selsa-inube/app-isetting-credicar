@@ -8,12 +8,14 @@ const deleteCreditLineTab = async (
   userAcount: string,
   businessUnit: string,
   data: IRequestCreditLine,
+  token: string,
 ): Promise<IRequestCreditLine> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "DeleteLineOfCredit",
       "X-Business-Unit": businessUnit,
       "X-User-Name": userAcount,
+      Authorization: token,
     },
   };
 

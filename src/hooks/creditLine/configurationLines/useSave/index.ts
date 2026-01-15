@@ -26,6 +26,7 @@ const useSave = (props: IUseSave) => {
     userAccount: appData.user.userAccount,
     sendData: showRequestProcessModal,
     setSendData: setShowRequestProcessModal,
+    token: appData.token,
   };
 
   if (isEdit) {

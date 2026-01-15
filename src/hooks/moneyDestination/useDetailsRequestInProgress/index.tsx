@@ -63,6 +63,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
         await postAddMoneyDestination(
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestMoneyDestination,
+          appData.token,
         );
         setShowModal(false);
         navigate(-1);
@@ -71,6 +72,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
         await patchEditMoneyDestination(
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestMoneyDestination,
+          appData.token,
         );
         setShowModal(false);
         navigate(-1);
@@ -79,6 +81,7 @@ const useDetailsRequestInProgress = (data: IEntry) => {
         await deleteMoneyDestination(
           appData.businessUnit.publicCode,
           requestConfiguration as IRequestMoneyDestination,
+          appData.token,
         );
         setShowModal(false);
         navigate(-1);

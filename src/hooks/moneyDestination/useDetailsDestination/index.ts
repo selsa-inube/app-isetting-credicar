@@ -25,6 +25,7 @@ const useDetailsDestination = (appData: IAppData, data: IEntry) => {
       ],
     },
     language: appData.language,
+    token: appData.token,
   });
 
   useEffect(() => {

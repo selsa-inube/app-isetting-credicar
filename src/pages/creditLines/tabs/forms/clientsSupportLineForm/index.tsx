@@ -42,6 +42,7 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     useEnumeratorsCrediboard({
       businessUnits: appData.businessUnit.publicCode,
       enumQuery: ECreditLines.SUPPORT_LINE,
+      token: appData.token,
     });
 
   const { message, loadingData, showInfo, handleMove } =

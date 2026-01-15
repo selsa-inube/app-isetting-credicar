@@ -4,7 +4,7 @@ import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreement
 import { IUsePayrollAgreementData } from "@ptypes/hooks/IUsePayrollAgreementData";
 
 const usePayrollAgreementData = (props: IUsePayrollAgreementData) => {
-  const { businessUnits } = props;
+  const { businessUnits, token } = props;
   const [payrollAgreement, setPayrollAgreement] = useState<
     IPayrollAgreementData[]
   >([]);
@@ -15,7 +15,7 @@ const usePayrollAgreementData = (props: IUsePayrollAgreementData) => {
     const fetchPayrollAgreementData = async () => {
       setLoading(true);
       try {
-        const data = await getPayrollAgreementData(businessUnits);
+        const data = await getPayrollAgreementData(businessUnits, token);
         setPayrollAgreement(data);
       } catch (error) {
         console.info(error);

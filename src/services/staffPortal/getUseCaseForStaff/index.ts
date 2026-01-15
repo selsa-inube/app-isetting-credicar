@@ -7,11 +7,13 @@ const getUseCaseForStaff = async (
   businessUnit: string,
   userAccount: string,
   businessManagerCode: string,
+  token: string,
 ): Promise<string[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchUseCaseForStaff",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

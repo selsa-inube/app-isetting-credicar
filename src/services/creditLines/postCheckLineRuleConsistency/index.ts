@@ -9,12 +9,14 @@ const postCheckLineRuleConsistency = async (
   userAccount: string,
   data: ICheckedRuleLine,
   businessUnit: string,
+  token: string,
 ): Promise<IPostCheckLineRule[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "CheckLineRuleConsistency",
       "X-User-Name": userAccount,
       "X-Business-Unit": businessUnit,
+      Authorization: token,
     },
   };
 

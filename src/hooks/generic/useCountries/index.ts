@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { ICountry } from "@ptypes/ICountry";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getCountriesData } from "@services/shared/countries";
 import { IServerDomain } from "@ptypes/IServerDomain";
 
 const useCountries = () => {
+  const { appData } = useContext(AuthAndPortalData);
   const [countriesData, setCountriesData] = useState<ICountry[]>(
     [] as ICountry[],
   );
@@ -13,7 +15,7 @@ const useCountries = () => {
   useEffect(() => {
     const fetchCountriesData = async () => {
       try {
-        const data = await getCountriesData();
+        const data = await getCountriesData(appData.token);
 
         setCountriesData(data);
       } catch (error) {

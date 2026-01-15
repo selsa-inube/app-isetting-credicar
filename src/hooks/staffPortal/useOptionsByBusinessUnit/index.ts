@@ -36,6 +36,7 @@ const useOptionsByBusinessUnit = (props: IUseOptionsByBusinessUnit) => {
           businessUnitSigla.publicCode,
           staffPortalId,
           appData.user.userAccount,
+          appData.token,
         );
         setOptionsBusinessUnit(data);
       } catch (error) {

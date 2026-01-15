@@ -4,8 +4,13 @@ import { getBusinessUnitsPortalStaff } from "@services/staffPortal/getBusinessUn
 const validateBusinessUnities = async (
   publicCode: string,
   userAccount: string,
+  token: string,
 ): Promise<IBusinessUnitsPortalStaff[]> => {
-  const newData = await getBusinessUnitsPortalStaff(publicCode, userAccount);
+  const newData = await getBusinessUnitsPortalStaff(
+    publicCode,
+    userAccount,
+    token,
+  );
 
   return newData;
 };

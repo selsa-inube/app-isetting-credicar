@@ -8,11 +8,13 @@ import { mapDeleteMoneyDestToApi } from "./mappers";
 const deleteMoneyDestination = async (
   businessUnit: string,
   data: IRequestMoneyDestination,
+  token: string,
 ): Promise<IRequestMoneyDestination> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "DeleteMoneyDestination",
       "X-Business-unit": businessUnit,
+      Authorization: token,
     },
   };
 

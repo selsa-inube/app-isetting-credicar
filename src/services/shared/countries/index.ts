@@ -5,10 +5,11 @@ import { ICountry } from "@ptypes/ICountry";
 import { isaasQueryAxiosInstance } from "@api/isaasQuery";
 import { mapCountriesToEntities } from "./mappers";
 
-const getCountriesData = async (): Promise<ICountry[]> => {
+const getCountriesData = async (token: string): Promise<ICountry[]> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "SearchAllCountryCatalog",
+      Authorization: token,
     },
   };
   const data: ICountry[] = await getWithRetries<ICountry[]>(

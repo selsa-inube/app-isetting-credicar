@@ -6,7 +6,8 @@ import { IUseLinesConstructionData } from "@ptypes/hooks/creditLines/IUseLinesCo
 import { IErrors } from "@ptypes/IErrors";
 
 const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
-  const { option, userAccount, linesData, withNeWData, setIsUpdated } = props;
+  const { option, userAccount, linesData, withNeWData, setIsUpdated, token } =
+    props;
   const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
     {} as IModifyConstructionResponse,
   );
@@ -23,7 +24,11 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
       if (option && withNeWData && linesData?.configurationRequestData) {
         setLoading(true);
         try {
-          const data = await patchModifyConstruction(userAccount, linesData);
+          const data = await patchModifyConstruction(
+            userAccount,
+            linesData,
+            token,
+          );
           setBorrowerData(data);
         } catch (error) {
           console.info(error);

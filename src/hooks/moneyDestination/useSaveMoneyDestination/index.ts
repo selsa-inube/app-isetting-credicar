@@ -34,6 +34,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     setSendData,
     setShowModal,
     setEntryDeleted,
+    token,
   } = props;
   const [saveMoneyDestination, setSaveMoneyDestination] =
     useState<ISaveDataResponse>();
@@ -56,7 +57,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   const fetchSaveMoneyDestinationData = async () => {
     setLoadingSendData(true);
     try {
-      const saveData = await postSaveRequest(userAccount, data);
+      const saveData = await postSaveRequest(userAccount, data, token);
       setSaveMoneyDestination(saveData);
       setShowModal(false);
     } catch (error) {
@@ -87,6 +88,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         const newData = await postAddMoneyDestination(
           businessUnits,
           requestConfiguration as IRequestMoneyDestination,
+          token,
         );
         setStatusRequest(newData.settingRequest?.requestStatus);
       }
@@ -94,6 +96,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         const newData = await patchEditMoneyDestination(
           businessUnits,
           requestConfiguration as IRequestMoneyDestination,
+          token,
         );
 
         setStatusRequest(newData.settingRequest?.requestStatus);
@@ -102,6 +105,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
         const newData = await deleteMoneyDestination(
           businessUnits,
           requestConfiguration as IRequestMoneyDestination,
+          token,
         );
 
         setStatusRequest(newData.settingRequest?.requestStatus);

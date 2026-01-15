@@ -8,11 +8,13 @@ import { mapConfirmConstructionEntityToApi } from "./mappers";
 const patchConfirmConstruction = async (
   userAccount: string,
   data: IModifyConstructionRequest,
+  token: string,
 ): Promise<ISaveDataResponse> => {
   const config: AxiosRequestConfig = {
     headers: {
       "X-Action": "ConfirmRequestInConstruction",
       "X-User-Name": userAccount,
+      Authorization: token,
     },
   };
 

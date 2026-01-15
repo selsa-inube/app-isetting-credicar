@@ -5,6 +5,7 @@ interface IUseEnumRules {
   ruleCatalog: string;
   businessUnits: string;
   catalogAction: string;
+  token: string;
   i18n?: ILanguage;
 }
 
