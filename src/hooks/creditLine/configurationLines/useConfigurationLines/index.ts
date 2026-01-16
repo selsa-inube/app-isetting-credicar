@@ -748,12 +748,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     return await handleStep(true);
   };
 
-  console.log({
-    showUnconfiguredModal,
-    showSaveModal,
-    showRequestProcessModal,
-  });
-
   return {
     loading,
     initialValues,
