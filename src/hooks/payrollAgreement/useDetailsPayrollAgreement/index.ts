@@ -282,7 +282,7 @@ const useDetailsPayrollAgreement = (props: IUseDetailsPayrollAgreement) => {
     (field) => data[field.id],
   );
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.useCaseName}`;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 

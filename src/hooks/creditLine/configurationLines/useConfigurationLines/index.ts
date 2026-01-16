@@ -233,9 +233,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const handleUnconfiguredRules = () => {
     onSubmit();
-    if (!loadingModify) {
-      navigate("/credit-lines");
-    }
   };
 
   const handleToggleSaveModal = () => {
@@ -695,6 +692,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setShowRequestProcessModal,
     setShowSaveModal,
     setShowModal: setShowSaveModal,
+    setShowUnconfiguredModal,
   });
 
   const { modalData, showDecision } = useModalConfiguration({
