@@ -72,6 +72,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     onCloseProcess,
   } = props;
 
+  console.log("🤖", { minimumIncomePercentage });
+
   return (
     <BoxContainer
       direction="column"
