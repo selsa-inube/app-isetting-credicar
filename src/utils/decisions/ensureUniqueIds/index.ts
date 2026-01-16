@@ -14,7 +14,7 @@ const ensureUniqueIds = (list: IRuleDecision[]) => {
     return {
       ...d,
       _originalDecisionId: (d as any).decisionId,
-      decisionId: id,
+      decisionId: (d as any).decisionId ?? id,
     } as any;
   });
 };
