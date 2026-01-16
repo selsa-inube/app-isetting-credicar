@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { findDecision } from "../destination/findDecision";
-import { arraysEqual } from "../destination/arraysEqual";
+
+import { arraysEqual } from "../decisions/arraysEqualServices";
+import { findDecisionServices } from "../decisions/findDecisionServices";
 
 const getNewDeletedDecisionsConfig = (
   useCase: boolean,
@@ -12,9 +14,11 @@ const getNewDeletedDecisionsConfig = (
   prevRef: IRuleDecisionExtended[],
   newDecision: IRuleDecisionExtended[],
 ) => {
-  if (useCase && !arraysEqual(prevRef, newDecision)) {
+  console.log({ prevRef, newDecision });
+
+  if (useCase && !arraysEqual(prevRef as any, newDecision as any)) {
     return prevRef
-      .filter((decision) => !findDecision(newDecision, decision))
+      .filter((decision) => findDecisionServices(newDecision, decision))
       .map((decision) => {
         const decisionsByRule = decision.decisionsByRule?.map((decision) => {
           const conditionGroups = decision.conditionGroups
@@ -49,6 +53,7 @@ const getNewDeletedDecisionsConfig = (
           };
         });
 
+        console.log("🍿", { decisionsByRule });
         return {
           modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
           ruleName: decision.ruleName,

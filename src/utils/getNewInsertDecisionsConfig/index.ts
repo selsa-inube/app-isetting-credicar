@@ -21,7 +21,7 @@ const getNewInsertDecisionsConfig = (
         const decisionsByRule = decision.decisionsByRule?.map((condition) => {
           const conditionGroups = condition.conditionGroups
             ? condition.conditionGroups.map((item) => ({
-                conditionGroupId: item.conditionGroupId,
+                // conditionGroupId: item.conditionGroupId,
                 transactionOperation: ETransactionOperation.INSERT,
                 conditionsThatEstablishesTheDecision: [
                   ...(item.conditionsThatEstablishesTheDecision
@@ -53,7 +53,6 @@ const getNewInsertDecisionsConfig = (
             validUntil: validUntil,
             value: condition.value,
             transactionOperation: ETransactionOperation.INSERT,
-            decisionId: condition.decisionId,
             conditionGroups: conditionGroups,
           };
         });
