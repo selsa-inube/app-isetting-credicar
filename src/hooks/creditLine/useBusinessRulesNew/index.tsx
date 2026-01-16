@@ -25,6 +25,8 @@ import { keyOf } from "@utils/keyOf";
 import { safeSortDisplayDataSampleSwitchPlaces } from "@utils/safeSortDisplayDataSampleSwitchPlaces";
 import { stableStringify } from "@utils/stableStringify";
 import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdit";
+import { mapDecisionIdsFromConfigured } from "@utils/mapDecisionIdsFromConfigured";
+import { configurationLinesEventBus } from "@events/configurationLinesEventBus";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const normalizeCondition = (c: any) => ({
@@ -81,14 +83,41 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       (initialDecisions ?? []).map((d) => transformDecision(d, language)),
     ),
   );
+  const configuredRef: any = useRef<any[] | null>(null);
+  useEffect(() => {
+    const handler = (configured: IRuleDecision[]) => {
+      if (!configured || configured.length === 0) return;
+
+      configuredRef.current = configured;
+
+      setDecisions((prev) => {
+        if (!prev || prev.length === 0) {
+          return prev;
+        }
+
+        const next = mapDecisionIdsFromConfigured(configuredRef.current, prev);
+
+        return next;
+      });
+    };
+
+    configurationLinesEventBus.on("configuredDecisionsUpdated", handler);
+    return () => {
+      configurationLinesEventBus.off("configuredDecisionsUpdated", handler);
+    };
+  }, []);
 
   useEffect(() => {
     if (!hydratedFromProps && (initialDecisions?.length ?? 0) > 0) {
-      setDecisions(
-        ensureUniqueIds(
-          (initialDecisions ?? []).map((d) => transformDecision(d, language)),
-        ),
+      let next = ensureUniqueIds(
+        (initialDecisions ?? []).map((d) => transformDecision(d, language)),
       );
+
+      if (configuredRef.current && configuredRef.current.length > 0) {
+        next = mapDecisionIdsFromConfigured(configuredRef.current, next);
+      }
+
+      setDecisions(next);
       setHydratedFromProps(true);
     }
   }, [initialDecisions, language, hydratedFromProps]);
