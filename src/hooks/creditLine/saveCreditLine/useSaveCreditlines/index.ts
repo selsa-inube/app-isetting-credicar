@@ -45,6 +45,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     try {
       const saveData = await patchConfirmConstruction(userAccount, data, token);
       setSaveCreditLines(saveData);
+      setShowModal(false);
     } catch (error) {
       console.info(error);
       setSendData(false);
@@ -52,7 +53,6 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
       setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
-      setShowModal(false);
     }
   };
 

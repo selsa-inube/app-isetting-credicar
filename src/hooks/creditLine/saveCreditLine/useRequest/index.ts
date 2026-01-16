@@ -67,7 +67,11 @@ const useRequest = (props: IUseRequest) => {
             ERequestStepsStatus.ERROR,
           ),
         );
-        setSendData(false);
+        setTimeout(() => {
+          setSendData(false);
+          setHasError(true);
+          setChangeTab(true);
+        }, 1500);
       } else {
         setRequestSteps((prev) =>
           updateRequestSteps(
@@ -155,14 +159,7 @@ const useRequest = (props: IUseRequest) => {
     if (isStatusInAutomatic(saveGeneralPolicies?.requestStatus)) {
       if (isStatusCloseModal()) {
         setChangeTab(true);
-        addFlag({
-          title: flowAutomaticMessagesDecision().errorCreateRequest.title,
-          description:
-            flowAutomaticMessagesDecision().errorCreateRequest.description,
-          appearance: flowAutomaticMessagesDecision().errorCreateRequest
-            .appearance as IFlagAppearance,
-          duration: flowAutomaticMessagesDecision().errorCreateRequest.duration,
-        });
+        setHasError(true);
       }
 
       if (isStatusRequestFinished()) {

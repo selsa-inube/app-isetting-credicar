@@ -233,9 +233,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const handleUnconfiguredRules = () => {
     onSubmit();
-    if (!loadingModify) {
-      navigate("/credit-lines");
-    }
   };
 
   const handleToggleSaveModal = () => {
