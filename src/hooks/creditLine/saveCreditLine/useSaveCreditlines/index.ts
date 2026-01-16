@@ -24,6 +24,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     setShowModal,
     useCase,
     token,
+    setShowUnconfiguredModal,
   } = props;
 
   const [saveCreditLines, setSaveCreditLines] = useState<ISaveDataResponse>();
@@ -83,6 +84,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
 
   const fetchRequestData = async () => {
     try {
+      setShowUnconfiguredModal(false);
       if (useCase === EUseCase.ADD) {
         const newData = await postLineUnderConstruction(
           userAccount,

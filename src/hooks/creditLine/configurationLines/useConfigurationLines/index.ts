@@ -692,6 +692,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setShowRequestProcessModal,
     setShowSaveModal,
     setShowModal: setShowSaveModal,
+    setShowUnconfiguredModal,
   });
 
   const { modalData, showDecision } = useModalConfiguration({
@@ -746,6 +747,12 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   const beforeDropdownNavigate: IBeforeNavigate = async (_to) => {
     return await handleStep(true);
   };
+
+  console.log({
+    showUnconfiguredModal,
+    showSaveModal,
+    showRequestProcessModal,
+  });
 
   return {
     loading,
