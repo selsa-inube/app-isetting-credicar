@@ -146,9 +146,13 @@ const useValidatingLoginInformation = () => {
           languageId: businessUnit?.languageId,
           urlLogo: businessUnit?.urlLogo,
         },
+        language:
+          businessUnit?.languageId && businessUnit.languageId !== ""
+            ? businessUnit.languageId
+            : languageBrowser || "es",
       }));
     }
-  }, [businessUnitSigla, businessUnitsToTheStaff]);
+  }, [businessUnitSigla, businessUnitsToTheStaff, languageBrowser]);
 
   useEffect(() => {
     localStorage.setItem("useCasesByStaff", useCases);
@@ -173,13 +177,6 @@ const useValidatingLoginInformation = () => {
   useEffect(() => {
     localStorage.setItem("useCasesByStaff", useCases);
   }, [useCases]);
-
-  useEffect(() => {
-    setAppData((prev) => ({
-      ...prev,
-      language: languageBrowser ?? enviroment.VITE_LANGUAGE,
-    }));
-  }, [languageBrowser]);
 
   useEffect(() => {
     const obtenerDatos = async () => {

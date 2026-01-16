@@ -24,6 +24,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     setShowModal,
     useCase,
     token,
+    setShowUnconfiguredModal,
   } = props;
 
   const [saveCreditLines, setSaveCreditLines] = useState<ISaveDataResponse>();
@@ -45,6 +46,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
     try {
       const saveData = await patchConfirmConstruction(userAccount, data, token);
       setSaveCreditLines(saveData);
+      setShowModal(false);
     } catch (error) {
       console.info(error);
       setSendData(false);
@@ -52,7 +54,6 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
       setErrorData(errorObject(error));
     } finally {
       setLoadingSendData(false);
-      setShowModal(false);
     }
   };
 
@@ -83,6 +84,7 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
 
   const fetchRequestData = async () => {
     try {
+      setShowUnconfiguredModal(false);
       if (useCase === EUseCase.ADD) {
         const newData = await postLineUnderConstruction(
           userAccount,

@@ -6,6 +6,7 @@ interface IUseSave {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
   editData: ISaveDataRequest;
+  setShowUnconfiguredModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShowRequestProcessModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShowSaveModal: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;

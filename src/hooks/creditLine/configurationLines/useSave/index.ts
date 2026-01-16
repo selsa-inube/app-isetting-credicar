@@ -13,6 +13,7 @@ const useSave = (props: IUseSave) => {
     showRequestProcessModal,
     data,
     editData,
+    setShowUnconfiguredModal,
     setShowRequestProcessModal,
     setShowSaveModal,
     setShowModal,
@@ -35,6 +36,7 @@ const useSave = (props: IUseSave) => {
       useCase: EUseCase.EDIT,
       data: editData as ISaveDataRequest,
       setShowModal,
+      setShowUnconfiguredModal,
     });
 
     return {
@@ -59,6 +61,7 @@ const useSave = (props: IUseSave) => {
     useCase: useCaseConfiguration as EUseCase,
     data: data || ({} as IModifyConstructionResponse),
     setShowModal: setShowSaveModal,
+    setShowUnconfiguredModal,
   });
 
   return {

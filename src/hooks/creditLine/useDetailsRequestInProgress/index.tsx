@@ -183,7 +183,7 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
 
   const useCaseName = data.useCaseName;
 
-  const title = `${detailsRequestInProgressModal.labelRequest} ${data.request}`;
+  const title = `${detailsRequestInProgressModal.labelRequest} ${data.useCaseName}`;
 
   const withErrorRequest = approvalRequest || executeRequest;
 

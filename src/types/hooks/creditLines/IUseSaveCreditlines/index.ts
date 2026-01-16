@@ -8,6 +8,7 @@ interface IUseSaveCreditlines {
   sendData: boolean;
   data: IModifyConstructionRequest;
   token: string;
+  setShowUnconfiguredModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSendData: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setEntryDeleted?: (id: string | number) => void;

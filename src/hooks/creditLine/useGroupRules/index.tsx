@@ -91,7 +91,10 @@ const useGroupRules = (props: IUseGroupRules) => {
 
     options.unshift({
       id: descriptionLineOption.id,
-      title: descriptionLineOption.title,
+      title:
+        descriptionLineOption.title?.[
+          appData.language as keyof typeof descriptionLineOption.title
+        ],
       path: descriptionLineOption.path,
       links: [],
     });
