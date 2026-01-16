@@ -1,68 +1,78 @@
 import { ETransactionOperation } from "@enum/transactionOperation";
-import { ECreditLines } from "@enum/creditLines";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { findDecision } from "../destination/findDecision";
-import { arraysEqual } from "../destination/arraysEqual";
 
 const getNewInsertDecisionsConfig = (
   useCase: boolean,
   user: string,
   prevRef: IRuleDecisionExtended[],
-  decision: IRuleDecisionExtended[],
-  abbreviatedName: string,
+  newDecision: IRuleDecisionExtended[],
 ) => {
-  if (useCase && !arraysEqual(prevRef, decision)) {
-    return decision
-      .filter((decision) => !findDecision(prevRef, decision))
-      .map((decision) => {
-        const decisionsByRule = decision.decisionsByRule?.map((condition) => {
-          const conditionGroups = condition.conditionGroups
-            ? condition.conditionGroups.map((item) => ({
-                // conditionGroupId: item.conditionGroupId,
-                transactionOperation: ETransactionOperation.INSERT,
-                conditionsThatEstablishesTheDecision: [
-                  ...(item.conditionsThatEstablishesTheDecision
-                    ?.filter((condition) => condition.value !== undefined)
-                    .map((condition) => ({
-                      conditionDataType: condition.conditionDataType,
-                      conditionName: condition.conditionName,
-                      howToSetTheCondition: condition.howToSetTheCondition,
-                      value: condition.value,
-                      transactionOperation: ETransactionOperation.INSERT,
-                    })) || []),
-                  {
-                    conditionName: ECreditLines.CREDIT_LINE_RULE,
-                    value: abbreviatedName,
-                    transactionOperation: ETransactionOperation.INSERT,
-                  },
-                ] as IConditionsTheDecision[],
-              }))
-            : undefined;
+  if (!useCase) return;
 
-          const validUntil = condition.validUntil
-            ? formatDateDecision(condition.validUntil as string)
-            : undefined;
+  const prevDecisions = prevRef.flatMap((group) => group.decisionsByRule ?? []);
+  const newDecisions = newDecision.flatMap(
+    (group) => group.decisionsByRule ?? [],
+  );
 
-          return {
-            effectiveFrom: formatDateDecision(
-              condition.effectiveFrom as string,
-            ),
-            validUntil: validUntil,
-            value: condition.value,
-            transactionOperation: ETransactionOperation.INSERT,
-            conditionGroups: conditionGroups,
-          };
-        });
-        return {
-          modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
-          ruleName: decision.ruleName,
-          decisionsByRule: decisionsByRule,
-        };
-      });
+  const prevIds = new Set(prevDecisions.map((d) => d.decisionId));
+
+  const addedDecisions = newDecisions.filter((d) => !prevIds.has(d.decisionId));
+
+  if (addedDecisions.length === 0) {
+    return;
   }
+
+  const decisionsByRule = addedDecisions.map((decision) => {
+    const conditionGroups = decision.conditionGroups
+      ? decision.conditionGroups.map((item) => ({
+          conditionGroupId: item.conditionGroupId ?? item.ConditionGroupId,
+          transactionOperation: ETransactionOperation.INSERT, // Cambiado a INSERT
+          conditionsThatEstablishesTheDecision:
+            item.conditionsThatEstablishesTheDecision?.filter((condition) => {
+              if (condition.value !== undefined) {
+                return {
+                  conditionName: condition.conditionName,
+                  value: condition.value,
+                  transactionOperation: ETransactionOperation.INSERT, // Cambiado a INSERT
+                };
+              }
+              return false;
+            }) as IConditionsTheDecision[],
+        }))
+      : undefined;
+
+    const validUntil = decision.validUntil
+      ? formatDateDecision(decision.validUntil as string)
+      : undefined;
+
+    return {
+      effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
+      validUntil,
+      value: decision.value,
+      transactionOperation: ETransactionOperation.INSERT,
+      decisionId: decision.decisionId,
+      conditionGroups,
+    };
+  });
+
+  const ruleName = prevRef[0]?.ruleName ?? newDecision[0]?.ruleName;
+
+  console.log("INSERT", {
+    modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+    ruleName,
+    decisionsByRule,
+  });
+
+  return [
+    {
+      modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+      ruleName,
+      decisionsByRule,
+    },
+  ];
 };
 
 export { getNewInsertDecisionsConfig };

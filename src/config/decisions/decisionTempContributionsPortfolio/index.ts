@@ -47,6 +47,7 @@ const decisionContributionsPortfConfig = (
               ),
               conditionDataType: condition.conditionDataType,
               value: "",
+              listOfPossibleValues: condition.listOfPossibleValues,
               howToSetTheCondition:
                 condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL,
             })),
@@ -54,6 +55,7 @@ const decisionContributionsPortfConfig = (
       ],
     };
 
+    console.log("😶‍🌫️", { decisionTemplate });
     return decisionTemplate;
   }
 };

@@ -1,7 +1,11 @@
 import { useState, useEffect, useContext } from "react";
+import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { normalizeConditionTraduction } from "@utils/normalizeConditionTraduction";
+import { isRangeObject } from "@utils/formatValueOfCondition";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { ENameRules } from "@enum/nameRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
@@ -34,6 +38,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     onPreviousStep,
     attentionModal,
     heightContentPage,
+    ruleData,
+    language,
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,6 +73,14 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     setSelectedDecision(null);
   };
 
+  const {
+    conditionTraduction,
+    // ruleNameTraduction,
+    // conditionCreditLine,
+    // listValuesDecision,
+    // dataType,
+  } = getConditionsTraduction(ruleData, language);
+
   const handleSubmitForm = (
     dataDecision: IRuleDecisionExtended,
     decisionTemplate: IRuleDecisionExtended,
@@ -75,14 +89,35 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     const updatedConditionGroups = decisionTemplate.conditionGroups?.map(
       (templateGroup: IConditionGroups) => {
         const updatedConditions =
-          templateGroup?.conditionsThatEstablishesTheDecision?.map((group) => ({
-            ...group,
-            conditionName: group.conditionName,
-            value:
-              group.conditionName === "BusinessUnit"
-                ? appData.businessUnit.publicCode
-                : group.value,
-          }));
+          templateGroup?.conditionsThatEstablishesTheDecision?.map((group) => {
+            const normalized = normalizeConditionTraduction(
+              conditionTraduction,
+              group.conditionName,
+            )?.listPossibleValues;
+            const listValues = normalizeConditionTraduction(
+              conditionTraduction,
+              group.conditionName,
+            )?.listPossibleValues?.list;
+
+            console.log("🍔", { normalized });
+
+            return {
+              ...group,
+              conditionName: group.conditionName,
+              value:
+                group.conditionName === "BusinessUnit"
+                  ? appData.businessUnit.publicCode
+                  : group.value,
+              howToSetTheCondition: isRangeObject(group.value)
+                ? EValueHowToSetUp.RANGE
+                : listValues && listValues.length > 0
+                  ? EValueHowToSetUp.LIST_OF_VALUES
+                  : EValueHowToSetUp.EQUAL,
+              listOfPossibleValues: normalized ?? [],
+            };
+          });
+
+        console.log("❤️", { updatedConditions });
 
         return [
           {
@@ -109,6 +144,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
         ? selectedDecision.decisionId
         : `Decisión ${decisions.length + 1}`,
     };
+
+    console.log("🐸🐸", { decisionsByRuleData });
 
     const getUpdatedConditionGroups = () => {
       const existingConditions =
