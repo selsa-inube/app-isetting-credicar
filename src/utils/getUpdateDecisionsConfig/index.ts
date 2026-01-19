@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ETransactionOperation } from "@src/enum/transactionOperation";
-import { IConditionsTheDecision } from "@src/types/context/creditLinesConstruction/IConditionsTheDecision";
-import { IRuleDecisionExtended } from "@src/types/IRuleDecisionExtended";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
+import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 
 const getUpdateDecisionsConfig = (
