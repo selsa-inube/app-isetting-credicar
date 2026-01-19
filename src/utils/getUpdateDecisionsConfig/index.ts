@@ -43,13 +43,9 @@ const getUpdateDecisionsConfig = (
               (item.conditionGroupId ?? item.ConditionGroupId),
           );
 
-          const groupOperation = !prevGroup
-            ? ETransactionOperation.INSERT
-            : ETransactionOperation.UPDATE;
-
           return {
             conditionGroupId: item.conditionGroupId ?? item.ConditionGroupId,
-            transactionOperation: groupOperation,
+            transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
             conditionsThatEstablishesTheDecision:
               item.conditionsThatEstablishesTheDecision
                 ?.map((condition) => {
@@ -86,13 +82,15 @@ const getUpdateDecisionsConfig = (
       effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
       validUntil,
       value: decision.value,
-      transactionOperation: ETransactionOperation.UPDATE,
+      transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
       decisionId: decision.decisionId,
       conditionGroups,
     };
   });
 
   const ruleName = prevRef[0]?.ruleName ?? newDecision[0]?.ruleName;
+
+  console.log("🤡😈MODIFICAR", { decisionsByRule, ruleName });
 
   return [
     {
