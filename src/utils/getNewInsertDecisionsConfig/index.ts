@@ -110,10 +110,6 @@ const getNewInsertDecisionsConfig = (
 
   const ruleName = prevRef[0]?.ruleName ?? newDecision[0]?.ruleName;
 
-  console.log("😨INSERT", {
-    decisionsByRule,
-  });
-
   return [
     {
       modifyJustification: `${decisionsLabels.modifyJustification} ${ruleName}`,

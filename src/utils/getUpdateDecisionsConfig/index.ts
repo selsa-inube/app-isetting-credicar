@@ -90,8 +90,6 @@ const getUpdateDecisionsConfig = (
 
   const ruleName = prevRef[0]?.ruleName ?? newDecision[0]?.ruleName;
 
-  console.log("🤡😈MODIFICAR", { decisionsByRule, ruleName });
-
   return [
     {
       modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,

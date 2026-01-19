@@ -40,7 +40,6 @@ const useSaveCreditlines = (props: IUseSaveCreditlines) => {
 
   const navigate = useNavigate();
   const navigatePage = "/credit-lines";
-  console.log("👻👻DATA", { data });
 
   const fetchSaveGeneralData = async () => {
     setLoadingSendData(true);

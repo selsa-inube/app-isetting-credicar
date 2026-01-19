@@ -44,8 +44,6 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
   const navigate = useNavigate();
   const navigatePage = "/credit-lines";
 
-  console.log("🍕DATA", { data });
-
   const fetchSavecreditLineData = async () => {
     setLoadingSendData(true);
     try {

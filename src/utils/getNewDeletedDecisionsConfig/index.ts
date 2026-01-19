@@ -61,8 +61,6 @@ const getNewDeletedDecisionsConfig = (
 
   const ruleName = prevRef[0]?.ruleName ?? newDecision[0]?.ruleName;
 
-  console.log("🐸DELETE", { decisionsByRule });
-
   return [
     {
       modifyJustification: `${decisionsLabels.modifyJustification} ${ruleName}`,
