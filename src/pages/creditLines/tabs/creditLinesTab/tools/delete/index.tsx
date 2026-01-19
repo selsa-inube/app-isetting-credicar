@@ -57,6 +57,9 @@ const Delete = (props: IDelete) => {
     setShowPendingReq,
     setEntryDeleted,
     token: appData.token,
+    setShowUnconfiguredModal: () => {
+      return false;
+    },
   });
 
   const { modalData, showDecision } = useModalDeleteCreditLine({
