@@ -23,8 +23,6 @@ const getNewDeletedDecisionsConfig = (
     (d) => !newIds.has(d.decisionId),
   );
 
-  console.log("😨 deletedDecisions:", deletedDecisions);
-
   if (deletedDecisions.length === 0) {
     return;
   }

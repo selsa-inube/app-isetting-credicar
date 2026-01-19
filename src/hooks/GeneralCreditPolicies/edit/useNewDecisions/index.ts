@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { useEffect, useState } from "react";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
 import { decisionWithoutConditions } from "@utils/decisionWithoutConditions";
@@ -29,10 +28,10 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     prevContributionsRef,
     prevIncomesRef,
     prevScoreModelsRef,
+    prevMinimumIncomeRef,
     user,
   } = props;
 
-  const { appData } = useContext(AuthAndPortalData);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [contributionsPortfolio, setContributionsPortfolio] = useState<
@@ -126,53 +125,58 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   }, [scoreModelsData]);
 
   useEffect(() => {
-    if (normalizedMinimumIncome) {
+    if (minimumIncomeData && normalizedMinimumIncome) {
       setMinimumIncomePercentage(normalizedMinimumIncome);
     }
-  }, [minimumIncomePercentage]);
+  }, [minimumIncomeData]);
 
   const newInsertValContribution = getNewInsertDecisions(
-    appData.user.userAccount,
     prevContributionsRef,
     contributionsPortfolio,
     dateDecisions?.date,
   );
 
   const newInsertValIncomes = getNewInsertDecisions(
-    appData.user.userAccount,
     prevIncomesRef,
     incomePortfolio,
     dateDecisions?.date,
   );
 
+  const newInsertPercentage = getNewInsertDecisions(
+    prevMinimumIncomeRef,
+    minimumIncomePercentage,
+    dateDecisions?.date,
+  );
+
   const newInsertValScore = getNewInsertDecisions(
-    appData.user.userAccount,
     prevScoreModelsRef,
     scoreModels,
     dateDecisions?.date,
   );
 
   const newDeleteValContribution = getNewDeletedDecisions(
-    appData.user.userAccount,
     prevContributionsRef,
     contributionsPortfolio,
     dateDecisions?.date,
   );
 
   const newDeleteValIncomes = getNewDeletedDecisions(
-    appData.user.userAccount,
     prevIncomesRef,
     incomePortfolio,
     dateDecisions?.date,
   );
 
+  const newDeletePercentage = getNewDeletedDecisions(
+    prevMinimumIncomeRef,
+    minimumIncomePercentage,
+    dateDecisions?.date,
+  );
+
   const newDeleteValScore = getNewDeletedDecisions(
-    appData.user.userAccount,
     prevScoreModelsRef,
     scoreModels,
     dateDecisions?.date,
   );
-
   useEffect(() => {
     let methods;
     if (methodsArray.length > 0) {
@@ -211,12 +215,14 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       newInsertValContribution,
       newInsertValIncomes,
       newInsertValScore,
+      newInsertPercentage,
     ].filter((decision) => decision !== undefined);
 
     const deleteValues = [
       newDeleteValContribution,
       newDeleteValIncomes,
       newDeleteValScore,
+      newDeletePercentage,
     ].filter((decision) => decision !== undefined);
 
     setNewDecisions(
@@ -224,7 +230,13 @@ const useNewDecisions = (props: IUseNewDecisions) => {
         (item) => item as IRules,
       ),
     );
-  }, [contributionsPortfolio, incomePortfolio, scoreModels, generalDecisions]);
+  }, [
+    contributionsPortfolio,
+    incomePortfolio,
+    minimumIncomePercentage,
+    scoreModels,
+    generalDecisions,
+  ]);
 
   return {
     showRequestProcessModal,

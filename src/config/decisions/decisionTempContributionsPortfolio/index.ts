@@ -47,15 +47,20 @@ const decisionContributionsPortfConfig = (
               ),
               conditionDataType: condition.conditionDataType,
               value: "",
-              listOfPossibleValues: condition.listOfPossibleValues,
-              howToSetTheCondition:
-                condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL,
+              listOfPossibleValues: {
+                list: condition.listOfPossibleValues?.list?.map(
+                  (item) => (item as unknown as { label: string }).label,
+                ),
+              },
+              listOfPossibleValuesHidden: condition.listOfPossibleValues,
+              howToSetTheCondition: condition.listOfPossibleValues
+                ? ValueHowToSetUp.LIST_OF_VALUES
+                : (condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL),
             })),
         },
       ],
     };
 
-    console.log("😶‍🌫️", { decisionTemplate });
     return decisionTemplate;
   }
 };

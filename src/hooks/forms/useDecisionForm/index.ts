@@ -13,17 +13,6 @@ import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 
-const isDecisionLabelEs = (value: unknown) =>
-  typeof value === "string" && /^Decisión\s+\d+$/i.test(value.trim());
-
-const normalizeDecisionIds = <T extends { decisionId?: string }>(list: T[]) =>
-  list.map((item, index) => ({
-    ...item,
-    decisionId: isDecisionLabelEs(item.decisionId)
-      ? item.decisionId
-      : `Decisión ${index + 1}`,
-  }));
-
 const useDecisionForm = (props: IUseDecisionForm) => {
   const {
     initialValues,
@@ -47,7 +36,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     useState<IRuleDecision | null>(null);
 
   const [decisions, setDecisions] = useState<IRuleDecisionExtended[]>(
-    normalizeDecisionIds(initialValues as IRuleDecisionExtended[]),
+    initialValues as IRuleDecisionExtended[],
   );
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -58,7 +47,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   );
 
   const [initialDecisions] = useState<IRuleDecision[]>(
-    normalizeDecisionIds(initialValues as IRuleDecision[]),
+    initialValues as IRuleDecision[],
   );
 
   const { appData } = useContext(AuthAndPortalData);
@@ -73,13 +62,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     setSelectedDecision(null);
   };
 
-  const {
-    conditionTraduction,
-    // ruleNameTraduction,
-    // conditionCreditLine,
-    // listValuesDecision,
-    // dataType,
-  } = getConditionsTraduction(ruleData, language);
+  const { conditionTraduction } = getConditionsTraduction(ruleData, language);
 
   const handleSubmitForm = (
     dataDecision: IRuleDecisionExtended,
@@ -99,8 +82,6 @@ const useDecisionForm = (props: IUseDecisionForm) => {
               group.conditionName,
             )?.listPossibleValues?.list;
 
-            console.log("🍔", { normalized });
-
             return {
               ...group,
               conditionName: group.conditionName,
@@ -113,11 +94,16 @@ const useDecisionForm = (props: IUseDecisionForm) => {
                 : listValues && listValues.length > 0
                   ? EValueHowToSetUp.LIST_OF_VALUES
                   : EValueHowToSetUp.EQUAL,
-              listOfPossibleValues: normalized ?? [],
+              listOfPossibleValues: {
+                list: Array.isArray(normalized)
+                  ? normalized.map(
+                      (item) => (item as unknown as { label: string }).label,
+                    )
+                  : [],
+              },
+              listOfPossibleValuesHidden: normalized ?? [],
             };
           });
-
-        console.log("❤️", { updatedConditions });
 
         return [
           {
@@ -144,8 +130,6 @@ const useDecisionForm = (props: IUseDecisionForm) => {
         ? selectedDecision.decisionId
         : `Decisión ${decisions.length + 1}`,
     };
-
-    console.log("🐸🐸", { decisionsByRuleData });
 
     const getUpdatedConditionGroups = () => {
       const existingConditions =

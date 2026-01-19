@@ -47,8 +47,15 @@ const decisionMinimumIncomePercentage = (
               ),
               conditionDataType: condition.conditionDataType,
               value: "",
-              howToSetTheCondition:
-                condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL,
+              listOfPossibleValues: {
+                list: condition.listOfPossibleValues?.list?.map(
+                  (item) => (item as unknown as { label: string }).label,
+                ),
+              },
+              listOfPossibleValuesHidden: condition.listOfPossibleValues,
+              howToSetTheCondition: condition.listOfPossibleValues
+                ? ValueHowToSetUp.LIST_OF_VALUES
+                : (condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL),
             })),
         },
       ],
