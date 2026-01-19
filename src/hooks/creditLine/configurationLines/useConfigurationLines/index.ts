@@ -641,14 +641,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { groupsData } = useGroupRules({ filterRules });
 
-  const nav = useStepNavigation({
-    groups: groupsData as unknown as IDropdownMenuGroup[],
-    disabledButtons: validateDisabled,
-    disabledButtonSend: validateButtonSend(),
-    handleStep,
-    handleSave,
-  });
-
   useEffect(() => {
     if (loadingModify) {
       setLoadingInitial(true);
@@ -703,8 +695,17 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setShowSaveModal,
     setShowModal: setShowSaveModal,
     setShowUnconfiguredModal,
+    setShowEditSubmitModal,
   });
 
+  const nav = useStepNavigation({
+    groups: groupsData as unknown as IDropdownMenuGroup[],
+    disabledButtons: validateDisabled,
+    disabledButtonSend: validateButtonSend(),
+    loadingSendData,
+    handleStep,
+    handleSave,
+  });
   const { modalData, showDecision } = useModalConfiguration({
     showGoBackModal,
     loading,
