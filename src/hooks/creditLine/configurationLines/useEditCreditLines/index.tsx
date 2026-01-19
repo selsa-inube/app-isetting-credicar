@@ -130,7 +130,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
-      linesConstructionData.abbreviatedName as string,
+      // linesConstructionData.abbreviatedName as string,
     );
 
     const newUpdateDecision = getUpdateDecisionsConfig(
@@ -138,7 +138,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
-      linesConstructionData.abbreviatedName as string,
+      // linesConstructionData.abbreviatedName as string,
     );
 
     const newDeleteDecision = getNewDeletedDecisionsConfig(
