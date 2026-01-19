@@ -115,6 +115,9 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const prevScoreModelsRef = useRef<IRules[]>([]);
   prevScoreModelsRef.current = normalizedScoreModels ?? [];
 
+  const prevMinimumIncomeRef = useRef<IRules[]>([]);
+  prevMinimumIncomeRef.current = normalizedMinimumIncome ?? [];
+
   const {
     showRequestProcessModal,
     contributionsPortfolio,
@@ -141,12 +144,15 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     contributionsData,
     incomeData,
     scoreModelsData,
+    minimumIncomeData,
     normalizedContributions,
     normalizedIncome,
     normalizedScoreModels,
+    normalizedMinimumIncome,
     prevContributionsRef,
     prevIncomesRef,
     prevScoreModelsRef,
+    prevMinimumIncomeRef,
     user: appData.user.userAccount,
   });
 
@@ -222,15 +228,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const handleFinishForm = () => {
     const configurationRequestData: {
-      moneyDestinationId: string;
       modifyJustification: string;
-      abbreviatedName?: string;
-      descriptionUse?: string;
-      iconReference?: string;
       rules?: IRuleDecision[];
     } = {
-      moneyDestinationId: "",
-      modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
+      modifyJustification: `${editLabels.modifyJustification}`,
     };
 
     if (newDecisions && newDecisions.length > 0) {
@@ -242,7 +243,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       requestType: ERequestType.MODIFY,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
+      description: `${editLabels.modifyJustification}`,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
       useCaseName: EGeneralPolicies.USE_CASE_EDIT,

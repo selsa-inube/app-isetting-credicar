@@ -1,4 +1,5 @@
 import { IValue } from "@isettingkit/input";
+import { IListOfPossibleValuesHid } from "../IListOfPossibleValuesHid";
 
 interface IConditionsTheDecision {
   conditionName: string;
@@ -9,6 +10,7 @@ interface IConditionsTheDecision {
   conditionDataType?: string;
   howToSetTheCondition?: string;
   listOfPossibleValues?: IValue;
+  listOfPossibleValuesHidden?: IListOfPossibleValuesHid;
   TimeUnit?: string;
   timeUnit?: string;
 }

@@ -3,7 +3,7 @@ const decisionsLabels = {
   labelpreviousButton: "Anterior",
   labelNextButton: "Siguiente",
   labelSaveButton: "Enviar",
-  modifyJustification: "La modificación de la decisión es solicitada por",
+  modifyJustification: "Modificación de la decisión en la regla ",
 };
 
 export { decisionsLabels };
