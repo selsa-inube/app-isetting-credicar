@@ -7,6 +7,7 @@ interface IUseNewDecisions {
   prevContributionsRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   prevIncomesRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   prevScoreModelsRef: React.MutableRefObject<IRuleDecisionExtended[]>;
+  prevMinimumIncomeRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   user: string;
   contributionsData?: IRuleDecisionExtended[];
   minimumIncomeData?: IRuleDecisionExtended[];

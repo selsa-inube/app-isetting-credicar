@@ -1,24 +1,17 @@
 import { useState, useEffect, useContext } from "react";
+import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { normalizeConditionTraduction } from "@utils/normalizeConditionTraduction";
+import { isRangeObject } from "@utils/formatValueOfCondition";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { ENameRules } from "@enum/nameRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseDecisionForm } from "@ptypes/hooks/IUseDecisionForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
-
-const isDecisionLabelEs = (value: unknown) =>
-  typeof value === "string" && /^Decisión\s+\d+$/i.test(value.trim());
-
-const normalizeDecisionIds = <T extends { decisionId?: string }>(list: T[]) =>
-  list.map((item, index) => ({
-    ...item,
-    decisionId: isDecisionLabelEs(item.decisionId)
-      ? item.decisionId
-      : `Decisión ${index + 1}`,
-  }));
 
 const useDecisionForm = (props: IUseDecisionForm) => {
   const {
@@ -34,6 +27,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     onPreviousStep,
     attentionModal,
     heightContentPage,
+    ruleData,
+    language,
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +36,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     useState<IRuleDecision | null>(null);
 
   const [decisions, setDecisions] = useState<IRuleDecisionExtended[]>(
-    normalizeDecisionIds(initialValues as IRuleDecisionExtended[]),
+    initialValues as IRuleDecisionExtended[],
   );
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -52,7 +47,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
   );
 
   const [initialDecisions] = useState<IRuleDecision[]>(
-    normalizeDecisionIds(initialValues as IRuleDecision[]),
+    initialValues as IRuleDecision[],
   );
 
   const { appData } = useContext(AuthAndPortalData);
@@ -67,6 +62,8 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     setSelectedDecision(null);
   };
 
+  const { conditionTraduction } = getConditionsTraduction(ruleData, language);
+
   const handleSubmitForm = (
     dataDecision: IRuleDecisionExtended,
     decisionTemplate: IRuleDecisionExtended,
@@ -75,14 +72,38 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     const updatedConditionGroups = decisionTemplate.conditionGroups?.map(
       (templateGroup: IConditionGroups) => {
         const updatedConditions =
-          templateGroup?.conditionsThatEstablishesTheDecision?.map((group) => ({
-            ...group,
-            conditionName: group.conditionName,
-            value:
-              group.conditionName === "BusinessUnit"
-                ? appData.businessUnit.publicCode
-                : group.value,
-          }));
+          templateGroup?.conditionsThatEstablishesTheDecision?.map((group) => {
+            const normalized = normalizeConditionTraduction(
+              conditionTraduction,
+              group.conditionName,
+            )?.listPossibleValues;
+            const listValues = normalizeConditionTraduction(
+              conditionTraduction,
+              group.conditionName,
+            )?.listPossibleValues?.list;
+
+            return {
+              ...group,
+              conditionName: group.conditionName,
+              value:
+                group.conditionName === "BusinessUnit"
+                  ? appData.businessUnit.publicCode
+                  : group.value,
+              howToSetTheCondition: isRangeObject(group.value)
+                ? EValueHowToSetUp.RANGE
+                : listValues && listValues.length > 0
+                  ? EValueHowToSetUp.LIST_OF_VALUES
+                  : EValueHowToSetUp.EQUAL,
+              listOfPossibleValues: {
+                list: Array.isArray(normalized)
+                  ? normalized.map(
+                      (item) => (item as unknown as { label: string }).label,
+                    )
+                  : [],
+              },
+              listOfPossibleValuesHidden: normalized ?? [],
+            };
+          });
 
         return [
           {

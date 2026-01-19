@@ -1,70 +1,138 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ETransactionOperation } from "@enum/transactionOperation";
-import { ECreditLines } from "@enum/creditLines";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { findUpdateDecision } from "../decisionsConfig/findUpdateDecision";
-import { arraysEqual } from "../destination/arraysEqual";
 
 const getUpdateDecisionsConfig = (
   useCase: boolean,
   user: string,
   prevRef: IRuleDecisionExtended[],
-  decision: IRuleDecisionExtended[],
-  abbreviatedName: string,
+  newDecision: IRuleDecisionExtended[],
 ) => {
-  if (useCase && !arraysEqual(prevRef, decision)) {
-    return decision
-      .filter((decision) => !findUpdateDecision(prevRef, decision))
-      .map((decision) => {
-        const decisionsByRule = decision.decisionsByRule?.map((condition) => {
-          const conditionGroups = condition.conditionGroups
-            ? condition.conditionGroups.map((item) => ({
-                conditionGroupId: item.conditionGroupId,
-                transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
-                conditionsThatEstablishesTheDecision: [
-                  ...(item.conditionsThatEstablishesTheDecision
-                    ?.filter((condition) => condition.value !== undefined)
-                    .map((condition) => ({
-                      conditionDataType: condition.conditionDataType,
-                      conditionName: condition.conditionName,
-                      howToSetTheCondition: condition.howToSetTheCondition,
-                      value: condition.value,
-                      transactionOperation:
-                        ETransactionOperation.PARTIAL_UPDATE,
-                    })) || []),
-                  {
-                    conditionName: ECreditLines.CREDIT_LINE_RULE,
-                    value: abbreviatedName,
-                    transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
-                  },
-                ] as IConditionsTheDecision[],
-              }))
-            : undefined;
+  if (!useCase) return;
 
-          const validUntil = condition.validUntil
-            ? formatDateDecision(condition.validUntil as string)
-            : undefined;
+  const prevDecisions = prevRef.flatMap((group) => group.decisionsByRule ?? []);
+  const newDecisions = newDecision.flatMap(
+    (group) => group.decisionsByRule ?? [],
+  );
+
+  const prevMap = new Map(prevDecisions.map((d) => [d.decisionId, d]));
+
+  const modifiedDecisions = newDecisions.filter((newDec) => {
+    const prevDec = prevMap.get(newDec.decisionId);
+
+    if (!prevDec) return false;
+
+    return hasChanges(prevDec, newDec);
+  });
+
+  if (modifiedDecisions.length === 0) {
+    return;
+  }
+
+  const decisionsByRule = modifiedDecisions.map((decision) => {
+    const prevDecision = prevMap.get(decision.decisionId)!;
+
+    const conditionGroups = decision.conditionGroups
+      ? decision.conditionGroups.map((item) => {
+          const prevGroup = prevDecision.conditionGroups?.find(
+            (pg) =>
+              (pg.conditionGroupId ?? pg.ConditionGroupId) ===
+              (item.conditionGroupId ?? item.ConditionGroupId),
+          );
 
           return {
-            effectiveFrom: formatDateDecision(
-              condition.effectiveFrom as string,
-            ),
-            validUntil: validUntil,
-            value: condition.value,
-            transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
-            decisionId: condition.decisionId,
-            conditionGroups: conditionGroups,
+            conditionGroupId: item.conditionGroupId ?? item.ConditionGroupId,
+            transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+            conditionsThatEstablishesTheDecision:
+              item.conditionsThatEstablishesTheDecision
+                ?.map((condition) => {
+                  if (condition.value === undefined) return null;
+
+                  const prevCondition =
+                    prevGroup?.conditionsThatEstablishesTheDecision?.find(
+                      (pc) => pc.conditionName === condition.conditionName,
+                    );
+
+                  let conditionOperation = ETransactionOperation.PARTIAL_UPDATE;
+                  if (!prevCondition) {
+                    conditionOperation = ETransactionOperation.PARTIAL_UPDATE;
+                  } else if (prevCondition.value !== condition.value) {
+                    conditionOperation = ETransactionOperation.PARTIAL_UPDATE;
+                  }
+
+                  return {
+                    conditionName: condition.conditionName,
+                    value: condition.value,
+                    transactionOperation: conditionOperation,
+                  };
+                })
+                .filter(Boolean) as IConditionsTheDecision[],
           };
-        });
-        return {
-          modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
-          ruleName: decision.ruleName,
-          decisionsByRule: decisionsByRule,
-        };
-      });
+        })
+      : undefined;
+
+    const validUntil = decision.validUntil
+      ? formatDateDecision(decision.validUntil as string)
+      : undefined;
+
+    return {
+      effectiveFrom: formatDateDecision(decision.effectiveFrom as string),
+      validUntil,
+      value: decision.value,
+      transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+      decisionId: decision.decisionId,
+      conditionGroups,
+    };
+  });
+
+  const ruleName = prevRef[0]?.ruleName ?? newDecision[0]?.ruleName;
+
+  return [
+    {
+      modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+      ruleName,
+      decisionsByRule,
+    },
+  ];
+};
+
+const hasChanges = (prevDec: any, newDec: any): boolean => {
+  if (prevDec.value !== newDec.value) return true;
+  if (prevDec.effectiveFrom !== newDec.effectiveFrom) return true;
+  if (prevDec.validUntil !== newDec.validUntil) return true;
+
+  const prevGroups = prevDec.conditionGroups ?? [];
+  const newGroups = newDec.conditionGroups ?? [];
+
+  if (prevGroups.length !== newGroups.length) return true;
+
+  for (const newGroup of newGroups) {
+    const prevGroup = prevGroups.find(
+      (pg: any) =>
+        (pg.conditionGroupId ?? pg.ConditionGroupId) ===
+        (newGroup.conditionGroupId ?? newGroup.ConditionGroupId),
+    );
+
+    if (!prevGroup) return true;
+
+    const prevConditions = prevGroup.conditionsThatEstablishesTheDecision ?? [];
+    const newConditions = newGroup.conditionsThatEstablishesTheDecision ?? [];
+
+    if (prevConditions.length !== newConditions.length) return true;
+
+    for (const newCond of newConditions) {
+      const prevCond = prevConditions.find(
+        (pc: any) => pc.conditionName === newCond.conditionName,
+      );
+
+      if (!prevCond || prevCond.value !== newCond.value) return true;
+    }
   }
+
+  return false;
 };
 
 export { getUpdateDecisionsConfig };

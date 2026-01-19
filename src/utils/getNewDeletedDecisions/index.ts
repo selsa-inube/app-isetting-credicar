@@ -2,90 +2,68 @@ import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { arraysEqual } from "../destination/arraysEqual";
 import { findDecision } from "../destination/findDecision";
-import { translationToEnum } from "../translationToEnum";
+import { normalizedCodeList } from "../normalizedCodeList";
 
 const getNewDeletedDecisions = (
-  user: string,
   prevRef: React.MutableRefObject<IRuleDecisionExtended[]>,
-  currentPortfolio: IRuleDecisionExtended[],
+  current: IRuleDecisionExtended[],
   dateFrom?: string,
 ) => {
-  if (!arraysEqual(prevRef.current, currentPortfolio)) {
+  if (!arraysEqual(prevRef.current, current)) {
     return prevRef.current
-      .filter((decision) => !findDecision(prevRef.current, decision))
+      .filter((decision) => !findDecision(current, decision))
       .map((decision) => {
-        const conditionGroupsData: unknown[] = [];
-        const decisionsByRule =
-          decision.conditionGroups && decision.conditionGroups?.length > 0
-            ? conditionGroupsData.push(
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                decision.conditionGroups.map((item: any) => ({
-                  conditionGroupId: item.conditionGroupId,
-                  transactionOperation: ETransactionOperation.DELETE,
-                  conditionsThatEstablishesTheDecision:
-                    item.conditionsThatEstablishesTheDecision?.map(
-                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      (condition: any) => {
-                        if (condition.value !== undefined) {
-                          return {
-                            conditionName: condition.conditionName,
-                            value: condition.value,
-                            transactionOperation: ETransactionOperation.DELETE,
-                          };
-                        }
-                      },
-                    ) as IConditionsTheDecision[],
-                })),
-              )
-            : decision.decisionsByRule?.map((condition) => {
-                conditionGroupsData.push(
-                  condition.conditionGroups
-                    ? condition.conditionGroups.map((item) => ({
-                        conditionGroupId: item.conditionGroupId,
+        const conditionGroups =
+          decision.conditionGroups && decision.conditionGroups.length > 0
+            ? decision.conditionGroups.map(
+                (conditionGroup: IConditionGroups) => {
+                  const conditionsThatEstablishesTheDecision =
+                    (conditionGroup.conditionsThatEstablishesTheDecision
+                      ?.filter((condition) => condition.value !== undefined)
+                      .map((condition) => ({
+                        conditionName: condition.conditionName,
+                        value:
+                          condition.listOfPossibleValues?.list &&
+                          condition.listOfPossibleValues?.list?.length > 0
+                            ? normalizedCodeList(
+                                condition.value,
+                                condition.listOfPossibleValuesHidden?.list,
+                              )
+                            : condition.value,
                         transactionOperation: ETransactionOperation.DELETE,
-                        conditionsThatEstablishesTheDecision:
-                          item.conditionsThatEstablishesTheDecision?.filter(
-                            (condition) => {
-                              if (condition.value !== undefined) {
-                                return {
-                                  conditionName:
-                                    translationToEnum[
-                                      condition.conditionName
-                                    ] ?? condition.conditionName,
-                                  value: condition.value,
-                                  transactionOperation:
-                                    ETransactionOperation.DELETE,
-                                };
-                              }
-                            },
-                          ) as IConditionsTheDecision[],
-                      }))
-                    : undefined,
-                );
+                      })) as IConditionsTheDecision[]) || [];
 
-                const validUntil = condition.validUntil
-                  ? formatDateDecision(condition.validUntil as string)
-                  : undefined;
+                  return {
+                    transactionOperation: ETransactionOperation.DELETE,
+                    conditionsThatEstablishesTheDecision,
+                  };
+                },
+              )
+            : undefined;
 
-                return {
-                  effectiveFrom: dateFrom
-                    ? formatDateDecision(dateFrom)
-                    : formatDateDecision(condition.effectiveFrom as string),
-                  validUntil: validUntil,
-                  value: condition.value,
-                  transactionOperation: ETransactionOperation.DELETE,
-                  decisionId: condition.decisionId,
-                  conditionGroups: conditionGroupsData,
-                };
-              });
+        const validUntil = decision.validUntil
+          ? formatDateDecision(decision.validUntil as string)
+          : undefined;
+
+        const decisionObject = {
+          effectiveFrom: dateFrom
+            ? formatDateDecision(dateFrom)
+            : formatDateDecision(decision.effectiveFrom as string),
+          validUntil: validUntil,
+          value: decision.value,
+          transactionOperation: ETransactionOperation.DELETE,
+          decisionId: decision.decisionId,
+          ...(conditionGroups && { conditionGroups }),
+        };
 
         return {
-          modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+          modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
           ruleName: decision.ruleName,
-          decisionsByRule: [decisionsByRule],
+          decisionsByRule: [decisionObject],
         };
       });
   }

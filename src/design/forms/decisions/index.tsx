@@ -5,6 +5,7 @@ import { useDecisionForm } from "@hooks/forms/useDecisionForm";
 import { capitalizeText } from "@utils/capitalizeText";
 import { ENameRules } from "@enum/nameRules";
 import { IDecisionsForm } from "@ptypes/design/IDecisionsForm";
+import { ILanguage } from "@ptypes/i18n";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { DecisionsFormUI } from "./interface";
 
@@ -32,6 +33,16 @@ const DecisionsForm = (props: IDecisionsForm) => {
     setDecisions,
     setShowAttentionModal,
   } = props;
+
+  const { appData } = useContext(AuthAndPortalData);
+
+  const { ruleData } = useEnumRules({
+    enumDestination: labelBusinessRules,
+    ruleCatalog,
+    catalogAction: capitalizeText(ruleCatalog),
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
 
   const {
     isModalOpen,
@@ -67,15 +78,8 @@ const DecisionsForm = (props: IDecisionsForm) => {
     onPreviousStep,
     attentionModal,
     heightContentPage,
-  });
-
-  const { appData } = useContext(AuthAndPortalData);
-  const { ruleData } = useEnumRules({
-    enumDestination: labelBusinessRules,
-    ruleCatalog,
-    catalogAction: capitalizeText(ruleCatalog),
-    businessUnits: appData.businessUnit.publicCode,
-    token: appData.token,
+    ruleData,
+    language: appData.language as ILanguage,
   });
 
   const enumeratorsRules = ruleData as unknown as IRuleDecisionExtended;

@@ -47,6 +47,7 @@ import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
 import { useModalOnSubmit } from "../useModalOnSubmit";
 import { IBeforeNavigate } from "@ptypes/creditLines/IBeforeNavigate";
+import { configurationLinesEventBus } from "@events/configurationLinesEventBus";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -376,6 +377,15 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     editDecision,
     deleteDecision,
   });
+
+  useEffect(() => {
+    if (configuredDecisions && configuredDecisions.length > 0) {
+      configurationLinesEventBus.emit(
+        "configuredDecisionsUpdated",
+        configuredDecisions as IRuleDecision[],
+      );
+    }
+  }, [configuredDecisions]);
 
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
     .filter((r) => r.ruleName === ruleData.ruleName)

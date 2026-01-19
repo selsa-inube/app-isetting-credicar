@@ -1,5 +1,6 @@
 import { IValue } from "@isettingkit/input";
 import { IConditionGroups } from "../IConditionGroups";
+import { IListOfPossibleValuesHid } from "../IListOfPossibleValuesHid";
 
 interface IDecisionsByRule {
   effectiveFrom?: string;
@@ -13,6 +14,7 @@ interface IDecisionsByRule {
   howToSetTheDecision?: string;
   decisionDataType?: string;
   modifyJustification?: string;
+  listOfPossibleValuesHidden?: IListOfPossibleValuesHid;
 }
 
 export type { IDecisionsByRule };
