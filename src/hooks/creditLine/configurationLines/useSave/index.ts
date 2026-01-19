@@ -17,6 +17,7 @@ const useSave = (props: IUseSave) => {
     setShowRequestProcessModal,
     setShowSaveModal,
     setShowModal,
+    setShowEditSubmitModal,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -36,7 +37,7 @@ const useSave = (props: IUseSave) => {
       useCase: EUseCase.EDIT,
       data: editData as ISaveDataRequest,
       setShowModal,
-      setShowUnconfiguredModal,
+      setShowUnconfiguredModal: setShowEditSubmitModal,
     });
 
     return {

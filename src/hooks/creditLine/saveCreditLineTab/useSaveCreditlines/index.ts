@@ -25,6 +25,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     sendData,
     setShowModal,
     setEntryDeleted,
+    setShowUnconfiguredModal,
     useCase,
     token,
   } = props;
@@ -89,6 +90,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
   };
 
   const fetchRequestData = async () => {
+    setShowUnconfiguredModal(false);
     try {
       if (useCase === EUseCase.DELETE) {
         const newData = await deleteCreditLineTab(
