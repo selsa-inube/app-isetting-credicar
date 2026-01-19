@@ -9,6 +9,7 @@ const useStepNavigation = (props: IUseStepNavigation) => {
     groups,
     disabledButtons,
     disabledButtonSend,
+    loadingSendData,
     handleStep,
     handleSave,
   } = props;
@@ -85,7 +86,7 @@ const useStepNavigation = (props: IUseStepNavigation) => {
 
   const disabledSend = disabledButtons || disabledButtonSend;
   const loadingBackAndNext = false;
-  const loadingSend = false;
+  const loadingSend = loadingSendData;
 
   return {
     currentIndex,
