@@ -6,7 +6,6 @@ import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/ICondi
 import { arraysEqual } from "../destination/arraysEqual";
 import { findDecision } from "../destination/findDecision";
 import { formatDateDecision } from "../date/formatDateDecision";
-import { translationToEnum } from "../translationToEnum";
 import { normalizedCodeList } from "../normalizedCodeList";
 
 const getNewInsertDecisions = (
@@ -26,9 +25,7 @@ const getNewInsertDecisions = (
                     (conditionGroup.conditionsThatEstablishesTheDecision
                       ?.filter((condition) => condition.value !== undefined)
                       .map((condition) => ({
-                        conditionName:
-                          translationToEnum[condition.conditionName] ??
-                          condition.conditionName,
+                        conditionName: condition.conditionName,
                         value:
                           condition.listOfPossibleValues?.list &&
                           condition.listOfPossibleValues?.list?.length > 0

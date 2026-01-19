@@ -6,7 +6,6 @@ import { formatDateDecision } from "../date/formatDateDecision";
 
 const getNewDeletedDecisionsConfig = (
   useCase: boolean,
-  user: string,
   prevRef: IRuleDecisionExtended[],
   newDecision: IRuleDecisionExtended[],
 ) => {
@@ -64,7 +63,7 @@ const getNewDeletedDecisionsConfig = (
 
   return [
     {
-      modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+      modifyJustification: `${decisionsLabels.modifyJustification} ${ruleName}`,
       ruleName,
       decisionsByRule,
     },
