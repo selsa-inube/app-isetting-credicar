@@ -11,6 +11,7 @@ const ensureArrayGroupsDeep = (
   decision: IRuleDecision,
   editDecision?: boolean,
   initialDecision?: IRuleDecision,
+  idInitial?: string,
 ): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
   const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
@@ -24,6 +25,7 @@ const ensureArrayGroupsDeep = (
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const out: IRuleDecision = {
     ...cloned,
+    decisionId: editDecision && idInitial ? idInitial : cloned.decisionId,
     effectiveFrom: editDecision
       ? getNextDay(cloned.effectiveFrom as string, initialDecision)
       : cloned.effectiveFrom,

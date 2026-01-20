@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
@@ -29,7 +28,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     deleteDecision,
   } = props;
 
-  const { appData } = useContext(AuthAndPortalData);
   const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
@@ -134,10 +132,9 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
 
     const newUpdateDecision = getUpdateDecisionsConfig(
       editDecision,
-      appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
-      // linesConstructionData.abbreviatedName as string,
+      linesConstructionData.abbreviatedName as string,
     );
 
     const newDeleteDecision = getNewDeletedDecisionsConfig(
