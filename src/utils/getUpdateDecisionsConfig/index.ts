@@ -13,7 +13,7 @@ const getUpdateDecisionsConfig = (
   abbreviatedName: string,
 ) => {
   if (!useCase) return;
-
+  console.log("🍕", { prevRef, newDecision });
   const prevDecisions = prevRef.flatMap((group) => group.decisionsByRule ?? []);
   const newDecisions = newDecision.flatMap(
     (group) => group.decisionsByRule ?? [],
