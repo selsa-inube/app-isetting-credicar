@@ -12,7 +12,7 @@ const postAddGeneralPolicies = async (
 ): Promise<IRequestGeneralPol> => {
   const config: AxiosRequestConfig = {
     headers: {
-      "X-Action": "AddGeneralPortfolioPolicess",
+      "X-Action": "AddGeneralPortfolioPolicies",
       "X-Business-Unit": businessUnit,
       "X-User-Name": user,
       Authorization: token,
@@ -20,7 +20,7 @@ const postAddGeneralPolicies = async (
   };
 
   const newData = await postWithRetries<IRequestGeneralPol>(
-    `/portfolio-policess`,
+    `/portfolio-policies`,
     config,
     mapAddPayrollnEntityToApi(data) as unknown as string[],
     credicarAxiosInstance,
