@@ -103,7 +103,6 @@ const getNewInsertDecisionsConfig = (
       validUntil,
       value: decision.value,
       transactionOperation: ETransactionOperation.INSERT,
-      decisionId: decision.decisionId,
       conditionGroups,
     };
   });

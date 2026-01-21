@@ -1,15 +1,17 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ETransactionOperation } from "@enum/transactionOperation";
+import { ECreditLines } from "@enum/creditLines";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
+import { areDecisionsEqualModify } from "../areDecisionsEqualModify";
+import { getConditionGroupId } from "../getConditionGroupId";
 
 const getUpdateDecisionsConfig = (
   useCase: boolean,
-  user: string,
   prevRef: IRuleDecisionExtended[],
   newDecision: IRuleDecisionExtended[],
+  abbreviatedName: string,
 ) => {
   if (!useCase) return;
 
@@ -18,62 +20,100 @@ const getUpdateDecisionsConfig = (
     (group) => group.decisionsByRule ?? [],
   );
 
-  const prevMap = new Map(prevDecisions.map((d) => [d.decisionId, d]));
-
-  const modifiedDecisions = newDecisions.filter((newDec) => {
-    const prevDec = prevMap.get(newDec.decisionId);
-
-    if (!prevDec) return false;
-
-    return hasChanges(prevDec, newDec);
+  const addedDecisions = newDecisions.filter((newDec) => {
+    return !prevDecisions.some((prevDec) =>
+      areDecisionsEqualModify(prevDec, newDec),
+    );
   });
 
-  if (modifiedDecisions.length === 0) {
+  if (addedDecisions.length === 0) {
     return;
   }
 
-  const decisionsByRule = modifiedDecisions.map((decision) => {
-    const prevDecision = prevMap.get(decision.decisionId)!;
+  const decisionsByRule = addedDecisions.map((decision) => {
+    const prevDecision = prevDecisions.find(
+      (prev) => prev.decisionId === decision.decisionId,
+    );
 
-    const conditionGroups = decision.conditionGroups
-      ? decision.conditionGroups.map((item) => {
-          const prevGroup = prevDecision.conditionGroups?.find(
-            (pg) =>
-              (pg.conditionGroupId ?? pg.ConditionGroupId) ===
-              (item.conditionGroupId ?? item.ConditionGroupId),
-          );
+    const conditionGroups =
+      decision.conditionGroups && decision.conditionGroups.length > 0
+        ? (() => {
+            const filtered = decision.conditionGroups
+              .filter(
+                (item) => item.conditionsThatEstablishesTheDecision.length > 0,
+              )
+              .map((item, index) => {
+                const validateTransOperation =
+                  (prevDecision?.conditionGroups?.[index]?.conditionGroupId
+                    ?.length ?? 0) > 0
+                    ? ETransactionOperation.PARTIAL_UPDATE
+                    : ETransactionOperation.INSERT;
 
-          return {
-            conditionGroupId: item.conditionGroupId ?? item.ConditionGroupId,
-            transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
-            conditionsThatEstablishesTheDecision:
-              item.conditionsThatEstablishesTheDecision
-                ?.map((condition) => {
-                  if (condition.value === undefined) return null;
+                const filteredConditions =
+                  (item.conditionsThatEstablishesTheDecision
+                    ?.filter((condition) => {
+                      if (
+                        condition.conditionName ===
+                        ECreditLines.CREDIT_LINE_RULE
+                      ) {
+                        return false;
+                      }
+                      return Object.values(condition.value).length > 0;
+                    })
+                    .map((condition) => ({
+                      conditionName: condition.conditionName,
+                      value: condition.value,
+                      transactionOperation: validateTransOperation,
+                    })) as IConditionsTheDecision[]) || [];
 
-                  const prevCondition =
-                    prevGroup?.conditionsThatEstablishesTheDecision?.find(
-                      (pc) => pc.conditionName === condition.conditionName,
-                    );
+                const updatedConditions: IConditionsTheDecision[] = [
+                  ...filteredConditions,
+                  {
+                    conditionName: ECreditLines.CREDIT_LINE_RULE,
+                    value: abbreviatedName,
+                    transactionOperation: validateTransOperation,
+                  },
+                ];
 
-                  let conditionOperation = ETransactionOperation.PARTIAL_UPDATE;
-                  if (!prevCondition) {
-                    conditionOperation = ETransactionOperation.PARTIAL_UPDATE;
-                  } else if (prevCondition.value !== condition.value) {
-                    conditionOperation = ETransactionOperation.PARTIAL_UPDATE;
-                  }
+                const conditionGroupId =
+                  prevDecision?.conditionGroups?.[index]?.conditionGroupId ??
+                  getConditionGroupId(item.conditionGroupId ?? "");
 
-                  return {
-                    conditionName: condition.conditionName,
-                    value: condition.value,
-                    transactionOperation: conditionOperation,
-                  };
-                })
-                .filter(Boolean) as IConditionsTheDecision[],
-          };
-        })
-      : undefined;
+                return {
+                  transactionOperation: validateTransOperation,
+                  conditionGroupId,
+                  conditionsThatEstablishesTheDecision: updatedConditions,
+                };
+              });
 
+            return filtered.length > 0
+              ? filtered
+              : [
+                  {
+                    transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+                    conditionsThatEstablishesTheDecision: [
+                      {
+                        conditionName: ECreditLines.CREDIT_LINE_RULE,
+                        value: abbreviatedName,
+                        transactionOperation:
+                          ETransactionOperation.PARTIAL_UPDATE,
+                      },
+                    ],
+                  },
+                ];
+          })()
+        : [
+            {
+              transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+              conditionsThatEstablishesTheDecision: [
+                {
+                  conditionName: ECreditLines.CREDIT_LINE_RULE,
+                  value: abbreviatedName,
+                  transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+                },
+              ],
+            },
+          ];
     const validUntil = decision.validUntil
       ? formatDateDecision(decision.validUntil as string)
       : undefined;
@@ -92,47 +132,11 @@ const getUpdateDecisionsConfig = (
 
   return [
     {
-      modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+      modifyJustification: `${decisionsLabels.modifyJustification} ${ruleName}`,
       ruleName,
       decisionsByRule,
     },
   ];
-};
-
-const hasChanges = (prevDec: any, newDec: any): boolean => {
-  if (prevDec.value !== newDec.value) return true;
-  if (prevDec.effectiveFrom !== newDec.effectiveFrom) return true;
-  if (prevDec.validUntil !== newDec.validUntil) return true;
-
-  const prevGroups = prevDec.conditionGroups ?? [];
-  const newGroups = newDec.conditionGroups ?? [];
-
-  if (prevGroups.length !== newGroups.length) return true;
-
-  for (const newGroup of newGroups) {
-    const prevGroup = prevGroups.find(
-      (pg: any) =>
-        (pg.conditionGroupId ?? pg.ConditionGroupId) ===
-        (newGroup.conditionGroupId ?? newGroup.ConditionGroupId),
-    );
-
-    if (!prevGroup) return true;
-
-    const prevConditions = prevGroup.conditionsThatEstablishesTheDecision ?? [];
-    const newConditions = newGroup.conditionsThatEstablishesTheDecision ?? [];
-
-    if (prevConditions.length !== newConditions.length) return true;
-
-    for (const newCond of newConditions) {
-      const prevCond = prevConditions.find(
-        (pc: any) => pc.conditionName === newCond.conditionName,
-      );
-
-      if (!prevCond || prevCond.value !== newCond.value) return true;
-    }
-  }
-
-  return false;
 };
 
 export { getUpdateDecisionsConfig };

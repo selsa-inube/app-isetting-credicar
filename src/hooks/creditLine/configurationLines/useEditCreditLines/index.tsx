@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IRuleDecision } from "@isettingkit/input";
-import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
@@ -29,7 +28,6 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
     deleteDecision,
   } = props;
 
-  const { appData } = useContext(AuthAndPortalData);
   const [optionsConditionsCSV, setOptionsConditionsCSV] = useState<string>();
 
   const getRule = (ruleName: string) =>
@@ -134,10 +132,9 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
 
     const newUpdateDecision = getUpdateDecisionsConfig(
       editDecision,
-      appData.user.userAccount,
       normalizeEvaluateRuleConfig(configuredDecisions) ?? [],
       transformRuleStructure(decisionsData),
-      // linesConstructionData.abbreviatedName as string,
+      linesConstructionData.abbreviatedName as string,
     );
 
     const newDeleteDecision = getNewDeletedDecisionsConfig(
@@ -191,27 +188,27 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
 
   useEffect(() => {
     const validate = useCaseConfiguration === EUseCase.EDIT;
-    if (validate) {
-      const newFormattedRules = formatRuleDecisionsConfig(
-        decisionsData,
-        false,
-        linesConstructionData.abbreviatedName as string,
-      );
-      setLinesConstructionData((prev) => {
-        const existingRules =
-          (prev?.rules as IRuleDecision[] | undefined) ??
-          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-          [];
 
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
-          rules: mergeRules(existingRules, newFormattedRules),
-        };
-      });
+    if (!validate || decisionsData.length === 0) {
+      return;
     }
-  }, [decisionsData, useCaseConfiguration]);
 
+    const newFormattedRules = formatRuleDecisionsConfig(
+      decisionsData,
+      false,
+      linesConstructionData.abbreviatedName as string,
+    );
+
+    setLinesConstructionData((prev) => {
+      const existingRules = (prev?.rules as IRuleDecision[] | undefined) ?? [];
+
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        rules: mergeRules(existingRules, newFormattedRules),
+      };
+    });
+  }, [decisionsData, useCaseConfiguration]);
   return {
     optionsConditionsCSV,
     ruleError,
