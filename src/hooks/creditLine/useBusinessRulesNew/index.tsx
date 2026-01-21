@@ -139,11 +139,37 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   >(new Set());
 
   const removeCondition = (conditionName: string) => {
-    const key = originalName(conditionName);
+    const parts = conditionName.split(".");
+    const groupKey = parts.length > 1 ? parts[0] : undefined;
+    const plainName = parts.length > 1 ? parts.slice(1).join(".") : parts[0];
+    const key = originalName(plainName);
+
     setRemovedConditionNames((prev) => {
       const next = new Set(prev);
       next.add(key);
       return next;
+    });
+
+    setSelectedDecision((prev) => {
+      if (!prev) return prev;
+
+      const groups = getConditionsByGroupNew(prev) || {};
+
+      const updatedGroupsRecord = Object.fromEntries(
+        Object.entries(groups).map(([g, list]) => {
+          if (groupKey && g !== groupKey) return [g, list];
+
+          return [g, list.filter((c) => originalName(c.conditionName) !== key)];
+        }),
+      );
+
+      const nextDecision: IRuleDecision = {
+        ...prev,
+        conditionGroups: groupsRecordToArrayNew(updatedGroupsRecord) as any,
+        conditionsThatEstablishesTheDecision: updatedGroupsRecord as any,
+      };
+
+      return nextDecision;
     });
   };
 
