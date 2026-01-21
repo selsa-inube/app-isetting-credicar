@@ -58,7 +58,10 @@ const getUpdateDecisionsConfig = (
                       conditionName: condition.conditionName,
                       value: condition.value,
                       transactionOperation:
-                        ETransactionOperation.PARTIAL_UPDATE,
+                        (prevDecision?.conditionGroups?.[index]
+                          ?.conditionGroupId?.length ?? 0) > 0
+                          ? ETransactionOperation.PARTIAL_UPDATE
+                          : ETransactionOperation.INSERT,
                     })) as IConditionsTheDecision[]) || [];
 
                 const updatedConditions: IConditionsTheDecision[] = [
@@ -66,7 +69,11 @@ const getUpdateDecisionsConfig = (
                   {
                     conditionName: ECreditLines.CREDIT_LINE_RULE,
                     value: abbreviatedName,
-                    transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+                    transactionOperation:
+                      (prevDecision?.conditionGroups?.[index]?.conditionGroupId
+                        ?.length ?? 0) > 0
+                        ? ETransactionOperation.PARTIAL_UPDATE
+                        : ETransactionOperation.INSERT,
                   },
                 ];
 
@@ -75,7 +82,11 @@ const getUpdateDecisionsConfig = (
                   getConditionGroupId(item.conditionGroupId ?? "");
 
                 return {
-                  transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
+                  transactionOperation:
+                    (prevDecision?.conditionGroups?.[index]?.conditionGroupId
+                      ?.length ?? 0) > 0
+                      ? ETransactionOperation.PARTIAL_UPDATE
+                      : ETransactionOperation.INSERT,
                   conditionGroupId,
                   conditionsThatEstablishesTheDecision: updatedConditions,
                 };
