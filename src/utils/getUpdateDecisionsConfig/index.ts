@@ -43,6 +43,12 @@ const getUpdateDecisionsConfig = (
                 (item) => item.conditionsThatEstablishesTheDecision.length > 0,
               )
               .map((item, index) => {
+                const validateTransOperation =
+                  (prevDecision?.conditionGroups?.[index]?.conditionGroupId
+                    ?.length ?? 0) > 0
+                    ? ETransactionOperation.PARTIAL_UPDATE
+                    : ETransactionOperation.INSERT;
+
                 const filteredConditions =
                   (item.conditionsThatEstablishesTheDecision
                     ?.filter((condition) => {
@@ -57,11 +63,7 @@ const getUpdateDecisionsConfig = (
                     .map((condition) => ({
                       conditionName: condition.conditionName,
                       value: condition.value,
-                      transactionOperation:
-                        (prevDecision?.conditionGroups?.[index]
-                          ?.conditionGroupId?.length ?? 0) > 0
-                          ? ETransactionOperation.PARTIAL_UPDATE
-                          : ETransactionOperation.INSERT,
+                      transactionOperation: validateTransOperation,
                     })) as IConditionsTheDecision[]) || [];
 
                 const updatedConditions: IConditionsTheDecision[] = [
@@ -69,11 +71,7 @@ const getUpdateDecisionsConfig = (
                   {
                     conditionName: ECreditLines.CREDIT_LINE_RULE,
                     value: abbreviatedName,
-                    transactionOperation:
-                      (prevDecision?.conditionGroups?.[index]?.conditionGroupId
-                        ?.length ?? 0) > 0
-                        ? ETransactionOperation.PARTIAL_UPDATE
-                        : ETransactionOperation.INSERT,
+                    transactionOperation: validateTransOperation,
                   },
                 ];
 
@@ -82,11 +80,7 @@ const getUpdateDecisionsConfig = (
                   getConditionGroupId(item.conditionGroupId ?? "");
 
                 return {
-                  transactionOperation:
-                    (prevDecision?.conditionGroups?.[index]?.conditionGroupId
-                      ?.length ?? 0) > 0
-                      ? ETransactionOperation.PARTIAL_UPDATE
-                      : ETransactionOperation.INSERT,
+                  transactionOperation: validateTransOperation,
                   conditionGroupId,
                   conditionsThatEstablishesTheDecision: updatedConditions,
                 };
