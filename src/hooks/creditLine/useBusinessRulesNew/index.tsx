@@ -329,8 +329,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     const decisionWithSentences = transformDecision(
       newDecision,
       language,
-      validateEditionMode === "versioned" && isEditing,
+      isEditing,
       compareValueDecision(initialDecisions, newDecision),
+      base.decisionId,
     );
 
     setDecisions((prev) => {

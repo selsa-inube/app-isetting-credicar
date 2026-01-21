@@ -15,11 +15,13 @@ const transformDecision = (
   language: "es" | "en" | undefined,
   editDecision?: boolean,
   initialDecision?: IRuleDecision,
+  idInitial?: string,
 ): IRuleDecision => {
   const loc = ensureArrayGroupsDeep(
     localizeDecision(d, language),
     editDecision,
     initialDecision,
+    idInitial,
   );
   const withSentences = loc;
   const mappedRecord = mapByGroupNew(
