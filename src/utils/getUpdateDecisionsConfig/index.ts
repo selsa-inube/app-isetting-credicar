@@ -5,6 +5,7 @@ import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { areDecisionsEqualModify } from "../areDecisionsEqualModify";
+import { getConditionGroupId } from "../getConditionGroupId";
 
 const getUpdateDecisionsConfig = (
   useCase: boolean,
@@ -13,7 +14,7 @@ const getUpdateDecisionsConfig = (
   abbreviatedName: string,
 ) => {
   if (!useCase) return;
-  console.log("🍕", { prevRef, newDecision });
+
   const prevDecisions = prevRef.flatMap((group) => group.decisionsByRule ?? []);
   const newDecisions = newDecision.flatMap(
     (group) => group.decisionsByRule ?? [],
@@ -30,6 +31,10 @@ const getUpdateDecisionsConfig = (
   }
 
   const decisionsByRule = addedDecisions.map((decision) => {
+    const prevDecision = prevDecisions.find(
+      (prev) => prev.decisionId === decision.decisionId,
+    );
+
     const conditionGroups =
       decision.conditionGroups && decision.conditionGroups.length > 0
         ? (() => {
@@ -37,7 +42,7 @@ const getUpdateDecisionsConfig = (
               .filter(
                 (item) => item.conditionsThatEstablishesTheDecision.length > 0,
               )
-              .map((item) => {
+              .map((item, index) => {
                 const filteredConditions =
                   (item.conditionsThatEstablishesTheDecision
                     ?.filter((condition) => {
@@ -65,9 +70,13 @@ const getUpdateDecisionsConfig = (
                   },
                 ];
 
+                const conditionGroupId =
+                  prevDecision?.conditionGroups?.[index]?.conditionGroupId ??
+                  getConditionGroupId(item.conditionGroupId ?? "");
+
                 return {
                   transactionOperation: ETransactionOperation.PARTIAL_UPDATE,
-                  conditionGroupId: item.conditionGroupId,
+                  conditionGroupId,
                   conditionsThatEstablishesTheDecision: updatedConditions,
                 };
               });

@@ -19,7 +19,7 @@ const patchConfirmConstruction = async (
   };
 
   const saveData = await patchWithRetries<ISaveDataResponse>(
-    `/requestsssss`,
+    `/requests`,
     config,
     mapConfirmConstructionEntityToApi(data) as unknown as string[],
     isaasPerAxiosInstance,
