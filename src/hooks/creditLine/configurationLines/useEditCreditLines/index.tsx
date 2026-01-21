@@ -188,27 +188,27 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
 
   useEffect(() => {
     const validate = useCaseConfiguration === EUseCase.EDIT;
-    if (validate) {
-      const newFormattedRules = formatRuleDecisionsConfig(
-        decisionsData,
-        false,
-        linesConstructionData.abbreviatedName as string,
-      );
-      setLinesConstructionData((prev) => {
-        const existingRules =
-          (prev?.rules as IRuleDecision[] | undefined) ??
-          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-          [];
 
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
-          rules: mergeRules(existingRules, newFormattedRules),
-        };
-      });
+    if (!validate || decisionsData.length === 0) {
+      return;
     }
-  }, [decisionsData, useCaseConfiguration]);
 
+    const newFormattedRules = formatRuleDecisionsConfig(
+      decisionsData,
+      false,
+      linesConstructionData.abbreviatedName as string,
+    );
+
+    setLinesConstructionData((prev) => {
+      const existingRules = (prev?.rules as IRuleDecision[] | undefined) ?? [];
+
+      return {
+        ...prev,
+        settingRequestId: linesConstructionData.settingRequestId,
+        rules: mergeRules(existingRules, newFormattedRules),
+      };
+    });
+  }, [decisionsData, useCaseConfiguration]);
   return {
     optionsConditionsCSV,
     ruleError,
