@@ -36,7 +36,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
 
   const { appData } = useContext(AuthAndPortalData);
 
-  const { ruleData } = useEnumRules({
+  const { ruleData, loadingList } = useEnumRules({
     enumDestination: labelBusinessRules,
     ruleCatalog,
     catalogAction: capitalizeText(ruleCatalog),
@@ -103,7 +103,7 @@ const DecisionsForm = (props: IDecisionsForm) => {
       decisionTemplate={decisionTemplate as any}
       deleteModal={deleteModal}
       isModalOpen={isModalOpen}
-      loading={false}
+      loading={loadingList}
       onCloseModal={handleCloseModal}
       onDelete={handleDelete}
       onButtonClick={onButtonClick}

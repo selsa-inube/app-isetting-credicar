@@ -6,6 +6,7 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { normalizeConditionTraduction } from "@utils/normalizeConditionTraduction";
 import { isRangeObject } from "@utils/formatValueOfCondition";
+import { transformationDecisionPolicies } from "@utils/transformationDecisionPolicies";
 import { formatDateDecision } from "@utils/date/formatDateDecision";
 import { ENameRules } from "@enum/nameRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
@@ -31,13 +32,16 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     language,
   } = props;
 
+  const { conditionTraduction, ruleNameTraduction } = getConditionsTraduction(
+    ruleData,
+    language,
+  );
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
 
-  const [decisions, setDecisions] = useState<IRuleDecisionExtended[]>(
-    initialValues as IRuleDecisionExtended[],
-  );
+  const [decisions, setDecisions] = useState<IRuleDecisionExtended[]>([]);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [id, setId] = useState("");
@@ -46,9 +50,7 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     [],
   );
 
-  const [initialDecisions] = useState<IRuleDecision[]>(
-    initialValues as IRuleDecision[],
-  );
+  const [initialDecisions, setInitialDecisions] = useState<IRuleDecision[]>([]);
 
   const { appData } = useContext(AuthAndPortalData);
 
@@ -62,7 +64,19 @@ const useDecisionForm = (props: IUseDecisionForm) => {
     setSelectedDecision(null);
   };
 
-  const { conditionTraduction } = getConditionsTraduction(ruleData, language);
+  useEffect(() => {
+    if (conditionTraduction && conditionTraduction.length > 0) {
+      const transformedDecisions = transformationDecisionPolicies(
+        initialValues as IRuleDecision[],
+        conditionTraduction,
+        ruleNameTraduction as string,
+      );
+
+      setInitialDecisions(transformedDecisions);
+      setDecisions(transformedDecisions as IRuleDecisionExtended[]);
+      setSavedDecisions(transformedDecisions as IRuleDecisionExtended[]);
+    }
+  }, [ruleData]);
 
   const handleSubmitForm = (
     dataDecision: IRuleDecisionExtended,

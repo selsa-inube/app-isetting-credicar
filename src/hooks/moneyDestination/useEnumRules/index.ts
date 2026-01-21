@@ -21,6 +21,7 @@ const useEnumRules = (props: IUseEnumRules) => {
   );
   const [hasError, setHasError] = useState(false);
   const [hasListError, setHasListError] = useState(false);
+  const [loadingList, setLoadingList] = useState(false);
 
   useEffect(() => {
     const fetchEnumData = async () => {
@@ -46,6 +47,7 @@ const useEnumRules = (props: IUseEnumRules) => {
 
   const fetchListValues = async (pathListPossibleValues: string) => {
     try {
+      setLoadingList(true);
       if (
         pathListPossibleValues !== "undefined" &&
         pathListPossibleValues.length > 0
@@ -68,6 +70,8 @@ const useEnumRules = (props: IUseEnumRules) => {
       console.info(error);
       setHasListError(true);
       return [];
+    } finally {
+      setLoadingList(false);
     }
   };
 
@@ -119,7 +123,7 @@ const useEnumRules = (props: IUseEnumRules) => {
     processEnumData();
   }, [enumRuleData, hasError, businessUnits]);
 
-  return { ruleData, hasError, hasListError };
+  return { ruleData, hasError, hasListError, loadingList };
 };
 
 export { useEnumRules };
