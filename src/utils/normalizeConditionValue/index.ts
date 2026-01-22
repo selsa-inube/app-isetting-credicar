@@ -1,6 +1,6 @@
 import { IOption } from "@inubekit/inubekit";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
-import { IValue } from "@src/types/decisions/IValue";
+import { IValue } from "@ptypes/decisions/IValue";
 
 const normalizeConditionValue = (
   conditionsArray: IConditionTraduction[],
