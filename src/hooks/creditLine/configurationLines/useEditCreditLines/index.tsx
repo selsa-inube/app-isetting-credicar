@@ -7,6 +7,7 @@ import { transformRuleStructure } from "@utils/transformRuleStructure";
 import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { getUpdateDecisionsConfig } from "@utils/getUpdateDecisionsConfig";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
+import { mergeRulesPreservingExisting } from "@utils/mergeRulesPreservingExisting";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { rulesExcludedByEvaluate } from "@config/creditLines/configuration/rulesExcludedByEvaluate";
 import { IUseEditCreditLines } from "@ptypes/hooks/creditLines/IUseEditCreditLines";
@@ -102,7 +103,10 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
             const existingRules = (prev?.rules ?? []) as IRuleDecision[];
             const newRules = normalized;
 
-            normalizeData.rules = mergeRules(existingRules, newRules);
+            normalizeData.rules = mergeRulesPreservingExisting(
+              existingRules,
+              newRules,
+            );
 
             return {
               ...prev,
