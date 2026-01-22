@@ -5,11 +5,8 @@ const geti18nValueDecision = (
   listValues: { id: string; label: string; value: string }[],
 ) => {
   if (listValues && listValues.length > 0) {
-    return listValues.find((item) => {
-      return item.id === value;
-    })?.label;
-  } else {
-    return value;
+    const foundValue = listValues.find((item) => item.id === value);
+    return foundValue?.label || value;
   }
 };
 
