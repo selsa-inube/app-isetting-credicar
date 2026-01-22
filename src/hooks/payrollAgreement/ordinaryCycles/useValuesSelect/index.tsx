@@ -37,15 +37,24 @@ const useValuesSelect = () => {
     token: appData.token,
   });
 
-  const periodicityOptions = optionsFromEnumsSpanish(periodicity);
+  const periodicityOptions = optionsFromEnumsSpanish(
+    periodicity,
+    appData.language,
+  );
 
-  const weeklyPayDayOptions = optionsFromEnumsSpanish(weekly);
+  const weeklyPayDayOptions = optionsFromEnumsSpanish(weekly, appData.language);
 
-  const everyTenPayDayOptions = optionsFromEnumsSpanish(everyTen);
+  const everyTenPayDayOptions = optionsFromEnumsSpanish(
+    everyTen,
+    appData.language,
+  );
 
-  const semimonthlyOptions = optionsFromEnumsSpanish(semimonthly);
+  const semimonthlyOptions = optionsFromEnumsSpanish(
+    semimonthly,
+    appData.language,
+  );
 
-  const monthPayDayOptions = optionsFromEnumsSpanish(monthly);
+  const monthPayDayOptions = optionsFromEnumsSpanish(monthly, appData.language);
 
   const montlyCourtDaysOptions = withoutLastElements(
     monthPayDayOptions as unknown as Record<string, string>[],

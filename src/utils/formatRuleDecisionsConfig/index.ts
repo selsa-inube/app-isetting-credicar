@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { getConditionsByGroupNew } from "@isettingkit/business-rules";
 import { ECreditLines } from "@enum/creditLines";
+import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { asArray } from "../asArray";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { geti18nValueDecision } from "../geti18nValueDecision";
+import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 
 const formatRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
   validateUseEdit: boolean,
   abbreviatedName?: string,
   conditionHidden?: string,
+  conditionTraduction?: IConditionTraduction[],
 ) => {
   return rule.map((decision) => {
     const decisionsByRule: Partial<IRuleDecisionExtended> = {
@@ -23,6 +26,7 @@ const formatRuleDecisionsConfig = (
         decision.value,
         decision.listOfPossibleValues?.list as any,
       ),
+      howToSetTheCondition: "EqualTo",
     };
 
     if (decision.validUntil) {
@@ -39,12 +43,23 @@ const formatRuleDecisionsConfig = (
     decisionsByRule.conditionGroups = Object.entries(groups)
       .map(([groupKey, rawList]) => {
         const items = asArray(rawList).filter((item) => !item?.hidden);
+
         const conditionGroup: any = {
-          conditionsThatEstablishesTheDecision: items.map((condition: any) => ({
-            ...condition,
-            conditionName: condition?.conditionName ?? "",
-            value: condition?.value,
-          })),
+          conditionsThatEstablishesTheDecision: items.map((condition: any) => {
+            const normalized = normalizeConditionTraduction(
+              conditionTraduction ?? [],
+              condition.conditionName,
+            );
+            return {
+              ...condition,
+              conditionName: condition?.conditionName ?? "",
+              value: condition?.value,
+              i18nValue: geti18nValueDecision(
+                condition.value,
+                normalized?.listPossibleValues?.list as any,
+              ),
+            };
+          }),
         };
 
         if (validateUseEdit) {

@@ -79,7 +79,7 @@ const transformationDecisions = (
                 timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
                 listOfPossibleValues: normalized?.listPossibleValues ?? [],
                 hidden: false,
-                i18n: geti18nValueDecision(
+                i18nValue: geti18nValueDecision(
                   c.value,
                   normalized?.listPossibleValues?.list as any,
                 ),

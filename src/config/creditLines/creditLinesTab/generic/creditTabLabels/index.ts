@@ -10,6 +10,6 @@ const creditTabLabels = {
   titleEvaluateRules:
     "Antes de crear una nueva línea de crédito, es necesario que completes la configuración de políticas generales.",
   subtitleEvaluateRules:
-    "Por favor, dirígete a la sección de línea de crédito y realiza la configuración de los siguientes parámetros:",
+    "Por favor, dirígete a la sección de políticas generales y realiza la configuración de los siguientes parámetros:",
 };
 export { creditTabLabels };

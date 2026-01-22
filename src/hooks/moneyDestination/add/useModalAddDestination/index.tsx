@@ -55,7 +55,6 @@ const useModalAddDestination = (props: IUseModalAddDestination) => {
         onCloseModal: handleToggleErrorModal,
         onClick: handleToggleErrorModal,
         withCancelButton: false,
-        moreDetails: "",
         withIcon: true,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,
