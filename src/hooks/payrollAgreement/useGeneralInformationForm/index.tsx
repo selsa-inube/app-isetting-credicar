@@ -7,12 +7,15 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { validationRules } from "@validations/validationRules";
 import { validationMessages } from "@validations/validationMessages";
 import { useEnumerators } from "@hooks/useEnumerators";
+import { EComponentAppearance } from "@enum/appearances";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { getDomainById } from "@mocks/domains/domainService.mocks";
 import { codeExistModal } from "@config/payrollAgreement/payrollAgreementTab/generic/codeExistModal";
 import { mediaQueryTablet } from "@config/environment";
+import { infoModal } from "@config/payrollAgreement/payrollAgreementTab/generic/infoModal";
 import { generalInfoLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/generalInfoLabels";
+import { infoTypeModal } from "@config/payrollAgreement/payrollAgreementTab/generic/infoTypeModal";
 import { IUseGeneralInformationForm } from "@ptypes/hooks/IUseGeneralInformationForm";
 import { usePayrollAgreementData } from "../usePayrollAgreementData";
 
@@ -77,12 +80,14 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     validateOnBlur: true,
     onSubmit: onSubmit ?? (() => true),
   });
-
   const [autosuggestValue, setAutosuggestValue] = useState(
     formik.values.applicationDaysPayroll ?? "",
   );
   const [isDisabledButton, setIsDisabledButton] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showTypeModal, setShowTypeModal] = useState(false);
+  const [showDecision, setShowDecision] = useState(false);
+
   const [showCodeModal, setShowCodeModal] = useState(false);
 
   const { enumData: typePayroll } = useEnumerators({
@@ -176,6 +181,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     setShowModal(!showModal);
   };
 
+  const handleToggleInfoTypeModal = () => {
+    setShowTypeModal(!showTypeModal);
+  };
+
   const handleToggleCodeModal = () => {
     setShowCodeModal(!showCodeModal);
   };
@@ -208,6 +217,57 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     moreDetails: moreDetailsCode,
   } = codeExistModal;
 
+  useEffect(() => {
+    const decision = showModal || showTypeModal;
+    setShowDecision(decision);
+  }, [showModal, showTypeModal]);
+
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      moreDetails: "",
+      icon: <></>,
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
+    };
+
+    if (showModal) {
+      return {
+        ...infoModal,
+        onCloseModal: handleToggleModal,
+        onClick: handleToggleModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (showTypeModal) {
+      return {
+        ...infoTypeModal,
+        onCloseModal: handleToggleInfoTypeModal,
+        onClick: handleToggleInfoTypeModal,
+        withCancelButton: false,
+        withIcon: true,
+        moreDetails: "",
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    return initial;
+  };
+
+  const modalData = modal();
+
   return {
     autosuggestValue,
     formik,
@@ -225,6 +285,9 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     descriptionCodeModal,
     actionTextCodeModal,
     moreDetailsCode,
+    modalData,
+    showDecision,
+    handleToggleInfoTypeModal,
     handleToggleCodeModal,
     handleChangeSelect,
     handleChangeAutosuggest,

@@ -12,30 +12,40 @@ const formatRuleDecisions = (
     const decisionsByRule: Partial<IRuleDecisionExtended> = {
       effectiveFrom: dateEffectiveFrom && formatDateDecision(dateEffectiveFrom),
       value: decision.value,
-      conditionGroups:
-        decision.conditionGroups && decision.conditionGroups.length > 0
-          ? decision.conditionGroups.map((conditionGroup: IConditionGroups) => {
-              const conditionsThatEstablishesTheDecision =
-                (conditionGroup.conditionsThatEstablishesTheDecision
-                  ?.filter((condition) => condition.value !== undefined)
-                  .map((condition) => ({
-                    conditionName: condition.conditionName,
-                    value:
-                      condition.listOfPossibleValues?.list &&
-                      condition.listOfPossibleValues?.list?.length > 0
-                        ? normalizedCodeList(
-                            condition.value,
-                            condition.listOfPossibleValuesHidden?.list,
-                          )
-                        : condition.value,
-                  })) as IConditionsTheDecision[]) || [];
-
-              return {
-                conditionsThatEstablishesTheDecision,
-              };
-            })
-          : undefined,
     };
+
+    if (decision.conditionGroups && decision.conditionGroups.length > 0) {
+      const formattedConditionGroups = decision.conditionGroups
+        .map((conditionGroup: IConditionGroups) => {
+          const conditionsThatEstablishesTheDecision =
+            (conditionGroup.conditionsThatEstablishesTheDecision
+              ?.filter((condition) => condition.value !== undefined)
+              .map((condition) => ({
+                conditionName: condition.conditionName,
+                value:
+                  condition.listOfPossibleValues?.list &&
+                  condition.listOfPossibleValues?.list?.length > 0
+                    ? normalizedCodeList(
+                        condition.value,
+                        condition.listOfPossibleValuesHidden?.list,
+                      )
+                    : condition.value,
+              })) as IConditionsTheDecision[]) || [];
+
+          return {
+            conditionsThatEstablishesTheDecision,
+          };
+        })
+        .filter(
+          (group: IConditionGroups) =>
+            group.conditionsThatEstablishesTheDecision &&
+            group.conditionsThatEstablishesTheDecision.length > 0,
+        );
+
+      if (formattedConditionGroups.length > 0) {
+        decisionsByRule.conditionGroups = formattedConditionGroups;
+      }
+    }
 
     if (decision.validUntil) {
       decisionsByRule.validUntil =

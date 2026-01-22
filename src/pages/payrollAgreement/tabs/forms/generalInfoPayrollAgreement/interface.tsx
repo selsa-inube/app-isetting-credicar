@@ -1,6 +1,6 @@
 import { MdInfoOutline, MdOutlineWarningAmber } from "react-icons/md";
 import {
-  Autocomplete,
+  Autosuggest,
   Button,
   Checkpicker,
   Grid,
@@ -30,10 +30,10 @@ const GeneralInformationPayrollFormUI = (
   const {
     formik,
     loading,
-    infoModal,
     editDataOption,
     autosuggestValue,
     isDisabledButton,
+    modalData,
     showModal,
     sourcesOfIncomeValues,
     isMobile,
@@ -53,6 +53,7 @@ const GeneralInformationPayrollFormUI = (
     onButtonClick,
     onResetEdit,
     onToggleInfoModalModal,
+    onToggleInfoTypeModal,
     onChangeCheck,
     onPreviousStep,
   } = props;
@@ -178,12 +179,32 @@ const GeneralInformationPayrollFormUI = (
                   />
                 </Stack>
                 {!editDataOption && (
-                  <Stack height={tokens.spacing.s600} width="100%">
+                  <Stack
+                    height={tokens.spacing.s600}
+                    width="100%"
+                    direction="column"
+                  >
+                    <Stack
+                      alignItems="center"
+                      gap={tokens.spacing.s050}
+                      margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s050} ${tokens.spacing.s200}`}
+                    >
+                      <Label htmlFor="applicationDaysPayroll" size="medium">
+                        {generalInfoLabels.typePayroll}
+                      </Label>
+
+                      <Icon
+                        icon={<MdInfoOutline />}
+                        appearance={EComponentAppearance.PRIMARY}
+                        onClick={onToggleInfoTypeModal}
+                        size="12px"
+                        cursorHover
+                      />
+                    </Stack>
                     <Select
                       disabled={false}
                       id="typePayroll"
                       name="typePayroll"
-                      label={generalInfoLabels.typePayroll}
                       placeholder={generalInfoLabels.placeholderTypePayroll}
                       onChange={onChangeSelect}
                       options={typePayrollOptions}
@@ -232,7 +253,7 @@ const GeneralInformationPayrollFormUI = (
                     />
                   </Stack>
                   <Stack height={tokens.spacing.s600} width="100%">
-                    <Autocomplete
+                    <Autosuggest
                       label=""
                       name="applicationDaysPayroll"
                       id="applicationDaysPayroll"
@@ -274,13 +295,13 @@ const GeneralInformationPayrollFormUI = (
       {showModal && (
         <DecisionModal
           portalId={portalId}
-          title={infoModal.title}
-          description={infoModal.description}
-          actionText={infoModal.actionText}
-          withCancelButton={false}
-          onCloseModal={onToggleInfoModalModal}
-          onClick={onToggleInfoModalModal}
-          moreDetails={infoModal.moreDetails}
+          title={modalData.title}
+          description={modalData.description}
+          actionText={modalData.actionText}
+          withCancelButton={modalData.withCancelButton}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          moreDetails={modalData.moreDetails}
         />
       )}
 

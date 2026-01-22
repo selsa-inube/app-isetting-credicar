@@ -136,6 +136,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           onCloseModal={modalData.onCloseModal}
           onClick={modalData.onClick}
           withCancelButton={modalData.withCancelButton}
+          moreDetails={modalData.moreDetails}
           withIcon={modalData.withIcon}
           icon={modalData.icon}
           appearance={modalData.appearance}
