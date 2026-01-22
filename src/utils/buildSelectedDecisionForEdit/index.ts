@@ -22,65 +22,58 @@ const buildSelectedDecisionForEdit = (
   const tplGroups = (getConditionsByGroupNew(templateForBusinessRules) ||
     {}) as Record<string, unknown>;
 
-  const mergedGroupsRecord: Record<string, any[]> = Object.fromEntries(
-    Object.entries(baseGroups).map(([groupKey, list]) => [
-      groupKey,
-      asArray(list).map((c: any) => normalizeCondition(c)),
-    ]),
-  );
+  const tplKeys = Object.keys(tplGroups);
+  const baseKeys = Object.keys(baseGroups);
 
-  const ensureGroup = (groupKey: string) => {
-    if (!mergedGroupsRecord[groupKey]) {
-      mergedGroupsRecord[groupKey] = [];
-    }
-    return mergedGroupsRecord[groupKey];
-  };
+  const mergedGroupsRecord: Record<string, any[]> = {};
 
-  const findIndex = (groupKey: string, name: string) =>
-    (mergedGroupsRecord[groupKey] || []).findIndex(
-      (c: any) => c?.conditionName === name,
-    );
+  tplKeys.forEach((tplKey, index) => {
+    const baseKey = baseKeys[index];
 
-  Object.entries(tplGroups).forEach(([groupKey, tplList]) => {
-    const tplArray = asArray(tplList);
-    const groupList = ensureGroup(groupKey);
+    const tplList = asArray(tplGroups[tplKey]);
+    const baseList = asArray(baseKey ? baseGroups[baseKey] : []);
 
-    tplArray.forEach((tplCond: any) => {
-      const name = tplCond?.conditionName;
+    const byName = new Map<string, any>();
+
+    tplList.forEach((tplCond: any) => {
+      if (!tplCond?.conditionName) return;
+      byName.set(tplCond.conditionName, normalizeCondition(tplCond));
+    });
+
+    baseList.forEach((baseCond: any) => {
+      const name = baseCond?.conditionName;
       if (!name) return;
 
-      const existingIndex = findIndex(groupKey, name);
+      const existing = byName.get(name);
 
-      if (existingIndex >= 0) {
-        const existing = groupList[existingIndex];
+      const merged = normalizeCondition({
+        ...existing,
+        ...baseCond,
+        value: baseCond?.value !== undefined ? baseCond.value : existing?.value,
+        listOfPossibleValues:
+          baseCond?.listOfPossibleValues ?? existing?.listOfPossibleValues,
+      });
 
-        groupList[existingIndex] = normalizeCondition({
-          ...tplCond,
-          ...existing,
-          value: existing?.value ?? tplCond.value,
-          listOfPossibleValues:
-            existing?.listOfPossibleValues ?? tplCond.listOfPossibleValues,
-        });
-      } else {
-        groupList.push(
-          normalizeCondition({
-            ...tplCond,
-          }),
-        );
-      }
+      byName.set(name, merged);
     });
+
+    mergedGroupsRecord[tplKey] = Array.from(byName.values());
   });
 
-  const groupKeys = Object.keys(mergedGroupsRecord);
+  if (baseKeys.length > tplKeys.length) {
+    for (let i = tplKeys.length; i < baseKeys.length; i += 1) {
+      const bKey = baseKeys[i];
+      mergedGroupsRecord[bKey] = asArray(baseGroups[bKey]).map((c: any) =>
+        normalizeCondition(c),
+      );
+    }
+  }
+
+  const finalGroupKeys = Object.keys(mergedGroupsRecord);
   let limitedGroupsRecord = mergedGroupsRecord;
 
-  if (groupKeys.length > 4) {
-    const orderedKeys = groupKeys.includes("group-primary")
-      ? ["group-primary", ...groupKeys.filter((k) => k !== "group-primary")]
-      : groupKeys;
-
-    const allowedKeys = orderedKeys.slice(0, 4);
-
+  if (finalGroupKeys.length > 4) {
+    const allowedKeys = finalGroupKeys.slice(0, 4);
     limitedGroupsRecord = allowedKeys.reduce<Record<string, any[]>>(
       (acc, key) => {
         acc[key] = mergedGroupsRecord[key];
