@@ -1,13 +1,12 @@
 import { FormikProps } from "formik";
-import { IMessageModal } from "@ptypes/design/IMessageModal";
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IGeneralInformationEntry } from "../IGeneralInformationPayroll";
 
 interface IGeneralInformationPayrollFormUI {
   autosuggestValue: string;
   editDataOption: boolean;
   formik: FormikProps<IGeneralInformationEntry>;
-  infoModal: IMessageModal;
   loading: boolean;
   showModal: boolean;
   valuesEqual: boolean;
@@ -22,6 +21,8 @@ interface IGeneralInformationPayrollFormUI {
   descriptionCodeModal: string;
   actionTextCodeModal: string;
   moreDetailsCode: string;
+  modalData: IModalData;
+  onToggleInfoTypeModal: () => void;
   onToggleCodeModal: () => void;
   onToggleInfoModalModal: () => void;
   onChangeCheck: (name: string, values: string) => void;

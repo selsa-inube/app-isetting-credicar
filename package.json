@@ -18,8 +18,8 @@
   "dependencies": {
     "@inube/iauth-react": "^3.0.4",
     "@inubekit/inubekit": "^6.4.0",
-    "@isettingkit/business-rules": "^2.2.21",
-    "@isettingkit/input": "^1.1.13",
+    "@isettingkit/business-rules": "^2.2.23",
+    "@isettingkit/input": "^1.1.14",
     "@isettingkit/view": "^0.1.39",
     "axios": "^1.7.7",
     "crypto-js": "^4.2.0",

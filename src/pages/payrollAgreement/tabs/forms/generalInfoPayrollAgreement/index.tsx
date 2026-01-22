@@ -4,7 +4,6 @@ import { FormikProps } from "formik";
 import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
 import { useGeneralInformationForm } from "@hooks/payrollAgreement/useGeneralInformationForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
-import { infoModal } from "@config/payrollAgreement/payrollAgreementTab/generic/infoModal";
 import { IGeneralInformationPayrollForm } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayrollForm";
 import { GeneralInformationPayrollFormUI } from "./interface";
 
@@ -32,7 +31,6 @@ const GeneralInformationPayrollForm = forwardRef<
     const {
       autosuggestValue,
       formik,
-      showModal,
       valuesEqual,
       isMobile,
       typePayrollOptions,
@@ -45,11 +43,14 @@ const GeneralInformationPayrollForm = forwardRef<
       descriptionCodeModal,
       actionTextCodeModal,
       moreDetailsCode,
+      showDecision,
+      modalData,
       handleToggleCodeModal,
       handleChangeSelect,
       handleChangeAutosuggest,
       handleReset,
       handleToggleModal,
+      handleToggleInfoTypeModal,
       handleChangeCheck,
     } = useGeneralInformationForm({
       initialValues,
@@ -74,11 +75,10 @@ const GeneralInformationPayrollForm = forwardRef<
         onPreviousStep={onPreviousStep}
         editDataOption={editDataOption}
         isDisabledButton={isDisabledButton}
-        showModal={showModal}
+        showModal={showDecision}
         valuesEqual={valuesEqual}
         onResetAdd={handleReset}
         onResetEdit={onReset}
-        infoModal={infoModal}
         onToggleInfoModalModal={handleToggleModal}
         onChangeCheck={handleChangeCheck}
         sourcesOfIncomeValues={sourcesOfIncomeValues}
@@ -94,6 +94,8 @@ const GeneralInformationPayrollForm = forwardRef<
         actionTextCodeModal={actionTextCodeModal}
         onToggleCodeModal={handleToggleCodeModal}
         moreDetailsCode={moreDetailsCode}
+        onToggleInfoTypeModal={handleToggleInfoTypeModal}
+        modalData={modalData}
       />
     );
   },

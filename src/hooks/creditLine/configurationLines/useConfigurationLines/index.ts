@@ -439,6 +439,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         false,
         linesConstructionData.abbreviatedName as string,
         conditionCreditLine,
+        conditionTraduction,
       );
       setLinesData((prev) => {
         const existingRules =

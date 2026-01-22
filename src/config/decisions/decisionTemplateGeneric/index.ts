@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueDataType } from "@isettingkit/input";
 import { ECreditLines } from "@enum/creditLines";
+import { geti18nValueDecision } from "@utils/geti18nValueDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionTemplateConfig = (
@@ -7,7 +9,7 @@ const decisionTemplateConfig = (
     ruleName,
     decisionDataType,
     conditionsThatEstablishesTheDecision,
-    i18n,
+    i18nValue,
     descriptionUse,
     howToSetTheDecision,
     listOfPossibleValues,
@@ -22,7 +24,7 @@ const decisionTemplateConfig = (
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const localLabel = String(
-      i18n?.[language as keyof typeof i18n] ?? descriptionUse,
+      i18nValue?.[language as keyof typeof i18nValue] ?? descriptionUse,
     );
 
     const buildGroup = (ConditionGroupId: string) => ({
@@ -40,6 +42,10 @@ const decisionTemplateConfig = (
           ),
           conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
           value: "",
+          i18nValue: geti18nValueDecision(
+            condition.value,
+            listOfPossibleValues?.list as any,
+          ),
           listOfPossibleValues: condition.listOfPossibleValues
             ? condition.listOfPossibleValues
             : undefined,
@@ -59,6 +65,10 @@ const decisionTemplateConfig = (
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision,
       value: "",
+      // i18nValue: geti18nValueDecision(
+      //   "",
+      //   listOfPossibleValues?.list as any,
+      // ),
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues:
