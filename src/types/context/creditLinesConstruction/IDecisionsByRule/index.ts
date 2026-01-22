@@ -15,6 +15,7 @@ interface IDecisionsByRule {
   decisionDataType?: string;
   modifyJustification?: string;
   listOfPossibleValuesHidden?: IListOfPossibleValuesHid;
+  _originalDecisionId?: string;
 }
 
 export type { IDecisionsByRule };
