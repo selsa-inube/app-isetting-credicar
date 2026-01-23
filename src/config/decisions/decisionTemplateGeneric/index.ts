@@ -9,7 +9,7 @@ const decisionTemplateConfig = (
     ruleName,
     decisionDataType,
     conditionsThatEstablishesTheDecision,
-    i18nValue,
+    i18n,
     descriptionUse,
     howToSetTheDecision,
     listOfPossibleValues,
@@ -24,7 +24,7 @@ const decisionTemplateConfig = (
     const decisionData = decisionDataType.toLocaleUpperCase();
 
     const localLabel = String(
-      i18nValue?.[language as keyof typeof i18nValue] ?? descriptionUse,
+      i18n?.[language as keyof typeof i18n] ?? descriptionUse,
     );
 
     const buildGroup = (ConditionGroupId: string) => ({
