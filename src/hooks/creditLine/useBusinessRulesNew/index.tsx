@@ -78,41 +78,11 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     [decisionTemplate, language],
   );
 
-  const [decisions, setDecisions] = useState<IRuleDecision[]>([]);
-
-  const lastProcessedRef = useRef<string>("");
-
-  useEffect(() => {
-    if ((initialDecisions?.length ?? 0) === 0) {
-      return;
-    }
-
-    const currentSignature = JSON.stringify(
-      initialDecisions.map((d) => ({
-        decisionId: d.decisionId,
-        value: d.value,
-        i18nValue: d.i18nValue,
-        effectiveFrom: d.effectiveFrom,
-      })),
-    );
-
-    if (currentSignature === lastProcessedRef.current) {
-      return;
-    }
-
-    lastProcessedRef.current = currentSignature;
-
-    let next = ensureUniqueIds(
+  const [decisions, setDecisions] = useState<IRuleDecision[]>(
+    ensureUniqueIds(
       (initialDecisions ?? []).map((d) => transformDecision(d, language)),
-    );
-
-    if (configuredRef.current && configuredRef.current.length > 0) {
-      next = mapDecisionIdsFromConfigured(configuredRef.current, next);
-    }
-
-    setDecisions(next);
-  }, [initialDecisions, language]);
-
+    ),
+  );
   const configuredRef: any = useRef<any[] | null>(null);
   useEffect(() => {
     const handler = (configured: IRuleDecision[]) => {
