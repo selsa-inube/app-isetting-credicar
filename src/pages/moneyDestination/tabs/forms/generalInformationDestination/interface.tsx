@@ -1,5 +1,5 @@
 import {
-  Autocomplete,
+  Autosuggest,
   Button,
   Checkpicker,
   Select,
@@ -109,12 +109,12 @@ const GeneralInformationFormUI = (props: IGeneralInformationFormUI) => {
                             invalid={isInvalid(formik, "typeDestination")}
                           />
                           <Stack width="100%">
-                            <Autocomplete
+                            <Autosuggest
                               label={generalInfoLabels.name}
                               name="nameDestination"
                               id="nameDestination"
                               placeholder={generalInfoLabels.placeholderName}
-                              value={formik.values.nameDestination}
+                              value={autosuggestValue}
                               onChange={onChange}
                               options={optionsDestination}
                               onBlur={formik.handleBlur}
