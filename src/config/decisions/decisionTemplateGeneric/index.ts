@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ValueDataType } from "@isettingkit/input";
 import { ECreditLines } from "@enum/creditLines";
-import { geti18nValueDecision } from "@utils/geti18nValueDecision";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 const decisionTemplateConfig = (
@@ -42,10 +40,7 @@ const decisionTemplateConfig = (
           ),
           conditionDataType: condition.conditionDataType.toLocaleLowerCase(),
           value: "",
-          i18nValue: geti18nValueDecision(
-            condition.value,
-            listOfPossibleValues?.list as any,
-          ),
+          i18nValue: condition.i18nValue,
           listOfPossibleValues: condition.listOfPossibleValues
             ? condition.listOfPossibleValues
             : undefined,
@@ -65,10 +60,6 @@ const decisionTemplateConfig = (
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision,
       value: "",
-      // i18nValue: geti18nValueDecision(
-      //   "",
-      //   listOfPossibleValues?.list as any,
-      // ),
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues:

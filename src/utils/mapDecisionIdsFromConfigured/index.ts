@@ -2,6 +2,7 @@
 import { IRuleDecision } from "@isettingkit/input";
 import { buildDecisionKey } from "../buildDecisionKey";
 import { flattenConfigured } from "../flattenConfigured";
+import { geti18nValueDecision } from "../geti18nValueDecision";
 
 const mapDecisionIdsFromConfigured = (
   configuredDecisions: any[] | undefined,
@@ -40,6 +41,10 @@ const mapDecisionIdsFromConfigured = (
 
     const updated: IRuleDecision = {
       ...decision,
+      i18nValue: geti18nValueDecision(
+        decision.value,
+        decision.listOfPossibleValues?.list,
+      ),
       decisionId: configuredId,
       _originalDecisionId: configuredId,
     };
