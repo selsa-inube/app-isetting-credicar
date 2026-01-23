@@ -13,6 +13,7 @@ import { validationMessages } from "@validations/validationMessages";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { tokens } from "@design/tokens";
 import { EMoneyDestination } from "@enum/moneyDestination";
+import { normalizeDestinationForm } from "@utils/destination/normalizeDestinationForm";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { mediaQueryTablet } from "@config/environment";
 import { generalInfoLabels } from "@config/moneyDestination/moneyDestinationTab/form/generalInfoLabels";
@@ -53,6 +54,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
 
   const validationSchema = createValidationSchema();
 
+  const { appData } = useContext(AuthAndPortalData);
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -60,12 +62,30 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     onSubmit: onSubmit ?? (() => true),
   });
 
+  const optionsDestination = enumData
+    .filter(
+      (entry) => entry.moneyDestinationType === formik.values.typeDestination,
+    )
+    .map((item: IEnumerators) => {
+      const name =
+        item.i18nValue?.[appData.language as keyof typeof item.i18n] ??
+        item.description;
+      return {
+        id: item.code,
+        label: name,
+        value: item.code,
+      };
+    });
+
   const [autosuggestValue, setAutosuggestValue] = useState(
-    formik.values.nameDestination ?? "",
+    normalizeDestinationForm(
+      enumData,
+      formik.values.nameDestination,
+      appData.language,
+    ) ?? "",
   );
 
   const [isDisabledButton, setIsDisabledButton] = useState(false);
-  const { appData } = useContext(AuthAndPortalData);
 
   const { enumData: type } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
@@ -86,21 +106,6 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     },
   );
 
-  const optionsDestination = enumData
-    .filter(
-      (entry) => entry.moneyDestinationType === formik.values.typeDestination,
-    )
-    .map((item: IEnumerators) => {
-      const name =
-        item.i18nValue?.[appData.language as keyof typeof item.i18n] ??
-        item.description;
-      return {
-        id: item.code,
-        label: name,
-        value: item.code,
-      };
-    });
-
   useImperativeHandle(ref, () => formik);
 
   useEffect(() => {
@@ -113,11 +118,19 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   }, [formik.values, onFormValid]);
 
   useEffect(() => {
-    setAutosuggestValue(formik.values.nameDestination ?? "");
-  }, [formik.values.nameDestination]);
+    setAutosuggestValue(
+      normalizeDestinationForm(
+        enumData,
+        formik.values.nameDestination,
+        appData.language,
+      ) ?? "",
+    );
+  }, [formik.values.nameDestination, formik.values.typeDestination, enumData]);
 
   const handleChange = (name: string, value: string) => {
-    setAutosuggestValue(value);
+    setAutosuggestValue(
+      normalizeDestinationForm(enumData, value, appData.language),
+    );
     formik.setFieldValue(name, value);
 
     if (name === EMoneyDestination.FIELD_TYPE_DESTINATION) {
