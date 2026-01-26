@@ -10,6 +10,16 @@ const generalDataLabels = [
       "¿Qué métodos se utilizan para el cálculo del cupo global por cliente?",
   },
   {
+    id: "methodsAdded",
+    titleName:
+      "Métodos agregados que se utilizan para el cálculo del cupo global por cliente",
+  },
+  {
+    id: "methodsRemoved",
+    titleName:
+      "Métodos eliminados que se utilizan para el cálculo del cupo global por cliente",
+  },
+  {
     id: "additionalDebtors",
     titleName: "¿Se permiten deudores adicionales en una solicitud?",
   },

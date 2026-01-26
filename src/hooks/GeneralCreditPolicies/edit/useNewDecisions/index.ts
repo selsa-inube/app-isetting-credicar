@@ -20,7 +20,10 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     contributionsData,
     minimumIncomeData,
     incomeData,
+    methodsData,
     scoreModelsData,
+    additionalDebtorsData,
+    realGuaranteesData,
     normalizedContributions,
     normalizedMinimumIncome,
     normalizedIncome,
@@ -29,7 +32,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     prevIncomesRef,
     prevScoreModelsRef,
     prevMinimumIncomeRef,
-    user,
   } = props;
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
@@ -94,16 +96,16 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.ADDITIONAL_DEBTORS,
     formValues.additionalDebtors ?? "",
     initialGeneralData.additionalDebtors,
-    valueTransactionOperation(formValues.additionalDebtors),
-    user,
+    ETransactionOperation.PARTIAL_UPDATE,
+    additionalDebtorsData,
   );
 
   const realGuarantees = decisionWithoutConditions(
     ENameRules.REAL_GUARANTEES,
     formValues.realGuarantees ?? "",
     initialGeneralData.realGuarantees,
-    valueTransactionOperation(formValues.realGuarantees),
-    user,
+    ETransactionOperation.PARTIAL_UPDATE,
+    realGuaranteesData,
   );
 
   useEffect(() => {
@@ -192,8 +194,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       if (validMethods.length > 0) {
         methods = {
           ruleName: ENameRules.METHODS,
-          modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+          modifyJustification: `${decisionsLabels.modifyJustification} ${ENameRules.METHODS}`,
           decisionsByRule: validMethods.map((method) => ({
+            decisionId: methodsData?.[0].decisionId,
             effectiveFrom: String(formatDate(new Date())),
             transactionOperation: method.transactionOperation,
             value: method.value,
@@ -201,6 +204,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
         };
       }
     }
+
     const allGeneralDecisions = [methods, additionalDebtors, realGuarantees];
 
     const validGeneralDecisions = allGeneralDecisions.filter(

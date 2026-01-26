@@ -6,6 +6,7 @@ import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { ECreditLines } from "@enum/creditLines";
 import { ENameRules } from "@enum/nameRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
+import { ETransactionOperation } from "@enum/transactionOperation";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
 import { EBooleanText } from "@enum/booleanText";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
@@ -68,10 +69,11 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   };
 
   const methodsArray: string[] = [];
+  const methodsRemoved: string[] = [];
+  const methodsAdded: string[] = [];
 
   data.configurationRequestData.rules.forEach((rule: IEntry) => {
     if (rule === null) return;
-
     rule.decisionsByRule?.forEach((decision: IRuleDecision) => {
       if (rule.ruleName === ENameRules.ADDITIONAL_DEBTORS) {
         additionalDebtors = decision.value;
@@ -85,7 +87,17 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
         rule.ruleName === ENameRules.METHODS &&
         methodsMap[decision.value as string]
       ) {
-        methodsArray.push(methodsMap[decision.value as string]);
+        const methodValue = methodsMap[decision.value as string];
+
+        if (decision.transactionOperation === ETransactionOperation.DELETE) {
+          methodsRemoved.push(methodValue);
+        } else if (
+          decision.transactionOperation === ETransactionOperation.INSERT
+        ) {
+          methodsAdded.push(methodValue);
+        } else {
+          methodsArray.push(methodValue);
+        }
       }
     });
   });
@@ -96,12 +108,18 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
       : EBooleanText.NO;
 
   const methods = methodsArray.join(", ");
+  const methodsAddedJoin = methodsAdded.join(", ");
+  const methodsRemovedJoin = methodsRemoved.join(", ");
+
   const moreDetailsData = {
     id: data.id,
     methods: methods,
+    methodsAdded: methodsAddedJoin,
+    methodsRemoved: methodsRemovedJoin,
     additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
     guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
   };
+
   const decisionsReciprocity = getDecisionsByRule(
     formatDetailsDecisions(data, conditionContribution),
     ENameRules.CONTRIBUTIONS_PORTFOLIO,
