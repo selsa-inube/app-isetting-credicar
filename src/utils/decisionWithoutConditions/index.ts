@@ -1,5 +1,6 @@
 import { EBooleanText } from "@enum/booleanText";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDate } from "../date/formatDate";
 
 const decisionWithoutConditions = (
@@ -7,7 +8,7 @@ const decisionWithoutConditions = (
   value: string | boolean,
   prevValue: string | boolean,
   transactionOperation: string,
-  user: string,
+  data?: IRuleDecisionExtended[],
 ) => {
   if (prevValue !== value) {
     const decisionsByRule = {
@@ -17,12 +18,13 @@ const decisionWithoutConditions = (
             ? EBooleanText.Y
             : EBooleanText.N
           : value,
+      decisionId: data && data.length > 0 ? data?.[0].decisionId : undefined,
       effectiveFrom: String(formatDate(new Date())),
       transactionOperation: transactionOperation,
     };
     return {
       ruleName: ruleName,
-      modifyJustification: `${decisionsLabels.modifyJustification} ${user}`,
+      modifyJustification: `${decisionsLabels.modifyJustification}${ruleName}`,
       decisionsByRule: [decisionsByRule],
     };
   }
