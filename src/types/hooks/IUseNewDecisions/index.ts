@@ -11,6 +11,9 @@ interface IUseNewDecisions {
   user: string;
   contributionsData?: IRuleDecisionExtended[];
   minimumIncomeData?: IRuleDecisionExtended[];
+  methodsData?: IRuleDecisionExtended[];
+  additionalDebtorsData?: IRuleDecisionExtended[];
+  realGuaranteesData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
   scoreModelsData?: IRuleDecisionExtended[];
   normalizedContributions?: IRuleDecisionExtended[];

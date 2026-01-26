@@ -17,33 +17,44 @@ const getNewInsertDecisions = (
     return current
       .filter((decision) => !findDecision(prevRef.current, decision))
       .map((decision) => {
-        const conditionGroups =
-          decision.conditionGroups && decision.conditionGroups.length > 0
-            ? decision.conditionGroups.map(
-                (conditionGroup: IConditionGroups) => {
-                  const conditionsThatEstablishesTheDecision =
-                    (conditionGroup.conditionsThatEstablishesTheDecision
-                      ?.filter((condition) => condition.value !== undefined)
-                      .map((condition) => ({
-                        conditionName: condition.conditionName,
-                        value:
-                          condition.listOfPossibleValues?.list &&
-                          condition.listOfPossibleValues?.list?.length > 0
-                            ? normalizedCodeList(
-                                condition.value,
-                                condition.listOfPossibleValuesHidden?.list,
-                              )
-                            : condition.value,
-                        transactionOperation: ETransactionOperation.INSERT,
-                      })) as IConditionsTheDecision[]) || [];
+        let conditionGroups = undefined;
 
-                  return {
+        if (decision.conditionGroups && decision.conditionGroups.length > 0) {
+          const mappedGroups = decision.conditionGroups
+            .map((conditionGroup: IConditionGroups) => {
+              const conditionsThatEstablishesTheDecision =
+                (conditionGroup.conditionsThatEstablishesTheDecision
+                  ?.filter((condition) => condition.value !== undefined)
+                  .map((condition) => ({
+                    conditionName: condition.conditionName,
+                    value:
+                      condition.listOfPossibleValues?.list &&
+                      condition.listOfPossibleValues?.list?.length > 0
+                        ? normalizedCodeList(
+                            condition.value,
+                            condition.listOfPossibleValuesHidden?.list,
+                          )
+                        : condition.value,
                     transactionOperation: ETransactionOperation.INSERT,
-                    conditionsThatEstablishesTheDecision,
-                  };
-                },
-              )
-            : undefined;
+                  })) as IConditionsTheDecision[]) || [];
+
+              return {
+                transactionOperation:
+                  conditionsThatEstablishesTheDecision.length > 0
+                    ? ETransactionOperation.INSERT
+                    : undefined,
+                conditionsThatEstablishesTheDecision,
+              };
+            })
+            .filter(
+              (group: IConditionGroups) =>
+                group.conditionsThatEstablishesTheDecision.length > 0,
+            );
+
+          if (mappedGroups.length > 0) {
+            conditionGroups = mappedGroups;
+          }
+        }
 
         const validUntil = decision.validUntil
           ? formatDateDecision(decision.validUntil as string)
@@ -53,7 +64,7 @@ const getNewInsertDecisions = (
           effectiveFrom: dateFrom
             ? formatDateDecision(dateFrom)
             : formatDateDecision(decision.effectiveFrom as string),
-          validUntil: validUntil,
+          ...(validUntil && { validUntil }),
           value: decision.value,
           transactionOperation: ETransactionOperation.INSERT,
           ...(conditionGroups && { conditionGroups }),
