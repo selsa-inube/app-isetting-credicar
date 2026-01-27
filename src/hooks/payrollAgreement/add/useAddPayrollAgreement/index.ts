@@ -232,13 +232,54 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
       }
 
       if (generalInformationRef.current) {
+        const previousTypePayroll =
+          formValues.generalInformation.values.typePayroll;
+        const currentTypePayroll =
+          generalInformationRef.current.values.typePayroll;
+        const typePayrollChanged = previousTypePayroll !== currentTypePayroll;
+
         setFormValues((prevValues) => ({
           ...prevValues,
           generalInformation: {
             ...prevValues.generalInformation,
             values: generalInformationRef.current!.values,
           },
+          ...(typePayrollChanged && {
+            ordinaryCycles: {
+              isValid: false,
+              values: [
+                {
+                  cycleId: "",
+                  nameCycle: "",
+                  periodicity: "",
+                  payday: "",
+                  numberDaysUntilCut: "",
+                  laborRegulatorFramework: "",
+                },
+              ],
+            },
+            extraordinaryCycles: {
+              isValid: false,
+              values: [
+                {
+                  nameCycle: "",
+                  typePayment: "",
+                  payday: "",
+                  numberDaysUntilCut: "",
+                  laborRegulatorFramework: "",
+                },
+              ],
+            },
+          }),
         }));
+
+        if (typePayrollChanged) {
+          setRegularPaymentCycles([]);
+          setExtraordinaryPayment([]);
+          setIncludeExtraPayDay([]);
+          setRegularDeleted([]);
+        }
+
         setIsCurrentFormValid(generalInformationRef.current.isValid);
         const showOrdinary = typePayrollForCyclesExtraord.includes(
           generalInformationRef.current.values.typePayroll,

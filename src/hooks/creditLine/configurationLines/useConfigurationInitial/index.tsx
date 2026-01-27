@@ -65,7 +65,6 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   } = useEnumAllRulesConfiguration({
     ruleCatalog,
     catalogAction,
-    optionsContext: optionsAllRules,
     validRules: allValidRules,
   });
 
