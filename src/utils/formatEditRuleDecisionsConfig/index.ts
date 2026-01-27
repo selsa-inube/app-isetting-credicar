@@ -8,7 +8,7 @@ import { formatDateDecision } from "../date/formatDateDecision";
 import { geti18nValueDecision } from "../geti18nValueDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 
-const formatRuleDecisionsConfig = (
+const formatEditRuleDecisionsConfig = (
   rule: IRuleDecisionExtended[],
   validateUseEdit: boolean,
   abbreviatedName?: string,
@@ -17,6 +17,7 @@ const formatRuleDecisionsConfig = (
 ) => {
   return rule.map((decision) => {
     const decisionsByRule: Partial<IRuleDecisionExtended> = {
+      ...decision,
       effectiveFrom:
         decision.effectiveFrom &&
         formatDateDecision(String(decision.effectiveFrom)),
@@ -97,4 +98,4 @@ const formatRuleDecisionsConfig = (
   });
 };
 
-export { formatRuleDecisionsConfig };
+export { formatEditRuleDecisionsConfig };
