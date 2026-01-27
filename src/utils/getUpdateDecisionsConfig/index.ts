@@ -5,7 +5,6 @@ import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDateDecision } from "../date/formatDateDecision";
 import { areDecisionsEqualModify } from "../areDecisionsEqualModify";
-import { getConditionGroupId } from "../getConditionGroupId";
 
 const getUpdateDecisionsConfig = (
   useCase: boolean,
@@ -77,7 +76,7 @@ const getUpdateDecisionsConfig = (
 
                 const conditionGroupId =
                   prevDecision?.conditionGroups?.[index]?.conditionGroupId ??
-                  getConditionGroupId(item.conditionGroupId ?? "");
+                  undefined;
 
                 return {
                   transactionOperation: validateTransOperation,
