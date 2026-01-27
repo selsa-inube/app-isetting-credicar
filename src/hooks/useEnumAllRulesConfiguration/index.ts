@@ -7,7 +7,7 @@ import { IUseEnumAllRules } from "@ptypes/hooks/IUseEnumAllRules";
 import { IDecisionData } from "@ptypes/decisions/IDecision";
 
 const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
-  const { optionsContext, ruleCatalog, catalogAction, validRules } = props;
+  const { ruleCatalog, catalogAction, validRules } = props;
   const [loading, setLoading] = useState<boolean>(false);
   const [enumRuleData, setEnumRuleData] = useState<IDecisionData[]>([]);
 
@@ -16,28 +16,26 @@ const useEnumAllRulesConfiguration = (props: IUseEnumAllRules) => {
 
   useEffect(() => {
     const fetchEnumData = async () => {
-      if (optionsContext.length === 0 && validRules.length > 0) {
-        setLoading(true);
-        try {
-          const rulesData = validRules.join(",");
-          const data = await getEnumeratorAllRules(
-            rulesData,
-            ruleCatalog,
-            catalogAction,
-            appData.businessUnit.publicCode,
-            appData.token,
-          );
-          setEnumRuleData(data);
-        } catch (error) {
-          console.info(error);
-          setHasError(true);
-        } finally {
-          setLoading(false);
-        }
+      setLoading(true);
+      try {
+        const rulesData = validRules.join(",");
+        const data = await getEnumeratorAllRules(
+          rulesData,
+          ruleCatalog,
+          catalogAction,
+          appData.businessUnit.publicCode,
+          appData.token,
+        );
+        setEnumRuleData(data);
+      } catch (error) {
+        console.info(error);
+        setHasError(true);
+      } finally {
+        setLoading(false);
       }
     };
     fetchEnumData();
-  }, [ruleCatalog, optionsContext, validRules]);
+  }, [ruleCatalog, validRules]);
 
   const optionsAllRules =
     enumRuleData.length > 0
