@@ -4,9 +4,9 @@ import { EUseCase } from "@enum/useCase";
 import { ECreditLines } from "@enum/creditLines";
 import { getNewInsertDecisionsConfig } from "@utils/getNewInsertDecisionsConfig";
 import { transformRuleStructure } from "@utils/transformRuleStructure";
-import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { getUpdateDecisionsConfig } from "@utils/getUpdateDecisionsConfig";
 import { normalizeEvaluateRuleConfig } from "@utils/normalizeEvaluateRuleConfig";
+import { formatEditRuleDecisionsConfig } from "@utils/formatEditRuleDecisionsConfig";
 import { mergeRulesPreservingExisting } from "@utils/mergeRulesPreservingExisting";
 import { getNewDeletedDecisionsConfig } from "@utils/getNewDeletedDecisionsConfig";
 import { removeDeletedDecisions } from "@utils/removeDeletedDecisions";
@@ -204,7 +204,7 @@ const useEditCreditLines = (props: IUseEditCreditLines) => {
       return;
     }
 
-    const newFormattedRules = formatRuleDecisionsConfig(
+    const newFormattedRules = formatEditRuleDecisionsConfig(
       decisionsData,
       false,
       linesConstructionData.abbreviatedName as string,
