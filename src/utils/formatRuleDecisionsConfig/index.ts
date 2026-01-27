@@ -93,6 +93,19 @@ const formatRuleDecisionsConfig = (
         );
       });
 
+    if (Object.values(decisionsByRule.conditionGroups).length === 0) {
+      decisionsByRule.conditionGroups = [
+        {
+          conditionsThatEstablishesTheDecision: [
+            {
+              conditionName: ECreditLines.CREDIT_LINE_RULE,
+              value: abbreviatedName,
+            },
+          ],
+        },
+      ];
+    }
+
     return { ruleName: decision.ruleName, decisionsByRule: [decisionsByRule] };
   });
 };
