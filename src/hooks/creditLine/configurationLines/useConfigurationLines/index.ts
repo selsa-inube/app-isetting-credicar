@@ -650,7 +650,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         return shouldDisable;
       }
 
-      if (Object.keys(linesData ?? {}).length === 0) {
+      if (linesConstructionData.rules?.length === 0) {
         return true;
       }
     }
