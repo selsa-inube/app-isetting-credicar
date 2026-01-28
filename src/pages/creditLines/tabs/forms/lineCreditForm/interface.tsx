@@ -21,7 +21,6 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
     showInfo,
     showInfoModal,
     updateData,
-    loading,
     navigation,
     lineNameDecision,
     message,
@@ -53,7 +52,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
           lineName={lineNameDecision}
           lineType={titleOptionConfigLine(ECreditLines.CREDIT_LINE_RULE) || ""}
           updateData={updateData}
-          loading={loading}
+          loading={false}
           withoutDecisions={true}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}

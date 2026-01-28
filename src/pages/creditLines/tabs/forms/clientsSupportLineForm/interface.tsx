@@ -20,7 +20,6 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     optionsIncluded,
     showInfoModal,
     updateData,
-    loading,
     navigation,
     lineNameDecision,
     message,
@@ -55,7 +54,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             titleOptionConfigLine(ECreditLines.CLIENT_SUPPORT_RULE) || ""
           }
           updateData={updateData}
-          loading={loading}
+          loading={false}
           withoutDecisions={true}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}

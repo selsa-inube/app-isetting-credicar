@@ -398,7 +398,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
         requestType: ERequestType.MODIFY,
         businessManagerCode: appData.businessManager.publicCode,
         businessUnitCode: appData.businessUnit.publicCode,
-        description: jsonLabels(appData.user.userAccount).modifyJustification,
+        description: jsonLabels(changedFields.abbreviatedName ?? "")
+          .modifyJustification,
         entityName: conditionRule,
         requestDate: formatDate(new Date()),
         useCaseName: EPayrollAgreement.USE_CASE_EDIT,

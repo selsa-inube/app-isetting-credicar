@@ -22,8 +22,8 @@ const flowAutomaticMessagesDecision = (action?: string) => {
       duration: 3000,
     },
     successfulCreateRequest: {
-      title: `Politicas generales ${action} con éxito!`,
-      description: `Politicas generales fue ${action} con éxito!`,
+      title: `Línea de crédito  ${action} con éxito!`,
+      description: `Línea de crédito fue ${action} con éxito!`,
       appearance: EComponentAppearance.SUCCESS,
       duration: 3000,
     },

@@ -1,6 +1,6 @@
 const jsonLabels = (userAccount: string) => {
   return {
-    modifyJustification: `Solicitud de modificación de una nómina de convenio por ${userAccount} `,
+    modifyJustification: `Solicitud de modificación de nómina de convenio ${userAccount} `,
   };
 };
 

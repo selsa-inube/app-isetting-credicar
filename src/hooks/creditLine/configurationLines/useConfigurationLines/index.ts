@@ -428,41 +428,58 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   }, [nameLineRef.current?.values]);
 
   useEffect(() => {
-    if (decisionsData.length === 0) return;
     const dragForm =
       templateKey === ECreditLines.CREDIT_LINE_RULE ||
-      templateKey === ECreditLines.CREDIT_LINE_RULE;
+      templateKey === ECreditLines.CLIENT_SUPPORT_RULE;
     const validate = useCaseConfiguration === EUseCase.ADD && !dragForm;
-    if (validate) {
-      const newFormattedRules = formatRuleDecisionsConfig(
-        decisionsData,
-        false,
-        linesConstructionData.abbreviatedName as string,
-        conditionCreditLine,
-        conditionTraduction,
-      );
-      setLinesData((prev) => {
-        const existingRules =
-          (prev?.configurationRequestData?.rules as
-            | IRuleDecision[]
-            | undefined) ??
-          (linesConstructionData.rules as IRuleDecision[] | undefined) ??
-          [];
 
-        return {
-          ...prev,
-          settingRequestId: linesConstructionData.settingRequestId,
+    if (!validate) return;
+
+    const currentRuleName = ruleData?.ruleName;
+
+    if (!currentRuleName) return;
+
+    setLinesConstructionData((prev) => {
+      const existingRules = (prev.rules as IRuleDecision[]) || [];
+
+      let updatedRules: IRuleDecision[];
+
+      if (decisionsData.length === 0) {
+        updatedRules = existingRules.filter(
+          (rule) => rule.ruleName !== currentRuleName,
+        );
+      } else {
+        const newFormattedRules = formatRuleDecisionsConfig(
+          decisionsData,
+          false,
+          prev.abbreviatedName as string,
+          conditionCreditLine,
+          conditionTraduction,
+        );
+
+        updatedRules = mergeRules(existingRules, newFormattedRules);
+      }
+
+      const newState = {
+        ...prev,
+        rules: updatedRules,
+      };
+
+      if (JSON.stringify(prev.rules) !== JSON.stringify(updatedRules)) {
+        setLinesData({
+          settingRequestId: prev.settingRequestId,
           configurationRequestData: {
-            ...prev?.configurationRequestData,
-            alias: linesConstructionData.alias,
-            abbreviatedName: linesConstructionData.abbreviatedName,
-            descriptionUse: linesConstructionData.descriptionUse,
-            rules: mergeRules(existingRules, newFormattedRules),
+            alias: prev.alias,
+            abbreviatedName: prev.abbreviatedName,
+            descriptionUse: prev.descriptionUse,
+            rules: updatedRules,
           },
-        };
-      });
-    }
-  }, [decisionsData, useCaseConfiguration]);
+        });
+      }
+
+      return newState;
+    });
+  }, [decisionsData, useCaseConfiguration, ruleData?.ruleName, templateKey]);
 
   const loadingModifyRef = useRef(loadingModify);
   const savePromiseRef = useRef<((value: boolean) => void) | null>(null);
