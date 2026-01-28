@@ -1,6 +1,6 @@
 const textValuesBusinessRules = {
   selectOptions: "Seleccione las opciones",
-  selectOption: "Seleccione una opción",
+  selectOption: "Selecciona una opción",
   rangeMin: (label: string) => `${label} Minima`,
   rangeMax: (label: string) => `${label} Maxima`,
   reasonForChange: "Motivo del cambio",
