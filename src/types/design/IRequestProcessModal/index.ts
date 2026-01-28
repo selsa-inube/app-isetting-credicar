@@ -8,6 +8,7 @@ interface IRequestProcessModal {
   description: string;
   onClose: () => void;
   sizeIcon?: string;
+  changeZIndex?: boolean;
 }
 
 export type { IRequestProcessModal };

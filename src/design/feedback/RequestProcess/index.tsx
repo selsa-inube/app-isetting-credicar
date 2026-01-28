@@ -14,6 +14,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
     portalId,
     requestProcessSteps,
     saveData,
+    changeZIndex,
     descriptionRequestStatus,
     onCloseRequestStatus,
     onCloseProcess,
@@ -42,6 +43,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
             isMobile={isMobile}
             sizeIcon="28px"
             onClose={onCloseProcess}
+            changeZIndex={changeZIndex}
           />
         ) : (
           <RequestStatusModal
@@ -54,6 +56,7 @@ const RequestProcess = (props: IRequestProcessContent) => {
             loading={false}
             actionText={descriptionRequestStatus(staffDisplayName).actionText}
             appearance={EComponentAppearance.PRIMARY}
+            changeZIndex={changeZIndex}
           />
         ))}
     </Stack>

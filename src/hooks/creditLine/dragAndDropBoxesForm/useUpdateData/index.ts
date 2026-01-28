@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useCallback } from "react";
+import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
-import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
+import { ECreditLines } from "@enum/creditLines";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { formatDate } from "@utils/date/formatDate";
 import { mergeEditClientRules } from "@utils/mergeEditClientRules";
 import { mergeEditRules } from "@utils/mergeEditRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseUpateData } from "@ptypes/hooks/creditLines/IUseUpateData";
-import { EValueHowToSetUp } from "@isettingkit/business-rules";
 
-const useUpateData = (props: IUseUpateData) => {
+const useUpdateData = (props: IUseUpateData) => {
   const {
     condition,
     configuredDecisions,
@@ -23,6 +23,7 @@ const useUpateData = (props: IUseUpateData) => {
     move,
     supportLine,
     templateKey,
+    lineNameDecision,
     setMove,
     supportIncludedData,
     setLinesData,
@@ -54,10 +55,9 @@ const useUpateData = (props: IUseUpateData) => {
     const firstDecision = currentRuleData?.decisionsByRule?.[0];
 
     const transformJson = {
-      decisionId: firstDecision?.decisionId ?? "",
-      ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
+      ruleName: templateKey,
       ruleDataType: firstDecision?.ruleDataType ?? "Alphabetical",
-      value: firstDecision?.value ?? linesConstructionData.abbreviatedName,
+      value: linesConstructionData.abbreviatedName,
       howToSetTheDecision:
         firstDecision?.howToSetTheDecision ?? EValueHowToSetUp.EQUAL,
       effectiveFrom: formatDate(new Date()),
@@ -68,6 +68,12 @@ const useUpateData = (props: IUseUpateData) => {
             conditionName: condition,
             howToSetTheCondition: "EqualTo",
             value: rule,
+          },
+          {
+            conditionDataType: "Alphabetical",
+            conditionName: ECreditLines.CREDIT_LINE_RULE,
+            howToSetTheCondition: "EqualTo",
+            value: lineNameDecision,
           },
         ],
       })),
@@ -80,6 +86,10 @@ const useUpateData = (props: IUseUpateData) => {
       },
     ];
 
+    const initiaConditionGroups = configuredDecisions?.flatMap(
+      (config) => config.decisionsByRule || [],
+    );
+
     const editCondition = () => {
       const conditionGroups: any[] = [];
 
@@ -87,12 +97,8 @@ const useUpateData = (props: IUseUpateData) => {
         supportLine.find(
           (value) =>
             value.i18n?.[appData.language as keyof typeof value.i18n] ===
-            condition,
+              condition || value.description === condition,
         );
-
-      const initiaConditionGroups = configuredDecisions?.flatMap(
-        (config) => config.decisionsByRule || [],
-      );
 
       const initialData = (rule: string) => {
         if (!initiaConditionGroups) return undefined;
@@ -121,6 +127,13 @@ const useUpateData = (props: IUseUpateData) => {
               value: enums(ruleCode)?.code,
               transactionOperation: ETransactionOperation.INSERT,
             },
+            {
+              conditionDataType: "Alphabetical",
+              conditionName: ECreditLines.CREDIT_LINE_RULE,
+              howToSetTheCondition: "EqualTo",
+              value: lineNameDecision,
+              transactionOperation: ETransactionOperation.INSERT,
+            },
           ],
         });
       });
@@ -136,6 +149,13 @@ const useUpateData = (props: IUseUpateData) => {
               value: enums(ruleCode)?.code,
               transactionOperation: ETransactionOperation.DELETE,
             },
+            {
+              conditionDataType: "Alphabetical",
+              conditionName: ECreditLines.CREDIT_LINE_RULE,
+              howToSetTheCondition: "EqualTo",
+              value: lineNameDecision,
+              transactionOperation: ETransactionOperation.DELETE,
+            },
           ],
         });
       });
@@ -143,21 +163,29 @@ const useUpateData = (props: IUseUpateData) => {
       return conditionGroups;
     };
 
+    const validateDecisionId =
+      initiaConditionGroups && initiaConditionGroups?.length > 0
+        ? initiaConditionGroups?.[0].decisionId
+        : (firstDecision?.decisionId ?? undefined);
+
     const transformEditJson = {
-      decisionId: firstDecision?.decisionId,
-      ruleName: ECreditLines.CLIENT_SUPPORT_RULE,
+      decisionId: validateDecisionId,
+      ruleName: templateKey,
       ruleDataType: firstDecision?.ruleDataType,
-      value: firstDecision?.value,
+      value: linesConstructionData.abbreviatedName,
       howToSetTheDecision: firstDecision?.howToSetTheDecision,
       effectiveFrom: formatDate(new Date()),
-      transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
+      transactionOperation:
+        validateDecisionId === undefined
+          ? ETransactionOperation.INSERT
+          : ETransactionOperation.INSERT_OR_UPDATE,
       conditionGroups: editCondition(),
     };
 
     const newEditValues = [
       {
         ruleName: templateKey,
-        modifyJustification: `${decisionsLabels.modifyJustification} ${appData.user.userAccount}`,
+        modifyJustification: `${decisionsLabels.modifyJustification} ${templateKey}`,
         decisionsByRule: [transformEditJson],
       },
     ];
@@ -171,16 +199,22 @@ const useUpateData = (props: IUseUpateData) => {
           (linesConstructionData.rules as IRuleDecision[] | undefined) ??
           [];
         const updatedRules = mergeEditRules(existingRules, newValues);
-
         return {
           ...prev,
           settingRequestId: linesConstructionData.settingRequestId,
           configurationRequestData: {
-            ...prev?.configurationRequestData,
+            alias: linesConstructionData.alias,
+            abbreviatedName: linesConstructionData.abbreviatedName,
+            descriptionUse: linesConstructionData.descriptionUse,
             rules: updatedRules,
           },
         };
       });
+
+      setLinesConstructionData((prev: any) => ({
+        ...prev,
+        rules: mergeEditRules(prev.rules ?? [], newValues),
+      }));
     }
 
     if (useCaseConfiguration === EUseCase.EDIT) {
@@ -222,4 +256,4 @@ const useUpateData = (props: IUseUpateData) => {
   ]);
 };
 
-export { useUpateData };
+export { useUpdateData };

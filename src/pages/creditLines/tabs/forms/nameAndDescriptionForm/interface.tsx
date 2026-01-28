@@ -130,6 +130,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
           onCloseRequestStatus={onCloseRequestStatus}
           onCloseProcess={onCloseProcess}
           onClosePendingModal={onClosePendingModal}
+          changeZIndex
         />
 
         {showModal && (
@@ -155,6 +156,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
+            changeZIndex
           />
         )}
         {showSendModal && (

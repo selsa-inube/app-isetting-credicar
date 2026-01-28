@@ -6,12 +6,14 @@ import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/Informati
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
+import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
 import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { tokens } from "@design/tokens";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { LineInformation } from "../lineInformation";
 
 const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
@@ -20,7 +22,6 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     optionsIncluded,
     showInfoModal,
     updateData,
-    loading,
     navigation,
     lineNameDecision,
     message,
@@ -35,6 +36,13 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     editOption,
     submitModalData,
     showInfo,
+    requestSteps,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    saveCreditLines,
+    handleCloseRequestStatus,
+    handleCloseProcess,
+    handleClosePendingModal,
     onToggleInfoModal,
     onOpenModal,
     onMove,
@@ -55,7 +63,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             titleOptionConfigLine(ECreditLines.CLIENT_SUPPORT_RULE) || ""
           }
           updateData={updateData}
-          loading={loading}
+          loading={false}
           withoutDecisions={true}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}
@@ -115,6 +123,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
+            changeZIndex
           />
         )}
 
@@ -132,6 +141,16 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             editOption={editOption}
           />
         )}
+        <RequestModal
+          showRequestProcessModal={showRequestProcessModal}
+          showRequestStatusModal={showRequestStatusModal}
+          saveData={saveCreditLines as ISaveDataResponse}
+          requestSteps={requestSteps}
+          onCloseRequestStatus={handleCloseRequestStatus}
+          onCloseProcess={handleCloseProcess}
+          onClosePendingModal={handleClosePendingModal}
+          changeZIndex
+        />
       </Stack>
       <StyledFloatButtonsContainer>
         <ButtonsConfiguration
