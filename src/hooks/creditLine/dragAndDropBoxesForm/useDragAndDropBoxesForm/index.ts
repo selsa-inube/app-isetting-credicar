@@ -9,7 +9,7 @@ import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
-import { useUpateData } from "../useUpateData";
+import { useUpdateData } from "../useUpdateData";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
@@ -238,7 +238,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     );
   }, [linesConstructionData?.rules, ruleOption]);
 
-  useUpateData({
+  useUpdateData({
     condition,
     configuredDecisions,
     currentRuleData,

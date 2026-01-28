@@ -13,7 +13,7 @@ import { mergeEditRules } from "@utils/mergeEditRules";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IUseUpateData } from "@ptypes/hooks/creditLines/IUseUpateData";
 
-const useUpateData = (props: IUseUpateData) => {
+const useUpdateData = (props: IUseUpateData) => {
   const {
     condition,
     configuredDecisions,
@@ -256,4 +256,4 @@ const useUpateData = (props: IUseUpateData) => {
   ]);
 };
 
-export { useUpateData };
+export { useUpdateData };
