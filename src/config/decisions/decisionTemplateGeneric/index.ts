@@ -29,6 +29,11 @@ const decisionTemplateConfig = (
       ConditionGroupId,
       conditionsThatEstablishesTheDecision:
         conditionsThatEstablishesTheDecision.map((condition) => ({
+          placeholder:
+            condition.listOfPossibleValues?.list &&
+            condition.listOfPossibleValues.list?.length > 0
+              ? "Selecciona una opción"
+              : "",
           conditionName: condition.conditionName,
           labelName: String(
             condition.i18n?.[language as keyof typeof condition.i18n] ??
@@ -60,6 +65,10 @@ const decisionTemplateConfig = (
         ValueDataType[decisionData as keyof typeof ValueDataType],
       howToSetTheDecision,
       value: "",
+      placeholder:
+        listOfPossibleValues?.list && listOfPossibleValues.list?.length > 0
+          ? "Selecciona una opción"
+          : "",
       effectiveFrom: "",
       validUntil: "",
       listOfPossibleValues:
