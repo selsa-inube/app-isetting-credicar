@@ -777,6 +777,9 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     return await handleStep(true);
   };
 
+  console.log("🐰", { linesEditData });
+  console.log("😻", { linesConstructionData });
+
   return {
     loading,
     initialValues,
