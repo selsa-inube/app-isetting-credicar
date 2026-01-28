@@ -123,6 +123,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
+            changeZIndex
           />
         )}
 
@@ -148,6 +149,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
           onCloseRequestStatus={handleCloseRequestStatus}
           onCloseProcess={handleCloseProcess}
           onClosePendingModal={handleClosePendingModal}
+          changeZIndex
         />
       </Stack>
       <StyledFloatButtonsContainer>

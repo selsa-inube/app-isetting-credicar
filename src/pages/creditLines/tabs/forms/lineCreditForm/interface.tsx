@@ -118,6 +118,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
             description={message}
             onClick={onToggleInfoModal}
             onCloseModal={onToggleInfoModal}
+            changeZIndex
           />
         )}
 
@@ -144,7 +145,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
           onCloseRequestStatus={handleCloseRequestStatus}
           onCloseProcess={handleCloseProcess}
           onClosePendingModal={handleClosePendingModal}
-          changeZIndex={true}
+          changeZIndex
         />
       </Stack>
       <StyledFloatButtonsContainer>

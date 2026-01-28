@@ -113,8 +113,8 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
 
     if (!rulesToInclude || rulesToInclude.length === 0) {
       return {
-        includedOptions: mapSupportLinesToLanguage(supportLine),
-        excludedOptions: [],
+        includedOptions: [],
+        excludedOptions: mapSupportLinesToLanguage(supportLine),
       };
     }
 

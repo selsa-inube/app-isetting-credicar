@@ -11,6 +11,7 @@ const StyledDropdownMenuContainer = styled.div`
 `;
 
 const StyledFloatButtonsContainer = styled.div`
+  z-index: 2;
   position: sticky;
   bottom: 1rem;
   left: 50rem;

@@ -174,6 +174,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             onClick={handleToggleInfoModal}
             onCloseModal={handleToggleInfoModal}
             title={lineTypeDecision}
+            changeZIndex
           />
         )}
         {showSendModal && (
@@ -199,6 +200,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           onCloseRequestStatus={handleCloseRequestStatus}
           onCloseProcess={handleCloseProcess}
           onClosePendingModal={handleClosePendingModal}
+          changeZIndex
         />
 
         {showLineModal && (

@@ -163,17 +163,22 @@ const useUpateData = (props: IUseUpateData) => {
       return conditionGroups;
     };
 
+    const validateDecisionId =
+      initiaConditionGroups && initiaConditionGroups?.length > 0
+        ? initiaConditionGroups?.[0].decisionId
+        : (firstDecision?.decisionId ?? undefined);
+
     const transformEditJson = {
-      decisionId:
-        initiaConditionGroups && initiaConditionGroups?.length > 0
-          ? initiaConditionGroups?.[0].decisionId
-          : (firstDecision?.decisionId ?? ""),
+      decisionId: validateDecisionId,
       ruleName: templateKey,
       ruleDataType: firstDecision?.ruleDataType,
-      value: firstDecision?.value,
+      value: linesConstructionData.abbreviatedName,
       howToSetTheDecision: firstDecision?.howToSetTheDecision,
       effectiveFrom: formatDate(new Date()),
-      transactionOperation: ETransactionOperation.INSERT_OR_UPDATE,
+      transactionOperation:
+        validateDecisionId === undefined
+          ? ETransactionOperation.INSERT
+          : ETransactionOperation.INSERT_OR_UPDATE,
       conditionGroups: editCondition(),
     };
 
