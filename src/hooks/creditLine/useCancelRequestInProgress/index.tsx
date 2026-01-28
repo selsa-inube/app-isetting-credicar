@@ -3,14 +3,12 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { eventBus } from "@events/eventBus";
 import { cancelRequestInProgress } from "@services/requestInProgress/cancelRequestInProgress";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { EModalState } from "@enum/modalState";
 import { EComponentAppearance } from "@enum/appearances";
 import { errorObject } from "@utils/errorObject";
 import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { notCancelStatus } from "@config/status/notCancelStatus";
-import { disabledModal } from "@config/disabledModal";
 import { cancelLabels } from "@config/creditLines/requestInProgressTab/cancelLabels";
 import { cancelRequestModal } from "@config/creditLines/requestInProgressTab/cancelRequestModal";
 import { deleteCreditModal } from "@config/creditLines/creditLinesTab/generic/deleteCreditModal";
@@ -26,7 +24,6 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     businessUnit,
     data,
     userAccount,
-    useCaseCancel,
     setEntryCanceled,
     inConstruction = false,
     token,
@@ -34,35 +31,23 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [showDecision, setShowDecision] = useState(false);
   const [cannotCancelled, setCannotCancelled] = useState(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const { addFlag } = useFlag();
 
-  const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
-
   const notCancel = notCancelStatus.includes(data.requestStatusCode);
 
   const handleToggleModal = () => {
-    if (disabledButton) {
-      setShowInfoModal(!showInfoModal);
-    }
-    if (!disabledButton) {
-      if (notCancel) {
-        setCannotCancelled(!cannotCancelled);
-      } else {
-        setShowModal(!showModal);
-      }
+    if (notCancel) {
+      setCannotCancelled(!cannotCancelled);
+    } else {
+      setShowModal(!showModal);
     }
   };
 
   const handleToggleCancelledModal = () => {
     setCannotCancelled(!notCancel);
-  };
-
-  const handleToggleInfoModal = () => {
-    setShowInfoModal(!showInfoModal);
   };
 
   const fetchCancelRequestData = async (data: ICancelRequest) => {
@@ -101,9 +86,9 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
   };
 
   useEffect(() => {
-    const decision = showInfoModal || showModal || cannotCancelled || hasError;
+    const decision = showModal || cannotCancelled || hasError;
     setShowDecision(decision);
-  }, [showInfoModal, showModal, cannotCancelled, hasError]);
+  }, [showModal, cannotCancelled, hasError]);
 
   const modal = () => {
     const initial = {
@@ -135,19 +120,6 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
         withIcon: true,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,
-      };
-    }
-
-    if (showInfoModal) {
-      return {
-        ...disabledModal,
-        onCloseModal: handleToggleInfoModal,
-        onClick: handleToggleInfoModal,
-        withCancelButton: false,
-        moreDetails: "",
-        withIcon: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 
@@ -203,11 +175,9 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
     showModal,
     loading,
     hasError,
-    showInfoModal,
     showDecision,
     modalData,
     errorData,
-    handleToggleInfoModal,
     handleToggleModal,
     handleClick,
   };
