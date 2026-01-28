@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { cancelRequestInProgress } from "@services/requestInProgress/cancelRequestInProgress";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
 import { eventBus } from "@events/eventBus";
 import { messageErrorStatusConsultation } from "@utils/messageErrorStatusConsultation";
 import { errorObject } from "@utils/errorObject";
@@ -21,14 +20,7 @@ import { ICancelRequestInProgressRequest } from "@ptypes/requestInProgress/ICanc
 import { IErrors } from "@ptypes/IErrors";
 
 const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
-  const {
-    businessUnit,
-    data,
-    userAccount,
-    useCaseCancel,
-    token,
-    setEntryCanceled,
-  } = props;
+  const { businessUnit, data, userAccount, token, setEntryCanceled } = props;
   const [showModal, setShowModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
@@ -39,20 +31,13 @@ const useCancelRequestInProgress = (props: IUseCancelRequestInProgress) => {
 
   const { addFlag } = useFlag();
 
-  const { disabledButton } = useValidateUseCase({ useCase: useCaseCancel });
-
   const notCancel = notCancelStatus.includes(data.requestStatusCode);
 
   const handleToggleModal = () => {
-    if (disabledButton) {
-      setShowInfoModal(!showInfoModal);
-    }
-    if (!disabledButton) {
-      if (notCancel) {
-        setCannotCancelled(!cannotCancelled);
-      } else {
-        setShowModal(!showModal);
-      }
+    if (notCancel) {
+      setCannotCancelled(!cannotCancelled);
+    } else {
+      setShowModal(!showModal);
     }
   };
 
