@@ -86,6 +86,10 @@ const useUpateData = (props: IUseUpateData) => {
       },
     ];
 
+    const initiaConditionGroups = configuredDecisions?.flatMap(
+      (config) => config.decisionsByRule || [],
+    );
+
     const editCondition = () => {
       const conditionGroups: any[] = [];
 
@@ -93,12 +97,8 @@ const useUpateData = (props: IUseUpateData) => {
         supportLine.find(
           (value) =>
             value.i18n?.[appData.language as keyof typeof value.i18n] ===
-            condition,
+              condition || value.description === condition,
         );
-
-      const initiaConditionGroups = configuredDecisions?.flatMap(
-        (config) => config.decisionsByRule || [],
-      );
 
       const initialData = (rule: string) => {
         if (!initiaConditionGroups) return undefined;
@@ -164,7 +164,7 @@ const useUpateData = (props: IUseUpateData) => {
     };
 
     const transformEditJson = {
-      decisionId: firstDecision?.decisionId,
+      decisionId: initiaConditionGroups?.[0].decisionId,
       ruleName: templateKey,
       ruleDataType: firstDecision?.ruleDataType,
       value: firstDecision?.value,
