@@ -15,6 +15,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { IRequestStatusModal } from "@ptypes/design/IRequestStatusModal";
 import { closeLabels } from "@config/closeLabels";
 import { StyledModal } from "./styles";
+import { StyledModalContainer } from "../modalWrapper/styles";
 
 const RequestStatusModal = (props: IRequestStatusModal) => {
   const {
@@ -25,6 +26,7 @@ const RequestStatusModal = (props: IRequestStatusModal) => {
     description,
     loading,
     requestNumber,
+    changeZIndex = false,
     onClick,
     onCloseModal,
   } = props;
@@ -40,76 +42,78 @@ const RequestStatusModal = (props: IRequestStatusModal) => {
   }
 
   return createPortal(
-    <Blanket>
-      <StyledModal $smallScreen={isMobile}>
-        <Stack direction="column" gap={tokens.spacing.s200}>
-          <Stack alignItems="center" justifyContent="space-between">
-            <Text
-              type="headline"
-              size="small"
-              weight="bold"
-              appearance={EComponentAppearance.DARK}
-            >
-              {title}
-            </Text>
+    <StyledModalContainer changeZIndex={changeZIndex}>
+      <Blanket>
+        <StyledModal $smallScreen={isMobile}>
+          <Stack direction="column" gap={tokens.spacing.s200}>
+            <Stack alignItems="center" justifyContent="space-between">
+              <Text
+                type="headline"
+                size="small"
+                weight="bold"
+                appearance={EComponentAppearance.DARK}
+              >
+                {title}
+              </Text>
 
+              <Button
+                spacing="compact"
+                appearance={EComponentAppearance.DARK}
+                variant="none"
+                onClick={onCloseModal}
+                iconAfter={
+                  <Icon
+                    appearance={EComponentAppearance.DARK}
+                    icon={<MdClear />}
+                  />
+                }
+              >
+                {closeLabels.title}
+              </Button>
+            </Stack>
+            <Divider />
+          </Stack>
+
+          <Stack alignItems="center" justifyContent="center">
+            <Icon
+              icon={<MdCheckCircle />}
+              appearance={EComponentAppearance.SUCCESS}
+              size="68px"
+            />
+          </Stack>
+
+          <Stack direction="column" gap={tokens.spacing.s200}>
+            <Stack justifyContent="center">
+              <Text
+                textAlign="center"
+                appearance={EComponentAppearance.DARK}
+                size="large"
+                weight="bold"
+              >
+                {`Solicitud # ${requestNumber}`}
+              </Text>
+            </Stack>
+
+            <Text appearance={EComponentAppearance.GRAY} size="medium">
+              {description}
+            </Text>
+          </Stack>
+
+          <Stack width="100%" justifyContent="flex-end">
             <Button
-              spacing="compact"
-              appearance={EComponentAppearance.DARK}
-              variant="none"
-              onClick={onCloseModal}
-              iconAfter={
-                <Icon
-                  appearance={EComponentAppearance.DARK}
-                  icon={<MdClear />}
-                />
-              }
+              spacing="wide"
+              appearance={appearance}
+              variant="filled"
+              loading={loading}
+              onClick={onClick}
+              fullwidth={isMobile ? true : false}
             >
-              {closeLabels.title}
+              {actionText}
             </Button>
           </Stack>
-          <Divider />
-        </Stack>
-
-        <Stack alignItems="center" justifyContent="center">
-          <Icon
-            icon={<MdCheckCircle />}
-            appearance={EComponentAppearance.SUCCESS}
-            size="68px"
-          />
-        </Stack>
-
-        <Stack direction="column" gap={tokens.spacing.s200}>
-          <Stack justifyContent="center">
-            <Text
-              textAlign="center"
-              appearance={EComponentAppearance.DARK}
-              size="large"
-              weight="bold"
-            >
-              {`Solicitud # ${requestNumber}`}
-            </Text>
-          </Stack>
-
-          <Text appearance={EComponentAppearance.GRAY} size="medium">
-            {description}
-          </Text>
-        </Stack>
-
-        <Stack width="100%" justifyContent="flex-end">
-          <Button
-            spacing="wide"
-            appearance={appearance}
-            variant="filled"
-            loading={loading}
-            onClick={onClick}
-            fullwidth={isMobile ? true : false}
-          >
-            {actionText}
-          </Button>
-        </Stack>
-      </StyledModal>
-    </Blanket>,
+        </StyledModal>
+      </Blanket>
+    </StyledModalContainer>,
     node,
   );
 };

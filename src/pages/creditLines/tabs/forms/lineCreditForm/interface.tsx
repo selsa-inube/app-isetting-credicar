@@ -4,6 +4,7 @@ import { DragAndDropBoxes } from "@isettingkit/business-rules";
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/InformationBox";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
+import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { ECreditLines } from "@enum/creditLines";
@@ -11,6 +12,7 @@ import { EComponentAppearance } from "@enum/appearances";
 import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { tokens } from "@design/tokens";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { LineInformation } from "../lineInformation";
 
@@ -34,6 +36,13 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
     optionIcon,
     editOption,
     submitModalData,
+    requestSteps,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    saveCreditLines,
+    handleCloseRequestStatus,
+    handleCloseProcess,
+    handleClosePendingModal,
     onToggleInfoModal,
     onOpenModal,
     onMove,
@@ -126,6 +135,17 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
             editOption={editOption}
           />
         )}
+
+        <RequestModal
+          showRequestProcessModal={showRequestProcessModal}
+          showRequestStatusModal={showRequestStatusModal}
+          saveData={saveCreditLines as ISaveDataResponse}
+          requestSteps={requestSteps}
+          onCloseRequestStatus={handleCloseRequestStatus}
+          onCloseProcess={handleCloseProcess}
+          onClosePendingModal={handleClosePendingModal}
+          changeZIndex={true}
+        />
       </Stack>
       <StyledFloatButtonsContainer>
         <ButtonsConfiguration

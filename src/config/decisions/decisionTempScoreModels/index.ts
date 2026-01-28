@@ -42,6 +42,7 @@ const decisionScoreModelsConfig = (
         conditionGroupId: "",
         conditionsThatEstablishesTheDecision:
           conditionsThatEstablishesTheDecision?.map((condition) => ({
+            placeholder: "Selecciona una opción",
             conditionName: condition.conditionName,
             labelName: String(
               condition.i18n?.[language as keyof typeof i18n] ??

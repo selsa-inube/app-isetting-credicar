@@ -18,6 +18,7 @@ interface IRequestProcessContent {
   onCloseProcess: () => void;
   saveData?: ISaveDataResponse;
   appearance?: ISpinnerAppearance;
+  changeZIndex?: boolean;
 }
 
 export type { IRequestProcessContent };

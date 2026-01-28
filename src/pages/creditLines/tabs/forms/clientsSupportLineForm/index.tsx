@@ -35,6 +35,13 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     optionIcon,
     ruleLoadding,
     configuredDecisions,
+    requestSteps,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    saveCreditLines,
+    handleCloseRequestStatus,
+    handleCloseProcess,
+    handleClosePendingModal,
     setLinesData,
     setOptionsIncluded,
     setOptionsExcluded,
@@ -106,6 +113,13 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       optionIcon={optionIcon}
       editOption={useCaseConfiguration === EUseCase.EDIT}
       showInfo={showInfo}
+      requestSteps={requestSteps}
+      showRequestProcessModal={showRequestProcessModal}
+      showRequestStatusModal={showRequestStatusModal}
+      saveCreditLines={saveCreditLines}
+      handleCloseRequestStatus={handleCloseRequestStatus}
+      handleCloseProcess={handleCloseProcess}
+      handleClosePendingModal={handleClosePendingModal}
     />
   );
 };

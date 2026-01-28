@@ -12,6 +12,7 @@ const RequestModal = (props: IRequestModal) => {
     showRequestStatusModal,
     saveData,
     requestSteps,
+    changeZIndex,
     onCloseRequestStatus,
     onCloseProcess,
     onClosePendingModal,
@@ -28,6 +29,7 @@ const RequestModal = (props: IRequestModal) => {
           appearance={EComponentAppearance.SUCCESS}
           onCloseRequestStatus={onCloseRequestStatus}
           onCloseProcess={onCloseProcess}
+          changeZIndex={changeZIndex}
         />
       )}
       {showRequestStatusModal && (
@@ -41,6 +43,7 @@ const RequestModal = (props: IRequestModal) => {
           loading={false}
           actionText={requestStatusMessage(saveData.staffName).actionText}
           appearance={EComponentAppearance.PRIMARY}
+          changeZIndex={changeZIndex}
         />
       )}
     </>

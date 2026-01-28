@@ -164,7 +164,10 @@ const useUpateData = (props: IUseUpateData) => {
     };
 
     const transformEditJson = {
-      decisionId: initiaConditionGroups?.[0].decisionId,
+      decisionId:
+        initiaConditionGroups && initiaConditionGroups?.length > 0
+          ? initiaConditionGroups?.[0].decisionId
+          : (firstDecision?.decisionId ?? ""),
       ruleName: templateKey,
       ruleDataType: firstDecision?.ruleDataType,
       value: firstDecision?.value,
