@@ -36,6 +36,14 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     useCaseConfiguration,
     optionIcon,
     ruleLoadding,
+    configuredDecisions,
+    requestSteps,
+    showRequestProcessModal,
+    showRequestStatusModal,
+    saveCreditLines,
+    handleCloseRequestStatus,
+    handleCloseProcess,
+    handleClosePendingModal,
     setLinesData,
     setCreditOptionsIncluded,
     setCreditOptionsExcluded,
@@ -73,10 +81,12 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       optionsExcluded: creditOptionsExcluded,
       infoRuleName: ECreditLines.CREDIT_LINE_RULE,
       supportLine: valuesData,
+      lineNameDecision,
       loadingSupportOptions: loadingOptions,
       setOptionsIncluded: setCreditOptionsIncluded,
       setOptionsExcluded: setCreditOptionsExcluded,
       condition: "MoneyDestination",
+      configuredDecisions,
       setLinesData,
     });
 
@@ -104,6 +114,13 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       optionIcon={optionIcon}
       editOption={useCaseConfiguration === EUseCase.EDIT}
       showInfo={showInfo}
+      requestSteps={requestSteps}
+      showRequestProcessModal={showRequestProcessModal}
+      showRequestStatusModal={showRequestStatusModal}
+      saveCreditLines={saveCreditLines}
+      handleCloseRequestStatus={handleCloseRequestStatus}
+      handleCloseProcess={handleCloseProcess}
+      handleClosePendingModal={handleClosePendingModal}
     />
   );
 };

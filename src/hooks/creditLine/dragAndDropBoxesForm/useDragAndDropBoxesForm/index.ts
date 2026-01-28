@@ -9,7 +9,7 @@ import { ISide } from "@ptypes/ISide";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IEnumerators } from "@ptypes/IEnumerators";
 import { IUseDragAndDropBoxesForm } from "@ptypes/hooks/creditLines/IUseDragAndDropBoxesForm";
-import { useUpateData } from "../useUpateData";
+import { useUpdateData } from "../useUpdateData";
 
 const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
   const {
@@ -23,6 +23,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     condition,
     loadingSupportOptions,
     configuredDecisions,
+    lineNameDecision,
     setOptionsIncluded,
     setOptionsExcluded,
     setLinesData,
@@ -112,8 +113,8 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
 
     if (!rulesToInclude || rulesToInclude.length === 0) {
       return {
-        includedOptions: mapSupportLinesToLanguage(supportLine),
-        excludedOptions: [],
+        includedOptions: [],
+        excludedOptions: mapSupportLinesToLanguage(supportLine),
       };
     }
 
@@ -237,7 +238,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     );
   }, [linesConstructionData?.rules, ruleOption]);
 
-  useUpateData({
+  useUpdateData({
     condition,
     configuredDecisions,
     currentRuleData,
@@ -246,6 +247,7 @@ const useDragAndDropBoxesForm = (props: IUseDragAndDropBoxesForm) => {
     move,
     supportLine,
     templateKey,
+    lineNameDecision,
     setMove,
     supportIncludedData,
     setLinesData,

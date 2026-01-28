@@ -10,6 +10,7 @@ import { percentage } from "@utils/percentage";
 import { percTotalNumber } from "@config/percentageNumber";
 import { StyledModal } from "./styles";
 import { RequestProcessBar } from "./RequestProcessBar";
+import { StyledModalContainer } from "../modalWrapper/styles";
 
 const RequestProcessModal = (props: IRequestProcessModal) => {
   const {
@@ -19,6 +20,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
     isMobile,
     description,
     title,
+    changeZIndex = false,
     onClose,
   } = props;
 
@@ -38,45 +40,51 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
   const showButton = percentageNumber === percTotalNumber;
 
   return createPortal(
-    <Blanket>
-      <StyledModal $smallScreen={isMobile}>
-        <Stack direction="column" gap={tokens.spacing.s200} width="100%">
-          <Stack direction="column" gap={tokens.spacing.s100}>
-            <Text type="title" size="medium" weight="bold">
-              {title}
-            </Text>
-            <Divider />
-          </Stack>
-          <Stack direction="column" justifyContent="center" alignItems="center">
-            <Text
-              size={isMobile ? "small" : "medium"}
-              appearance={EComponentAppearance.GRAY}
+    <StyledModalContainer changeZIndex={changeZIndex}>
+      <Blanket>
+        <StyledModal $smallScreen={isMobile}>
+          <Stack direction="column" gap={tokens.spacing.s200} width="100%">
+            <Stack direction="column" gap={tokens.spacing.s100}>
+              <Text type="title" size="medium" weight="bold">
+                {title}
+              </Text>
+              <Divider />
+            </Stack>
+            <Stack
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
             >
-              {description}
-            </Text>
-          </Stack>
+              <Text
+                size={isMobile ? "small" : "medium"}
+                appearance={EComponentAppearance.GRAY}
+              >
+                {description}
+              </Text>
+            </Stack>
 
-          <RequestProcessBar
-            requestSteps={requestSteps}
-            sizeIcon={sizeIcon}
-            stepCurrent={stepCurrent}
-            stepCurrentIndex={stepCurrentIndex}
-            percentage={percentage(requestSteps)}
-          />
-        </Stack>
-        {showButton && (
-          <Stack justifyContent="end">
-            <Button
-              spacing="wide"
-              appearance={EComponentAppearance.SUCCESS}
-              onClick={onClose}
-            >
-              {requestProcessLabels.labelButton}
-            </Button>
+            <RequestProcessBar
+              requestSteps={requestSteps}
+              sizeIcon={sizeIcon}
+              stepCurrent={stepCurrent}
+              stepCurrentIndex={stepCurrentIndex}
+              percentage={percentage(requestSteps)}
+            />
           </Stack>
-        )}
-      </StyledModal>
-    </Blanket>,
+          {showButton && (
+            <Stack justifyContent="end">
+              <Button
+                spacing="wide"
+                appearance={EComponentAppearance.SUCCESS}
+                onClick={onClose}
+              >
+                {requestProcessLabels.labelButton}
+              </Button>
+            </Stack>
+          )}
+        </StyledModal>
+      </Blanket>
+    </StyledModalContainer>,
     node,
   );
 };

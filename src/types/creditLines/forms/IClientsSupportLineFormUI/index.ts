@@ -2,6 +2,8 @@ import { IDragAndDropColumn } from "@isettingkit/business-rules";
 import { ISide } from "@ptypes/ISide";
 import { INavigation } from "@ptypes/context/INavigation";
 import { ISubmitModalData } from "@ptypes/creditLines/ISubmitModalData";
+import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 interface IClientsSupportLineFormUI {
   optionsExcluded: IDragAndDropColumn;
   optionsIncluded: IDragAndDropColumn;
@@ -22,6 +24,13 @@ interface IClientsSupportLineFormUI {
   submitModalData: ISubmitModalData;
   editOption: boolean;
   showInfo: boolean;
+  requestSteps: IRequestSteps[];
+  showRequestProcessModal: boolean;
+  showRequestStatusModal: boolean;
+  saveCreditLines: ISaveDataResponse | undefined;
+  handleCloseRequestStatus: () => void;
+  handleCloseProcess: () => void;
+  handleClosePendingModal: () => void;
   onMove: (payload: { item: string; from: ISide; to: ISide }) => void;
   onOpenModal: () => void;
   onToggleInfoModal: () => void;

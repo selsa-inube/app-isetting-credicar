@@ -9,6 +9,7 @@ interface IRequestModal {
   onCloseRequestStatus: () => void;
   onCloseProcess: () => void;
   onClosePendingModal: () => void;
+  changeZIndex?: boolean;
 }
 
 export type { IRequestModal };

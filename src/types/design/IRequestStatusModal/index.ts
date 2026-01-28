@@ -10,6 +10,7 @@ interface IRequestStatusModal {
   onClick: () => void;
   onCloseModal: () => void;
   appearance?: IIconAppearance;
+  changeZIndex?: boolean;
 }
 
 export type { IRequestStatusModal };
