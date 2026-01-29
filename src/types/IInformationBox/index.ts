@@ -9,6 +9,7 @@ interface IInformationBox {
   sizeIcon: string;
   sizeDescription: ITextSize;
   appearanceIcon: IIconAppearance;
+  withCursor?: boolean;
   widthBox?: string;
   heigthBox?: string;
   ellipsisText?: boolean;

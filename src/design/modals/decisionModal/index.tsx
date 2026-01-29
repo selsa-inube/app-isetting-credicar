@@ -34,6 +34,7 @@ const DecisionModal = (props: IDecisionModal) => {
     isDisabledButton = false,
     changeZIndex,
     subtitle,
+    valueZIndex,
     onBlurDate,
     onClick,
     onCloseModal,
@@ -57,6 +58,7 @@ const DecisionModal = (props: IDecisionModal) => {
       disabledActionButton={isDisabledButton}
       appearanceButton={appearanceButton}
       changeZIndex={changeZIndex}
+      valueZIndex={valueZIndex}
     >
       {withIcon && (
         <Stack width="100%" alignItems="center" justifyContent="center">
