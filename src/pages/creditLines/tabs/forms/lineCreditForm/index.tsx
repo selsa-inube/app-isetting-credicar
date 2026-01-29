@@ -81,7 +81,6 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       optionsExcluded: creditOptionsExcluded,
       infoRuleName: ECreditLines.CREDIT_LINE_RULE,
       supportLine: valuesData,
-      lineNameDecision,
       loadingSupportOptions: loadingOptions,
       setOptionsIncluded: setCreditOptionsIncluded,
       setOptionsExcluded: setCreditOptionsExcluded,

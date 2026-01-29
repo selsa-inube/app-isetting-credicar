@@ -5,7 +5,6 @@ import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { EUseCase } from "@enum/useCase";
-import { ECreditLines } from "@enum/creditLines";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { formatDate } from "@utils/date/formatDate";
 import { mergeEditClientRules } from "@utils/mergeEditClientRules";
@@ -23,7 +22,6 @@ const useUpdateData = (props: IUseUpateData) => {
     move,
     supportLine,
     templateKey,
-    lineNameDecision,
     setMove,
     supportIncludedData,
     setLinesData,
@@ -68,12 +66,6 @@ const useUpdateData = (props: IUseUpateData) => {
             conditionName: condition,
             howToSetTheCondition: "EqualTo",
             value: rule,
-          },
-          {
-            conditionDataType: "Alphabetical",
-            conditionName: ECreditLines.CREDIT_LINE_RULE,
-            howToSetTheCondition: "EqualTo",
-            value: lineNameDecision,
           },
         ],
       })),
@@ -127,13 +119,6 @@ const useUpdateData = (props: IUseUpateData) => {
               value: enums(ruleCode)?.code,
               transactionOperation: ETransactionOperation.INSERT,
             },
-            {
-              conditionDataType: "Alphabetical",
-              conditionName: ECreditLines.CREDIT_LINE_RULE,
-              howToSetTheCondition: "EqualTo",
-              value: lineNameDecision,
-              transactionOperation: ETransactionOperation.INSERT,
-            },
           ],
         });
       });
@@ -147,13 +132,6 @@ const useUpdateData = (props: IUseUpateData) => {
               conditionName: condition,
               howToSetTheCondition: "EqualTo",
               value: enums(ruleCode)?.code,
-              transactionOperation: ETransactionOperation.DELETE,
-            },
-            {
-              conditionDataType: "Alphabetical",
-              conditionName: ECreditLines.CREDIT_LINE_RULE,
-              howToSetTheCondition: "EqualTo",
-              value: lineNameDecision,
               transactionOperation: ETransactionOperation.DELETE,
             },
           ],
