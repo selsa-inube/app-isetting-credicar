@@ -89,6 +89,7 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
                 boxColor={EComponentAppearance.HELP}
                 sizeIcon="20px"
                 sizeDescription="large"
+                withCursor={false}
               />
             </Stack>
           )}
