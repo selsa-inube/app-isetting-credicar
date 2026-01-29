@@ -165,6 +165,8 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             title={modalData.title}
             withCancelButton={modalData.withCancelButton}
             withIcon={modalData.withIcon}
+            changeZIndex
+            valueZIndex={4}
           />
         )}
 

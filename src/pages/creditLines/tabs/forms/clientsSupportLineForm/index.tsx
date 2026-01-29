@@ -39,6 +39,8 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     showRequestProcessModal,
     showRequestStatusModal,
     saveCreditLines,
+    modalData,
+    showDecision,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingModal,
@@ -119,6 +121,8 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       handleCloseRequestStatus={handleCloseRequestStatus}
       handleCloseProcess={handleCloseProcess}
       handleClosePendingModal={handleClosePendingModal}
+      modalData={modalData}
+      showDecision={showDecision}
     />
   );
 };

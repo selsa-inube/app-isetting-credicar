@@ -17,6 +17,7 @@ const InformationBox = (props: IInformationBox) => {
     heigthBox = "100%",
     ellipsisText = false,
     descriptionModal,
+    withCursor = true,
     onClickInfo,
   } = props;
 
@@ -40,7 +41,7 @@ const InformationBox = (props: IInformationBox) => {
       <Icon
         appearance={appearanceIcon}
         icon={icon}
-        cursorHover
+        cursorHover={withCursor}
         size={sizeIcon}
         onClick={handleClick}
       />

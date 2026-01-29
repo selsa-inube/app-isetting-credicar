@@ -10,7 +10,9 @@ import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfigurati
 import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
 import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
+import { portalId } from "@config/portalId";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
@@ -40,6 +42,8 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
     showRequestProcessModal,
     showRequestStatusModal,
     saveCreditLines,
+    modalData,
+    showDecision,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingModal,
@@ -83,6 +87,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
                 boxColor={EComponentAppearance.HELP}
                 sizeIcon="20px"
                 sizeDescription="large"
+                withCursor={false}
               />
             </Stack>
           )}
@@ -147,6 +152,24 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
           onClosePendingModal={handleClosePendingModal}
           changeZIndex
         />
+        {showDecision && (
+          <DecisionModal
+            appearance={modalData.appearance}
+            appearanceButton={modalData.appearanceButton}
+            actionText={modalData.actionText}
+            description={modalData.description}
+            icon={modalData.icon}
+            onClick={modalData.onClick}
+            moreDetails={modalData.moreDetails}
+            onCloseModal={modalData.onCloseModal}
+            portalId={portalId}
+            title={modalData.title}
+            withCancelButton={modalData.withCancelButton}
+            withIcon={modalData.withIcon}
+            changeZIndex
+            valueZIndex={4}
+          />
+        )}
       </Stack>
       <StyledFloatButtonsContainer>
         <ButtonsConfiguration

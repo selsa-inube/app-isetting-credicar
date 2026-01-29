@@ -24,6 +24,7 @@ interface IDecisionModal {
   valueDate?: string;
   messageDate?: string;
   changeZIndex?: boolean;
+  valueZIndex?: number;
   onBlurDate?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onDateChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }

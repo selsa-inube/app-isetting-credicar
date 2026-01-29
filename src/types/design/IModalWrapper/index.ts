@@ -34,6 +34,7 @@ interface IModalWrapper {
   loadingThirdButton?: boolean;
   fullwidthbutton?: boolean;
   changeZIndex?: boolean;
+  valueZIndex?: number;
   onClickThirdButton?: () => void;
   onCloseModal?: () => void;
 }
