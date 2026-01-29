@@ -4,6 +4,7 @@ import { INavigation } from "@ptypes/context/INavigation";
 import { ISubmitModalData } from "@ptypes/creditLines/ISubmitModalData";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 interface IClientsSupportLineFormUI {
   optionsExcluded: IDragAndDropColumn;
   optionsIncluded: IDragAndDropColumn;
@@ -27,6 +28,8 @@ interface IClientsSupportLineFormUI {
   requestSteps: IRequestSteps[];
   showRequestProcessModal: boolean;
   showRequestStatusModal: boolean;
+  modalData: IModalData;
+  showDecision: boolean;
   saveCreditLines: ISaveDataResponse | undefined;
   handleCloseRequestStatus: () => void;
   handleCloseProcess: () => void;

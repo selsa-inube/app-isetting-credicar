@@ -11,6 +11,8 @@ import { ECreditLines } from "@enum/creditLines";
 import { EComponentAppearance } from "@enum/appearances";
 import { titleOptionConfigLine } from "@utils/titleOptionConfigLine";
 import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
+import { portalId } from "@config/portalId";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { IClientsSupportLineFormUI } from "@ptypes/creditLines/forms/IClientsSupportLineFormUI";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -40,6 +42,8 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     showRequestProcessModal,
     showRequestStatusModal,
     saveCreditLines,
+    modalData,
+    showDecision,
     handleCloseRequestStatus,
     handleCloseProcess,
     handleClosePendingModal,
@@ -139,6 +143,24 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
             appearanceItemIcon={submitModalData.appearanceItemIcon}
             itemIcon={submitModalData.itemIcon}
             editOption={editOption}
+          />
+        )}
+        {showDecision && (
+          <DecisionModal
+            appearance={modalData.appearance}
+            appearanceButton={modalData.appearanceButton}
+            actionText={modalData.actionText}
+            description={modalData.description}
+            icon={modalData.icon}
+            onClick={modalData.onClick}
+            moreDetails={modalData.moreDetails}
+            onCloseModal={modalData.onCloseModal}
+            portalId={portalId}
+            title={modalData.title}
+            withCancelButton={modalData.withCancelButton}
+            withIcon={modalData.withIcon}
+            changeZIndex
+            valueZIndex={4}
           />
         )}
         <RequestModal

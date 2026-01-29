@@ -49,6 +49,7 @@ const ModalWrapper = (props: IModalWrapper) => {
     loadingThirdButton,
     fullwidthbutton = false,
     changeZIndex = false,
+    valueZIndex,
     onClickThirdButton,
     onClick,
     onCloseModal,
@@ -63,7 +64,7 @@ const ModalWrapper = (props: IModalWrapper) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={changeZIndex}>
+    <StyledModalContainer changeZIndex={changeZIndex} valueZIndex={valueZIndex}>
       <Blanket>
         <BoxContainer
           width={width}

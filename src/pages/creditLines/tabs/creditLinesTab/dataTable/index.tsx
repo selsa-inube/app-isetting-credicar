@@ -56,6 +56,7 @@ const DataTable = (props: IDataTable) => {
             boxColor={EComponentAppearance.HELP}
             sizeIcon="20px"
             sizeDescription="large"
+            withCursor={false}
           />
         )}
       </Stack>
