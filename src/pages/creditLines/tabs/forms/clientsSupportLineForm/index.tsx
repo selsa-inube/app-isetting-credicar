@@ -85,7 +85,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       setOptionsExcluded,
       condition: "CreditRiskProfile",
       configuredDecisions,
-      lineNameDecision,
       setLinesData,
     });
 
