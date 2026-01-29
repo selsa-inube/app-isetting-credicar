@@ -11,7 +11,6 @@ interface IUseDragAndDropBoxesForm {
   optionsExcluded: IDragAndDropColumn;
   ruleLoadding: boolean;
   infoRuleName: string;
-  lineNameDecision: string;
   supportLine: IEnumerators[];
   loadingSupportOptions: boolean;
   condition: string;

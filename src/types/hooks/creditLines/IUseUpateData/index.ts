@@ -12,7 +12,6 @@ interface IUseUpateData {
   supportLine: IEnumerators[];
   itemInsert: string[];
   itemDelete: string[];
-  lineNameDecision: string;
   setMove: React.Dispatch<React.SetStateAction<boolean>>;
   setLinesData: React.Dispatch<
     SetStateAction<IModifyConstructionResponse | undefined>
