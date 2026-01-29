@@ -8,7 +8,7 @@ const mediaQueryMobile = "(max-width: 770px)";
 const mediaQueryTablet = "(max-width: 1281px)";
 const mediaQueryTabletMain = "(max-width: 1000px)";
 const mediaQueryMobileSmall = "(max-width: 450px)";
-
+const mediaQueryAssisted = "(min-width: 1681px)";
 const maxWidthLineConstruction = "1394px";
 const maxWidthOtherPages = "1064px";
 
@@ -54,6 +54,7 @@ export {
   mediaQueryTablet,
   mediaQueryTabletMain,
   mediaQueryMobileSmall,
+  mediaQueryAssisted,
   maxWidthLineConstruction,
   maxWidthOtherPages,
   maxRetriesServices,

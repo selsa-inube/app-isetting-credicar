@@ -1,21 +1,31 @@
 import { inube } from "@inubekit/inubekit";
 import styled from "styled-components";
 
+interface IFloatButtonsContainer {
+  maxAssistedScreenSize?: boolean;
+}
+
 const StyledDropdownMenuContainer = styled.div`
   position: fixed;
-  z-index: 1;
   overflow: auto;
   width: 334px;
   background: ${({ theme }) =>
     `${theme?.palette?.neutral?.N20 || inube.palette.neutral.N20}`};
+  z-index: 1;
 `;
 
-const StyledFloatButtonsContainer = styled.div`
+const StyledFloatButtonsContainer = styled.div<IFloatButtonsContainer>`
+  position: ${({ maxAssistedScreenSize }) =>
+    maxAssistedScreenSize ? "static" : "fixed"};
+  right: 1.5rem;
+  bottom: 1.5rem;
   z-index: 2;
-  position: sticky;
-  bottom: 1rem;
-  left: 50rem;
-  margin-top: -58px;
+  width: ${({ maxAssistedScreenSize }) =>
+    maxAssistedScreenSize ? "auto" : "19rem"};
+  max-width: ${({ maxAssistedScreenSize }) =>
+    maxAssistedScreenSize ? "none" : "unset"};
+  margin-left: ${({ maxAssistedScreenSize }) =>
+    maxAssistedScreenSize ? "auto" : "unset"};
 `;
 
 export { StyledDropdownMenuContainer, StyledFloatButtonsContainer };
