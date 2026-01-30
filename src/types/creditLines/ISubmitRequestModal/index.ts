@@ -12,6 +12,7 @@ interface ISubmitRequestModal {
   editOption: boolean;
   onClick: () => void;
   onCloseModal: () => void;
+  withCursor?: boolean;
 }
 
 export type { ISubmitRequestModal };

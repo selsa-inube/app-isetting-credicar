@@ -191,6 +191,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
             appearanceItemIcon={submitModalData.appearanceItemIcon}
             itemIcon={submitModalData.itemIcon}
             editOption={useCaseConfiguration === EUseCase.EDIT}
+            withCursor={useCaseConfiguration === EUseCase.ADD}
           />
         )}
 

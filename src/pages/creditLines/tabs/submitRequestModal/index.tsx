@@ -25,6 +25,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
     appearanceItemIcon,
     itemIcon,
     editOption,
+    withCursor = true,
     onClick,
     onCloseModal,
   } = props;
@@ -53,7 +54,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={true} valueZIndex={4}>
+    <StyledModalContainer changeZIndex={true}>
       <Blanket>
         <BoxContainer
           width="500px"
@@ -121,7 +122,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
                   heigthBox="auto"
                   setDescriptionError={setDescriptionError}
                   onClickInfo={onClickInfo}
-                  withCursor={false}
+                  withCursor={withCursor}
                 />
               ))}
             </BoxContainer>
@@ -156,6 +157,8 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
               onCloseModal={onCloseDecisionModal}
               onClick={onCloseDecisionModal}
               withCancelButton={false}
+              changeZIndex
+              valueZIndex={4}
             />
           )}
         </BoxContainer>

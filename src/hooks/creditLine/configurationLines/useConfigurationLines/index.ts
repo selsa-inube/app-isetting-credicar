@@ -617,22 +617,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
 
     if (
-      !optionDetails &&
-      templateKey === ECreditLines.CLIENT_SUPPORT_RULE &&
-      optionsIncluded.items.length === 0
-    ) {
-      return true;
-    }
-
-    if (
-      !optionDetails &&
-      templateKey === ECreditLines.CREDIT_LINE_RULE &&
-      creditOptionsIncluded.items.length === 0
-    ) {
-      return true;
-    }
-
-    if (
       location.pathname ===
         "/credit-lines/edit-credit-lines/line-Names-Descriptions" &&
       !isCurrentFormValid
@@ -651,16 +635,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
 
     if (useCaseConfiguration === EUseCase.ADD) {
-      if (templateKey === ECreditLines.CREDIT_LINE_RULE) {
-        const shouldDisable = creditOptionsIncluded.items.length === 0;
-        return shouldDisable;
-      }
-
-      if (templateKey === ECreditLines.CLIENT_SUPPORT_RULE) {
-        const shouldDisable = optionsIncluded.items.length === 0;
-        return shouldDisable;
-      }
-
       if (linesConstructionData.rules?.length === 0) {
         return true;
       }
