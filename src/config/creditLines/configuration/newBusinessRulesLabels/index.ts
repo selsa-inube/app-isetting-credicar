@@ -5,7 +5,7 @@ const newBusinessRulesLabels = {
   NoStringAttached: "Sin condiciones",
   NoDecision: "Sin Decisiones",
   before:
-    "Antes de agregar tus decisiones, selecciona las condiciones que la determinan.",
+    "Antes de agregar tus decisiones, selecciona las condiciones que las determinan.",
 };
 
 export { newBusinessRulesLabels };

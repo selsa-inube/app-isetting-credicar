@@ -97,6 +97,7 @@ const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
                     boxColor={EComponentAppearance.HELP}
                     sizeIcon="20px"
                     sizeDescription="large"
+                    withCursor={false}
                   />
                 )}
               </Stack>
