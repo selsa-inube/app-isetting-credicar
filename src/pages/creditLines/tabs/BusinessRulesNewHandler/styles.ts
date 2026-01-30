@@ -1,11 +1,5 @@
+import { IScroll } from "@ptypes/creditLines/IScroll";
 import styled from "styled-components";
-
-interface IScroll {
-  $maxHeight: number;
-  $withFloatingActions?: boolean;
-}
-
-const FLOATING_ACTIONS_SAFE_SPACE = 140;
 
 const StyledCardContainer = styled.div`
   & > div {
@@ -24,15 +18,19 @@ const StyledRulesScroll = styled.div<IScroll>`
   overflow-y: auto;
   overflow-x: hidden;
 
-  padding-bottom: ${({ $withFloatingActions }) =>
-    $withFloatingActions ? `${FLOATING_ACTIONS_SAFE_SPACE}px` : "0px"};
-
+  margin-bottom: ${({ $withFloatingActions }) =>
+    $withFloatingActions ? "70px" : "0px"};
   scroll-padding-bottom: ${({ $withFloatingActions }) =>
-    $withFloatingActions ? `${FLOATING_ACTIONS_SAFE_SPACE}px` : "0px"};
+    $withFloatingActions ? "70px" : "0px"};
+`;
+
+const StyledFixedContainerMessage = styled.div`
+  margin-bottom: 90px;
 `;
 
 export {
   StyledCardContainer,
+  StyledFixedContainerMessage,
   StyledMultipleChoiceContainer,
   StyledRulesScroll,
 };

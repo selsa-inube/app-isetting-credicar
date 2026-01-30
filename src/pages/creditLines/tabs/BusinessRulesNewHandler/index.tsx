@@ -12,7 +12,11 @@ import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBus
 import { portalId } from "@config/portalId";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { StyledMultipleChoiceContainer, StyledRulesScroll } from "./styles";
+import {
+  StyledFixedContainerMessage,
+  StyledMultipleChoiceContainer,
+  StyledRulesScroll,
+} from "./styles";
 import { AlertMessage } from "../forms/alertMessage";
 
 const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
@@ -92,13 +96,17 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     handleToggleModal,
   });
 
-  const isMd = useMediaQuery("(min-width: 768px)");
-  const isLg = useMediaQuery("(min-width: 1024px)");
-  const isXl = useMediaQuery("(min-width: 1440px)");
-  const is2xl = useMediaQuery("(min-width: 1680px)");
+  const smallScreen = useMediaQuery("(min-width: 768px)");
+  const mediumScreen = useMediaQuery("(min-width: 1024px)");
+  const largeScreen = useMediaQuery("(min-width: 1440px)");
+  const extraLargeScreen = useMediaQuery("(min-width: 1680px)");
 
   const visibleRows =
-    (is2xl && 12) || (isXl && 10) || (isLg && 8) || (isMd && 6) || 6;
+    (extraLargeScreen && 12) ||
+    (largeScreen && 10) ||
+    (mediumScreen && 8) ||
+    (smallScreen && 6) ||
+    6;
 
   const rowHeight = 96;
 
@@ -146,7 +154,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
       {!ruleLoading && (
         <StyledRulesScroll
           $maxHeight={maxHeight}
-          $withFloatingActions={isFloatingActions}
+          $withFloatingActions={isFloatingActions && decisionsSorted.length > 0}
         >
           <BusinessRulesNew
             baseDecisionTemplate={localizedTemplate}
@@ -169,12 +177,14 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             shouldRenderEmptyMessage={dataEmpty || decisionsSorted.length > 0}
           />
           {conditionEmpty && (
-            <AlertMessage
-              mesaggeEmpty={mesaggeEmpty}
-              icon={iconMessage}
-              iconAppearance={iconAppearance}
-              message={customMessageEmptyDecisions ?? message}
-            />
+            <StyledFixedContainerMessage>
+              <AlertMessage
+                mesaggeEmpty={mesaggeEmpty}
+                icon={iconMessage}
+                iconAppearance={iconAppearance}
+                message={customMessageEmptyDecisions ?? message}
+              />
+            </StyledFixedContainerMessage>
           )}
 
           {showDecision && (

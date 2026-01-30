@@ -218,7 +218,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
       </Stack>
 
       <StyledFloatButtonsContainer
-        maxAssistedScreenSize={maxAssistedScreenSize}
+        $maxAssistedScreenSize={maxAssistedScreenSize}
       >
         <ButtonsConfiguration
           navigation={nav}
