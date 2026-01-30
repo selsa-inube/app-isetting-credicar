@@ -32,6 +32,7 @@ const NameAndDescriptionForm = () => {
     showSendModal,
     submitModalData,
     useCaseConfiguration,
+    disabledNameDescription,
     handleClosePendingModal,
     handleCloseRequestStatus,
     handleCloseProcess,
@@ -89,7 +90,7 @@ const NameAndDescriptionForm = () => {
       optionCrumb={optionCrumb}
       optionDetails={optionDetails}
       optionIcon={optionIcon}
-      disabledField={optionDetails}
+      disabledField={disabledNameDescription}
       showSendModal={showSendModal}
       submitModalData={submitModalData}
       editOption={useCaseConfiguration === EUseCase.EDIT}

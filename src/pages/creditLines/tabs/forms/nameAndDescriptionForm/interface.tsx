@@ -171,6 +171,7 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
             appearanceItemIcon={submitModalData.appearanceItemIcon}
             itemIcon={submitModalData.itemIcon}
             editOption={editOption}
+            withCursor={!editOption}
           />
         )}
       </Stack>

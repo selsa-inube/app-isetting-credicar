@@ -89,6 +89,7 @@ const ConfigurationLines = () => {
           icon={modalData.icon}
           appearance={modalData.appearance}
           appearanceButton={modalData.appearanceButton}
+          changeZIndex
         />
       )}
     </Stack>
