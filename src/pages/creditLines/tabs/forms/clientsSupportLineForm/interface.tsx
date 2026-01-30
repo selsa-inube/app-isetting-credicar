@@ -4,7 +4,7 @@ import { DragAndDropBoxes } from "@isettingkit/business-rules";
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { InformationBox } from "@pages/creditLines/tabs/creditLinesTab/InformationBox";
 import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfigurationModal";
-import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
+import { StyledFloatButtonsContainer } from "@src/pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { RequestModal } from "@pages/creditLines/tabs/requestModal";
 import { ECreditLines } from "@enum/creditLines";

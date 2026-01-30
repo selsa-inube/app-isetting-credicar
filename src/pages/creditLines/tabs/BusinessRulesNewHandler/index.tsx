@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Fieldset, Stack } from "@inubekit/inubekit";
+import { Button, Fieldset, Stack, useMediaQuery } from "@inubekit/inubekit";
 import { MdAdd } from "react-icons/md";
 import type { IOption } from "@inubekit/inubekit";
 import { BusinessRulesNew } from "@isettingkit/business-rules";
@@ -12,7 +12,11 @@ import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBus
 import { portalId } from "@config/portalId";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import { StyledMultipleChoiceContainer } from "./styles";
+import {
+  StyledFixedContainerMessage,
+  StyledMultipleChoiceContainer,
+  StyledRulesScroll,
+} from "./styles";
 import { AlertMessage } from "../forms/alertMessage";
 
 const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
@@ -92,6 +96,23 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     handleToggleModal,
   });
 
+  const smallScreen = useMediaQuery("(min-width: 768px)");
+  const mediumScreen = useMediaQuery("(min-width: 1024px)");
+  const largeScreen = useMediaQuery("(min-width: 1440px)");
+  const extraLargeScreen = useMediaQuery("(min-width: 1680px)");
+
+  const visibleRows =
+    (extraLargeScreen && 12) ||
+    (largeScreen && 10) ||
+    (mediumScreen && 8) ||
+    (smallScreen && 6) ||
+    6;
+
+  const rowHeight = 96;
+
+  const maxHeight = visibleRows * rowHeight;
+  const isFloatingActions = !optionDetailsCreditline;
+
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
@@ -131,7 +152,10 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
         </>
       )}
       {!ruleLoading && (
-        <>
+        <StyledRulesScroll
+          $maxHeight={maxHeight}
+          $withFloatingActions={isFloatingActions && decisionsSorted.length > 0}
+        >
           <BusinessRulesNew
             baseDecisionTemplate={localizedTemplate}
             controls={!optionDetailsCreditline}
@@ -153,12 +177,14 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             shouldRenderEmptyMessage={dataEmpty || decisionsSorted.length > 0}
           />
           {conditionEmpty && (
-            <AlertMessage
-              mesaggeEmpty={mesaggeEmpty}
-              icon={iconMessage}
-              iconAppearance={iconAppearance}
-              message={customMessageEmptyDecisions ?? message}
-            />
+            <StyledFixedContainerMessage>
+              <AlertMessage
+                mesaggeEmpty={mesaggeEmpty}
+                icon={iconMessage}
+                iconAppearance={iconAppearance}
+                message={customMessageEmptyDecisions ?? message}
+              />
+            </StyledFixedContainerMessage>
           )}
 
           {showDecision && (
@@ -178,7 +204,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
               valueZIndex={4}
             />
           )}
-        </>
+        </StyledRulesScroll>
       )}
     </Stack>
   );
