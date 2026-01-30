@@ -139,6 +139,7 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
             appearanceItemIcon={submitModalData.appearanceItemIcon}
             itemIcon={submitModalData.itemIcon}
             editOption={editOption}
+            withCursor={!editOption}
           />
         )}
 

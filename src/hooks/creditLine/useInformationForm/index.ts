@@ -15,7 +15,7 @@ const useInformationForm = (props: IUseInformationForm) => {
     object().shape({
       nameLine: validationRules.string.required(validationMessages.required),
       aliasLine: validationRules.string.required(validationMessages.required),
-      descriptionLine: validationRules.string.required(
+      descriptionLine: validationRules.decription.required(
         validationMessages.required,
       ),
     });

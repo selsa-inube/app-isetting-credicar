@@ -1,7 +1,7 @@
 const lineInitiatedLabels = {
   title: "¡Línea crédito iniciada!",
   subtitle:
-    "Hemos iniciado la construcción de tú línea de crédito. Selecciona una de la opciones para continuar.",
+    "Hemos iniciado la construcción de tú línea de crédito. Selecciona una de las opciones para continuar.",
   titleFirstBox: "Regresar a la consulta",
   descriptionFirst:
     "Haz clic en esta opción, si deseas regresar a la consulta donde puedes visualizar todas las líneas de crédito.",

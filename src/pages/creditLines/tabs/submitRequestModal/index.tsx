@@ -25,6 +25,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
     appearanceItemIcon,
     itemIcon,
     editOption,
+    withCursor = true,
     onClick,
     onCloseModal,
   } = props;
@@ -121,6 +122,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
                   heigthBox="auto"
                   setDescriptionError={setDescriptionError}
                   onClickInfo={onClickInfo}
+                  withCursor={withCursor}
                 />
               ))}
             </BoxContainer>
@@ -155,6 +157,8 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
               onCloseModal={onCloseDecisionModal}
               onClick={onCloseDecisionModal}
               withCancelButton={false}
+              changeZIndex
+              valueZIndex={4}
             />
           )}
         </BoxContainer>
