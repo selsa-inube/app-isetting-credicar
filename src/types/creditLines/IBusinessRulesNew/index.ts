@@ -18,6 +18,7 @@ interface IBusinessRulesNew extends IUseBusinessRulesNewGeneral {
   customMessageEmptyDecisions?: string;
   customTitleContentAddCard?: string;
   formId?: string;
+  floatingActionsHeight?: number;
 }
 
 export type { IBusinessRulesNew };
