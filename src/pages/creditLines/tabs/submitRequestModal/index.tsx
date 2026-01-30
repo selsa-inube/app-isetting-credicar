@@ -53,7 +53,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={true}>
+    <StyledModalContainer changeZIndex={true} valueZIndex={4}>
       <Blanket>
         <BoxContainer
           width="500px"
@@ -121,6 +121,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
                   heigthBox="auto"
                   setDescriptionError={setDescriptionError}
                   onClickInfo={onClickInfo}
+                  withCursor={false}
                 />
               ))}
             </BoxContainer>

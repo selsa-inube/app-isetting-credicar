@@ -12,7 +12,7 @@ const useNameAndDescriptionForm = (props: IUseNameAndDescriptionForm) => {
   const validationSchema = object().shape({
     aliasLine: validationRules.string.required(validationMessages.required),
     nameLine: validationRules.string.required(validationMessages.required),
-    descriptionLine: validationRules.string.required(
+    descriptionLine: validationRules.decription.required(
       validationMessages.required,
     ),
   });

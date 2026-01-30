@@ -15,6 +15,7 @@ import { useGroupRules } from "@hooks/creditLine/useGroupRules";
 import { useStepNavigation } from "@hooks/creditLine/useStepNavigation";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { useAutoSaveOnRouteChange } from "@hooks/creditLine/useAutoSaveOnRouteChange";
+import { configurationLinesEventBus } from "@events/configurationLinesEventBus";
 import { compareObjects } from "@utils/compareObjects";
 import { capitalizeText } from "@utils/capitalizeText";
 import { transformationDecisions } from "@utils/transformationDecisions";
@@ -23,6 +24,7 @@ import { optionTitleConfiguration } from "@utils/optionTitleConfiguration";
 import { errorObject } from "@utils/errorObject";
 import { formatDate } from "@utils/date/formatDate";
 import { validateEditedRules } from "@utils/validateEditedRules";
+import { updateLineCreditInRules } from "@utils/updateLineCreditInRules";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { ECreditLines } from "@enum/creditLines";
 import { EUseCase } from "@enum/useCase";
@@ -41,13 +43,12 @@ import { ILanguage } from "@ptypes/i18n";
 import { IPostCheckLineRule } from "@ptypes/creditLines/ISaveDataRequest";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { IBeforeNavigate } from "@ptypes/creditLines/IBeforeNavigate";
 import { IValue } from "@ptypes/decisions/IValue";
 import { useModalConfiguration } from "../useModalConfiguration";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
 import { useModalOnSubmit } from "../useModalOnSubmit";
-import { IBeforeNavigate } from "@ptypes/creditLines/IBeforeNavigate";
-import { configurationLinesEventBus } from "@events/configurationLinesEventBus";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -403,29 +404,36 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       );
     });
 
-  const newData: {
-    abbreviatedName?: string;
-    alias?: string;
-    descriptionUse?: string;
-  } = {};
-
   useEffect(() => {
     if (!nameLineRef.current?.values) return;
+    if (useCaseConfiguration !== EUseCase.ADD) return;
 
-    newData.alias = nameLineRef.current?.values.aliasLine;
-    newData.abbreviatedName = nameLineRef.current?.values.nameLine;
-    newData.descriptionUse = nameLineRef.current?.values.descriptionLine;
+    const currentValues = nameLineRef.current.values;
 
-    if (Object.values(newData).length > 0)
-      setLinesData((prev) => ({
-        ...prev,
-        settingRequestId: linesConstructionData.settingRequestId,
-        configurationRequestData: {
-          ...prev?.configurationRequestData,
-          ...newData,
-        },
-      }));
-  }, [nameLineRef.current?.values]);
+    let updatedData = linesConstructionData;
+    const newState = {
+      alias: currentValues.aliasLine,
+      abbreviatedName: currentValues.nameLine,
+      descriptionUse: currentValues.descriptionLine,
+    };
+
+    if (currentValues.nameLine !== initialData.abbreviatedName) {
+      updatedData = updateLineCreditInRules(
+        linesConstructionData,
+        currentValues.nameLine,
+      );
+    }
+
+    setLinesData({
+      settingRequestId: linesConstructionData.settingRequestId,
+      configurationRequestData: {
+        alias: newState.alias,
+        abbreviatedName: newState.abbreviatedName,
+        descriptionUse: newState.descriptionUse,
+        rules: updatedData.rules || [],
+      },
+    });
+  }, [nameLineRef.current?.values, useCaseConfiguration]);
 
   useEffect(() => {
     const dragForm =
@@ -500,29 +508,27 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   useEffect(() => {
     if (!validateCase) {
-      const currentFormValues = nameLineRef.current?.values;
-      const hasFormChanges =
-        currentFormValues &&
-        (currentFormValues.aliasLine !== (initialData.alias || "") ||
-          currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
-          currentFormValues.descriptionLine !==
-            (initialData.descriptionUse || ""));
-
       setHasUnsavedChanges(
         Boolean(
-          hasFormChanges ||
-            decisionsData.length > 0 ||
+          decisionsData.length > 0 ||
             creditOptionsIncluded.items.length > 0 ||
             optionsIncluded.items.length > 0,
         ),
       );
     }
-  }, [
-    nameLineRef.current?.values,
-    decisionsData,
-    creditOptionsIncluded.items,
-    optionsIncluded.items,
-  ]);
+  }, [decisionsData, creditOptionsIncluded.items, optionsIncluded.items]);
+
+  useEffect(() => {
+    const currentFormValues = nameLineRef.current?.values;
+    const hasFormChanges =
+      currentFormValues &&
+      (currentFormValues.aliasLine !== (initialData.alias || "") ||
+        currentFormValues.nameLine !== (initialData.abbreviatedName || "") ||
+        currentFormValues.descriptionLine !==
+          (initialData.descriptionUse || ""));
+
+    setHasUnsavedChanges(Boolean(hasFormChanges));
+  }, [nameLineRef.current?.values, useCaseConfiguration]);
 
   const handleStep = async (click: boolean): Promise<boolean> => {
     if (!click) {
@@ -530,21 +536,24 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       return true;
     }
 
-    if (useCaseConfiguration === EUseCase.ADD && hasUnsavedChanges) {
-      if (!linesData?.configurationRequestData?.rules) {
-        return true;
-      }
+    if (useCaseConfiguration === EUseCase.ADD) {
+      if (hasUnsavedChanges) {
+        setIsUpdated(true);
 
-      if (loadingModify) {
+        if (!linesData?.configurationRequestData?.rules) {
+          return true;
+        }
+
+        if (loadingModify) {
+          return new Promise((resolve) => {
+            savePromiseRef.current = resolve;
+          });
+        }
+
         return new Promise((resolve) => {
           savePromiseRef.current = resolve;
         });
       }
-      setIsUpdated(true);
-
-      return new Promise((resolve) => {
-        savePromiseRef.current = resolve;
-      });
     }
     return true;
   };
@@ -599,6 +608,8 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL
       ? true
       : false;
+
+  const disabledNameDescription = useCaseConfiguration !== EUseCase.ADD;
 
   const validateConfig = () => {
     if (loadingModify) {
@@ -824,6 +835,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     creditOptionsExcluded,
     creditOptionsIncluded,
     configuredDecisions,
+    disabledNameDescription,
     setLinesData,
     setAddDecision,
     setEditDecision,
