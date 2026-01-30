@@ -12,17 +12,13 @@ const StyledDropdownMenuContainer = styled.div`
 `;
 
 const StyledFloatButtonsContainer = styled.div<IFloatButtonsContainer>`
-  position: ${({ $maxAssistedScreenSize }) =>
-    $maxAssistedScreenSize ? "sticky" : "fixed"};
+  position: sticky;
   right: 1.5rem;
   bottom: 1.5rem;
   z-index: 2;
-  width: ${({ $maxAssistedScreenSize }) =>
-    $maxAssistedScreenSize ? "auto" : "19rem"};
-  max-width: ${({ $maxAssistedScreenSize }) =>
-    $maxAssistedScreenSize ? "none" : "unset"};
-  margin-left: ${({ $maxAssistedScreenSize }) =>
-    $maxAssistedScreenSize ? "auto" : "unset"};
+  width: auto;
+  max-width: none;
+  margin-left: auto;
 `;
 
 export { StyledDropdownMenuContainer, StyledFloatButtonsContainer };
