@@ -1,5 +1,4 @@
 import { useIAuth } from "@inube/iauth-react";
-import { enviroment } from "@config/environment";
 
 export const useSignOut = () => {
   const { logout } = useIAuth();
@@ -13,7 +12,7 @@ export const useSignOut = () => {
     ];
     keysToRemove.forEach((key) => localStorage.removeItem(key));
     if (!redirect) {
-      logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+      logout();
     } else {
       logout({ logoutParams: { returnTo: window.location.origin + redirect } });
     }

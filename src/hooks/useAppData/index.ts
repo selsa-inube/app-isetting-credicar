@@ -2,12 +2,13 @@ import { useContext, useEffect } from "react";
 
 import { IUser } from "@ptypes/app.types";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
+import { decrypt } from "@utils/crypto/decrypt";
 import { useAuthRedirect } from "../authentication/useAuthRedirect";
 import { usePortalData } from "../staffPortal/usePortalData";
 import { useBusinessManagers } from "../staffPortal/useBusinessManagers";
+import { encrypt } from "@utils/crypto/encrypt";
 
 const useAppData = (
-  portalCode: string | null,
   code: string | undefined,
   user: IUser,
   businessUnit: string | undefined,
@@ -15,7 +16,7 @@ const useAppData = (
   const { setBusinessUnitSigla, setAppData } = useContext(AuthAndPortalData);
   const updateAppData = () => {
     if (code) {
-      localStorage.setItem("portalCode", code);
+      localStorage.setItem("portalCode", encrypt(code));
     }
 
     if (businessUnit) {
@@ -43,29 +44,46 @@ const useAppData = (
   let isAuthenticated = true;
   let errorCode = 0;
 
+  const decryptedPortal = decrypt(localStorage.getItem("portalCode") ?? "");
+
   const {
     portalData,
     hasError: portalError,
     errorCode: errorCodePortal,
-  } = usePortalData(portalCode);
+  } = usePortalData(decryptedPortal);
   const {
     businessManagersData,
     hasError: businessError,
     errorCode: errorCodeBusiness,
+    authConfig,
+    hasAuthError,
   } = useBusinessManagers(portalData);
   const {
     hasError: authError,
     isLoading: authLoading,
     isAuthenticated: authAuthenticated,
     errorCode: errorCodeAuth,
-  } = useAuthRedirect(portalData, businessManagersData, portalCode);
+  } = useAuthRedirect(
+    portalData,
+    businessManagersData,
+    decryptedPortal,
+    authConfig,
+    hasAuthError,
+  );
 
   hasError = portalError || businessError || authError;
   errorCode = errorCodePortal || errorCodeBusiness || errorCodeAuth;
   isLoading = authLoading;
   isAuthenticated = authAuthenticated;
 
-  return { hasError, isLoading, isAuthenticated, errorCode };
+  return {
+    hasError,
+    isLoading,
+    isAuthenticated,
+    errorCode,
+    businessManagersData,
+    authConfig,
+  };
 };
 
 export { useAppData };

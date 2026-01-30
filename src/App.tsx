@@ -12,6 +12,7 @@ import { ThemeProviderWrapper } from "./context/theme";
 import { CreditLinesConstructionProvider } from "./context/creditLinesConstruction";
 import { useAppData } from "./hooks/useAppData/index.ts";
 import { AuthWrapper } from "./pages/authWrapper/index.tsx";
+import { encrypt } from "./utils/crypto/encrypt/index.ts";
 
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
@@ -25,9 +26,11 @@ interface IApp {
 
 function AppContent(props: IApp) {
   const { code, user, businessUnit } = props;
+  if (portalCode && portalCode?.length > 0) {
+    localStorage.setItem("portalCode", encrypt(portalCode));
+  }
 
   const { hasError, isLoading, isAuthenticated, errorCode } = useAppData(
-    portalCode,
     code,
     user as IUser,
     businessUnit,
