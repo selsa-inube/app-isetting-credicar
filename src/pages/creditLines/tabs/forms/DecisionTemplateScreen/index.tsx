@@ -106,7 +106,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
       <Stack
         direction="column"
         gap={tokens.spacing.s300}
-        height="100%"
         padding={`${tokens.spacing.s350} ${tokens.spacing.s700}`}
         width="-webkit-fill-available"
       >

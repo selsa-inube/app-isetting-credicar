@@ -13,7 +13,7 @@ const StyledDropdownMenuContainer = styled.div`
 
 const StyledFloatButtonsContainer = styled.div<IFloatButtonsContainer>`
   position: ${({ $maxAssistedScreenSize }) =>
-    $maxAssistedScreenSize ? "static" : "fixed"};
+    $maxAssistedScreenSize ? "sticky" : "fixed"};
   right: 1.5rem;
   bottom: 1.5rem;
   z-index: 2;
