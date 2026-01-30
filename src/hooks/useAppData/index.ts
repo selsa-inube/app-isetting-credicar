@@ -3,10 +3,10 @@ import { useContext, useEffect } from "react";
 import { IUser } from "@ptypes/app.types";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { decrypt } from "@utils/crypto/decrypt";
+import { encrypt } from "@utils/crypto/encrypt";
 import { useAuthRedirect } from "../authentication/useAuthRedirect";
 import { usePortalData } from "../staffPortal/usePortalData";
 import { useBusinessManagers } from "../staffPortal/useBusinessManagers";
-import { encrypt } from "@utils/crypto/encrypt";
 
 const useAppData = (
   code: string | undefined,

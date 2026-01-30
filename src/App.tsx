@@ -2,7 +2,6 @@ import { RouterProvider } from "react-router-dom";
 import { FlagProvider } from "@inubekit/inubekit";
 
 import { IUser } from "@ptypes/app.types";
-
 import { mainNavigation } from "./routes/mainNavigation";
 import { GlobalStyles } from "./styles/global";
 import { AuthAndPortalDataProvider } from "./context/authAndPortalDataProvider";
@@ -12,17 +11,12 @@ import { ThemeProviderWrapper } from "./context/theme";
 import { CreditLinesConstructionProvider } from "./context/creditLinesConstruction";
 import { useAppData } from "./hooks/useAppData/index.ts";
 import { AuthWrapper } from "./pages/authWrapper/index.tsx";
-import { encrypt } from "./utils/crypto/encrypt/index.ts";
+import { encrypt } from "./utils/crypto/encrypt";
+import { IApp } from "./types/IApp/index";
 
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
 const portalCode = params.get("portal");
-
-interface IApp {
-  code?: string;
-  businessUnit?: string;
-  user?: IUser;
-}
 
 function AppContent(props: IApp) {
   const { code, user, businessUnit } = props;
