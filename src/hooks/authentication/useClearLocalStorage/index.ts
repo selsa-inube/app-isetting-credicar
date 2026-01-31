@@ -6,7 +6,6 @@ const useClearLocalStorage = () => {
       "businessUnitSigla",
       "businessUnitsToTheStaff",
       "useCasesByStaff",
-      "portalCode",
     ];
     keysToRemove.forEach((key) => localStorage.removeItem(key));
   }, []);

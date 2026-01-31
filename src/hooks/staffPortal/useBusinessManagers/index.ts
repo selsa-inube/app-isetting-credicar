@@ -3,6 +3,7 @@ import { getBusinessManagers } from "@services/staffPortal/getBusinessManager";
 import { storeEncryptedData } from "@utils/storeEncryptedData";
 import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 import { IBusinessManagers } from "@ptypes/staffPortal/IBusinessManagers";
+import { IAuthConfig } from "@ptypes/IAuthConfig";
 
 const useBusinessManagers = (
   portalPublicCode: IStaffPortalByBusinessManager,
@@ -11,6 +12,7 @@ const useBusinessManagers = (
     useState<IBusinessManagers>({} as IBusinessManagers);
   const [hasError, setHasError] = useState(false);
   const [errorCode, setErrorCode] = useState<number>(0);
+  const [authConfig, setAuthConfig] = useState<IAuthConfig | null>(null);
 
   useEffect(() => {
     const fetchBusinessManagers = async () => {
@@ -36,6 +38,12 @@ const useBusinessManagers = (
           });
 
           setBusinessManagersData(newData);
+          if (newData.clientId && newData.clientSecret) {
+            setAuthConfig({
+              clientId: newData.clientId,
+              clientSecret: newData.clientSecret,
+            });
+          }
         }
       } catch (error) {
         console.info(error);
@@ -47,7 +55,15 @@ const useBusinessManagers = (
     fetchBusinessManagers();
   }, [portalPublicCode]);
 
-  return { businessManagersData, hasError, errorCode };
+  const hasAuthError = !authConfig || Boolean(errorCode);
+
+  return {
+    businessManagersData,
+    hasError,
+    errorCode,
+    authConfig,
+    hasAuthError,
+  };
 };
 
 export { useBusinessManagers };

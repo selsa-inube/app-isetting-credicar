@@ -5,7 +5,6 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useOptionsByBusinessUnit } from "@hooks/staffPortal/useOptionsByBusinessUnit";
 import { useCaseForStaff } from "@hooks/staffPortal/useCaseForStaff";
 import { tokens } from "@design/tokens";
-import { enviroment } from "@config/environment";
 import { mainNavigation } from "@config/mainNavigation";
 import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
 
@@ -74,8 +73,8 @@ const useHome = () => {
     "(max-width: 944px)",
   ]);
 
-  const handlelogout = () => {
-    logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+  const handlelogout = (redirect?: string) => {
+    logout({ logoutParams: { returnTo: window.location.origin + redirect } });
   };
 
   const hasMultipleBusinessUnits = businessUnitsToTheStaff.length > 1;
