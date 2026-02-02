@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 
 import { staffPortalByBusinessManager } from "@services/staffPortal/getStaffPortalByBusinessManager";
-import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 import { enviroment } from "@config/environment";
+import { IStaffPortalByBusinessManager } from "@ptypes/staffPortal/IStaffPortalByBusinessManager";
 
 const usePortalData = (portalCode: string | null) => {
   const [portalData, setPortalData] = useState<IStaffPortalByBusinessManager>(
     {} as IStaffPortalByBusinessManager,
   );
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState<boolean>(false);
   const [errorCode, setErrorCode] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!portalCode) {
@@ -21,6 +22,7 @@ const usePortalData = (portalCode: string | null) => {
 
   useEffect(() => {
     const fetchPortalData = async () => {
+      setLoading(true);
       try {
         if (!portalCode) {
           return;
@@ -49,13 +51,15 @@ const usePortalData = (portalCode: string | null) => {
         console.info(error);
         setHasError(true);
         setErrorCode(500);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchPortalData();
   }, [portalCode]);
 
-  return { portalData, hasError, errorCode };
+  return { portalData, hasError, errorCode, loading };
 };
 
 export { usePortalData };

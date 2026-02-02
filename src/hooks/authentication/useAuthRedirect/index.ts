@@ -10,33 +10,57 @@ const useAuthRedirect = (
   businessManagersData: IBusinessManagers,
   portalCode: string | null,
   authConfig: IAuthConfig | null,
-  hasAuthError: boolean,
+  loadingPortalData: boolean,
+  loadingBusinessManagers: boolean,
 ) => {
   const { loginWithRedirect, isAuthenticated, isLoading, error } = useIAuth();
   const [hasError, setHasError] = useState(false);
   const [errorCode, setErrorCode] = useState<number>(0);
   const { signOut } = useSignOut();
 
-  if (error) {
-    signOut("/error?code=1009");
-  }
+  useEffect(() => {
+    if (error) {
+      signOut("/error?code=1009");
+    }
+  }, [error, signOut]);
 
   useEffect(() => {
     const isLogoutRoute = window.location.pathname === "/logout";
-    if (portalPublicCode.abbreviatedName) {
-      if (
-        businessManagersData &&
-        !isLoading &&
-        !isAuthenticated &&
-        !hasAuthError &&
-        authConfig &&
-        !isLogoutRoute
-      ) {
-        loginWithRedirect();
+
+    if (isLogoutRoute) {
+      return;
+    }
+
+    const isLoadingData =
+      loadingPortalData || loadingBusinessManagers || isLoading;
+
+    if (isLoadingData) {
+      if (hasError) {
+        setHasError(false);
+        setErrorCode(0);
       }
-    } else {
+      return;
+    }
+
+    if (!portalPublicCode.abbreviatedName) {
       setHasError(true);
       setErrorCode(1001);
+      return;
+    }
+
+    if (!authConfig) {
+      setHasError(true);
+      setErrorCode(1002);
+      return;
+    }
+
+    if (hasError) {
+      setHasError(false);
+      setErrorCode(0);
+    }
+
+    if (!isAuthenticated) {
+      loginWithRedirect();
     }
   }, [
     portalPublicCode,
@@ -46,9 +70,20 @@ const useAuthRedirect = (
     isAuthenticated,
     loginWithRedirect,
     portalCode,
+    loadingPortalData,
+    loadingBusinessManagers,
+    hasError,
   ]);
 
-  return { hasError, isLoading, isAuthenticated, errorCode };
+  const isLoadingGlobal =
+    loadingPortalData || loadingBusinessManagers || isLoading;
+
+  return {
+    hasError,
+    isLoading: isLoadingGlobal,
+    isAuthenticated,
+    errorCode,
+  };
 };
 
 export { useAuthRedirect };

@@ -50,13 +50,14 @@ const useAppData = (
     portalData,
     hasError: portalError,
     errorCode: errorCodePortal,
+    loading: loadingPortalData,
   } = usePortalData(decryptedPortal);
   const {
     businessManagersData,
     hasError: businessError,
     errorCode: errorCodeBusiness,
     authConfig,
-    hasAuthError,
+    loading: loadingBusinessManagers,
   } = useBusinessManagers(portalData);
   const {
     hasError: authError,
@@ -68,12 +69,13 @@ const useAppData = (
     businessManagersData,
     decryptedPortal,
     authConfig,
-    hasAuthError,
+    loadingPortalData,
+    loadingBusinessManagers,
   );
 
   hasError = portalError || businessError || authError;
   errorCode = errorCodePortal || errorCodeBusiness || errorCodeAuth;
-  isLoading = authLoading;
+  isLoading = authLoading || loadingPortalData || loadingBusinessManagers;
   isAuthenticated = authAuthenticated;
 
   return {
