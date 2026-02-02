@@ -18,6 +18,7 @@ import {
   StyledRulesScroll,
 } from "./styles";
 import { AlertMessage } from "../forms/alertMessage";
+import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
 
 const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const {
@@ -66,7 +67,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
     submitForm,
     handleToggleModal,
     handleToggleDateModal,
-    validateEditionMode,
     decisionsSorted,
     decisionTemplateForBusinessRules,
   } = useBusinessRulesNew({
@@ -112,6 +112,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
 
   const maxHeight = visibleRows * rowHeight;
   const isFloatingActions = !optionDetailsCreditline;
+  const editionMode = getEditionModeForDecision(option, selectedDecision);
 
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
@@ -169,7 +170,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
             handleSubmitForm={submitForm}
             isModalOpen={isModalOpen}
             loading={!!loading}
-            editionMode={validateEditionMode}
+            editionMode={editionMode}
             onRemoveCondition={removeCondition}
             onRestoreConditions={restoreConditions}
             selectedDecision={selectedDecision}

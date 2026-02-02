@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Stack, useMediaQuery } from "@inubekit/inubekit";
+import { Stack } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useConfigurationLines } from "@hooks/creditLine/configurationLines/useConfigurationLines";
@@ -25,7 +25,6 @@ import { useOutletContext } from "react-router-dom";
 import React from "react";
 import { INavGuard } from "@ptypes/creditLines/INavGuard";
 import { IOutletCtx } from "@ptypes/creditLines/IOutletCtx";
-import { mediaQueryAssisted } from "@config/environment";
 
 const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
   const { templateKey } = props;
@@ -98,8 +97,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     ruleLoadding,
     loadingModify,
   });
-
-  const maxAssistedScreenSize = useMediaQuery(mediaQueryAssisted);
 
   return (
     <>
@@ -217,9 +214,7 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
         )}
       </Stack>
 
-      <StyledFloatButtonsContainer
-        $maxAssistedScreenSize={maxAssistedScreenSize}
-      >
+      <StyledFloatButtonsContainer>
         <ButtonsConfiguration
           navigation={nav}
           withSendButton={!optionDetails}

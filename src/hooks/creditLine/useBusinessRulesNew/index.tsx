@@ -27,6 +27,7 @@ import { stableStringify } from "@utils/stableStringify";
 import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdit";
 import { mapDecisionIdsFromConfigured } from "@utils/mapDecisionIdsFromConfigured";
 import { configurationLinesEventBus } from "@events/configurationLinesEventBus";
+import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const normalizeCondition = (c: any) => ({
@@ -235,9 +236,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setSelectedDecision(null);
   };
 
-  const validateEditionMode: "classic" | "versioned" =
-    option === EUseCase.EDIT ? "versioned" : "classic";
-
   /* eslint-disable @typescript-eslint/no-explicit-any */
   const submitForm = (dataDecision: any) => {
     let hasDateError = false;
@@ -336,27 +334,28 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
     setDecisions((prev) => {
       if (isEditing && selectedDecision) {
-        if (validateEditionMode === "versioned") {
+        const editionMode = getEditionModeForDecision(option, selectedDecision);
+        if (editionMode === "versioned") {
           let localHasDateError = false;
 
-          const updatedPrev = prev.map((d) => {
-            if (keyOf(d) !== keyOf(selectedDecision)) {
-              return d;
+          const updatedPrev = prev.map((decision) => {
+            if (keyOf(decision) !== keyOf(selectedDecision)) {
+              return decision;
             }
 
             if (
               isDateBeforeSimple(
                 decisionWithSentences.effectiveFrom as string,
-                d.effectiveFrom as string,
+                decision.effectiveFrom as string,
               )
             ) {
               localHasDateError = true;
               setShowAlertDateModal(true);
-              return d;
+              return decision;
             }
 
             return {
-              ...d,
+              ...decision,
               validUntil: getAfterDay(
                 decisionWithSentences.effectiveFrom as string,
               ),
@@ -370,8 +369,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
           return [...updatedPrev, decisionWithSentences];
         }
-        return prev.map((d) =>
-          keyOf(d) === keyOf(selectedDecision) ? decisionWithSentences : d,
+        return prev.map((decision) =>
+          keyOf(decision) === keyOf(selectedDecision)
+            ? decisionWithSentences
+            : decision,
         );
       }
 
@@ -545,7 +546,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     iconAppearance,
     conditionEmpty,
     showAlertDateModal,
-    validateEditionMode,
     handleToggleDateModal,
     handleToggleModal,
     setSelectedConditionsCSV,
