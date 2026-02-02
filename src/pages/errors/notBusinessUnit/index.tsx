@@ -1,15 +1,14 @@
 import { useIAuth } from "@inube/iauth-react";
-import { ErrorPage } from "@design/layout/errorPage";
-import { enviroment } from "@config/environment";
 import { useClearLocalStorage } from "@hooks/authentication/useClearLocalStorage";
+import { ErrorPage } from "@design/layout/errorPage";
 
 function NotBusinessUnit() {
   const { logout } = useIAuth();
 
   useClearLocalStorage();
 
-  const handlelogout = () => {
-    logout({ logoutParams: { returnTo: enviroment.REDIRECT_URI } });
+  const handlelogout = (redirect?: string) => {
+    logout({ logoutParams: { returnTo: window.location.origin + redirect } });
   };
 
   return (
