@@ -3,7 +3,7 @@ import { InfoConfigurationModal } from "@pages/creditLines/tabs/infoConfiguratio
 import { SubmitRequestModal } from "@pages/creditLines/tabs/submitRequestModal";
 import { ButtonsConfiguration } from "@pages/creditLines/tabs/buttonsConfiguration";
 import { RequestModal } from "@pages/creditLines/tabs/requestModal";
-import { StyledFloatButtonsContainer } from "@src/pages/creditLines/tabs/buttonsConfiguration/styles";
+import { StyledFloatButtonsContainer } from "@pages/creditLines/tabs/buttonsConfiguration/styles";
 import { ECreditLines } from "@enum/creditLines";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
