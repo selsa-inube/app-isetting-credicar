@@ -61,6 +61,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
   const [hydratedFromProps, setHydratedFromProps] = useState(false);
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
   useEffect(() => {
     setAddDecision(false);
     setEditDecision(false);
@@ -230,12 +231,15 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         decision,
         decisionTemplateForBusinessRules as any,
       );
+
       setSelectedDecision(selectedFromTemplate);
+      setIsCreatingNew(false);
     } else {
       setSelectedDecision({
         ...localizedTemplate,
         ...(decisionTemplateForBusinessRules as any),
       } as IRuleDecision);
+      setIsCreatingNew(true);
     }
 
     setIsModalOpen(true);
@@ -252,6 +256,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDecision(null);
+    setIsCreatingNew(false);
   };
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -262,8 +267,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       (decision) => decision.value === dataDecision.value,
     );
 
-    const isDuplicateNewDecision =
-      validateValue.length > 0 && selectedDecision === null;
+    const isEditing = selectedDecision !== null && !isCreatingNew;
+
+    const isDuplicateNewDecision = validateValue.length > 0 && !isEditing;
 
     if (isDuplicateNewDecision) {
       setShowAlertModal(true);
@@ -271,8 +277,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       setEditDecision(false);
       return;
     }
-
-    const isEditing = selectedDecision !== null;
 
     if (!isEditing) {
       setAddDecision(true);
