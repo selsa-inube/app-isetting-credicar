@@ -36,6 +36,9 @@ const normalizeCondition = (c: any) => ({
 
 const originalName = (name: string) => name?.split(".").pop() || name;
 
+const makeScopedKey = (groupKey: string, conditionName: string) =>
+  `${groupKey}.${originalName(conditionName)}`;
+
 const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const {
     decisionTemplate,
@@ -58,6 +61,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecision | null>(null);
   const [hydratedFromProps, setHydratedFromProps] = useState(false);
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
   useEffect(() => {
     setAddDecision(false);
     setEditDecision(false);
@@ -135,19 +139,19 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     }
   }, [optionsConditionsCSV]);
 
-  const [removedConditionNames, setRemovedConditionNames] = useState<
-    Set<string>
-  >(new Set());
-
+  const [removedConditionKeys, setRemovedConditionKeys] = useState<Set<string>>(
+    new Set(),
+  );
   const removeCondition = (conditionName: string) => {
     const parts = conditionName.split(".");
     const groupKey = parts.length > 1 ? parts[0] : undefined;
     const plainName = parts.length > 1 ? parts.slice(1).join(".") : parts[0];
-    const key = originalName(plainName);
+    const effectiveGroupKey = groupKey ?? "group-primary";
+    const scopedKey = makeScopedKey(effectiveGroupKey, plainName);
 
-    setRemovedConditionNames((prev) => {
+    setRemovedConditionKeys((prev) => {
       const next = new Set(prev);
-      next.add(key);
+      next.add(scopedKey);
       return next;
     });
 
@@ -158,9 +162,14 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
 
       const updatedGroupsRecord = Object.fromEntries(
         Object.entries(groups).map(([g, list]) => {
-          if (groupKey && g !== groupKey) return [g, list];
+          if (effectiveGroupKey && g !== effectiveGroupKey) return [g, list];
 
-          return [g, list.filter((c) => originalName(c.conditionName) !== key)];
+          return [
+            g,
+            list.filter(
+              (c) => originalName(c.conditionName) !== originalName(plainName),
+            ),
+          ];
         }),
       );
 
@@ -174,12 +183,20 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     });
   };
 
-  const restoreConditions = (names: string[]) => {
-    if (!names?.length) return;
-    setRemovedConditionNames((prev) => {
+  const restoreConditions = (scopedNames: string[]) => {
+    if (!scopedNames?.length) return;
+
+    setRemovedConditionKeys((prev) => {
       if (prev.size === 0) return prev;
+
       const next = new Set(prev);
-      names.map(originalName).forEach((n) => next.delete(n));
+
+      scopedNames.forEach((scoped) => {
+        const [groupKey, ...rest] = scoped.split(".");
+        const plainName = rest.join(".");
+        next.delete(makeScopedKey(groupKey, plainName));
+      });
+
       return next;
     });
   };
@@ -216,8 +233,13 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       );
 
       setSelectedDecision(selectedFromTemplate);
+      setIsCreatingNew(false);
     } else {
-      setSelectedDecision(null);
+      setSelectedDecision({
+        ...localizedTemplate,
+        ...(decisionTemplateForBusinessRules as any),
+      } as IRuleDecision);
+      setIsCreatingNew(true);
     }
 
     setIsModalOpen(true);
@@ -234,6 +256,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDecision(null);
+    setIsCreatingNew(false);
   };
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -244,8 +267,9 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       (decision) => decision.value === dataDecision.value,
     );
 
-    const isDuplicateNewDecision =
-      validateValue.length > 0 && selectedDecision === null;
+    const isEditing = selectedDecision !== null && !isCreatingNew;
+
+    const isDuplicateNewDecision = validateValue.length > 0 && !isEditing;
 
     if (isDuplicateNewDecision) {
       setShowAlertModal(true);
@@ -253,8 +277,6 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       setEditDecision(false);
       return;
     }
-
-    const isEditing = selectedDecision !== null;
 
     if (!isEditing) {
       setAddDecision(true);
@@ -300,7 +322,10 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
         const finalList = merged.filter((m: any) => {
           const passesSelected =
             selectedIds.size === 0 || selectedIds.has(m.conditionName);
-          const notRemoved = !removedConditionNames.has(m.conditionName);
+
+          const scopedKey = makeScopedKey(group, m.conditionName);
+          const notRemoved = !removedConditionKeys.has(scopedKey);
+
           return passesSelected && notRemoved;
         });
 
@@ -400,14 +425,18 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     >;
     const filteredEntries = Object.entries(tplGroups).reduce(
       (acc, [group, list]) => {
-        const kept = asArray(list).filter(
-          /* eslint-disable @typescript-eslint/no-explicit-any */
-          (c: any) =>
-            selectedIds.size > 0 &&
-            selectedIds.has(c.conditionName) &&
-            !removedConditionNames.has(c.conditionName) &&
-            !c?.hidden,
-        );
+        const kept = asArray(list).filter((c: any) => {
+          if (c?.hidden) return false;
+
+          const passesSelected =
+            selectedIds.size > 0 && selectedIds.has(c.conditionName);
+
+          const scopedKey = makeScopedKey(group, c.conditionName);
+          const notRemoved = !removedConditionKeys.has(scopedKey);
+
+          return passesSelected && notRemoved;
+        });
+
         if (kept.length > 0) acc.push([group, kept]);
         return acc;
       },
@@ -430,7 +459,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     delete (withFiltered as any).conditionsThatEstablishesTheDecision;
 
     return ensureArrayGroupsDeep(withFiltered);
-  }, [localizedTemplate, language, selectedIds, removedConditionNames]);
+  }, [localizedTemplate, language, selectedIds, removedConditionKeys]);
 
   const decisionsSorted = useMemo(() => {
     return [...decisions];
@@ -531,7 +560,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     selectedDecision,
     decisions,
     selectedConditionsCSV,
-    removedConditionNames,
+    removedConditionNames: removedConditionKeys,
     localizedTemplate,
     filteredDecisionTemplate,
     multipleChoicesOptions,
