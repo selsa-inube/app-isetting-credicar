@@ -24,6 +24,7 @@ interface ICreditLinesTabUI {
   setEntryDeleted: React.Dispatch<React.SetStateAction<string | number>>;
   onToggleInfoModal: () => void;
   onSearchCreditLines: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  errorRules?: boolean;
 }
 
 export type { ICreditLinesTabUI };

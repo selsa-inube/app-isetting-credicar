@@ -1,9 +1,9 @@
-import { Breadcrumbs, Spinner, Stack, Tabs, Text } from "@inubekit/inubekit";
+import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 import { Title } from "@design/data/title";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { tokens } from "@design/tokens";
+import { LoadingPage } from "@design/feedback/loadingPage";
 import { crumbsGeneralpolicies } from "@config/generalCreditPolicies/navigation";
-import { loadingLabels } from "@config/loadingLabels";
 import { descriptionTitle } from "@config/generalCreditPolicies/descriptionTitle";
 import { portalId } from "@config/portalId";
 import { IGeneralCreditPoliciesUI } from "@ptypes/generalCredPolicies/IGeneralCreditPoliciesUI";
@@ -38,19 +38,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
   return (
     <>
       {loadingPolicies || loadingRequest ? (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          direction="column"
-          width="100%"
-          height="100%"
-          gap={tokens.spacing.s200}
-        >
-          <Spinner size="large" />
-          <Text type="title" size="medium" textAlign="center">
-            {loadingLabels.loading}
-          </Text>
-        </Stack>
+        <LoadingPage />
       ) : (
         <>
           {showAddPolicies ? (

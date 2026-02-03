@@ -1,4 +1,4 @@
-import { Breadcrumbs, Spinner, Stack, Tabs, Text } from "@inubekit/inubekit";
+import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 
 import { GeneralInformationForm } from "@pages/moneyDestination/tabs/forms/generalInformationDestination";
 import { Title } from "@design/data/title";
@@ -6,10 +6,10 @@ import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
+import { LoadingPage } from "@design/feedback/loadingPage";
 import { EComponentAppearance } from "@enum/appearances";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
-import { loadingLabels } from "@config/loadingLabels";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
 import { editDestinationLabels } from "@config/moneyDestination/editDestination/editDestinationLabels";
 import { portalId } from "@config/portalId";
@@ -71,19 +71,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
         </Stack>
 
         {loading ? (
-          <Stack
-            alignItems="center"
-            justifyContent="center"
-            direction="column"
-            width="100%"
-            height="100%"
-            gap={tokens.spacing.s200}
-          >
-            <Spinner size="large" />
-            <Text type="title" size="medium" textAlign="center">
-              {loadingLabels.loading}
-            </Text>
-          </Stack>
+          <LoadingPage />
         ) : (
           <>
             <Stack

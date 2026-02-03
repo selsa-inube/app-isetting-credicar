@@ -21,6 +21,7 @@ const CreditLinesTab = (props: ICreditLinesTab) => {
     showDecision,
     searchCreditLines,
     businessRules,
+    errorRules,
     showIcon,
     validateMissingRules,
     hasBusinessRules,
@@ -61,6 +62,7 @@ const CreditLinesTab = (props: ICreditLinesTab) => {
       onToggleAddModal={handleToggleAddModal}
       setShowAddModal={setShowAddModal}
       setShowUnderConstruction={setShowUnderConstruction}
+      errorRules={errorRules}
     />
   );
 };
