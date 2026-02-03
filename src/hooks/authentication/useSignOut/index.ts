@@ -8,7 +8,6 @@ export const useSignOut = () => {
       "businessUnitSigla",
       "businessUnitsToTheStaff",
       "useCasesByStaff",
-      "portalCode",
     ];
     keysToRemove.forEach((key) => localStorage.removeItem(key));
     if (!redirect) {

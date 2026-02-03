@@ -12,6 +12,7 @@ const useBusinessManagers = (
     useState<IBusinessManagers>({} as IBusinessManagers);
   const [hasError, setHasError] = useState(false);
   const [errorCode, setErrorCode] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [authConfig, setAuthConfig] = useState<IAuthConfig | null>(null);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const useBusinessManagers = (
         return;
       }
       try {
+        setLoading(true);
         if (
           portalPublicCode.businessManagerCode &&
           portalPublicCode.businessManagerCode.length > 0
@@ -49,20 +51,21 @@ const useBusinessManagers = (
         console.info(error);
         setHasError(true);
         setErrorCode(500);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchBusinessManagers();
   }, [portalPublicCode]);
 
-  const hasAuthError = !authConfig || Boolean(errorCode);
-
   return {
     businessManagersData,
     hasError,
     errorCode,
     authConfig,
-    hasAuthError,
+
+    loading,
   };
 };
 

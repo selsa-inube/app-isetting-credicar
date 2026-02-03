@@ -6,7 +6,6 @@ import { dataTranslations } from "@utils/dataTranslations";
 
 const useValidateRules = () => {
   const { appData } = useContext(AuthAndPortalData);
-  const [loadingCreditLines, setLoadingCreditLines] = useState<boolean>(false);
   const [businessRules, setBusinessRules] = useState<string[]>([]);
 
   const getRule = (ruleName: string) =>
@@ -35,13 +34,10 @@ const useValidateRules = () => {
     setBusinessRules(rulesArray);
   }, [methodsData, methodsError]);
 
-  useEffect(() => {
-    setLoadingCreditLines(methodsLoadding);
-  }, [methodsLoadding]);
-
   return {
-    loadingCreditLines,
+    loadingValidateRules: methodsLoadding,
     businessRules,
+    methodsError,
   };
 };
 

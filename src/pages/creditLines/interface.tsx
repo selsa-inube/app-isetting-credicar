@@ -55,6 +55,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
               title={descriptionOptions?.publicCode ?? ""}
               description={descriptionOptions?.description ?? ""}
               sizeTitle="large"
+              navigatePage="/"
             />
           </Stack>
 

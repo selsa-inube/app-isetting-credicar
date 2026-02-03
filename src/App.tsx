@@ -13,6 +13,7 @@ import { useAppData } from "./hooks/useAppData/index.ts";
 import { AuthWrapper } from "./pages/authWrapper/index.tsx";
 import { encrypt } from "./utils/crypto/encrypt";
 import { IApp } from "./types/IApp/index";
+import { Loading } from "./pages/login/loading/index.tsx";
 
 const url = new URL(window.location.href);
 const params = new URLSearchParams(url.search);
@@ -31,7 +32,7 @@ function AppContent(props: IApp) {
   );
 
   if (isLoading) {
-    return null;
+    return <Loading />;
   }
 
   if (hasError && !isAuthenticated) {
@@ -39,7 +40,7 @@ function AppContent(props: IApp) {
   }
 
   if (!isAuthenticated) {
-    return null;
+    return <Loading />;
   }
 
   return (

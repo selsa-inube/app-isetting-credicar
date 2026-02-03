@@ -76,29 +76,44 @@ const LinesUnderConstructionTabUI = (props: ILinesUnderConstructionTabUI) => {
                 </Text>
               </Stack>
               <Stack>
-                {entries && entries.length > 0 ? (
+                {loading ? (
                   <Table
                     id={portalId}
                     titles={titles}
-                    entries={entries}
+                    entries={[]}
                     actions={actionsConfig(setEntryDeleted)}
                     breakpoints={breakPoints}
                     filter={searchLineInConstruction}
-                    loading={loading}
+                    loading={true}
                     columnWidths={columnWidths}
-                    pageLength={pageLength}
                   />
                 ) : (
-                  <InformationBox
-                    icon={<MdOutlineInfo />}
-                    appearanceIcon={EComponentAppearance.PRIMARY}
-                    description={emptyDataMessage}
-                    boxPadding={tokens.spacing.s250}
-                    boxColor={EComponentAppearance.HELP}
-                    sizeIcon="20px"
-                    sizeDescription="large"
-                    withCursor={false}
-                  />
+                  <>
+                    {entries && entries.length > 0 ? (
+                      <Table
+                        id={portalId}
+                        titles={titles}
+                        entries={entries}
+                        actions={actionsConfig(setEntryDeleted)}
+                        breakpoints={breakPoints}
+                        filter={searchLineInConstruction}
+                        loading={loading}
+                        columnWidths={columnWidths}
+                        pageLength={pageLength}
+                      />
+                    ) : (
+                      <InformationBox
+                        icon={<MdOutlineInfo />}
+                        appearanceIcon={EComponentAppearance.PRIMARY}
+                        description={emptyDataMessage}
+                        boxPadding={tokens.spacing.s250}
+                        boxColor={EComponentAppearance.HELP}
+                        sizeIcon="20px"
+                        sizeDescription="large"
+                        withCursor={false}
+                      />
+                    )}
+                  </>
                 )}
               </Stack>
             </Stack>

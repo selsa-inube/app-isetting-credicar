@@ -29,6 +29,7 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
     entries,
     emptyDataMessage,
     businessRules,
+    errorRules,
     loadingRules,
     showIcon,
     validateMissingRules,
@@ -130,13 +131,13 @@ const CreditLinesTabUI = (props: ICreditLinesTabUI) => {
                     actions={actions(setEntryDeleted)}
                     breakpoints={breakPoints}
                     filter={searchCreditLines}
-                    loading={true}
+                    loading={loadingRules}
                     columnWidths={columnWidths}
                   />
                 </>
               ) : (
                 <>
-                  {hasBusinessRules ? (
+                  {hasBusinessRules && !errorRules ? (
                     <EvaluateRules
                       title={creditTabLabels.titleEvaluateRules}
                       subtitle={creditTabLabels.subtitleEvaluateRules}
