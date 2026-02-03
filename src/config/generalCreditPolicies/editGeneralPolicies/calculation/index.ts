@@ -1,3 +1,3 @@
-const calculation = ["RiskAnalysisBasedCreditLimit"];
+const calculation = ["PaymentCapacityBasedCreditLimit"];
 
 export { calculation };

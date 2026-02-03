@@ -3,6 +3,7 @@ import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
 import { decisionWithoutConditions } from "@utils/decisionWithoutConditions";
 import { formatDate } from "@utils/date/formatDate";
+import { getDecisionIdMethods } from "@utils/decisions/getDecisionIdMethods";
 import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
@@ -179,6 +180,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     scoreModels,
     dateDecisions?.date,
   );
+
   useEffect(() => {
     let methods;
     if (methodsArray.length > 0) {
@@ -196,7 +198,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
           ruleName: ENameRules.METHODS,
           modifyJustification: `${decisionsLabels.modifyJustification} ${ENameRules.METHODS}`,
           decisionsByRule: validMethods.map((method) => ({
-            decisionId: methodsData?.[0].decisionId,
+            decisionId: getDecisionIdMethods(methodsData, method.value),
             effectiveFrom: String(formatDate(new Date())),
             transactionOperation: method.transactionOperation,
             value: method.value,

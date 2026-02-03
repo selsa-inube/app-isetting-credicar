@@ -103,10 +103,6 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     }
   }, [formik.values.RiskAnalysisBasedCreditLimit, setShowFactor]);
 
-  const valuesEmpty = Object.values(formik.values).every(
-    (value) => value === "" || value === null || value === undefined,
-  );
-
   const valuesEqualBoton =
     JSON.stringify(initialValuesEdit) === JSON.stringify(formik.values);
 
@@ -125,9 +121,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(
-          !formik.isValid || validatefields || valuesEmpty || valuesEqualBoton,
-        );
+        setIsDisabledButton(valuesEqualBoton);
       } else {
         setIsDisabledButton(!formik.isValid || validatefields);
       }
