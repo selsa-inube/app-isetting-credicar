@@ -22,7 +22,6 @@ import { useValidateRules } from "../useValidateRules";
 const useCreditLinesTab = (props: IUseCreditLinesTab) => {
   const { businessUnits, token } = props;
   const [creditLines, setCreditLines] = useState<ICreditLinesData[]>([]);
-  const [loadingRules] = useState<boolean>(false);
   const [hasError, setHasError] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [showDecision, setShowDecision] = useState<boolean>(false);
@@ -53,7 +52,11 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     setFilterRules([]);
   }, []);
 
-  const { businessRules } = useValidateRules();
+  const {
+    businessRules,
+    loadingValidateRules: loadingRules,
+    methodsError: errorRules,
+  } = useValidateRules();
 
   useEffect(() => {
     if (!loadingRules && businessRules && businessRules.length > 0) {
@@ -191,6 +194,7 @@ const useCreditLinesTab = (props: IUseCreditLinesTab) => {
     showDecision,
     searchCreditLines,
     businessRules,
+    errorRules,
     loadingRules,
     validateMissingRules,
     showIcon,

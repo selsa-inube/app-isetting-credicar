@@ -14,32 +14,39 @@ import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecis
 const useDetailsRequest = (props: IUseDetailsRequest) => {
   const { configurationData, useNameRequest } = props;
   const { setFilterRules } = useContext(CreditLinesConstruction);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const useCaseDelete = useNameRequest === ECreditLines.USE_CASE_DELETE;
+  const [showModal, setShowModal] = useState<boolean>(useCaseDelete);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (configurationData?.configurationRequestData) {
-      if (useNameRequest === ECreditLines.USE_CASE_DELETE) {
-        setShowModal(true);
-      } else {
-        const filterData = configurationData.configurationRequestData.rules
-          .map((item: IDecisionsByRule) => item.ruleName)
-          .filter((item: IDecisionsByRule) => item !== undefined);
-        const removeDeleteTransOperation =
-          removeDeleteTransactions(configurationData);
-        setFilterRules(filterData);
-        navigate(`/credit-lines/edit-credit-lines`, {
-          state: { data: removeDeleteTransOperation, option: EUseCase.DETAILS },
-        });
-      }
-    }
-  }, [configurationData, useNameRequest]);
-
-  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   const handleToggleModal = () => {
     setShowModal(false);
   };
+
+  useEffect(() => {
+    if (useNameRequest === ECreditLines.USE_CASE_DELETE) {
+      setShowModal(true);
+    }
+  }, [useNameRequest]);
+
+  useEffect(() => {
+    if (!configurationData?.configurationRequestData) {
+      return;
+    }
+
+    if (!useCaseDelete) {
+      const filterData = configurationData.configurationRequestData.rules
+        .map((item: IDecisionsByRule) => item.ruleName)
+        .filter((item: IDecisionsByRule) => item !== undefined);
+      const removeDeleteTransOperation =
+        removeDeleteTransactions(configurationData);
+      setFilterRules(filterData);
+      navigate(`/credit-lines/edit-credit-lines`, {
+        state: { data: removeDeleteTransOperation, option: EUseCase.DETAILS },
+      });
+    }
+  }, [configurationData, useNameRequest]);
+
+  const screenTablet = useMediaQuery(mediaQueryTablet);
 
   const modal = () => {
     const initial = {
@@ -52,7 +59,7 @@ const useDetailsRequest = (props: IUseDetailsRequest) => {
       withCancelButton: false,
     };
 
-    if (showModal) {
+    if (useCaseDelete) {
       return {
         ...detailsRequestModal,
         onCloseModal: handleToggleModal,

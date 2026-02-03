@@ -50,7 +50,7 @@ const useAuthRedirect = (
 
     if (!authConfig) {
       setHasError(true);
-      setErrorCode(1002);
+      setErrorCode(1006);
       return;
     }
 

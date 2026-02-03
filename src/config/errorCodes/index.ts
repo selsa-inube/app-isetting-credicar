@@ -77,7 +77,7 @@ const errorCodes: Record<number, IDetailsErrors> = {
   },
   1004: {
     descriptionError: ["Su usuario no tiene unidades de negocio relacionados."],
-    solutionError: ["consulta con tu operador."],
+    solutionError: ["Consulta con tu operador."],
   },
   1005: {
     descriptionError: ["No se encuentra disponible la página."],
@@ -86,6 +86,17 @@ const errorCodes: Record<number, IDetailsErrors> = {
       "Puede que no tengas los privilegios necesarios.",
       "Intenta nuevamente más tarde.",
     ],
+  },
+  1006: {
+    descriptionError: ["Datos no disponibles."],
+    solutionError: [
+      "Intenta nuevamente más tarde.",
+      "Consulta con tu operador.",
+    ],
+  },
+  1009: {
+    descriptionError: ["Error en el proceso de autenticación."],
+    solutionError: ["Consulta con tu operador."],
   },
 };
 

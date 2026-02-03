@@ -70,9 +70,9 @@ const MoreDetails = (props: IMoreDetails) => {
   return (
     <ModalWrapper
       width={isMobile ? "335px" : "700px"}
-      maxHeight={isMobile ? "600px" : "750px"}
+      maxHeight={isMobile ? "600px" : "760px"}
       isMobile={isMobile}
-      padding={tokens.spacing.s300}
+      padding={tokens.spacing.s250}
       labelActionButton={moreDetailsRequestModal.labelActionButton}
       labelCloseButton={moreDetailsRequestModal.labelCloseButton}
       labelCloseModal={moreDetailsRequestModal.labelCloseModal}
@@ -87,7 +87,7 @@ const MoreDetails = (props: IMoreDetails) => {
         borderColor={EComponentAppearance.DARK}
         borderRadius={tokens.spacing.s100}
         width="100%"
-        maxHeight={isMobile ? "410px" : "auto"}
+        maxHeight={isMobile ? "410px" : "650px"}
         padding={isMobile ? `${tokens.spacing.s050}` : `${tokens.spacing.s200}`}
         backgroundColor={EComponentAppearance.LIGHT}
         boxSizing="border-box"
@@ -108,14 +108,14 @@ const MoreDetails = (props: IMoreDetails) => {
         <BoxContainer
           direction="column"
           width="100%"
-          height={isMobile ? "auto" : "135px"}
+          height={isMobile ? "auto" : "165px"}
           boxSizing="border-box"
-          overflowY={isMobile ? "none" : "auto"}
+          // overflowY={isMobile ? "none" : "auto"}
         >
           <Grid
-            templateColumns={isMobile ? "1fr" : "repeat(2,auto)"}
+            templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
             templateRows={isMobile ? "repeat(5,auto)" : "repeat(3,auto)"}
-            gap={tokens.spacing.s150}
+            gap={tokens.spacing.s100}
             width="100%"
             padding={
               isMobile
@@ -147,7 +147,7 @@ const MoreDetails = (props: IMoreDetails) => {
         <Stack
           direction="column"
           gap={tokens.spacing.s150}
-          padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s150}`}
+          padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s025}`}
         >
           {hasAnyPaymentData && (
             <>

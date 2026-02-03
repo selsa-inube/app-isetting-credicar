@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { patchModifyConstruction } from "@services/creditLines/patchModifyConstruction";
@@ -31,7 +31,6 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [showErrorRulesModal, setShowErrorRulesModal] =
     useState<boolean>(false);
-
   const [showWithoutDataModal, setShowWithoutDataModal] =
     useState<boolean>(false);
 
@@ -43,12 +42,15 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
   const [hasError, setHasError] = useState(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [loading, setLoading] = useState(false);
+  const hasNavigatedToError = useRef(false);
+  const shouldNavigate = useRef(true);
 
   const navigate = useNavigate();
   const withoutData = data === undefined;
 
   const ruleCatalog = ECreditLines.RULE_CATALOG;
   const catalogAction = ECreditLines.CATALOG_ACTION;
+
   const {
     optionsGroups,
     loading: loadingGroupRules,
@@ -119,6 +121,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
           console.info(error);
           setHasError(true);
           setErrorData(errorObject(error));
+          shouldNavigate.current = false;
         } finally {
           setLoading(false);
         }
@@ -161,13 +164,17 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
         }
       }
 
-      if (!loadingAllRules && !hasErrorAllRules) {
+      if (
+        !hasErrorAllRules &&
+        shouldNavigate.current &&
+        !hasNavigatedToError.current
+      ) {
         setTimeout(() => {
           navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
         }, 500);
       }
     }
-  }, [loading, option, borrowerData?.settingRequestId]);
+  }, [loading, option, borrowerData?.settingRequestId, hasErrorAllRules]);
 
   useEffect(() => {
     if (!linesData) {
@@ -200,7 +207,12 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
         }
       }
 
-      if (!loadingAllRules && !hasErrorAllRules) {
+      if (
+        !loadingAllRules &&
+        !hasErrorAllRules &&
+        shouldNavigate.current &&
+        !hasNavigatedToError.current
+      ) {
         setTimeout(() => {
           navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
         }, 500);
@@ -212,18 +224,26 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     setHasError(!hasError);
     if (hasError) {
       setShowErrorModal(false);
+      hasNavigatedToError.current = true;
+      shouldNavigate.current = false;
     }
+    navigate("/credit-lines");
   };
 
   const handleToggleErrorRulesModal = () => {
     setHasErrorAllRules(!hasErrorAllRules);
     if (hasErrorAllRules) {
       setShowErrorRulesModal(false);
+      hasNavigatedToError.current = true;
+      shouldNavigate.current = false;
     }
+    navigate("/credit-lines");
   };
 
   const handleToggleWithouDataModal = () => {
     setShowWithoutDataModal(!showWithoutDataModal);
+    hasNavigatedToError.current = true;
+    shouldNavigate.current = false;
     navigate("/credit-lines");
   };
 
