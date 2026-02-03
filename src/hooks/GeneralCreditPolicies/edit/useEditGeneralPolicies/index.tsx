@@ -40,14 +40,21 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const { appData } = useContext(AuthAndPortalData);
 
   const initialMethodsData = () => {
-    const hasReciprocity = methodsData?.some((condition) =>
+    if (!methodsData || methodsData.length === 0) {
+      return {
+        hasReciprocity: false,
+        hasCalculation: false,
+        hasFactor: false,
+      };
+    }
+
+    const hasReciprocity = methodsData.some((condition) =>
       reciprocity.includes(condition.value as string),
     );
-
-    const hasCalculation = methodsData?.some((condition) =>
+    const hasCalculation = methodsData.some((condition) =>
       calculation.includes(condition.value as string),
     );
-    const hasFactor = methodsData?.some((condition) =>
+    const hasFactor = methodsData.some((condition) =>
       factor.includes(condition.value as string),
     );
 
