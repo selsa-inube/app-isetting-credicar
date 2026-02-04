@@ -8,6 +8,7 @@ interface IExtraordinaryCyclesEntry {
   payday?: string;
   paydayTranslation?: string;
   id?: string;
+  payrollForDeductionAgreementId?: string;
 }
 
 export type { IExtraordinaryCyclesEntry };
