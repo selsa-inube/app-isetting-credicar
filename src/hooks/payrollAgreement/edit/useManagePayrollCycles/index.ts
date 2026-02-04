@@ -34,7 +34,10 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
     transactionOperation: string,
   ): IRegularPaymentCycles[] =>
     newValues.map((item) => ({
-      payrollForDeductionAgreementId: item.cycleId ?? "",
+      payrollForDeductionAgreementId:
+        transactionOperation === ETransactionOperation.DELETE
+          ? item.payrollForDeductionAgreementId
+          : undefined,
       regularPaymentCycleNumber: item.cycleId ?? "",
       regularPaymentCycleName: item.nameCycle ?? "",
       schedule:
@@ -55,7 +58,10 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
       abbreviatedName: item.nameCycle,
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
       paymentDay: formatPaymentDay(item.payday ?? ""),
-      payrollForDeductionAgreementId: item.id ?? "",
+      payrollForDeductionAgreementId:
+        transactionOperation === ETransactionOperation.DELETE
+          ? item.payrollForDeductionAgreementId
+          : undefined,
       regulatoryFrameworkCode: item.laborRegulatorFramework ?? undefined,
       transactionOperation: transactionOperation,
     }));

@@ -51,6 +51,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     return cycles.map((entry, index) => ({
       id: String(index + 1),
       cycleId: `${addLeadingZero(index + 1).toString()}`,
+      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
       nameCycle: entry.regularPaymentCycleName,
       periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
       payday: getDayPayment(entry.paymentDay),
@@ -64,6 +65,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       data.payrollSpecialBenefitPaymentCycles,
     ).map((entry, index) => ({
       id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
+      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
       nameCycle: entry.abbreviatedName,
       typePayment: specialBenefitPayment[0],
       payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
@@ -76,6 +78,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       data.severancePaymentCycles,
     ).map((entry, index) => ({
       id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
+      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
       nameCycle: entry.abbreviatedName,
       typePayment: severancePay[0],
       payday: formatPaymentDayExtra(entry.paymentDay),
