@@ -1,72 +1,33 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect } from "react";
+import { decrypt } from "@utils/crypto/decrypt";
 import { encrypt } from "@utils/crypto/encrypt";
-import { IAuthLocalStorageSnapshot } from "@ptypes/context/authLocalStorageSnapshot";
-import { readAuthFromLocalStorage } from "@utils/readAuthFromLocalStorage";
 
 const useAuthWrapper = () => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
   const portalParam = params.get("portal");
+  const storedPortal = localStorage.getItem("portalCode");
+  const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
 
-  const [snapshot, setSnapshot] = useState<IAuthLocalStorageSnapshot>(() =>
-    readAuthFromLocalStorage(portalParam),
-  );
-
-  useEffect(() => {
-    if (!portalParam) return;
-
-    const encryptedPortal = encrypt(portalParam);
-    localStorage.setItem("portalCode", encryptedPortal);
-
-    setSnapshot((prev) => ({
-      ...prev,
-      portalCode: portalParam,
-    }));
-  }, [portalParam]);
+  const clientId = localStorage.getItem("originatorId");
+  const publicCode = localStorage.getItem("originatorCode");
+  const aplicationName = localStorage.getItem("aplicationName");
+  const clientIdDecrypt = decrypt(clientId ?? "");
+  const publicCodeDecrypt = decrypt(publicCode ?? "");
+  const aplicationNameDecrypt = decrypt(aplicationName ?? "");
 
   useEffect(() => {
-    let cancelled = false;
+    if (portalParam && portalParam !== decryptedPortal) {
+      const encryptedPortal = encrypt(portalParam);
+      localStorage.setItem("portalCode", encryptedPortal);
+    }
+  }, [portalParam, decryptedPortal]);
 
-    const sync = () => {
-      const next = readAuthFromLocalStorage(portalParam);
-
-      setSnapshot((prev) => {
-        const same =
-          prev.originatorId === next.originatorId &&
-          prev.originatorCode === next.originatorCode &&
-          prev.applicationName === next.applicationName &&
-          prev.portalCode === next.portalCode &&
-          prev.isReady === next.isReady;
-
-        return same ? prev : next;
-      });
-
-      return next.isReady;
-    };
-
-    if (sync()) return;
-
-    const intervalId = window.setInterval(() => {
-      if (cancelled) return;
-      const ready = sync();
-      if (ready) window.clearInterval(intervalId);
-    }, 200);
-
-    const onStorage = () => {
-      if (cancelled) return;
-      const ready = sync();
-      if (ready) window.clearInterval(intervalId);
-    };
-    window.addEventListener("storage", onStorage);
-
-    return () => {
-      cancelled = true;
-      window.clearInterval(intervalId);
-      window.removeEventListener("storage", onStorage);
-    };
-  }, [portalParam]);
-
-  return useMemo(() => snapshot, [snapshot]);
+  return {
+    clientIdDecrypt,
+    publicCodeDecrypt,
+    aplicationNameDecrypt,
+  };
 };
 
 export { useAuthWrapper };
