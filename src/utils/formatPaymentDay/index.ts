@@ -7,8 +7,8 @@ const formatPaymentDay = (payday: string) => {
   } else {
     const [month, day] = payday.split("-");
 
-    const monthIndex = monthNames.indexOf(month);
-    const formatMonth = addLeadingZero(monthIndex + 1);
+    const monthIndex = monthNames.find((item) => item.month === month)?.code;
+    const formatMonth = addLeadingZero(monthIndex ?? 0);
     const formatDay = addLeadingZero(Number(day));
 
     return `${formatMonth}${formatDay}`;

@@ -6,6 +6,7 @@ interface IExtraordinaryCyclesEntry {
   day?: string;
   month?: string;
   payday?: string;
+  paydayTranslation?: string;
   id?: string;
 }
 

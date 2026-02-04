@@ -17,7 +17,7 @@ const titles: ITitle[] = [
     priority: 1,
   },
   {
-    id: "payday",
+    id: "paydayTranslation",
     titleName: "Día de pago del ciclo",
     priority: 2,
   },

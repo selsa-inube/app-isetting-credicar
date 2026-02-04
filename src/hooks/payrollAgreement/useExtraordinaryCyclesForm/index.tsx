@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@inubekit/inubekit";
+import { IOption, useMediaQuery } from "@inubekit/inubekit";
 import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useFormik } from "formik";
 import { object } from "yup";
@@ -14,12 +14,13 @@ import { daysOfMonth } from "@utils/daysOfMonth";
 import { optionsFromEnumerators } from "@utils/optionsFromEnumerators";
 import { normalizeEnumTranslation } from "@utils/normalizeEnumTranslation";
 import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
-import { compareObjects } from "@utils/compareObjects";
 import { convertToOptions } from "@utils/convertToOptions";
 import { optionsEnumCodeI18n } from "@utils/optionsEnumCodeI18n";
+import { compareObjectsSpecific } from "@utils/compareObjectsSpecific";
 import { generateExtraOrdPayDays } from "@utils/generateExtraOrdPayDays";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EModalState } from "@enum/modalState";
+import { getPaydayTranslation } from "@utils/getPaydayTranslation";
 import { cyclespaymentLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/cyclespaymentLabels";
 import { mediaQueryMobileSmall } from "@config/environment";
 import { monthsInNumber } from "@config/payrollAgreement/payrollAgreementTab/generic/monthsInNumber";
@@ -98,8 +99,38 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const monthOptions = optionsFromEnumI18n(
     appData.language as ILanguage,
     months,
-    true,
   );
+
+  useEffect(() => {
+    if (months && months.length > 0) {
+      const monthOptionsUpdated = optionsFromEnumI18n(
+        appData.language as ILanguage,
+        months,
+      );
+
+      setEntries((prev) =>
+        prev.map((entry) => {
+          const extraordinaryEntry = entry as IExtraordinaryCyclesEntry;
+          if (
+            extraordinaryEntry.payday &&
+            extraordinaryEntry.payday.includes("-")
+          ) {
+            const [month, day] = extraordinaryEntry.payday.split("-");
+
+            return {
+              ...entry,
+              paydayTranslation: `${getPaydayTranslation(
+                monthOptionsUpdated as IOption[],
+                month,
+              )}-${day}`,
+            };
+          }
+
+          return entry;
+        }),
+      );
+    }
+  }, [months, appData.language]);
 
   const { enumData } = useEnumerators({
     enumDestination: ECyclesPayroll.EXTRAORDINARY_TYPE,
@@ -139,7 +170,11 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
   const valuesEqual =
     JSON.stringify(initialValues) === JSON.stringify(formik.values);
 
-  const valuesEqualBoton = compareObjects(initialData, entries);
+  const valuesEqualBoton = compareObjectsSpecific(
+    initialData as IExtraordinaryCyclesEntry[],
+    entries as IExtraordinaryCyclesEntry[],
+    ["paydayTranslation"],
+  );
 
   useEffect(() => {
     if (!formik.values.month) {
@@ -194,6 +229,7 @@ const useExtraordinaryCyclesForm = (props: IUseExtraordinaryCyclesForm) => {
       normalizeEnumTranslation(formik.values.typePayment)?.name ??
       formik.values.typePayment,
     payday: `${formik.values.month}-${formik.values.day}`,
+    paydayTranslation: `${getPaydayTranslation(monthOptions as IOption[], formik.values.month as string)}-${formik.values.day}`,
     numberDaysUntilCut: formik.values.numberDaysUntilCut,
     laborRegulatorFramework: formik.values.laborRegulatorFramework,
   });
