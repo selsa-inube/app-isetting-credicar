@@ -9,10 +9,12 @@ const useEnumerators = (props: IUseEnumerators) => {
   const [enumData, setEnumData] = useState<IEnumerators[]>(
     [] as IEnumerators[],
   );
+  const [loading, setLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     const fetchEnumData = async () => {
+      setLoading(true);
       try {
         const data = await getEnumerators(
           enumDestination,
@@ -23,13 +25,15 @@ const useEnumerators = (props: IUseEnumerators) => {
       } catch (error) {
         console.info(error);
         setHasError(true);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchEnumData();
   }, []);
 
-  return { enumData, hasError };
+  return { enumData, hasError, loading };
 };
 
 export { useEnumerators };

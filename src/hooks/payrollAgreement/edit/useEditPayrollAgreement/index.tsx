@@ -41,6 +41,7 @@ import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const { data } = props;
+  const { appData } = useContext(AuthAndPortalData);
 
   const regularPaymentValues = () => {
     const cycles = transformToArray<IRegularPaymentCycles>(
@@ -58,7 +59,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     }));
   };
 
-  const extraordinaryPaymentValues = () => {
+  const extraordinaryPaymentValues = useMemo(() => {
     const specials = transformToArray<IPayrollSpecialBenefit>(
       data.payrollSpecialBenefitPaymentCycles,
     ).map((entry, index) => ({
@@ -66,6 +67,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       nameCycle: entry.abbreviatedName,
       typePayment: specialBenefitPayment[0],
       payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
+      paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
       numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
       laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
@@ -77,12 +79,13 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       nameCycle: entry.abbreviatedName,
       typePayment: severancePay[0],
       payday: formatPaymentDayExtra(entry.paymentDay),
+      paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
       numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
       laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
 
     return [...specials, ...severances];
-  };
+  }, [data, appData.language]);
 
   const initialData = {
     generalInformation: {
@@ -105,12 +108,10 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     },
     extraordinaryCycles: {
       isValid: false,
-      values: extraordinaryPaymentValues(),
+      values: extraordinaryPaymentValues,
     },
   };
-
   const companyAgreement = data.payingEntityName ?? "";
-  const { appData } = useContext(AuthAndPortalData);
   const [isSelected, setIsSelected] = useState<string>(
     editPayrollAgTabsConfig.generalInformation.id,
   );
@@ -125,7 +126,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   >(initialData.ordinaryCycles.values);
   const [extraordinaryPayment, setExtraordinaryPayment] = useState<
     IExtraordinaryCyclesEntry[]
-  >(extraordinaryPaymentValues());
+  >(extraordinaryPaymentValues);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [canRefresh, setCanRefresh] = useState(false);
   const [sourcesOfIncomeValues, setSourcesOfIncomeValues] = useState<
@@ -175,7 +176,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     );
   }, []);
 
-  const extraordinaryData = extraordinaryPaymentValues();
+  const extraordinaryData = extraordinaryPaymentValues;
 
   const shouldHideExtraordinaryTab = useMemo(() => {
     const hasValidPeriodicity = regularPaymentCycles.some((cycle) => {

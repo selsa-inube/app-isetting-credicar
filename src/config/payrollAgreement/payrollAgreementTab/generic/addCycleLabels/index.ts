@@ -1,6 +1,7 @@
 const addCycleLabels = {
   nameCycle: "Nombre del ciclo",
   periodicity: "Periodicidad de ciclo",
+  paydayTranslation: "Día de pago",
   payday: "Día de pago",
   typePayment: "Tipo de pago",
   numberDaysUntilCut: "# de días para el corte",

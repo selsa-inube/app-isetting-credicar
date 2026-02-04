@@ -10,6 +10,7 @@ interface IEnumerators {
   i18nDescription?: II18n;
   icon?: React.ReactNode;
   moneyDestinationType?: string;
+  index?: number;
 }
 
 export type { IEnumerators };
