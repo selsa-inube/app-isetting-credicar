@@ -2,15 +2,22 @@ import { IAuthProvider } from "@inube/iauth-react";
 import { useAuthWrapper } from "@hooks/authentication/useAuthWrapper";
 import { enviroment } from "@config/environment";
 import { IAuthWrapper } from "@ptypes/IAuthWrapper";
-import { Loading } from "../login/loading";
+// import { Loading } from "../login/loading";
 
 const AuthWrapper = ({ children }: IAuthWrapper) => {
   const { originatorId, originatorCode, applicationName, isReady } =
     useAuthWrapper();
 
-  if (!isReady) {
-    return <Loading />;
-  }
+  console.log(
+    "AuthWrapper - isReady:",
+    originatorId,
+    originatorCode,
+    applicationName,
+    isReady,
+  );
+  // if (!isReady) {
+  //   return <Loading />;
+  // }
 
   return (
     <IAuthProvider
