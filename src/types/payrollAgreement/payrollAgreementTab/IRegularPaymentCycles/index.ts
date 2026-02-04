@@ -1,7 +1,7 @@
 interface IRegularPaymentCycles {
   numberOfDaysBeforePaymentToBill: number;
   paymentDay: string;
-  payrollForDeductionAgreementId: string;
+  payrollForDeductionAgreementId?: string;
   regularPaymentCycleName: string;
   schedule: string;
   regularPaymentCycleNumber?: string;

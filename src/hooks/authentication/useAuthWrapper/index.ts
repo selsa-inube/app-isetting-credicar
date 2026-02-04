@@ -1,33 +1,47 @@
-import { useEffect } from "react";
-import { decrypt } from "@utils/crypto/decrypt";
+import { useEffect, useMemo, useState } from "react";
 import { encrypt } from "@utils/crypto/encrypt";
+import { readAuthFromLocalStorage } from "@utils/readAuthFromLocalStorage";
+import { IAuthLocalStorageSnapshot } from "@ptypes/context/authLocalStorageSnapshot";
+import { AUTH_STORAGE_UPDATED_EVENT } from "@utils/storeEncryptedData";
+
+const persistFromQueryParams = (params: URLSearchParams) => {
+  const originatorId = params.get("originatorId");
+  const originatorCode = params.get("originatorCode");
+  const applicationName = params.get("applicationName");
+  const portal = params.get("portal");
+
+  if (originatorId) localStorage.setItem("originatorId", encrypt(originatorId));
+  if (originatorCode)
+    localStorage.setItem("originatorCode", encrypt(originatorCode));
+  if (applicationName)
+    localStorage.setItem("aplicationName", encrypt(applicationName));
+  if (portal) localStorage.setItem("portalCode", encrypt(portal));
+};
 
 const useAuthWrapper = () => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
-  const portalParam = params.get("portal");
-  const storedPortal = localStorage.getItem("portalCode");
-  const decryptedPortal = storedPortal ? decrypt(storedPortal) : "";
 
-  const clientId = localStorage.getItem("originatorId");
-  const publicCode = localStorage.getItem("originatorCode");
-  const aplicationName = localStorage.getItem("aplicationName");
-  const clientIdDecrypt = decrypt(clientId ?? "");
-  const publicCodeDecrypt = decrypt(publicCode ?? "");
-  const aplicationNameDecrypt = decrypt(aplicationName ?? "");
+  const [snapshot, setSnapshot] = useState<IAuthLocalStorageSnapshot>(() => {
+    persistFromQueryParams(params);
+    return readAuthFromLocalStorage(params.get("portal"));
+  });
 
   useEffect(() => {
-    if (portalParam && portalParam !== decryptedPortal) {
-      const encryptedPortal = encrypt(portalParam);
-      localStorage.setItem("portalCode", encryptedPortal);
-    }
-  }, [portalParam, decryptedPortal]);
+    const sync = () => {
+      setSnapshot(readAuthFromLocalStorage(params.get("portal")));
+    };
 
-  return {
-    clientIdDecrypt,
-    publicCodeDecrypt,
-    aplicationNameDecrypt,
-  };
+    sync();
+
+    window.addEventListener(AUTH_STORAGE_UPDATED_EVENT, sync);
+
+    return () => {
+      window.removeEventListener(AUTH_STORAGE_UPDATED_EVENT, sync);
+    };
+  }, []);
+
+  return useMemo(() => snapshot, [snapshot]);
 };
 
 export { useAuthWrapper };
