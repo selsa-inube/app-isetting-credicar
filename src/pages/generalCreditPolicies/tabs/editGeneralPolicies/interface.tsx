@@ -2,28 +2,29 @@ import { Stack, Tabs } from "@inubekit/inubekit";
 
 import { DecisionsGeneralForm } from "@pages/generalCreditPolicies/forms/decisionsGeneral";
 import { tokens } from "@design/tokens";
-import { DecisionsForm } from "@design/forms/decisions";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
-import { revertModalDisplayData } from "@utils/revertModalDisplayData";
+import { NewDecisionForm } from "@design/forms/NewDecisionForm";
+import { EUseCase } from "@enum/useCase";
 import { EComponentAppearance } from "@enum/appearances";
 import { ENameRules } from "@enum/nameRules";
-import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
-import { decisionMinimumIncomePercentage } from "@config/decisions/decisionMinimumIncomePercentage";
-import { minimumIncomeLabels } from "@config/generalCreditPolicies/assisted/minimumIncomeLabels";
-import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
-import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
-import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
-import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
-import { deleteModal } from "@config/decisions/messages";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
+import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
 import { portalId } from "@config/portalId";
 import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
+// import { revertModalDisplayData } from "@utils/revertModalDisplayData";
+// import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
+// import { minimumIncomeLabels } from "@config/generalCreditPolicies/assisted/minimumIncomeLabels";
+// import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
+// import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
+// import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
+// import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
+// import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
+// import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
+// import { deleteModal } from "@config/decisions/messages";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
   const {
@@ -44,32 +45,32 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     initialDecisionsData,
     showDecisionsGeneral,
     showIncomePort,
-    showContributions,
     showScoreModels,
     showMinimumIncome,
-    normalizedContributions,
-    normalizedIncome,
-    normalizedScoreModels,
-    normalizedMinimumIncome,
-    heightContPageContribut,
-    heightContPageIncome,
-    heightContPageScoreModels,
-    heightContPageMinimum,
     modalData,
     showDecision,
     setShowFactor,
     setShowReciprocity,
     onToggleDateModal,
-    setIncomePortfolio,
-    setScoreModels,
-    setMinimumIncomePercentage,
-    setContributionsPortfolio,
     onTabChange,
     onReset,
     setIsCurrentFormValid,
     onCloseRequestStatus,
     onClosePendingReqModal,
     onCloseProcess,
+    // showContributions,
+    // normalizedContributions,
+    // normalizedIncome,
+    // normalizedScoreModels,
+    // normalizedMinimumIncome,
+    // heightContPageContribut,
+    // heightContPageIncome,
+    // heightContPageScoreModels,
+    // heightContPageMinimum,
+    // setIncomePortfolio,
+    // setScoreModels,
+    // setMinimumIncomePercentage,
+    // setContributionsPortfolio,
   } = props;
 
   return (
@@ -108,98 +109,68 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               setShowFactor={setShowFactor}
             />
           )}
-          {showContributions && (
-            <DecisionsForm
-              deleteModal={deleteModal}
-              textValuesBusinessRules={textValuesBusinessRules}
-              decisionTemplateConfig={decisionContributionsPortfConfig}
-              onButtonClick={onToggleDateModal}
-              onPreviousStep={onReset}
-              initialValues={contributionsPortfolio}
-              setDecisions={setContributionsPortfolio}
-              revertModalDisplayData={revertModalDisplayData}
+          {showIncomePort && (
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
-              nameRule=""
-              titleContentAddCard={contributionsPortfLabels.titleContentAddCard}
-              messageEmptyDecisions={
-                contributionsPortfLabels.messageEmptyDecisions as unknown as string
-              }
+              nameRule="Número de veces los ingresos"
+              customMessageEmptyDecisions={""}
+              initialDecisions={contributionsPortfolio}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
               disabledButton={contributionsPortfolio.length === 0}
-              editDataOption
-              normalizeEvaluateRuleData={normalizedContributions}
-              heightContentPage={heightContPageContribut}
-              bottomAddButton="80px"
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
             />
           )}
+
           {showIncomePort && (
-            <DecisionsForm
-              deleteModal={deleteModal}
-              textValuesBusinessRules={textValuesBusinessRules}
-              decisionTemplateConfig={decisionIncomePortfolioConfig}
-              onButtonClick={onToggleDateModal}
-              onPreviousStep={onReset}
-              initialValues={incomePortfolio}
-              setDecisions={setIncomePortfolio}
-              revertModalDisplayData={revertModalDisplayData}
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
-              nameRule=""
-              titleContentAddCard={incomePortfLabels.titleContentAddCard}
-              messageEmptyDecisions={
-                incomePortfLabels.messageEmptyDecisions as unknown as string
-              }
+              nameRule="Número de veces los ingresos"
+              customMessageEmptyDecisions={""}
+              initialDecisions={incomePortfolio}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
               disabledButton={incomePortfolio.length === 0}
-              editDataOption
-              normalizeEvaluateRuleData={normalizedIncome}
-              heightContentPage={heightContPageIncome}
-              bottomAddButton="80px"
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
             />
           )}
           {showScoreModels && (
-            <DecisionsForm
-              deleteModal={deleteModal}
-              textValuesBusinessRules={textValuesBusinessRules}
-              decisionTemplateConfig={decisionScoreModelsConfig}
-              onButtonClick={onToggleDateModal}
-              onPreviousStep={onReset}
-              initialValues={scoreModels}
-              setDecisions={setScoreModels}
-              revertModalDisplayData={revertModalDisplayData}
-              labelBusinessRules={ENameRules.SCORE_MODELS}
-              nameRule=""
+            <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_IRISK}
-              titleContentAddCard={scoreModelsLabels.titleContentAddCard}
-              messageEmptyDecisions={
-                scoreModelsLabels.messageEmptyDecisions as unknown as string
-              }
+              labelBusinessRules={ENameRules.SCORE_MODELS}
+              nameRule="Modelo de score"
+              customMessageEmptyDecisions={""}
+              initialDecisions={scoreModels}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
               disabledButton={scoreModels.length === 0}
-              editDataOption
-              normalizeEvaluateRuleData={normalizedScoreModels}
-              heightContentPage={heightContPageScoreModels}
-              bottomAddButton="80px"
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
             />
           )}
           {showMinimumIncome && (
-            <DecisionsForm
-              deleteModal={deleteModal}
-              textValuesBusinessRules={textValuesBusinessRules}
-              decisionTemplateConfig={decisionMinimumIncomePercentage}
-              onButtonClick={onToggleDateModal}
-              onPreviousStep={onReset}
-              initialValues={minimumIncomePercentage}
-              setDecisions={setMinimumIncomePercentage}
-              revertModalDisplayData={revertModalDisplayData}
-              labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
-              nameRule=""
+            <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
-              titleContentAddCard={minimumIncomeLabels.titleContentAddCard}
-              messageEmptyDecisions={
-                minimumIncomeLabels.messageEmptyDecisions as unknown as string
-              }
+              labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
+              customMessageEmptyDecisions={""}
+              initialDecisions={minimumIncomePercentage}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
               disabledButton={minimumIncomePercentage.length === 0}
-              editDataOption
-              normalizeEvaluateRuleData={normalizedMinimumIncome}
-              heightContentPage={heightContPageMinimum}
-              bottomAddButton="80px"
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
             />
           )}
         </Stack>

@@ -13,15 +13,16 @@ const StyledMultipleChoiceContainer = styled.div`
 `;
 
 const StyledRulesScroll = styled.div<IScroll>`
- & > div > div > div  {
-  max-height: ${({ $maxHeight }) => `${$maxHeight}px`};
-  overflow-y: auto;
-  overflow-x: hidden;
+  & > div > div > div {
+    max-height: ${({ $maxHeight }) => `${$maxHeight}px`};
+    overflow-y: auto;
+    overflow-x: hidden;
 
-  margin-bottom: ${({ $withFloatingActions }) =>
-    $withFloatingActions ? "70px" : "0px"};
-  scroll-padding-bottom: ${({ $withFloatingActions }) =>
-    $withFloatingActions ? "70px" : "0px"};
+    margin-bottom: ${({ $withFloatingActions }) =>
+      $withFloatingActions ? "70px" : "0px"};
+    scroll-padding-bottom: ${({ $withFloatingActions }) =>
+      $withFloatingActions ? "70px" : "0px"};
+  }
 `;
 
 const StyledFixedContainerMessage = styled.div`

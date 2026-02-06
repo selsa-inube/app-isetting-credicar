@@ -13,6 +13,7 @@ interface IConditionsTheDecision {
   listOfPossibleValuesHidden?: IListOfPossibleValuesHid;
   TimeUnit?: string;
   timeUnit?: string;
+  hidden?: boolean;
 }
 
 export type { IConditionsTheDecision };
