@@ -18,7 +18,7 @@ const generalInfoLabels = {
   placeholderTypePayroll: "Selecciona de la lista",
   placeholderSourcesOfIncome: "Selecciona opciones",
   placeholderDaysApplication: "Escribe o selecciona # de días",
-  maxLengthNamePayroll: 20,
+  maxLengthNamePayroll: 50,
 };
 
 export { generalInfoLabels };
