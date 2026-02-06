@@ -1,7 +1,7 @@
 import { ValueDataType, ValueHowToSetUp } from "@isettingkit/input";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
-const decisionMinimumIncomePercentage = (
+const decisionTemplateGenPolicies = (
   {
     ruleName,
     descriptionUse,
@@ -12,6 +12,8 @@ const decisionMinimumIncomePercentage = (
     i18n,
   }: IRuleDecisionExtended,
   language: string,
+  labelName: string,
+  businessUnit?: string,
 ) => {
   if (descriptionUse && decisionDataType) {
     const decisionData = decisionDataType.toLocaleUpperCase();
@@ -19,10 +21,10 @@ const decisionMinimumIncomePercentage = (
     const decisionTemplate = {
       ruleName: ruleName,
       labelName: String(
-        i18n?.[language as keyof typeof i18n] ?? descriptionUse,
+        i18n?.[language as keyof typeof i18n] ?? labelName ?? descriptionUse,
       ),
       descriptionUse: String(
-        i18n?.[language as keyof typeof i18n] ?? descriptionUse,
+        i18n?.[language as keyof typeof i18n] ?? labelName ?? descriptionUse,
       ),
       decisionDataType:
         ValueDataType[decisionData as keyof typeof ValueDataType],
@@ -47,7 +49,10 @@ const decisionMinimumIncomePercentage = (
                   condition.descriptionUse,
               ),
               conditionDataType: condition.conditionDataType,
-              value: "",
+              value:
+                condition.conditionName === "BusinessUnit"
+                  ? businessUnit
+                  : condition.value,
               listOfPossibleValues: {
                 list: condition.listOfPossibleValues?.list?.map(
                   (item) => (item as unknown as { label: string }).label,
@@ -57,6 +62,7 @@ const decisionMinimumIncomePercentage = (
               howToSetTheCondition: condition.listOfPossibleValues
                 ? ValueHowToSetUp.LIST_OF_VALUES
                 : (condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL),
+              hidden: condition.conditionName === "BusinessUnit" ? true : false,
             })),
         },
       ],
@@ -66,4 +72,4 @@ const decisionMinimumIncomePercentage = (
   }
 };
 
-export { decisionMinimumIncomePercentage };
+export { decisionTemplateGenPolicies };
