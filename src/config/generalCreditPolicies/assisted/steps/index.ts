@@ -31,9 +31,41 @@ const addGenCredPoliciesSteps: IAssistedStep[] = [
     name: "Porcentaje mínimo ingreso",
     description: "Porcentaje mínimo de reserva por la fuente de ingreso.",
   },
+
   {
     id: 6,
     number: 6,
+    name: "Formato de notificación",
+    description: "Define qué formato de notificación debe utilizarse.",
+  },
+  {
+    id: 7,
+    number: 7,
+    name: "Destinatario de la notificación",
+    description: "Define quién debe recibir la notificación.",
+  },
+  {
+    id: 8,
+    number: 8,
+    name: "Puntuación mínima de riesgo de crédito",
+    description: "Puntuación mínima de riesgo de la agencia de crédito.",
+  },
+  {
+    id: 9,
+    number: 9,
+    name: "Canal de notificación",
+    description: "Canales que deben utilizarse para enviar la notificación.",
+  },
+  {
+    id: 10,
+    number: 10,
+    name: "URL de la API de score de riesgo",
+    description: "URL de la API de score de riesgo.",
+  },
+
+  {
+    id: 11,
+    number: 11,
     name: "Verificación",
     description: "Confirma la información diligenciada en pasos anteriores.",
   },

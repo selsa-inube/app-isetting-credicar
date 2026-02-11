@@ -16,7 +16,6 @@ const NewDecisionForm = (props: INewDecisions) => {
     labelBusinessRules,
     nameRule,
     onSave,
-    onToggleDateModal,
     decisionTemplateConfig,
     setDecisionData,
   } = props;
@@ -55,7 +54,6 @@ const NewDecisionForm = (props: INewDecisions) => {
     ruleCatalog,
     labelBusinessRules,
     nameRule,
-    onToggleDateModal,
     decisionTemplateConfig,
     setDecisionData,
   });

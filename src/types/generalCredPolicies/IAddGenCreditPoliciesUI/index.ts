@@ -6,6 +6,7 @@ import { IAddGenCredPoliciesRef } from "../forms/IAddGenCredPoliciesRef";
 import { IAddGenCredPoliciesForms } from "../forms/IAddGenCredPoliciesForms";
 import { IDateVerification } from "../forms/IDateVerification";
 import { IModalData } from "../IModalData";
+import { IRuleState } from "../IRuleState";
 
 interface IAddGenCreditPoliciesUI {
   currentStep: number;
@@ -14,9 +15,6 @@ interface IAddGenCreditPoliciesUI {
   initialValues: IAddGenCredPoliciesForms;
   smallScreen: boolean;
   steps: IAssistedStep[];
-  contributionsPortfolio: IRuleDecision[];
-  incomePortfolio: IRuleDecision[];
-  scoreModels: IRuleDecision[];
   showModal: boolean;
   showRequestProcessModal: boolean;
   requestSteps: IRequestSteps[];
@@ -26,10 +24,10 @@ interface IAddGenCreditPoliciesUI {
   dateVerification: IDateVerification;
   modalData: IModalData;
   showDecision: boolean;
-  minimumIncomePercentage: IRuleDecision[];
-  setMinimumIncomePercentage: React.Dispatch<
-    React.SetStateAction<IRuleDecision[]>
-  >;
+  disabledButton: boolean;
+  rulesData: IRuleState;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;
   onOpenModal: () => void;
   setDateVerification: React.Dispatch<
     React.SetStateAction<IDateVerification | undefined>
@@ -37,11 +35,6 @@ interface IAddGenCreditPoliciesUI {
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
   onFinishForm: () => void;
-  setScoreModels: React.Dispatch<React.SetStateAction<IRuleDecision[]>>;
-  setIncomePortfolio: React.Dispatch<React.SetStateAction<IRuleDecision[]>>;
-  setContributionsPortfolio: React.Dispatch<
-    React.SetStateAction<IRuleDecision[]>
-  >;
   onToggleModal: () => void;
   onNextStep: () => void;
   onPreviousStep: () => void;

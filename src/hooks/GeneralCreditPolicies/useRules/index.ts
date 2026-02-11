@@ -5,14 +5,7 @@ import { formatRuleDecisions } from "@utils/formatRuleDecisions";
 import { IUseRules } from "@ptypes/hooks/IUseRules";
 
 const useRules = (props: IUseRules) => {
-  const {
-    formValues,
-    dateVerification,
-    contributionsPortfolio,
-    incomePortfolio,
-    scoreModels,
-    minimumIncomePercentage,
-  } = props;
+  const { formValues, dateVerification, rulesData } = props;
   const decisionGeneralData = formValues.decisionsGeneral.values;
 
   const decisionWithoutConditions = (
@@ -72,21 +65,42 @@ const useRules = (props: IUseRules) => {
   );
 
   const rulesContributions = formatRuleDecisions(
-    contributionsPortfolio,
+    rulesData.ReciprocityFactorForCreditLimit,
     dateVerification?.date,
   );
   const rulesIncomes = formatRuleDecisions(
-    incomePortfolio,
+    rulesData.RiskScoreFactorForCreditLimit,
     dateVerification?.date,
   );
 
   const ruleScoremodels = formatRuleDecisions(
-    scoreModels,
+    rulesData.CreditRiskScoringModel,
     dateVerification?.date,
   );
 
   const ruleMinimumIncome = formatRuleDecisions(
-    minimumIncomePercentage,
+    rulesData.MinimumSubsistenceReservePercentage,
+    dateVerification?.date,
+  );
+
+  const ruleBasicNotifForm = formatRuleDecisions(
+    rulesData.BasicNotificationFormat,
+    dateVerification?.date,
+  );
+  const ruleBasicNotifRec = formatRuleDecisions(
+    rulesData.BasicNotificationRecipient,
+    dateVerification?.date,
+  );
+  const ruleMinCredBureauRiskScore = formatRuleDecisions(
+    rulesData.MinimumCreditBureauRiskScore,
+    dateVerification?.date,
+  );
+  const ruleNotificationChannel = formatRuleDecisions(
+    rulesData.NotificationChannel,
+    dateVerification?.date,
+  );
+  const ruleRiskScoreApiUrl = formatRuleDecisions(
+    rulesData.RiskScoreApiUrl,
     dateVerification?.date,
   );
 
@@ -98,6 +112,11 @@ const useRules = (props: IUseRules) => {
     ...additionalDebtorsValues,
     ...realGuaranteesValues,
     ...ruleMinimumIncome,
+    ...ruleBasicNotifForm,
+    ...ruleBasicNotifRec,
+    ...ruleMinCredBureauRiskScore,
+    ...ruleNotificationChannel,
+    ...ruleRiskScoreApiUrl,
   ];
 
   return {

@@ -9,9 +9,7 @@ import { rowsAttribute } from "@utils/rowsAttribute";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IRenderContributionsVerification } from "@ptypes/generalCredPolicies/forms/IRenderContributionsVerification";
 
-const RendersMinimumIncomeVerification = (
-  props: IRenderContributionsVerification,
-) => {
+const RendersRuleVerification = (props: IRenderContributionsVerification) => {
   const { values, isMobile } = props;
 
   return (
@@ -45,4 +43,4 @@ const RendersMinimumIncomeVerification = (
   );
 };
 
-export { RendersMinimumIncomeVerification };
+export { RendersRuleVerification };

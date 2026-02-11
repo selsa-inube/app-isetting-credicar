@@ -18,26 +18,21 @@ const AddGenCreditPolicies = () => {
     formValues,
     formReferences,
     smallScreen,
-    contributionsPortfolio,
-    incomePortfolio,
     formValid,
-    scoreModels,
-    minimumIncomePercentage,
     showModal,
     showRequestProcessModal,
     dateVerification,
     showGoBackModal,
+    disabledButton,
+    rulesData,
+    setDecisionData,
     handleCloseGoBackModal,
     handleGoBack,
     handleOpenModal,
     setDateVerification,
     handleSubmitClick,
     setShowRequestProcessModal,
-    setScoreModels,
-    setMinimumIncomePercentage,
     setCurrentStep,
-    setIncomePortfolio,
-    setContributionsPortfolio,
     handleFormValidChange,
     handleNextStep,
     handlePreviousStep,
@@ -95,14 +90,6 @@ const AddGenCreditPolicies = () => {
       smallScreen={smallScreen}
       onToggleModal={handleToggleModal}
       handleFormValidChange={handleFormValidChange}
-      contributionsPortfolio={contributionsPortfolio}
-      setContributionsPortfolio={setContributionsPortfolio}
-      incomePortfolio={incomePortfolio}
-      setIncomePortfolio={setIncomePortfolio}
-      scoreModels={scoreModels}
-      setScoreModels={setScoreModels}
-      minimumIncomePercentage={minimumIncomePercentage}
-      setMinimumIncomePercentage={setMinimumIncomePercentage}
       setCurrentStep={setCurrentStep}
       showModal={showModal}
       onCloseRequestStatus={handleCloseRequestStatus}
@@ -119,6 +106,9 @@ const AddGenCreditPolicies = () => {
       onCloseProcess={handleCloseProcess}
       modalData={modalData}
       showDecision={showDecision}
+      disabledButton={disabledButton}
+      rulesData={rulesData}
+      setDecisionData={setDecisionData}
     />
   );
 };

@@ -18,6 +18,11 @@ const RenderDecisionsGenVerification = (
     PaymentCapacityBasedCreditLimit,
     ReciprocityBasedCreditLimit,
     RiskAnalysisBasedCreditLimit,
+    creditBureausConsultReq,
+    inquiryValidityPeriod,
+    lineCreditPayrollAdvance,
+    lineCreditPayrollSpecialAdvance,
+    maximumNotifDocSize,
   } = values;
 
   return (
@@ -25,7 +30,7 @@ const RenderDecisionsGenVerification = (
       <Grid
         width="100%"
         templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
-        templateRows={isMobile ? "repeat(3, 1fr)" : "repeat(2, 1fr)"}
+        templateRows={isMobile ? "repeat(8, 1fr)" : "repeat(4, 1fr)"}
         gap={tokens.spacing.s200}
       >
         <BoxAttribute
@@ -59,6 +64,31 @@ const RenderDecisionsGenVerification = (
           direction="column"
           label={verificationLabels.realGuarantees}
           value={renderValue(realGuarantees)}
+        />
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.creditBureausConsultReq}
+          value={renderValue(creditBureausConsultReq)}
+        />
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.inquiryValidityPeriod}
+          value={renderValue(inquiryValidityPeriod)}
+        />
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.lineCreditPayrollAdvance}
+          value={renderValue(lineCreditPayrollAdvance)}
+        />
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.lineCreditPayrollSpecialAdvance}
+          value={renderValue(lineCreditPayrollSpecialAdvance)}
+        />
+        <BoxAttribute
+          direction="column"
+          label={verificationLabels.maximumNotifDocSize}
+          value={renderValue(maximumNotifDocSize)}
         />
       </Grid>
     </>

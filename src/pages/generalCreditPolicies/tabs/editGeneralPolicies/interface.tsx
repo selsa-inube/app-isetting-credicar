@@ -104,7 +104,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -122,7 +121,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -140,7 +138,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -157,7 +154,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -174,7 +170,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -191,7 +186,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -209,7 +203,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -226,7 +219,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
@@ -243,7 +235,6 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               loading={false}
               onPreviousStep={onReset}
               disabledButton={disabledButton}
-              onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}

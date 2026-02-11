@@ -13,7 +13,6 @@ interface INewDecisions {
   disabledButton: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;
-  onToggleDateModal: () => void;
   decisionTemplateConfig: (
     enumeratorsRules: IRuleDecisionExtended,
     language: string,
