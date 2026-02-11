@@ -11,6 +11,8 @@ interface INewDecisions {
   labelBusinessRules: string;
   onPreviousStep: () => void;
   disabledButton: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;
   onToggleDateModal: () => void;
   decisionTemplateConfig: (
     enumeratorsRules: IRuleDecisionExtended,
@@ -18,6 +20,7 @@ interface INewDecisions {
     nameRule: string,
     businessUnit?: string,
   ) => void;
+  onSave: () => void;
   nameRule?: string;
 }
 export type { INewDecisions };

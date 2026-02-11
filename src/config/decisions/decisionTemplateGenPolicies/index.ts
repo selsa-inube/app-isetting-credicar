@@ -53,11 +53,10 @@ const decisionTemplateGenPolicies = (
                 condition.conditionName === "BusinessUnit"
                   ? businessUnit
                   : condition.value,
-              listOfPossibleValues: {
-                list: condition.listOfPossibleValues?.list?.map(
-                  (item) => (item as unknown as { label: string }).label,
-                ),
-              },
+              listOfPossibleValues:
+                Object.values(condition.listOfPossibleValues || []).length > 0
+                  ? condition.listOfPossibleValues
+                  : undefined,
               listOfPossibleValuesHidden: condition.listOfPossibleValues,
               howToSetTheCondition: condition.listOfPossibleValues
                 ? ValueHowToSetUp.LIST_OF_VALUES

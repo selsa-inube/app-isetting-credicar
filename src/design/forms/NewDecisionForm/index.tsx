@@ -1,4 +1,4 @@
-import { useNewDecisionsForm } from "@hooks/forms/useNewDecisionsForm/inde";
+import { useNewDecisionsForm } from "@hooks/forms/useNewDecisionsForm";
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 import { INewDecisions } from "@ptypes/generalCredPolicies/INewDecisions";
 import { NewDecisionFormUI } from "./interface";
@@ -15,8 +15,10 @@ const NewDecisionForm = (props: INewDecisions) => {
     disabledButton,
     labelBusinessRules,
     nameRule,
+    onSave,
     onToggleDateModal,
     decisionTemplateConfig,
+    setDecisionData,
   } = props;
 
   const {
@@ -36,8 +38,9 @@ const NewDecisionForm = (props: INewDecisions) => {
     decisionTemplateFiltered,
     cancelButtonLabel,
     disabledNext,
-    handleSave,
+    loadingList,
     saveButtonLabel,
+    maxHeight,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -54,6 +57,7 @@ const NewDecisionForm = (props: INewDecisions) => {
     nameRule,
     onToggleDateModal,
     decisionTemplateConfig,
+    setDecisionData,
   });
 
   return (
@@ -87,8 +91,10 @@ const NewDecisionForm = (props: INewDecisions) => {
       disabledPrevius={disabledPrevius}
       cancelButtonLabel={cancelButtonLabel}
       disabledNext={disabledNext}
-      onSave={handleSave}
+      onSave={onSave}
+      loadingList={loadingList}
       saveButtonLabel={saveButtonLabel}
+      maxHeight={maxHeight}
     />
   );
 };

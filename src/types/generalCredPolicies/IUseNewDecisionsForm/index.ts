@@ -7,6 +7,8 @@ interface IUseNewDecisionsForm {
   disabledButton: boolean;
   ruleCatalog: string;
   labelBusinessRules: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;
   onToggleDateModal: () => void;
   decisionTemplateConfig: (
     enumeratorsRules: IRuleDecisionExtended,

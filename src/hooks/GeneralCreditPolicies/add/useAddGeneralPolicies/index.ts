@@ -30,6 +30,11 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
         PaymentCapacityBasedCreditLimit: false,
         ReciprocityBasedCreditLimit: false,
         RiskAnalysisBasedCreditLimit: false,
+        creditBureausConsultReq: false,
+        inquiryValidityPeriod: false,
+        lineCreditPayrollAdvance: false,
+        lineCreditPayrollSpecialAdvance: false,
+        maximumNotifDocSize: false,
       },
     },
   };

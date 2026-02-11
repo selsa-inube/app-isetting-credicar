@@ -24,6 +24,31 @@ const editGeneralPoliciesTabsConfig = {
     isDisabled: false,
     label: "Porcentaje mínimo ingreso",
   },
+  basicNotificationFormat: {
+    id: "basicNotificationFormat",
+    isDisabled: false,
+    label: "Formato de notificación",
+  },
+  basicNotificationRecipient: {
+    id: "basicNotificationRecipient",
+    isDisabled: false,
+    label: "Destinatario de la notificación",
+  },
+  minimumCreditBureauRiskScore: {
+    id: "minimumCreditBureauRiskScore",
+    isDisabled: false,
+    label: "Score de riesgo requerido",
+  },
+  notificationChannel: {
+    id: "notificationChannel",
+    isDisabled: false,
+    label: "Canal de notificación",
+  },
+  riskScoreApiUrl: {
+    id: "riskScoreApiUrl",
+    isDisabled: false,
+    label: "URL de la API de score de riesgo",
+  },
 };
 
 export { editGeneralPoliciesTabsConfig };

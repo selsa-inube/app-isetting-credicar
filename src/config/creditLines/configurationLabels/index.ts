@@ -1,5 +1,5 @@
 const configurationLabels = {
-  addButton: "Agregar decisión",
+  addButton: "Agregar",
   lineInformation: "Información de la línea",
   conditions: "Condiciones que determinan las decisiones",
   decisions: "Decisiones",

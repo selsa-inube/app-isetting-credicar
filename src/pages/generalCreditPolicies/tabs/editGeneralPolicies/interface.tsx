@@ -15,16 +15,6 @@ import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateG
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
 import { portalId } from "@config/portalId";
 import { IEditGeneralPoliciesUI } from "@ptypes/generalCredPolicies/IEditGeneralPoliciesUI";
-// import { revertModalDisplayData } from "@utils/revertModalDisplayData";
-// import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
-// import { minimumIncomeLabels } from "@config/generalCreditPolicies/assisted/minimumIncomeLabels";
-// import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
-// import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-// import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
-// import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
-// import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
-// import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
-// import { deleteModal } from "@config/decisions/messages";
 
 const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
   const {
@@ -36,11 +26,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     isRequestStatusModal,
     showRequestProcessModal,
     smallScreen,
-    contributionsPortfolio,
     formValues,
-    incomePortfolio,
-    scoreModels,
-    minimumIncomePercentage,
     filteredTabsConfig,
     initialDecisionsData,
     showDecisionsGeneral,
@@ -49,6 +35,15 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showMinimumIncome,
     modalData,
     showDecision,
+    rulesData,
+    showBasicNotificFormat,
+    showBasicNotifRecipient,
+    showMinCreditBureauRiskScore,
+    showNotificationChannel,
+    showRiskScoreApiUrl,
+    showContributions,
+    disabledButton,
+    handleToggleDateModal,
     setShowFactor,
     setShowReciprocity,
     onToggleDateModal,
@@ -58,19 +53,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     onCloseRequestStatus,
     onClosePendingReqModal,
     onCloseProcess,
-    // showContributions,
-    // normalizedContributions,
-    // normalizedIncome,
-    // normalizedScoreModels,
-    // normalizedMinimumIncome,
-    // heightContPageContribut,
-    // heightContPageIncome,
-    // heightContPageScoreModels,
-    // heightContPageMinimum,
-    // setIncomePortfolio,
-    // setScoreModels,
-    // setMinimumIncomePercentage,
-    // setContributionsPortfolio,
+    setDecisionData,
   } = props;
 
   return (
@@ -109,37 +92,40 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               setShowFactor={setShowFactor}
             />
           )}
-          {showIncomePort && (
+          {showContributions && (
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
               nameRule="Número de veces los ingresos"
               customMessageEmptyDecisions={""}
-              initialDecisions={contributionsPortfolio}
+              initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
               editionMode={"classic"}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
-              disabledButton={contributionsPortfolio.length === 0}
+              disabledButton={disabledButton}
               onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
             />
           )}
-
           {showIncomePort && (
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
               nameRule="Número de veces los ingresos"
               customMessageEmptyDecisions={""}
-              initialDecisions={incomePortfolio}
+              initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
               editionMode={"classic"}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
-              disabledButton={incomePortfolio.length === 0}
+              disabledButton={disabledButton}
               onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
             />
           )}
           {showScoreModels && (
@@ -148,14 +134,16 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               labelBusinessRules={ENameRules.SCORE_MODELS}
               nameRule="Modelo de score"
               customMessageEmptyDecisions={""}
-              initialDecisions={scoreModels}
+              initialDecisions={rulesData.CreditRiskScoringModel}
               editionMode={"classic"}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
-              disabledButton={scoreModels.length === 0}
+              disabledButton={disabledButton}
               onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
             />
           )}
           {showMinimumIncome && (
@@ -163,14 +151,102 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
               customMessageEmptyDecisions={""}
-              initialDecisions={minimumIncomePercentage}
+              initialDecisions={rulesData.MinimumSubsistenceReservePercentage}
               editionMode={"classic"}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
-              disabledButton={minimumIncomePercentage.length === 0}
+              disabledButton={disabledButton}
               onToggleDateModal={onToggleDateModal}
               decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
+            />
+          )}
+          {showBasicNotificFormat && (
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+              labelBusinessRules={ENameRules.BASIC_NOTIFICATION_FORMAT}
+              customMessageEmptyDecisions={""}
+              initialDecisions={rulesData.BasicNotificationFormat}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
+              disabledButton={disabledButton}
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
+            />
+          )}
+          {showBasicNotifRecipient && (
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+              labelBusinessRules={ENameRules.BASIC_NOTIFICATION_RECIPIENT}
+              customMessageEmptyDecisions={""}
+              initialDecisions={rulesData.BasicNotificationRecipient}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
+              disabledButton={disabledButton}
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
+            />
+          )}
+
+          {showMinCreditBureauRiskScore && (
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+              labelBusinessRules={ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE}
+              customMessageEmptyDecisions={""}
+              initialDecisions={rulesData.MinimumCreditBureauRiskScore}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
+              disabledButton={disabledButton}
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
+            />
+          )}
+          {showNotificationChannel && (
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+              labelBusinessRules={ENameRules.NOTIFICATION_CHANNEL}
+              customMessageEmptyDecisions={""}
+              initialDecisions={rulesData.NotificationChannel}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
+              disabledButton={disabledButton}
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
+            />
+          )}
+          {showRiskScoreApiUrl && (
+            <NewDecisionForm
+              ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+              labelBusinessRules={ENameRules.RISKSCORE_API_URL}
+              customMessageEmptyDecisions={""}
+              initialDecisions={rulesData.RiskScoreApiUrl}
+              editionMode={"classic"}
+              option={EUseCase.EDIT}
+              loading={false}
+              onPreviousStep={onReset}
+              disabledButton={disabledButton}
+              onToggleDateModal={onToggleDateModal}
+              decisionTemplateConfig={decisionTemplateGenPolicies}
+              setDecisionData={setDecisionData}
+              onSave={handleToggleDateModal}
             />
           )}
         </Stack>

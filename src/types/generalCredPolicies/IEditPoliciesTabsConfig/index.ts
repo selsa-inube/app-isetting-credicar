@@ -6,6 +6,11 @@ interface IEditPoliciesTabsConfig {
   incomePortfolio: ITabConfig;
   scoreModels: ITabConfig;
   minimumIncomePercentage: ITabConfig;
+  basicNotificationFormat: ITabConfig;
+  basicNotificationRecipient: ITabConfig;
+  minimumCreditBureauRiskScore: ITabConfig;
+  notificationChannel: ITabConfig;
+  riskScoreApiUrl: ITabConfig;
 }
 
 export type { IEditPoliciesTabsConfig };

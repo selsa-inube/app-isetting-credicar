@@ -24,7 +24,9 @@ interface INewDecisionsUI {
   disabledPrevius: boolean;
   cancelButtonLabel: string;
   disabledNext: boolean;
+  loadingList: boolean;
   onSave: () => void;
+  maxHeight: number;
   saveButtonLabel: string;
   onMultipleChoicesChange: (name: string, values: string) => void;
   openModal: (decision?: IRuleDecision | null) => void;

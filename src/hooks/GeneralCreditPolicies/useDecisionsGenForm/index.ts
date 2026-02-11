@@ -34,6 +34,11 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       PaymentCapacityBasedCreditLimit: validationRules.boolean,
       ReciprocityBasedCreditLimit: validationRules.boolean,
       RiskAnalysisBasedCreditLimit: validationRules.boolean,
+      creditBureausConsultReq: validationRules.boolean,
+      inquiryValidityPeriod: validationRules.boolean,
+      lineCreditPayrollAdvance: validationRules.boolean,
+      lineCreditPayrollSpecialAdvance: validationRules.boolean,
+      maximumNotifDocSize: validationRules.boolean,
     });
 
   const validationSchema = createValidationSchema();

@@ -11,12 +11,4 @@ const StyledMultipleChoiceContainer = styled.div`
   width: -webkit-fill-available;
 `;
 
-const StyledFixedContainerMessage = styled.div`
-  margin-bottom: 90px;
-`;
-
-export {
-  StyledCardContainer,
-  StyledFixedContainerMessage,
-  StyledMultipleChoiceContainer,
-};
+export { StyledCardContainer, StyledMultipleChoiceContainer };

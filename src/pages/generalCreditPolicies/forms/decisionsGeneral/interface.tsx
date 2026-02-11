@@ -100,6 +100,37 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
               showIcon
               onInfoModal={onInfoObligModal}
             />
+
+            <ToggleGeneralDecision
+              name="creditBureausConsultReq"
+              label={decisionsGenLabels.fourth}
+              isChecked={formik.values.creditBureausConsultReq}
+              onToggle={onToggle}
+            />
+            <ToggleGeneralDecision
+              name="inquiryValidityPeriod"
+              label={decisionsGenLabels.fifth}
+              isChecked={formik.values.inquiryValidityPeriod}
+              onToggle={onToggle}
+            />
+            <ToggleGeneralDecision
+              name="lineCreditPayrollAdvance"
+              label={decisionsGenLabels.sixth}
+              isChecked={formik.values.lineCreditPayrollAdvance}
+              onToggle={onToggle}
+            />
+            <ToggleGeneralDecision
+              name="lineCreditPayrollSpecialAdvance"
+              label={decisionsGenLabels.seventh}
+              isChecked={formik.values.lineCreditPayrollSpecialAdvance}
+              onToggle={onToggle}
+            />
+            <ToggleGeneralDecision
+              name="maximumNotifDocSize"
+              label={decisionsGenLabels.eighth}
+              isChecked={formik.values.maximumNotifDocSize}
+              onToggle={onToggle}
+            />
           </BoxContainer>
         </Stack>
       </StyledFormContent>
