@@ -44,7 +44,7 @@ const useRules = (props: IUseRules) => {
   const methodsArray =
     calculation || factor || reciprocity
       ? [calculation, factor, reciprocity].filter(Boolean)
-      : ["No"];
+      : [EBooleanText.NO];
 
   const methods = {
     ruleName: ENameRules.METHODS,
@@ -62,6 +62,27 @@ const useRules = (props: IUseRules) => {
   const realGuaranteesValues = decisionWithoutConditions(
     ENameRules.REAL_GUARANTEES,
     decisionGeneralData.realGuarantees,
+  );
+
+  const credBureausConsultReqValues = decisionWithoutConditions(
+    ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
+    decisionGeneralData.creditBureausConsultReq,
+  );
+  const inquiryValidityPeriodValues = decisionWithoutConditions(
+    ENameRules.INQUIRY_VALIDITY_PERIOD,
+    decisionGeneralData.inquiryValidityPeriod,
+  );
+  const lineCredPayrollAdvanceValues = decisionWithoutConditions(
+    ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
+    decisionGeneralData.lineCreditPayrollAdvance,
+  );
+  const lineCredPayrollSpecialAdvanceValues = decisionWithoutConditions(
+    ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
+    decisionGeneralData.lineCreditPayrollSpecialAdvance,
+  );
+  const maximumNotifDocSizeValues = decisionWithoutConditions(
+    ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE,
+    decisionGeneralData.maximumNotifDocSize,
   );
 
   const rulesContributions = formatRuleDecisions(
@@ -111,6 +132,11 @@ const useRules = (props: IUseRules) => {
     ...ruleScoremodels,
     ...additionalDebtorsValues,
     ...realGuaranteesValues,
+    ...credBureausConsultReqValues,
+    ...inquiryValidityPeriodValues,
+    ...lineCredPayrollAdvanceValues,
+    ...lineCredPayrollSpecialAdvanceValues,
+    ...maximumNotifDocSizeValues,
     ...ruleMinimumIncome,
     ...ruleBasicNotifForm,
     ...ruleBasicNotifRec,
