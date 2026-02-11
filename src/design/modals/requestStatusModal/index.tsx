@@ -42,7 +42,7 @@ const RequestStatusModal = (props: IRequestStatusModal) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={changeZIndex}>
+    <StyledModalContainer $changeZIndex={changeZIndex}>
       <Blanket>
         <StyledModal $smallScreen={isMobile}>
           <Stack direction="column" gap={tokens.spacing.s200}>
