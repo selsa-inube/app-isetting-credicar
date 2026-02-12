@@ -1,6 +1,5 @@
 import { ITab } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
-import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { IDetailsTabsConfig } from "@ptypes/generalCredPolicies/IDetailsTabsConfig";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IModalData } from "../IModalData";
@@ -11,7 +10,6 @@ interface IDetailsRequest {
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];
   decisionsMinimum: IRuleDecision[];
-  decisionTemplate: IRuleDecision;
   defaultSelectedTab: string;
   detailsTabsConfig: IDetailsTabsConfig;
   filteredTabsConfig: IDetailsTabsConfig;
@@ -21,7 +19,6 @@ interface IDetailsRequest {
   moreDetailsData: IEntry;
   showModal: boolean;
   showMoreDetailsModal: boolean;
-  textValuesBusinessRules: IRulesFormTextValues;
   titleRequest: string;
   isSelectedRequest: string;
   filteredTabs: ITab[];

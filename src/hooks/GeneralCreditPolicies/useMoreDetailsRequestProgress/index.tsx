@@ -22,6 +22,11 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
   let additionalDebtors;
   let realGuarantees;
+  let creditBureausConsultReq;
+  let inquiryValidityPeriod;
+  let lineCreditPayrollAdvance;
+  let lineCreditPayrollSpecialAdvance;
+  let maximumNotifDocSize;
 
   const onToggleMoreDetailsModal = () => {
     setShowMoreDetailsModal(!showMoreDetailsModal);
@@ -118,6 +123,19 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     methodsRemoved: methodsRemovedJoin,
     additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
     guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
+    creditBureausConsultReq: valueBoolean(
+      creditBureausConsultReq ?? EBooleanText.NO,
+    ),
+    inquiryValidityPeriod: valueBoolean(
+      inquiryValidityPeriod ?? EBooleanText.NO,
+    ),
+    lineCreditPayrollAdvance: valueBoolean(
+      lineCreditPayrollAdvance ?? EBooleanText.NO,
+    ),
+    lineCreditPayrollSpecialAdvance: valueBoolean(
+      lineCreditPayrollSpecialAdvance ?? EBooleanText.NO,
+    ),
+    maximumNotifDocSize: valueBoolean(maximumNotifDocSize ?? EBooleanText.NO),
   };
 
   const decisionsReciprocity = getDecisionsByRule(

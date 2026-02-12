@@ -30,8 +30,6 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     minimumDeleted,
     data,
     portalId,
-    textValues,
-    decisionTemplate,
     decisionsReciprocity,
     decisionsIncomePortfolio,
     decisionsScoreModels,
@@ -50,7 +48,7 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     <ModalWrapper
       portalId={portalId}
       width={isMobile ? "335px" : "720px"}
-      height={isMobile ? "auto" : "660px"}
+      height={isMobile ? "auto" : "690px"}
       isMobile={isMobile}
       labelActionButton={moreDetailsLabels.close}
       labelCloseModal={moreDetailsLabels.close}
@@ -68,91 +66,25 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showGeneralDecisionsTab && (
           <GeneralTab data={data} labelsDetails={generalDataLabels} />
         )}
-        {showDecisionsRecip && (
-          <DecisionTab
-            data={decisionsReciprocity}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
+        {showDecisionsRecip && <DecisionTab data={decisionsReciprocity} />}
         {showContribInserted && (
-          <DecisionTab
-            data={contribQuotaInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={contribQuotaInserted ?? []} />
         )}
-        {showContribDeleted && (
-          <DecisionTab
-            data={contribQuotaDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showDecisionsIncome && (
-          <DecisionTab
-            data={decisionsIncomePortfolio}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showIncomeInserted && (
-          <DecisionTab
-            data={incomeQuotaInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showIncomeDeleted && (
-          <DecisionTab
-            data={incomeQuotaDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showScoreModels && (
-          <DecisionTab
-            data={decisionsScoreModels}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
+        {showContribDeleted && <DecisionTab data={contribQuotaDeleted ?? []} />}
+        {showDecisionsIncome && <DecisionTab data={decisionsIncomePortfolio} />}
+        {showIncomeInserted && <DecisionTab data={incomeQuotaInserted ?? []} />}
+        {showIncomeDeleted && <DecisionTab data={incomeQuotaDeleted ?? []} />}
+        {showScoreModels && <DecisionTab data={decisionsScoreModels} />}
         {showScoreModelsInserted && (
-          <DecisionTab
-            data={scoreModelsInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={scoreModelsInserted ?? []} />
         )}
         {showScoreModelsDeleted && (
-          <DecisionTab
-            data={scoreModelsDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={scoreModelsDeleted ?? []} />
         )}
 
-        {showMinimum && (
-          <DecisionTab
-            data={decisionsMinimum}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showMinimumInserted && (
-          <DecisionTab
-            data={minimumInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showMinimumDeleted && (
-          <DecisionTab
-            data={minimumDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
+        {showMinimum && <DecisionTab data={decisionsMinimum} />}
+        {showMinimumInserted && <DecisionTab data={minimumInserted ?? []} />}
+        {showMinimumDeleted && <DecisionTab data={minimumDeleted ?? []} />}
         <Divider />
       </Stack>
     </ModalWrapper>

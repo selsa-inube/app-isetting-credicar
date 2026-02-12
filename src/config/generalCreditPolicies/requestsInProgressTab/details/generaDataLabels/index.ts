@@ -25,8 +25,7 @@ const generalDataLabels = [
   },
   {
     id: "sourcesIncome",
-    titleName:
-      "¿¿Se permite modificar las fuentes de ingreso en una solicitud?",
+    titleName: "¿Se permite modificar las fuentes de ingreso en una solicitud?",
   },
   {
     id: "financialOblig",
@@ -37,6 +36,29 @@ const generalDataLabels = [
     id: "guarantees",
     titleName:
       "¿Las obligaciones con garantías reales se incluyen en el cálculo del descubierto?",
+  },
+  {
+    id: "creditBureausConsultReq",
+    titleName:
+      "¿Las centrales de riesgo crediticio deben ser consultadas antes de otorgar un crédito?",
+  },
+  {
+    id: "inquiryValidityPeriod",
+    titleName:
+      "¿La consulta a las centrales de riesgo crediticio tiene un período de validez definido?",
+  },
+  {
+    id: "lineCreditPayrollAdvance",
+    titleName: "¿Existe una línea de crédito destinada al adelanto de nómina?",
+  },
+  {
+    id: "lineCreditPayrollSpecialAdvance",
+    titleName: "¿Existe una línea de crédito destinada al adelanto de prima?",
+  },
+  {
+    id: "maximumNotifDocSize",
+    titleName:
+      "¿El tamaño máximo permitido de los documentos está definido en megabytes (MB)?",
   },
 ];
 

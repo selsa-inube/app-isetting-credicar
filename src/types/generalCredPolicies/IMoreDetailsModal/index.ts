@@ -1,5 +1,4 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "../IDetailsTabsConfig";
 
@@ -9,7 +8,6 @@ interface IMoreDetailsModal {
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];
   decisionsMinimum: IRuleDecision[];
-  decisionTemplate: IRuleDecision;
   defaultSelectedTab: string;
   detailsTabsConfig: IDetailsTabsConfig;
   filteredTabsConfig: IDetailsTabsConfig;
@@ -17,7 +15,6 @@ interface IMoreDetailsModal {
   isMoreDetails: boolean;
   isSelected: string;
   portalId: string;
-  textValues: IRulesFormTextValues;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
   minimumInserted?: IRuleDecision[];

@@ -1,4 +1,3 @@
-import { formatValueOfCondition } from "@utils/formatValueOfCondition";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
@@ -6,6 +5,7 @@ import { formatDate } from "../date/formatDate";
 import { dataTranslations } from "../dataTranslations";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
+import { formatValueObjectfCondition } from "../formatValueObjectfCondition";
 
 const formatDetailsDecisions = (
   data: IEntry,
@@ -22,7 +22,7 @@ const formatDetailsDecisions = (
           return {
             labelName: dataTranslations[rule.ruleName] ?? rule.ruleName,
             ruleName: rule.ruleName,
-            value: formatValueOfCondition(decisionByRule?.value),
+            value: formatValueObjectfCondition(decisionByRule?.value),
             effectiveFrom: decisionByRule?.effectiveFrom
               ? formatDate(new Date(decisionByRule.effectiveFrom))
               : undefined,
@@ -41,7 +41,9 @@ const formatDetailsDecisions = (
                         ? decisionGroup.conditionsThatEstablishesTheDecision.map(
                             (condition: IConditionsTheDecision) => ({
                               ...condition,
-                              value: formatValueOfCondition(condition.value),
+                              value: formatValueObjectfCondition(
+                                condition.value,
+                              ),
                               conditionName: condition.conditionName,
                               labelName: conditionsArray
                                 ? normalizeConditionTraduction(

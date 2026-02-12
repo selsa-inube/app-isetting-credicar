@@ -17,7 +17,6 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     decisionsMinimum,
     minimumInserted,
     minimumDeleted,
-    decisionTemplate,
     defaultSelectedTab,
     detailsTabsConfig,
     filteredTabsConfig,
@@ -25,7 +24,6 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     isMoreDetails,
     isSelected,
     portalId,
-    textValues,
     onCloseModal,
     onTabChange,
   } = props;
@@ -62,8 +60,6 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       onTabChange={onTabChange}
       portalId={portalId}
       smallScreenTab={isMobile}
-      decisionTemplate={decisionTemplate}
-      textValues={textValues}
       decisionsReciprocity={decisionsReciprocity}
       decisionsIncomePortfolio={decisionsIncomePortfolio}
       decisionsScoreModels={decisionsScoreModels}

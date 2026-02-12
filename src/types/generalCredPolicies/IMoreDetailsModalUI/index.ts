@@ -1,16 +1,13 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "../IDetailsTabsConfig";
 
 interface IMoreDetailsModalUI {
   data: IEntry;
-  decisionTemplate: IRuleDecision;
   filteredTabsConfig: IDetailsTabsConfig;
   isSelected: string;
   portalId: string;
   smallScreenTab: boolean;
-  textValues: IRulesFormTextValues;
   decisionsReciprocity: IRuleDecision[];
   decisionsIncomePortfolio: IRuleDecision[];
   decisionsScoreModels: IRuleDecision[];

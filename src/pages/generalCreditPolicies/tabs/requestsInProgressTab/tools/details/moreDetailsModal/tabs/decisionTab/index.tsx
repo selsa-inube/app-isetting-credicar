@@ -1,12 +1,15 @@
-import { BusinessRules } from "@isettingkit/business-rules";
 import { Stack } from "@inubekit/inubekit";
 
+import { ENameRules } from "@enum/nameRules";
+import { EUseCase } from "@enum/useCase";
 import { tokens } from "@design/tokens";
+import { NewDecisionForm } from "@design/forms/NewDecisionForm";
+import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
 import { IDecisionTab } from "@ptypes/generalCredPolicies/IDecisionTab";
 import { StyledContainer } from "../styles";
 
 const DecisionTab = (props: IDecisionTab) => {
-  const { data, textValues, decisionTemplate } = props;
+  const { data } = props;
 
   return (
     <Stack
@@ -16,18 +19,19 @@ const DecisionTab = (props: IDecisionTab) => {
       height="85%"
     >
       <StyledContainer>
-        <BusinessRules
-          controls={false}
-          decisions={data}
-          textValues={textValues}
-          decisionTemplate={decisionTemplate}
-          isModalOpen={false}
-          selectedDecision={null}
+        <NewDecisionForm
+          ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+          labelBusinessRules={""}
+          customMessageEmptyDecisions={""}
+          initialDecisions={data}
+          editionMode={"classic"}
+          option={EUseCase.DETAILS}
           loading={false}
-          handleOpenModal={() => void 0}
-          handleCloseModal={() => void 0}
-          handleSubmitForm={() => void 0}
-          handleDelete={() => void 0}
+          onPreviousStep={() => void 0}
+          disabledButton={false}
+          decisionTemplateConfig={decisionTemplateGenPolicies}
+          setDecisionData={() => void 0}
+          onSave={() => void 0}
         />
       </StyledContainer>
     </Stack>

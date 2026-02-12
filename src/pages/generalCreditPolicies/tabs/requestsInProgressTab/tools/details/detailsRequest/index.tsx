@@ -28,7 +28,6 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     decisionsReciprocity,
     decisionsIncomePortfolio,
     decisionsScoreModels,
-    decisionTemplate,
     defaultSelectedTab,
     detailsTabsConfig,
     filteredTabsConfig,
@@ -38,7 +37,6 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     moreDetailsData,
     showModal,
     showMoreDetailsModal,
-    textValuesBusinessRules,
     titleRequest,
     isSelectedRequest,
     filteredTabs,
@@ -104,8 +102,6 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           detailsTabsConfig={detailsTabsConfig}
           portalId={portalId}
           onCloseModal={onToggleMoreDetailsModal}
-          textValues={textValuesBusinessRules}
-          decisionTemplate={decisionTemplate}
           decisionsReciprocity={decisionsReciprocity}
           decisionsIncomePortfolio={decisionsIncomePortfolio}
           decisionsScoreModels={decisionsScoreModels}

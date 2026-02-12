@@ -14,6 +14,21 @@ interface IDetailsTabsConfig {
   minimumIncome?: ITabConfig;
   minimumIncomeIncluded?: ITabConfig;
   minimumIncomeRemoved?: ITabConfig;
+  basicNotifFormat?: ITabConfig;
+  basicNotifFormatIncluded?: ITabConfig;
+  basicNotifFormatRemoved?: ITabConfig;
+  basicNotifRecipient?: ITabConfig;
+  basicNotifRecipientIncluded?: ITabConfig;
+  basicNotifRecipientRemoved?: ITabConfig;
+  minCredBureauRiskScore?: ITabConfig;
+  minCredBureauRiskScoreIncluded?: ITabConfig;
+  minCredBureauRiskScoreRemoved?: ITabConfig;
+  notificationChannel?: ITabConfig;
+  notificationChannelIncluded?: ITabConfig;
+  notificationChannelRemoved?: ITabConfig;
+  riskScoreApiUrl?: ITabConfig;
+  riskScoreApiUrlIncluded?: ITabConfig;
+  riskScoreApiUrlRemoved?: ITabConfig;
 }
 
 export type { IDetailsTabsConfig };

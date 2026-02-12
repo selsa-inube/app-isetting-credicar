@@ -18,10 +18,12 @@ const GeneralTab = (props: IGeneralDecisionsTab) => {
   );
 
   return (
-    <Stack
+    <BoxContainer
       direction="column"
       gap={isMobile ? tokens.spacing.s200 : tokens.spacing.s300}
       height="85%"
+      boxSizing="border-box"
+      overflowY="auto"
     >
       <Stack gap={tokens.spacing.s200} direction="column" width="100%">
         {filteredFieldData.map((field, id) => (
@@ -44,7 +46,7 @@ const GeneralTab = (props: IGeneralDecisionsTab) => {
           </BoxContainer>
         ))}
       </Stack>
-    </Stack>
+    </BoxContainer>
   );
 };
 

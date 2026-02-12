@@ -177,23 +177,25 @@ const NewDecisionFormUI = (props: INewDecisionsUI) => {
               shouldRenderEmptyMessage={dataEmpty || decisions.length > 0}
             />
           )}
-          <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
-            <Button
-              onClick={cancelButton}
-              appearance={EComponentAppearance.GRAY}
-              disabled={disabledPrevius}
-            >
-              {cancelButtonLabel}
-            </Button>
+          {!optionDetails && (
+            <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
+              <Button
+                onClick={cancelButton}
+                appearance={EComponentAppearance.GRAY}
+                disabled={disabledPrevius}
+              >
+                {cancelButtonLabel}
+              </Button>
 
-            <Button
-              onClick={onSave}
-              appearance={EComponentAppearance.PRIMARY}
-              disabled={!disabledNext}
-            >
-              {saveButtonLabel}
-            </Button>
-          </Stack>
+              <Button
+                onClick={onSave}
+                appearance={EComponentAppearance.PRIMARY}
+                disabled={!disabledNext}
+              >
+                {saveButtonLabel}
+              </Button>
+            </Stack>
+          )}
         </>
       )}
     </Stack>

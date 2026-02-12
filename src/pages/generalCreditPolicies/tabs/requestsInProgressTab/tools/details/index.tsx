@@ -1,9 +1,7 @@
 import { useDetailsRequestInProgress } from "@hooks/GeneralCreditPolicies/useDetailsRequestInProgress";
 import { useMoreDetailsRequestProgress } from "@hooks/GeneralCreditPolicies/useMoreDetailsRequestProgress";
 import { useDetailsPoliciesModal } from "@hooks/GeneralCreditPolicies/useDetailsPoliciesModal";
-import { decisionTemplate } from "@config/generalCreditPolicies/decisionTemplate";
 import { detailsTabsConfig } from "@config/generalCreditPolicies/requestsInProgressTab/tabs";
-import { textValuesBusinessRules } from "@config/generalCreditPolicies/textValuesBusinessRules";
 import { IDetails } from "@ptypes/generalCredPolicies/IDetails";
 import { DetailsRequestInProcess } from "./detailsRequest";
 
@@ -71,11 +69,9 @@ const Details = (props: IDetails) => {
       moreDetailsData={moreDetailsData}
       showMoreDetailsModal={showMoreDetailsModal}
       detailsTabsConfig={detailsTabsConfig}
-      decisionTemplate={decisionTemplate}
       decisionsReciprocity={decisionsReciprocity}
       decisionsIncomePortfolio={decisionsIncomePortfolio}
       decisionsScoreModels={decisionsScoreModels}
-      textValuesBusinessRules={textValuesBusinessRules}
       onToggleMoreDetailsModal={onToggleMoreDetailsModal}
       isMoreDetails={isMoreDetails}
       isSelected={isSelected ?? defaultSelectedTab ?? ""}
