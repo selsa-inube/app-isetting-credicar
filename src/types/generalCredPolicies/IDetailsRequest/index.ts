@@ -3,13 +3,11 @@ import { IRuleDecision } from "@isettingkit/input";
 import { IDetailsTabsConfig } from "@ptypes/generalCredPolicies/IDetailsTabsConfig";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IModalData } from "../IModalData";
+import { IDecisionsDetails } from "../forms/IDecisionsDetails";
 
 interface IDetailsRequest {
   data: IEntry;
-  decisionsReciprocity: IRuleDecision[];
-  decisionsIncomePortfolio: IRuleDecision[];
-  decisionsScoreModels: IRuleDecision[];
-  decisionsMinimum: IRuleDecision[];
+  decisions: IDecisionsDetails;
   defaultSelectedTab: string;
   detailsTabsConfig: IDetailsTabsConfig;
   filteredTabsConfig: IDetailsTabsConfig;
@@ -43,6 +41,16 @@ interface IDetailsRequest {
   incomeQuotaDeleted?: IRuleDecision[];
   scoreModelsInserted?: IRuleDecision[];
   scoreModelsDeleted?: IRuleDecision[];
+  basicNotifFormatInserted?: IRuleDecision[];
+  basicNotifFormatDeleted?: IRuleDecision[];
+  basicNotifRecipientInserted?: IRuleDecision[];
+  basicNotifRecipientDeleted?: IRuleDecision[];
+  minCredBureauRiskScoreInserted?: IRuleDecision[];
+  minCredBureauRiskScoreDeleted?: IRuleDecision[];
+  notifChannelInserted?: IRuleDecision[];
+  notifChannelDeleted?: IRuleDecision[];
+  riskScoreApiUrlInserted?: IRuleDecision[];
+  riskScoreApiUrlDeleted?: IRuleDecision[];
 }
 
 export type { IDetailsRequest };

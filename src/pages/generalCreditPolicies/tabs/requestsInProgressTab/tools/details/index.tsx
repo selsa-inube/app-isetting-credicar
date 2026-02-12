@@ -29,10 +29,7 @@ const Details = (props: IDetails) => {
   const {
     showMoreDetailsModal,
     moreDetailsData,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
-    decisionsMinimum,
+    decisions,
     isMoreDetails,
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress({ data });
@@ -51,13 +48,20 @@ const Details = (props: IDetails) => {
     scoreModelsDeleted,
     minimumInserted,
     minimumDeleted,
+    basicNotifFormatInserted,
+    basicNotifFormatDeleted,
+    basicNotifRecipientInserted,
+    basicNotifRecipientDeleted,
+    minCredBureauRiskScoreInserted,
+    minCredBureauRiskScoreDeleted,
+    notifChannelInserted,
+    notifChannelDeleted,
+    riskScoreApiUrlInserted,
+    riskScoreApiUrlDeleted,
   } = useDetailsPoliciesModal({
     data: moreDetailsData,
     detailsTabsConfig,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
-    decisionsMinimum,
+    decisions,
     isMoreDetails,
   });
 
@@ -69,9 +73,7 @@ const Details = (props: IDetails) => {
       moreDetailsData={moreDetailsData}
       showMoreDetailsModal={showMoreDetailsModal}
       detailsTabsConfig={detailsTabsConfig}
-      decisionsReciprocity={decisionsReciprocity}
-      decisionsIncomePortfolio={decisionsIncomePortfolio}
-      decisionsScoreModels={decisionsScoreModels}
+      decisions={decisions}
       onToggleMoreDetailsModal={onToggleMoreDetailsModal}
       isMoreDetails={isMoreDetails}
       isSelected={isSelected ?? defaultSelectedTab ?? ""}
@@ -85,6 +87,16 @@ const Details = (props: IDetails) => {
       incomeQuotaDeleted={incomeQuotaDeleted}
       scoreModelsInserted={scoreModelsInserted}
       scoreModelsDeleted={scoreModelsDeleted}
+      basicNotifFormatInserted={basicNotifFormatInserted}
+      basicNotifFormatDeleted={basicNotifFormatDeleted}
+      basicNotifRecipientInserted={basicNotifRecipientInserted}
+      basicNotifRecipientDeleted={basicNotifRecipientDeleted}
+      minCredBureauRiskScoreInserted={minCredBureauRiskScoreInserted}
+      minCredBureauRiskScoreDeleted={minCredBureauRiskScoreDeleted}
+      notifChannelInserted={notifChannelInserted}
+      notifChannelDeleted={notifChannelDeleted}
+      riskScoreApiUrlInserted={riskScoreApiUrlInserted}
+      riskScoreApiUrlDeleted={riskScoreApiUrlDeleted}
       titleRequest={titleRequest}
       isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
       filteredTabs={filteredRequestTabs}
@@ -98,7 +110,6 @@ const Details = (props: IDetails) => {
       showDecision={showDecision}
       labelButton={statusRequestData.textButton}
       iconButton={statusRequestData.iconButton}
-      decisionsMinimum={decisionsMinimum}
       minimumInserted={minimumInserted}
       minimumDeleted={minimumDeleted}
     />

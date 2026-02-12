@@ -5,18 +5,25 @@ import { MoreDetailsModalUI } from "./interface";
 const MoreDetailsModal = (props: IMoreDetailsModal) => {
   const {
     data,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
+    decisions,
     contribQuotaInserted,
     contribQuotaDeleted,
     incomeQuotaInserted,
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
-    decisionsMinimum,
     minimumInserted,
     minimumDeleted,
+    basicNotifFormatInserted,
+    basicNotifFormatDeleted,
+    basicNotifRecipientInserted,
+    basicNotifRecipientDeleted,
+    minCredBureauRiskScoreInserted,
+    minCredBureauRiskScoreDeleted,
+    notifChannelInserted,
+    notifChannelDeleted,
+    riskScoreApiUrlInserted,
+    riskScoreApiUrlDeleted,
     defaultSelectedTab,
     detailsTabsConfig,
     filteredTabsConfig,
@@ -42,14 +49,26 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     showMinimumInserted,
     showMinimumDeleted,
     showScoreModelsDeleted,
+    showBasicNotifFormat,
+    showBasicNotifFormatInserted,
+    showBasicNotifFormatDeleted,
+    showBasicNotifRecipient,
+    showBasicNotifRecipientInserted,
+    showBasicNotifRecipientDeleted,
+    showMinCredBureauRiskScore,
+    showMinCredBureauRiskInserted,
+    showMinCredBureauRiskDeleted,
+    showNotifChannel,
+    showNotifChanneInserted,
+    showNotifChanneDeleted,
+    showRiskScoreApiUrl,
+    showRiskScoreApiUrlInserted,
+    showRiskScoreApiUrlDeleted,
   } = useMoreDetailsModal({
     isSelected,
     detailsTabsConfig,
     isMoreDetails,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
-    decisionsMinimum,
+    decisions,
   });
   return (
     <MoreDetailsModalUI
@@ -60,9 +79,7 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       onTabChange={onTabChange}
       portalId={portalId}
       smallScreenTab={isMobile}
-      decisionsReciprocity={decisionsReciprocity}
-      decisionsIncomePortfolio={decisionsIncomePortfolio}
-      decisionsScoreModels={decisionsScoreModels}
+      decisions={decisions}
       contribQuotaInserted={contribQuotaInserted}
       contribQuotaDeleted={contribQuotaDeleted}
       incomeQuotaInserted={incomeQuotaInserted}
@@ -83,9 +100,33 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       showMinimum={showMinimum}
       showMinimumInserted={showMinimumInserted}
       showMinimumDeleted={showMinimumDeleted}
-      decisionsMinimum={decisionsMinimum}
       minimumInserted={minimumInserted}
       minimumDeleted={minimumDeleted}
+      basicNotifFormatInserted={basicNotifFormatInserted}
+      basicNotifFormatDeleted={basicNotifFormatDeleted}
+      basicNotifRecipientInserted={basicNotifRecipientInserted}
+      basicNotifRecipientDeleted={basicNotifRecipientDeleted}
+      minCredBureauRiskScoreInserted={minCredBureauRiskScoreInserted}
+      minCredBureauRiskScoreDeleted={minCredBureauRiskScoreDeleted}
+      notifChannelInserted={notifChannelInserted}
+      notifChannelDeleted={notifChannelDeleted}
+      riskScoreApiUrlInserted={riskScoreApiUrlInserted}
+      riskScoreApiUrlDeleted={riskScoreApiUrlDeleted}
+      showBasicNotifFormat={showBasicNotifFormat}
+      showBasicNotifFormatInserted={showBasicNotifFormatInserted}
+      showBasicNotifFormatDeleted={showBasicNotifFormatDeleted}
+      showBasicNotifRecipient={showBasicNotifRecipient}
+      showBasicNotifRecipientInserted={showBasicNotifRecipientInserted}
+      showBasicNotifRecipientDeleted={showBasicNotifRecipientDeleted}
+      showMinCredBureauRiskScore={showMinCredBureauRiskScore}
+      showMinCredBureauRiskInserted={showMinCredBureauRiskInserted}
+      showMinCredBureauRiskDeleted={showMinCredBureauRiskDeleted}
+      showNotifChannel={showNotifChannel}
+      showNotifChanneInserted={showNotifChanneInserted}
+      showNotifChanneDeleted={showNotifChanneDeleted}
+      showRiskScoreApiUrl={showRiskScoreApiUrl}
+      showRiskScoreApiUrlInserted={showRiskScoreApiUrlInserted}
+      showRiskScoreApiUrlDeleted={showRiskScoreApiUrlDeleted}
     />
   );
 };

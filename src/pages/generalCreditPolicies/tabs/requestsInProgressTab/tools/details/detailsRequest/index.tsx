@@ -22,12 +22,19 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
-    decisionsMinimum,
+    basicNotifFormatInserted,
+    basicNotifFormatDeleted,
+    basicNotifRecipientInserted,
+    basicNotifRecipientDeleted,
+    minCredBureauRiskScoreInserted,
+    minCredBureauRiskScoreDeleted,
+    notifChannelInserted,
+    notifChannelDeleted,
+    riskScoreApiUrlInserted,
+    riskScoreApiUrlDeleted,
+    decisions,
     minimumInserted,
     minimumDeleted,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
     defaultSelectedTab,
     detailsTabsConfig,
     filteredTabsConfig,
@@ -102,9 +109,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           detailsTabsConfig={detailsTabsConfig}
           portalId={portalId}
           onCloseModal={onToggleMoreDetailsModal}
-          decisionsReciprocity={decisionsReciprocity}
-          decisionsIncomePortfolio={decisionsIncomePortfolio}
-          decisionsScoreModels={decisionsScoreModels}
+          decisions={decisions}
           isMoreDetails={isMoreDetails}
           defaultSelectedTab={defaultSelectedTab}
           filteredTabsConfig={filteredTabsConfig}
@@ -117,9 +122,18 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           incomeQuotaDeleted={incomeQuotaDeleted}
           scoreModelsInserted={scoreModelsInserted}
           scoreModelsDeleted={scoreModelsDeleted}
-          decisionsMinimum={decisionsMinimum}
           minimumInserted={minimumInserted}
           minimumDeleted={minimumDeleted}
+          basicNotifFormatInserted={basicNotifFormatInserted}
+          basicNotifFormatDeleted={basicNotifFormatDeleted}
+          basicNotifRecipientInserted={basicNotifRecipientInserted}
+          basicNotifRecipientDeleted={basicNotifRecipientDeleted}
+          minCredBureauRiskScoreInserted={minCredBureauRiskScoreInserted}
+          minCredBureauRiskScoreDeleted={minCredBureauRiskScoreDeleted}
+          notifChannelInserted={notifChannelInserted}
+          notifChannelDeleted={notifChannelDeleted}
+          riskScoreApiUrlInserted={riskScoreApiUrlInserted}
+          riskScoreApiUrlDeleted={riskScoreApiUrlDeleted}
         />
       )}
 

@@ -9,15 +9,7 @@ import { newDeleted } from "@utils/newDeletedDecision";
 import { newInserted } from "@utils/newInsertedDecisions";
 
 const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
-  const {
-    data,
-    detailsTabsConfig,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
-    decisionsMinimum,
-    isMoreDetails,
-  } = props;
+  const { data, detailsTabsConfig, decisions, isMoreDetails } = props;
 
   const [isSelected, setIsSelected] = useState<string>();
   const isMobile = useMediaQuery(mediaQueryMobile);
@@ -26,14 +18,31 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
     setIsSelected(tabId);
   };
 
-  const contribQuotaInserted = newInserted(decisionsReciprocity);
-  const contribQuotaDeleted = newDeleted(decisionsReciprocity);
-  const incomeQuotaInserted = newInserted(decisionsIncomePortfolio);
-  const incomeQuotaDeleted = newDeleted(decisionsIncomePortfolio);
-  const scoreModelsInserted = newInserted(decisionsScoreModels);
-  const scoreModelsDeleted = newDeleted(decisionsScoreModels);
-  const minimumInserted = newInserted(decisionsMinimum);
-  const minimumDeleted = newDeleted(decisionsMinimum);
+  const contribQuotaInserted = newInserted(decisions.reciprocity);
+  const contribQuotaDeleted = newDeleted(decisions.reciprocity);
+  const incomeQuotaInserted = newInserted(decisions.incomePortfolio);
+  const incomeQuotaDeleted = newDeleted(decisions.incomePortfolio);
+  const scoreModelsInserted = newInserted(decisions.scoreModels);
+  const scoreModelsDeleted = newDeleted(decisions.scoreModels);
+  const minimumInserted = newInserted(decisions.minimum);
+  const minimumDeleted = newDeleted(decisions.minimum);
+  const basicNotifFormatInserted = newInserted(decisions.basicNotifFormat);
+  const basicNotifFormatDeleted = newDeleted(decisions.basicNotifFormat);
+  const basicNotifRecipientInserted = newInserted(
+    decisions.basicNotifRecipient,
+  );
+  const basicNotifRecipientDeleted = newDeleted(decisions.basicNotifRecipient);
+  const minCredBureauRiskScoreInserted = newInserted(
+    decisions.minCredBureauRiskScore,
+  );
+  const minCredBureauRiskScoreDeleted = newDeleted(
+    decisions.minCredBureauRiskScore,
+  );
+  const notifChannelInserted = newInserted(decisions.notifChannel);
+  const notifChannelDeleted = newDeleted(decisions.notifChannel);
+
+  const riskScoreApiUrlInserted = newInserted(decisions.riskScoreApiUrl);
+  const riskScoreApiUrlDeleted = newDeleted(decisions.riskScoreApiUrl);
 
   const generalData = generalDataKeys.reduce(
     (acc, prop) => {
@@ -54,7 +63,7 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
         return acc;
       }
       if (
-        (isMoreDetails || decisionsReciprocity.length === 0) &&
+        (isMoreDetails || decisions.reciprocity.length === 0) &&
         tab?.id === detailsTabsConfig.contributionQuota?.id
       ) {
         return acc;
@@ -74,7 +83,7 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
       }
 
       if (
-        (isMoreDetails || decisionsIncomePortfolio.length === 0) &&
+        (isMoreDetails || decisions.incomePortfolio.length === 0) &&
         tab?.id === detailsTabsConfig.incomeQuota?.id
       ) {
         return acc;
@@ -94,7 +103,7 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
       }
 
       if (
-        (isMoreDetails || decisionsScoreModels.length === 0) &&
+        (isMoreDetails || decisions.scoreModels.length === 0) &&
         tab?.id === detailsTabsConfig.scoreModels?.id
       ) {
         return acc;
@@ -114,7 +123,7 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
       }
 
       if (
-        (isMoreDetails || decisionsMinimum.length === 0) &&
+        (isMoreDetails || decisions.minimum.length === 0) &&
         tab?.id === detailsTabsConfig.minimumIncome?.id
       ) {
         return acc;
@@ -129,6 +138,106 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
       if (
         minimumDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.minimumIncomeRemoved?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        (isMoreDetails || decisions.basicNotifFormat.length === 0) &&
+        tab?.id === detailsTabsConfig.basicNotifFormat?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        basicNotifFormatInserted.length === 0 &&
+        tab?.id === detailsTabsConfig.basicNotifFormatIncluded?.id
+      ) {
+        return acc;
+      }
+      if (
+        basicNotifFormatDeleted.length === 0 &&
+        tab?.id === detailsTabsConfig.basicNotifFormatRemoved?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        (isMoreDetails || decisions.basicNotifRecipient.length === 0) &&
+        tab?.id === detailsTabsConfig.basicNotifRecipient?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        basicNotifRecipientInserted.length === 0 &&
+        tab?.id === detailsTabsConfig.basicNotifRecipientIncluded?.id
+      ) {
+        return acc;
+      }
+      if (
+        basicNotifRecipientDeleted.length === 0 &&
+        tab?.id === detailsTabsConfig.basicNotifRecipientRemoved?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        (isMoreDetails || decisions.minCredBureauRiskScore.length === 0) &&
+        tab?.id === detailsTabsConfig.minCredBureauRiskScore?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        minCredBureauRiskScoreInserted.length === 0 &&
+        tab?.id === detailsTabsConfig.minCredBureauRiskScoreIncluded?.id
+      ) {
+        return acc;
+      }
+      if (
+        minCredBureauRiskScoreDeleted.length === 0 &&
+        tab?.id === detailsTabsConfig.minCredBureauRiskScoreRemoved?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        (isMoreDetails || decisions.notifChannel.length === 0) &&
+        tab?.id === detailsTabsConfig.notificationChannel?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        notifChannelInserted.length === 0 &&
+        tab?.id === detailsTabsConfig.notificationChannelIncluded?.id
+      ) {
+        return acc;
+      }
+      if (
+        notifChannelDeleted.length === 0 &&
+        tab?.id === detailsTabsConfig.notificationChannelRemoved?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        (isMoreDetails || decisions.riskScoreApiUrl.length === 0) &&
+        tab?.id === detailsTabsConfig.riskScoreApiUrl?.id
+      ) {
+        return acc;
+      }
+
+      if (
+        riskScoreApiUrlInserted.length === 0 &&
+        tab?.id === detailsTabsConfig.riskScoreApiUrlIncluded?.id
+      ) {
+        return acc;
+      }
+      if (
+        riskScoreApiUrlDeleted.length === 0 &&
+        tab?.id === detailsTabsConfig.riskScoreApiUrlRemoved?.id
       ) {
         return acc;
       }
@@ -164,6 +273,16 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
     scoreModelsDeleted,
     minimumInserted,
     minimumDeleted,
+    basicNotifFormatInserted,
+    basicNotifFormatDeleted,
+    basicNotifRecipientInserted,
+    basicNotifRecipientDeleted,
+    minCredBureauRiskScoreInserted,
+    minCredBureauRiskScoreDeleted,
+    notifChannelInserted,
+    notifChannelDeleted,
+    riskScoreApiUrlInserted,
+    riskScoreApiUrlDeleted,
     handleTabChange,
   };
 };

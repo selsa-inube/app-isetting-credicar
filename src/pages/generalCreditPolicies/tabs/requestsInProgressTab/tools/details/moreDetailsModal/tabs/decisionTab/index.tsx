@@ -1,8 +1,7 @@
-import { Stack } from "@inubekit/inubekit";
-
 import { ENameRules } from "@enum/nameRules";
 import { EUseCase } from "@enum/useCase";
 import { tokens } from "@design/tokens";
+import { BoxContainer } from "@design/layout/boxContainer";
 import { NewDecisionForm } from "@design/forms/NewDecisionForm";
 import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
 import { IDecisionTab } from "@ptypes/generalCredPolicies/IDecisionTab";
@@ -12,11 +11,14 @@ const DecisionTab = (props: IDecisionTab) => {
   const { data } = props;
 
   return (
-    <Stack
+    <BoxContainer
       direction="column"
       gap={tokens.spacing.s300}
       justifyContent="space-between"
       height="85%"
+      width="100%"
+      boxSizing="border-box"
+      overflowY="auto"
     >
       <StyledContainer>
         <NewDecisionForm
@@ -34,7 +36,7 @@ const DecisionTab = (props: IDecisionTab) => {
           onSave={() => void 0}
         />
       </StyledContainer>
-    </Stack>
+    </BoxContainer>
   );
 };
 

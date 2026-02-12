@@ -1,5 +1,4 @@
-import { Stack, Text, useMediaQuery } from "@inubekit/inubekit";
-
+import { Text, useMediaQuery } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { mediaQueryMobile } from "@config/environment";
@@ -25,15 +24,26 @@ const GeneralTab = (props: IGeneralDecisionsTab) => {
       boxSizing="border-box"
       overflowY="auto"
     >
-      <Stack gap={tokens.spacing.s200} direction="column" width="100%">
+      <BoxContainer
+        direction="column"
+        gap={tokens.spacing.s200}
+        width="100%"
+        height="300px"
+        boxSizing="border-box"
+      >
         {filteredFieldData.map((field, id) => (
           <BoxContainer
             key={id}
             direction="column"
             width="100%"
+            height="200px"
             minHeight="52px"
             borderRadius={tokens.spacing.s100}
-            padding={`${tokens.spacing.s075} ${tokens.spacing.s200}`}
+            padding={
+              isMobile
+                ? `${tokens.spacing.s0}`
+                : `${tokens.spacing.s075} ${tokens.spacing.s200}`
+            }
             boxSizing="border-box"
             backgroundColor={EComponentAppearance.GRAY}
           >
@@ -45,7 +55,7 @@ const GeneralTab = (props: IGeneralDecisionsTab) => {
             </Text>
           </BoxContainer>
         ))}
-      </Stack>
+      </BoxContainer>
     </BoxContainer>
   );
 };

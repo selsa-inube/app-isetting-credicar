@@ -25,20 +25,42 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     showMinimum,
     showMinimumInserted,
     showMinimumDeleted,
-    decisionsMinimum,
+    showBasicNotifFormat,
+    showBasicNotifFormatInserted,
+    showBasicNotifFormatDeleted,
+    showBasicNotifRecipient,
+    showBasicNotifRecipientInserted,
+    showBasicNotifRecipientDeleted,
+    showMinCredBureauRiskScore,
+    showMinCredBureauRiskInserted,
+    showMinCredBureauRiskDeleted,
+    showNotifChannel,
+    showNotifChanneInserted,
+    showNotifChanneDeleted,
+    showRiskScoreApiUrl,
+    showRiskScoreApiUrlInserted,
+    showRiskScoreApiUrlDeleted,
     minimumInserted,
     minimumDeleted,
     data,
     portalId,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
+    decisions,
     contribQuotaInserted,
     contribQuotaDeleted,
     incomeQuotaInserted,
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
+    basicNotifFormatInserted,
+    basicNotifFormatDeleted,
+    basicNotifRecipientInserted,
+    basicNotifRecipientDeleted,
+    minCredBureauRiskScoreInserted,
+    minCredBureauRiskScoreDeleted,
+    notifChannelInserted,
+    notifChannelDeleted,
+    riskScoreApiUrlInserted,
+    riskScoreApiUrlDeleted,
     isMobile,
     onCloseModal,
     onTabChange,
@@ -48,7 +70,7 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     <ModalWrapper
       portalId={portalId}
       width={isMobile ? "335px" : "720px"}
-      height={isMobile ? "auto" : "690px"}
+      height={isMobile ? "auto" : "660px"}
       isMobile={isMobile}
       labelActionButton={moreDetailsLabels.close}
       labelCloseModal={moreDetailsLabels.close}
@@ -66,15 +88,17 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showGeneralDecisionsTab && (
           <GeneralTab data={data} labelsDetails={generalDataLabels} />
         )}
-        {showDecisionsRecip && <DecisionTab data={decisionsReciprocity} />}
+        {showDecisionsRecip && <DecisionTab data={decisions.reciprocity} />}
         {showContribInserted && (
           <DecisionTab data={contribQuotaInserted ?? []} />
         )}
         {showContribDeleted && <DecisionTab data={contribQuotaDeleted ?? []} />}
-        {showDecisionsIncome && <DecisionTab data={decisionsIncomePortfolio} />}
+        {showDecisionsIncome && (
+          <DecisionTab data={decisions.incomePortfolio} />
+        )}
         {showIncomeInserted && <DecisionTab data={incomeQuotaInserted ?? []} />}
         {showIncomeDeleted && <DecisionTab data={incomeQuotaDeleted ?? []} />}
-        {showScoreModels && <DecisionTab data={decisionsScoreModels} />}
+        {showScoreModels && <DecisionTab data={decisions.scoreModels} />}
         {showScoreModelsInserted && (
           <DecisionTab data={scoreModelsInserted ?? []} />
         )}
@@ -82,9 +106,59 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
           <DecisionTab data={scoreModelsDeleted ?? []} />
         )}
 
-        {showMinimum && <DecisionTab data={decisionsMinimum} />}
+        {showMinimum && <DecisionTab data={decisions.minimum} />}
         {showMinimumInserted && <DecisionTab data={minimumInserted ?? []} />}
         {showMinimumDeleted && <DecisionTab data={minimumDeleted ?? []} />}
+
+        {showBasicNotifFormat && (
+          <DecisionTab data={decisions.basicNotifFormat} />
+        )}
+        {showBasicNotifFormatInserted && (
+          <DecisionTab data={basicNotifFormatInserted ?? []} />
+        )}
+        {showBasicNotifFormatDeleted && (
+          <DecisionTab data={basicNotifFormatDeleted ?? []} />
+        )}
+
+        {showBasicNotifRecipient && (
+          <DecisionTab data={decisions.basicNotifRecipient} />
+        )}
+        {showBasicNotifRecipientInserted && (
+          <DecisionTab data={basicNotifRecipientInserted ?? []} />
+        )}
+        {showBasicNotifRecipientDeleted && (
+          <DecisionTab data={basicNotifRecipientDeleted ?? []} />
+        )}
+
+        {showMinCredBureauRiskScore && (
+          <DecisionTab data={decisions.minCredBureauRiskScore} />
+        )}
+        {showMinCredBureauRiskInserted && (
+          <DecisionTab data={minCredBureauRiskScoreInserted ?? []} />
+        )}
+        {showMinCredBureauRiskDeleted && (
+          <DecisionTab data={minCredBureauRiskScoreDeleted ?? []} />
+        )}
+
+        {showNotifChannel && <DecisionTab data={decisions.notifChannel} />}
+
+        {showNotifChanneInserted && (
+          <DecisionTab data={notifChannelInserted ?? []} />
+        )}
+        {showNotifChanneDeleted && (
+          <DecisionTab data={notifChannelDeleted ?? []} />
+        )}
+
+        {showRiskScoreApiUrl && (
+          <DecisionTab data={decisions.riskScoreApiUrl} />
+        )}
+
+        {showRiskScoreApiUrlInserted && (
+          <DecisionTab data={riskScoreApiUrlInserted ?? []} />
+        )}
+        {showRiskScoreApiUrlDeleted && (
+          <DecisionTab data={riskScoreApiUrlDeleted ?? []} />
+        )}
         <Divider />
       </Stack>
     </ModalWrapper>
