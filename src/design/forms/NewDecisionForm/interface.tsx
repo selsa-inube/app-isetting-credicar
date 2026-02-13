@@ -143,6 +143,8 @@ const NewDecisionFormUI = (props: INewDecisionsUI) => {
                   selectedDecision={selectedDecision}
                   textValues={textValues as IRulesFormTextValues}
                   shouldRenderEmptyMessage={dataEmpty || decisions.length > 0}
+                  withEditOption={false}
+                  withTerm={false}
                 />
 
                 {conditionEmpty && (

@@ -21,7 +21,9 @@ const useMultipleEnumRules = (props: IUseMultipleEnumRules) => {
     loadingStates[ruleName] = loadingList;
   });
 
-  const isLoading = Object.values(loadingStates).some((loading) => loading);
+  const isLoading = Boolean(
+    Object.values(loadingStates).some((loading) => loading),
+  );
 
   return {
     rulesDataMap,

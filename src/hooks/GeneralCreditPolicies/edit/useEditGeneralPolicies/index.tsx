@@ -82,10 +82,13 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     RiskAnalysisBasedCreditLimit: hasFactor ?? false,
     creditBureausConsultReq: hasValuesRule(creditBureausConsultReqData),
     inquiryValidityPeriod: hasValuesRule(inquiryValidityPeriodData),
-    lineCreditPayrollAdvance: hasValuesRule(lineCreditPayrollAdvanceData),
-    lineCreditPayrollSpecialAdvance: hasValuesRule(
-      lineCreditPayrollSpecialAdvanceData,
-    ),
+    toggleLineCreditPayrollSpecialAdvance:
+      hasValuesRule(lineCreditPayrollSpecialAdvanceData) ?? false,
+    toggleLineCreditPayrollAdvance:
+      hasValuesRule(lineCreditPayrollAdvanceData) ?? false,
+    /////////////////// --- verificar ---
+    lineCreditPayrollAdvance: "",
+    lineCreditPayrollSpecialAdvance: "",
     maximumNotifDocSize: hasValuesRule(maximumNotifDocSizeData),
   };
 

@@ -35,6 +35,11 @@ const DecisionsGeneralForm = forwardRef<
       isDisabledButton,
       buttonLabel,
       methodsOptions,
+      payrollAdvanceOptions,
+      payrollSpecialAdvanceOptions,
+      isLoadingEnums,
+      handleChangePayrollAdvance,
+      handleChangePayrollSpecialAdvance,
       handleInformationReferenceModal,
       handleInformationObligationModal,
       handleInformationMethodsModal,
@@ -69,6 +74,11 @@ const DecisionsGeneralForm = forwardRef<
         buttonLabel={buttonLabel}
         onResetEdit={onReset}
         methodsOptions={methodsOptions}
+        payrollAdvanceOptions={payrollAdvanceOptions}
+        payrollSpecialAdvanceOptions={payrollSpecialAdvanceOptions}
+        onChangePayrollAdvance={handleChangePayrollAdvance}
+        onChangePayrollSpecialAdvance={handleChangePayrollSpecialAdvance}
+        isLoadingEnums={isLoadingEnums}
       />
     );
   },

@@ -4,14 +4,14 @@ const decisionsGenLabels = {
   second: "2. ¿Se permiten deudores adicionales en una solicitud?",
   third:
     "3. ¿Las obligaciones con garantías reales se incluyen en el cálculo del descubierto?",
-  fourth:
-    "4. ¿Las centrales de riesgo crediticio deben ser consultadas antes de otorgar un crédito?",
+  fourth: "4. ¿En cuales centrales de riesgo se debe consultar los clientes?",
   fifth:
-    "5. ¿La consulta a las centrales de riesgo crediticio tiene un período de validez definido?",
-  sixth: "6. ¿Existe una línea de crédito destinada al adelanto de nómina?",
-  seventh: "7. ¿Existe una línea de crédito destinada al adelanto de prima?",
+    "5. ¿Cuál es la vigencia, en días, de la consulta de un cliente en las centrales de riesgo?",
+  sixth: "6. ¿Tienes una línea de crédito para adelanto de nómina?",
+  seventh: "7. ¿Tienes una línea de crédito para adelanto de prima?",
   eighth:
-    "8. ¿El tamaño máximo permitido de los documentos está definido en megabytes (MB)?",
+    "8. ¿Cuál es el tamaño máximo permitido (en MB) para la carga de documentos en los sistemas de gestión documental y notificaciones?",
+  which: "¿Cuál?",
   buttonCancelLabel: "Cancelar",
   buttonSaveLabel: "Enviar",
   buttonNextLabel: "Siguiente",

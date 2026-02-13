@@ -16,6 +16,8 @@ import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdi
 import { transformDecision } from "@utils/transformDecision";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { compareValueDecision } from "@utils/compareValueDecision";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { transformDecisions } from "@utils/transforDecisionPolicies";
 import { normalizeCondition } from "@utils/decisions/normalizeCondition";
 import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
@@ -76,6 +78,28 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   const [decisions, setDecisions] = useState<IRuleDecision[]>(
     normalizeDecisions(initialDecisions),
   );
+
+  const {
+    conditionTraduction,
+    ruleNameTraduction,
+    listValuesDecision,
+    dataType,
+  } = getConditionsTraduction(ruleData, appData.language);
+
+  useEffect(() => {
+    if (!conditionTraduction || conditionTraduction.length === 0) return;
+
+    setDecisions(
+      (prev) =>
+        transformDecisions(
+          prev,
+          ruleNameTraduction as string,
+          dataType,
+          listValuesDecision,
+          conditionTraduction,
+        ) as IRuleDecision[],
+    );
+  }, [ruleData]);
 
   const getDecisionTemplate = () => {
     const template = decisionTemplateConfig(
@@ -494,7 +518,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     selectedDecision,
     disabledPrevius,
     cancelButtonLabel,
-    isCreatingNew, /////////////////////////revisar
+    isCreatingNew,
     disabledNext,
     decisionTemplate,
     decisionTemplateFiltered,

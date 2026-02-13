@@ -20,6 +20,10 @@ const decisionTemplateGenPolicies = (
 
     const decisionTemplate = {
       ruleName: ruleName,
+      placeholder:
+        listOfPossibleValues?.list && listOfPossibleValues.list?.length > 0
+          ? "Selecciona una opción"
+          : "",
       labelName: String(
         i18n?.[language as keyof typeof i18n] ?? labelName ?? descriptionUse,
       ),
@@ -38,7 +42,11 @@ const decisionTemplateGenPolicies = (
           ConditionGroupId: "group-primary",
           conditionsThatEstablishesTheDecision:
             conditionsThatEstablishesTheDecision?.map((condition) => ({
-              placeholder: "Selecciona una opción",
+              placeholder:
+                condition.listOfPossibleValues?.list &&
+                condition.listOfPossibleValues.list?.length > 0
+                  ? "Selecciona una opción"
+                  : "",
               conditionName: condition.conditionName,
               labelName: String(
                 condition.i18n?.[language as keyof typeof i18n] ??

@@ -6,8 +6,10 @@ interface IDecisionsGeneralEntry {
   RiskAnalysisBasedCreditLimit: boolean;
   creditBureausConsultReq: boolean;
   inquiryValidityPeriod: boolean;
-  lineCreditPayrollAdvance: boolean;
-  lineCreditPayrollSpecialAdvance: boolean;
+  toggleLineCreditPayrollSpecialAdvance: boolean;
+  toggleLineCreditPayrollAdvance: boolean;
+  lineCreditPayrollAdvance: string;
+  lineCreditPayrollSpecialAdvance: string;
   maximumNotifDocSize: boolean;
 }
 

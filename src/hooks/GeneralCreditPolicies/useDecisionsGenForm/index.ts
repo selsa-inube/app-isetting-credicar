@@ -1,4 +1,10 @@
-import { useContext, useEffect, useImperativeHandle, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useFormik } from "formik";
 import { object } from "yup";
@@ -6,6 +12,8 @@ import { object } from "yup";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { EGeneralPolicies } from "@enum/generalPolicies";
+import { ECreditLines } from "@enum/creditLines";
+import { ENameRules } from "@enum/nameRules";
 import { validationRules } from "@validations/validationRules";
 import { mediaQueryMobile } from "@config/environment";
 import { generalMethods } from "@config/generalCreditPolicies/assisted/generalMethods";
@@ -13,6 +21,8 @@ import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decis
 import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { useMultipleEnumRules } from "../useMultipleEnumRules";
 
 const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const {
@@ -36,8 +46,10 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       RiskAnalysisBasedCreditLimit: validationRules.boolean,
       creditBureausConsultReq: validationRules.boolean,
       inquiryValidityPeriod: validationRules.boolean,
-      lineCreditPayrollAdvance: validationRules.boolean,
-      lineCreditPayrollSpecialAdvance: validationRules.boolean,
+      toggleLineCreditPayrollAdvance: validationRules.boolean,
+      lineCreditPayrollAdvance: validationRules.string,
+      toggleLineCreditPayrollSpecialAdvance: validationRules.boolean,
+      lineCreditPayrollSpecialAdvance: validationRules.string,
       maximumNotifDocSize: validationRules.boolean,
     });
 
@@ -59,12 +71,28 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const [showInformationObligationModal, setShowInfoObligModal] =
     useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
+  const [selectedPayrollAdvance, setSelectedPayrollAdvance] =
+    useState<string>("");
+  const [selectedPayrollSpecialAdvance, setSelectedPayrollSpecialAdvance] =
+    useState<string>("");
 
   const { enumData: methods } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
     enumQuery: EGeneralPolicies.METHODS,
     token: appData.token,
   });
+
+  const { rulesDataMap, isLoading: isLoadingEnums } = useMultipleEnumRules({
+    ruleNames: [
+      ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
+      ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
+    ],
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
+
   const methodsOptions: IServerDomain[] = methods
     .filter((entry) => generalMethods.includes(entry.code))
     .map((item: IEnumerators) => {
@@ -78,6 +106,25 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
         value: item.code ?? "",
       };
     });
+
+  const optionMap = useMemo(() => {
+    const map: Record<string, IServerDomain[]> = {};
+
+    Object.keys(rulesDataMap).forEach((ruleName) => {
+      const ruleData = rulesDataMap[ruleName] as IRuleDecisionExtended;
+      if (ruleData?.listOfPossibleValues?.list) {
+        map[ruleName] = ruleData.listOfPossibleValues
+          .list as unknown as IServerDomain[];
+      }
+    });
+
+    return map;
+  }, [rulesDataMap]);
+
+  const payrollAdvanceOptions: IServerDomain[] =
+    optionMap[ENameRules.LINE_CREDIT_PAYROLL_ADVANCE];
+  const payrollSpecialAdvanceOptions: IServerDomain[] =
+    optionMap[ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE];
 
   const handleInformationReferenceModal = () => {
     setShowInfoRefModal(!showInformationReferenceModal);
@@ -95,6 +142,26 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     const { name, checked } = event.target;
     formik.setFieldValue(name, checked);
   };
+  const handleChangePayrollAdvance = (_name: string, value: string) => {
+    setSelectedPayrollAdvance(value);
+  };
+  const handleChangePayrollSpecialAdvance = (_name: string, value: string) => {
+    setSelectedPayrollSpecialAdvance(value);
+  };
+  useEffect(() => {
+    if (selectedPayrollAdvance) {
+      formik.setFieldValue("lineCreditPayrollAdvance", selectedPayrollAdvance);
+    }
+  }, [selectedPayrollAdvance]);
+
+  useEffect(() => {
+    if (selectedPayrollSpecialAdvance) {
+      formik.setFieldValue(
+        "lineCreditPayrollSpecialAdvance",
+        selectedPayrollSpecialAdvance,
+      );
+    }
+  }, [selectedPayrollSpecialAdvance]);
 
   useEffect(() => {
     if (setShowReciprocity) {
@@ -157,6 +224,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   return {
     formik,
+    isLoadingEnums,
     showInformationReferenceModal,
     showInformationMethodModal,
     showInformationObligationModal,
@@ -164,6 +232,12 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     isDisabledButton,
     buttonLabel,
     methodsOptions,
+    selectedPayrollSpecialAdvance,
+    selectedPayrollAdvance,
+    payrollAdvanceOptions,
+    payrollSpecialAdvanceOptions,
+    handleChangePayrollAdvance,
+    handleChangePayrollSpecialAdvance,
     handleInformationReferenceModal,
     handleInformationObligationModal,
     handleInformationMethodsModal,

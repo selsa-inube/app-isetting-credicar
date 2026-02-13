@@ -6,6 +6,7 @@ import { dataTranslations } from "../dataTranslations";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 import { formatValueObjectfCondition } from "../formatValueObjectfCondition";
+import { normalizeConditionValue } from "../normalizeConditionValue";
 
 const formatDetailsDecisions = (
   data: IEntry,
@@ -41,9 +42,15 @@ const formatDetailsDecisions = (
                         ? decisionGroup.conditionsThatEstablishesTheDecision.map(
                             (condition: IConditionsTheDecision) => ({
                               ...condition,
-                              value: formatValueObjectfCondition(
-                                condition.value,
-                              ),
+                              value: conditionsArray
+                                ? normalizeConditionValue(
+                                    conditionsArray,
+                                    condition.conditionName,
+                                    formatValueObjectfCondition(
+                                      condition.value,
+                                    ),
+                                  )
+                                : formatValueObjectfCondition(condition.value),
                               conditionName: condition.conditionName,
                               labelName: conditionsArray
                                 ? normalizeConditionTraduction(

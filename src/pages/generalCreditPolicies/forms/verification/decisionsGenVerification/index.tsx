@@ -20,8 +20,8 @@ const RenderDecisionsGenVerification = (
     RiskAnalysisBasedCreditLimit,
     creditBureausConsultReq,
     inquiryValidityPeriod,
-    lineCreditPayrollAdvance,
-    lineCreditPayrollSpecialAdvance,
+    // lineCreditPayrollAdvance,
+    // lineCreditPayrollSpecialAdvance,
     maximumNotifDocSize,
   } = values;
 
@@ -78,12 +78,12 @@ const RenderDecisionsGenVerification = (
         <BoxAttribute
           direction="column"
           label={verificationLabels.lineCreditPayrollAdvance}
-          value={renderValue(lineCreditPayrollAdvance)}
+          value={""} //////////////verificar
         />
         <BoxAttribute
           direction="column"
           label={verificationLabels.lineCreditPayrollSpecialAdvance}
-          value={renderValue(lineCreditPayrollSpecialAdvance)}
+          value={""}
         />
         <BoxAttribute
           direction="column"

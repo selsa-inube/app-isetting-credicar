@@ -39,26 +39,25 @@ const generalDataLabels = [
   },
   {
     id: "creditBureausConsultReq",
-    titleName:
-      "¿Las centrales de riesgo crediticio deben ser consultadas antes de otorgar un crédito?",
+    titleName: "¿En cuales centrales de riesgo se debe consultar los clientes?",
   },
   {
     id: "inquiryValidityPeriod",
     titleName:
-      "¿La consulta a las centrales de riesgo crediticio tiene un período de validez definido?",
+      "¿Cuál es la vigencia, en días, de la consulta de un cliente en las centrales de riesgo?",
   },
   {
     id: "lineCreditPayrollAdvance",
-    titleName: "¿Existe una línea de crédito destinada al adelanto de nómina?",
+    titleName: "¿Tienes una línea de crédito para adelanto de nómina?",
   },
   {
     id: "lineCreditPayrollSpecialAdvance",
-    titleName: "¿Existe una línea de crédito destinada al adelanto de prima?",
+    titleName: "¿Tienes una línea de crédito para adelanto de prima?",
   },
   {
     id: "maximumNotifDocSize",
     titleName:
-      "¿El tamaño máximo permitido de los documentos está definido en megabytes (MB)?",
+      "¿Cuál es el tamaño máximo permitido (en MB) para la carga de documentos en los sistemas de gestión documental y notificaciones?",
   },
 ];
 
