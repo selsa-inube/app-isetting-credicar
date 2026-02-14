@@ -36,6 +36,8 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     showDecision,
     disabledButton,
     rulesData,
+    optionsGenDecision,
+    setOptionsGenDecision,
     setDecisionData,
     onOpenModal,
     setDateVerification,
@@ -90,6 +92,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 initialValues={initialValues.decisionsGeneral.values}
                 handleNextStep={onNextStep}
                 handleFormValidChange={handleFormValidChange}
+                setOptionsGenDecision={setOptionsGenDecision}
               />
             )}
             {currentStep === stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO && (
@@ -331,6 +334,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 date={dateVerification}
                 setDateVerification={setDateVerification}
                 onCloseProcess={onCloseProcess}
+                optionsGenDecision={optionsGenDecision}
               />
             )}
           </Stack>

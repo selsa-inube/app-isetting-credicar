@@ -5,8 +5,8 @@ import { formatDate } from "../date/formatDate";
 
 const decisionWithoutConditions = (
   ruleName: string,
-  value: string | boolean,
-  prevValue: string | boolean,
+  value: string | boolean | number | undefined,
+  prevValue: string | boolean | undefined,
   transactionOperation: string,
   data?: IRuleDecisionExtended[],
 ) => {

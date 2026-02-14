@@ -1,6 +1,7 @@
 import { IAssistedStep } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IAddGenCredPoliciesRef } from "../forms/IAddGenCredPoliciesRef";
 import { IAddGenCredPoliciesForms } from "../forms/IAddGenCredPoliciesForms";
@@ -26,6 +27,10 @@ interface IAddGenCreditPoliciesUI {
   showDecision: boolean;
   disabledButton: boolean;
   rulesData: IRuleState;
+  optionsGenDecision: IOptionsGenDecision;
+  setOptionsGenDecision: React.Dispatch<
+    React.SetStateAction<IOptionsGenDecision>
+  >;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;
   onOpenModal: () => void;

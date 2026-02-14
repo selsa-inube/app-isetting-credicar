@@ -10,6 +10,8 @@ import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { compareObjects } from "@utils/compareObjects";
+import { hasStringValues } from "@utils/hasStringValues";
+import { dataEvaluatePolicies } from "@utils/dataEvaluatePolicies";
 import { ERequestType } from "@enum/requestType";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { EGeneral } from "@enum/general";
@@ -18,6 +20,8 @@ import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/edi
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { mediaQueryTablet } from "@config/environment";
+import { datacreditoExperian } from "@config/generalCreditPolicies/editGeneralPolicies/datacreditoExperian";
+import { transunion } from "@config/generalCreditPolicies/editGeneralPolicies/transunion";
 import { editLabels } from "@config/generalCreditPolicies/editGeneralPolicies/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
@@ -71,8 +75,29 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     return { hasReciprocity, hasCalculation, hasFactor };
   };
 
+  const initialCreditBureausData = () => {
+    if (
+      !creditBureausConsultReqData ||
+      creditBureausConsultReqData.length === 0
+    ) {
+      return {
+        hasDatacreditoExperian: false,
+        hasTransunion: false,
+      };
+    }
+    const hasDatacreditoExperian = creditBureausConsultReqData.some(
+      (condition) => datacreditoExperian.includes(condition.value as string),
+    );
+    const hasTransunion = creditBureausConsultReqData.some((condition) =>
+      transunion.includes(condition.value as string),
+    );
+
+    return { hasDatacreditoExperian, hasTransunion };
+  };
+
   const [decisionData, setDecisionData] = useState<IRuleDecision[]>([]);
   const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
+  const { hasDatacreditoExperian, hasTransunion } = initialCreditBureausData();
 
   const initialDecisionsGenData = {
     additionalDebtors: hasValuesRule(additionalDebtorsData),
@@ -80,16 +105,20 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     PaymentCapacityBasedCreditLimit: hasCalculation ?? false,
     ReciprocityBasedCreditLimit: hasReciprocity ?? false,
     RiskAnalysisBasedCreditLimit: hasFactor ?? false,
-    creditBureausConsultReq: hasValuesRule(creditBureausConsultReqData),
-    inquiryValidityPeriod: hasValuesRule(inquiryValidityPeriodData),
+    DATACREDITO_EXPERIAN: hasDatacreditoExperian ?? false,
+    TRANSUNION: hasTransunion ?? false,
+    inquiryValidityPeriod: Number(inquiryValidityPeriodData?.[0]?.value ?? 0),
     toggleLineCreditPayrollSpecialAdvance:
-      hasValuesRule(lineCreditPayrollSpecialAdvanceData) ?? false,
+      hasStringValues(lineCreditPayrollSpecialAdvanceData) ?? false,
     toggleLineCreditPayrollAdvance:
-      hasValuesRule(lineCreditPayrollAdvanceData) ?? false,
-    /////////////////// --- verificar ---
-    lineCreditPayrollAdvance: "",
-    lineCreditPayrollSpecialAdvance: "",
-    maximumNotifDocSize: hasValuesRule(maximumNotifDocSizeData),
+      hasStringValues(lineCreditPayrollAdvanceData) ?? false,
+    lineCreditPayrollAdvance: dataEvaluatePolicies(
+      lineCreditPayrollAdvanceData as IRuleDecisionExtended[],
+    ),
+    lineCreditPayrollSpecialAdvance: dataEvaluatePolicies(
+      lineCreditPayrollSpecialAdvanceData as IRuleDecisionExtended[],
+    ),
+    maximumNotifDocSize: Number(maximumNotifDocSizeData?.[0]?.value ?? 0),
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(

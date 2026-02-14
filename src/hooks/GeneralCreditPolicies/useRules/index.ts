@@ -1,6 +1,7 @@
 import { ENameRules } from "@enum/nameRules";
 import { EBooleanText } from "@enum/booleanText";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
+import { decisionWithMultipleValues } from "@utils/decisionWithMultipleValuesAdd";
 import { formatRuleDecisions } from "@utils/formatRuleDecisions";
 import { IUseRules } from "@ptypes/hooks/IUseRules";
 
@@ -10,7 +11,7 @@ const useRules = (props: IUseRules) => {
 
   const decisionWithoutConditions = (
     ruleName: string,
-    value: string | boolean,
+    value: string | boolean | number | undefined,
   ) => {
     const data =
       typeof value === "boolean"
@@ -19,14 +20,16 @@ const useRules = (props: IUseRules) => {
           : EBooleanText.N
         : value;
 
-    return [
-      {
-        decisionsByRule: [
-          { effectiveFrom: dateVerification.date, value: data },
-        ],
-        ruleName: ruleName,
-      },
-    ];
+    return value
+      ? [
+          {
+            decisionsByRule: [
+              { effectiveFrom: dateVerification.date, value: data },
+            ],
+            ruleName: ruleName,
+          },
+        ]
+      : [];
   };
 
   const calculation =
@@ -41,9 +44,21 @@ const useRules = (props: IUseRules) => {
     decisionGeneralData.ReciprocityBasedCreditLimit &&
     ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
 
+  const datacreditoExperian =
+    decisionGeneralData.DATACREDITO_EXPERIAN &&
+    ERulesOfDecisions.DATACREDITO_EXPERIAN;
+
+  const transunion =
+    decisionGeneralData.TRANSUNION && ERulesOfDecisions.TRANSUNION;
+
   const methodsArray =
     calculation || factor || reciprocity
       ? [calculation, factor, reciprocity].filter(Boolean)
+      : [EBooleanText.NO];
+
+  const creditBureausArray =
+    datacreditoExperian || transunion
+      ? [datacreditoExperian, transunion].filter(Boolean)
       : [EBooleanText.NO];
 
   const methods = {
@@ -51,6 +66,14 @@ const useRules = (props: IUseRules) => {
     decisionsByRule: methodsArray.map((method) => ({
       effectiveFrom: dateVerification?.date && dateVerification?.date,
       value: method,
+    })),
+  };
+
+  const creditBureaus = {
+    ruleName: ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
+    decisionsByRule: creditBureausArray.map((credit) => ({
+      effectiveFrom: dateVerification?.date && dateVerification?.date,
+      value: credit,
     })),
   };
 
@@ -64,22 +87,21 @@ const useRules = (props: IUseRules) => {
     decisionGeneralData.realGuarantees,
   );
 
-  const credBureausConsultReqValues = decisionWithoutConditions(
-    ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
-    decisionGeneralData.creditBureausConsultReq,
-  );
   const inquiryValidityPeriodValues = decisionWithoutConditions(
     ENameRules.INQUIRY_VALIDITY_PERIOD,
     decisionGeneralData.inquiryValidityPeriod,
   );
-  const lineCredPayrollAdvanceValues = decisionWithoutConditions(
+  const lineCredPayrollAdvanceValues = decisionWithMultipleValues(
     ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
     decisionGeneralData.lineCreditPayrollAdvance,
+    dateVerification,
   );
-  const lineCredPayrollSpecialAdvanceValues = decisionWithoutConditions(
+  const lineCredPayrollSpecialAdvanceValues = decisionWithMultipleValues(
     ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
     decisionGeneralData.lineCreditPayrollSpecialAdvance,
+    dateVerification,
   );
+
   const maximumNotifDocSizeValues = decisionWithoutConditions(
     ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE,
     decisionGeneralData.maximumNotifDocSize,
@@ -127,12 +149,12 @@ const useRules = (props: IUseRules) => {
 
   const rules = [
     methods,
+    creditBureaus,
     ...rulesContributions,
     ...rulesIncomes,
     ...ruleScoremodels,
     ...additionalDebtorsValues,
     ...realGuaranteesValues,
-    ...credBureausConsultReqValues,
     ...inquiryValidityPeriodValues,
     ...lineCredPayrollAdvanceValues,
     ...lineCredPayrollSpecialAdvanceValues,
@@ -143,8 +165,10 @@ const useRules = (props: IUseRules) => {
     ...ruleMinCredBureauRiskScore,
     ...ruleNotificationChannel,
     ...ruleRiskScoreApiUrl,
-  ];
-
+  ].filter((rule) => {
+    if (Array.isArray(rule)) return rule.length > 0;
+    return rule && rule.decisionsByRule && rule.decisionsByRule.length > 0;
+  });
   return {
     rules,
   };

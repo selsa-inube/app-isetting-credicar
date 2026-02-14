@@ -13,6 +13,7 @@ interface IDecisionsGeneralFormUI {
   isDisabledButton: boolean;
   buttonLabel: string;
   methodsOptions: IServerDomain[];
+  creditBureausOptions: IServerDomain[];
   payrollAdvanceOptions: IServerDomain[];
   payrollSpecialAdvanceOptions: IServerDomain[];
   isLoadingEnums: boolean;

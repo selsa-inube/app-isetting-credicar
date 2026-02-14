@@ -35,6 +35,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     initialValuesEdit,
     setShowReciprocity,
     setShowFactor,
+    setOptionsGenDecision,
   } = props;
 
   const createValidationSchema = () =>
@@ -44,13 +45,14 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       PaymentCapacityBasedCreditLimit: validationRules.boolean,
       ReciprocityBasedCreditLimit: validationRules.boolean,
       RiskAnalysisBasedCreditLimit: validationRules.boolean,
-      creditBureausConsultReq: validationRules.boolean,
-      inquiryValidityPeriod: validationRules.boolean,
+      DATACREDITO_EXPERIAN: validationRules.boolean,
+      TRANSUNION: validationRules.boolean,
+      inquiryValidityPeriod: validationRules.number,
       toggleLineCreditPayrollAdvance: validationRules.boolean,
       lineCreditPayrollAdvance: validationRules.string,
       toggleLineCreditPayrollSpecialAdvance: validationRules.boolean,
       lineCreditPayrollSpecialAdvance: validationRules.string,
-      maximumNotifDocSize: validationRules.boolean,
+      maximumNotifDocSize: validationRules.number,
     });
 
   const validationSchema = createValidationSchema();
@@ -86,6 +88,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     ruleNames: [
       ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
       ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
+      ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
     ],
     ruleCatalog: ECreditLines.RULE_CATALOG,
     catalogAction: ECreditLines.CATALOG_ACTION,
@@ -125,6 +128,23 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     optionMap[ENameRules.LINE_CREDIT_PAYROLL_ADVANCE];
   const payrollSpecialAdvanceOptions: IServerDomain[] =
     optionMap[ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE];
+
+  const creditBureausOptions: IServerDomain[] =
+    optionMap[ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED];
+
+  useEffect(() => {
+    if (setOptionsGenDecision) {
+      setOptionsGenDecision({
+        payrollAdvance: payrollAdvanceOptions,
+        payrollSpecialAdvance: payrollSpecialAdvanceOptions,
+        creditBureaus: creditBureausOptions,
+      });
+    }
+  }, [
+    payrollAdvanceOptions,
+    payrollSpecialAdvanceOptions,
+    creditBureausOptions,
+  ]);
 
   const handleInformationReferenceModal = () => {
     setShowInfoRefModal(!showInformationReferenceModal);
@@ -236,6 +256,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     selectedPayrollAdvance,
     payrollAdvanceOptions,
     payrollSpecialAdvanceOptions,
+    creditBureausOptions,
     handleChangePayrollAdvance,
     handleChangePayrollSpecialAdvance,
     handleInformationReferenceModal,

@@ -4,7 +4,7 @@ import { RenderDecisionsGenVerification } from "../decisionsGenVerification";
 import { RendersRuleVerification } from "../RendersRuleVerification";
 
 const VerificationBoxes = (props: IVerificationBoxes) => {
-  const { updatedData, stepKey, isMobile } = props;
+  const { updatedData, stepKey, isMobile, optionsGenDecision } = props;
 
   const showContributions =
     stepKey === stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO &&
@@ -48,6 +48,7 @@ const VerificationBoxes = (props: IVerificationBoxes) => {
         <RenderDecisionsGenVerification
           values={updatedData.decisionsGeneral.values}
           isMobile={isMobile}
+          optionsGenDecision={optionsGenDecision}
         />
       )}
 

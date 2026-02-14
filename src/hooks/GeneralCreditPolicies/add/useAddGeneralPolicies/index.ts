@@ -22,6 +22,7 @@ import { IUseAddGenCredPolicies } from "@ptypes/hooks/generalCreditPolicies/IUse
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
 import { IRuleState, IRuleKey } from "@ptypes/generalCredPolicies/IRuleState";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 
 const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const { appData } = props;
@@ -34,13 +35,14 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
         PaymentCapacityBasedCreditLimit: false,
         ReciprocityBasedCreditLimit: false,
         RiskAnalysisBasedCreditLimit: false,
-        creditBureausConsultReq: false,
-        inquiryValidityPeriod: false,
+        DATACREDITO_EXPERIAN: false,
+        TRANSUNION: false,
+        inquiryValidityPeriod: 0,
         toggleLineCreditPayrollSpecialAdvance: false,
         toggleLineCreditPayrollAdvance: false,
         lineCreditPayrollAdvance: "",
         lineCreditPayrollSpecialAdvance: "",
-        maximumNotifDocSize: false,
+        maximumNotifDocSize: 0,
       },
     },
   };
@@ -69,6 +71,8 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [disabledButton] = useState(true);
+  const [optionsGenDecision, setOptionsGenDecision] =
+    useState<IOptionsGenDecision>({} as IOptionsGenDecision);
 
   const navigate = useNavigate();
   const smallScreen = useMediaQuery(mediaQueryTablet);
@@ -308,6 +312,8 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     showGoBackModal,
     disabledButton,
     rulesData,
+    optionsGenDecision,
+    setOptionsGenDecision,
     setDecisionData,
     setRulesData,
     handleOpenModal,

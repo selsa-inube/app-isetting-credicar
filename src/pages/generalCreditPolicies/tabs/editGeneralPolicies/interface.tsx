@@ -10,6 +10,7 @@ import { NewDecisionForm } from "@design/forms/NewDecisionForm";
 import { EUseCase } from "@enum/useCase";
 import { EComponentAppearance } from "@enum/appearances";
 import { ENameRules } from "@enum/nameRules";
+import { decisionsLabels } from "@config/generalCreditPolicies/assisted/decisionsLabels";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
 import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
 import { requestStatusMessage } from "@config/generalCreditPolicies/generic/requestStatusMessage";
@@ -96,8 +97,10 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
-              nameRule="Número de veces los ingresos"
-              customMessageEmptyDecisions={""}
+              nameRule="Número de veces los aportes"
+              customMessageEmptyDecisions={decisionsLabels(
+                "Número de veces los aportes",
+              )}
               initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
               editionMode={"classic"}
               option={EUseCase.EDIT}
@@ -114,7 +117,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
               nameRule="Número de veces los ingresos"
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionsLabels(
+                "Número de veces los ingresos",
+              )}
               initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
               editionMode={"classic"}
               option={EUseCase.EDIT}
@@ -131,7 +136,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               ruleCatalog={ENameRules.RULE_CATALOG_IRISK}
               labelBusinessRules={ENameRules.SCORE_MODELS}
               nameRule="Modelo de score"
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionsLabels("Modelo de score")}
               initialDecisions={rulesData.CreditRiskScoringModel}
               editionMode={"classic"}
               option={EUseCase.EDIT}

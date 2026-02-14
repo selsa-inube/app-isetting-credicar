@@ -4,13 +4,14 @@ interface IDecisionsGeneralEntry {
   PaymentCapacityBasedCreditLimit: boolean;
   ReciprocityBasedCreditLimit: boolean;
   RiskAnalysisBasedCreditLimit: boolean;
-  creditBureausConsultReq: boolean;
-  inquiryValidityPeriod: boolean;
+  DATACREDITO_EXPERIAN: boolean;
+  TRANSUNION: boolean;
+  inquiryValidityPeriod: number;
   toggleLineCreditPayrollSpecialAdvance: boolean;
   toggleLineCreditPayrollAdvance: boolean;
   lineCreditPayrollAdvance: string;
   lineCreditPayrollSpecialAdvance: string;
-  maximumNotifDocSize: boolean;
+  maximumNotifDocSize: number;
 }
 
 export type { IDecisionsGeneralEntry };

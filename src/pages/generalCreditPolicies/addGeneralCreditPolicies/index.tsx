@@ -25,6 +25,8 @@ const AddGenCreditPolicies = () => {
     showGoBackModal,
     disabledButton,
     rulesData,
+    optionsGenDecision,
+    setOptionsGenDecision,
     setDecisionData,
     handleCloseGoBackModal,
     handleGoBack,
@@ -109,6 +111,8 @@ const AddGenCreditPolicies = () => {
       disabledButton={disabledButton}
       rulesData={rulesData}
       setDecisionData={setDecisionData}
+      optionsGenDecision={optionsGenDecision}
+      setOptionsGenDecision={setOptionsGenDecision}
     />
   );
 };

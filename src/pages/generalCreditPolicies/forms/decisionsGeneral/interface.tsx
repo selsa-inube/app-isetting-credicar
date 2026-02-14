@@ -4,6 +4,7 @@ import {
   Checkbox,
   Checkpicker,
   Icon,
+  Input,
   Stack,
   Text,
 } from "@inubekit/inubekit";
@@ -36,6 +37,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     methodsOptions,
     payrollAdvanceOptions,
     payrollSpecialAdvanceOptions,
+    creditBureausOptions,
     isLoadingEnums,
     onToggle,
     onButtonClick,
@@ -107,33 +109,64 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     ))}
                   </Stack>
                 </Stack>
+
+                <Stack direction="column" gap={tokens.spacing.s200}>
+                  <Stack alignItems="center" gap={tokens.spacing.s050}>
+                    <Text size="medium">{decisionsGenLabels.second}</Text>
+                  </Stack>
+                  <Stack
+                    direction="column"
+                    gap={tokens.spacing.s100}
+                    margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
+                  >
+                    {creditBureausOptions.map((creditBureau) => (
+                      <Checkbox
+                        key={creditBureau.id}
+                        id={creditBureau.id}
+                        name={creditBureau.id}
+                        label={creditBureau.label}
+                        checked={Boolean(
+                          formik.values[
+                            creditBureau.id as keyof typeof formik.values
+                          ],
+                        )}
+                        onChange={onToggle}
+                        value={creditBureau.value}
+                      />
+                    ))}
+                  </Stack>
+                </Stack>
                 <ToggleGeneralDecision
                   name="additionalDebtors"
-                  label={decisionsGenLabels.second}
+                  label={decisionsGenLabels.third}
                   isChecked={formik.values.additionalDebtors}
                   onToggle={onToggle}
                 />
                 <ToggleGeneralDecision
                   name="realGuarantees"
-                  label={decisionsGenLabels.third}
+                  label={decisionsGenLabels.fourth}
                   isChecked={formik.values.realGuarantees}
                   onToggle={onToggle}
                   showIcon
                   onInfoModal={onInfoObligModal}
                 />
 
-                <ToggleGeneralDecision
-                  name="creditBureausConsultReq"
-                  label={decisionsGenLabels.fourth}
-                  isChecked={formik.values.creditBureausConsultReq}
-                  onToggle={onToggle}
-                />
-                <ToggleGeneralDecision
-                  name="inquiryValidityPeriod"
-                  label={decisionsGenLabels.fifth}
-                  isChecked={formik.values.inquiryValidityPeriod}
-                  onToggle={onToggle}
-                />
+                <Stack direction="column" gap={tokens.spacing.s150}>
+                  <Text size="medium">{decisionsGenLabels.fifth}</Text>
+                  <Stack
+                    padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
+                  >
+                    <Input
+                      id="inquiryValidityPeriod"
+                      name="inquiryValidityPeriod"
+                      type="number"
+                      value={formik.values.inquiryValidityPeriod}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </Stack>
+                </Stack>
+
                 <ToggleGeneralDecision
                   name="toggleLineCreditPayrollAdvance"
                   label={decisionsGenLabels.sixth}
@@ -181,12 +214,22 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     />
                   </Stack>
                 )}
-                <ToggleGeneralDecision
-                  name="maximumNotifDocSize"
-                  label={decisionsGenLabels.eighth}
-                  isChecked={formik.values.maximumNotifDocSize}
-                  onToggle={onToggle}
-                />
+
+                <Stack direction="column" gap={tokens.spacing.s150}>
+                  <Text size="medium">{decisionsGenLabels.eighth}</Text>
+                  <Stack
+                    padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
+                  >
+                    <Input
+                      id="maximumNotifDocSize"
+                      name="maximumNotifDocSize"
+                      type="number"
+                      value={formik.values.maximumNotifDocSize}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </Stack>
+                </Stack>
               </BoxContainer>
             </Stack>
           </StyledFormContent>
