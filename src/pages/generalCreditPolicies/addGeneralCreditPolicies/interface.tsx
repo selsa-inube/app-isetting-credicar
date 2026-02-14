@@ -1,25 +1,18 @@
 import { Assisted, Breadcrumbs, Stack } from "@inubekit/inubekit";
 import { Title } from "@design/data/title";
 import { tokens } from "@design/tokens";
-import { DecisionsForm } from "@design/forms/decisions";
+import { NewDecisionForm } from "@design/forms/NewDecisionForm";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { stepKeysPolicies } from "@enum/stepsKeysPolicies";
+import { EUseCase } from "@enum/useCase";
 import { ENameRules } from "@enum/nameRules";
-import { revertModalDisplayData } from "@utils/revertModalDisplayData";
+import { getNamePolicieStep } from "@utils/getNamePolicieStep";
 import { addLabels } from "@config/generalCreditPolicies/assisted/addLabels";
 import { crumbsAddGenCredPolicies } from "@config/generalCreditPolicies/assisted/navigation";
 import { controlsAssisted } from "@config/controlsAssisted";
-import { decisionMinimumIncomePercentage } from "@config/decisions/decisionMinimumIncomePercentage";
-import { deleteModal } from "@config/decisions/messages";
-import { decisionScoreModelsConfig } from "@config/decisions/decisionTempScoreModels";
-import { scoreModelsLabels } from "@config/generalCreditPolicies/assisted/scoreModelsLabels";
+import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
+import { decisionsLabels } from "@config/generalCreditPolicies/assisted/decisionsLabels";
 import { portalId } from "@config/portalId";
-import { decisionContributionsPortfConfig } from "@config/decisions/decisionTempContributionsPortfolio";
-import { decisionIncomePortfolioConfig } from "@config/decisions/decisionTempIncomePortfolio";
-import { textValuesBusinessRules } from "@config/generalCreditPolicies/assisted/businessRules";
-import { minimumIncomeLabels } from "@config/generalCreditPolicies/assisted/minimumIncomeLabels";
-import { contributionsPortfLabels } from "@config/generalCreditPolicies/assisted/contributionsPortfLabels";
-import { incomePortfLabels } from "@config/generalCreditPolicies/assisted/incomePortfLabels";
 import { IAddGenCreditPoliciesUI } from "@ptypes/generalCredPolicies/IAddGenCreditPoliciesUI";
 import { DecisionsGeneralForm } from "../forms/decisionsGeneral";
 import { VerificationForm } from "../forms/verification";
@@ -32,9 +25,6 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     initialValues,
     smallScreen,
     steps,
-    contributionsPortfolio,
-    incomePortfolio,
-    scoreModels,
     showModal,
     showRequestProcessModal,
     requestSteps,
@@ -44,16 +34,16 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
     dateVerification,
     modalData,
     showDecision,
-    minimumIncomePercentage,
-    setMinimumIncomePercentage,
+    disabledButton,
+    rulesData,
+    optionsGenDecision,
+    setOptionsGenDecision,
+    setDecisionData,
     onOpenModal,
     setDateVerification,
     onCloseRequestStatus,
     onClosePendingReqModal,
     onFinishForm,
-    setScoreModels,
-    setIncomePortfolio,
-    setContributionsPortfolio,
     setCurrentStep,
     handleFormValidChange,
     onNextStep,
@@ -102,82 +92,185 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 initialValues={initialValues.decisionsGeneral.values}
                 handleNextStep={onNextStep}
                 handleFormValidChange={handleFormValidChange}
+                setOptionsGenDecision={setOptionsGenDecision}
               />
             )}
             {currentStep === stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO && (
-              <DecisionsForm
-                deleteModal={deleteModal}
-                textValuesBusinessRules={textValuesBusinessRules}
-                decisionTemplateConfig={decisionContributionsPortfConfig}
-                onButtonClick={onNextStep}
-                onPreviousStep={onPreviousStep}
-                initialValues={contributionsPortfolio}
-                setDecisions={setContributionsPortfolio}
-                revertModalDisplayData={revertModalDisplayData}
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
                 labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
-                nameRule=""
-                titleContentAddCard={
-                  contributionsPortfLabels.titleContentAddCard
-                }
-                messageEmptyDecisions={
-                  contributionsPortfLabels.messageEmptyDecisions as unknown as string
-                }
+                nameRule="Número de veces los aportes"
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(
+                    stepKeysPolicies.CONTRIBUTIONS_PORTFOLIO,
+                  ) ?? "",
+                )}
+                initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
               />
             )}
             {currentStep === stepKeysPolicies.INCOME_PORTFOLIO && (
-              <DecisionsForm
-                deleteModal={deleteModal}
-                textValuesBusinessRules={textValuesBusinessRules}
-                decisionTemplateConfig={decisionIncomePortfolioConfig}
-                onButtonClick={onNextStep}
-                onPreviousStep={onPreviousStep}
-                initialValues={incomePortfolio}
-                setDecisions={setIncomePortfolio}
-                revertModalDisplayData={revertModalDisplayData}
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
                 labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
-                nameRule=""
-                titleContentAddCard={incomePortfLabels.titleContentAddCard}
-                messageEmptyDecisions={
-                  incomePortfLabels.messageEmptyDecisions as unknown as string
-                }
+                nameRule="Número de veces los ingresos"
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(stepKeysPolicies.INCOME_PORTFOLIO) ?? "",
+                )}
+                initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
               />
             )}
             {currentStep === stepKeysPolicies.SCORE_MODELS && (
-              <DecisionsForm
-                deleteModal={deleteModal}
-                textValuesBusinessRules={textValuesBusinessRules}
-                decisionTemplateConfig={decisionScoreModelsConfig}
-                onButtonClick={onNextStep}
-                onPreviousStep={onPreviousStep}
-                initialValues={scoreModels}
-                setDecisions={setScoreModels}
-                revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules={ENameRules.SCORE_MODELS}
-                nameRule=""
+              <NewDecisionForm
                 ruleCatalog={ENameRules.RULE_CATALOG_IRISK}
-                titleContentAddCard={scoreModelsLabels.titleContentAddCard}
-                messageEmptyDecisions={
-                  scoreModelsLabels.messageEmptyDecisions as unknown as string
-                }
+                labelBusinessRules={ENameRules.SCORE_MODELS}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(stepKeysPolicies.SCORE_MODELS) ?? "",
+                )}
+                initialDecisions={rulesData.CreditRiskScoringModel}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
               />
             )}
             {currentStep === stepKeysPolicies.MINIMUM_INCOME_PERCENTAGE && (
-              <DecisionsForm
-                deleteModal={deleteModal}
-                textValuesBusinessRules={textValuesBusinessRules}
-                decisionTemplateConfig={decisionMinimumIncomePercentage}
-                onButtonClick={onNextStep}
-                onPreviousStep={onPreviousStep}
-                initialValues={minimumIncomePercentage}
-                setDecisions={setMinimumIncomePercentage}
-                revertModalDisplayData={revertModalDisplayData}
-                labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
-                nameRule=""
+              <NewDecisionForm
                 ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
-                titleContentAddCard={minimumIncomeLabels.titleContentAddCard}
-                messageEmptyDecisions={
-                  minimumIncomeLabels.messageEmptyDecisions as unknown as string
-                }
+                labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(
+                    stepKeysPolicies.MINIMUM_INCOME_PERCENTAGE,
+                  ) ?? "",
+                )}
+                initialDecisions={rulesData.MinimumSubsistenceReservePercentage}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
+              />
+            )}
+
+            {currentStep === stepKeysPolicies.BASIC_NOTIFICATION_FORMAT && (
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+                labelBusinessRules={ENameRules.BASIC_NOTIFICATION_FORMAT}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(
+                    stepKeysPolicies.BASIC_NOTIFICATION_FORMAT,
+                  ) ?? "",
+                )}
+                initialDecisions={rulesData.BasicNotificationFormat}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
+              />
+            )}
+
+            {currentStep === stepKeysPolicies.BASIC_NOTIFICATION_RECIPIENT && (
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+                labelBusinessRules={ENameRules.BASIC_NOTIFICATION_RECIPIENT}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(
+                    stepKeysPolicies.BASIC_NOTIFICATION_RECIPIENT,
+                  ) ?? "",
+                )}
+                initialDecisions={rulesData.BasicNotificationRecipient}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
+              />
+            )}
+            {currentStep ===
+              stepKeysPolicies.MINIMUM_CREDIT_BUREAU_RISKSCORE && (
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+                labelBusinessRules={ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(
+                    stepKeysPolicies.MINIMUM_CREDIT_BUREAU_RISKSCORE,
+                  ) ?? "",
+                )}
+                initialDecisions={rulesData.MinimumCreditBureauRiskScore}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
+              />
+            )}
+            {currentStep === stepKeysPolicies.NOTIFICATION_CHANNEL && (
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+                labelBusinessRules={ENameRules.NOTIFICATION_CHANNEL}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(stepKeysPolicies.NOTIFICATION_CHANNEL) ??
+                    "",
+                )}
+                initialDecisions={rulesData.NotificationChannel}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
+              />
+            )}
+            {currentStep === stepKeysPolicies.RISKSCORE_API_URL && (
+              <NewDecisionForm
+                ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
+                labelBusinessRules={ENameRules.RISKSCORE_API_URL}
+                customMessageEmptyDecisions={decisionsLabels(
+                  getNamePolicieStep(stepKeysPolicies.RISKSCORE_API_URL) ?? "",
+                )}
+                initialDecisions={rulesData.RiskScoreApiUrl}
+                editionMode={"classic"}
+                option={EUseCase.ADD}
+                loading={false}
+                onPreviousStep={onPreviousStep}
+                disabledButton={disabledButton}
+                decisionTemplateConfig={decisionTemplateGenPolicies}
+                setDecisionData={setDecisionData}
+                onSave={onNextStep}
               />
             )}
             {currentStep === stepKeysPolicies.VERIFICATION && (
@@ -190,19 +283,40 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
 
                   contributionsPortfolio: {
                     isValid: formValid,
-                    values: contributionsPortfolio,
+                    values: rulesData.ReciprocityFactorForCreditLimit,
                   },
                   incomePortfolio: {
                     isValid: formValid,
-                    values: incomePortfolio,
+                    values: rulesData.RiskScoreFactorForCreditLimit,
                   },
                   scoreModels: {
                     isValid: formValid,
-                    values: scoreModels,
+                    values: rulesData.CreditRiskScoringModel,
                   },
                   minimumIncomePercentage: {
                     isValid: formValid,
-                    values: minimumIncomePercentage,
+                    values: rulesData.MinimumSubsistenceReservePercentage,
+                  },
+
+                  basicNotificationFormat: {
+                    isValid: formValid,
+                    values: rulesData.BasicNotificationFormat,
+                  },
+                  basicNotificationRecipient: {
+                    isValid: formValid,
+                    values: rulesData.BasicNotificationRecipient,
+                  },
+                  minimumCreditBureauRiskScore: {
+                    isValid: formValid,
+                    values: rulesData.MinimumCreditBureauRiskScore,
+                  },
+                  notificationChannel: {
+                    isValid: formValid,
+                    values: rulesData.NotificationChannel,
+                  },
+                  riskScoreApiUrl: {
+                    isValid: formValid,
+                    values: rulesData.RiskScoreApiUrl,
                   },
                 }}
                 requestSteps={requestSteps}
@@ -220,6 +334,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 date={dateVerification}
                 setDateVerification={setDateVerification}
                 onCloseProcess={onCloseProcess}
+                optionsGenDecision={optionsGenDecision}
               />
             )}
           </Stack>

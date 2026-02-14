@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
@@ -10,6 +11,7 @@ import { compareObjects } from "@utils/compareObjects";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { ERequestType } from "@enum/requestType";
 import { EGeneral } from "@enum/general";
+import { ENameRules } from "@enum/nameRules";
 import { mediaQueryTablet } from "@config/environment";
 import { addGenCredPoliciesSteps } from "@config/generalCreditPolicies/assisted/steps";
 import { IAddGenCredPoliciesForms } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesForms";
@@ -18,6 +20,9 @@ import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecis
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { IUseAddGenCredPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseAddGenCredPolicies";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
+import { IRuleState, IRuleKey } from "@ptypes/generalCredPolicies/IRuleState";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 
 const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const { appData } = props;
@@ -30,6 +35,14 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
         PaymentCapacityBasedCreditLimit: false,
         ReciprocityBasedCreditLimit: false,
         RiskAnalysisBasedCreditLimit: false,
+        DATACREDITO_EXPERIAN: false,
+        TRANSUNION: false,
+        inquiryValidityPeriod: 0,
+        toggleLineCreditPayrollSpecialAdvance: false,
+        toggleLineCreditPayrollAdvance: false,
+        lineCreditPayrollAdvance: "",
+        lineCreditPayrollSpecialAdvance: "",
+        maximumNotifDocSize: 0,
       },
     },
   };
@@ -38,29 +51,117 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
   const [formValues, setFormValues] = useState(initialValues);
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
+  const [decisionData, setDecisionData] = useState<IRuleDecision[]>([]);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const [contributionsPortfolio, setContributionsPortfolio] = useState<
-    IRuleDecision[]
-  >([]);
-  const [minimumIncomePercentage, setMinimumIncomePercentage] = useState<
-    IRuleDecision[]
-  >([]);
-  const [scoreModels, setScoreModels] = useState<IRuleDecision[]>([]);
-  const [incomePortfolio, setIncomePortfolio] = useState<IRuleDecision[]>([]);
+
+  const [rulesData, setRulesData] = useState<IRuleState>({
+    ReciprocityFactorForCreditLimit: [],
+    RiskScoreFactorForCreditLimit: [],
+    MinimumSubsistenceReservePercentage: [],
+    CreditRiskScoringModel: [],
+    BasicNotificationFormat: [],
+    BasicNotificationRecipient: [],
+    MinimumCreditBureauRiskScore: [],
+    NotificationChannel: [],
+    RiskScoreApiUrl: [],
+  });
+
   const [showModal, setShowModal] = useState(false);
   const [dateVerification, setDateVerification] = useState<IDateVerification>();
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
+  const [disabledButton] = useState(true);
+  const [optionsGenDecision, setOptionsGenDecision] =
+    useState<IOptionsGenDecision>({} as IOptionsGenDecision);
 
   const navigate = useNavigate();
-
   const smallScreen = useMediaQuery(mediaQueryTablet);
-
   const decisionsGeneralRef = useRef<FormikProps<IDecisionsGeneralEntry>>(null);
 
   const formReferences: IAddGenCredPoliciesRef = {
     decisionsGeneral: decisionsGeneralRef,
   };
+
+  const ruleNameToKeyMap: Record<string, IRuleKey> = {
+    [ENameRules.CONTRIBUTIONS_PORTFOLIO]: "ReciprocityFactorForCreditLimit",
+    [ENameRules.INCOME_PORTFOLIO]: "RiskScoreFactorForCreditLimit",
+    [ENameRules.MINIMUM_INCOME_PERCENTAGE]:
+      "MinimumSubsistenceReservePercentage",
+    [ENameRules.SCORE_MODELS]: "CreditRiskScoringModel",
+    [ENameRules.BASIC_NOTIFICATION_FORMAT]: "BasicNotificationFormat",
+    [ENameRules.BASIC_NOTIFICATION_RECIPIENT]: "BasicNotificationRecipient",
+    [ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE]:
+      "MinimumCreditBureauRiskScore",
+    [ENameRules.NOTIFICATION_CHANNEL]: "NotificationChannel",
+    [ENameRules.RISKSCORE_API_URL]: "RiskScoreApiUrl",
+  };
+
+  const normalizeDecisionData = (
+    data: IRuleDecisionExtended[],
+  ): Partial<IRuleState> => {
+    if (!Array.isArray(data) || data.length === 0) {
+      return {};
+    }
+
+    const groupedRules: Partial<IRuleState> = {};
+
+    data.forEach((decision, index) => {
+      const ruleName = decision.ruleName;
+      const key = ruleNameToKeyMap[ruleName ?? ""];
+
+      if (!key) {
+        console.warn(`⚠️ No se encontró mapeo para ruleName: ${ruleName}`);
+        return;
+      }
+
+      const normalizedDecision: IRuleDecisionExtended = {
+        decisionId: `Decisión ${index + 1}`,
+        ruleName: decision.ruleName,
+        labelName: decision.labelName || decision.ruleName,
+        ruleDataType: decision.ruleDataType,
+        value: decision.value,
+        howToSetTheDecision: decision.howToSetTheDecision,
+        effectiveFrom: decision.effectiveFrom,
+        typeDecision: decision.typeDecision || "Permanent",
+        conditionGroups: Array.isArray(decision.conditionGroups)
+          ? decision.conditionGroups
+          : [],
+        decisionsByRule: Array.isArray((decision as any).decisionsByRule)
+          ? (decision as any).decisionsByRule
+          : [],
+      };
+
+      if (!groupedRules[key]) {
+        groupedRules[key] = [];
+      }
+      groupedRules[key]!.push(normalizedDecision);
+    });
+
+    return groupedRules;
+  };
+
+  useEffect(() => {
+    if (
+      decisionData &&
+      Array.isArray(decisionData) &&
+      decisionData.length > 0
+    ) {
+      const normalizedRules = normalizeDecisionData(decisionData);
+
+      setRulesData((prev) => {
+        const merged: IRuleState = { ...prev };
+
+        (Object.keys(normalizedRules) as IRuleKey[]).forEach((key) => {
+          const newValue = normalizedRules[key];
+          if (Array.isArray(newValue) && newValue.length > 0) {
+            merged[key] = newValue;
+          }
+        });
+
+        return merged;
+      });
+    }
+  }, [decisionData]);
 
   const getValues = () =>
     decisionsGeneralRef.current?.values || formValues.decisionsGeneral.values;
@@ -130,10 +231,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const { rules } = useRules({
     formValues,
     dateVerification: dateVerification ?? ({} as IDateVerification),
-    contributionsPortfolio,
-    incomePortfolio,
-    scoreModels,
-    minimumIncomePercentage,
+    rulesData,
   });
 
   const handleSubmitClick = () => {
@@ -168,7 +266,6 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
       if (hasUnsavedChanges) {
         event.preventDefault();
         setShowGoBackModal(!showGoBackModal);
-
         event.returnValue = "";
       }
     };
@@ -208,24 +305,22 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     smallScreen,
     isCurrentFormValid,
     showModal,
-    contributionsPortfolio,
-    incomePortfolio,
     formValid,
-    scoreModels,
     showRequestProcessModal,
     saveData,
     dateVerification,
     showGoBackModal,
-    minimumIncomePercentage,
-    setMinimumIncomePercentage,
+    disabledButton,
+    rulesData,
+    optionsGenDecision,
+    setOptionsGenDecision,
+    setDecisionData,
+    setRulesData,
     handleOpenModal,
     handleCloseGoBackModal,
     handleGoBack,
     setDateVerification,
     handleSubmitClick,
-    setScoreModels,
-    setIncomePortfolio,
-    setContributionsPortfolio,
     handleFormValidChange,
     handleToggleModal,
     handleNextStep,

@@ -1,19 +1,15 @@
 import { IRuleDecision } from "@isettingkit/input";
-import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { IDetailsTabsConfig } from "../IDetailsTabsConfig";
+import { IDecisionsDetails } from "../forms/IDecisionsDetails";
 
 interface IMoreDetailsModalUI {
   data: IEntry;
-  decisionTemplate: IRuleDecision;
   filteredTabsConfig: IDetailsTabsConfig;
   isSelected: string;
   portalId: string;
   smallScreenTab: boolean;
-  textValues: IRulesFormTextValues;
-  decisionsReciprocity: IRuleDecision[];
-  decisionsIncomePortfolio: IRuleDecision[];
-  decisionsScoreModels: IRuleDecision[];
+  decisions: IDecisionsDetails;
   isMobile: boolean;
   showGeneralDecisionsTab: boolean;
   showDecisionsRecip: boolean;
@@ -28,7 +24,21 @@ interface IMoreDetailsModalUI {
   showMinimum: boolean;
   showMinimumInserted: boolean;
   showMinimumDeleted: boolean;
-  decisionsMinimum: IRuleDecision[];
+  showBasicNotifFormat: boolean;
+  showBasicNotifFormatInserted: boolean;
+  showBasicNotifFormatDeleted: boolean;
+  showBasicNotifRecipient: boolean;
+  showBasicNotifRecipientInserted: boolean;
+  showBasicNotifRecipientDeleted: boolean;
+  showMinCredBureauRiskScore: boolean;
+  showMinCredBureauRiskInserted: boolean;
+  showMinCredBureauRiskDeleted: boolean;
+  showNotifChannel: boolean;
+  showNotifChanneInserted: boolean;
+  showNotifChanneDeleted: boolean;
+  showRiskScoreApiUrl: boolean;
+  showRiskScoreApiUrlInserted: boolean;
+  showRiskScoreApiUrlDeleted: boolean;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
   contribQuotaInserted?: IRuleDecision[];
@@ -39,6 +49,16 @@ interface IMoreDetailsModalUI {
   scoreModelsDeleted?: IRuleDecision[];
   minimumInserted?: IRuleDecision[];
   minimumDeleted?: IRuleDecision[];
+  basicNotifFormatInserted?: IRuleDecision[];
+  basicNotifFormatDeleted?: IRuleDecision[];
+  basicNotifRecipientInserted?: IRuleDecision[];
+  basicNotifRecipientDeleted?: IRuleDecision[];
+  minCredBureauRiskScoreInserted?: IRuleDecision[];
+  minCredBureauRiskScoreDeleted?: IRuleDecision[];
+  notifChannelInserted?: IRuleDecision[];
+  notifChannelDeleted?: IRuleDecision[];
+  riskScoreApiUrlInserted?: IRuleDecision[];
+  riskScoreApiUrlDeleted?: IRuleDecision[];
 }
 
 export type { IMoreDetailsModalUI };

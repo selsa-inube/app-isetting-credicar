@@ -7,6 +7,11 @@ interface IUpdateDataGenPolicies {
   incomePortfolio: { isValid: boolean; values: IRuleDecision[] };
   scoreModels: { isValid: boolean; values: IRuleDecision[] };
   minimumIncomePercentage: { isValid: boolean; values: IRuleDecision[] };
+  basicNotificationFormat: { isValid: boolean; values: IRuleDecision[] };
+  basicNotificationRecipient: { isValid: boolean; values: IRuleDecision[] };
+  minimumCreditBureauRiskScore: { isValid: boolean; values: IRuleDecision[] };
+  notificationChannel: { isValid: boolean; values: IRuleDecision[] };
+  riskScoreApiUrl: { isValid: boolean; values: IRuleDecision[] };
 }
 
 export type { IUpdateDataGenPolicies };

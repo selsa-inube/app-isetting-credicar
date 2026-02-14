@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
-import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { ECreditLines } from "@enum/creditLines";
 import { ENameRules } from "@enum/nameRules";
 import { EGeneralPolicies } from "@enum/generalPolicies";
@@ -15,6 +14,7 @@ import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { useMultipleEnumRules } from "../useMultipleEnumRules";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
@@ -22,43 +22,15 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
   let additionalDebtors;
   let realGuarantees;
+  let creditBureausConsultReq;
+  let inquiryValidityPeriod;
+  let lineCreditPayrollAdvance;
+  let lineCreditPayrollSpecialAdvance;
+  let maximumNotifDocSize;
 
   const onToggleMoreDetailsModal = () => {
     setShowMoreDetailsModal(!showMoreDetailsModal);
   };
-
-  const { ruleData: ruleContribution } = useEnumRules({
-    enumDestination: ENameRules.CONTRIBUTIONS_PORTFOLIO,
-    ruleCatalog: ECreditLines.RULE_CATALOG,
-    catalogAction: ECreditLines.CATALOG_ACTION,
-    businessUnits: appData.businessUnit.publicCode,
-    token: appData.token,
-  });
-
-  const { ruleData: ruleIncomePortfolio } = useEnumRules({
-    enumDestination: ENameRules.INCOME_PORTFOLIO,
-    ruleCatalog: ECreditLines.RULE_CATALOG,
-    catalogAction: ECreditLines.CATALOG_ACTION,
-    businessUnits: appData.businessUnit.publicCode,
-    token: appData.token,
-  });
-
-  const { ruleData: ruleMinimum } = useEnumRules({
-    enumDestination: ENameRules.MINIMUM_INCOME_PERCENTAGE,
-    ruleCatalog: ECreditLines.RULE_CATALOG,
-    catalogAction: ECreditLines.CATALOG_ACTION,
-    businessUnits: appData.businessUnit.publicCode,
-    token: appData.token,
-  });
-
-  const { conditionTraduction: conditionContribution } =
-    getConditionsTraduction(ruleContribution, appData.language);
-  const { conditionTraduction: conditionIncomePortfolio } =
-    getConditionsTraduction(ruleIncomePortfolio, appData.language);
-  const { conditionTraduction: conditionMinimum } = getConditionsTraduction(
-    ruleMinimum,
-    appData.language,
-  );
 
   const methodsMap: Record<string, string> = {
     [ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY]:
@@ -118,39 +90,95 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     methodsRemoved: methodsRemovedJoin,
     additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
     guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
+    creditBureausConsultReq: valueBoolean(
+      creditBureausConsultReq ?? EBooleanText.NO,
+    ),
+    inquiryValidityPeriod: valueBoolean(
+      inquiryValidityPeriod ?? EBooleanText.NO,
+    ),
+    lineCreditPayrollAdvance: valueBoolean(
+      lineCreditPayrollAdvance ?? EBooleanText.NO,
+    ),
+    lineCreditPayrollSpecialAdvance: valueBoolean(
+      lineCreditPayrollSpecialAdvance ?? EBooleanText.NO,
+    ),
+    maximumNotifDocSize: valueBoolean(maximumNotifDocSize ?? EBooleanText.NO),
   };
 
-  const decisionsReciprocity = getDecisionsByRule(
-    formatDetailsDecisions(data, conditionContribution),
-    ENameRules.CONTRIBUTIONS_PORTFOLIO,
-  );
-  const decisionsIncomePortfolio = getDecisionsByRule(
-    formatDetailsDecisions(data, conditionIncomePortfolio),
-    ENameRules.INCOME_PORTFOLIO,
-  );
+  const { rulesDataMap } = useMultipleEnumRules({
+    ruleNames: [
+      ENameRules.CONTRIBUTIONS_PORTFOLIO,
+      ENameRules.INCOME_PORTFOLIO,
+      ENameRules.MINIMUM_INCOME_PERCENTAGE,
+      ENameRules.SCORE_MODELS,
+      ENameRules.BASIC_NOTIFICATION_FORMAT,
+      ENameRules.BASIC_NOTIFICATION_RECIPIENT,
+      ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE,
+      ENameRules.NOTIFICATION_CHANNEL,
+      ENameRules.RISKSCORE_API_URL,
+    ],
+    ruleCatalog: ECreditLines.RULE_CATALOG,
+    catalogAction: ECreditLines.CATALOG_ACTION,
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
 
-  const decisionsScoreModels = getDecisionsByRule(
-    formatDetailsDecisions(data),
-    ENameRules.SCORE_MODELS,
-    (condition: IEntry) =>
-      condition.conditionName !== EGeneralPolicies.CONDITION_BUSINESS_UNIT,
-  );
+  const conditionsMap = useMemo(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const map: Record<string, any> = {};
 
-  const decisionsMinimum = getDecisionsByRule(
-    formatDetailsDecisions(data, conditionMinimum),
-    ENameRules.MINIMUM_INCOME_PERCENTAGE,
-  );
+    Object.keys(rulesDataMap).forEach((ruleName) => {
+      const ruleData = rulesDataMap[ruleName];
+      if (ruleData) {
+        const { conditionTraduction } = getConditionsTraduction(
+          ruleData,
+          appData.language,
+        );
+        map[ruleName] = conditionTraduction;
+      }
+    });
+
+    return map;
+  }, [rulesDataMap, appData.language]);
+
+  const generateDecisions = (
+    ruleName: string,
+    filter?: (condition: IEntry) => boolean,
+  ) => {
+    return getDecisionsByRule(
+      formatDetailsDecisions(data, conditionsMap[ruleName]),
+      ruleName,
+      filter,
+    );
+  };
+
+  const decisions = {
+    reciprocity: generateDecisions(ENameRules.CONTRIBUTIONS_PORTFOLIO),
+    incomePortfolio: generateDecisions(ENameRules.INCOME_PORTFOLIO),
+    scoreModels: generateDecisions(
+      ENameRules.SCORE_MODELS,
+      (condition) =>
+        condition.conditionName !== EGeneralPolicies.CONDITION_BUSINESS_UNIT,
+    ),
+    minimum: generateDecisions(ENameRules.MINIMUM_INCOME_PERCENTAGE),
+    basicNotifFormat: generateDecisions(ENameRules.BASIC_NOTIFICATION_FORMAT),
+    basicNotifRecipient: generateDecisions(
+      ENameRules.BASIC_NOTIFICATION_RECIPIENT,
+    ),
+    minCredBureauRiskScore: generateDecisions(
+      ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE,
+    ),
+    notifChannel: generateDecisions(ENameRules.NOTIFICATION_CHANNEL),
+    riskScoreApiUrl: generateDecisions(ENameRules.RISKSCORE_API_URL),
+  };
 
   const isMoreDetails = data.useCaseName === EGeneralPolicies.USE_CASE_EDIT;
 
   return {
     showMoreDetailsModal,
     moreDetailsData,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
+    decisions,
     isMoreDetails,
-    decisionsMinimum,
     onToggleMoreDetailsModal,
   };
 };

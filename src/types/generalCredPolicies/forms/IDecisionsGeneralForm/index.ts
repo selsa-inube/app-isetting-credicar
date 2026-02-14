@@ -1,8 +1,12 @@
+import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 import { IDecisionsGeneralEntry } from "../IDecisionsGeneralEntry";
 
 interface IDecisionsGeneralForm {
   initialValues: IDecisionsGeneralEntry;
   handleNextStep: () => void;
+  setOptionsGenDecision?: React.Dispatch<
+    React.SetStateAction<IOptionsGenDecision>
+  >;
   editDataOption?: boolean;
   loading?: boolean;
   onFormValid?: React.Dispatch<React.SetStateAction<boolean>>;

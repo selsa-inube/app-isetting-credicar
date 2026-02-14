@@ -1,4 +1,5 @@
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IUpdateDataGenPolicies } from "../IUpdateDataGenPolicies";
 import { IDateVerification } from "../IDateVerification";
@@ -12,6 +13,7 @@ interface IVerificationForm {
   loading: boolean;
   showPendingReqModal: boolean;
   date: IDateVerification;
+  optionsGenDecision: IOptionsGenDecision;
   setDateVerification: React.Dispatch<
     React.SetStateAction<IDateVerification | undefined>
   >;

@@ -10,6 +10,8 @@ import { formatDate } from "@utils/date/formatDate";
 import { hasValuesRule } from "@utils/hasValuesRule";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { compareObjects } from "@utils/compareObjects";
+import { hasStringValues } from "@utils/hasStringValues";
+import { dataEvaluatePolicies } from "@utils/dataEvaluatePolicies";
 import { ERequestType } from "@enum/requestType";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { EGeneral } from "@enum/general";
@@ -18,6 +20,8 @@ import { editGeneralPoliciesTabsConfig } from "@config/generalCreditPolicies/edi
 import { calculation } from "@config/generalCreditPolicies/editGeneralPolicies/calculation";
 import { reciprocity } from "@config/generalCreditPolicies/editGeneralPolicies/reciprocity";
 import { mediaQueryTablet } from "@config/environment";
+import { datacreditoExperian } from "@config/generalCreditPolicies/editGeneralPolicies/datacreditoExperian";
+import { transunion } from "@config/generalCreditPolicies/editGeneralPolicies/transunion";
 import { editLabels } from "@config/generalCreditPolicies/editGeneralPolicies/editLabels";
 import { IDecisionsGeneralEntry } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralEntry";
 import { IEditPoliciesTabsConfig } from "@ptypes/generalCredPolicies/IEditPoliciesTabsConfig";
@@ -36,6 +40,16 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
   } = props;
   const { appData } = useContext(AuthAndPortalData);
 
@@ -61,7 +75,29 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     return { hasReciprocity, hasCalculation, hasFactor };
   };
 
+  const initialCreditBureausData = () => {
+    if (
+      !creditBureausConsultReqData ||
+      creditBureausConsultReqData.length === 0
+    ) {
+      return {
+        hasDatacreditoExperian: false,
+        hasTransunion: false,
+      };
+    }
+    const hasDatacreditoExperian = creditBureausConsultReqData.some(
+      (condition) => datacreditoExperian.includes(condition.value as string),
+    );
+    const hasTransunion = creditBureausConsultReqData.some((condition) =>
+      transunion.includes(condition.value as string),
+    );
+
+    return { hasDatacreditoExperian, hasTransunion };
+  };
+
+  const [decisionData, setDecisionData] = useState<IRuleDecision[]>([]);
   const { hasReciprocity, hasCalculation, hasFactor } = initialMethodsData();
+  const { hasDatacreditoExperian, hasTransunion } = initialCreditBureausData();
 
   const initialDecisionsGenData = {
     additionalDebtors: hasValuesRule(additionalDebtorsData),
@@ -69,6 +105,20 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     PaymentCapacityBasedCreditLimit: hasCalculation ?? false,
     ReciprocityBasedCreditLimit: hasReciprocity ?? false,
     RiskAnalysisBasedCreditLimit: hasFactor ?? false,
+    DATACREDITO_EXPERIAN: hasDatacreditoExperian ?? false,
+    TRANSUNION: hasTransunion ?? false,
+    inquiryValidityPeriod: Number(inquiryValidityPeriodData?.[0]?.value ?? 0),
+    toggleLineCreditPayrollSpecialAdvance:
+      hasStringValues(lineCreditPayrollSpecialAdvanceData) ?? false,
+    toggleLineCreditPayrollAdvance:
+      hasStringValues(lineCreditPayrollAdvanceData) ?? false,
+    lineCreditPayrollAdvance: dataEvaluatePolicies(
+      lineCreditPayrollAdvanceData as IRuleDecisionExtended[],
+    ),
+    lineCreditPayrollSpecialAdvance: dataEvaluatePolicies(
+      lineCreditPayrollSpecialAdvanceData as IRuleDecisionExtended[],
+    ),
+    maximumNotifDocSize: Number(maximumNotifDocSizeData?.[0]?.value ?? 0),
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(
@@ -113,6 +163,22 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     normalizeEvaluateRuleData(minimumIncomeData),
   );
 
+  const normalizedBasicNotificFormat = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(basicNotificFormatData),
+  );
+  const normalizedBasicNotificationRec = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(basicNotificationRecData),
+  );
+  const normalizedMinCredBureauRiskScore = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(minCredBureauRiskScoreData),
+  );
+  const normalizedNotifChannel = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(notifChannelData),
+  );
+  const normalizedRiskScoreApiUrl = fixDecisionsByRuleArray(
+    normalizeEvaluateRuleData(riskScoreApiUrlData),
+  );
+
   const prevContributionsRef = useRef<IRules[]>([]);
   prevContributionsRef.current = normalizedContributions ?? [];
 
@@ -125,29 +191,40 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const prevMinimumIncomeRef = useRef<IRules[]>([]);
   prevMinimumIncomeRef.current = normalizedMinimumIncome ?? [];
 
+  const prevBasicNotificFormatRef = useRef<IRules[]>([]);
+  prevBasicNotificFormatRef.current = normalizedBasicNotificFormat ?? [];
+
+  const prevBasicNotificationRecRef = useRef<IRules[]>([]);
+  prevBasicNotificationRecRef.current = normalizedBasicNotificationRec ?? [];
+
+  const prevMinCredBureauRiskScoreRef = useRef<IRules[]>([]);
+  prevMinCredBureauRiskScoreRef.current =
+    normalizedMinCredBureauRiskScore ?? [];
+
+  const prevNotifChannelRef = useRef<IRules[]>([]);
+  prevNotifChannelRef.current = normalizedNotifChannel ?? [];
+
+  const prevRiskScoreApiUrlRef = useRef<IRules[]>([]);
+  prevRiskScoreApiUrlRef.current = normalizedRiskScoreApiUrl ?? [];
+
   const {
     showRequestProcessModal,
-    contributionsPortfolio,
     isCurrentFormValid,
-    incomePortfolio,
-    scoreModels,
     dateDecisions,
     newDecisions,
     showReciprocity,
     showFactor,
-    minimumIncomePercentage,
-    setMinimumIncomePercentage,
+    rulesData,
+    disabledButton,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
-    setIncomePortfolio,
-    setScoreModels,
-    setContributionsPortfolio,
     setIsCurrentFormValid,
     setShowRequestProcessModal,
   } = useNewDecisions({
     formValues,
     initialGeneralData: initialDecisionsGenData,
+    decisionData,
     contributionsData,
     incomeData,
     methodsData,
@@ -155,14 +232,25 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     additionalDebtorsData,
     realGuaranteesData,
     minimumIncomeData,
-    normalizedContributions,
-    normalizedIncome,
-    normalizedScoreModels,
-    normalizedMinimumIncome,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
     prevContributionsRef,
     prevIncomesRef,
     prevScoreModelsRef,
     prevMinimumIncomeRef,
+    prevBasicNotificFormatRef,
+    prevBasicNotificationRecRef,
+    prevMinCredBureauRiskScoreRef,
+    prevNotifChannelRef,
+    prevRiskScoreApiUrlRef,
     user: appData.user.userAccount,
   });
 
@@ -333,26 +421,31 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const showScoreModels =
     filteredTabs.scoreModels && isSelected === filteredTabs.scoreModels.id;
 
-  const heightContPageContribut =
-    contributionsPortfolio.length === 0 ? "58vh" : "auto";
+  const showBasicNotificFormat =
+    filteredTabs.basicNotificationFormat &&
+    isSelected === filteredTabs.basicNotificationFormat.id;
 
-  const heightContPageMinimum =
-    minimumIncomePercentage.length === 0 ? "58vh" : "auto";
+  const showBasicNotifRecipient =
+    filteredTabs.basicNotificationRecipient &&
+    isSelected === filteredTabs.basicNotificationRecipient.id;
 
-  const heightContPageIncome = incomePortfolio.length === 0 ? "58vh" : "auto";
-  const heightContPageScoreModels = scoreModels.length === 0 ? "58vh" : "auto";
+  const showMinCreditBureauRiskScore =
+    filteredTabs.minimumCreditBureauRiskScore &&
+    isSelected === filteredTabs.minimumCreditBureauRiskScore.id;
+
+  const showNotificationChannel =
+    filteredTabs.notificationChannel &&
+    isSelected === filteredTabs.notificationChannel.id;
+
+  const showRiskScoreApiUrl =
+    filteredTabs.riskScoreApiUrl &&
+    isSelected === filteredTabs.riskScoreApiUrl.id;
 
   return {
-    contributionsPortfolio,
     dateDecisions,
     decisionsGeneralRef,
     filteredTabs,
     formValues,
-    heightContPageContribut,
-    heightContPageIncome,
-    heightContPageMinimum,
-    heightContPageScoreModels,
-    incomePortfolio,
     initialDecisionsGenData,
     isCurrentFormValid,
     isSelected,
@@ -360,9 +453,12 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     normalizedIncome,
     normalizedScoreModels,
     normalizedMinimumIncome,
+    normalizedRiskScoreApiUrl,
+    normalizedNotifChannel,
+    normalizedMinCredBureauRiskScore,
+    normalizedBasicNotificationRec,
+    normalizedBasicNotificFormat,
     saveData,
-    scoreModels,
-    minimumIncomePercentage,
     showContributions,
     showDateModal,
     showDecisionsGeneral,
@@ -372,7 +468,20 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     showMinimumIncome,
     showRequestProcessModal,
     showScoreModels,
+    showBasicNotificFormat,
+    showBasicNotifRecipient,
+    showMinCreditBureauRiskScore,
+    showNotificationChannel,
+    showRiskScoreApiUrl,
     smallScreen,
+    rulesData,
+    prevBasicNotificFormatRef,
+    prevBasicNotificationRecRef,
+    prevMinCredBureauRiskScoreRef,
+    prevNotifChannelRef,
+    prevRiskScoreApiUrlRef,
+    disabledButton,
+    setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,
     setShowReciprocity,
@@ -384,10 +493,6 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     handleGoBack,
     handleCloseGoBackModal,
     normalizeEvaluateRuleData,
-    setIncomePortfolio,
-    setScoreModels,
-    setContributionsPortfolio,
-    setMinimumIncomePercentage,
     handleReset,
     setIsCurrentFormValid,
     handleTabChange,

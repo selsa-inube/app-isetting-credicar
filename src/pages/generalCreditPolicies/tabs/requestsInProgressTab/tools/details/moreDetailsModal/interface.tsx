@@ -25,22 +25,42 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     showMinimum,
     showMinimumInserted,
     showMinimumDeleted,
-    decisionsMinimum,
+    showBasicNotifFormat,
+    showBasicNotifFormatInserted,
+    showBasicNotifFormatDeleted,
+    showBasicNotifRecipient,
+    showBasicNotifRecipientInserted,
+    showBasicNotifRecipientDeleted,
+    showMinCredBureauRiskScore,
+    showMinCredBureauRiskInserted,
+    showMinCredBureauRiskDeleted,
+    showNotifChannel,
+    showNotifChanneInserted,
+    showNotifChanneDeleted,
+    showRiskScoreApiUrl,
+    showRiskScoreApiUrlInserted,
+    showRiskScoreApiUrlDeleted,
     minimumInserted,
     minimumDeleted,
     data,
     portalId,
-    textValues,
-    decisionTemplate,
-    decisionsReciprocity,
-    decisionsIncomePortfolio,
-    decisionsScoreModels,
+    decisions,
     contribQuotaInserted,
     contribQuotaDeleted,
     incomeQuotaInserted,
     incomeQuotaDeleted,
     scoreModelsInserted,
     scoreModelsDeleted,
+    basicNotifFormatInserted,
+    basicNotifFormatDeleted,
+    basicNotifRecipientInserted,
+    basicNotifRecipientDeleted,
+    minCredBureauRiskScoreInserted,
+    minCredBureauRiskScoreDeleted,
+    notifChannelInserted,
+    notifChannelDeleted,
+    riskScoreApiUrlInserted,
+    riskScoreApiUrlDeleted,
     isMobile,
     onCloseModal,
     onTabChange,
@@ -68,90 +88,76 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showGeneralDecisionsTab && (
           <GeneralTab data={data} labelsDetails={generalDataLabels} />
         )}
-        {showDecisionsRecip && (
-          <DecisionTab
-            data={decisionsReciprocity}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
+        {showDecisionsRecip && <DecisionTab data={decisions.reciprocity} />}
         {showContribInserted && (
-          <DecisionTab
-            data={contribQuotaInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={contribQuotaInserted ?? []} />
         )}
-        {showContribDeleted && (
-          <DecisionTab
-            data={contribQuotaDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
+        {showContribDeleted && <DecisionTab data={contribQuotaDeleted ?? []} />}
         {showDecisionsIncome && (
-          <DecisionTab
-            data={decisionsIncomePortfolio}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={decisions.incomePortfolio} />
         )}
-        {showIncomeInserted && (
-          <DecisionTab
-            data={incomeQuotaInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showIncomeDeleted && (
-          <DecisionTab
-            data={incomeQuotaDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
-        {showScoreModels && (
-          <DecisionTab
-            data={decisionsScoreModels}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
-        )}
+        {showIncomeInserted && <DecisionTab data={incomeQuotaInserted ?? []} />}
+        {showIncomeDeleted && <DecisionTab data={incomeQuotaDeleted ?? []} />}
+        {showScoreModels && <DecisionTab data={decisions.scoreModels} />}
         {showScoreModelsInserted && (
-          <DecisionTab
-            data={scoreModelsInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={scoreModelsInserted ?? []} />
         )}
         {showScoreModelsDeleted && (
-          <DecisionTab
-            data={scoreModelsDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+          <DecisionTab data={scoreModelsDeleted ?? []} />
         )}
 
-        {showMinimum && (
-          <DecisionTab
-            data={decisionsMinimum}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+        {showMinimum && <DecisionTab data={decisions.minimum} />}
+        {showMinimumInserted && <DecisionTab data={minimumInserted ?? []} />}
+        {showMinimumDeleted && <DecisionTab data={minimumDeleted ?? []} />}
+
+        {showBasicNotifFormat && (
+          <DecisionTab data={decisions.basicNotifFormat} />
         )}
-        {showMinimumInserted && (
-          <DecisionTab
-            data={minimumInserted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+        {showBasicNotifFormatInserted && (
+          <DecisionTab data={basicNotifFormatInserted ?? []} />
         )}
-        {showMinimumDeleted && (
-          <DecisionTab
-            data={minimumDeleted ?? []}
-            textValues={textValues}
-            decisionTemplate={decisionTemplate}
-          />
+        {showBasicNotifFormatDeleted && (
+          <DecisionTab data={basicNotifFormatDeleted ?? []} />
+        )}
+
+        {showBasicNotifRecipient && (
+          <DecisionTab data={decisions.basicNotifRecipient} />
+        )}
+        {showBasicNotifRecipientInserted && (
+          <DecisionTab data={basicNotifRecipientInserted ?? []} />
+        )}
+        {showBasicNotifRecipientDeleted && (
+          <DecisionTab data={basicNotifRecipientDeleted ?? []} />
+        )}
+
+        {showMinCredBureauRiskScore && (
+          <DecisionTab data={decisions.minCredBureauRiskScore} />
+        )}
+        {showMinCredBureauRiskInserted && (
+          <DecisionTab data={minCredBureauRiskScoreInserted ?? []} />
+        )}
+        {showMinCredBureauRiskDeleted && (
+          <DecisionTab data={minCredBureauRiskScoreDeleted ?? []} />
+        )}
+
+        {showNotifChannel && <DecisionTab data={decisions.notifChannel} />}
+
+        {showNotifChanneInserted && (
+          <DecisionTab data={notifChannelInserted ?? []} />
+        )}
+        {showNotifChanneDeleted && (
+          <DecisionTab data={notifChannelDeleted ?? []} />
+        )}
+
+        {showRiskScoreApiUrl && (
+          <DecisionTab data={decisions.riskScoreApiUrl} />
+        )}
+
+        {showRiskScoreApiUrlInserted && (
+          <DecisionTab data={riskScoreApiUrlInserted ?? []} />
+        )}
+        {showRiskScoreApiUrlDeleted && (
+          <DecisionTab data={riskScoreApiUrlDeleted ?? []} />
         )}
         <Divider />
       </Stack>

@@ -17,8 +17,8 @@
   },
   "dependencies": {
     "@inube/iauth-react": "^3.0.4",
-    "@inubekit/inubekit": "^6.4.0",
-    "@isettingkit/business-rules": "^2.2.37",
+    "@inubekit/inubekit": "^6.6.0",
+    "@isettingkit/business-rules": "^3.0.1",
     "@isettingkit/input": "^1.1.23",
     "@isettingkit/view": "^0.1.39",
     "axios": "^1.7.7",
