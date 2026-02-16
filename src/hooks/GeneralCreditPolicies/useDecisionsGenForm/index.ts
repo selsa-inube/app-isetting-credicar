@@ -1,10 +1,11 @@
 import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useFormik } from "formik";
-import { object } from "yup";
+import { object, string } from "yup";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
+import { validationMessages } from "@validations/validationMessages";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { validationRules } from "@validations/validationRules";
 import { mediaQueryMobile } from "@config/environment";
@@ -39,9 +40,23 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       creditBureausConsultReq: validationRules.string,
       inquiryValidityPeriod: validationRules.number,
       toggleLineCreditPayrollAdvance: validationRules.boolean,
-      lineCreditPayrollAdvance: validationRules.string,
+      lineCreditPayrollAdvance: string().when(
+        "toggleLineCreditPayrollAdvance",
+        {
+          is: true,
+          then: (schema) => schema.required(validationMessages.required),
+          otherwise: (schema) => schema.notRequired(),
+        },
+      ),
       toggleLineCreditPayrollSpecialAdvance: validationRules.boolean,
-      lineCreditPayrollSpecialAdvance: validationRules.string,
+      lineCreditPayrollSpecialAdvance: string().when(
+        "toggleLineCreditPayrollSpecialAdvance",
+        {
+          is: true,
+          then: (schema) => schema.required(validationMessages.required),
+          otherwise: (schema) => schema.notRequired(),
+        },
+      ),
       maximumNotifDocSize: validationRules.number,
     });
 
@@ -170,7 +185,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(valuesEqualBoton);
+        setIsDisabledButton(valuesEqualBoton || !formik.isValid);
       } else {
         setIsDisabledButton(!formik.isValid || validatefields);
       }

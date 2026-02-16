@@ -15,6 +15,7 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { LoadingPage } from "@design/feedback/loadingPage";
+import { isInvalid } from "@utils/isInvalid";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IDecisionsGeneralFormUI } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralFormUI";
 import { infoObligationModal } from "@config/generalCreditPolicies/generic/infoObligationModal";
@@ -174,9 +175,13 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     <Select
                       label={decisionsGenLabels.which}
                       name="lineCreditPayrollAdvance"
+                      placeholder={decisionsGenLabels.placeholderReference}
                       onChange={onChange}
                       options={payrollAdvanceOptions}
                       value={formik.values.lineCreditPayrollAdvance}
+                      message={formik.errors.lineCreditPayrollAdvance}
+                      invalid={isInvalid(formik, "lineCreditPayrollAdvance")}
+                      onBlur={formik.handleBlur}
                     />
                   </Stack>
                 )}
@@ -198,10 +203,17 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                   >
                     <Select
                       label={decisionsGenLabels.which}
+                      placeholder={decisionsGenLabels.placeholderReference}
                       name="lineCreditPayrollSpecialAdvance"
                       onChange={onChange}
                       options={payrollSpecialAdvanceOptions}
                       value={formik.values.lineCreditPayrollSpecialAdvance}
+                      message={formik.errors.lineCreditPayrollSpecialAdvance}
+                      invalid={isInvalid(
+                        formik,
+                        "lineCreditPayrollSpecialAdvance",
+                      )}
+                      onBlur={formik.handleBlur}
                     />
                   </Stack>
                 )}
