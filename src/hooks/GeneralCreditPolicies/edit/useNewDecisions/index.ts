@@ -216,7 +216,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.ADDITIONAL_DEBTORS,
     formValues.additionalDebtors ?? "",
     initialGeneralData.additionalDebtors,
-    ETransactionOperation.PARTIAL_UPDATE,
     additionalDebtorsData,
   );
 
@@ -224,7 +223,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.REAL_GUARANTEES,
     formValues.realGuarantees ?? "",
     initialGeneralData.realGuarantees,
-    ETransactionOperation.PARTIAL_UPDATE,
     realGuaranteesData,
   );
 
@@ -232,7 +230,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.INQUIRY_VALIDITY_PERIOD,
     formValues.inquiryValidityPeriod ?? undefined,
     String(initialGeneralData.inquiryValidityPeriod ?? 0),
-    ETransactionOperation.PARTIAL_UPDATE,
     inquiryValidityPeriodData,
   );
 
@@ -247,14 +244,12 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
     formValues.lineCreditPayrollAdvance ?? "",
     initialGeneralData.lineCreditPayrollAdvance,
-    ETransactionOperation.PARTIAL_UPDATE,
     lineCreditPayrollAdvanceData,
   );
   const lineCreditPayrollSpecialAdvance = decisionWithoutConditions(
     ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
     formValues.lineCreditPayrollSpecialAdvance ?? "",
     initialGeneralData.lineCreditPayrollSpecialAdvance,
-    ETransactionOperation.PARTIAL_UPDATE,
     lineCreditPayrollSpecialAdvanceData,
   );
 
@@ -262,7 +257,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE,
     formValues.maximumNotifDocSize ?? undefined,
     String(initialGeneralData.inquiryValidityPeriod ?? 0),
-    ETransactionOperation.PARTIAL_UPDATE,
     maximumNotifDocSizeData,
   );
 
