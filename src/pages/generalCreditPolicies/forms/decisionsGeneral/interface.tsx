@@ -115,14 +115,18 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                   <Stack alignItems="center" gap={tokens.spacing.s050}>
                     <Text size="medium">{decisionsGenLabels.second}</Text>
                   </Stack>
-
-                  <Checkpicker
-                    label={""}
-                    name="creditBureausConsultReq"
-                    onChange={onChangeCreditBureaus}
-                    options={creditBureausOptions}
-                    values={formik.values.creditBureausConsultReq}
-                  />
+                  <Stack
+                    direction="column"
+                    padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
+                  >
+                    <Checkpicker
+                      label={""}
+                      name="creditBureausConsultReq"
+                      onChange={onChangeCreditBureaus}
+                      options={creditBureausOptions}
+                      values={formik.values.creditBureausConsultReq}
+                    />
+                  </Stack>
                 </Stack>
                 <ToggleGeneralDecision
                   name="additionalDebtors"
