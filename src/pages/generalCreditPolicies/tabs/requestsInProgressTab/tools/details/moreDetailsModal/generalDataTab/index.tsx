@@ -36,8 +36,8 @@ const GeneralTab = (props: IGeneralDecisionsTab) => {
             key={id}
             direction="column"
             width="100%"
-            height="200px"
-            minHeight="52px"
+            height="auto"
+            minHeight="60px"
             borderRadius={tokens.spacing.s100}
             padding={
               isMobile

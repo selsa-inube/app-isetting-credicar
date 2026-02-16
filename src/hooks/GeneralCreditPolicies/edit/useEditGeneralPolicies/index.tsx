@@ -107,7 +107,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     RiskAnalysisBasedCreditLimit: hasFactor ?? false,
     DATACREDITO_EXPERIAN: hasDatacreditoExperian ?? false,
     TRANSUNION: hasTransunion ?? false,
-    inquiryValidityPeriod: Number(inquiryValidityPeriodData?.[0]?.value ?? 0),
+    inquiryValidityPeriod:
+      Number(inquiryValidityPeriodData?.[0]?.value) || undefined,
     toggleLineCreditPayrollSpecialAdvance:
       hasStringValues(lineCreditPayrollSpecialAdvanceData) ?? false,
     toggleLineCreditPayrollAdvance:
@@ -118,7 +119,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     lineCreditPayrollSpecialAdvance: dataEvaluatePolicies(
       lineCreditPayrollSpecialAdvanceData as IRuleDecisionExtended[],
     ),
-    maximumNotifDocSize: Number(maximumNotifDocSizeData?.[0]?.value ?? 0),
+    maximumNotifDocSize:
+      Number(maximumNotifDocSizeData?.[0]?.value) || undefined,
   };
 
   const [formValues, setFormValues] = useState<IDecisionsGeneralEntry>(

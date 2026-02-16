@@ -6,12 +6,12 @@ interface IDecisionsGeneralEntry {
   RiskAnalysisBasedCreditLimit: boolean;
   DATACREDITO_EXPERIAN: boolean;
   TRANSUNION: boolean;
-  inquiryValidityPeriod: number;
+  inquiryValidityPeriod: number | undefined;
   toggleLineCreditPayrollSpecialAdvance: boolean;
   toggleLineCreditPayrollAdvance: boolean;
   lineCreditPayrollAdvance: string;
   lineCreditPayrollSpecialAdvance: string;
-  maximumNotifDocSize: number;
+  maximumNotifDocSize: number | undefined;
 }
 
 export type { IDecisionsGeneralEntry };

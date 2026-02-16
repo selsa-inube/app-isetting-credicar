@@ -20,6 +20,20 @@ const generalDataLabels = [
       "Métodos eliminados que se utilizan para el cálculo del cupo global por cliente",
   },
   {
+    id: "creditBureaus",
+    titleName: "¿En cuales centrales de riesgo se debe consultar los clientes?",
+  },
+  {
+    id: "creditBureausAdded",
+    titleName:
+      "Centrales de riesgo agregadas que se deben consultar los clientes",
+  },
+  {
+    id: "creditBureausRemoved",
+    titleName:
+      "Centrales de riesgo eliminadas que se deben consultar los clientes",
+  },
+  {
     id: "additionalDebtors",
     titleName: "¿Se permiten deudores adicionales en una solicitud?",
   },
@@ -38,10 +52,6 @@ const generalDataLabels = [
       "¿Las obligaciones con garantías reales se incluyen en el cálculo del descubierto?",
   },
   {
-    id: "creditBureausConsultReq",
-    titleName: "¿En cuales centrales de riesgo se debe consultar los clientes?",
-  },
-  {
     id: "inquiryValidityPeriod",
     titleName:
       "¿Cuál es la vigencia, en días, de la consulta de un cliente en las centrales de riesgo?",
@@ -51,8 +61,24 @@ const generalDataLabels = [
     titleName: "¿Tienes una línea de crédito para adelanto de nómina?",
   },
   {
+    id: "linePayrollAdvanceAdded",
+    titleName: "Líneas de crédito agregadas para adelanto de nómina",
+  },
+  {
+    id: "linePayrollAdvanceRemoved",
+    titleName: "Líneas de crédito eliminadas para adelanto de nómina",
+  },
+  {
     id: "lineCreditPayrollSpecialAdvance",
     titleName: "¿Tienes una línea de crédito para adelanto de prima?",
+  },
+  {
+    id: "linePayrollSpecialAdvanceAdded",
+    titleName: "Líneas de crédito agregadas para adelanto de prima",
+  },
+  {
+    id: "linePayrollSpecialAdvanceRemoved",
+    titleName: "Líneas de crédito eliminadas para adelanto de prima",
   },
   {
     id: "maximumNotifDocSize",

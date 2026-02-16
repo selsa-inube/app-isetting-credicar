@@ -73,10 +73,6 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const [showInformationObligationModal, setShowInfoObligModal] =
     useState(false);
   const [isDisabledButton, setIsDisabledButton] = useState(false);
-  const [selectedPayrollAdvance, setSelectedPayrollAdvance] =
-    useState<string>("");
-  const [selectedPayrollSpecialAdvance, setSelectedPayrollSpecialAdvance] =
-    useState<string>("");
 
   const { enumData: methods } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
@@ -163,25 +159,23 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     formik.setFieldValue(name, checked);
   };
   const handleChangePayrollAdvance = (_name: string, value: string) => {
-    setSelectedPayrollAdvance(value);
+    formik.setFieldValue("lineCreditPayrollAdvance", value);
   };
   const handleChangePayrollSpecialAdvance = (_name: string, value: string) => {
-    setSelectedPayrollSpecialAdvance(value);
+    formik.setFieldValue("lineCreditPayrollSpecialAdvance", value);
   };
-  useEffect(() => {
-    if (selectedPayrollAdvance) {
-      formik.setFieldValue("lineCreditPayrollAdvance", selectedPayrollAdvance);
-    }
-  }, [selectedPayrollAdvance]);
 
   useEffect(() => {
-    if (selectedPayrollSpecialAdvance) {
-      formik.setFieldValue(
-        "lineCreditPayrollSpecialAdvance",
-        selectedPayrollSpecialAdvance,
-      );
+    if (formik.values.toggleLineCreditPayrollAdvance === false) {
+      formik.setFieldValue("lineCreditPayrollAdvance", "");
     }
-  }, [selectedPayrollSpecialAdvance]);
+  }, [formik.values.toggleLineCreditPayrollAdvance]);
+
+  useEffect(() => {
+    if (formik.values.toggleLineCreditPayrollSpecialAdvance === false) {
+      formik.setFieldValue("lineCreditPayrollSpecialAdvance", "");
+    }
+  }, [formik.values.toggleLineCreditPayrollSpecialAdvance]);
 
   useEffect(() => {
     if (setShowReciprocity) {
@@ -252,8 +246,6 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     isDisabledButton,
     buttonLabel,
     methodsOptions,
-    selectedPayrollSpecialAdvance,
-    selectedPayrollAdvance,
     payrollAdvanceOptions,
     payrollSpecialAdvanceOptions,
     creditBureausOptions,

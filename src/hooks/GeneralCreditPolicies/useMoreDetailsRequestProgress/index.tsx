@@ -12,6 +12,7 @@ import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
+import { optionsCreditBureaus } from "@config/generalCreditPolicies/editGeneralPolicies/optionsCreditBureaus";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { useMultipleEnumRules } from "../useMultipleEnumRules";
@@ -22,10 +23,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
   let additionalDebtors;
   let realGuarantees;
-  let creditBureausConsultReq;
   let inquiryValidityPeriod;
-  let lineCreditPayrollAdvance;
-  let lineCreditPayrollSpecialAdvance;
   let maximumNotifDocSize;
 
   const onToggleMoreDetailsModal = () => {
@@ -40,9 +38,27 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
       optionsMethods.ReciprocityOfContributions,
   };
 
+  const creditBureausMap: Record<string, string> = {
+    [ERulesOfDecisions.DATACREDITO_EXPERIAN]:
+      optionsCreditBureaus.datacreditoExperian,
+    [ERulesOfDecisions.TRANSUNION]: optionsCreditBureaus.transunion,
+  };
+
   const methodsArray: string[] = [];
   const methodsRemoved: string[] = [];
   const methodsAdded: string[] = [];
+
+  const creditBureausArray: string[] = [];
+  const creditBureausRemoved: string[] = [];
+  const creditBureausAdded: string[] = [];
+
+  const lineCreditPayrollAdvance: string[] = [];
+  const linePayrollAdvanceadded: string[] = [];
+  const linePayrollAdvanceRemoved: string[] = [];
+
+  const lineCreditPayrollSpecialAdvance: string[] = [];
+  const linePayrollSpecialAdvanceadded: string[] = [];
+  const linePayrollSpecialAdvanceRemoved: string[] = [];
 
   data.configurationRequestData.rules.forEach((rule: IEntry) => {
     if (rule === null) return;
@@ -71,6 +87,54 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
           methodsArray.push(methodValue);
         }
       }
+
+      if (
+        rule.ruleName === ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED &&
+        creditBureausMap[decision.value as string]
+      ) {
+        const creditValue = creditBureausMap[decision.value as string];
+
+        if (decision.transactionOperation === ETransactionOperation.DELETE) {
+          creditBureausRemoved.push(creditValue);
+        } else if (
+          decision.transactionOperation === ETransactionOperation.INSERT
+        ) {
+          creditBureausAdded.push(creditValue);
+        } else {
+          creditBureausArray.push(creditValue);
+        }
+      }
+
+      if (rule.ruleName === ENameRules.INQUIRY_VALIDITY_PERIOD) {
+        inquiryValidityPeriod = decision.value;
+      }
+
+      if (rule.ruleName === ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE) {
+        maximumNotifDocSize = decision.value;
+      }
+      if (rule.ruleName === ENameRules.LINE_CREDIT_PAYROLL_ADVANCE) {
+        if (decision.transactionOperation === ETransactionOperation.DELETE) {
+          linePayrollAdvanceRemoved.push(decision.value as string);
+        } else if (
+          decision.transactionOperation === ETransactionOperation.INSERT
+        ) {
+          linePayrollAdvanceadded.push(decision.value as string);
+        } else {
+          lineCreditPayrollAdvance.push(decision.value as string);
+        }
+      }
+
+      if (rule.ruleName === ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE) {
+        if (decision.transactionOperation === ETransactionOperation.DELETE) {
+          linePayrollSpecialAdvanceRemoved.push(decision.value as string);
+        } else if (
+          decision.transactionOperation === ETransactionOperation.INSERT
+        ) {
+          linePayrollSpecialAdvanceadded.push(decision.value as string);
+        } else {
+          lineCreditPayrollSpecialAdvance.push(decision.value as string);
+        }
+      }
     });
   });
 
@@ -79,30 +143,25 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
       ? EBooleanText.YES
       : EBooleanText.NO;
 
-  const methods = methodsArray.join(", ");
-  const methodsAddedJoin = methodsAdded.join(", ");
-  const methodsRemovedJoin = methodsRemoved.join(", ");
-
   const moreDetailsData = {
     id: data.id,
-    methods: methods,
-    methodsAdded: methodsAddedJoin,
-    methodsRemoved: methodsRemovedJoin,
+    methods: methodsArray.join(", "),
+    methodsAdded: methodsAdded.join(", "),
+    methodsRemoved: methodsRemoved.join(", "),
     additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
     guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
-    creditBureausConsultReq: valueBoolean(
-      creditBureausConsultReq ?? EBooleanText.NO,
-    ),
-    inquiryValidityPeriod: valueBoolean(
-      inquiryValidityPeriod ?? EBooleanText.NO,
-    ),
-    lineCreditPayrollAdvance: valueBoolean(
-      lineCreditPayrollAdvance ?? EBooleanText.NO,
-    ),
-    lineCreditPayrollSpecialAdvance: valueBoolean(
-      lineCreditPayrollSpecialAdvance ?? EBooleanText.NO,
-    ),
-    maximumNotifDocSize: valueBoolean(maximumNotifDocSize ?? EBooleanText.NO),
+    creditBureaus: creditBureausArray.join(", "),
+    creditBureausAdded: creditBureausAdded.join(", "),
+    creditBureausRemoved: creditBureausRemoved.join(", "),
+    inquiryValidityPeriod: inquiryValidityPeriod,
+    lineCreditPayrollAdvance: lineCreditPayrollAdvance.join(", "),
+    linePayrollAdvanceRemoved: linePayrollAdvanceRemoved.join(", "),
+    linePayrollAdvanceAdded: linePayrollAdvanceadded.join(", "),
+    lineCreditPayrollSpecialAdvance: lineCreditPayrollSpecialAdvance.join(", "),
+    linePayrollSpecialAdvanceRemoved:
+      linePayrollSpecialAdvanceRemoved.join(", "),
+    linePayrollSpecialAdvanceAdded: linePayrollSpecialAdvanceadded.join(", "),
+    maximumNotifDocSize: maximumNotifDocSize,
   };
 
   const { rulesDataMap } = useMultipleEnumRules({

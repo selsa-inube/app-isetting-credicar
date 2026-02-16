@@ -256,14 +256,12 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
     formValues.lineCreditPayrollAdvance ?? "",
     initialGeneralData.lineCreditPayrollAdvance,
-    ETransactionOperation.PARTIAL_UPDATE,
     lineCreditPayrollAdvanceData,
   );
   const lineCreditPayrollSpecialAdvance = decisionWithMultipleValuesEdit(
     ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
     formValues.lineCreditPayrollSpecialAdvance ?? "",
     initialGeneralData.lineCreditPayrollSpecialAdvance,
-    ETransactionOperation.PARTIAL_UPDATE,
     lineCreditPayrollSpecialAdvanceData,
   );
   const maximumNotifDocSize = decisionWithoutConditions(
