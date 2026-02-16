@@ -105,6 +105,16 @@ const GeneralCreditPolicies = () => {
       handleOpenModal={handleOpenModal}
       loadingRequest={loadingRequest}
       showDecision={showDecision}
+      basicNotificFormatData={basicNotificFormatData}
+      basicNotificationRecData={basicNotificationRecData}
+      creditBureausConsultReqData={creditBureausConsultReqData}
+      inquiryValidityPeriodData={inquiryValidityPeriodData}
+      lineCreditPayrollAdvanceData={lineCreditPayrollAdvanceData}
+      lineCreditPayrollSpecialAdvanceData={lineCreditPayrollSpecialAdvanceData}
+      maximumNotifDocSizeData={maximumNotifDocSizeData}
+      minCredBureauRiskScoreData={minCredBureauRiskScoreData}
+      notifChannelData={notifChannelData}
+      riskScoreApiUrlData={riskScoreApiUrlData}
     />
   );
 };

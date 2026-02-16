@@ -18,7 +18,7 @@ const transformDecisions = (
     ...dec,
     labelName: ruleNameTraduction ?? dec.labelName,
     decisionDataType: dataType?.toLocaleLowerCase(),
-    howToSetTheDecision: isRangeObject(dec.decisionDataType)
+    howToSetTheDecision: isRangeObject(dec.value)
       ? EValueHowToSetUp.RANGE
       : listValuesDecision?.list && listValuesDecision.list.length > 0
         ? EValueHowToSetUp.LIST_OF_VALUES

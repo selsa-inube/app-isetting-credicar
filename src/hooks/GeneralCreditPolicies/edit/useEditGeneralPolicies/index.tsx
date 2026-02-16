@@ -87,7 +87,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     ReciprocityBasedCreditLimit: hasReciprocity ?? false,
     RiskAnalysisBasedCreditLimit: hasFactor ?? false,
     creditBureausConsultReq: dataEvaluatePolicies(
-      lineCreditPayrollAdvanceData as IRuleDecisionExtended[],
+      creditBureausConsultReqData as IRuleDecisionExtended[],
     ),
     inquiryValidityPeriod:
       Number(inquiryValidityPeriodData?.[0]?.value) || undefined,

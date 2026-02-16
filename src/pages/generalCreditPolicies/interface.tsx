@@ -26,6 +26,16 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
     loadingPolicies,
     showAddPolicies,
     loadingRequest,
@@ -100,6 +110,20 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                       additionalDebtorsData={additionalDebtorsData}
                       realGuaranteesData={realGuaranteesData}
                       minimumIncomeData={minimumIncomeData}
+                      basicNotificFormatData={basicNotificFormatData}
+                      basicNotificationRecData={basicNotificationRecData}
+                      creditBureausConsultReqData={creditBureausConsultReqData}
+                      inquiryValidityPeriodData={inquiryValidityPeriodData}
+                      lineCreditPayrollAdvanceData={
+                        lineCreditPayrollAdvanceData
+                      }
+                      lineCreditPayrollSpecialAdvanceData={
+                        lineCreditPayrollSpecialAdvanceData
+                      }
+                      maximumNotifDocSizeData={maximumNotifDocSizeData}
+                      minCredBureauRiskScoreData={minCredBureauRiskScoreData}
+                      notifChannelData={notifChannelData}
+                      riskScoreApiUrlData={riskScoreApiUrlData}
                     />
                   )}
                   {showrequestTab && <RequestsInProgressTab />}
