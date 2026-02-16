@@ -31,6 +31,7 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     isMoreDetails,
     isSelected,
     portalId,
+    loading,
     onCloseModal,
     onTabChange,
   } = props;
@@ -127,6 +128,7 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       showRiskScoreApiUrl={showRiskScoreApiUrl}
       showRiskScoreApiUrlInserted={showRiskScoreApiUrlInserted}
       showRiskScoreApiUrlDeleted={showRiskScoreApiUrlDeleted}
+      loading={loading}
     />
   );
 };

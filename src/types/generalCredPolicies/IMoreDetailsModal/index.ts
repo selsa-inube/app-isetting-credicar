@@ -33,6 +33,7 @@ interface IMoreDetailsModal {
   notifChannelDeleted?: IRuleDecision[];
   riskScoreApiUrlInserted?: IRuleDecision[];
   riskScoreApiUrlDeleted?: IRuleDecision[];
+  loading: boolean;
 }
 
 export type { IMoreDetailsModal };

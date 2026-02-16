@@ -1,4 +1,5 @@
-import { Text, useMediaQuery } from "@inubekit/inubekit";
+import { Stack, Text, useMediaQuery } from "@inubekit/inubekit";
+import { LoadingPage } from "@design/feedback/loadingPage";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { mediaQueryMobile } from "@config/environment";
@@ -7,7 +8,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { ILabel } from "@ptypes/ILabel";
 
 const GeneralTab = (props: IGeneralDecisionsTab) => {
-  const { data, labelsDetails } = props;
+  const { data, labelsDetails, loading } = props;
   const isMobile = useMediaQuery(mediaQueryMobile);
 
   const isField = (field: { id: string }) => data[field.id as keyof ILabel];
@@ -24,38 +25,48 @@ const GeneralTab = (props: IGeneralDecisionsTab) => {
       boxSizing="border-box"
       overflowY="auto"
     >
-      <BoxContainer
-        direction="column"
-        gap={tokens.spacing.s200}
-        width="100%"
-        height="300px"
-        boxSizing="border-box"
-      >
-        {filteredFieldData.map((field, id) => (
-          <BoxContainer
-            key={id}
-            direction="column"
-            width="100%"
-            height="auto"
-            minHeight="60px"
-            borderRadius={tokens.spacing.s100}
-            padding={
-              isMobile
-                ? `${tokens.spacing.s0}`
-                : `${tokens.spacing.s075} ${tokens.spacing.s200}`
-            }
-            boxSizing="border-box"
-            backgroundColor={EComponentAppearance.GRAY}
-          >
-            <Text size="medium" type="label" weight="bold">
-              {field.titleName}
-            </Text>
-            <Text size="medium" appearance={EComponentAppearance.GRAY} ellipsis>
-              {data[field.id]}
-            </Text>
-          </BoxContainer>
-        ))}
-      </BoxContainer>
+      {loading ? (
+        <Stack justifyContent="center" alignContent="center">
+          <LoadingPage />
+        </Stack>
+      ) : (
+        <BoxContainer
+          direction="column"
+          gap={tokens.spacing.s200}
+          width="100%"
+          height="300px"
+          boxSizing="border-box"
+        >
+          {filteredFieldData.map((field, id) => (
+            <BoxContainer
+              key={id}
+              direction="column"
+              width="100%"
+              height="auto"
+              minHeight="60px"
+              borderRadius={tokens.spacing.s100}
+              padding={
+                isMobile
+                  ? `${tokens.spacing.s0}`
+                  : `${tokens.spacing.s075} ${tokens.spacing.s200}`
+              }
+              boxSizing="border-box"
+              backgroundColor={EComponentAppearance.GRAY}
+            >
+              <Text size="medium" type="label" weight="bold">
+                {field.titleName}
+              </Text>
+              <Text
+                size="medium"
+                appearance={EComponentAppearance.GRAY}
+                ellipsis
+              >
+                {data[field.id]}
+              </Text>
+            </BoxContainer>
+          ))}
+        </BoxContainer>
+      )}
     </BoxContainer>
   );
 };

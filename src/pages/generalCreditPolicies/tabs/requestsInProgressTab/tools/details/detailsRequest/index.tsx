@@ -55,6 +55,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     showDecision,
     labelButton,
     iconButton,
+    loadingEnums,
     onTabRequestChange,
     onThirdClick,
     onTabChange,
@@ -134,6 +135,7 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           notifChannelDeleted={notifChannelDeleted}
           riskScoreApiUrlInserted={riskScoreApiUrlInserted}
           riskScoreApiUrlDeleted={riskScoreApiUrlDeleted}
+          loading={loadingEnums}
         />
       )}
 

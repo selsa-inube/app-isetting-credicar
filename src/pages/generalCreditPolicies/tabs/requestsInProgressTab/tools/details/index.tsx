@@ -31,6 +31,7 @@ const Details = (props: IDetails) => {
     moreDetailsData,
     decisions,
     isMoreDetails,
+    isLoadingEnums,
     onToggleMoreDetailsModal,
   } = useMoreDetailsRequestProgress({ data });
 
@@ -112,6 +113,7 @@ const Details = (props: IDetails) => {
       iconButton={statusRequestData.iconButton}
       minimumInserted={minimumInserted}
       minimumDeleted={minimumDeleted}
+      loadingEnums={isLoadingEnums}
     />
   );
 };

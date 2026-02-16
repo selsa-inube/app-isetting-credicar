@@ -10,10 +10,10 @@ const validateOptionVerification = (
     optionsGenDecision[option as keyof typeof optionsGenDecision];
 
   const foundOptions = optionValue
-    .filter((option) => valuesArray.includes(option.value))
+    ?.filter((option) => valuesArray.includes(option.value))
     .map((option) => option.label);
 
-  return foundOptions.join(", ");
+  return foundOptions ? foundOptions.join(", ") : "";
 };
 
 export { validateOptionVerification };

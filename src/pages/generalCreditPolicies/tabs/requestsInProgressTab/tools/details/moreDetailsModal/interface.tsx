@@ -62,6 +62,7 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     riskScoreApiUrlInserted,
     riskScoreApiUrlDeleted,
     isMobile,
+    loading,
     onCloseModal,
     onTabChange,
   } = props;
@@ -86,7 +87,11 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
           scroll={Object.values(filteredTabsConfig).length > 2}
         />
         {showGeneralDecisionsTab && (
-          <GeneralTab data={data} labelsDetails={generalDataLabels} />
+          <GeneralTab
+            data={data}
+            labelsDetails={generalDataLabels}
+            loading={loading}
+          />
         )}
         {showDecisionsRecip && <DecisionTab data={decisions.reciprocity} />}
         {showContribInserted && (

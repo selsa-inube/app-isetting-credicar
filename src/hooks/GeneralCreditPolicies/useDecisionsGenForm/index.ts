@@ -1,10 +1,4 @@
-import {
-  useContext,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from "react";
+import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useFormik } from "formik";
 import { object } from "yup";
@@ -12,8 +6,6 @@ import { object } from "yup";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
 import { EGeneralPolicies } from "@enum/generalPolicies";
-import { ECreditLines } from "@enum/creditLines";
-import { ENameRules } from "@enum/nameRules";
 import { validationRules } from "@validations/validationRules";
 import { mediaQueryMobile } from "@config/environment";
 import { generalMethods } from "@config/generalCreditPolicies/assisted/generalMethods";
@@ -21,8 +13,7 @@ import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decis
 import { IUseDecisionsGenForm } from "@ptypes/hooks/IUseDecisionsGenForm";
 import { IServerDomain } from "@ptypes/IServerDomain";
 import { IEnumerators } from "@ptypes/IEnumerators";
-import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
-import { useMultipleEnumRules } from "../useMultipleEnumRules";
+import { useEnumRulesPolicies } from "../useEnumRulesPolicies";
 
 const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   const {
@@ -80,17 +71,12 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     token: appData.token,
   });
 
-  const { rulesDataMap, isLoading: isLoadingEnums } = useMultipleEnumRules({
-    ruleNames: [
-      ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
-      ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
-      ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
-    ],
-    ruleCatalog: ECreditLines.RULE_CATALOG,
-    catalogAction: ECreditLines.CATALOG_ACTION,
-    businessUnits: appData.businessUnit.publicCode,
-    token: appData.token,
-  });
+  const {
+    isLoadingEnums,
+    payrollAdvanceOptions,
+    payrollSpecialAdvanceOptions,
+    creditBureausOptions,
+  } = useEnumRulesPolicies();
 
   const methodsOptions: IServerDomain[] = methods
     .filter((entry) => generalMethods.includes(entry.code))
@@ -105,28 +91,6 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
         value: item.code ?? "",
       };
     });
-
-  const optionMap = useMemo(() => {
-    const map: Record<string, IServerDomain[]> = {};
-
-    Object.keys(rulesDataMap).forEach((ruleName) => {
-      const ruleData = rulesDataMap[ruleName] as IRuleDecisionExtended;
-      if (ruleData?.listOfPossibleValues?.list) {
-        map[ruleName] = ruleData.listOfPossibleValues
-          .list as unknown as IServerDomain[];
-      }
-    });
-
-    return map;
-  }, [rulesDataMap]);
-
-  const payrollAdvanceOptions: IServerDomain[] =
-    optionMap[ENameRules.LINE_CREDIT_PAYROLL_ADVANCE];
-  const payrollSpecialAdvanceOptions: IServerDomain[] =
-    optionMap[ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE];
-
-  const creditBureausOptions: IServerDomain[] =
-    optionMap[ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED];
 
   useEffect(() => {
     if (setOptionsGenDecision) {

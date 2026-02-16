@@ -39,6 +39,7 @@ interface IMoreDetailsModalUI {
   showRiskScoreApiUrl: boolean;
   showRiskScoreApiUrlInserted: boolean;
   showRiskScoreApiUrlDeleted: boolean;
+  loading: boolean;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
   contribQuotaInserted?: IRuleDecision[];

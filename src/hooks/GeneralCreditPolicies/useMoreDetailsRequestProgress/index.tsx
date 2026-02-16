@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 
 import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
@@ -10,16 +10,21 @@ import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
 import { EBooleanText } from "@enum/booleanText";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { getDecisionsByRule } from "@utils/getDecisionsByRule";
+import { validateOptionVerification } from "@utils/validateOptionVerification";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
 import { optionsCreditBureaus } from "@config/generalCreditPolicies/editGeneralPolicies/optionsCreditBureaus";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
+import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { useMultipleEnumRules } from "../useMultipleEnumRules";
+import { useEnumRulesPolicies } from "../useEnumRulesPolicies";
 
 const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const { data } = props;
   const { appData } = useContext(AuthAndPortalData);
+  const [optionsGenDecision, setOptionsGenDecision] =
+    useState<IOptionsGenDecision>({} as IOptionsGenDecision);
   const [showMoreDetailsModal, setShowMoreDetailsModal] = useState(false);
   let additionalDebtors;
   let realGuarantees;
@@ -29,6 +34,21 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const onToggleMoreDetailsModal = () => {
     setShowMoreDetailsModal(!showMoreDetailsModal);
   };
+
+  const {
+    payrollAdvanceOptions,
+    payrollSpecialAdvanceOptions,
+    isLoadingEnums,
+  } = useEnumRulesPolicies();
+
+  useEffect(() => {
+    if (setOptionsGenDecision) {
+      setOptionsGenDecision({
+        payrollAdvance: payrollAdvanceOptions,
+        payrollSpecialAdvance: payrollSpecialAdvanceOptions,
+      });
+    }
+  }, [payrollAdvanceOptions, payrollSpecialAdvanceOptions]);
 
   const methodsMap: Record<string, string> = {
     [ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY]:
@@ -138,6 +158,13 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     });
   });
 
+  const linePayrollAdvanceData = lineCreditPayrollAdvance.join(", ");
+  const linePayAdvanceRemovedData = linePayrollAdvanceRemoved.join(", ");
+  const linePayAdvanceAddedData = linePayrollAdvanceadded.join(", ");
+  const linePayrollSpecialData = lineCreditPayrollSpecialAdvance.join(", ");
+  const linePaySpecialRemovedData = linePayrollSpecialAdvanceRemoved.join(", ");
+  const linePaySpecialAddedData = linePayrollSpecialAdvanceadded.join(", ");
+
   const valueBoolean = (value: string) =>
     value === EBooleanText.Y || value === EBooleanText.YES
       ? EBooleanText.YES
@@ -154,13 +181,36 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     creditBureausAdded: creditBureausAdded.join(", "),
     creditBureausRemoved: creditBureausRemoved.join(", "),
     inquiryValidityPeriod: inquiryValidityPeriod,
-    lineCreditPayrollAdvance: lineCreditPayrollAdvance.join(", "),
-    linePayrollAdvanceRemoved: linePayrollAdvanceRemoved.join(", "),
-    linePayrollAdvanceAdded: linePayrollAdvanceadded.join(", "),
-    lineCreditPayrollSpecialAdvance: lineCreditPayrollSpecialAdvance.join(", "),
-    linePayrollSpecialAdvanceRemoved:
-      linePayrollSpecialAdvanceRemoved.join(", "),
-    linePayrollSpecialAdvanceAdded: linePayrollSpecialAdvanceadded.join(", "),
+    lineCreditPayrollAdvance: validateOptionVerification(
+      optionsGenDecision,
+      "payrollAdvance",
+      linePayrollAdvanceData,
+    ),
+    linePayrollAdvanceRemoved: validateOptionVerification(
+      optionsGenDecision,
+      "payrollAdvance",
+      linePayAdvanceRemovedData,
+    ),
+    linePayrollAdvanceAdded: validateOptionVerification(
+      optionsGenDecision,
+      "payrollAdvance",
+      linePayAdvanceAddedData,
+    ),
+    lineCreditPayrollSpecialAdvance: validateOptionVerification(
+      optionsGenDecision,
+      "payrollSpecialAdvance",
+      linePayrollSpecialData,
+    ),
+    linePayrollSpecialAdvanceRemoved: validateOptionVerification(
+      optionsGenDecision,
+      "payrollSpecialAdvance",
+      linePaySpecialRemovedData,
+    ),
+    linePayrollSpecialAdvanceAdded: validateOptionVerification(
+      optionsGenDecision,
+      "payrollSpecialAdvance",
+      linePaySpecialAddedData,
+    ),
     maximumNotifDocSize: maximumNotifDocSize,
   };
 
@@ -238,6 +288,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     moreDetailsData,
     decisions,
     isMoreDetails,
+    isLoadingEnums,
     onToggleMoreDetailsModal,
   };
 };

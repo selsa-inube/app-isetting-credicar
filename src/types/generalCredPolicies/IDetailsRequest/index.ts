@@ -28,6 +28,7 @@ interface IDetailsRequest {
   showDecision: boolean;
   labelButton: string;
   iconButton: React.ReactElement;
+  loadingEnums: boolean;
   onTabRequestChange: (id: string) => void;
   onThirdClick: () => void;
   onTabChange: (id: string) => void;
