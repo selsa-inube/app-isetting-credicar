@@ -45,207 +45,207 @@ const useDetailsPoliciesModal = (props: IUseDetailsPoliciesModal) => {
   const riskScoreApiUrlDeleted = newDeleted(decisions.riskScoreApiUrl);
 
   const generalData = generalDataKeys.reduce(
-    (acc, prop) => {
+    (genData, prop) => {
       const value = data?.[prop];
-      if (value) acc[prop] = value;
-      return acc;
+      if (value) genData[prop] = value;
+      return genData;
     },
     {} as Record<string, unknown>,
   );
 
   const filteredTabsConfig = Object.keys(detailsTabsConfig).reduce(
-    (acc, key) => {
+    (details, key) => {
       const tab = detailsTabsConfig[key as keyof IDetailsTabsConfig];
       if (
         Object.values(generalData).length === 0 &&
         tab?.id === detailsTabsConfig.generalDecision?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         (isMoreDetails || decisions.reciprocity.length === 0) &&
         tab?.id === detailsTabsConfig.contributionQuota?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         contribQuotaInserted.length === 0 &&
         tab?.id === detailsTabsConfig.contribQuotaIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         contribQuotaDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.contribQuotaRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.incomePortfolio.length === 0) &&
         tab?.id === detailsTabsConfig.incomeQuota?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         incomeQuotaInserted.length === 0 &&
         tab?.id === detailsTabsConfig.incomeQuotaIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         incomeQuotaDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.incomeQuotaRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.scoreModels.length === 0) &&
         tab?.id === detailsTabsConfig.scoreModels?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         scoreModelsInserted.length === 0 &&
         tab?.id === detailsTabsConfig.scoreModelsIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         scoreModelsDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.scoreModelsRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.minimum.length === 0) &&
         tab?.id === detailsTabsConfig.minimumIncome?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         minimumInserted.length === 0 &&
         tab?.id === detailsTabsConfig.minimumIncomeIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         minimumDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.minimumIncomeRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.basicNotifFormat.length === 0) &&
         tab?.id === detailsTabsConfig.basicNotifFormat?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         basicNotifFormatInserted.length === 0 &&
         tab?.id === detailsTabsConfig.basicNotifFormatIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         basicNotifFormatDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.basicNotifFormatRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.basicNotifRecipient.length === 0) &&
         tab?.id === detailsTabsConfig.basicNotifRecipient?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         basicNotifRecipientInserted.length === 0 &&
         tab?.id === detailsTabsConfig.basicNotifRecipientIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         basicNotifRecipientDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.basicNotifRecipientRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.minCredBureauRiskScore.length === 0) &&
         tab?.id === detailsTabsConfig.minCredBureauRiskScore?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         minCredBureauRiskScoreInserted.length === 0 &&
         tab?.id === detailsTabsConfig.minCredBureauRiskScoreIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         minCredBureauRiskScoreDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.minCredBureauRiskScoreRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.notifChannel.length === 0) &&
         tab?.id === detailsTabsConfig.notificationChannel?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         notifChannelInserted.length === 0 &&
         tab?.id === detailsTabsConfig.notificationChannelIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         notifChannelDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.notificationChannelRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         (isMoreDetails || decisions.riskScoreApiUrl.length === 0) &&
         tab?.id === detailsTabsConfig.riskScoreApiUrl?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (
         riskScoreApiUrlInserted.length === 0 &&
         tab?.id === detailsTabsConfig.riskScoreApiUrlIncluded?.id
       ) {
-        return acc;
+        return details;
       }
       if (
         riskScoreApiUrlDeleted.length === 0 &&
         tab?.id === detailsTabsConfig.riskScoreApiUrlRemoved?.id
       ) {
-        return acc;
+        return details;
       }
 
       if (tab !== undefined) {
-        acc[key as keyof IDetailsTabsConfig] = tab;
+        details[key as keyof IDetailsTabsConfig] = tab;
       }
-      return acc;
+      return details;
     },
     {} as IDetailsTabsConfig,
   );

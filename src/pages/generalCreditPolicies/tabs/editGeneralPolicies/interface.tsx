@@ -8,8 +8,10 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { NewDecisionForm } from "@design/forms/NewDecisionForm";
 import { EUseCase } from "@enum/useCase";
+import { EEditionMode } from "@enum/editionMode";
 import { EComponentAppearance } from "@enum/appearances";
 import { ENameRules } from "@enum/nameRules";
+import { decisionLabels } from "@config/generalCreditPolicies/editGeneralPolicies/decisionLabels";
 import { decisionsLabels } from "@config/generalCreditPolicies/assisted/decisionsLabels";
 import { requestProcessMessage } from "@config/generalCreditPolicies/generic/requestProcessMessage";
 import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
@@ -97,12 +99,12 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.CONTRIBUTIONS_PORTFOLIO}
-              nameRule="Número de veces los aportes"
+              nameRule={decisionLabels.contributionsPortfolio}
               customMessageEmptyDecisions={decisionsLabels(
-                "Número de veces los aportes",
+                decisionLabels.contributionsPortfolio,
               )}
               initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -116,12 +118,12 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.INCOME_PORTFOLIO}
-              nameRule="Número de veces los ingresos"
+              nameRule={decisionLabels.incomePortfolio}
               customMessageEmptyDecisions={decisionsLabels(
-                "Número de veces los ingresos",
+                decisionLabels.incomePortfolio,
               )}
               initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -135,10 +137,12 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_IRISK}
               labelBusinessRules={ENameRules.SCORE_MODELS}
-              nameRule="Modelo de score"
-              customMessageEmptyDecisions={decisionsLabels("Modelo de score")}
+              nameRule={decisionLabels.scoreModels}
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.scoreModels,
+              )}
               initialDecisions={rulesData.CreditRiskScoringModel}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -152,9 +156,11 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.MINIMUM_INCOME_PERCENTAGE}
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.minimumIncomePercentage,
+              )}
               initialDecisions={rulesData.MinimumSubsistenceReservePercentage}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -168,9 +174,11 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.BASIC_NOTIFICATION_FORMAT}
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.basicNotificationFormat,
+              )}
               initialDecisions={rulesData.BasicNotificationFormat}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -184,9 +192,11 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.BASIC_NOTIFICATION_RECIPIENT}
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.basicNotificationRecipient,
+              )}
               initialDecisions={rulesData.BasicNotificationRecipient}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -201,9 +211,11 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE}
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={
+                decisionLabels.minimumCreditBureauRiskscore
+              }
               initialDecisions={rulesData.MinimumCreditBureauRiskScore}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -217,9 +229,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.NOTIFICATION_CHANNEL}
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionLabels.notificationChannel}
               initialDecisions={rulesData.NotificationChannel}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -233,9 +245,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.RISKSCORE_API_URL}
-              customMessageEmptyDecisions={""}
+              customMessageEmptyDecisions={decisionLabels.riskscoreApiUrl}
               initialDecisions={rulesData.RiskScoreApiUrl}
-              editionMode={"classic"}
+              editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}

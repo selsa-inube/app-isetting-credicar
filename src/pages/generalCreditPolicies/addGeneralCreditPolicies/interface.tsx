@@ -6,6 +6,7 @@ import { DecisionModal } from "@design/modals/decisionModal";
 import { stepKeysPolicies } from "@enum/stepsKeysPolicies";
 import { EUseCase } from "@enum/useCase";
 import { ENameRules } from "@enum/nameRules";
+import { EEditionMode } from "@enum/editionMode";
 import { getNamePolicieStep } from "@utils/getNamePolicieStep";
 import { addLabels } from "@config/generalCreditPolicies/assisted/addLabels";
 import { crumbsAddGenCredPolicies } from "@config/generalCreditPolicies/assisted/navigation";
@@ -106,7 +107,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   ) ?? "",
                 )}
                 initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -125,7 +126,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   getNamePolicieStep(stepKeysPolicies.INCOME_PORTFOLIO) ?? "",
                 )}
                 initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -143,7 +144,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   getNamePolicieStep(stepKeysPolicies.SCORE_MODELS) ?? "",
                 )}
                 initialDecisions={rulesData.CreditRiskScoringModel}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -163,7 +164,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   ) ?? "",
                 )}
                 initialDecisions={rulesData.MinimumSubsistenceReservePercentage}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -184,7 +185,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   ) ?? "",
                 )}
                 initialDecisions={rulesData.BasicNotificationFormat}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -205,7 +206,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   ) ?? "",
                 )}
                 initialDecisions={rulesData.BasicNotificationRecipient}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -226,7 +227,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   ) ?? "",
                 )}
                 initialDecisions={rulesData.MinimumCreditBureauRiskScore}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -245,7 +246,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                     "",
                 )}
                 initialDecisions={rulesData.NotificationChannel}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}
@@ -263,7 +264,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                   getNamePolicieStep(stepKeysPolicies.RISKSCORE_API_URL) ?? "",
                 )}
                 initialDecisions={rulesData.RiskScoreApiUrl}
-                editionMode={"classic"}
+                editionMode={EEditionMode.CLASSIC}
                 option={EUseCase.ADD}
                 loading={false}
                 onPreviousStep={onPreviousStep}

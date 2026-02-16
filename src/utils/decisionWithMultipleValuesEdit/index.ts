@@ -10,12 +10,12 @@ const decisionWithMultipleValuesEdit = (
   prevValue: string,
   data?: IRuleDecisionExtended[],
 ) => {
-  const normalizeValues = (str: string): string[] => {
-    return str
-      ? str
+  const normalizeValues = (dataRule: string): string[] => {
+    return dataRule
+      ? dataRule
           .split(",")
-          .map((v) => v.trim())
-          .filter((v) => v !== "")
+          .map((item) => item.trim())
+          .filter((item) => item !== "")
       : [];
   };
 
