@@ -44,21 +44,9 @@ const useRules = (props: IUseRules) => {
     decisionGeneralData.ReciprocityBasedCreditLimit &&
     ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS;
 
-  const datacreditoExperian =
-    decisionGeneralData.DATACREDITO_EXPERIAN &&
-    ERulesOfDecisions.DATACREDITO_EXPERIAN;
-
-  const transunion =
-    decisionGeneralData.TRANSUNION && ERulesOfDecisions.TRANSUNION;
-
   const methodsArray =
     calculation || factor || reciprocity
       ? [calculation, factor, reciprocity].filter(Boolean)
-      : [EBooleanText.NO];
-
-  const creditBureausArray =
-    datacreditoExperian || transunion
-      ? [datacreditoExperian, transunion].filter(Boolean)
       : [EBooleanText.NO];
 
   const methods = {
@@ -66,14 +54,6 @@ const useRules = (props: IUseRules) => {
     decisionsByRule: methodsArray.map((method) => ({
       effectiveFrom: dateVerification?.date && dateVerification?.date,
       value: method,
-    })),
-  };
-
-  const creditBureaus = {
-    ruleName: ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
-    decisionsByRule: creditBureausArray.map((credit) => ({
-      effectiveFrom: dateVerification?.date && dateVerification?.date,
-      value: credit,
     })),
   };
 
@@ -91,15 +71,20 @@ const useRules = (props: IUseRules) => {
     ENameRules.INQUIRY_VALIDITY_PERIOD,
     decisionGeneralData.inquiryValidityPeriod,
   );
-  const lineCredPayrollAdvanceValues = decisionWithMultipleValues(
-    ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
-    decisionGeneralData.lineCreditPayrollAdvance,
+  const creditBureausConsultValues = decisionWithMultipleValues(
+    ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
+    decisionGeneralData.creditBureausConsultReq,
     dateVerification,
   );
-  const lineCredPayrollSpecialAdvanceValues = decisionWithMultipleValues(
+
+  const lineCredPayrollAdvanceValues = decisionWithoutConditions(
+    ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
+    decisionGeneralData.lineCreditPayrollAdvance,
+  );
+
+  const lineCredPayrollSpecialAdvanceValues = decisionWithoutConditions(
     ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
     decisionGeneralData.lineCreditPayrollSpecialAdvance,
-    dateVerification,
   );
 
   const maximumNotifDocSizeValues = decisionWithoutConditions(
@@ -149,7 +134,7 @@ const useRules = (props: IUseRules) => {
 
   const rules = [
     methods,
-    creditBureaus,
+    ...creditBureausConsultValues,
     ...rulesContributions,
     ...rulesIncomes,
     ...ruleScoremodels,

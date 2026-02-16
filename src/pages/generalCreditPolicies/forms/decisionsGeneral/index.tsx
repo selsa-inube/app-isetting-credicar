@@ -40,8 +40,8 @@ const DecisionsGeneralForm = forwardRef<
       payrollSpecialAdvanceOptions,
       creditBureausOptions,
       isLoadingEnums,
-      handleChangePayrollAdvance,
-      handleChangePayrollSpecialAdvance,
+      handleChange,
+      handleChangeCreditBureaus,
       handleInformationReferenceModal,
       handleInformationObligationModal,
       handleInformationMethodsModal,
@@ -79,10 +79,10 @@ const DecisionsGeneralForm = forwardRef<
         methodsOptions={methodsOptions}
         payrollAdvanceOptions={payrollAdvanceOptions}
         payrollSpecialAdvanceOptions={payrollSpecialAdvanceOptions}
-        onChangePayrollAdvance={handleChangePayrollAdvance}
-        onChangePayrollSpecialAdvance={handleChangePayrollSpecialAdvance}
+        onChange={handleChange}
         isLoadingEnums={isLoadingEnums}
         creditBureausOptions={creditBureausOptions}
+        onChangeCreditBureaus={handleChangeCreditBureaus}
       />
     );
   },

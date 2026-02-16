@@ -9,7 +9,6 @@ import { rows } from "@utils/rowsVerificationPolicies";
 import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
 import { IRenderDecisionsGenVerification } from "@ptypes/generalCredPolicies/forms/IRenderDecisionsGenVerification";
 import { RenderMethodTags } from "./renderMethodTags";
-import { RenderCreditBurTags } from "../rendercreditBurTags";
 
 const RenderDecisionsGenVerification = (
   props: IRenderDecisionsGenVerification,
@@ -22,9 +21,8 @@ const RenderDecisionsGenVerification = (
     PaymentCapacityBasedCreditLimit,
     ReciprocityBasedCreditLimit,
     RiskAnalysisBasedCreditLimit,
-    DATACREDITO_EXPERIAN,
-    TRANSUNION,
     inquiryValidityPeriod,
+    creditBureausConsultReq,
     lineCreditPayrollAdvance,
     lineCreditPayrollSpecialAdvance,
     maximumNotifDocSize,
@@ -64,21 +62,12 @@ const RenderDecisionsGenVerification = (
         <BoxAttribute
           direction="column"
           label={verificationLabels.creditBureausConsultReq}
-          withTag
-        >
-          <Stack
-            gap={tokens.spacing.s100}
-            direction={isMobile ? "column" : "row"}
-            wrap="wrap"
-          >
-            {
-              <RenderCreditBurTags
-                datacreditoExperian={DATACREDITO_EXPERIAN}
-                transunion={TRANSUNION}
-              />
-            }
-          </Stack>
-        </BoxAttribute>
+          value={validateOptionVerification(
+            optionsGenDecision,
+            "creditBureaus",
+            creditBureausConsultReq,
+          )}
+        />
 
         <BoxAttribute
           direction="column"

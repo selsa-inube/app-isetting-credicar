@@ -13,7 +13,6 @@ import { getDecisionsByRule } from "@utils/getDecisionsByRule";
 import { validateOptionVerification } from "@utils/validateOptionVerification";
 import { formatDetailsDecisions } from "@utils/formatDetailsDecisions";
 import { optionsMethods } from "@config/generalCreditPolicies/editGeneralPolicies/optionsMethods";
-import { optionsCreditBureaus } from "@config/generalCreditPolicies/editGeneralPolicies/optionsCreditBureaus";
 import { IUseMoreDetailsRequest } from "@ptypes/generalCredPolicies/IUseMoreDetailsRequest";
 import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 import { IEntry } from "@ptypes/design/table/IEntry";
@@ -30,6 +29,8 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   let realGuarantees;
   let inquiryValidityPeriod;
   let maximumNotifDocSize;
+  let lineCreditPayrollAdvance;
+  let lineCreditPayrollSpecialAdvance;
 
   const onToggleMoreDetailsModal = () => {
     setShowMoreDetailsModal(!showMoreDetailsModal);
@@ -38,6 +39,7 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const {
     payrollAdvanceOptions,
     payrollSpecialAdvanceOptions,
+    creditBureausOptions,
     isLoadingEnums,
   } = useEnumRulesPolicies();
 
@@ -46,9 +48,14 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
       setOptionsGenDecision({
         payrollAdvance: payrollAdvanceOptions,
         payrollSpecialAdvance: payrollSpecialAdvanceOptions,
+        creditBureaus: creditBureausOptions,
       });
     }
-  }, [payrollAdvanceOptions, payrollSpecialAdvanceOptions]);
+  }, [
+    payrollAdvanceOptions,
+    payrollSpecialAdvanceOptions,
+    creditBureausOptions,
+  ]);
 
   const methodsMap: Record<string, string> = {
     [ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY]:
@@ -58,12 +65,6 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
       optionsMethods.ReciprocityOfContributions,
   };
 
-  const creditBureausMap: Record<string, string> = {
-    [ERulesOfDecisions.DATACREDITO_EXPERIAN]:
-      optionsCreditBureaus.datacreditoExperian,
-    [ERulesOfDecisions.TRANSUNION]: optionsCreditBureaus.transunion,
-  };
-
   const methodsArray: string[] = [];
   const methodsRemoved: string[] = [];
   const methodsAdded: string[] = [];
@@ -71,14 +72,6 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const creditBureausArray: string[] = [];
   const creditBureausRemoved: string[] = [];
   const creditBureausAdded: string[] = [];
-
-  const lineCreditPayrollAdvance: string[] = [];
-  const linePayrollAdvanceadded: string[] = [];
-  const linePayrollAdvanceRemoved: string[] = [];
-
-  const lineCreditPayrollSpecialAdvance: string[] = [];
-  const linePayrollSpecialAdvanceadded: string[] = [];
-  const linePayrollSpecialAdvanceRemoved: string[] = [];
 
   data.configurationRequestData.rules.forEach((rule: IEntry) => {
     if (rule === null) return;
@@ -108,20 +101,15 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
         }
       }
 
-      if (
-        rule.ruleName === ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED &&
-        creditBureausMap[decision.value as string]
-      ) {
-        const creditValue = creditBureausMap[decision.value as string];
-
+      if (rule.ruleName === ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED) {
         if (decision.transactionOperation === ETransactionOperation.DELETE) {
-          creditBureausRemoved.push(creditValue);
+          creditBureausRemoved.push(decision.value as string);
         } else if (
           decision.transactionOperation === ETransactionOperation.INSERT
         ) {
-          creditBureausAdded.push(creditValue);
+          creditBureausAdded.push(decision.value as string);
         } else {
-          creditBureausArray.push(creditValue);
+          creditBureausArray.push(decision.value as string);
         }
       }
 
@@ -133,37 +121,14 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
         maximumNotifDocSize = decision.value;
       }
       if (rule.ruleName === ENameRules.LINE_CREDIT_PAYROLL_ADVANCE) {
-        if (decision.transactionOperation === ETransactionOperation.DELETE) {
-          linePayrollAdvanceRemoved.push(decision.value as string);
-        } else if (
-          decision.transactionOperation === ETransactionOperation.INSERT
-        ) {
-          linePayrollAdvanceadded.push(decision.value as string);
-        } else {
-          lineCreditPayrollAdvance.push(decision.value as string);
-        }
+        lineCreditPayrollAdvance = decision.value;
       }
 
       if (rule.ruleName === ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE) {
-        if (decision.transactionOperation === ETransactionOperation.DELETE) {
-          linePayrollSpecialAdvanceRemoved.push(decision.value as string);
-        } else if (
-          decision.transactionOperation === ETransactionOperation.INSERT
-        ) {
-          linePayrollSpecialAdvanceadded.push(decision.value as string);
-        } else {
-          lineCreditPayrollSpecialAdvance.push(decision.value as string);
-        }
+        lineCreditPayrollSpecialAdvance = decision.value;
       }
     });
   });
-
-  const linePayrollAdvanceData = lineCreditPayrollAdvance.join(", ");
-  const linePayAdvanceRemovedData = linePayrollAdvanceRemoved.join(", ");
-  const linePayAdvanceAddedData = linePayrollAdvanceadded.join(", ");
-  const linePayrollSpecialData = lineCreditPayrollSpecialAdvance.join(", ");
-  const linePaySpecialRemovedData = linePayrollSpecialAdvanceRemoved.join(", ");
-  const linePaySpecialAddedData = linePayrollSpecialAdvanceadded.join(", ");
 
   const valueBoolean = (value: string) =>
     value === EBooleanText.Y || value === EBooleanText.YES
@@ -177,39 +142,34 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     methodsRemoved: methodsRemoved.join(", "),
     additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
     guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
-    creditBureaus: creditBureausArray.join(", "),
-    creditBureausAdded: creditBureausAdded.join(", "),
-    creditBureausRemoved: creditBureausRemoved.join(", "),
+    creditBureaus: validateOptionVerification(
+      optionsGenDecision,
+      "creditBureaus",
+      creditBureausArray.join(", "),
+    ),
+
+    creditBureausAdded: validateOptionVerification(
+      optionsGenDecision,
+      "creditBureaus",
+      creditBureausAdded.join(", "),
+    ),
+
+    creditBureausRemoved: validateOptionVerification(
+      optionsGenDecision,
+      "creditBureaus",
+      creditBureausRemoved.join(", "),
+    ),
+
     inquiryValidityPeriod: inquiryValidityPeriod,
     lineCreditPayrollAdvance: validateOptionVerification(
       optionsGenDecision,
       "payrollAdvance",
-      linePayrollAdvanceData,
-    ),
-    linePayrollAdvanceRemoved: validateOptionVerification(
-      optionsGenDecision,
-      "payrollAdvance",
-      linePayAdvanceRemovedData,
-    ),
-    linePayrollAdvanceAdded: validateOptionVerification(
-      optionsGenDecision,
-      "payrollAdvance",
-      linePayAdvanceAddedData,
+      lineCreditPayrollAdvance ?? "",
     ),
     lineCreditPayrollSpecialAdvance: validateOptionVerification(
       optionsGenDecision,
       "payrollSpecialAdvance",
-      linePayrollSpecialData,
-    ),
-    linePayrollSpecialAdvanceRemoved: validateOptionVerification(
-      optionsGenDecision,
-      "payrollSpecialAdvance",
-      linePaySpecialRemovedData,
-    ),
-    linePayrollSpecialAdvanceAdded: validateOptionVerification(
-      optionsGenDecision,
-      "payrollSpecialAdvance",
-      linePaySpecialAddedData,
+      lineCreditPayrollSpecialAdvance ?? "",
     ),
     maximumNotifDocSize: maximumNotifDocSize,
   };

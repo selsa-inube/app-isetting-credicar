@@ -25,6 +25,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     minimumIncomeData,
     incomeData,
     methodsData,
+    creditBureausConsultReqData,
     scoreModelsData,
     additionalDebtorsData,
     realGuaranteesData,
@@ -209,25 +210,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     value: ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS,
   };
 
-  const datacreditoExpValues = initialGeneralData.DATACREDITO_EXPERIAN !==
-    formValues.DATACREDITO_EXPERIAN && {
-    transactionOperation: valueTransactionOperation(
-      formValues.DATACREDITO_EXPERIAN ?? false,
-    ),
-    value: ERulesOfDecisions.DATACREDITO_EXPERIAN,
-  };
-
-  const transunionValues = initialGeneralData.TRANSUNION !==
-    formValues.TRANSUNION && {
-    transactionOperation: valueTransactionOperation(
-      formValues.TRANSUNION ?? false,
-    ),
-    value: ERulesOfDecisions.TRANSUNION,
-  };
-
   const methodsArray = [calculationValues, factorValues, reciprocityValues];
-
-  const creditBureausArray = [datacreditoExpValues, transunionValues];
 
   const additionalDebtors = decisionWithoutConditions(
     ENameRules.ADDITIONAL_DEBTORS,
@@ -252,18 +235,29 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ETransactionOperation.PARTIAL_UPDATE,
     inquiryValidityPeriodData,
   );
-  const lineCreditPayrollAdvance = decisionWithMultipleValuesEdit(
+
+  const creditBureausConsult = decisionWithMultipleValuesEdit(
+    ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
+    formValues.creditBureausConsultReq ?? undefined,
+    String(initialGeneralData.creditBureausConsultReq ?? ""),
+    creditBureausConsultReqData,
+  );
+
+  const lineCreditPayrollAdvance = decisionWithoutConditions(
     ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
     formValues.lineCreditPayrollAdvance ?? "",
     initialGeneralData.lineCreditPayrollAdvance,
+    ETransactionOperation.PARTIAL_UPDATE,
     lineCreditPayrollAdvanceData,
   );
-  const lineCreditPayrollSpecialAdvance = decisionWithMultipleValuesEdit(
+  const lineCreditPayrollSpecialAdvance = decisionWithoutConditions(
     ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
     formValues.lineCreditPayrollSpecialAdvance ?? "",
     initialGeneralData.lineCreditPayrollSpecialAdvance,
+    ETransactionOperation.PARTIAL_UPDATE,
     lineCreditPayrollSpecialAdvanceData,
   );
+
   const maximumNotifDocSize = decisionWithoutConditions(
     ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE,
     formValues.maximumNotifDocSize ?? undefined,
@@ -311,7 +305,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
 
   useEffect(() => {
     let methods;
-    let creditBureausConsult;
 
     if (methodsArray.length > 0) {
       const validMethods = methodsArray.filter(
@@ -332,33 +325,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
             effectiveFrom: String(formatDate(new Date())),
             transactionOperation: method.transactionOperation,
             value: method.value,
-          })),
-        };
-      }
-    }
-
-    if (creditBureausArray.length > 0) {
-      const validCreditBureaus = creditBureausArray.filter(
-        (
-          creditBureau,
-        ): creditBureau is {
-          transactionOperation: ETransactionOperation;
-          value: ERulesOfDecisions;
-        } =>
-          creditBureau !== false &&
-          creditBureau !== undefined &&
-          creditBureau !== null,
-      );
-
-      if (validCreditBureaus.length > 0) {
-        creditBureausConsult = {
-          ruleName: ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
-          modifyJustification: `${decisionsLabels.modifyJustification} ${ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED}`,
-          decisionsByRule: validCreditBureaus.map((creditBureau) => ({
-            decisionId: getDecisionIdMethods(methodsData, creditBureau.value),
-            effectiveFrom: String(formatDate(new Date())),
-            transactionOperation: creditBureau.transactionOperation,
-            value: creditBureau.value,
           })),
         };
       }

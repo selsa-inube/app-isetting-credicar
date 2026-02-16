@@ -61,24 +61,8 @@ const generalDataLabels = [
     titleName: "¿Tienes una línea de crédito para adelanto de nómina?",
   },
   {
-    id: "linePayrollAdvanceAdded",
-    titleName: "Líneas de crédito agregadas para adelanto de nómina",
-  },
-  {
-    id: "linePayrollAdvanceRemoved",
-    titleName: "Líneas de crédito eliminadas para adelanto de nómina",
-  },
-  {
     id: "lineCreditPayrollSpecialAdvance",
     titleName: "¿Tienes una línea de crédito para adelanto de prima?",
-  },
-  {
-    id: "linePayrollSpecialAdvanceAdded",
-    titleName: "Líneas de crédito agregadas para adelanto de prima",
-  },
-  {
-    id: "linePayrollSpecialAdvanceRemoved",
-    titleName: "Líneas de crédito eliminadas para adelanto de prima",
   },
   {
     id: "maximumNotifDocSize",

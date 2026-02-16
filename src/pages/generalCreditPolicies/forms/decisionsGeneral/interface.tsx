@@ -5,6 +5,7 @@ import {
   Checkpicker,
   Icon,
   Input,
+  Select,
   Stack,
   Text,
 } from "@inubekit/inubekit";
@@ -39,14 +40,14 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     payrollSpecialAdvanceOptions,
     creditBureausOptions,
     isLoadingEnums,
+    onChangeCreditBureaus,
     onToggle,
     onButtonClick,
     onResetEdit,
     onInfoRefModal,
     onInfoObligModal,
     onInfoMethodsModal,
-    onChangePayrollAdvance,
-    onChangePayrollSpecialAdvance,
+    onChange,
   } = props;
 
   return (
@@ -114,27 +115,14 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                   <Stack alignItems="center" gap={tokens.spacing.s050}>
                     <Text size="medium">{decisionsGenLabels.second}</Text>
                   </Stack>
-                  <Stack
-                    direction="column"
-                    gap={tokens.spacing.s100}
-                    margin={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
-                  >
-                    {creditBureausOptions.map((creditBureau) => (
-                      <Checkbox
-                        key={creditBureau.id}
-                        id={creditBureau.id}
-                        name={creditBureau.id}
-                        label={creditBureau.label}
-                        checked={Boolean(
-                          formik.values[
-                            creditBureau.id as keyof typeof formik.values
-                          ],
-                        )}
-                        onChange={onToggle}
-                        value={creditBureau.value}
-                      />
-                    ))}
-                  </Stack>
+
+                  <Checkpicker
+                    label={""}
+                    name="creditBureausConsultReq"
+                    onChange={onChangeCreditBureaus}
+                    options={creditBureausOptions}
+                    values={formik.values.creditBureausConsultReq}
+                  />
                 </Stack>
                 <ToggleGeneralDecision
                   name="additionalDebtors"
@@ -178,13 +166,12 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     direction="column"
                     padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
                   >
-                    <Checkpicker
+                    <Select
                       label={decisionsGenLabels.which}
                       name="lineCreditPayrollAdvance"
-                      onChange={onChangePayrollAdvance}
+                      onChange={onChange}
                       options={payrollAdvanceOptions}
-                      values={formik.values.lineCreditPayrollAdvance}
-                      fullwidth
+                      value={formik.values.lineCreditPayrollAdvance}
                     />
                   </Stack>
                 )}
@@ -204,13 +191,12 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     direction="column"
                     padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s200}`}
                   >
-                    <Checkpicker
+                    <Select
                       label={decisionsGenLabels.which}
                       name="lineCreditPayrollSpecialAdvance"
-                      onChange={onChangePayrollSpecialAdvance}
+                      onChange={onChange}
                       options={payrollSpecialAdvanceOptions}
-                      values={formik.values.lineCreditPayrollSpecialAdvance}
-                      fullwidth
+                      value={formik.values.lineCreditPayrollSpecialAdvance}
                     />
                   </Stack>
                 )}

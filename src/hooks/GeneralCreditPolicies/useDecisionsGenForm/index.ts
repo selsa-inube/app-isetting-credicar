@@ -36,8 +36,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       PaymentCapacityBasedCreditLimit: validationRules.boolean,
       ReciprocityBasedCreditLimit: validationRules.boolean,
       RiskAnalysisBasedCreditLimit: validationRules.boolean,
-      DATACREDITO_EXPERIAN: validationRules.boolean,
-      TRANSUNION: validationRules.boolean,
+      creditBureausConsultReq: validationRules.string,
       inquiryValidityPeriod: validationRules.number,
       toggleLineCreditPayrollAdvance: validationRules.boolean,
       lineCreditPayrollAdvance: validationRules.string,
@@ -122,11 +121,11 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     const { name, checked } = event.target;
     formik.setFieldValue(name, checked);
   };
-  const handleChangePayrollAdvance = (_name: string, value: string) => {
-    formik.setFieldValue("lineCreditPayrollAdvance", value);
+  const handleChangeCreditBureaus = (_name: string, value: string) => {
+    formik.setFieldValue("creditBureausConsultReq", value);
   };
-  const handleChangePayrollSpecialAdvance = (_name: string, value: string) => {
-    formik.setFieldValue("lineCreditPayrollSpecialAdvance", value);
+  const handleChange = (name: string, value: string) => {
+    formik.setFieldValue(name, value);
   };
 
   useEffect(() => {
@@ -213,8 +212,8 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     payrollAdvanceOptions,
     payrollSpecialAdvanceOptions,
     creditBureausOptions,
-    handleChangePayrollAdvance,
-    handleChangePayrollSpecialAdvance,
+    handleChangeCreditBureaus,
+    handleChange,
     handleInformationReferenceModal,
     handleInformationObligationModal,
     handleInformationMethodsModal,

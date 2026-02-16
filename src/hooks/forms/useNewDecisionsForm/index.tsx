@@ -6,10 +6,11 @@ import {
   groupsRecordToArrayNew,
 } from "@isettingkit/business-rules";
 import { MdInfoOutline, MdOutlineReportProblem } from "react-icons/md";
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecision, ValueDataType } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { capitalizeText } from "@utils/capitalizeText";
+import { normalizeConditionTraduction } from "@utils/normalizeConditionTraduction";
 import { asArray } from "@utils/asArray";
 import { localizeLabel } from "@utils/localizeLabel";
 import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdit";
@@ -166,12 +167,21 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
           const match = dataList.find(
             (d: any) => d?.conditionName === tplItem?.conditionName,
           );
+
+          const normalized = normalizeConditionTraduction(
+            conditionTraduction,
+            tplItem.conditionName,
+          );
           return normalizeCondition({
             ...tplItem,
             labelName: localizeLabel(
               tplItem,
               appData.language as "es" | "en" | undefined,
             ),
+            conditionDataType:
+              tplItem.conditionDataType?.toLocaleLowerCase() ??
+              normalized?.conditionDataType?.toLowerCase() ??
+              ValueDataType.ALPHABETICAL,
             value: match?.value ?? tplItem.value,
             listOfPossibleValues:
               match?.listOfPossibleValues ?? tplItem.listOfPossibleValues,

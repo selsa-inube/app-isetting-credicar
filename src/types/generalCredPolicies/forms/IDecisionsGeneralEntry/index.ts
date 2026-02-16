@@ -4,8 +4,7 @@ interface IDecisionsGeneralEntry {
   PaymentCapacityBasedCreditLimit: boolean;
   ReciprocityBasedCreditLimit: boolean;
   RiskAnalysisBasedCreditLimit: boolean;
-  DATACREDITO_EXPERIAN: boolean;
-  TRANSUNION: boolean;
+  creditBureausConsultReq: string;
   inquiryValidityPeriod: number | undefined;
   toggleLineCreditPayrollSpecialAdvance: boolean;
   toggleLineCreditPayrollAdvance: boolean;

@@ -17,8 +17,8 @@ interface IDecisionsGeneralFormUI {
   payrollAdvanceOptions: IServerDomain[];
   payrollSpecialAdvanceOptions: IServerDomain[];
   isLoadingEnums: boolean;
-  onChangePayrollAdvance: (_name: string, valueCSV: string) => void;
-  onChangePayrollSpecialAdvance: (_name: string, valueCSV: string) => void;
+  onChangeCreditBureaus: (_name: string, valueCSV: string) => void;
+  onChange: (name: string, value: string) => void;
   onToggle: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onInfoRefModal: () => void;
   onInfoObligModal: () => void;
