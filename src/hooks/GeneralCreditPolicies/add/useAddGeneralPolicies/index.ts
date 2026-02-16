@@ -108,11 +108,6 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
       const ruleName = decision.ruleName;
       const key = ruleNameToKeyMap[ruleName ?? ""];
 
-      if (!key) {
-        console.warn(`⚠️ No se encontró mapeo para ruleName: ${ruleName}`);
-        return;
-      }
-
       const normalizedDecision: IRuleDecisionExtended = {
         decisionId: `Decisión ${index + 1}`,
         ruleName: decision.ruleName,
