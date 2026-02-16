@@ -211,9 +211,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE}
-              customMessageEmptyDecisions={
-                decisionLabels.minimumCreditBureauRiskscore
-              }
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.minimumCreditBureauRiskscore,
+              )}
               initialDecisions={rulesData.MinimumCreditBureauRiskScore}
               editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
@@ -229,7 +229,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.NOTIFICATION_CHANNEL}
-              customMessageEmptyDecisions={decisionLabels.notificationChannel}
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.notificationChannel,
+              )}
               initialDecisions={rulesData.NotificationChannel}
               editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
@@ -245,7 +247,9 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
             <NewDecisionForm
               ruleCatalog={ENameRules.RULE_CATALOG_CREDIBOARD}
               labelBusinessRules={ENameRules.RISKSCORE_API_URL}
-              customMessageEmptyDecisions={decisionLabels.riskscoreApiUrl}
+              customMessageEmptyDecisions={decisionsLabels(
+                decisionLabels.riskscoreApiUrl,
+              )}
               initialDecisions={rulesData.RiskScoreApiUrl}
               editionMode={EEditionMode.CLASSIC}
               option={EUseCase.EDIT}
