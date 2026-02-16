@@ -125,6 +125,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                       onChange={onChangeCreditBureaus}
                       options={creditBureausOptions}
                       values={formik.values.creditBureausConsultReq}
+                      fullwidth
                     />
                   </Stack>
                 </Stack>
