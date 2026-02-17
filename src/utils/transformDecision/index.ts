@@ -1,4 +1,4 @@
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecision, ValueDataType } from "@isettingkit/input";
 import { ensureArrayGroupsDeep } from "../ensureArrayGroupsDeep";
 import { localizeDecision } from "../localizeDecision";
 import {
@@ -33,6 +33,9 @@ const transformDecision = (
         condition as { labelName?: string; i18n?: Record<string, string> },
         language,
       ),
+      conditionDataType:
+        condition.conditionDataType?.toLocaleLowerCase() ??
+        ValueDataType.ALPHABETICAL,
       i18nValue: geti18nValueDecision(
         condition.value,
         condition.listOfPossibleValues?.list,

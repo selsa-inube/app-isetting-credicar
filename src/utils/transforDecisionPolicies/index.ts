@@ -6,6 +6,7 @@ import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { isRangeObject } from "../formatValueOfCondition";
 import { geti18nValueDecision } from "../geti18nValueDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
+import { normalizeConditionValue } from "../normalizeConditionValue";
 
 const transformDecisions = (
   prev: IRuleDecision[],
@@ -18,11 +19,6 @@ const transformDecisions = (
     ...dec,
     labelName: ruleNameTraduction ?? dec.labelName,
     decisionDataType: dataType?.toLocaleLowerCase(),
-    howToSetTheDecision: isRangeObject(dec.value)
-      ? EValueHowToSetUp.RANGE
-      : listValuesDecision?.list && listValuesDecision.list.length > 0
-        ? EValueHowToSetUp.LIST_OF_VALUES
-        : EValueHowToSetUp.EQUAL,
     i18nValue: geti18nValueDecision(dec.value, listValuesDecision?.list as any),
     conditionGroups:
       dec.conditionGroups?.map((group) => ({
@@ -33,9 +29,17 @@ const transformDecisions = (
               conditionTraduction,
               c.conditionName,
             );
+
+            const normalizedValue = normalizeConditionValue(
+              conditionTraduction,
+              c.conditionName,
+              c.value,
+            );
+
             return {
               ...c,
               labelName: normalized?.label as string,
+              value: normalizedValue,
               i18nValue: geti18nValueDecision(
                 c.value,
                 normalized?.listPossibleValues?.list as any,
