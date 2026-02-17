@@ -64,7 +64,10 @@ const ModalWrapper = (props: IModalWrapper) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={changeZIndex} valueZIndex={valueZIndex}>
+    <StyledModalContainer
+      $changeZIndex={changeZIndex}
+      $valueZIndex={valueZIndex}
+    >
       <Blanket>
         <BoxContainer
           width={width}

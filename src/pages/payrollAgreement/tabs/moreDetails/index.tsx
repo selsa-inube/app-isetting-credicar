@@ -110,7 +110,6 @@ const MoreDetails = (props: IMoreDetails) => {
           width="100%"
           height={isMobile ? "auto" : "165px"}
           boxSizing="border-box"
-          // overflowY={isMobile ? "none" : "auto"}
         >
           <Grid
             templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}

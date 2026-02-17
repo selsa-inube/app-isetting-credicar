@@ -20,6 +20,16 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     additionalDebtorsData,
     minimumIncomeData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -30,10 +40,6 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     saveData,
     showRequestProcessModal,
     smallScreen,
-    contributionsPortfolio,
-    incomePortfolio,
-    scoreModels,
-    minimumIncomePercentage,
     filteredTabs,
     initialDecisionsGenData,
     showDecisionsGeneral,
@@ -42,26 +48,22 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showScoreModels,
     showGoBackModal,
     showDateModal,
-    normalizedContributions,
-    normalizedIncome,
-    normalizedScoreModels,
-    heightContPageContribut,
-    heightContPageIncome,
-    heightContPageScoreModels,
     showInfoModal,
     showMinimumIncome,
-    heightContPageMinimum,
-    normalizedMinimumIncome,
+    showBasicNotificFormat,
+    showBasicNotifRecipient,
+    showMinCreditBureauRiskScore,
+    showNotificationChannel,
+    showRiskScoreApiUrl,
+    rulesData,
+    disabledButton,
+    setDecisionData,
     handleFinishForm,
     handleToggleInfoModal,
     setShowReciprocity,
     setShowFactor,
     handleEditedModal,
     handleToggleDateModal,
-    setIncomePortfolio,
-    setScoreModels,
-    setContributionsPortfolio,
-    setMinimumIncomePercentage,
     handleReset,
     handleGoBack,
     handleCloseGoBackModal,
@@ -77,6 +79,16 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     additionalDebtorsData,
     realGuaranteesData,
     minimumIncomeData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
   });
 
   const {
@@ -137,13 +149,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
       smallScreen={smallScreen}
-      contributionsPortfolio={contributionsPortfolio}
-      setContributionsPortfolio={setContributionsPortfolio}
       decisionsGeneralReference={decisionsGeneralRef}
-      incomePortfolio={incomePortfolio}
-      scoreModels={scoreModels}
-      setIncomePortfolio={setIncomePortfolio}
-      setScoreModels={setScoreModels}
       initialDecisionsData={initialDecisionsGenData}
       showDecisionsGeneral={showDecisionsGeneral}
       showIncomePort={showIncomePort}
@@ -153,23 +159,22 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       showDateModal={showDateModal}
       onEditedModal={handleEditedModal}
       onToggleDateModal={handleToggleDateModal}
-      normalizedContributions={normalizedContributions}
-      normalizedIncome={normalizedIncome}
-      normalizedScoreModels={normalizedScoreModels}
-      normalizedMinimumIncome={normalizedMinimumIncome}
       isRequestStatusModal={isRequestStatusModal}
       setShowReciprocity={setShowReciprocity}
       setShowFactor={setShowFactor}
-      heightContPageContribut={heightContPageContribut}
-      heightContPageIncome={heightContPageIncome}
-      heightContPageMinimum={heightContPageMinimum}
       showMinimumIncome={showMinimumIncome}
-      heightContPageScoreModels={heightContPageScoreModels}
       onCloseProcess={handleCloseProcess}
       modalData={modalData as IModalData}
       showDecision={showDecision}
-      minimumIncomePercentage={minimumIncomePercentage}
-      setMinimumIncomePercentage={setMinimumIncomePercentage}
+      showBasicNotificFormat={showBasicNotificFormat}
+      showBasicNotifRecipient={showBasicNotifRecipient}
+      showMinCreditBureauRiskScore={showMinCreditBureauRiskScore}
+      showNotificationChannel={showNotificationChannel}
+      showRiskScoreApiUrl={showRiskScoreApiUrl}
+      rulesData={rulesData}
+      setDecisionData={setDecisionData}
+      disabledButton={disabledButton}
+      handleToggleDateModal={handleToggleDateModal}
     />
   );
 };

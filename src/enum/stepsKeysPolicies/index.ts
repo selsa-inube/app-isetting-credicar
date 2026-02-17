@@ -10,6 +10,13 @@ const stepKeysPolicies = {
     ],
   SCORE_MODELS: stepKeyByNamePolicies["Modelos de score"],
   MINIMUM_INCOME_PERCENTAGE: stepKeyByNamePolicies["Porcentaje mínimo ingreso"],
+  BASIC_NOTIFICATION_FORMAT: stepKeyByNamePolicies["Formato de notificación"],
+  BASIC_NOTIFICATION_RECIPIENT:
+    stepKeyByNamePolicies["Destinatario de la notificación"],
+  MINIMUM_CREDIT_BUREAU_RISKSCORE:
+    stepKeyByNamePolicies["Puntuación mínima de riesgo de crédito"],
+  NOTIFICATION_CHANNEL: stepKeyByNamePolicies["Canal de notificación"],
+  RISKSCORE_API_URL: stepKeyByNamePolicies["URL de la API de score de riesgo"],
   VERIFICATION: stepKeyByNamePolicies["Verificación"],
 };
 

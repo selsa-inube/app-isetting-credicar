@@ -8,17 +8,13 @@ import { useAlertDecisionModal } from "@hooks/creditLine/configurationLines/useA
 import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
+import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { portalId } from "@config/portalId";
 import { IBusinessRulesNew } from "@ptypes/creditLines/IBusinessRulesNew";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
-import {
-  StyledFixedContainerMessage,
-  StyledMultipleChoiceContainer,
-  StyledRulesScroll,
-} from "./styles";
+import { StyledMultipleChoiceContainer, StyledRulesScroll } from "./styles";
 import { AlertMessage } from "../forms/alertMessage";
-import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
 
 const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const {
@@ -114,6 +110,8 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const isFloatingActions = !optionDetailsCreditline;
   const editionMode = getEditionModeForDecision(option, selectedDecision);
 
+  const validateData = dataEmpty || decisionsSorted.length > 0;
+
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
@@ -153,39 +151,67 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
         </>
       )}
       {!ruleLoading && (
-        <StyledRulesScroll
-          $maxHeight={maxHeight}
-          $withFloatingActions={isFloatingActions && decisionsSorted.length > 0}
-        >
-          <BusinessRulesNew
-            baseDecisionTemplate={localizedTemplate}
-            controls={!optionDetailsCreditline}
-            customMessageEmptyDecisions={customMessageEmptyDecisions}
-            customTitleContentAddCard={customTitleContentAddCard}
-            decisionTemplate={decisionTemplateForBusinessRules as any}
-            decisions={decisionsSorted}
-            handleCloseModal={closeModal}
-            handleDelete={deleteDecision}
-            handleOpenModal={openModal}
-            handleSubmitForm={submitForm}
-            isModalOpen={isModalOpen}
-            loading={!!loading}
-            editionMode={editionMode}
-            onRemoveCondition={removeCondition}
-            onRestoreConditions={restoreConditions}
-            selectedDecision={selectedDecision}
-            textValues={textValues as IRulesFormTextValues}
-            shouldRenderEmptyMessage={dataEmpty || decisionsSorted.length > 0}
-          />
-          {conditionEmpty && (
-            <StyledFixedContainerMessage>
-              <AlertMessage
-                mesaggeEmpty={mesaggeEmpty}
-                icon={iconMessage}
-                iconAppearance={iconAppearance}
-                message={customMessageEmptyDecisions ?? message}
-              />
-            </StyledFixedContainerMessage>
+        <>
+          {!dataEmpty ? (
+            <Fieldset legend={newBusinessRulesLabels.decisionsTitle}>
+              <StyledRulesScroll
+                $maxHeight={maxHeight}
+                $withFloatingActions={
+                  isFloatingActions && decisionsSorted.length > 0
+                }
+              >
+                <BusinessRulesNew
+                  baseDecisionTemplate={localizedTemplate}
+                  controls={!optionDetailsCreditline}
+                  customMessageEmptyDecisions={customMessageEmptyDecisions}
+                  customTitleContentAddCard={customTitleContentAddCard}
+                  decisionTemplate={decisionTemplateForBusinessRules as any}
+                  decisions={decisionsSorted}
+                  handleCloseModal={closeModal}
+                  handleDelete={deleteDecision}
+                  handleOpenModal={openModal}
+                  handleSubmitForm={submitForm}
+                  isModalOpen={isModalOpen}
+                  loading={!!loading}
+                  editionMode={editionMode}
+                  onRemoveCondition={removeCondition}
+                  onRestoreConditions={restoreConditions}
+                  selectedDecision={selectedDecision}
+                  textValues={textValues as IRulesFormTextValues}
+                  shouldRenderEmptyMessage={validateData}
+                />
+
+                {conditionEmpty && (
+                  <AlertMessage
+                    mesaggeEmpty={mesaggeEmpty}
+                    icon={iconMessage}
+                    iconAppearance={iconAppearance}
+                    message={customMessageEmptyDecisions ?? message}
+                  />
+                )}
+              </StyledRulesScroll>
+            </Fieldset>
+          ) : (
+            <BusinessRulesNew
+              baseDecisionTemplate={localizedTemplate}
+              controls={!optionDetailsCreditline}
+              customMessageEmptyDecisions={customMessageEmptyDecisions}
+              customTitleContentAddCard={customTitleContentAddCard}
+              decisionTemplate={decisionTemplateForBusinessRules as any}
+              decisions={decisionsSorted}
+              handleCloseModal={closeModal}
+              handleDelete={deleteDecision}
+              handleOpenModal={openModal}
+              handleSubmitForm={submitForm}
+              isModalOpen={isModalOpen}
+              loading={!!loading}
+              editionMode={editionMode}
+              onRemoveCondition={removeCondition}
+              onRestoreConditions={restoreConditions}
+              selectedDecision={selectedDecision}
+              textValues={textValues as IRulesFormTextValues}
+              shouldRenderEmptyMessage={validateData}
+            />
           )}
 
           {showDecision && (
@@ -205,7 +231,7 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
               valueZIndex={4}
             />
           )}
-        </StyledRulesScroll>
+        </>
       )}
     </Stack>
   );

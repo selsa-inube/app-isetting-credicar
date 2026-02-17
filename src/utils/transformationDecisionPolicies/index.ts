@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { IRuleDecision } from "@isettingkit/input";
+import { IRuleDecision, ValueDataType } from "@isettingkit/input";
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
 import { IValue } from "@ptypes/decisions/IValue";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
 import { isRangeObject } from "../formatValueOfCondition";
 import { geti18nValueDecision } from "../geti18nValueDecision";
@@ -12,10 +13,12 @@ const transformationDecisionPolicies = (
   decision: IRuleDecision[],
   conditionArray: IConditionTraduction[],
   ruleNameTraduction: string,
-): IRuleDecision[] => {
+  listValuesDecision: IValue | undefined,
+): IRuleDecisionExtended[] => {
   return decision.map((dec) => ({
     ...dec,
     labelName: ruleNameTraduction,
+    i18nValue: geti18nValueDecision(dec.value, listValuesDecision?.list as any),
     conditionGroups:
       dec.conditionGroups?.map((group) => ({
         ...group,
@@ -35,6 +38,10 @@ const transformationDecisionPolicies = (
               ...c,
               labelName: normalized?.label as string,
               descriptionUse: c.conditionName,
+              conditionDataType:
+                normalized?.conditionDataType?.toLowerCase() ??
+                c.conditionDataType?.toLocaleLowerCase() ??
+                ValueDataType.ALPHABETICAL,
               value: normalizedValue,
               howToSetTheCondition: isRangeObject(c.value)
                 ? EValueHowToSetUp.RANGE

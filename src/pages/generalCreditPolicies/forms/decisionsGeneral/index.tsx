@@ -20,6 +20,7 @@ const DecisionsGeneralForm = forwardRef<
       editDataOption = false,
       handleFormValidChange,
       onReset,
+      setOptionsGenDecision,
       initialValuesEdit,
       setShowReciprocity,
       setShowFactor,
@@ -35,6 +36,12 @@ const DecisionsGeneralForm = forwardRef<
       isDisabledButton,
       buttonLabel,
       methodsOptions,
+      payrollAdvanceOptions,
+      payrollSpecialAdvanceOptions,
+      creditBureausOptions,
+      isLoadingEnums,
+      handleChange,
+      handleChangeCreditBureaus,
       handleInformationReferenceModal,
       handleInformationObligationModal,
       handleInformationMethodsModal,
@@ -49,6 +56,7 @@ const DecisionsGeneralForm = forwardRef<
       initialValuesEdit,
       setShowReciprocity,
       setShowFactor,
+      setOptionsGenDecision,
     });
 
     return (
@@ -69,6 +77,12 @@ const DecisionsGeneralForm = forwardRef<
         buttonLabel={buttonLabel}
         onResetEdit={onReset}
         methodsOptions={methodsOptions}
+        payrollAdvanceOptions={payrollAdvanceOptions}
+        payrollSpecialAdvanceOptions={payrollSpecialAdvanceOptions}
+        onChange={handleChange}
+        isLoadingEnums={isLoadingEnums}
+        creditBureausOptions={creditBureausOptions}
+        onChangeCreditBureaus={handleChangeCreditBureaus}
       />
     );
   },

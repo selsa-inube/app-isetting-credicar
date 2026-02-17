@@ -20,6 +20,16 @@ const GeneralCreditPolicies = () => {
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
     loadingPolicies,
     showAddPolicies,
     showrequestTab,
@@ -27,6 +37,7 @@ const GeneralCreditPolicies = () => {
     emptyData,
     withoutPrivilegesAdd,
     defaultSelectedTab,
+    handleScreenModal,
     handleEmptyData,
     handleCloseModal,
     handlePolicies,
@@ -46,6 +57,16 @@ const GeneralCreditPolicies = () => {
     minimumIncomeData,
     additionalDebtorsData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
   });
 
   const { showDecision, modalData } = useModalGeneralCreditPolicies({
@@ -54,6 +75,8 @@ const GeneralCreditPolicies = () => {
     showAddPolicies,
     showGoBackModal,
     defaultSelectedTab,
+    smallScreen,
+    handleScreenModal,
     handleCloseGoBackModal,
     handleGoBack,
     handleEmptyData,
@@ -85,6 +108,16 @@ const GeneralCreditPolicies = () => {
       handleOpenModal={handleOpenModal}
       loadingRequest={loadingRequest}
       showDecision={showDecision}
+      basicNotificFormatData={basicNotificFormatData}
+      basicNotificationRecData={basicNotificationRecData}
+      creditBureausConsultReqData={creditBureausConsultReqData}
+      inquiryValidityPeriodData={inquiryValidityPeriodData}
+      lineCreditPayrollAdvanceData={lineCreditPayrollAdvanceData}
+      lineCreditPayrollSpecialAdvanceData={lineCreditPayrollSpecialAdvanceData}
+      maximumNotifDocSizeData={maximumNotifDocSizeData}
+      minCredBureauRiskScoreData={minCredBureauRiskScoreData}
+      notifChannelData={notifChannelData}
+      riskScoreApiUrlData={riskScoreApiUrlData}
     />
   );
 };
