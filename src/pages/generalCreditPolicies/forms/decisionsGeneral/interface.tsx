@@ -135,6 +135,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                   label={decisionsGenLabels.third}
                   isChecked={formik.values.additionalDebtors}
                   onToggle={onToggle}
+                  definePerLine={true}
                 />
                 <ToggleGeneralDecision
                   name="realGuarantees"
@@ -143,6 +144,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                   onToggle={onToggle}
                   showIcon
                   onInfoModal={onInfoObligModal}
+                  definePerLine={true}
                 />
 
                 <Stack direction="column" gap={tokens.spacing.s150}>
@@ -166,6 +168,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                   label={decisionsGenLabels.sixth}
                   isChecked={formik.values.toggleLineCreditPayrollAdvance}
                   onToggle={onToggle}
+                  definePerLine={false}
                 />
                 {formik.values.toggleLineCreditPayrollAdvance === true && (
                   <Stack
@@ -193,6 +196,7 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                     formik.values.toggleLineCreditPayrollSpecialAdvance
                   }
                   onToggle={onToggle}
+                  definePerLine={false}
                 />
 
                 {formik.values.toggleLineCreditPayrollSpecialAdvance ===

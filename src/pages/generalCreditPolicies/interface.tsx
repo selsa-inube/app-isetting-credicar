@@ -47,107 +47,131 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
 
   return (
     <>
-      {loadingPolicies || loadingRequest ? (
-        <LoadingPage />
+      {smallScreen ? (
+        <DecisionModal
+          portalId={portalId}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          onClick={modalData.onClick}
+          onCloseModal={modalData.onCloseModal}
+          withCancelButton={modalData.withCancelButton}
+          icon={modalData.icon}
+          withIcon={modalData.withIcon}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
+        />
       ) : (
         <>
-          {showAddPolicies ? (
-            <>
-              <AddGenCreditPolicies />
-              <DecisionModal
-                portalId={portalId}
-                title={modalData.title}
-                moreDetails={modalData.moreDetails}
-                actionText={modalData.actionText}
-                description={modalData.description}
-                subtitle={modalData?.subtitle ? modalData.subtitle : ""}
-                onCloseModal={modalData.onCloseModal}
-                onClick={modalData.onClick}
-                withCancelButton={modalData.withCancelButton}
-              />
-            </>
+          {loadingPolicies || loadingRequest ? (
+            <LoadingPage />
           ) : (
-            <Stack
-              direction="column"
-              width="-webkit-fill-available"
-              padding={
-                smallScreen
-                  ? `${tokens.spacing.s200}`
-                  : `${tokens.spacing.s400} ${tokens.spacing.s800}`
-              }
-            >
-              <Stack
-                gap={smallScreen ? tokens.spacing.s200 : tokens.spacing.s300}
-                direction="column"
-              >
-                <Stack gap={tokens.spacing.s300} direction="column">
-                  <Breadcrumbs crumbs={crumbsGeneralpolicies} />
-                  <Title
-                    title={descriptionOptions?.publicCode ?? ""}
-                    description={descriptionTitle}
-                    sizeTitle="large"
-                    navigatePage="/"
-                    onClick={handleOpenModal}
+            <>
+              {showAddPolicies ? (
+                <>
+                  <AddGenCreditPolicies />
+                  <DecisionModal
+                    portalId={portalId}
+                    title={modalData.title}
+                    moreDetails={modalData.moreDetails}
+                    actionText={modalData.actionText}
+                    description={modalData.description}
+                    subtitle={modalData?.subtitle ? modalData.subtitle : ""}
+                    onCloseModal={modalData.onCloseModal}
+                    onClick={modalData.onClick}
+                    withCancelButton={modalData.withCancelButton}
                   />
-                </Stack>
+                </>
+              ) : (
                 <Stack
-                  gap={tokens.spacing.s300}
                   direction="column"
-                  width="100%"
+                  width="-webkit-fill-available"
+                  padding={
+                    smallScreen
+                      ? `${tokens.spacing.s200}`
+                      : `${tokens.spacing.s400} ${tokens.spacing.s800}`
+                  }
                 >
-                  <Tabs
-                    tabs={policiesTabs}
-                    selectedTab={isSelected}
-                    onChange={onTabChange}
-                  />
+                  <Stack
+                    gap={
+                      smallScreen ? tokens.spacing.s200 : tokens.spacing.s300
+                    }
+                    direction="column"
+                  >
+                    <Stack gap={tokens.spacing.s300} direction="column">
+                      <Breadcrumbs crumbs={crumbsGeneralpolicies} />
+                      <Title
+                        title={descriptionOptions?.publicCode ?? ""}
+                        description={descriptionTitle}
+                        sizeTitle="large"
+                        navigatePage="/"
+                        onClick={handleOpenModal}
+                      />
+                    </Stack>
+                    <Stack
+                      gap={tokens.spacing.s300}
+                      direction="column"
+                      width="100%"
+                    >
+                      <Tabs
+                        tabs={policiesTabs}
+                        selectedTab={isSelected}
+                        onChange={onTabChange}
+                      />
 
-                  {showPoliciesTab && (
-                    <EditGeneralPolicies
-                      contributionsData={contributionsData}
-                      incomeData={incomeData}
-                      scoreModelsData={scoreModelsData}
-                      methodsData={methodsData}
-                      additionalDebtorsData={additionalDebtorsData}
-                      realGuaranteesData={realGuaranteesData}
-                      minimumIncomeData={minimumIncomeData}
-                      basicNotificFormatData={basicNotificFormatData}
-                      basicNotificationRecData={basicNotificationRecData}
-                      creditBureausConsultReqData={creditBureausConsultReqData}
-                      inquiryValidityPeriodData={inquiryValidityPeriodData}
-                      lineCreditPayrollAdvanceData={
-                        lineCreditPayrollAdvanceData
-                      }
-                      lineCreditPayrollSpecialAdvanceData={
-                        lineCreditPayrollSpecialAdvanceData
-                      }
-                      maximumNotifDocSizeData={maximumNotifDocSizeData}
-                      minCredBureauRiskScoreData={minCredBureauRiskScoreData}
-                      notifChannelData={notifChannelData}
-                      riskScoreApiUrlData={riskScoreApiUrlData}
+                      {showPoliciesTab && (
+                        <EditGeneralPolicies
+                          contributionsData={contributionsData}
+                          incomeData={incomeData}
+                          scoreModelsData={scoreModelsData}
+                          methodsData={methodsData}
+                          additionalDebtorsData={additionalDebtorsData}
+                          realGuaranteesData={realGuaranteesData}
+                          minimumIncomeData={minimumIncomeData}
+                          basicNotificFormatData={basicNotificFormatData}
+                          basicNotificationRecData={basicNotificationRecData}
+                          creditBureausConsultReqData={
+                            creditBureausConsultReqData
+                          }
+                          inquiryValidityPeriodData={inquiryValidityPeriodData}
+                          lineCreditPayrollAdvanceData={
+                            lineCreditPayrollAdvanceData
+                          }
+                          lineCreditPayrollSpecialAdvanceData={
+                            lineCreditPayrollSpecialAdvanceData
+                          }
+                          maximumNotifDocSizeData={maximumNotifDocSizeData}
+                          minCredBureauRiskScoreData={
+                            minCredBureauRiskScoreData
+                          }
+                          notifChannelData={notifChannelData}
+                          riskScoreApiUrlData={riskScoreApiUrlData}
+                        />
+                      )}
+                      {showrequestTab && <RequestsInProgressTab />}
+                    </Stack>
+                  </Stack>
+
+                  {showDecision && (
+                    <DecisionModal
+                      portalId={portalId}
+                      title={modalData.title}
+                      actionText={modalData.actionText}
+                      description={modalData.description}
+                      subtitle={modalData?.subtitle ? modalData.subtitle : ""}
+                      onCloseModal={modalData.onCloseModal}
+                      moreDetails={modalData.moreDetails}
+                      onClick={modalData.onClick}
+                      icon={modalData.icon}
+                      withIcon={modalData.withIcon}
+                      withCancelButton={modalData.withCancelButton}
+                      appearance={modalData.appearance}
+                      appearanceButton={modalData.appearanceButton}
                     />
                   )}
-                  {showrequestTab && <RequestsInProgressTab />}
                 </Stack>
-              </Stack>
-
-              {showDecision && (
-                <DecisionModal
-                  portalId={portalId}
-                  title={modalData.title}
-                  actionText={modalData.actionText}
-                  description={modalData.description}
-                  subtitle={modalData?.subtitle ? modalData.subtitle : ""}
-                  onCloseModal={modalData.onCloseModal}
-                  moreDetails={modalData.moreDetails}
-                  onClick={modalData.onClick}
-                  icon={modalData.icon}
-                  withIcon={modalData.withIcon}
-                  withCancelButton={modalData.withCancelButton}
-                  appearance={modalData.appearance}
-                  appearanceButton={modalData.appearanceButton}
-                />
               )}
-            </Stack>
+            </>
           )}
         </>
       )}

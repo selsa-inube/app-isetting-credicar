@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { MdOutlineReportProblem } from "react-icons/md";
+import { MdOutlineReportProblem, MdOutlineWarningAmber } from "react-icons/md";
 import { EComponentAppearance } from "@enum/appearances";
 import { disabledModal } from "@config/disabledModal";
+import { showOptionModal } from "@config/creditLines/showOptionModal";
 import { notPoliciesModal } from "@config/generalCreditPolicies/assisted/goBackModal";
 import { withoutDataModal } from "@config/generalCreditPolicies/assisted/withoutDataModal";
 import { goBackModal } from "@config/goBackModal";
@@ -16,6 +17,8 @@ const useModalGeneralCreditPolicies = (
     showAddPolicies,
     showGoBackModal,
     defaultSelectedTab,
+    smallScreen,
+    handleScreenModal,
     handleEmptyData,
     handleCloseModal,
     handlePolicies,
@@ -97,6 +100,19 @@ const useModalGeneralCreditPolicies = (
         icon: <></>,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    if (smallScreen) {
+      return {
+        ...showOptionModal,
+        onCloseModal: handleScreenModal,
+        onClick: handleScreenModal,
+        withCancelButton: false,
+        withIcon: true,
+        icon: <MdOutlineWarningAmber />,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
       };
     }
 

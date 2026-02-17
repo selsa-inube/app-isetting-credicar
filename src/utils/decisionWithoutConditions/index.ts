@@ -3,7 +3,6 @@ import { ETransactionOperation } from "@enum/transactionOperation";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { formatDate } from "../date/formatDate";
-import { getDecisionIdMethods } from "../decisions/getDecisionIdMethods";
 
 const decisionWithoutConditions = (
   ruleName: string,
@@ -11,14 +10,16 @@ const decisionWithoutConditions = (
   prevValue: string | boolean | undefined,
   data?: IRuleDecisionExtended[],
 ) => {
-  if (prevValue === value) {
+  const typeValue = typeof value === "number" ? String(value) : value;
+
+  if (prevValue === typeValue) {
     return undefined;
   }
   if (value === 0 || value === "0") {
     return undefined;
   }
+  const decisionIdData = data && data.length ? data?.[0].decisionId : undefined;
 
-  const decisionIdData = getDecisionIdMethods(data, value as string);
   const decisionsByRule = {
     value:
       typeof value === "boolean"

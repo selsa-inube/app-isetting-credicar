@@ -38,6 +38,7 @@ const useGeneralCreditPolicies = () => {
   } = useValidateRules();
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showScreenModal, setShowScreenModal] = useState<boolean>(false);
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -112,6 +113,11 @@ const useGeneralCreditPolicies = () => {
   }, [tabs, showAddPolicies, withoutRequestsData]);
 
   const policiesTabs = Object.values(filteredTabsConfig);
+
+  const handleScreenModal = () => {
+    setShowScreenModal(!showScreenModal);
+    navigate("/");
+  };
 
   const getFirstFilteredTab = (
     filteredTabsConfig: IGeneralPoliciesTabsConfig,
@@ -203,6 +209,7 @@ const useGeneralCreditPolicies = () => {
     withoutPrivilegesAdd,
     showModal,
     defaultSelectedTab,
+    handleScreenModal,
     handleEmptyData,
     handleCloseModal,
     handlePolicies,
