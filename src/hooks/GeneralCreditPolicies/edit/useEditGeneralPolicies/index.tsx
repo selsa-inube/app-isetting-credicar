@@ -311,7 +311,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       modifyJustification: string;
       rules?: IRuleDecision[];
     } = {
-      modifyJustification: `${editLabels.modifyJustification}`,
+      modifyJustification: `${editLabels.description}`,
     };
 
     if (newDecisions && newDecisions.length > 0) {
@@ -323,7 +323,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
       requestType: ERequestType.MODIFY,
       businessManagerCode: appData.businessManager.publicCode,
       businessUnitCode: appData.businessUnit.publicCode,
-      description: `${editLabels.modifyJustification}`,
+      description: `${editLabels.description}`,
       entityName: "GeneralCreditPolicies",
       requestDate: formatDate(new Date()),
       useCaseName: EGeneralPolicies.USE_CASE_EDIT,
