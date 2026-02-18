@@ -349,7 +349,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       incomeTypes?: IIncomeTypes[];
     } = {
       payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
-      modifyJustification: jsonLabels(appData.user.userAccount)
+      modifyJustification: jsonLabels(initialValues.abbreviatedName)
         .modifyJustification,
     };
 
