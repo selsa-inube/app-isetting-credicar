@@ -55,7 +55,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       nameCycle: entry.regularPaymentCycleName,
       periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
       payday: getDayPayment(entry.paymentDay),
-      numberDaysUntilCut: Number(entry.numberOfDaysBeforePaymentToBill),
+      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
       laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
     }));
   };
