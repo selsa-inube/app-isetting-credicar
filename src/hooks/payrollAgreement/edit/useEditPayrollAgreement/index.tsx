@@ -52,6 +52,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       id: String(index + 1),
       cycleId: `${addLeadingZero(index + 1).toString()}`,
       payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+      regularPaymentCycleNumber: entry.regularPaymentCycleNumber,
       nameCycle: entry.regularPaymentCycleName,
       periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
       payday: getDayPayment(entry.paymentDay),

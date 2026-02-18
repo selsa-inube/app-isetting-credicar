@@ -7,11 +7,6 @@ import { detailsOrdCycle } from "../detailsOrdCycle";
 
 const titles: ITitle[] = [
   {
-    id: "cycleId",
-    titleName: "Ciclo",
-    priority: 1,
-  },
-  {
     id: "nameCycle",
     titleName: "Nombre del ciclo",
     priority: 0,
@@ -19,17 +14,17 @@ const titles: ITitle[] = [
   {
     id: "periodicity",
     titleName: "Periodicidad del ciclo",
-    priority: 2,
+    priority: 1,
   },
   {
     id: "payday",
     titleName: "Día de pago del ciclo",
-    priority: 3,
+    priority: 2,
   },
   {
     id: "numberDaysUntilCut",
     titleName: "# de días para el corte",
-    priority: 4,
+    priority: 3,
   },
 ];
 
