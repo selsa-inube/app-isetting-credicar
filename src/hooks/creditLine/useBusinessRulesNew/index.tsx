@@ -235,10 +235,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       setSelectedDecision(selectedFromTemplate);
       setIsCreatingNew(false);
     } else {
-      setSelectedDecision({
-        ...localizedTemplate,
-        ...(decisionTemplateForBusinessRules as any),
-      } as IRuleDecision);
+      setSelectedDecision(null);
       setIsCreatingNew(true);
     }
 
