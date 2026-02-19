@@ -1,19 +1,26 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditDestination } from "@hooks/moneyDestination/edit/useEditDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { useDataDestination } from "@hooks/moneyDestination/useDataDestination";
 import { useModalEditDestination } from "@hooks/moneyDestination/edit/useModalEditDestination";
 import { EUseCase } from "@enum/useCase";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
 import { EditDestinationUI } from "./interface";
 
 const EditDestination = () => {
-  const location = useLocation();
-  const { data } = location.state ?? {};
+  const { id, option, requestNumber } = useParams();
   const { appData } = useContext(AuthAndPortalData);
+
+  const { transformedMoneyDestination: data, loading } = useDataDestination({
+    id,
+    requestNumber,
+    option,
+  });
 
   const {
     formValues,
@@ -27,7 +34,6 @@ const EditDestination = () => {
     showModal,
     showGoBackModal,
     creditLineValues,
-    loading,
     hasErrorRule,
     descriptionError,
     handleToggleErrorRuleModal,
@@ -43,7 +49,7 @@ const EditDestination = () => {
     setShowRequestProcessModal,
     setShowModal,
     setValuesLine,
-  } = useEditDestination({ data, appData });
+  } = useEditDestination({ data, appData, loading });
 
   const {
     saveMoneyDestination,
@@ -106,7 +112,9 @@ const EditDestination = () => {
       showRequestProcessModal={showRequestProcessModal}
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
-      initialGeneralInfData={initialGeneralInfData}
+      initialGeneralInfData={
+        initialGeneralInfData.current as IGeneralInformationEntry
+      }
       smallScreen={smallScreen}
       showGeneralInformation={showGeneralInformation}
       showRequestStatus={showRequestStatus}

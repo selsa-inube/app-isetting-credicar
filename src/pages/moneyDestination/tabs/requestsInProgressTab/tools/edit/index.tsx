@@ -1,17 +1,17 @@
 import { EditRecord } from "@design/feedback/editRecord";
-import { useEditDestinationConsultation } from "@hooks/moneyDestination/edit/useEditDestinationConsultation";
-import { EMoneyDestination } from "@enum/moneyDestination";
+import { useEditDestRequestConsultation } from "@hooks/moneyDestination/useEditDestRequestConsultation";
 import { EManagementType } from "@enum/managementType";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { IEdit } from "@ptypes/moneyDestination/tabs/IEdit";
 
 const Edit = (props: IEdit) => {
   const { data } = props;
 
   const { handleEdit, showInfoModal, modalData } =
-    useEditDestinationConsultation({
+    useEditDestRequestConsultation({
       data,
       useCase: EMoneyDestination.USE_CASE_EDIT,
-      option: EManagementType.CURRENT,
+      option: EManagementType.IN_PROGRESS,
     });
   return (
     <EditRecord

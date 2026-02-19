@@ -8,7 +8,10 @@ function MoneyDestinationRoutes() {
     <Routes>
       <Route path="/" element={<MoneyDestination />} />
       <Route path="add-destination" element={<AddDestination />} />
-      <Route path="edit-destination" element={<EditDestination />} />
+      <Route
+        path="edit-destination/:option/:id/:requestNumber"
+        element={<EditDestination />}
+      />
     </Routes>
   );
 }

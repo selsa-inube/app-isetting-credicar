@@ -32,15 +32,7 @@ import { IDecisionWithConditions } from "@ptypes/creditLines/IDecisionWithCondit
 import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
 
 const useEditDestination = (props: IUseEditDestination) => {
-  const { data, appData } = props;
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }, []);
+  const { data, appData, loading } = props;
 
   const getRule = () =>
     useEvaluateRuleByBusinessUnit({
@@ -98,27 +90,42 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [valuesLine, setValuesLine] = useState<string>("");
 
   useEffect(() => {
-    if (dataEvaluate && !isInitialized) {
+    if (dataEvaluate) {
       setFormValues((prev) => ({
         ...prev,
+        nameDestination: data.nameDestination ?? "",
+        typeDestination: data.typeDestination,
+        description: data.description ?? "",
+        icon: data.icon ?? "",
+        id: data.id ?? "",
         creditLine: dataEvaluate,
       }));
       setIsInitialized(true);
       setValuesLine(dataEvaluate);
     }
-  }, [dataEvaluate, isInitialized]);
+  }, [dataEvaluate, isInitialized, data]);
 
-  const initialGeneralInfData = useMemo(
-    () => ({
-      nameDestination: data.nameDestination ?? "",
-      typeDestination: data.typeDestination,
-      creditLine: dataEvaluate ?? "",
-      description: data.description ?? "",
-      icon: data.icon ?? "",
-      id: data.id ?? "",
-    }),
-    [dataEvaluate, data],
-  );
+  const initialGeneralInfData = useRef<IGeneralInformationEntry | null>(null);
+
+  useEffect(() => {
+    if (
+      !loading &&
+      data.id &&
+      data.nameDestination &&
+      dataEvaluate &&
+      initialGeneralInfData.current === null
+    ) {
+      initialGeneralInfData.current = {
+        nameDestination: data.nameDestination ?? "",
+        typeDestination: data.typeDestination,
+        creditLine: dataEvaluate,
+        description: data.description ?? "",
+        icon: data.icon ?? "",
+        id: data.id ?? "",
+      };
+    }
+  }, [loading, data.id, dataEvaluate]);
+
   const { optionsCreditLine, creditLineData } = useCreditLine();
 
   const generalInformationRef =
@@ -336,14 +343,16 @@ const useEditDestination = (props: IUseEditDestination) => {
   const onSubmit = () => {
     const currentValues = generalInformationRef.current?.values;
     const compare =
-      JSON.stringify(initialGeneralInfData) === JSON.stringify(formValues);
+      JSON.stringify(initialGeneralInfData.current) ===
+      JSON.stringify(formValues);
 
     const valuesUpdatedName =
-      initialGeneralInfData.nameDestination !== currentValues?.nameDestination;
+      initialGeneralInfData.current?.nameDestination !==
+      currentValues?.nameDestination;
     const valuesUpdatedDesc =
-      initialGeneralInfData.description !== currentValues?.description;
+      initialGeneralInfData.current?.description !== currentValues?.description;
     const valuesUpdatedLine =
-      initialGeneralInfData.creditLine !== currentValues?.creditLine;
+      initialGeneralInfData.current?.creditLine !== currentValues?.creditLine;
 
     const configurationRequestData: {
       moneyDestinationId: string;
@@ -371,14 +380,17 @@ const useEditDestination = (props: IUseEditDestination) => {
     if (currentValues?.creditLine !== undefined && valuesUpdatedLine)
       if (!compare) {
         if (
-          initialGeneralInfData.nameDestination !== formValues.nameDestination
+          initialGeneralInfData.current?.nameDestination !==
+          formValues.nameDestination
         ) {
           configurationRequestData.abbreviatedName = valueName(
             formValues.nameDestination,
           );
           configurationRequestData.iconReference = formValues.icon;
         }
-        if (initialGeneralInfData.description !== formValues.description) {
+        if (
+          initialGeneralInfData.current?.description !== formValues.description
+        ) {
           configurationRequestData.descriptionUse = formValues.description;
         }
       }

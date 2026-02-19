@@ -5,17 +5,16 @@ import { IEditCreditLine } from "@ptypes/creditLines/IEditCreditLine";
 
 const Edit = (props: IEditCreditLine) => {
   const { data } = props;
-  const { handleEdit, showInfoModal, handleToggleInfoModal } =
-    useEditCreditConsultation({
-      creditLineData: data,
-      useCaseEdit: ECreditLines.USE_CASE_EDIT,
-    });
+  const { handleEdit, showInfoModal, modalData } = useEditCreditConsultation({
+    creditLineData: data,
+    useCaseEdit: ECreditLines.USE_CASE_EDIT,
+  });
   return (
     <>
       <EditRecord
         onEdit={handleEdit}
         showInfoModal={showInfoModal}
-        onToggleInfoModal={handleToggleInfoModal}
+        modalData={modalData}
       />
     </>
   );
