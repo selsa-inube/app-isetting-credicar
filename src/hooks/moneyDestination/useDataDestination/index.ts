@@ -34,10 +34,7 @@ const useDataDestination = (props: IUseDataDestination) => {
 
       if (!requestNumber) return;
 
-      if (
-        // appData.businessManager.publicCode.length > 0 &&
-        option === EManagementType.IN_PROGRESS
-      ) {
+      if (option === EManagementType.IN_PROGRESS) {
         setLoading(true);
         try {
           const result = await getRequestsInProgress(
