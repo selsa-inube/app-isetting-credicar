@@ -1,3 +1,4 @@
+import { IApplicantData } from "../IApplicantData";
 import { IConfigurationRequestsTraceability } from "../IConfigRequestsTraceability";
 import { ISettingRequestError } from "../ISettingRequestError";
 import { IUserManagingConfigRequests } from "../IUserConfigRequests";
@@ -19,6 +20,7 @@ interface IRequestsInProgress {
   id?: string;
   requestStatusCode?: string;
   settingRequestError?: ISettingRequestError[];
+  applicantData?: IApplicantData[];
 }
 
 export type { IRequestsInProgress };
