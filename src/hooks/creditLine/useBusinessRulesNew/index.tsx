@@ -55,6 +55,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
     setEditDecision,
     setDeleteDecision,
   } = props;
+  console.log("props", props);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
   const [showAlertDateModal, setShowAlertDateModal] = useState<boolean>(false);
@@ -235,10 +236,7 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
       setSelectedDecision(selectedFromTemplate);
       setIsCreatingNew(false);
     } else {
-      setSelectedDecision({
-        ...localizedTemplate,
-        ...(decisionTemplateForBusinessRules as any),
-      } as IRuleDecision);
+      setSelectedDecision(null);
       setIsCreatingNew(true);
     }
 
