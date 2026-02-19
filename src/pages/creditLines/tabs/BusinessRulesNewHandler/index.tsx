@@ -111,7 +111,6 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
   const editionMode = getEditionModeForDecision(option, selectedDecision);
 
   const validateData = dataEmpty || decisionsSorted.length > 0;
-  console.log(selectedDecision, "selectedDecision");
   return (
     <Stack direction="column" gap={tokens.spacing.s300}>
       {!ruleLoading && (
