@@ -15,6 +15,14 @@ const detailsExtCycle = [
     id: "numberDaysUntilCut",
     titleName: "# de días para el corte",
   },
+  {
+    id: "laborRegulatorFramework",
+    titleName: "Marco normativo laboral",
+  },
+  {
+    id: "regulatoryFrameworkCode",
+    titleName: "Marco normativo laboral",
+  },
 ];
 
 export { detailsExtCycle };
