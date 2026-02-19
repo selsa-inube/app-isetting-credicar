@@ -37,8 +37,11 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
       payrollForDeductionAgreementId:
         transactionOperation === ETransactionOperation.DELETE
           ? item.payrollForDeductionAgreementId
+          : payrollId,
+      regularPaymentCycleNumber:
+        transactionOperation === ETransactionOperation.DELETE
+          ? item.regularPaymentCycleNumber
           : undefined,
-      regularPaymentCycleNumber: item.cycleId ?? "",
       regularPaymentCycleName: item.nameCycle ?? "",
       schedule:
         normalizeEnumTranslationCode(item.periodicity ?? "")?.code ??
