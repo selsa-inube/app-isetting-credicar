@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useMemo, useState } from "react";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
-import { getMoneyDestinationData } from "@services/moneyDestination/getMoneyDestination";
 import { getRequestsInProgress } from "@services/requestInProgress/getRequestsInProgress";
 import { EManagementType } from "@enum/managementType";
 import { EMoneyDestination } from "@enum/moneyDestination";
@@ -9,18 +9,25 @@ import { ERequestInProgress } from "@enum/requestInProgress";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { IUseDataDestination } from "@ptypes/hooks/moneyDestination/IUseDataDestination";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
-import { IMoneyDestinationData } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/IMoneyDestinationData";
+import { IEditData } from "@ptypes/hooks/moneyDestination/IEditData";
+import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
+import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
 
 const useDataDestination = (props: IUseDataDestination) => {
-  const { id, requestNumber, option } = props;
+  const { id, requestNumber, option, moneyDestinationData } = props;
   const { appData } = useContext(AuthAndPortalData);
   const [loading, setLoading] = useState<boolean>(false);
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
-  const [moneyDestination, setMoneyDestination] = useState<
-    IMoneyDestinationData[]
-  >([]);
+  const [moneyDestination, setMoneyDestination] = useState<IEditData>({
+    id: "",
+    nameDestination: "",
+    description: "",
+    icon: "",
+    typeDestination: "",
+    creditLine: "",
+  });
 
   const { enumData: type, loading: loadingEnum } = useEnumeratorsCrediboard({
     businessUnits: appData.businessUnit.publicCode,
@@ -28,6 +35,21 @@ const useDataDestination = (props: IUseDataDestination) => {
     token: appData.token,
   });
 
+  const ruleLineCredit = (configurationRequest: any) => {
+    const valuesRules: string[] = [];
+
+    const rules = configurationRequest?.rules;
+
+    if (!rules || !Array.isArray(rules) || rules.length === 0) return "";
+
+    rules.forEach((rule: IRules) => {
+      rule.decisionsByRule?.forEach((decision: IDecisionsByRule) => {
+        if (decision.value) valuesRules.push(decision.value as string);
+      });
+    });
+
+    return valuesRules.length > 0 ? valuesRules.join(", ") : "";
+  };
   useEffect(() => {
     const fetchRequestsInProgressData = async () => {
       if (!id) return;
@@ -57,50 +79,35 @@ const useDataDestination = (props: IUseDataDestination) => {
   }, [id, option, requestNumber, appData.businessManager.publicCode]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (option === EManagementType.CURRENT) {
-        setLoading(true);
-        try {
-          const result = await getMoneyDestinationData(
-            appData.businessUnit.publicCode,
-            appData.token,
-          );
-          setMoneyDestination(result);
-        } catch (error) {
-          console.info(error);
-        } finally {
-          setTimeout(() => setLoading(false), 2000);
-        }
-      }
-    };
-    fetchData();
+    if (option === EManagementType.CURRENT && moneyDestinationData) {
+      setMoneyDestination(moneyDestinationData);
+    }
   }, [id, requestNumber, option, appData.businessUnit.publicCode]);
 
   const data = useMemo(() => {
-    if (requestsInProgress.length > 0) {
+    if (
+      option === EManagementType.IN_PROGRESS &&
+      requestsInProgress.length > 0
+    ) {
       const configurationRequest = requestsInProgress.find(
         (item) => item,
       )?.configurationRequestData;
+
       return {
         id: requestsInProgress?.[0].id as string,
         nameDestination: configurationRequest?.abbreviatedName as string,
         description: configurationRequest?.descriptionUse as string,
         icon: configurationRequest?.iconReference as string,
         typeDestination: configurationRequest?.moneyDestinationType as string,
-        creditLine: configurationRequest?.creditLine as string,
+        creditLine: ruleLineCredit(configurationRequest),
       };
     }
 
-    if (moneyDestination.length > 0) {
-      const destination = moneyDestination.find((item) => item.id === id);
-      return {
-        id: destination?.moneyDestinationId ?? "",
-        nameDestination: destination?.name ?? "",
-        description: destination?.descriptionUse ?? "",
-        icon: destination?.iconReference ?? "",
-        typeDestination: destination?.moneyDestinationType ?? "",
-        creditLine: destination?.creditLine ?? "",
-      };
+    if (
+      option === EManagementType.CURRENT &&
+      Object.values(moneyDestination).length > 0
+    ) {
+      return moneyDestinationData;
     }
 
     return {
@@ -120,7 +127,7 @@ const useDataDestination = (props: IUseDataDestination) => {
 
     const typeDestination = normalizeDestination(
       type,
-      data.typeDestination ?? "",
+      data?.typeDestination ?? "",
     );
     const valueTypeDestination =
       typeDestination?.i18n?.[
@@ -129,7 +136,7 @@ const useDataDestination = (props: IUseDataDestination) => {
 
     return {
       ...data,
-      typeDestination: valueTypeDestination ?? data.typeDestination,
+      typeDestination: valueTypeDestination ?? data?.typeDestination,
     };
   }, [data, type, loadingEnum, appData.language]);
 

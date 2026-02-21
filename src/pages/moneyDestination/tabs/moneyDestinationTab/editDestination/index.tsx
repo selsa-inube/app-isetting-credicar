@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditDestination } from "@hooks/moneyDestination/edit/useEditDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
@@ -10,13 +10,17 @@ import { editDestinationTabsConfig } from "@config/moneyDestination/editDestinat
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
+import { IEditData } from "@ptypes/hooks/moneyDestination/IEditData";
 import { EditDestinationUI } from "./interface";
 
 const EditDestination = () => {
   const { id, option, requestNumber } = useParams();
+  const location = useLocation();
+  const { data: moneyDestinationData } = location.state ?? {};
   const { appData } = useContext(AuthAndPortalData);
 
   const { transformedMoneyDestination: data, loading } = useDataDestination({
+    moneyDestinationData,
     id,
     requestNumber,
     option,
@@ -36,6 +40,7 @@ const EditDestination = () => {
     creditLineValues,
     hasErrorRule,
     descriptionError,
+    loadingEnum,
     handleToggleErrorRuleModal,
     setCreditLineValues,
     handleOpenModal,
@@ -49,7 +54,7 @@ const EditDestination = () => {
     setShowRequestProcessModal,
     setShowModal,
     setValuesLine,
-  } = useEditDestination({ data, appData, loading });
+  } = useEditDestination({ data: data as IEditData, appData, loading });
 
   const {
     saveMoneyDestination,
@@ -126,6 +131,7 @@ const EditDestination = () => {
       creditLineValues={creditLineValues}
       setCreditLineValues={setCreditLineValues}
       loading={loading}
+      loadingEnum={loadingEnum}
       setValuesLine={setValuesLine}
     />
   );

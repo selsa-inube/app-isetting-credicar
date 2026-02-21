@@ -20,6 +20,7 @@ interface IEditDestinationUI {
   modalData: IModalData;
   showDecision: boolean;
   loading: boolean;
+  loadingEnum: boolean;
   creditLineValues: IServerDomain[];
   setCreditLineValues: React.Dispatch<React.SetStateAction<IServerDomain[]>>;
   onOpenModal: () => void;

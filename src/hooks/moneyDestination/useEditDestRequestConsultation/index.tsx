@@ -16,7 +16,7 @@ const useEditDestRequestConsultation = (props: IUseEditDestinationConsult) => {
   const navigate = useNavigate();
 
   const validateResponsible = useMemo(() => {
-    if (!data.userManagingConfigurationRequests && !data.requester)
+    if (!data.requester && !data.userManagingConfigurationRequests)
       return false;
     return getResponsible(
       data as IRequestsInProgress,

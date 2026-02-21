@@ -59,6 +59,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     initialValues,
     validationSchema,
     validateOnBlur: false,
+    enableReinitialize: true,
     onSubmit: onSubmit ?? (() => true),
   });
 

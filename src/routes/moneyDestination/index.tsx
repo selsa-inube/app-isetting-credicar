@@ -12,6 +12,7 @@ function MoneyDestinationRoutes() {
         path="edit-destination/:option/:id/:requestNumber"
         element={<EditDestination />}
       />
+      <Route path="edit-destination/:option" element={<EditDestination />} />
     </Routes>
   );
 }

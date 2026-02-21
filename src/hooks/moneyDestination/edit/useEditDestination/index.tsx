@@ -53,6 +53,7 @@ const useEditDestination = (props: IUseEditDestination) => {
     evaluateRuleData,
     hasError: hasErrorRule,
     setHasError: setHasErrorRule,
+    loading: loadingEnum,
     descriptionError,
   } = getRule();
 
@@ -90,6 +91,19 @@ const useEditDestination = (props: IUseEditDestination) => {
   const [valuesLine, setValuesLine] = useState<string>("");
 
   useEffect(() => {
+    if (data?.nameDestination) {
+      setFormValues({
+        nameDestination: data.nameDestination ?? "",
+        typeDestination: data.typeDestination,
+        creditLine: data.creditLine,
+        description: data.description ?? "",
+        icon: data.icon ?? "",
+        id: data.id ?? "",
+      });
+    }
+  }, [data?.id]);
+
+  useEffect(() => {
     if (dataEvaluate) {
       setFormValues((prev) => ({
         ...prev,
@@ -98,20 +112,20 @@ const useEditDestination = (props: IUseEditDestination) => {
         description: data.description ?? "",
         icon: data.icon ?? "",
         id: data.id ?? "",
-        creditLine: dataEvaluate,
+        creditLine: data.creditLine ?? dataEvaluate,
       }));
       setIsInitialized(true);
       setValuesLine(dataEvaluate);
     }
-  }, [dataEvaluate, isInitialized, data]);
+  }, [dataEvaluate, isInitialized, data, appData.businessUnit.publicCode]);
 
   const initialGeneralInfData = useRef<IGeneralInformationEntry | null>(null);
 
   useEffect(() => {
     if (
       !loading &&
-      data.id &&
-      data.nameDestination &&
+      data?.id &&
+      data?.nameDestination &&
       dataEvaluate &&
       initialGeneralInfData.current === null
     ) {
@@ -124,7 +138,7 @@ const useEditDestination = (props: IUseEditDestination) => {
         id: data.id ?? "",
       };
     }
-  }, [loading, data.id, dataEvaluate]);
+  }, [loading, data?.id, dataEvaluate]);
 
   const { optionsCreditLine, creditLineData } = useCreditLine();
 
@@ -516,6 +530,7 @@ const useEditDestination = (props: IUseEditDestination) => {
     loading,
     hasErrorRule,
     descriptionError,
+    loadingEnum,
     setValuesLine,
     handleToggleErrorRuleModal,
     setCreditLineValues,

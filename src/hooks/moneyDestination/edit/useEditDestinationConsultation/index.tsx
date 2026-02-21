@@ -12,6 +12,15 @@ const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
 
   const { disabledButton } = useValidateUseCase({ useCase });
 
+  const destinationData = {
+    id: data.id,
+    nameDestination: data.name,
+    description: data.descriptionUse,
+    icon: data.iconReference,
+    typeDestination: data.typeDestination,
+    creditLine: data.creditLine,
+  };
+
   const handleEdit = () => {
     if (disabledButton) {
       setShowInfoModal(!showInfoModal);
@@ -21,9 +30,9 @@ const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
         return;
       }
 
-      navigate(
-        `/money-destination/edit-destination/${option}/${data.id}/${data.requestNumber}`,
-      );
+      navigate(`/money-destination/edit-destination/${option}`, {
+        state: { data: destinationData },
+      });
     }
   };
 

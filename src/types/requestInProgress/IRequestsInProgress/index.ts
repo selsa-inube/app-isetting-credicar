@@ -20,7 +20,8 @@ interface IRequestsInProgress {
   id?: string;
   requestStatusCode?: string;
   settingRequestError?: ISettingRequestError[];
-  requester?: IRequester[];
+  requester?: IRequester;
+  requestType?: string;
 }
 
 export type { IRequestsInProgress };
