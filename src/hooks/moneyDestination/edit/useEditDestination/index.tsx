@@ -271,6 +271,7 @@ const useEditDestination = (props: IUseEditDestination) => {
                     conditionName: conditionDestination,
                     value: valueName(
                       generalInformationRef.current?.values.nameDestination ??
+                        formValues.nameDestination ??
                         "",
                     ),
                     ...(!optionInProgress && {
@@ -392,12 +393,11 @@ const useEditDestination = (props: IUseEditDestination) => {
       JSON.stringify(formValues);
 
     const valuesUpdatedName =
-      initialGeneralInfData.current?.nameDestination !==
-      currentValues?.nameDestination;
+      formValues.nameDestination !== currentValues?.nameDestination;
     const valuesUpdatedDesc =
-      initialGeneralInfData.current?.description !== currentValues?.description;
+      formValues.description !== currentValues?.description;
     const valuesUpdatedLine =
-      initialGeneralInfData.current?.creditLine !== currentValues?.creditLine;
+      formValues.creditLine !== currentValues?.creditLine;
 
     const configurationRequestData: {
       modifyJustification: string;
