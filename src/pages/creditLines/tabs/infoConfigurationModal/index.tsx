@@ -28,7 +28,7 @@ const InfoConfigurationModal = (props: IInfoConfigurationModal) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={changeZIndex}>
+    <StyledModalContainer $changeZIndex={changeZIndex}>
       <Blanket>
         <BoxContainer
           width="500px"

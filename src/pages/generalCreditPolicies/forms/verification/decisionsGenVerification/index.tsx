@@ -3,6 +3,9 @@ import { Grid, Stack } from "@inubekit/inubekit";
 import { BoxAttribute } from "@design/feedback/boxAttributes";
 import { tokens } from "@design/tokens";
 import { renderValue } from "@utils/renderValue";
+import { validateOptionVerification } from "@utils/validateOptionVerification";
+import { rowsAttribute } from "@utils/rowsAttribute";
+import { rows } from "@utils/rowsVerificationPolicies";
 import { verificationLabels } from "@config/generalCreditPolicies/assisted/verificationLabels";
 import { IRenderDecisionsGenVerification } from "@ptypes/generalCredPolicies/forms/IRenderDecisionsGenVerification";
 import { RenderMethodTags } from "./renderMethodTags";
@@ -10,7 +13,7 @@ import { RenderMethodTags } from "./renderMethodTags";
 const RenderDecisionsGenVerification = (
   props: IRenderDecisionsGenVerification,
 ) => {
-  const { values, isMobile } = props;
+  const { values, isMobile, optionsGenDecision } = props;
 
   const {
     additionalDebtors,
@@ -18,14 +21,20 @@ const RenderDecisionsGenVerification = (
     PaymentCapacityBasedCreditLimit,
     ReciprocityBasedCreditLimit,
     RiskAnalysisBasedCreditLimit,
+    inquiryValidityPeriod,
+    creditBureausConsultReq,
+    lineCreditPayrollAdvance,
+    lineCreditPayrollSpecialAdvance,
+    maximumNotifDocSize,
   } = values;
 
   return (
     <>
       <Grid
         width="100%"
+        height="auto"
         templateColumns={isMobile ? "1fr" : "repeat(2, 1fr)"}
-        templateRows={isMobile ? "repeat(3, 1fr)" : "repeat(2, 1fr)"}
+        templateRows={rowsAttribute(rows(values), isMobile)}
         gap={tokens.spacing.s200}
       >
         <BoxAttribute
@@ -52,6 +61,16 @@ const RenderDecisionsGenVerification = (
 
         <BoxAttribute
           direction="column"
+          label={verificationLabels.creditBureausConsultReq}
+          value={validateOptionVerification(
+            optionsGenDecision,
+            "creditBureaus",
+            creditBureausConsultReq,
+          )}
+        />
+
+        <BoxAttribute
+          direction="column"
           label={verificationLabels.additionalDebtors}
           value={renderValue(additionalDebtors)}
         />
@@ -60,6 +79,43 @@ const RenderDecisionsGenVerification = (
           label={verificationLabels.realGuarantees}
           value={renderValue(realGuarantees)}
         />
+        {inquiryValidityPeriod && inquiryValidityPeriod > 0 && (
+          <BoxAttribute
+            direction="column"
+            label={verificationLabels.inquiryValidityPeriod}
+            value={inquiryValidityPeriod}
+          />
+        )}
+        {lineCreditPayrollAdvance && lineCreditPayrollAdvance.length > 0 && (
+          <BoxAttribute
+            direction="column"
+            label={verificationLabels.lineCreditPayrollAdvance}
+            value={validateOptionVerification(
+              optionsGenDecision,
+              "payrollAdvance",
+              lineCreditPayrollAdvance,
+            )}
+          />
+        )}
+        {lineCreditPayrollSpecialAdvance &&
+          lineCreditPayrollSpecialAdvance.length > 0 && (
+            <BoxAttribute
+              direction="column"
+              label={verificationLabels.lineCreditPayrollSpecialAdvance}
+              value={validateOptionVerification(
+                optionsGenDecision,
+                "payrollSpecialAdvance",
+                lineCreditPayrollSpecialAdvance,
+              )}
+            />
+          )}
+        {maximumNotifDocSize && maximumNotifDocSize > 0 && (
+          <BoxAttribute
+            direction="column"
+            label={verificationLabels.maximumNotifDocSize}
+            value={maximumNotifDocSize}
+          />
+        )}
       </Grid>
     </>
   );

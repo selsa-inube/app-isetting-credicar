@@ -26,6 +26,7 @@ const VerificationForm = (props: IVerificationForm) => {
     loading,
     showPendingReqModal,
     date,
+    optionsGenDecision,
     setDateVerification,
     handleStepChange,
     onFinishForm,
@@ -64,6 +65,7 @@ const VerificationForm = (props: IVerificationForm) => {
               updatedData={updatedData}
               stepKey={Number(step.id)}
               isMobile={isMobile}
+              optionsGenDecision={optionsGenDecision}
             />
 
             <Button

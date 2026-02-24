@@ -4,14 +4,13 @@ import { Icon, Text, useMediaQuery } from "@inubekit/inubekit";
 import { EComponentAppearance } from "@enum/appearances";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { editLabels } from "@config/editLabels";
-import { disabledModal } from "@config/disabledModal";
 import { portalId } from "@config/portalId";
 import { mediaQueryTablet } from "@config/environment";
 import { IEditRecord } from "@ptypes/design/IEditRecord";
 import { StyledContainerIcon } from "./styles";
 
 const EditRecord = (props: IEditRecord) => {
-  const { showInfoModal, onToggleInfoModal, onEdit } = props;
+  const { showInfoModal, modalData, onEdit } = props;
 
   const screenTablet = useMediaQuery(mediaQueryTablet);
 
@@ -34,13 +33,13 @@ const EditRecord = (props: IEditRecord) => {
       {showInfoModal && (
         <DecisionModal
           portalId={portalId}
-          title={disabledModal.title}
-          actionText={disabledModal.actionText}
-          description={disabledModal.description}
-          subtitle={disabledModal.subtitle}
-          onCloseModal={onToggleInfoModal}
-          onClick={onToggleInfoModal}
-          withCancelButton={false}
+          title={modalData.title}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          subtitle={modalData.subtitle}
+          onCloseModal={modalData.onCloseModal}
+          onClick={modalData.onClick}
+          withCancelButton={modalData.withCancelButton}
         />
       )}
     </>

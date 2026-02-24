@@ -2,13 +2,13 @@ import { FormikProps } from "formik";
 import { ITab } from "@inubekit/inubekit";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
-import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionsGeneralEntry } from "../forms/IDecisionsGeneralEntry";
 import { IModalData } from "../IModalData";
+import { IRuleState } from "../IRuleState";
+import { IRuleDecision } from "@isettingkit/input";
 
 interface IEditGeneralPoliciesUI {
   filteredTabsConfig: ITab[];
-  contributionsPortfolio: IRuleDecisionExtended[];
   isSelected: string;
   requestSteps: IRequestSteps[];
   loading: boolean;
@@ -20,41 +20,35 @@ interface IEditGeneralPoliciesUI {
   formValues: IDecisionsGeneralEntry;
   initialDecisionsData: IDecisionsGeneralEntry;
   decisionsGeneralReference: React.RefObject<FormikProps<IDecisionsGeneralEntry> | null>;
-  incomePortfolio: IRuleDecisionExtended[];
-  scoreModels: IRuleDecisionExtended[];
-  minimumIncomePercentage: IRuleDecisionExtended[];
   showDecisionsGeneral: boolean;
   showIncomePort: boolean;
   showContributions: boolean;
   showScoreModels: boolean;
   showMinimumIncome: boolean;
+  showBasicNotificFormat: boolean;
+  showBasicNotifRecipient: boolean;
+  showMinCreditBureauRiskScore: boolean;
+  showNotificationChannel: boolean;
+  showRiskScoreApiUrl: boolean;
   showGoBackModal: boolean;
   isRequestStatusModal: boolean;
-  heightContPageContribut: string;
-  heightContPageIncome: string;
-  heightContPageScoreModels: string;
-  heightContPageMinimum: string;
   modalData: IModalData;
   showDecision: boolean;
+  rulesData: IRuleState;
+  disabledButton: boolean;
+  handleToggleDateModal: () => void;
   onEditedModal: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setDecisionData: React.Dispatch<React.SetStateAction<IRuleDecision[] | any>>;
   setShowReciprocity: React.Dispatch<React.SetStateAction<boolean>>;
   setShowFactor: React.Dispatch<React.SetStateAction<boolean>>;
   onToggleDateModal: () => void;
-  setIncomePortfolio: (decisions: IRuleDecisionExtended[]) => void;
-  setScoreModels: (decisions: IRuleDecisionExtended[]) => void;
-  setMinimumIncomePercentage: (decisions: IRuleDecisionExtended[]) => void;
   onTabChange: (id: string) => void;
   onReset: () => void;
-  setContributionsPortfolio: (decisions: IRuleDecisionExtended[]) => void;
   setIsCurrentFormValid: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseRequestStatus: () => void;
   onClosePendingReqModal: () => void;
   onCloseProcess: () => void;
-  normalizeEvaluateRuleData?: IRuleDecisionExtended[];
-  normalizedContributions?: IRuleDecisionExtended[];
-  normalizedIncome?: IRuleDecisionExtended[];
-  normalizedScoreModels?: IRuleDecisionExtended[];
-  normalizedMinimumIncome?: IRuleDecisionExtended[];
 }
 
 export type { IEditGeneralPoliciesUI };

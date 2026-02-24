@@ -1,14 +1,11 @@
-import { IRuleDecision } from "@isettingkit/input";
 import { IAddGenCredPoliciesForms } from "@ptypes/generalCredPolicies/forms/IAddGenCredPoliciesForms";
 import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerification";
+import { IRuleState } from "@ptypes/generalCredPolicies/IRuleState";
 
 interface IUseRules {
   formValues: IAddGenCredPoliciesForms;
-  contributionsPortfolio: IRuleDecision[];
-  incomePortfolio: IRuleDecision[];
+  rulesData: IRuleState;
   dateVerification: IDateVerification;
-  scoreModels: IRuleDecision[];
-  minimumIncomePercentage: IRuleDecision[];
 }
 
 export type { IUseRules };

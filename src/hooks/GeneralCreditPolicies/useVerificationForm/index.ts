@@ -23,6 +23,17 @@ const useVerificationForm = (props: IUseVerificationForm) => {
   const scoreModels = updatedData.scoreModels.values;
   const minimumIncome = updatedData.minimumIncomePercentage.values;
 
+  const basicNotifFormat = updatedData.basicNotificationFormat.values;
+
+  const basicNotifRec = updatedData.basicNotificationRecipient.values;
+
+  const minCredBureauRiskScore =
+    updatedData.minimumCreditBureauRiskScore.values;
+
+  const notificationChannel = updatedData.notificationChannel.values;
+
+  const riskScoreApiUrl = updatedData.riskScoreApiUrl.values;
+
   const steps = addGenCredPoliciesSteps.filter((step) => {
     if (step.name.toLowerCase() === "verificación") return false;
 
@@ -33,6 +44,16 @@ const useVerificationForm = (props: IUseVerificationForm) => {
     if (scoreModels.length === 0 && step.id === 4) return false;
 
     if (minimumIncome.length === 0 && step.id === 5) return false;
+
+    if (basicNotifFormat.length === 0 && step.id === 6) return false;
+
+    if (basicNotifRec.length === 0 && step.id === 7) return false;
+
+    if (minCredBureauRiskScore.length === 0 && step.id === 8) return false;
+
+    if (notificationChannel.length === 0 && step.id === 9) return false;
+
+    if (riskScoreApiUrl.length === 0 && step.id === 10) return false;
 
     return true;
   });

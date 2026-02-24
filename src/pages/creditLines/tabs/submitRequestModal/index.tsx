@@ -54,7 +54,7 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
   }
 
   return createPortal(
-    <StyledModalContainer changeZIndex={true}>
+    <StyledModalContainer $changeZIndex={true}>
       <Blanket>
         <BoxContainer
           width="500px"

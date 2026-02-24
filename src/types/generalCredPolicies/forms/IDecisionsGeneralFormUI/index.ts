@@ -13,6 +13,12 @@ interface IDecisionsGeneralFormUI {
   isDisabledButton: boolean;
   buttonLabel: string;
   methodsOptions: IServerDomain[];
+  creditBureausOptions: IServerDomain[];
+  payrollAdvanceOptions: IServerDomain[];
+  payrollSpecialAdvanceOptions: IServerDomain[];
+  isLoadingEnums: boolean;
+  onChangeCreditBureaus: (_name: string, valueCSV: string) => void;
+  onChange: (name: string, value: string) => void;
   onToggle: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onInfoRefModal: () => void;
   onInfoObligModal: () => void;

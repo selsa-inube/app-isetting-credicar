@@ -10,6 +10,8 @@ const getRequestsInProgress = async (
   businessUnit: string,
   entity: string,
   token: string,
+  id?: string,
+  requestNumber?: string,
 ): Promise<IRequestsInProgress[]> => {
   const config: AxiosRequestConfig = {
     headers: {
@@ -18,7 +20,7 @@ const getRequestsInProgress = async (
     },
   };
 
-  const queryParams = new URLSearchParams({
+  const queryParamsObj: Record<string, string> = {
     businessManagerCode: businessManagerCode,
     businessUnitCode: businessUnit,
     applicationName: EGeneral.APPLICATION_NAME,
@@ -26,7 +28,17 @@ const getRequestsInProgress = async (
     page: ".1",
     per_page: ".1",
     sort: "desc.requestDate",
-  });
+  };
+
+  if (id) {
+    queryParamsObj.settingRequestId = id;
+  }
+
+  if (requestNumber) {
+    queryParamsObj.requestNumber = requestNumber;
+  }
+
+  const queryParams = new URLSearchParams(queryParamsObj);
   const data = await getWithRetries<IRequestsInProgress[]>(
     queryProcessAxiosInstance,
     `/requests?${queryParams.toString()}`,

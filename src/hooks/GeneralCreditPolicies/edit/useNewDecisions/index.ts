@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { normalizeEvaluateRuleData } from "@utils/normalizeEvaluateRuleData";
 import { getNewDeletedDecisions } from "@utils/getNewDeletedDecisions";
 import { decisionWithoutConditions } from "@utils/decisionWithoutConditions";
 import { formatDate } from "@utils/date/formatDate";
 import { getDecisionIdMethods } from "@utils/decisions/getDecisionIdMethods";
+import { decisionWithMultipleValuesEdit } from "@utils/decisionWithMultipleValuesEdit";
 import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
@@ -13,47 +14,62 @@ import { IDateVerification } from "@ptypes/generalCredPolicies/forms/IDateVerifi
 import { IUseNewDecisions } from "@ptypes/hooks/IUseNewDecisions";
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IRuleKey, IRuleState } from "@ptypes/generalCredPolicies/IRuleState";
 
 const useNewDecisions = (props: IUseNewDecisions) => {
   const {
     formValues,
     initialGeneralData,
+    decisionData,
     contributionsData,
     minimumIncomeData,
     incomeData,
     methodsData,
+    creditBureausConsultReqData,
     scoreModelsData,
     additionalDebtorsData,
     realGuaranteesData,
-    normalizedContributions,
-    normalizedMinimumIncome,
-    normalizedIncome,
-    normalizedScoreModels,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
     prevContributionsRef,
     prevIncomesRef,
     prevScoreModelsRef,
     prevMinimumIncomeRef,
+    prevBasicNotificFormatRef,
+    prevBasicNotificationRecRef,
+    prevMinCredBureauRiskScoreRef,
+    prevNotifChannelRef,
+    prevRiskScoreApiUrlRef,
   } = props;
 
-  const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
-  const [showRequestProcessModal, setShowRequestProcessModal] = useState(false);
-  const [contributionsPortfolio, setContributionsPortfolio] = useState<
-    IRuleDecisionExtended[]
-  >(contributionsData ?? []);
-  const [incomePortfolio, setIncomePortfolio] = useState<
-    IRuleDecisionExtended[]
-  >([]);
-  const [minimumIncomePercentage, setMinimumIncomePercentage] = useState<
-    IRuleDecisionExtended[]
-  >(minimumIncomeData ?? []);
-  const [scoreModels, setScoreModels] = useState<IRuleDecisionExtended[]>([]);
+  const [isCurrentFormValid, setIsCurrentFormValid] = useState<boolean>(false);
+  const [showRequestProcessModal, setShowRequestProcessModal] =
+    useState<boolean>(false);
+  const [rulesData, setRulesData] = useState<IRuleState>({
+    ReciprocityFactorForCreditLimit: contributionsData ?? [],
+    RiskScoreFactorForCreditLimit: incomeData ?? [],
+    MinimumSubsistenceReservePercentage: minimumIncomeData ?? [],
+    CreditRiskScoringModel: scoreModelsData ?? [],
+    BasicNotificationFormat: basicNotificFormatData ?? [],
+    BasicNotificationRecipient: basicNotificationRecData ?? [],
+    MinimumCreditBureauRiskScore: minCredBureauRiskScoreData ?? [],
+    NotificationChannel: notifChannelData ?? [],
+    RiskScoreApiUrl: riskScoreApiUrlData ?? [],
+  });
   const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
   const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
   const [generalDecisions, setGeneralDecisions] = useState<
     IRuleDecisionExtended[]
   >([]);
-  const [showReciprocity, setShowReciprocity] = useState(false);
-  const [showFactor, setShowFactor] = useState(false);
+  const [showReciprocity, setShowReciprocity] = useState<boolean>(false);
+  const [showFactor, setShowFactor] = useState<boolean>(false);
 
   const dateCurrent = String(formatDate(new Date()));
 
@@ -62,6 +78,109 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       date: dateCurrent,
     });
   }, []);
+
+  const ruleNameToKeyMap: Record<string, IRuleKey> = {
+    [ENameRules.CONTRIBUTIONS_PORTFOLIO]: "ReciprocityFactorForCreditLimit",
+    [ENameRules.INCOME_PORTFOLIO]: "RiskScoreFactorForCreditLimit",
+    [ENameRules.MINIMUM_INCOME_PERCENTAGE]:
+      "MinimumSubsistenceReservePercentage",
+    [ENameRules.SCORE_MODELS]: "CreditRiskScoringModel",
+    [ENameRules.BASIC_NOTIFICATION_FORMAT]: "BasicNotificationFormat",
+    [ENameRules.BASIC_NOTIFICATION_RECIPIENT]: "BasicNotificationRecipient",
+    [ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE]:
+      "MinimumCreditBureauRiskScore",
+    [ENameRules.NOTIFICATION_CHANNEL]: "NotificationChannel",
+    [ENameRules.RISKSCORE_API_URL]: "RiskScoreApiUrl",
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const normalizeDecisionData = (data: any[]): IRuleState => {
+    if (!Array.isArray(data) || data.length === 0) {
+      return {
+        ReciprocityFactorForCreditLimit: [],
+        RiskScoreFactorForCreditLimit: [],
+        MinimumSubsistenceReservePercentage: [],
+        CreditRiskScoringModel: [],
+        BasicNotificationFormat: [],
+        BasicNotificationRecipient: [],
+        MinimumCreditBureauRiskScore: [],
+        NotificationChannel: [],
+        RiskScoreApiUrl: [],
+      };
+    }
+
+    const groupedRules: Partial<IRuleState> = {};
+
+    data.forEach((decision) => {
+      const ruleName = decision.ruleName;
+      const key = ruleNameToKeyMap[ruleName];
+
+      if (!key) {
+        console.warn(`No se encontró mapeo para ruleName: ${ruleName}`);
+        return;
+      }
+      const normalizedDecision: IRuleDecisionExtended = {
+        decisionId: decision.decisionId || `Decisión ${Math.random()}`,
+        ruleName: decision.ruleName,
+        labelName: decision.labelName || decision.ruleName,
+        ruleDataType: decision.ruleDataType || decision.decisionDataType,
+        value: decision.value,
+        howToSetTheDecision: decision.howToSetTheDecision,
+        effectiveFrom: decision.effectiveFrom,
+        typeDecision: decision.typeDecision || "Permanent",
+        conditionGroups: Array.isArray(decision.conditionGroups)
+          ? decision.conditionGroups
+          : [],
+        decisionsByRule: Array.isArray(decision.decisionsByRule)
+          ? decision.decisionsByRule
+          : [],
+      };
+
+      if (!groupedRules[key]) {
+        groupedRules[key] = [];
+      }
+      groupedRules[key]!.push(normalizedDecision);
+    });
+
+    return {
+      ReciprocityFactorForCreditLimit:
+        groupedRules.ReciprocityFactorForCreditLimit || [],
+      RiskScoreFactorForCreditLimit:
+        groupedRules.RiskScoreFactorForCreditLimit || [],
+      MinimumSubsistenceReservePercentage:
+        groupedRules.MinimumSubsistenceReservePercentage || [],
+      CreditRiskScoringModel: groupedRules.CreditRiskScoringModel || [],
+      BasicNotificationFormat: groupedRules.BasicNotificationFormat || [],
+      BasicNotificationRecipient: groupedRules.BasicNotificationRecipient || [],
+      MinimumCreditBureauRiskScore:
+        groupedRules.MinimumCreditBureauRiskScore || [],
+      NotificationChannel: groupedRules.NotificationChannel || [],
+      RiskScoreApiUrl: groupedRules.RiskScoreApiUrl || [],
+    };
+  };
+
+  useEffect(() => {
+    if (
+      decisionData &&
+      Array.isArray(decisionData) &&
+      decisionData.length > 0
+    ) {
+      const normalizedRules = normalizeDecisionData(decisionData);
+
+      setRulesData((prev) => {
+        const merged: IRuleState = { ...prev };
+
+        (Object.keys(normalizedRules) as IRuleKey[]).forEach((key) => {
+          const newValue = normalizedRules[key];
+          if (Array.isArray(newValue) && newValue.length > 0) {
+            merged[key] = newValue;
+          }
+        });
+
+        return merged;
+      });
+    }
+  }, [decisionData]);
 
   const valueTransactionOperation = (value: boolean) =>
     value ? ETransactionOperation.INSERT : ETransactionOperation.DELETE;
@@ -97,7 +216,6 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.ADDITIONAL_DEBTORS,
     formValues.additionalDebtors ?? "",
     initialGeneralData.additionalDebtors,
-    ETransactionOperation.PARTIAL_UPDATE,
     additionalDebtorsData,
   );
 
@@ -105,84 +223,83 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.REAL_GUARANTEES,
     formValues.realGuarantees ?? "",
     initialGeneralData.realGuarantees,
-    ETransactionOperation.PARTIAL_UPDATE,
     realGuaranteesData,
   );
 
-  useEffect(() => {
-    if (contributionsData && normalizedContributions) {
-      setContributionsPortfolio(normalizedContributions);
-    }
-  }, [contributionsData]);
-
-  useEffect(() => {
-    if (incomeData && normalizedIncome) {
-      setIncomePortfolio(normalizedIncome);
-    }
-  }, [incomeData]);
-
-  useEffect(() => {
-    if (scoreModelsData && normalizedScoreModels) {
-      setScoreModels(normalizedScoreModels);
-    }
-  }, [scoreModelsData]);
-
-  useEffect(() => {
-    if (minimumIncomeData && normalizedMinimumIncome) {
-      setMinimumIncomePercentage(normalizedMinimumIncome);
-    }
-  }, [minimumIncomeData]);
-
-  const newInsertValContribution = getNewInsertDecisions(
-    prevContributionsRef,
-    contributionsPortfolio,
-    dateDecisions?.date,
+  const inquiryValidityPeriod = decisionWithoutConditions(
+    ENameRules.INQUIRY_VALIDITY_PERIOD,
+    formValues.inquiryValidityPeriod ?? undefined,
+    String(initialGeneralData.inquiryValidityPeriod ?? 0),
+    inquiryValidityPeriodData,
   );
 
-  const newInsertValIncomes = getNewInsertDecisions(
-    prevIncomesRef,
-    incomePortfolio,
-    dateDecisions?.date,
+  const creditBureausConsult = decisionWithMultipleValuesEdit(
+    ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
+    formValues.creditBureausConsultReq ?? undefined,
+    String(initialGeneralData.creditBureausConsultReq ?? ""),
+    creditBureausConsultReqData,
   );
 
-  const newInsertPercentage = getNewInsertDecisions(
-    prevMinimumIncomeRef,
-    minimumIncomePercentage,
-    dateDecisions?.date,
+  const lineCreditPayrollAdvance = decisionWithoutConditions(
+    ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
+    formValues.lineCreditPayrollAdvance ?? "",
+    initialGeneralData.lineCreditPayrollAdvance,
+    lineCreditPayrollAdvanceData,
+  );
+  const lineCreditPayrollSpecialAdvance = decisionWithoutConditions(
+    ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
+    formValues.lineCreditPayrollSpecialAdvance ?? "",
+    initialGeneralData.lineCreditPayrollSpecialAdvance,
+    lineCreditPayrollSpecialAdvanceData,
   );
 
-  const newInsertValScore = getNewInsertDecisions(
-    prevScoreModelsRef,
-    scoreModels,
-    dateDecisions?.date,
+  const maximumNotifDocSize = decisionWithoutConditions(
+    ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE,
+    formValues.maximumNotifDocSize ?? undefined,
+    String(initialGeneralData.inquiryValidityPeriod ?? 0),
+    maximumNotifDocSizeData,
   );
 
-  const newDeleteValContribution = getNewDeletedDecisions(
-    prevContributionsRef,
-    contributionsPortfolio,
-    dateDecisions?.date,
-  );
+  const prevRefsMap = {
+    ReciprocityFactorForCreditLimit: prevContributionsRef,
+    RiskScoreFactorForCreditLimit: prevIncomesRef,
+    CreditRiskScoringModel: prevScoreModelsRef,
+    MinimumSubsistenceReservePercentage: prevMinimumIncomeRef,
+    BasicNotificationFormat: prevBasicNotificFormatRef,
+    BasicNotificationRecipient: prevBasicNotificationRecRef,
+    MinimumCreditBureauRiskScore: prevMinCredBureauRiskScoreRef,
+    NotificationChannel: prevNotifChannelRef,
+    RiskScoreApiUrl: prevRiskScoreApiUrlRef,
+  };
 
-  const newDeleteValIncomes = getNewDeletedDecisions(
-    prevIncomesRef,
-    incomePortfolio,
-    dateDecisions?.date,
-  );
+  const rulesDecisions = useMemo(() => {
+    const insertValues: IRules[] = [];
+    const deleteValues: IRules[] = [];
 
-  const newDeletePercentage = getNewDeletedDecisions(
-    prevMinimumIncomeRef,
-    minimumIncomePercentage,
-    dateDecisions?.date,
-  );
+    Object.entries(prevRefsMap).forEach(([key, prevRef]) => {
+      const rules = rulesData[key as keyof IRuleState];
 
-  const newDeleteValScore = getNewDeletedDecisions(
-    prevScoreModelsRef,
-    scoreModels,
-    dateDecisions?.date,
-  );
+      const newInsert = getNewInsertDecisions(
+        prevRef,
+        rules,
+        dateDecisions?.date,
+      );
+      const newDelete = getNewDeletedDecisions(
+        prevRef,
+        rules,
+        dateDecisions?.date,
+      );
+
+      if (newInsert) insertValues.push(...(newInsert as IRules[]));
+      if (newDelete) deleteValues.push(...(newDelete as IRules[]));
+    });
+
+    return { insertValues, deleteValues };
+  }, [rulesData, dateDecisions?.date]);
 
   useEffect(() => {
     let methods;
+
     if (methodsArray.length > 0) {
       const validMethods = methodsArray.filter(
         (
@@ -207,7 +324,16 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       }
     }
 
-    const allGeneralDecisions = [methods, additionalDebtors, realGuarantees];
+    const allGeneralDecisions = [
+      methods,
+      additionalDebtors,
+      realGuarantees,
+      creditBureausConsult,
+      inquiryValidityPeriod,
+      lineCreditPayrollAdvance,
+      lineCreditPayrollSpecialAdvance,
+      maximumNotifDocSize,
+    ];
 
     const validGeneralDecisions = allGeneralDecisions.filter(
       (decision) => decision !== undefined,
@@ -216,53 +342,38 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     setGeneralDecisions(validGeneralDecisions ?? []);
   }, [formValues]);
 
-  useEffect(() => {
-    const insertValues = [
-      newInsertValContribution,
-      newInsertValIncomes,
-      newInsertValScore,
-      newInsertPercentage,
-    ].filter((decision) => decision !== undefined);
+  const disabledButton = useMemo(() => {
+    const { insertValues, deleteValues } = rulesDecisions;
+    return (
+      insertValues.length > 0 ||
+      deleteValues.length > 0 ||
+      generalDecisions.length > 0
+    );
+  }, [rulesDecisions, generalDecisions]);
 
-    const deleteValues = [
-      newDeleteValContribution,
-      newDeleteValIncomes,
-      newDeleteValScore,
-      newDeletePercentage,
-    ].filter((decision) => decision !== undefined);
+  useEffect(() => {
+    const { insertValues, deleteValues } = rulesDecisions;
 
     setNewDecisions(
       [...insertValues, ...deleteValues, ...generalDecisions].flatMap(
         (item) => item as IRules,
       ),
     );
-  }, [
-    contributionsPortfolio,
-    incomePortfolio,
-    minimumIncomePercentage,
-    scoreModels,
-    generalDecisions,
-  ]);
+  }, [rulesDecisions, generalDecisions]);
 
   return {
     showRequestProcessModal,
-    contributionsPortfolio,
     isCurrentFormValid,
-    incomePortfolio,
-    scoreModels,
     dateDecisions,
     newDecisions,
     showReciprocity,
     showFactor,
-    minimumIncomePercentage,
-    setMinimumIncomePercentage,
+    rulesData,
+    disabledButton,
     setShowReciprocity,
     setShowFactor,
     setDateDecisions,
     normalizeEvaluateRuleData,
-    setIncomePortfolio,
-    setScoreModels,
-    setContributionsPortfolio,
     setIsCurrentFormValid,
     setShowRequestProcessModal,
   };

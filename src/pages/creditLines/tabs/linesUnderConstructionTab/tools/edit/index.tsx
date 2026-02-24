@@ -4,7 +4,7 @@ import { IEditConstruction } from "@ptypes/creditLines/IEditConstruction";
 
 const EditConstruction = (props: IEditConstruction) => {
   const { data, useCaseConfiguration } = props;
-  const { handleConfiguration, showInfoModal, handleToggleInfoModal } =
+  const { handleConfiguration, showInfoModal, modalData } =
     useConfigurationConsultation({
       configurationData: data,
       useCaseConfiguration,
@@ -14,7 +14,7 @@ const EditConstruction = (props: IEditConstruction) => {
       <EditRecord
         onEdit={handleConfiguration}
         showInfoModal={showInfoModal}
-        onToggleInfoModal={handleToggleInfoModal}
+        modalData={modalData}
       />
     </>
   );

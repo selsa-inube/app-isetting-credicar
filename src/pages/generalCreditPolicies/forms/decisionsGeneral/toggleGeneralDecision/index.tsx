@@ -2,13 +2,23 @@ import { MdInfoOutline } from "react-icons/md";
 import { Icon, Stack, Text, Toggle } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
-import { IToggleGeneralDecision } from "@ptypes/generalCredPolicies/forms/IToggleGeneralDecision";
 import { toggleDecisionsLabels } from "@config/generalCreditPolicies/assisted/toggleDecisionsLabels";
+import { IToggleGeneralDecision } from "@ptypes/generalCredPolicies/forms/IToggleGeneralDecision";
 
 const ToggleGeneralDecision = (props: IToggleGeneralDecision) => {
-  const { name, label, isChecked, showIcon, onInfoModal, onToggle } = props;
+  const {
+    name,
+    label,
+    isChecked,
+    showIcon,
+    definePerLine,
+    onInfoModal,
+    onToggle,
+  } = props;
 
-  const text = isChecked ? toggleDecisionsLabels.yes : toggleDecisionsLabels.no;
+  const text = isChecked
+    ? toggleDecisionsLabels(definePerLine).yes
+    : toggleDecisionsLabels().no;
   const appearance = isChecked
     ? EComponentAppearance.SUCCESS
     : EComponentAppearance.DANGER;

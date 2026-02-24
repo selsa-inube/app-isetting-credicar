@@ -1,19 +1,31 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditDestination } from "@hooks/moneyDestination/edit/useEditDestination";
 import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDestination";
+import { useDataDestination } from "@hooks/moneyDestination/useDataDestination";
 import { useModalEditDestination } from "@hooks/moneyDestination/edit/useModalEditDestination";
 import { EUseCase } from "@enum/useCase";
+import { EManagementType } from "@enum/managementType";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IGeneralInformationEntry } from "@ptypes/moneyDestination/tabs/moneyDestinationTab/forms/IGeneralInformationEntry";
+import { IEditData } from "@ptypes/hooks/moneyDestination/IEditData";
 import { EditDestinationUI } from "./interface";
 
 const EditDestination = () => {
+  const { id, option, requestNumber } = useParams();
   const location = useLocation();
-  const { data } = location.state ?? {};
+  const { data: moneyDestinationData } = location.state ?? {};
   const { appData } = useContext(AuthAndPortalData);
+
+  const { transformedMoneyDestination: data, loading } = useDataDestination({
+    moneyDestinationData,
+    id,
+    requestNumber,
+    option,
+  });
 
   const {
     formValues,
@@ -27,9 +39,9 @@ const EditDestination = () => {
     showModal,
     showGoBackModal,
     creditLineValues,
-    loading,
     hasErrorRule,
     descriptionError,
+    loadingEnum,
     handleToggleErrorRuleModal,
     setCreditLineValues,
     handleOpenModal,
@@ -43,7 +55,7 @@ const EditDestination = () => {
     setShowRequestProcessModal,
     setShowModal,
     setValuesLine,
-  } = useEditDestination({ data, appData });
+  } = useEditDestination({ data: data as IEditData, appData, loading, option });
 
   const {
     saveMoneyDestination,
@@ -67,6 +79,7 @@ const EditDestination = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
+    optionRequest: option === EManagementType.IN_PROGRESS,
   });
 
   const { modalData, showDecision } = useModalEditDestination({
@@ -79,6 +92,8 @@ const EditDestination = () => {
     errorFetchRequest,
     showEditedModal: showModal,
     descriptionError,
+    optionInProgress: Boolean(option === EManagementType.IN_PROGRESS),
+    request: String(requestNumber ?? ""),
     handleCloseGoBackModal,
     handleEditedModal,
     handleGoBack,
@@ -106,7 +121,9 @@ const EditDestination = () => {
       showRequestProcessModal={showRequestProcessModal}
       onCloseRequestStatus={handleCloseRequestStatus}
       onClosePendingReqModal={handleClosePendingReqModal}
-      initialGeneralInfData={initialGeneralInfData}
+      initialGeneralInfData={
+        initialGeneralInfData.current as IGeneralInformationEntry
+      }
       smallScreen={smallScreen}
       showGeneralInformation={showGeneralInformation}
       showRequestStatus={showRequestStatus}
@@ -118,7 +135,9 @@ const EditDestination = () => {
       creditLineValues={creditLineValues}
       setCreditLineValues={setCreditLineValues}
       loading={loading}
+      loadingEnum={loadingEnum}
       setValuesLine={setValuesLine}
+      option={option ?? ""}
     />
   );
 };

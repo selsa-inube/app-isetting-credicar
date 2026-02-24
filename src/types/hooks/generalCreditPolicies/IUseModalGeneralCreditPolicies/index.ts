@@ -4,6 +4,8 @@ interface IUseModalGeneralCreditPolicies {
   showAddPolicies: boolean;
   defaultSelectedTab: string | undefined;
   showGoBackModal: boolean;
+  smallScreen: boolean;
+  handleScreenModal: () => void;
   handleEmptyData: () => void;
   handleCloseModal: () => void;
   handlePolicies: () => void;

@@ -9,6 +9,8 @@ interface IUseModalEditDestination {
   networkError: IErrors;
   showEditedModal: boolean;
   descriptionError: IErrors;
+  optionInProgress: boolean;
+  request: string;
   handleToggleEditedModal: () => void;
   handleEditedModal: () => void;
   handleCloseGoBackModal: () => void;

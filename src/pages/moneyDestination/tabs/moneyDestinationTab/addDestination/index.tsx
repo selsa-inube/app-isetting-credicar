@@ -61,6 +61,7 @@ const AddDestination = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
+    optionRequest: false,
   });
 
   const { modalData, showDecision } = useModalAddDestination({

@@ -20,13 +20,26 @@ const generalDataLabels = [
       "Métodos eliminados que se utilizan para el cálculo del cupo global por cliente",
   },
   {
+    id: "creditBureaus",
+    titleName: "¿En cuales centrales de riesgo se debe consultar los clientes?",
+  },
+  {
+    id: "creditBureausAdded",
+    titleName:
+      "Centrales de riesgo agregadas que se deben consultar los clientes",
+  },
+  {
+    id: "creditBureausRemoved",
+    titleName:
+      "Centrales de riesgo eliminadas que se deben consultar los clientes",
+  },
+  {
     id: "additionalDebtors",
     titleName: "¿Se permiten deudores adicionales en una solicitud?",
   },
   {
     id: "sourcesIncome",
-    titleName:
-      "¿¿Se permite modificar las fuentes de ingreso en una solicitud?",
+    titleName: "¿Se permite modificar las fuentes de ingreso en una solicitud?",
   },
   {
     id: "financialOblig",
@@ -37,6 +50,24 @@ const generalDataLabels = [
     id: "guarantees",
     titleName:
       "¿Las obligaciones con garantías reales se incluyen en el cálculo del descubierto?",
+  },
+  {
+    id: "inquiryValidityPeriod",
+    titleName:
+      "¿Cuál es la vigencia, en días, de la consulta de un cliente en las centrales de riesgo?",
+  },
+  {
+    id: "lineCreditPayrollAdvance",
+    titleName: "¿Tienes una línea de crédito para adelanto de nómina?",
+  },
+  {
+    id: "lineCreditPayrollSpecialAdvance",
+    titleName: "¿Tienes una línea de crédito para adelanto de prima?",
+  },
+  {
+    id: "maximumNotifDocSize",
+    titleName:
+      "¿Cuál es el tamaño máximo permitido (en MB) para la carga de documentos en los sistemas de gestión documental y notificaciones?",
   },
 ];
 

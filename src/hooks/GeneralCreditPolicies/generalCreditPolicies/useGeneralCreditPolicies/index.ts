@@ -23,11 +23,22 @@ const useGeneralCreditPolicies = () => {
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
     withoutPolicies,
     loadingPolicies,
   } = useValidateRules();
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showScreenModal, setShowScreenModal] = useState<boolean>(false);
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -103,6 +114,11 @@ const useGeneralCreditPolicies = () => {
 
   const policiesTabs = Object.values(filteredTabsConfig);
 
+  const handleScreenModal = () => {
+    setShowScreenModal(!showScreenModal);
+    navigate("/");
+  };
+
   const getFirstFilteredTab = (
     filteredTabsConfig: IGeneralPoliciesTabsConfig,
   ) => {
@@ -176,6 +192,16 @@ const useGeneralCreditPolicies = () => {
     methodsData,
     additionalDebtorsData,
     realGuaranteesData,
+    basicNotificFormatData,
+    basicNotificationRecData,
+    creditBureausConsultReqData,
+    inquiryValidityPeriodData,
+    lineCreditPayrollAdvanceData,
+    lineCreditPayrollSpecialAdvanceData,
+    maximumNotifDocSizeData,
+    minCredBureauRiskScoreData,
+    notifChannelData,
+    riskScoreApiUrlData,
     loadingPolicies,
     showAddPolicies,
     emptyData,
@@ -183,6 +209,7 @@ const useGeneralCreditPolicies = () => {
     withoutPrivilegesAdd,
     showModal,
     defaultSelectedTab,
+    handleScreenModal,
     handleEmptyData,
     handleCloseModal,
     handlePolicies,

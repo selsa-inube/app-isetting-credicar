@@ -1,6 +1,5 @@
-const toggleDecisionsLabels = {
-  yes: "Sí, se define por línea",
-  no: "No",
+const toggleDecisionsLabels = (definePerLine?: boolean) => {
+  return { yes: definePerLine ? "Sí, se define por línea" : "Sí", no: "No" };
 };
 
 export { toggleDecisionsLabels };

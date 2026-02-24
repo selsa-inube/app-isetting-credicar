@@ -40,7 +40,7 @@ const RequestProcessModal = (props: IRequestProcessModal) => {
   const showButton = percentageNumber === percTotalNumber;
 
   return createPortal(
-    <StyledModalContainer changeZIndex={changeZIndex}>
+    <StyledModalContainer $changeZIndex={changeZIndex}>
       <Blanket>
         <StyledModal $smallScreen={isMobile}>
           <Stack direction="column" gap={tokens.spacing.s200} width="100%">
