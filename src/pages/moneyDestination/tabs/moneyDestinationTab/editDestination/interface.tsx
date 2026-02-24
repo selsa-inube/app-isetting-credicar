@@ -8,6 +8,7 @@ import { RequestProcess } from "@design/feedback/RequestProcess";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { LoadingPage } from "@design/feedback/loadingPage";
 import { EComponentAppearance } from "@enum/appearances";
+import { EManagementType } from "@enum/managementType";
 import { crumbsEditDestination } from "@config/moneyDestination/editDestination/navigation";
 import { requestProcessMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestProcessMessage";
 import { requestStatusMessage } from "@config/moneyDestination/moneyDestinationTab/generics/requestStatusMessage";
@@ -32,6 +33,8 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     showDecision,
     creditLineValues,
     loading,
+    loadingEnum,
+    option,
     setCreditLineValues,
     onToggleEditedModal,
     onOpenModal,
@@ -43,6 +46,8 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     onCloseProcess,
     setValuesLine,
   } = props;
+
+  const validateOption = option === EManagementType.IN_PROGRESS;
 
   return (
     <Stack
@@ -61,16 +66,16 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
         width="100%"
       >
         <Stack gap={tokens.spacing.s300} direction="column">
-          <Breadcrumbs crumbs={crumbsEditDestination} />
+          <Breadcrumbs crumbs={crumbsEditDestination(validateOption)} />
           <Title
-            title={editDestinationLabels.title}
-            description={editDestinationLabels.description}
+            title={editDestinationLabels(validateOption).title}
+            description={editDestinationLabels(validateOption).description}
             sizeTitle="large"
             onClick={onOpenModal}
           />
         </Stack>
 
-        {loading ? (
+        {loading || loadingEnum ? (
           <LoadingPage />
         ) : (
           <>

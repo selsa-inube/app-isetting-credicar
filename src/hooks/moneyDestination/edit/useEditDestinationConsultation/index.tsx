@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { EComponentAppearance } from "@enum/appearances";
+import { disabledModal } from "@config/disabledModal";
 import { IUseEditDestinationConsult } from "@ptypes/hooks/IUseEditDestinationConsult";
 
 const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
-  const { data, useCase } = props;
+  const { data, useCase, option } = props;
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
         return;
       }
 
-      navigate(`/money-destination/edit-destination`, {
+      navigate(`/money-destination/edit-destination/${option}`, {
         state: { data: destinationData },
       });
     }
@@ -38,8 +40,41 @@ const useEditDestinationConsultation = (props: IUseEditDestinationConsult) => {
     setShowInfoModal(!showInfoModal);
   };
 
+  const modal = () => {
+    const initial = {
+      title: "",
+      subtitle: "",
+      description: "",
+      actionText: "",
+      icon: <></>,
+      onCloseModal: () => void 0,
+      onClick: () => void 0,
+      withCancelButton: false,
+      withIcon: false,
+      appearance: EComponentAppearance.PRIMARY,
+      appearanceButton: EComponentAppearance.PRIMARY,
+    };
+
+    if (showInfoModal) {
+      return {
+        ...disabledModal,
+        onCloseModal: handleToggleInfoModal,
+        onClick: handleToggleInfoModal,
+        withCancelButton: false,
+        withIcon: false,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
+      };
+    }
+
+    return initial;
+  };
+
+  const modalData = modal();
+
   return {
     showInfoModal,
+    modalData,
     handleToggleInfoModal,
     handleEdit,
   };

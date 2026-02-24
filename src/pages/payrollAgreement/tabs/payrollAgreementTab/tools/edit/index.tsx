@@ -4,17 +4,16 @@ import { IEdit } from "@ptypes/payrollAgreement/payrollAgreementTab/IEdit";
 
 const Edit = (props: IEdit) => {
   const { data, useCaseEdit } = props;
-  const { handleEdit, showInfoModal, handleToggleInfoModal } =
-    useEditPayrollConsultation({
-      payrollAgreementData: data,
-      useCaseEdit,
-    });
+  const { handleEdit, showInfoModal, modalData } = useEditPayrollConsultation({
+    payrollAgreementData: data,
+    useCaseEdit,
+  });
   return (
     <>
       <EditRecord
         onEdit={handleEdit}
         showInfoModal={showInfoModal}
-        onToggleInfoModal={handleToggleInfoModal}
+        modalData={modalData}
       />
     </>
   );

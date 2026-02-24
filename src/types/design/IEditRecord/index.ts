@@ -1,6 +1,8 @@
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
+
 interface IEditRecord {
   showInfoModal: boolean;
-  onToggleInfoModal: () => void;
+  modalData: IModalData;
   onEdit: () => void;
 }
 

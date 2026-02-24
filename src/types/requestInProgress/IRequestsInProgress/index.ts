@@ -1,3 +1,4 @@
+import { IRequester } from "../IRequester";
 import { IConfigurationRequestsTraceability } from "../IConfigRequestsTraceability";
 import { ISettingRequestError } from "../ISettingRequestError";
 import { IUserManagingConfigRequests } from "../IUserConfigRequests";
@@ -19,6 +20,8 @@ interface IRequestsInProgress {
   id?: string;
   requestStatusCode?: string;
   settingRequestError?: ISettingRequestError[];
+  requester?: IRequester;
+  requestType?: string;
 }
 
 export type { IRequestsInProgress };

@@ -4,13 +4,16 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { postModifyRequestData } from "@services/requestInProgress/postModifyRequestData";
 import { patchEditMoneyDestination } from "@services/moneyDestination/patchEditMoneyDestination";
 import { deleteMoneyDestination } from "@services/moneyDestination/deleteMoneyDestination";
 import { postAddMoneyDestination } from "@services/moneyDestination/postAddMoneyDestination";
 import { errorObject } from "@utils/errorObject";
 import { EUseCase } from "@enum/useCase";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
+import { modifyRequestLabels } from "@config/modifyRequestLabels";
 import { flowAutomaticMessages } from "@config/moneyDestination/moneyDestinationTab/generics/flowAutomaticMessages";
 import { interventionHumanMessage } from "@config/moneyDestination/moneyDestinationTab/generics/interventionHumanMessage";
 import { statusCloseModal } from "@config/status/statusCloseModal";
@@ -22,6 +25,7 @@ import { IRequestMoneyDestination } from "@ptypes/moneyDestination/tabs/moneyDes
 import { IUseSaveMoneyDestination } from "@ptypes/hooks/moneyDestination/IUseSaveMoneyDestination";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
+import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 import { IErrors } from "@ptypes/IErrors";
 
 const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
@@ -31,6 +35,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     userAccount,
     sendData,
     data,
+    optionRequest,
     setSendData,
     setShowModal,
     setEntryDeleted,
@@ -70,6 +75,32 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     }
   };
 
+  const modifyRequestConfig = {
+    configurationRequestData: data?.configurationRequestData,
+    modifyJustification: modifyRequestLabels(EPayrollAgreement.OPTION_NAME)
+      .modifyJustification,
+    settingRequestId: data?.configurationRequestData.moneyDestinationId,
+  };
+
+  const fetchSaveRequestData = async () => {
+    setLoadingSendData(true);
+    try {
+      await postModifyRequestData(
+        userAccount,
+        modifyRequestConfig as IModifyRequestData,
+        token,
+      );
+      setShowModal(false);
+      navigate(-1);
+    } catch (error) {
+      console.info(error);
+      setHasError(true);
+      setErrorData(errorObject(error));
+    } finally {
+      setLoadingSendData(false);
+    }
+  };
+
   const isStatusIntAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
   };
@@ -83,38 +114,40 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
   };
 
   const fetchRequestData = async () => {
-    try {
-      if (useCase === EUseCase.ADD) {
-        const newData = await postAddMoneyDestination(
-          businessUnits,
-          requestConfiguration as IRequestMoneyDestination,
-          token,
-        );
-        setStatusRequest(newData.settingRequest?.requestStatus);
-      }
-      if (useCase === EUseCase.EDIT) {
-        const newData = await patchEditMoneyDestination(
-          businessUnits,
-          requestConfiguration as IRequestMoneyDestination,
-          token,
-        );
+    if (!optionRequest) {
+      try {
+        if (useCase === EUseCase.ADD) {
+          const newData = await postAddMoneyDestination(
+            businessUnits,
+            requestConfiguration as IRequestMoneyDestination,
+            token,
+          );
+          setStatusRequest(newData.settingRequest?.requestStatus);
+        }
+        if (useCase === EUseCase.EDIT) {
+          const newData = await patchEditMoneyDestination(
+            businessUnits,
+            requestConfiguration as IRequestMoneyDestination,
+            token,
+          );
 
-        setStatusRequest(newData.settingRequest?.requestStatus);
-      }
-      if (useCase === EUseCase.DELETE) {
-        const newData = await deleteMoneyDestination(
-          businessUnits,
-          requestConfiguration as IRequestMoneyDestination,
-          token,
-        );
+          setStatusRequest(newData.settingRequest?.requestStatus);
+        }
+        if (useCase === EUseCase.DELETE) {
+          const newData = await deleteMoneyDestination(
+            businessUnits,
+            requestConfiguration as IRequestMoneyDestination,
+            token,
+          );
 
-        setStatusRequest(newData.settingRequest?.requestStatus);
+          setStatusRequest(newData.settingRequest?.requestStatus);
+        }
+      } catch (error) {
+        console.info(error);
+        setErrorFetchRequest(true);
+        setNetworkError(errorObject(error));
+        setShowModal(false);
       }
-    } catch (error) {
-      console.info(error);
-      setErrorFetchRequest(true);
-      setNetworkError(errorObject(error));
-      setShowModal(false);
     }
   };
 
@@ -291,7 +324,12 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSaveMoneyDestinationData();
+
+    if (optionRequest) {
+      fetchSaveRequestData();
+    } else {
+      fetchSaveMoneyDestinationData();
+    }
   }, [sendData]);
 
   useEffect(() => {

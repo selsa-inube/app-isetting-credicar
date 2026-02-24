@@ -1,4 +1,5 @@
 import { Details } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/details";
+import { Edit } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/edit";
 import { Cancel } from "@pages/moneyDestination/tabs/requestsInProgressTab/tools/cancel";
 import { ITitle } from "@ptypes/design/table/ITitle";
 import { IAction } from "@ptypes/design/table/IAction";
@@ -27,7 +28,10 @@ const actionsConfig = (setEntryCanceled: (value: string | number) => void) => {
       id: "Details",
       content: (entry) => <Details data={entry} />,
     },
-
+    {
+      id: "edit",
+      content: (entry) => <Edit data={entry} />,
+    },
     {
       id: "delete",
       content: (entry) => (
