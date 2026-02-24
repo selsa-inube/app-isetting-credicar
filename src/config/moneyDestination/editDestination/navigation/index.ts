@@ -14,7 +14,7 @@ const crumbsEditDestination = (optionInProgress: boolean) => {
     },
     {
       path: "/money-destination/edit-destination",
-      label: optionInProgress ? "Editar solicitud destino" : "Editar destino",
+      label: optionInProgress ? "Editar solicitud" : "Editar destino",
       id: "editDestination",
       isActive: true,
     },

@@ -93,7 +93,7 @@ const EditDestination = () => {
     showEditedModal: showModal,
     descriptionError,
     optionInProgress: Boolean(option === EManagementType.IN_PROGRESS),
-    request: String(data?.id ?? ""),
+    request: String(requestNumber ?? ""),
     handleCloseGoBackModal,
     handleEditedModal,
     handleGoBack,

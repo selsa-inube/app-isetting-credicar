@@ -287,7 +287,6 @@ const useEditDestination = (props: IUseEditDestination) => {
         return {
           modifyJustification: `${editLabels.modifyDecision}`,
           ruleName: decision.ruleName,
-          businessRuleId: undefined,
           decisionsByRule: decisionsByRule,
         };
       });
@@ -401,7 +400,6 @@ const useEditDestination = (props: IUseEditDestination) => {
       initialGeneralInfData.current?.creditLine !== currentValues?.creditLine;
 
     const configurationRequestData: {
-      moneyDestinationId: string;
       modifyJustification: string;
       abbreviatedName?: string;
       descriptionUse?: string;
@@ -409,7 +407,6 @@ const useEditDestination = (props: IUseEditDestination) => {
       creditLine?: string;
       rules?: IRuleDecision[];
     } = {
-      moneyDestinationId: data.id,
       modifyJustification: `${editLabels.modifyJustification} ${currentValues?.nameDestination ?? formValues.nameDestination}`,
     };
 
