@@ -19,7 +19,7 @@ const postSaveRequest = async (
   };
 
   const saveData = await postWithRetries<ISaveDataResponse>(
-    `/requestssssssss`,
+    `/requests`,
     config,
     mapSavePayrollAgreementEntityToApi(data) as unknown as string[],
     isaasPerAxiosInstance,
