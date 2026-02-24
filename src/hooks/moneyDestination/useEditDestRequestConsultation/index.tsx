@@ -16,21 +16,19 @@ const useEditDestRequestConsultation = (props: IUseEditDestinationConsult) => {
   const navigate = useNavigate();
 
   const validateResponsible = useMemo(() => {
-    if (!data.requester && !data.userManagingConfigurationRequests)
-      return false;
     return getResponsible(
       data as IRequestsInProgress,
       appData.user.userAccount,
     );
   }, [
-    data.usermanamentsConfigurationrequest,
+    data.userManagingConfigurationRequests,
     data.requester,
     appData.user.userAccount,
   ]);
 
   const handleEdit = () => {
-    if (data.requestType !== ERequestType.ADD && !validateResponsible) {
-      setShowInfoModal(!showInfoModal);
+    if (data.requestType !== ERequestType.ADD || !validateResponsible) {
+      setShowInfoModal(true);
     } else {
       if (!data) {
         console.error("destination data is undefined or null");
@@ -64,7 +62,7 @@ const useEditDestRequestConsultation = (props: IUseEditDestinationConsult) => {
 
     if (showInfoModal) {
       return {
-        ...userResponsibleModal,
+        ...userResponsibleModal(data.requestType === ERequestType.ADD),
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,

@@ -35,6 +35,7 @@ const mapRequestsInProgressToEntity = (
     ),
     settingRequestError: Object(data.settingRequestError),
     requestType: String(data.requestType),
+    requester: Object(data.requester),
   };
   return request;
 };

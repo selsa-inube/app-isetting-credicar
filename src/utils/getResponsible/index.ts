@@ -6,7 +6,7 @@ const getResponsible = (data: IRequestsInProgress, user: string) => {
 
   const userManagements = data.userManagingConfigurationRequests as
     | IUserManagingConfigRequests[]
-    | undefined;
+    | [];
   const requesters = data.requester;
 
   if (Array.isArray(userManagements)) {
