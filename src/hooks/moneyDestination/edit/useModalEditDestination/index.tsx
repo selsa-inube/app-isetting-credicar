@@ -22,6 +22,8 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
     showEditedModal,
     hasErrorRule,
     descriptionError,
+    optionInProgress,
+    request,
     handleToggleEditedModal,
     handleEditedModal,
     handleCloseGoBackModal,
@@ -125,7 +127,7 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
 
     if (showEditedModal) {
       return {
-        ...sendEditedModal,
+        ...sendEditedModal(optionInProgress, request),
         onCloseModal: handleToggleEditedModal,
         onClick: handleEditedModal,
         withCancelButton: true,

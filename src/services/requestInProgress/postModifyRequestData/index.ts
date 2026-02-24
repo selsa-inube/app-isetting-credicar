@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import { isaasPerAxiosInstance } from "@api/isaasPersistence";
+import { patchWithRetries } from "@services/core/patchWithRetries";
 import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 import { IModifyRequestResponse } from "@ptypes/requestInProgress/IModifyRequestResponse";
-import { patchWithRetries } from "@src/services/core/patchWithRetries";
 
 const postModifyRequestData = async (
   userAccount: string,

@@ -92,6 +92,8 @@ const EditDestination = () => {
     errorFetchRequest,
     showEditedModal: showModal,
     descriptionError,
+    optionInProgress: Boolean(option === EManagementType.IN_PROGRESS),
+    request: String(data?.id ?? ""),
     handleCloseGoBackModal,
     handleEditedModal,
     handleGoBack,
@@ -135,6 +137,7 @@ const EditDestination = () => {
       loading={loading}
       loadingEnum={loadingEnum}
       setValuesLine={setValuesLine}
+      option={option ?? ""}
     />
   );
 };
