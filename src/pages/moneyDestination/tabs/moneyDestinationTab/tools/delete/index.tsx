@@ -54,6 +54,7 @@ const Delete = (props: IDelete) => {
     setShowModal,
     setEntryDeleted,
     token: appData.token,
+    optionRequest: false,
   });
 
   const { modalData, showDecision } = useModalDeleteDestination({

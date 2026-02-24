@@ -6,6 +6,7 @@ import { useSaveMoneyDestination } from "@hooks/moneyDestination/useSaveMoneyDes
 import { useDataDestination } from "@hooks/moneyDestination/useDataDestination";
 import { useModalEditDestination } from "@hooks/moneyDestination/edit/useModalEditDestination";
 import { EUseCase } from "@enum/useCase";
+import { EManagementType } from "@enum/managementType";
 import { editDestinationTabsConfig } from "@config/moneyDestination/editDestination/tabs";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
@@ -78,6 +79,7 @@ const EditDestination = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
+    optionRequest: option === EManagementType.IN_PROGRESS,
   });
 
   const { modalData, showDecision } = useModalEditDestination({

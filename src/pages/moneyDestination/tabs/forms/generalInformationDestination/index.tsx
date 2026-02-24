@@ -17,7 +17,6 @@ const GeneralInformationForm = forwardRef<
   (
     {
       initialValues,
-      initialGeneralInfData,
       onFormValid,
       onSubmit,
       onReset,
@@ -62,7 +61,7 @@ const GeneralInformationForm = forwardRef<
       loading,
       onSubmit,
       onFormValid,
-      initialGeneralInfData,
+      initialGeneralInfData: initialValues,
       creditLineValues,
       showDecisionModal,
       setShowDecisionModal,

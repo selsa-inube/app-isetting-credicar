@@ -3,7 +3,13 @@ import {
   IStackDirectionAlignment,
   useMediaQuery,
 } from "@inubekit/inubekit";
-import { useContext, useEffect, useImperativeHandle, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 import { useFormik } from "formik";
 import { object } from "yup";
 
@@ -128,6 +134,8 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     );
   }, [formik.values.nameDestination, formik.values.typeDestination, enumData]);
 
+  const userIconRef = useRef<string | null>(null);
+
   const handleChange = (name: string, value: string) => {
     setAutosuggestValue(
       normalizeDestinationForm(enumData, value, appData.language),
@@ -148,6 +156,12 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
       const description =
         normalizeData?.i18nDescription?.[appData.language as keyof II18n] ?? "";
 
+      if (equalValueName) {
+        const addIconFormik =
+          normalizeData?.type ?? EMoneyDestination.ICON_DEFAULT;
+        userIconRef.current = addIconFormik;
+        formik.setFieldValue("icon", addIconFormik);
+      }
       if (value === "") {
         formik.setFieldValue("description", "");
         formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
@@ -185,27 +199,29 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   };
 
   useEffect(() => {
-    if (editDataOption) {
-      if (
-        initialGeneralInfData?.nameDestination !== formik.values.nameDestination
-      ) {
-        formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
-      } else {
-        formik.setFieldValue("icon", initialGeneralInfData?.icon);
-      }
-    }
-  }, [editDataOption, formik.values]);
-
-  useEffect(() => {
     const updateButton = () => {
       if (editDataOption) {
         setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
+        if (
+          initialGeneralInfData?.nameDestination !==
+          formik.values.nameDestination
+        ) {
+          formik.setFieldValue("icon", EMoneyDestination.ICON_DEFAULT);
+        } else {
+          formik.setFieldValue("icon", initialGeneralInfData?.icon);
+        }
       } else {
         setIsDisabledButton(!formik.isValid);
       }
     };
     updateButton();
-  }, [formik.isValid, editDataOption, valuesEqual, valuesEqualBoton]);
+  }, [
+    formik.isValid,
+    formik.values,
+    editDataOption,
+    valuesEqual,
+    valuesEqualBoton,
+  ]);
 
   const handleChangeCheck = (name: string, values: string) => {
     const updatedData = creditLineValues.map((entry) =>
