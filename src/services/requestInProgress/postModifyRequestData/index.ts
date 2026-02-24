@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from "axios";
 import { isaasPerAxiosInstance } from "@api/isaasPersistence";
-import { postWithRetries } from "@services/core/postWithRetries";
 import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 import { IModifyRequestResponse } from "@ptypes/requestInProgress/IModifyRequestResponse";
+import { patchWithRetries } from "@src/services/core/patchWithRetries";
 
 const postModifyRequestData = async (
   userAccount: string,
@@ -17,7 +17,7 @@ const postModifyRequestData = async (
     },
   };
 
-  const saveData = await postWithRetries<IModifyRequestData>(
+  const saveData = await patchWithRetries<IModifyRequestData>(
     `/requests`,
     config,
     data as unknown as string[],
