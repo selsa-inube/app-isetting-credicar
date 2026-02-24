@@ -12,6 +12,7 @@ import { ETransactionOperation } from "@enum/transactionOperation";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { ECreditLines } from "@enum/creditLines";
 import { EGeneral } from "@enum/general";
+import { EManagementType } from "@enum/managementType";
 import { ERequestType } from "@enum/requestType";
 import { formatDate } from "@utils/date/formatDate";
 import { compareObjects } from "@utils/compareObjects";
@@ -30,9 +31,10 @@ import { II18n } from "@ptypes/i18n";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionWithConditions } from "@ptypes/creditLines/IDecisionWithConditions";
 import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
+import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 
 const useEditDestination = (props: IUseEditDestination) => {
-  const { data, appData, loading } = props;
+  const { data, appData, loading, option } = props;
 
   const {
     evaluateRuleData,
@@ -92,9 +94,21 @@ const useEditDestination = (props: IUseEditDestination) => {
   }, [evaluateRuleData]);
 
   const dataEvaluate = useMemo(() => {
-    return stableEvaluateRuleData && stableEvaluateRuleData.length > 0
-      ? stableEvaluateRuleData.map((item) => item.value).join(",")
-      : "";
+    if (!stableEvaluateRuleData || stableEvaluateRuleData.length === 0)
+      return "";
+
+    return stableEvaluateRuleData
+      .filter((item) =>
+        item.conditionGroups && item.conditionGroups.length > 0
+          ? item.conditionGroups.some((group: IConditionGroups) =>
+              group.conditionsThatEstablishesTheDecision?.some(
+                (condition) => condition.value === data.nameDestination,
+              ),
+            )
+          : false,
+      )
+      .map((item) => item.value)
+      .join(",");
   }, [stableEvaluateRuleData]);
 
   useEffect(() => {
@@ -107,6 +121,10 @@ const useEditDestination = (props: IUseEditDestination) => {
         icon: data.icon ?? "",
         id: data.id ?? "",
       });
+
+      if (data.creditLine.length > 0) {
+        setValuesLine(data.creditLine);
+      }
     }
   }, [data?.id, appData.businessUnit.publicCode]);
 
@@ -150,6 +168,8 @@ const useEditDestination = (props: IUseEditDestination) => {
 
   const conditionRule = "MoneyDestination";
 
+  const optionInProgress = option === EManagementType.IN_PROGRESS;
+
   useEffect(() => {
     setCreditLineValues(optionsCreditLine);
   }, [creditLineData]);
@@ -178,7 +198,7 @@ const useEditDestination = (props: IUseEditDestination) => {
     )?.conditionName;
 
   const tranformEvaluteDecision = () => {
-    if (!evaluateRuleData) return [];
+    if (!evaluateRuleData || optionInProgress) return [];
 
     return evaluateRuleData.map((decision) => {
       const dataEvalute: IDecisionWithConditions = {
@@ -238,7 +258,9 @@ const useEditDestination = (props: IUseEditDestination) => {
           const data: IDecisionsByRule = {
             effectiveFrom: condition.effectiveFrom,
             value: condition.value,
-            transactionOperation: ETransactionOperation.INSERT,
+            ...(!optionInProgress && {
+              transactionOperation: ETransactionOperation.INSERT,
+            }),
           };
 
           if (conditionDestination) {
@@ -251,6 +273,9 @@ const useEditDestination = (props: IUseEditDestination) => {
                       generalInformationRef.current?.values.nameDestination ??
                         "",
                     ),
+                    ...(!optionInProgress && {
+                      transactionOperation: ETransactionOperation.INSERT,
+                    }),
                   },
                 ],
               },
@@ -260,7 +285,7 @@ const useEditDestination = (props: IUseEditDestination) => {
         });
 
         return {
-          modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
+          modifyJustification: `${editLabels.modifyDecision}`,
           ruleName: decision.ruleName,
           businessRuleId: undefined,
           decisionsByRule: decisionsByRule,
@@ -269,6 +294,7 @@ const useEditDestination = (props: IUseEditDestination) => {
   };
 
   const getDeletedValues = () => {
+    if (option && optionInProgress) return;
     const currentRules = getRulesFromCreditLine(valuesLine ?? "");
     const evaluatedRules = tranformEvaluteDecision();
 
@@ -306,10 +332,8 @@ const useEditDestination = (props: IUseEditDestination) => {
                 conditionsThatEstablishesTheDecision: [
                   {
                     conditionName: conditionDestination,
-                    value: valueName(
-                      generalInformationRef.current?.values.nameDestination ??
-                        "",
-                    ),
+                    value: valueName(formValues.nameDestination ?? ""),
+                    transactionOperation: ETransactionOperation.DELETE,
                   },
                 ],
               },
@@ -318,7 +342,7 @@ const useEditDestination = (props: IUseEditDestination) => {
           return data;
         });
         return {
-          modifyJustification: `${editLabels.modifyDecision} ${appData.user.userAccount}`,
+          modifyJustification: `${editLabels.modifyDecision}`,
           ruleName: decision.ruleName,
           businessRuleId: decision.businessRuleId,
           decisionsByRule: decisionsByRule,
@@ -331,7 +355,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       (decision) =>
         decision.decisionsByRule && decision.decisionsByRule.length > 0,
     );
-    const deleteValues = getDeletedValues().filter(
+    const deleteValues = (getDeletedValues() ?? []).filter(
       (decision) =>
         decision.decisionsByRule && decision.decisionsByRule.length > 0,
     );
@@ -386,7 +410,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       rules?: IRuleDecision[];
     } = {
       moneyDestinationId: data.id,
-      modifyJustification: `${editLabels.modifyJustification} ${appData.user.userAccount}`,
+      modifyJustification: `${editLabels.modifyJustification} ${currentValues?.nameDestination ?? formValues.nameDestination}`,
     };
 
     if (currentValues?.nameDestination !== undefined && valuesUpdatedName) {

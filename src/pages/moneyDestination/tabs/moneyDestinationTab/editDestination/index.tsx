@@ -55,7 +55,7 @@ const EditDestination = () => {
     setShowRequestProcessModal,
     setShowModal,
     setValuesLine,
-  } = useEditDestination({ data: data as IEditData, appData, loading });
+  } = useEditDestination({ data: data as IEditData, appData, loading, option });
 
   const {
     saveMoneyDestination,
