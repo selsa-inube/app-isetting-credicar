@@ -104,7 +104,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.contributionsPortfolio,
               )}
               initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -123,7 +123,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.incomePortfolio,
               )}
               initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -142,7 +142,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.scoreModels,
               )}
               initialDecisions={rulesData.CreditRiskScoringModel}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -160,7 +160,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.minimumIncomePercentage,
               )}
               initialDecisions={rulesData.MinimumSubsistenceReservePercentage}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -178,7 +178,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.basicNotificationFormat,
               )}
               initialDecisions={rulesData.BasicNotificationFormat}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -196,7 +196,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.basicNotificationRecipient,
               )}
               initialDecisions={rulesData.BasicNotificationRecipient}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -215,7 +215,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.minimumCreditBureauRiskscore,
               )}
               initialDecisions={rulesData.MinimumCreditBureauRiskScore}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -233,7 +233,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.notificationChannel,
               )}
               initialDecisions={rulesData.NotificationChannel}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -251,7 +251,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.riskscoreApiUrl,
               )}
               initialDecisions={rulesData.RiskScoreApiUrl}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}

@@ -22,6 +22,10 @@ import { ensureArrayGroupsDeep } from "@utils/ensureArrayGroupsDeep";
 import { transformDecisions } from "@utils/transforDecisionPolicies";
 import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { normalizeCondition } from "@utils/decisions/normalizeCondition";
+import { keyOf } from "@utils/keyOf";
+import { getAfterDay } from "@utils/getAfterDay";
+import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
+import { safeSortDisplayDataSampleSwitchPlaces } from "@utils/safeSortDisplayDataSampleSwitchPlaces";
 import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
@@ -161,6 +165,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   };
 
   const submitForm = (dataDecision: any) => {
+    const isEditing = selectedDecision !== null && !isCreatingNew;
     const base = {
       ...localizedTemplate,
       ...dataDecision,
@@ -237,24 +242,38 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     const decisionWithSentences = transformDecision(
       newDecision,
       appData.language as "es" | "en" | undefined,
-      option === EUseCase.EDIT,
+      isEditing,
       compareValueDecision(initialDecisions, newDecision),
       base.decisionId,
     );
 
     setDecisions((prev) => {
-      const exists = prev.some(
-        (d) => d.decisionId === decisionWithSentences.decisionId,
-      );
-      if (exists) {
-        return prev.map((d) =>
-          d.decisionId === decisionWithSentences.decisionId
+      if (isEditing && selectedDecision) {
+        const editionMode = getEditionModeForDecision(option, selectedDecision);
+        if (editionMode === "versioned") {
+          const updatedPrev = prev.map((decision) => {
+            if (keyOf(decision) !== keyOf(selectedDecision)) {
+              return decision;
+            }
+
+            return {
+              ...decision,
+              validUntil: getAfterDay(
+                decisionWithSentences.effectiveFrom as string,
+              ),
+            };
+          });
+
+          return [...updatedPrev, decisionWithSentences];
+        }
+        return prev.map((decision) =>
+          keyOf(decision) === keyOf(selectedDecision)
             ? decisionWithSentences
-            : d,
+            : decision,
         );
-      } else {
-        return [...prev, decisionWithSentences];
       }
+
+      return [...prev, decisionWithSentences];
     });
 
     closeModal();
@@ -270,11 +289,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
       setSelectedDecision(selectedFromTemplate);
       setIsCreatingNew(false);
     } else {
-      setSelectedDecision({
-        ...localizedTemplate,
-        ...decisionTemplateFiltered,
-        conditionGroups: decisionTemplateFiltered.conditionGroups || [],
-      } as IRuleDecision);
+      setSelectedDecision(null);
       setIsCreatingNew(true);
     }
 
@@ -436,11 +451,15 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
 
     delete result.conditionsThatEstablishesTheDecision;
 
-    return result;
+    return ensureArrayGroupsDeep(result);
   }, [localizedTemplate, appData.language, selectedIds, removedConditionKeys]);
 
   const emptyConditionsTemplate = useMemo(() => {
-    const groups = (getConditionsByGroupNew(localizedTemplate) || {}) as Record<
+    const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
+    const tpl = safeSortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: normalizedTemplate,
+    });
+    const groups = (getConditionsByGroupNew(tpl) || {}) as Record<
       string,
       unknown
     >;
