@@ -2,12 +2,12 @@ import { MdAdd } from "react-icons/md";
 import { BusinessRulesNew } from "@isettingkit/business-rules";
 import {
   Button,
-  Checkpicker,
   Fieldset,
   IOption,
   SkeletonLine,
   Stack,
 } from "@inubekit/inubekit";
+import { Checkpicker } from "@isettingkit/input";
 import { AlertMessage } from "@pages/creditLines/tabs/forms/alertMessage";
 import { StyledRulesScroll } from "@pages/creditLines/tabs/BusinessRulesNewHandler/styles";
 import { DecisionBox } from "@pages/creditLines/tabs/forms/loadingForm/DecisionBox";
@@ -143,7 +143,6 @@ const NewDecisionFormUI = (props: INewDecisionsUI) => {
                   selectedDecision={selectedDecision}
                   textValues={textValues as IRulesFormTextValues}
                   shouldRenderEmptyMessage={dataEmpty || decisions.length > 0}
-                  withEditOption={false}
                   withTerm={false}
                 />
 

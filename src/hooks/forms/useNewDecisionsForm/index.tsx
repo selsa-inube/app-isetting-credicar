@@ -17,8 +17,10 @@ import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdi
 import { transformDecision } from "@utils/transformDecision";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { compareValueDecision } from "@utils/compareValueDecision";
-import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { localizeDecision } from "@utils/localizeDecision";
+import { ensureArrayGroupsDeep } from "@utils/ensureArrayGroupsDeep";
 import { transformDecisions } from "@utils/transforDecisionPolicies";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
 import { normalizeCondition } from "@utils/decisions/normalizeCondition";
 import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
@@ -43,6 +45,22 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
+
+  const { ruleData, loadingList } = useEnumRules({
+    enumDestination: labelBusinessRules,
+    ruleCatalog,
+    catalogAction: capitalizeText(ruleCatalog),
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
+
+  const {
+    conditionTraduction,
+    ruleNameTraduction,
+    listValuesDecision,
+    dataType,
+  } = getConditionsTraduction(ruleData, appData.language);
+
   const [selectedConditions, setSelectedConditions] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
@@ -53,14 +71,6 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   const [removedConditionKeys, setRemovedConditionKeys] = useState<Set<string>>(
     new Set(),
   );
-
-  const { ruleData, loadingList } = useEnumRules({
-    enumDestination: labelBusinessRules,
-    ruleCatalog,
-    catalogAction: capitalizeText(ruleCatalog),
-    businessUnits: appData.businessUnit.publicCode,
-    token: appData.token,
-  });
 
   const normalizeDecisions = (
     decisions: IRuleDecisionExtended[] | undefined,
@@ -79,13 +89,6 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   const [decisions, setDecisions] = useState<IRuleDecision[]>(
     normalizeDecisions(initialDecisions),
   );
-
-  const {
-    conditionTraduction,
-    ruleNameTraduction,
-    listValuesDecision,
-    dataType,
-  } = getConditionsTraduction(ruleData, appData.language);
 
   useEffect(() => {
     if (!conditionTraduction || conditionTraduction.length === 0) return;
@@ -116,6 +119,17 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   };
 
   const decisionTemplate = getDecisionTemplate();
+
+  const localizedTemplate = useMemo(
+    () =>
+      ensureArrayGroupsDeep(
+        localizeDecision(
+          decisionTemplate,
+          appData.language as "es" | "en" | undefined,
+        ),
+      ),
+    [decisionTemplate, appData.language],
+  );
 
   const originalName = (name: string) => name?.split(".").pop() || name;
 
@@ -148,11 +162,11 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
 
   const submitForm = (dataDecision: any) => {
     const base = {
-      ...decisionTemplate,
+      ...localizedTemplate,
       ...dataDecision,
     };
 
-    const tplGroups = (getConditionsByGroupNew(decisionTemplate) ||
+    const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
       {}) as Record<string, unknown>;
     const dataGroups = (getConditionsByGroupNew(dataDecision) || {}) as Record<
       string,
@@ -257,7 +271,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
       setIsCreatingNew(false);
     } else {
       setSelectedDecision({
-        ...decisionTemplate,
+        ...localizedTemplate,
         ...decisionTemplateFiltered,
         conditionGroups: decisionTemplateFiltered.conditionGroups || [],
       } as IRuleDecision);
@@ -340,11 +354,11 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   };
 
   const multipleChoicesOptions = useMemo(() => {
-    if (!decisionTemplate || !decisionTemplate.conditionGroups) {
+    if (!localizedTemplate || !localizedTemplate.conditionGroups) {
       return [];
     }
 
-    const groups = (getConditionsByGroupNew(decisionTemplate) || {}) as Record<
+    const groups = (getConditionsByGroupNew(localizedTemplate) || {}) as Record<
       string,
       unknown
     >;
@@ -361,12 +375,12 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
         value: option.conditionName,
       }))
       .filter((condition) => !conditionsHidden.includes(condition.id));
-  }, [decisionTemplate, appData.language]);
+  }, [localizedTemplate, appData.language]);
 
   const filteredDecisionTemplate = useMemo(() => {
-    if (!decisionTemplate) return {} as IRuleDecision;
+    if (!localizedTemplate) return {} as IRuleDecision;
 
-    const template = JSON.parse(JSON.stringify(decisionTemplate));
+    const template = JSON.parse(JSON.stringify(localizedTemplate));
 
     if (!template.conditionGroups) {
       return {
@@ -423,31 +437,25 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     delete result.conditionsThatEstablishesTheDecision;
 
     return result;
-  }, [decisionTemplate, appData.language, selectedIds, removedConditionKeys]);
+  }, [localizedTemplate, appData.language, selectedIds, removedConditionKeys]);
 
   const emptyConditionsTemplate = useMemo(() => {
-    const existingGroups = decisionTemplate?.conditionGroups || [];
+    const groups = (getConditionsByGroupNew(localizedTemplate) || {}) as Record<
+      string,
+      unknown
+    >;
 
-    const groupsArray = Array.isArray(existingGroups)
-      ? existingGroups
-      : Object.entries(existingGroups).map(([groupId]) => ({
-          groupId,
-          conditions: [],
-        }));
-
-    const emptyGroups =
-      groupsArray.length > 0
-        ? groupsArray.map((group) => ({
-            groupId: group.groupId || "group-primary",
-            conditions: [],
-          }))
-        : [{ groupId: "group-primary", conditions: [] }];
+    const groupKeys = Object.keys(groups);
+    const emptyRecord =
+      groupKeys.length > 0
+        ? Object.fromEntries(groupKeys.map((k) => [k, []]))
+        : { "group-primary": [] };
 
     return {
-      ...decisionTemplate,
-      conditionGroups: emptyGroups,
+      ...localizedTemplate,
+      conditionGroups: groupsRecordToArrayNew(emptyRecord),
     };
-  }, [decisionTemplate]);
+  }, [localizedTemplate]);
 
   const decisionTemplateFiltered =
     !selectedDecision && selectedConditions.length === 0
@@ -530,7 +538,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     cancelButtonLabel,
     isCreatingNew,
     disabledNext,
-    decisionTemplate,
+    localizedTemplate,
     decisionTemplateFiltered,
     loadingList,
     maxHeight,
