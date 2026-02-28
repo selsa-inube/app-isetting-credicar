@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { EValueHowToSetUp } from "@isettingkit/business-rules";
-import { IRuleDecision, ValueDataType } from "@isettingkit/input";
+import { ValueDataType } from "@isettingkit/input";
 import { IValue } from "@ptypes/decisions/IValue";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
 import { isRangeObject } from "../formatValueOfCondition";
 import { geti18nValueDecision } from "../geti18nValueDecision";
 import { normalizeConditionTraduction } from "../normalizeConditionTraduction";
@@ -10,7 +12,7 @@ import { normalizeConditionValue } from "../normalizeConditionValue";
 import { transformSingleDecision } from "../transformationDecisionPolicies";
 
 const transformDecisions = (
-  prev: IRuleDecision[],
+  prev: IRuleDecisionExtended[],
   ruleNameTraduction: string,
   dataType: string | undefined,
   listValuesDecision: IValue | undefined,
@@ -26,7 +28,7 @@ const transformDecisions = (
       conditionTraduction,
     ),
     conditionGroups:
-      dec.conditionGroups?.map((group) => ({
+      dec.conditionGroups?.map((group: IConditionGroups) => ({
         ...group,
         conditionsThatEstablishesTheDecision:
           group.conditionsThatEstablishesTheDecision?.map((c) => {

@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { IRuleDecision } from "@isettingkit/input";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { ENameRules } from "@enum/nameRules";
@@ -11,6 +10,7 @@ import { tokens } from "@design/tokens";
 import { BoxContainer } from "@design/layout/boxContainer";
 import { NewDecisionForm } from "@design/forms/NewDecisionForm";
 import { decisionTemplateGenPolicies } from "@config/decisions/decisionTemplateGenPolicies";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IDecisionTab } from "@ptypes/generalCredPolicies/IDecisionTab";
 import { StyledContainer } from "../styles";
 
@@ -40,7 +40,7 @@ const DecisionTab = (props: IDecisionTab) => {
     dataType,
     listValuesDecision,
     conditionTraduction,
-  ) as IRuleDecision[];
+  ) as IRuleDecisionExtended[];
 
   return (
     <BoxContainer
@@ -66,6 +66,7 @@ const DecisionTab = (props: IDecisionTab) => {
           decisionTemplateConfig={decisionTemplateGenPolicies}
           setDecisionData={() => void 0}
           onSave={() => void 0}
+          setEditDecision={() => false}
         />
       </StyledContainer>
     </BoxContainer>

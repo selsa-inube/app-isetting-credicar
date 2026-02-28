@@ -52,6 +52,15 @@ interface IDetailsRequest {
   notifChannelDeleted?: IRuleDecision[];
   riskScoreApiUrlInserted?: IRuleDecision[];
   riskScoreApiUrlDeleted?: IRuleDecision[];
+  contribQuotaUpdated?: IRuleDecision[];
+  incomeQuotaUpdated?: IRuleDecision[];
+  scoreModelsUpdated?: IRuleDecision[];
+  minimumUpdated?: IRuleDecision[];
+  basicNotifFormatUpdated?: IRuleDecision[];
+  basicNotifRecipientUpdated?: IRuleDecision[];
+  minCredBureauRiskScoreUpdated?: IRuleDecision[];
+  notifChannelUpdated?: IRuleDecision[];
+  riskScoreApiUrlUpdated?: IRuleDecision[];
 }
 
 export type { IDetailsRequest };

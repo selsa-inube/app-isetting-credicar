@@ -58,16 +58,17 @@ const RenderDecisionsGenVerification = (
             }
           </Stack>
         </BoxAttribute>
-
-        <BoxAttribute
-          direction="column"
-          label={verificationLabels.creditBureausConsultReq}
-          value={validateOptionVerification(
-            optionsGenDecision,
-            "creditBureaus",
-            creditBureausConsultReq,
-          )}
-        />
+        {creditBureausConsultReq && creditBureausConsultReq.length > 0 && (
+          <BoxAttribute
+            direction="column"
+            label={verificationLabels.creditBureausConsultReq}
+            value={validateOptionVerification(
+              optionsGenDecision,
+              "creditBureaus",
+              creditBureausConsultReq,
+            )}
+          />
+        )}
 
         <BoxAttribute
           direction="column"

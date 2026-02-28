@@ -6,6 +6,7 @@ import { formatDate } from "@utils/date/formatDate";
 import { getDecisionIdMethods } from "@utils/decisions/getDecisionIdMethods";
 import { decisionWithMultipleValuesEdit } from "@utils/decisionWithMultipleValuesEdit";
 import { getNewInsertDecisions } from "@utils/getNewInsertDecisions";
+import { getUpdateDecisionsPolicies } from "@utils/getUpdateDecisionsPolicies";
 import { ETransactionOperation } from "@enum/transactionOperation";
 import { ERulesOfDecisions } from "@enum/rulesOfDecisions";
 import { ENameRules } from "@enum/nameRules";
@@ -47,6 +48,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     prevMinCredBureauRiskScoreRef,
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
+    editDecision,
   } = props;
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState<boolean>(false);
@@ -275,6 +277,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const rulesDecisions = useMemo(() => {
     const insertValues: IRules[] = [];
     const deleteValues: IRules[] = [];
+    const updateValues: IRules[] = [];
 
     Object.entries(prevRefsMap).forEach(([key, prevRef]) => {
       const rules = rulesData[key as keyof IRuleState];
@@ -284,6 +287,14 @@ const useNewDecisions = (props: IUseNewDecisions) => {
         rules,
         dateDecisions?.date,
       );
+
+      const newUpdate = getUpdateDecisionsPolicies(
+        editDecision,
+        prevRef,
+        rules,
+        dateDecisions?.date,
+      );
+
       const newDelete = getNewDeletedDecisions(
         prevRef,
         rules,
@@ -291,10 +302,11 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       );
 
       if (newInsert) insertValues.push(...(newInsert as IRules[]));
+      if (newUpdate) updateValues.push(...(newUpdate as IRules[]));
       if (newDelete) deleteValues.push(...(newDelete as IRules[]));
     });
 
-    return { insertValues, deleteValues };
+    return { insertValues, updateValues, deleteValues };
   }, [rulesData, dateDecisions?.date]);
 
   useEffect(() => {
@@ -343,21 +355,25 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   }, [formValues]);
 
   const disabledButton = useMemo(() => {
-    const { insertValues, deleteValues } = rulesDecisions;
+    const { insertValues, updateValues, deleteValues } = rulesDecisions;
     return (
       insertValues.length > 0 ||
+      updateValues.length > 0 ||
       deleteValues.length > 0 ||
       generalDecisions.length > 0
     );
   }, [rulesDecisions, generalDecisions]);
 
   useEffect(() => {
-    const { insertValues, deleteValues } = rulesDecisions;
+    const { insertValues, updateValues, deleteValues } = rulesDecisions;
 
     setNewDecisions(
-      [...insertValues, ...deleteValues, ...generalDecisions].flatMap(
-        (item) => item as IRules,
-      ),
+      [
+        ...insertValues,
+        ...updateValues,
+        ...deleteValues,
+        ...generalDecisions,
+      ].flatMap((item) => item as IRules),
     );
   }, [rulesDecisions, generalDecisions]);
 

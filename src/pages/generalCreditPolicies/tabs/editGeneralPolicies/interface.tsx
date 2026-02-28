@@ -46,6 +46,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showRiskScoreApiUrl,
     showContributions,
     disabledButton,
+    setEditDecision,
     handleToggleDateModal,
     setShowFactor,
     setShowReciprocity,
@@ -112,6 +113,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showIncomePort && (
@@ -131,6 +133,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showScoreModels && (
@@ -150,6 +153,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showMinimumIncome && (
@@ -168,6 +172,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showBasicNotificFormat && (
@@ -186,6 +191,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showBasicNotifRecipient && (
@@ -204,6 +210,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
 
@@ -223,6 +230,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showNotificationChannel && (
@@ -241,6 +249,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showRiskScoreApiUrl && (
@@ -259,6 +268,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
         </Stack>

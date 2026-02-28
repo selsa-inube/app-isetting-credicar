@@ -115,6 +115,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep === stepKeysPolicies.INCOME_PORTFOLIO && (
@@ -134,6 +135,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep === stepKeysPolicies.SCORE_MODELS && (
@@ -152,6 +154,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep === stepKeysPolicies.MINIMUM_INCOME_PERCENTAGE && (
@@ -172,6 +175,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
 
@@ -193,6 +197,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
 
@@ -214,6 +219,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep ===
@@ -235,6 +241,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep === stepKeysPolicies.NOTIFICATION_CHANNEL && (
@@ -254,6 +261,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep === stepKeysPolicies.RISKSCORE_API_URL && (
@@ -272,6 +280,7 @@ const AddGenCreditPoliciesUI = (props: IAddGenCreditPoliciesUI) => {
                 decisionTemplateConfig={decisionTemplateGenPolicies}
                 setDecisionData={setDecisionData}
                 onSave={onNextStep}
+                setEditDecision={() => false}
               />
             )}
             {currentStep === stepKeysPolicies.VERIFICATION && (

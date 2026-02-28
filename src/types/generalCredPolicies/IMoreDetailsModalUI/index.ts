@@ -39,6 +39,15 @@ interface IMoreDetailsModalUI {
   showRiskScoreApiUrl: boolean;
   showRiskScoreApiUrlInserted: boolean;
   showRiskScoreApiUrlDeleted: boolean;
+  showContribUpdated: boolean;
+  showIncomeUpdated: boolean;
+  showScoreModelsUpdated: boolean;
+  showMinimumUpdated: boolean;
+  showBasicNotifFormatUpdated: boolean;
+  showBasicNotifRecipientUpdated: boolean;
+  showMinCredBureauRiskUpdated: boolean;
+  showNotifChanneUpdated: boolean;
+  showRiskScoreApiUrlUpdated: boolean;
   loading: boolean;
   onCloseModal: () => void;
   onTabChange: (id: string) => void;
@@ -60,6 +69,15 @@ interface IMoreDetailsModalUI {
   notifChannelDeleted?: IRuleDecision[];
   riskScoreApiUrlInserted?: IRuleDecision[];
   riskScoreApiUrlDeleted?: IRuleDecision[];
+  contribQuotaUpdated?: IRuleDecision[];
+  incomeQuotaUpdated?: IRuleDecision[];
+  scoreModelsUpdated?: IRuleDecision[];
+  minimumUpdated?: IRuleDecision[];
+  basicNotifFormatUpdated?: IRuleDecision[];
+  basicNotifRecipientUpdated?: IRuleDecision[];
+  minCredBureauRiskScoreUpdated?: IRuleDecision[];
+  notifChannelUpdated?: IRuleDecision[];
+  riskScoreApiUrlUpdated?: IRuleDecision[];
 }
 
 export type { IMoreDetailsModalUI };
