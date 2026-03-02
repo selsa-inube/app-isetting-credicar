@@ -11,6 +11,7 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { capitalizeText } from "@utils/capitalizeText";
 import { normalizeConditionTraduction } from "@utils/normalizeConditionTraduction";
+import { EEditionMode } from "@enum/editionMode";
 import { asArray } from "@utils/asArray";
 import { localizeLabel } from "@utils/localizeLabel";
 import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdit";
@@ -34,6 +35,7 @@ import { conditionsHidden } from "@config/creditLines/configuration/conditionsHi
 import { rulesLabels } from "@config/generalCreditPolicies/assisted/RulesLabels";
 import { IUseNewDecisionsForm } from "@ptypes/generalCredPolicies/IUseNewDecisionsForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
+import { ILanguageDecision } from "@ptypes/ILanguageDecision";
 
 const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   const {
@@ -133,7 +135,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
       ensureArrayGroupsDeep(
         localizeDecision(
           decisionTemplate,
-          appData.language as "es" | "en" | undefined,
+          appData.language as ILanguageDecision,
         ),
       ),
     [decisionTemplate, appData.language],
@@ -206,7 +208,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
             ...tplItem,
             labelName: localizeLabel(
               tplItem,
-              appData.language as "es" | "en" | undefined,
+              appData.language as ILanguageDecision,
             ),
             conditionDataType:
               tplItem.conditionDataType?.toLocaleLowerCase() ??
@@ -242,10 +244,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
       ...base,
       decisionId: decisionIdForNew,
       effectiveFrom: formatDateDecision(base.effectiveFrom) ?? "",
-      labelName: localizeLabel(
-        base,
-        appData.language as "es" | "en" | undefined,
-      ),
+      labelName: localizeLabel(base, appData.language as ILanguageDecision),
       /* eslint-disable @typescript-eslint/no-explicit-any */
       conditionGroups: groupsRecordToArrayNew(
         mergedGroups as Record<string, any[]>,
@@ -253,7 +252,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     };
     const decisionWithSentences = transformDecision(
       newDecision,
-      appData.language as "es" | "en" | undefined,
+      appData.language as ILanguageDecision,
       isEditing,
       compareValueDecision(initialDecisions, newDecision),
       base.decisionId,
@@ -263,7 +262,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     setDecisions((prev) => {
       if (isEditing && selectedDecision) {
         const editionMode = getEditionModeForDecision(option, selectedDecision);
-        if (editionMode === "versioned") {
+        if (editionMode === EEditionMode.VERSIONED) {
           const updatedPrev = prev.map((decision) => {
             if (keyOf(decision) !== keyOf(selectedDecision)) {
               return decision;
@@ -385,10 +384,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     return asArray(primaryGroup)
       .map((option: any) => ({
         id: option.conditionName,
-        label: localizeLabel(
-          option,
-          appData.language as "es" | "en" | undefined,
-        ),
+        label: localizeLabel(option, appData.language as ILanguageDecision),
         value: option.conditionName,
       }))
       .filter((condition) => !conditionsHidden.includes(condition.id));
@@ -432,7 +428,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
       /* eslint-disable @typescript-eslint/no-explicit-any */
       labelName: localizeLabel(
         tpl as any,
-        appData.language as "es" | "en" | undefined,
+        appData.language as ILanguageDecision,
       ),
       /* eslint-disable @typescript-eslint/no-explicit-any */
       conditionGroups: groupsRecordToArrayNew(
