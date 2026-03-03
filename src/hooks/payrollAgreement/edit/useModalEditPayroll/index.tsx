@@ -24,6 +24,10 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
     loadingSendData,
     showDeletedAlertModal,
     typePayroll,
+    hasErrorInProgress,
+    errorDataInProgress,
+    optionInProgress,
+    request,
     handleToggleDeletedAlertModal,
     handleToggleEditedModal,
     handleEditedModal,
@@ -92,6 +96,25 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
       };
     }
 
+    if (hasErrorInProgress) {
+      return {
+        ...errorModal(
+          messageErrorUseCases(
+            networkError.status,
+            operationTypes.editError,
+            EPayrollAgreement.OPTION_NAME,
+            getDescriptionError(errorDataInProgress.response),
+          ),
+        ),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
     if (showGoBackModal && !errorFetchRequest && !hasError) {
       return {
         ...goBackModal,
@@ -107,7 +130,7 @@ const useModalEditPayroll = (props: IUseModalEditPayroll) => {
 
     if (showEditedModal) {
       return {
-        ...sendEditedModal,
+        ...sendEditedModal(optionInProgress, request),
         onCloseModal: handleToggleEditedModal,
         onClick: handleEditedModal,
         moreDetails: "",

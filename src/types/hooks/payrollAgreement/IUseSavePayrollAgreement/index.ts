@@ -7,8 +7,10 @@ interface IUseSavePayrollAgreement {
   sendData: boolean;
   data: ISaveDataRequest;
   token: string;
+  optionRequest: boolean;
   setSendData: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  id?: string;
   setShowPendingReq?: React.Dispatch<React.SetStateAction<boolean>>;
   setErrorFetchSaveData?: React.Dispatch<React.SetStateAction<boolean>>;
   setEntryDeleted?: (id: string | number) => void;

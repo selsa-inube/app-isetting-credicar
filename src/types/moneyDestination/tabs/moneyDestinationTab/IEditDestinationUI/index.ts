@@ -4,6 +4,7 @@ import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { IEditData } from "@ptypes/hooks/moneyDestination/IEditData";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationEntry";
 interface IEditDestinationUI {
   editDestinationTabsConfig: ITab[];
@@ -23,6 +24,8 @@ interface IEditDestinationUI {
   loadingEnum: boolean;
   creditLineValues: IServerDomain[];
   option: string;
+  hasError: boolean;
+  data: IEditData;
   setCreditLineValues: React.Dispatch<React.SetStateAction<IServerDomain[]>>;
   onOpenModal: () => void;
   onTabChange: (id: string) => void;

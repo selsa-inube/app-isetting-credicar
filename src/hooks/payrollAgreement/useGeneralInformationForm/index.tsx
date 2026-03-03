@@ -78,6 +78,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     initialValues,
     validationSchema: validationSchema,
     validateOnBlur: true,
+    enableReinitialize: true,
     onSubmit: onSubmit ?? (() => true),
   });
   const [autosuggestValue, setAutosuggestValue] = useState(

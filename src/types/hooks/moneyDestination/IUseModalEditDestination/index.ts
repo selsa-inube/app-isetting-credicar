@@ -11,6 +11,8 @@ interface IUseModalEditDestination {
   descriptionError: IErrors;
   optionInProgress: boolean;
   request: string;
+  hasErrorInProgress: boolean;
+  errorDataInProgress: IErrors;
   handleToggleEditedModal: () => void;
   handleEditedModal: () => void;
   handleCloseGoBackModal: () => void;

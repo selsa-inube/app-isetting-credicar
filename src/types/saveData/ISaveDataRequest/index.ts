@@ -8,6 +8,7 @@ interface ISaveDataRequest {
   requestDate: string;
   useCaseName: string;
   requestType: string;
+  settingRequestId?: string;
 }
 
 export type { ISaveDataRequest };

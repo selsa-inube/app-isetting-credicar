@@ -16,6 +16,7 @@ interface IRequestsInProgress {
   useCaseName: string;
   userManagingConfigurationRequests: IUserManagingConfigRequests[];
   id?: string;
+  requestType?: string;
 }
 
 export type { IRequestsInProgress };

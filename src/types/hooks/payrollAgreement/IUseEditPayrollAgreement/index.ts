@@ -2,6 +2,7 @@ import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreement
 
 interface IUseEditPayrollAgreement {
   data: IPayrollAgreementData;
+  loading: boolean;
 }
 
 export type { IUseEditPayrollAgreement };

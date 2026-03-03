@@ -442,6 +442,8 @@ const useEditDestination = (props: IUseEditDestination) => {
       configurationRequestData.rules = newDecisions;
     }
 
+    const settingRequestId = data?.id ? data?.id : undefined;
+
     setSaveData({
       applicationName: EGeneral.APPLICATION_NAME,
       requestType: ERequestType.MODIFY,
@@ -451,6 +453,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       entityName: conditionRule,
       requestDate: formatDate(new Date()),
       useCaseName: EMoneyDestination.USE_CASE_EDIT,
+      settingRequestId,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);

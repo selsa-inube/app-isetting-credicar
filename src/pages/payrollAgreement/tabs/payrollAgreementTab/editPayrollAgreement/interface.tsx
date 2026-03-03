@@ -7,6 +7,7 @@ import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
 import { DecisionModal } from "@design/modals/decisionModal";
 import { Title } from "@design/data/title";
+import { LoadingPage } from "@design/feedback/loadingPage";
 import { tokens } from "@design/tokens";
 import { EComponentAppearance } from "@enum/appearances";
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
@@ -41,6 +42,10 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     descriptionRequest,
     actionTextRequest,
     showDecision,
+    loading,
+    data,
+    validateOption,
+    hasError,
     setIncludeExtraPayDay,
     setRegularDeleted,
     setExtraordinaryPayment,
@@ -57,120 +62,130 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
   } = props;
 
   return (
-    <Stack
-      direction="column"
-      width="-webkit-fill-available"
-      padding={
-        smallScreen
-          ? `${tokens.spacing.s200}`
-          : `${tokens.spacing.s300} ${tokens.spacing.s800}`
-      }
-    >
-      <Stack gap={tokens.spacing.s300} direction="column">
-        <Stack gap={tokens.spacing.s300} direction="column">
-          <Breadcrumbs crumbs={crumbsEditPayrollAgreement} />
-          <Title
-            title={editPayrollLabels.title}
-            description={editPayrollLabels.description}
-            sizeTitle="large"
-            navigatePage="/payroll-agreement"
-            onClick={handleOpenModal}
-          />
-        </Stack>
-        <Stack gap={tokens.spacing.s300} direction="column">
-          <Tabs
-            tabs={filteredTabs}
-            selectedTab={isSelected}
-            onChange={onTabChange}
-            scroll={smallScreen ? true : false}
-          />
-          <Stack direction="column">
-            {showGeneralInfPayrollForm && (
-              <GeneralInformationPayrollForm
-                ref={formReferences}
-                initialValues={formValues.generalInformation.values}
-                onFormValid={setIsCurrentFormValid}
-                onButtonClick={onToggleEditedModal}
-                onReset={onReset}
-                sourcesOfIncomeValues={sourcesOfIncomeValues}
-                setSourcesOfIncomeValues={setSourcesOfIncomeValues}
-                editDataOption
-                companyAgreement={companyAgreement}
-                initialGeneralInfData={initialValues.generalInformation.values}
+    <>
+      {(!data && !hasError) || loading ? (
+        <LoadingPage />
+      ) : (
+        <Stack
+          direction="column"
+          width="-webkit-fill-available"
+          padding={
+            smallScreen
+              ? `${tokens.spacing.s200}`
+              : `${tokens.spacing.s300} ${tokens.spacing.s800}`
+          }
+        >
+          <Stack gap={tokens.spacing.s300} direction="column">
+            <Stack gap={tokens.spacing.s300} direction="column">
+              <Breadcrumbs
+                crumbs={crumbsEditPayrollAgreement(validateOption)}
               />
-            )}
-            {showRegularPaymentCyclesForm && (
-              <RegularPaymentCyclesForm
-                regularPaymentCycles={regularPaymentCycles}
-                onFormValid={setIsCurrentFormValid}
-                onButtonClick={onToggleEditedModal}
-                onPreviousStep={onReset}
-                setRegularPaymentCycles={setRegularPaymentCycles}
-                editDataOption
-                initialData={initialValues.ordinaryCycles.values}
-                setIncludeExtraPayDay={setIncludeExtraPayDay}
-                setRegularDeleted={setRegularDeleted}
+              <Title
+                title={editPayrollLabels(validateOption).title}
+                description={editPayrollLabels(validateOption).description}
+                sizeTitle="large"
+                navigatePage="/payroll-agreement"
+                onClick={handleOpenModal}
               />
-            )}
-            {showExtraPaymentCyclesForm && (
-              <ExtraordinaryPaymentCyclesForm
-                extraordinaryPayment={extraordinaryPayment}
-                setExtraordinaryPayment={setExtraordinaryPayment}
-                onFormValid={setIsCurrentFormValid}
-                onButtonClick={onToggleEditedModal}
-                onPreviousStep={onReset}
-                typeRegularPayroll={typeRegularPayroll}
-                regularPaymentCycles={regularPaymentCycles}
-                initialData={initialValues.extraordinaryCycles.values}
-                editDataOption
+            </Stack>
+            <Stack gap={tokens.spacing.s300} direction="column">
+              <Tabs
+                tabs={filteredTabs}
+                selectedTab={isSelected}
+                onChange={onTabChange}
+                scroll={smallScreen ? true : false}
               />
-            )}
+              <Stack direction="column">
+                {showGeneralInfPayrollForm && (
+                  <GeneralInformationPayrollForm
+                    ref={formReferences}
+                    initialValues={formValues.generalInformation.values}
+                    onFormValid={setIsCurrentFormValid}
+                    onButtonClick={onToggleEditedModal}
+                    onReset={onReset}
+                    sourcesOfIncomeValues={sourcesOfIncomeValues}
+                    setSourcesOfIncomeValues={setSourcesOfIncomeValues}
+                    editDataOption
+                    companyAgreement={companyAgreement}
+                    initialGeneralInfData={
+                      initialValues.generalInformation.values
+                    }
+                  />
+                )}
+                {showRegularPaymentCyclesForm && (
+                  <RegularPaymentCyclesForm
+                    regularPaymentCycles={regularPaymentCycles}
+                    onFormValid={setIsCurrentFormValid}
+                    onButtonClick={onToggleEditedModal}
+                    onPreviousStep={onReset}
+                    setRegularPaymentCycles={setRegularPaymentCycles}
+                    editDataOption
+                    initialData={initialValues.ordinaryCycles.values}
+                    setIncludeExtraPayDay={setIncludeExtraPayDay}
+                    setRegularDeleted={setRegularDeleted}
+                  />
+                )}
+                {showExtraPaymentCyclesForm && (
+                  <ExtraordinaryPaymentCyclesForm
+                    extraordinaryPayment={extraordinaryPayment}
+                    setExtraordinaryPayment={setExtraordinaryPayment}
+                    onFormValid={setIsCurrentFormValid}
+                    onButtonClick={onToggleEditedModal}
+                    onPreviousStep={onReset}
+                    typeRegularPayroll={typeRegularPayroll}
+                    regularPaymentCycles={regularPaymentCycles}
+                    initialData={initialValues.extraordinaryCycles.values}
+                    editDataOption
+                  />
+                )}
+              </Stack>
+            </Stack>
           </Stack>
-        </Stack>
-      </Stack>
 
-      {showDecision && (
-        <DecisionModal
-          portalId={portalId}
-          title={modalData.title}
-          description={modalData.description}
-          actionText={modalData.actionText}
-          withIcon={modalData.withIcon}
-          withCancelButton={modalData.withCancelButton}
-          appearance={modalData.appearance}
-          appearanceButton={modalData.appearanceButton}
-          icon={modalData.icon}
-          onCloseModal={modalData.onCloseModal}
-          onClick={modalData.onClick}
-          moreDetails={modalData.moreDetails}
-        />
+          {showDecision && (
+            <DecisionModal
+              portalId={portalId}
+              title={modalData.title}
+              description={modalData.description}
+              actionText={modalData.actionText}
+              withIcon={modalData.withIcon}
+              withCancelButton={modalData.withCancelButton}
+              appearance={modalData.appearance}
+              appearanceButton={modalData.appearanceButton}
+              icon={modalData.icon}
+              onCloseModal={modalData.onCloseModal}
+              onClick={modalData.onClick}
+              moreDetails={modalData.moreDetails}
+            />
+          )}
+          {showRequestProcessModal && (
+            <RequestProcess
+              portalId={portalId}
+              saveData={savePayrollAgreement}
+              descriptionRequestProcess={requestProcessMessage}
+              descriptionRequestStatus={requestStatusMessage}
+              requestProcessSteps={requestSteps}
+              appearance={EComponentAppearance.SUCCESS}
+              onCloseRequestStatus={onCloseRequestStatus}
+              onCloseProcess={onCloseProcess}
+            />
+          )}
+          {showRequestStatus && (
+            <RequestStatusModal
+              portalId={portalId}
+              title={titleRequest}
+              description={descriptionRequest}
+              requestNumber={savePayrollAgreement.requestNumber}
+              onClick={onClosePendingRequestModal}
+              onCloseModal={onClosePendingRequestModal}
+              loading={false}
+              actionText={actionTextRequest}
+              appearance={EComponentAppearance.PRIMARY}
+            />
+          )}
+        </Stack>
       )}
-      {showRequestProcessModal && (
-        <RequestProcess
-          portalId={portalId}
-          saveData={savePayrollAgreement}
-          descriptionRequestProcess={requestProcessMessage}
-          descriptionRequestStatus={requestStatusMessage}
-          requestProcessSteps={requestSteps}
-          appearance={EComponentAppearance.SUCCESS}
-          onCloseRequestStatus={onCloseRequestStatus}
-          onCloseProcess={onCloseProcess}
-        />
-      )}
-      {showRequestStatus && (
-        <RequestStatusModal
-          portalId={portalId}
-          title={titleRequest}
-          description={descriptionRequest}
-          requestNumber={savePayrollAgreement.requestNumber}
-          onClick={onClosePendingRequestModal}
-          onCloseModal={onClosePendingRequestModal}
-          loading={false}
-          actionText={actionTextRequest}
-          appearance={EComponentAppearance.PRIMARY}
-        />
-      )}
-    </Stack>
+    </>
   );
 };
 

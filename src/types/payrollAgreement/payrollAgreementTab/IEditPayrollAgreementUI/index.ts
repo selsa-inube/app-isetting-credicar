@@ -8,6 +8,7 @@ import { IOrdinaryCyclesEntry } from "../forms/IOrdinaryCyclesEntry";
 import { IExtraordinaryCyclesEntry } from "../forms/IExtraordinaryCyclesEntry";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "../forms/IEditPayrollAgreementForms";
+import { IPayrollAgreementData } from "../IPayrollAgreementData";
 
 interface IEditPayrollAgreementUI {
   isSelected: string;
@@ -34,6 +35,10 @@ interface IEditPayrollAgreementUI {
   actionTextRequest: string;
   showDecision: boolean;
   modalData: IModalData;
+  loading: boolean;
+  hasError: boolean;
+  data: IPayrollAgreementData | undefined;
+  validateOption: boolean;
   setIncludeExtraPayDay: React.Dispatch<
     React.SetStateAction<IOrdinaryCyclesEntry[]>
   >;

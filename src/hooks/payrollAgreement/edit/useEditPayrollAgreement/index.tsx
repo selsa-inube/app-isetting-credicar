@@ -40,82 +40,88 @@ import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
-  const { data } = props;
+  const { data, loading } = props;
   const { appData } = useContext(AuthAndPortalData);
 
-  const regularPaymentValues = () => {
+  const regularPaymentValues = useMemo(() => {
     const cycles = transformToArray<IRegularPaymentCycles>(
-      data.regularPaymentCycles,
+      data?.regularPaymentCycles,
     );
-
-    return cycles.map((entry, index) => ({
-      id: String(index + 1),
-      cycleId: `${addLeadingZero(index + 1).toString()}`,
-      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
-      regularPaymentCycleNumber: entry.regularPaymentCycleNumber,
-      nameCycle: entry.regularPaymentCycleName,
-      periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
-      payday: getDayPayment(entry.paymentDay),
-      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
-      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
-    }));
-  };
+    return cycles
+      ? cycles.map((entry, index) => ({
+          id: String(index + 1),
+          cycleId: `${addLeadingZero(index + 1).toString()}`,
+          payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+          regularPaymentCycleNumber: entry.regularPaymentCycleNumber,
+          nameCycle: entry.regularPaymentCycleName,
+          periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
+          payday: getDayPayment(entry.paymentDay),
+          numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+          laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
+        }))
+      : [];
+  }, [data, loading, appData.language]);
 
   const extraordinaryPaymentValues = useMemo(() => {
-    const specials = transformToArray<IPayrollSpecialBenefit>(
-      data.payrollSpecialBenefitPaymentCycles,
-    ).map((entry, index) => ({
-      id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
-      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
-      nameCycle: entry.abbreviatedName,
-      typePayment: specialBenefitPayment[0],
-      payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
-      paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
-      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
-      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
-    }));
+    const specials = data?.payrollSpecialBenefitPaymentCycles
+      ? transformToArray<IPayrollSpecialBenefit>(
+          data.payrollSpecialBenefitPaymentCycles,
+        ).map((entry, index) => ({
+          id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
+          payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+          nameCycle: entry.abbreviatedName,
+          typePayment: specialBenefitPayment[0],
+          payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
+          paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
+          numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+          laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
+        }))
+      : [];
 
-    const severances = transformToArray<ISeverancePaymentCycles>(
-      data.severancePaymentCycles,
-    ).map((entry, index) => ({
-      id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
-      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
-      nameCycle: entry.abbreviatedName,
-      typePayment: severancePay[0],
-      payday: formatPaymentDayExtra(entry.paymentDay),
-      paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
-      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
-      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
-    }));
+    const severances = data?.severancePaymentCycles
+      ? transformToArray<ISeverancePaymentCycles>(
+          data.severancePaymentCycles,
+        ).map((entry, index) => ({
+          id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
+          payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+          nameCycle: entry.abbreviatedName,
+          typePayment: severancePay[0],
+          payday: formatPaymentDayExtra(entry.paymentDay),
+          paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
+          numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+          laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
+        }))
+      : [];
 
     return [...specials, ...severances];
-  }, [data, appData.language]);
+  }, [data, loading, appData.language]);
 
   const initialData = {
     generalInformation: {
       isValid: false,
       values: {
-        code: data.payrollForDeductionAgreementCode,
-        abbreviatedName: data.abbreviatedName ?? "",
+        code: data?.payrollForDeductionAgreementCode ?? "",
+        abbreviatedName: data?.abbreviatedName ?? "",
         typePayroll:
-          dataTranslations[data.payrollForDeductionAgreementType] ??
-          data.payrollForDeductionAgreementType,
-        sourcesOfIncome: getSourcesIncome(data.incomeTypes),
+          dataTranslations[data?.payrollForDeductionAgreementType] ??
+          data?.payrollForDeductionAgreementType ??
+          "",
+        sourcesOfIncome: getSourcesIncome(data?.incomeTypes ?? []),
         applicationDaysPayroll: String(
-          data.numberOfDaysForReceivingTheDiscounts ?? 0,
+          data?.numberOfDaysForReceivingTheDiscounts ?? 0,
         ),
       },
     },
     ordinaryCycles: {
       isValid: false,
-      values: regularPaymentValues(),
+      values: regularPaymentValues,
     },
     extraordinaryCycles: {
       isValid: false,
       values: extraordinaryPaymentValues,
     },
   };
-  const companyAgreement = data.payingEntityName ?? "";
+  const companyAgreement = data?.payingEntityName ?? "";
   const [isSelected, setIsSelected] = useState<string>(
     editPayrollAgTabsConfig.generalInformation.id,
   );
@@ -144,6 +150,47 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    if (!data) return;
+
+    setFormValues({
+      generalInformation: {
+        isValid: false,
+        values: {
+          code: data.payrollForDeductionAgreementCode ?? "",
+          abbreviatedName: data.abbreviatedName ?? "",
+          typePayroll:
+            dataTranslations[data.payrollForDeductionAgreementType] ??
+            data.payrollForDeductionAgreementType ??
+            "",
+          sourcesOfIncome: getSourcesIncome(data.incomeTypes ?? []),
+          applicationDaysPayroll: String(
+            data.numberOfDaysForReceivingTheDiscounts ?? 0,
+          ),
+        },
+      },
+      ordinaryCycles: {
+        isValid: false,
+        values: regularPaymentValues,
+      },
+      extraordinaryCycles: {
+        isValid: false,
+        values: extraordinaryPaymentValues,
+      },
+    });
+
+    setRegularPaymentCycles(regularPaymentValues);
+    setExtraordinaryPayment(extraordinaryPaymentValues);
+
+    setTypeRegularPayroll(
+      typePayrollForCyclesExtraord.includes(
+        dataTranslations[data.payrollForDeductionAgreementType] ??
+          data.payrollForDeductionAgreementType ??
+          "",
+      ),
+    );
+  }, [data]);
+
   const initialValues = initialData.generalInformation.values;
 
   const navigate = useNavigate();
@@ -167,18 +214,8 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       setExtraordinaryPayment,
       sourcesOfIncome: formValues.generalInformation.values.sourcesOfIncome,
       initialSourcesOfIncome: initialValues.sourcesOfIncome,
-      payrollId: data.payrollForDeductionAgreementId,
+      payrollId: data?.payrollForDeductionAgreementId,
     });
-
-  useEffect(() => {
-    setTypeRegularPayroll(
-      typePayrollForCyclesExtraord.includes(
-        formValues.generalInformation.values.typePayroll,
-      )
-        ? true
-        : false,
-    );
-  }, []);
 
   const extraordinaryData = extraordinaryPaymentValues;
 
@@ -198,7 +235,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       const tab =
         editPayrollAgTabsConfig[key as keyof typeof editPayrollAgTabsConfig];
 
-      const ordinaryData = regularPaymentValues();
+      const ordinaryData = regularPaymentValues;
       if (
         key === editPayrollAgTabsConfig.regularPaymentCycles.id &&
         ordinaryData.length === 0
@@ -349,7 +386,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       modifyJustification?: string;
       incomeTypes?: IIncomeTypes[];
     } = {
-      payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
+      payrollForDeductionAgreementId: data?.payrollForDeductionAgreementId,
       modifyJustification: jsonLabels(initialValues.abbreviatedName)
         .modifyJustification,
     };

@@ -11,6 +11,10 @@ interface IUseModalEditPayroll {
   loadingSendData: boolean;
   showDeletedAlertModal: boolean;
   typePayroll: string;
+  hasErrorInProgress: boolean;
+  errorDataInProgress: IErrors;
+  optionInProgress: boolean;
+  request: string;
   handleToggleDeletedAlertModal: () => void;
   handleToggleEditedModal: () => void;
   handleEditedModal: () => void;

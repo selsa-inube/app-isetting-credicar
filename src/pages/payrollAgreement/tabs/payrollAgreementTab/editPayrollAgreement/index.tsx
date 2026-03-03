@@ -1,19 +1,35 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditPayrollAgreement } from "@hooks/payrollAgreement/edit/useEditPayrollAgreement";
+import { useDataPayroll } from "@hooks/payrollAgreement/useDataPayroll";
 import { useModalEditPayroll } from "@hooks/payrollAgreement/edit/useModalEditPayroll";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/savePayrollAgreement/useSavePayrollAgreement";
 import { EUseCase } from "@enum/useCase";
+import { EManagementType } from "@enum/managementType";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
+import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { EditPayrollAgreementUI } from "./interface";
 
 const EditPayrollAgreement = () => {
+  const { id, option, requestNumber } = useParams();
   const location = useLocation();
-  const { data } = location.state ?? {};
+  const { data: payrollData } = location.state ?? {};
   const { appData } = useContext(AuthAndPortalData);
+
+  const {
+    data,
+    loading,
+    hasError: hasErrorInProgress,
+    errorData: errorDataInProgress,
+  } = useDataPayroll({
+    id,
+    requestNumber,
+    option,
+    payrollData,
+  });
 
   const {
     companyAgreement,
@@ -27,7 +43,6 @@ const EditPayrollAgreement = () => {
     showRequestProcessModal,
     smallScreen,
     sourcesOfIncomeValues,
-    initialData,
     typeRegularPayroll,
     regularPaymentCycles,
     extraordinaryPayment,
@@ -52,7 +67,10 @@ const EditPayrollAgreement = () => {
     setShowModal,
     setShowRequestProcessModal,
     setSourcesOfIncomeValues,
-  } = useEditPayrollAgreement({ data });
+  } = useEditPayrollAgreement({
+    data: data as IPayrollAgreementData,
+    loading,
+  });
 
   const {
     savePayrollAgreement,
@@ -79,6 +97,8 @@ const EditPayrollAgreement = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
+    optionRequest: Boolean(option === EManagementType.IN_PROGRESS),
+    id,
   });
 
   const { modalData, showDecision } = useModalEditPayroll({
@@ -92,6 +112,10 @@ const EditPayrollAgreement = () => {
     loadingSendData,
     showDeletedAlertModal,
     typePayroll,
+    hasErrorInProgress,
+    errorDataInProgress,
+    optionInProgress: Boolean(option === EManagementType.IN_PROGRESS),
+    request: String(requestNumber ?? ""),
     handleToggleDeletedAlertModal,
     handleCloseGoBackModal,
     handleEditedModal,
@@ -100,11 +124,13 @@ const EditPayrollAgreement = () => {
     handleToggleEditedModal,
   });
 
+  const validateOption = option === EManagementType.IN_PROGRESS;
+
   return (
     <EditPayrollAgreementUI
       formReferences={generalInformationRef}
       formValues={formValues}
-      initialValues={initialData}
+      initialValues={formValues}
       setIsCurrentFormValid={setIsCurrentFormValid}
       smallScreen={smallScreen}
       sourcesOfIncomeValues={sourcesOfIncomeValues}
@@ -142,6 +168,10 @@ const EditPayrollAgreement = () => {
       onCloseProcess={handleCloseProcess}
       modalData={modalData}
       showDecision={showDecision}
+      loading={loading}
+      data={data}
+      validateOption={validateOption}
+      hasError={hasErrorInProgress}
     />
   );
 };
