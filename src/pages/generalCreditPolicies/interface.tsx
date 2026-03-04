@@ -146,6 +146,8 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                           }
                           notifChannelData={notifChannelData}
                           riskScoreApiUrlData={riskScoreApiUrlData}
+                          option={""}
+                          id={""}
                         />
                       )}
                       {showrequestTab && <RequestsInProgressTab />}

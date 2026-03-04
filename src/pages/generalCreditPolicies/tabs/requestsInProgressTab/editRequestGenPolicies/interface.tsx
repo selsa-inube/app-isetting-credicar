@@ -87,6 +87,8 @@ const EditRequestGenPoliciesUI = (props: IEditRequestGenPoliciesUI) => {
                 minCredBureauRiskScoreData={minCredBureauRiskScoreData}
                 notifChannelData={notifChannelData}
                 riskScoreApiUrlData={riskScoreApiUrlData}
+                option={option}
+                id={id}
               />
             </Stack>
           </>
