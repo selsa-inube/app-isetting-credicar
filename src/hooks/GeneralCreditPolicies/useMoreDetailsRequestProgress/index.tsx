@@ -130,8 +130,8 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     });
   });
 
-  const valueBoolean = (value: string) =>
-    value === EBooleanText.Y || value === EBooleanText.YES
+  const valueBoolean = (value?: string) =>
+    value && (value === EBooleanText.Y || value === EBooleanText.YES)
       ? EBooleanText.YES
       : EBooleanText.NO;
 

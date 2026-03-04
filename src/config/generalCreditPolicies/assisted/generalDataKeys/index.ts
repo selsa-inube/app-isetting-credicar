@@ -4,6 +4,7 @@ const generalDataKeys = [
   "RiskAnalysisBasedCreditLimit",
   "financialObligations",
   "realGuarantees",
+  "guarantees",
   "ReciprocityBasedCreditLimit",
   "customValue",
   "sourcesIncome",
