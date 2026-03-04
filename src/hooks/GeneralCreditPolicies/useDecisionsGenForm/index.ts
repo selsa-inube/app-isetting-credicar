@@ -156,6 +156,18 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
   }, [formik.values.toggleLineCreditPayrollSpecialAdvance]);
 
   useEffect(() => {
+    if (formik.values.realGuarantees === false) {
+      formik.setFieldValue("realGuarantees", false);
+    }
+  }, [formik.values.realGuarantees]);
+
+  useEffect(() => {
+    if (formik.values.additionalDebtors === false) {
+      formik.setFieldValue("additionalDebtors", false);
+    }
+  }, [formik.values.additionalDebtors]);
+
+  useEffect(() => {
     if (setShowReciprocity) {
       setShowReciprocity(formik.values.ReciprocityBasedCreditLimit);
     }

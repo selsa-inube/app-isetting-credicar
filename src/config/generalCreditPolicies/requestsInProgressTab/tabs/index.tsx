@@ -7,34 +7,42 @@ const detailsTabsConfig = {
   contributionQuota: {
     id: "contributionQuota",
     isDisabled: false,
-    label: "Número de veces los aportes como cupo total de cartera",
+    label: "# de veces los aportes como cupo total de cartera",
   },
   contribQuotaIncluded: {
     id: "contribQuotaIncluded",
     isDisabled: false,
-    label: "Incluidas Número de veces los aportes como cupo total de cartera",
+    label: "Incluidas # de veces los aportes como cupo total de cartera",
+  },
+  contribQuotaUpdated: {
+    id: "contribQuotaUpdated",
+    isDisabled: false,
+    label: "Modificadas # de veces los aportes como cupo total de cartera",
   },
   contribQuotaRemoved: {
     id: "contribQuotaRemoved",
     isDisabled: false,
-    label: "Eliminadas Número de veces los aportes como cupo total de cartera",
+    label: "Eliminadas # de veces los aportes como cupo total de cartera",
   },
   incomeQuota: {
     id: "incomeQuota",
     isDisabled: false,
-    label: "Número de veces los ingresos como cupo total de la cartera",
+    label: "# de veces los ingresos como cupo total de la cartera",
   },
   incomeQuotaIncluded: {
     id: "incomeQuotaIncluded",
     isDisabled: false,
-    label:
-      "Incluidas Número de veces los ingresos como cupo total de la cartera",
+    label: "Incluidas # de veces los ingresos como cupo total de la cartera",
+  },
+  incomeQuotaUpdated: {
+    id: "incomeQuotaUpdated",
+    isDisabled: false,
+    label: "Modificadas # de veces los ingresos como cupo total de la cartera",
   },
   incomeQuotaRemoved: {
     id: "incomeQuotaRemoved",
     isDisabled: false,
-    label:
-      "Eliminadas Número de veces los ingresos como cupo total de la cartera",
+    label: "Eliminadas # de veces los ingresos como cupo total de la cartera",
   },
   scoreModels: {
     id: "ScoreModels",
@@ -45,6 +53,11 @@ const detailsTabsConfig = {
     id: "scoreModelsIncluded",
     isDisabled: false,
     label: "Incluidas Modelos de score",
+  },
+  scoreModelsUpdated: {
+    id: "scoreModelsUpdated",
+    isDisabled: false,
+    label: "Modificadas Modelos de score",
   },
   scoreModelsRemoved: {
     id: "scoreModelsRemoved",
@@ -61,12 +74,16 @@ const detailsTabsConfig = {
     isDisabled: false,
     label: "Incluidas Porcentaje mínimo de reserva por la fuente de ingreso.",
   },
+  minimumIncomeUpdated: {
+    id: "minimumIncomeUpdated",
+    isDisabled: false,
+    label: "Modificadas Porcentaje mínimo de reserva por la fuente de ingreso",
+  },
   minimumIncomeRemoved: {
     id: "minimumIncomeRemoved",
     isDisabled: false,
     label: "Eliminadas Porcentaje mínimo de reserva por la fuente de ingreso",
   },
-
   basicNotifFormat: {
     id: "basicNotifFormat",
     isDisabled: false,
@@ -77,12 +94,16 @@ const detailsTabsConfig = {
     isDisabled: false,
     label: "Incluidas formato de notificación",
   },
+  basicNotifFormatUpdated: {
+    id: "basicNotifFormatUpdated",
+    isDisabled: false,
+    label: "Modificadas formato de notificación ",
+  },
   basicNotifFormatRemoved: {
     id: "basicNotifFormatRemoved",
     isDisabled: false,
     label: "Eliminadas formato de notificación ",
   },
-
   basicNotifRecipient: {
     id: "basicNotifRecipient",
     isDisabled: false,
@@ -93,12 +114,16 @@ const detailsTabsConfig = {
     isDisabled: false,
     label: "Incluidas destinatario de la notificación",
   },
+  basicNotifRecipientUpdated: {
+    id: "basicNotifRecipientUpdated",
+    isDisabled: false,
+    label: "Modificadas destinatario de la notificación",
+  },
   basicNotifRecipientRemoved: {
     id: "basicNotifRecipientRemoved",
     isDisabled: false,
     label: "Eliminadas destinatario de la notificación",
   },
-
   minCredBureauRiskScore: {
     id: "minCredBureauRiskScore",
     isDisabled: false,
@@ -109,12 +134,16 @@ const detailsTabsConfig = {
     isDisabled: false,
     label: "Incluidas score de riesgo requerido",
   },
+  minCredBureauRiskScoreUpdated: {
+    id: "minCredBureauRiskScoreUpdated",
+    isDisabled: false,
+    label: "Modificadas score de riesgo requerido",
+  },
   minCredBureauRiskScoreRemoved: {
     id: "minCredBureauRiskScoreRemoved",
     isDisabled: false,
     label: "Eliminadas score de riesgo requerido",
   },
-
   notificationChannel: {
     id: "notificationChannel",
     isDisabled: false,
@@ -125,12 +154,16 @@ const detailsTabsConfig = {
     isDisabled: false,
     label: "Incluidas canal de notificación",
   },
+  notificationChannelUpdated: {
+    id: "notificationChannelUpdated",
+    isDisabled: false,
+    label: "Modificadas canal de notificación",
+  },
   notificationChannelRemoved: {
     id: "notificationChannelRemoved",
     isDisabled: false,
     label: "Eliminadas canal de notificación",
   },
-
   riskScoreApiUrl: {
     id: "riskScoreApiUrl",
     isDisabled: false,
@@ -140,6 +173,11 @@ const detailsTabsConfig = {
     id: "riskScoreApiUrlIncluded",
     isDisabled: false,
     label: "Incluidas URL de la API de score de riesgo",
+  },
+  riskScoreApiUrlUpdated: {
+    id: "riskScoreApiUrlUpdated",
+    isDisabled: false,
+    label: "Modificadas URL de la API de score de riesgo",
   },
   riskScoreApiUrlRemoved: {
     id: "riskScoreApiUrlRemoved",

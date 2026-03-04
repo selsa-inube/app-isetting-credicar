@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { IOption } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { EComponentAppearance } from "@enum/appearances";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IRulesFormTextValues } from "../IRulesFormTextValues";
 
 interface INewDecisionsUI {
@@ -10,7 +11,7 @@ interface INewDecisionsUI {
   controls: boolean;
   dataEmpty: boolean;
   decisions: IRuleDecision[];
-  decisionTemplate: IRuleDecision;
+  decisionTemplate: IRuleDecisionExtended;
   deleteDecision: (id: string) => void;
   editionMode: "classic" | "versioned";
   iconAppearance: EComponentAppearance;

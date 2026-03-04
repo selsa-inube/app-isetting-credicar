@@ -33,6 +33,15 @@ interface IMoreDetailsModal {
   notifChannelDeleted?: IRuleDecision[];
   riskScoreApiUrlInserted?: IRuleDecision[];
   riskScoreApiUrlDeleted?: IRuleDecision[];
+  incomeQuotaUpdated?: IRuleDecision[];
+  scoreModelsUpdated?: IRuleDecision[];
+  minimumUpdated?: IRuleDecision[];
+  basicNotifFormatUpdated?: IRuleDecision[];
+  basicNotifRecipientUpdated?: IRuleDecision[];
+  minCredBureauRiskScoreUpdated?: IRuleDecision[];
+  notifChannelUpdated?: IRuleDecision[];
+  riskScoreApiUrlUpdated?: IRuleDecision[];
+  contribQuotaUpdated?: IRuleDecision[];
   loading: boolean;
 }
 

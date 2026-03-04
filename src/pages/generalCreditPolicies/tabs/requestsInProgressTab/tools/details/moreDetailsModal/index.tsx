@@ -24,6 +24,15 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     notifChannelDeleted,
     riskScoreApiUrlInserted,
     riskScoreApiUrlDeleted,
+    incomeQuotaUpdated,
+    scoreModelsUpdated,
+    minimumUpdated,
+    contribQuotaUpdated,
+    basicNotifFormatUpdated,
+    basicNotifRecipientUpdated,
+    minCredBureauRiskScoreUpdated,
+    notifChannelUpdated,
+    riskScoreApiUrlUpdated,
     defaultSelectedTab,
     detailsTabsConfig,
     filteredTabsConfig,
@@ -65,6 +74,15 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
     showRiskScoreApiUrl,
     showRiskScoreApiUrlInserted,
     showRiskScoreApiUrlDeleted,
+    showContribUpdated,
+    showIncomeUpdated,
+    showScoreModelsUpdated,
+    showMinimumUpdated,
+    showBasicNotifFormatUpdated,
+    showBasicNotifRecipientUpdated,
+    showMinCredBureauRiskUpdated,
+    showNotifChanneUpdated,
+    showRiskScoreApiUrlUpdated,
   } = useMoreDetailsModal({
     isSelected,
     detailsTabsConfig,
@@ -129,6 +147,24 @@ const MoreDetailsModal = (props: IMoreDetailsModal) => {
       showRiskScoreApiUrlInserted={showRiskScoreApiUrlInserted}
       showRiskScoreApiUrlDeleted={showRiskScoreApiUrlDeleted}
       loading={loading}
+      contribQuotaUpdated={contribQuotaUpdated}
+      incomeQuotaUpdated={incomeQuotaUpdated}
+      scoreModelsUpdated={scoreModelsUpdated}
+      minimumUpdated={minimumUpdated}
+      basicNotifFormatUpdated={basicNotifFormatUpdated}
+      basicNotifRecipientUpdated={basicNotifRecipientUpdated}
+      minCredBureauRiskScoreUpdated={minCredBureauRiskScoreUpdated}
+      notifChannelUpdated={notifChannelUpdated}
+      riskScoreApiUrlUpdated={riskScoreApiUrlUpdated}
+      showContribUpdated={showContribUpdated}
+      showIncomeUpdated={showIncomeUpdated}
+      showScoreModelsUpdated={showScoreModelsUpdated}
+      showMinimumUpdated={showMinimumUpdated}
+      showBasicNotifFormatUpdated={showBasicNotifFormatUpdated}
+      showBasicNotifRecipientUpdated={showBasicNotifRecipientUpdated}
+      showMinCredBureauRiskUpdated={showMinCredBureauRiskUpdated}
+      showNotifChanneUpdated={showNotifChanneUpdated}
+      showRiskScoreApiUrlUpdated={showRiskScoreApiUrlUpdated}
     />
   );
 };

@@ -17,6 +17,7 @@ interface IUseNewDecisions {
   prevNotifChannelRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   prevRiskScoreApiUrlRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   user: string;
+  editDecision: boolean;
   contributionsData?: IRuleDecisionExtended[];
   minimumIncomeData?: IRuleDecisionExtended[];
   methodsData?: IRuleDecisionExtended[];

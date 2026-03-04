@@ -6,12 +6,14 @@ import { IRuleDecision } from "@isettingkit/input";
 import { asArray } from "../asArray";
 import { normalizeCondition } from "../decisions/normalizeCondition";
 import { getNextDay } from "../getNextDay";
+import { getEffectiveFromDay } from "../getEffectiveFromDay";
 
 const ensureArrayGroupsDeep = (
   decision: IRuleDecision,
   editDecision?: boolean,
   initialDecision?: IRuleDecision,
   idInitial?: string,
+  optionPolicies?: boolean,
 ): IRuleDecision => {
   const cloned: IRuleDecision = JSON.parse(JSON.stringify(decision ?? {}));
   const groups: Record<string, unknown> = getConditionsByGroupNew(cloned) ?? {};
@@ -27,7 +29,9 @@ const ensureArrayGroupsDeep = (
     ...cloned,
     decisionId: editDecision && idInitial ? idInitial : cloned.decisionId,
     effectiveFrom: editDecision
-      ? getNextDay(cloned.effectiveFrom as string, initialDecision)
+      ? optionPolicies
+        ? getEffectiveFromDay(cloned.effectiveFrom as string)
+        : getNextDay(cloned.effectiveFrom as string, initialDecision)
       : cloned.effectiveFrom,
     conditionGroups: groupsRecordToArrayNew(
       normalizedGroups as Record<string, any[]>,

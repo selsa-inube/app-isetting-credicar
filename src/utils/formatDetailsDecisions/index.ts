@@ -19,14 +19,11 @@ const formatDetailsDecisions = (
           const decisionByRule = rule.decisionsByRule?.find(
             (decision: IEntry) => decision,
           );
-
           return {
             labelName: dataTranslations[rule.ruleName] ?? rule.ruleName,
             ruleName: rule.ruleName,
             value: formatValueObjectfCondition(decisionByRule?.value),
-            effectiveFrom: decisionByRule?.effectiveFrom
-              ? formatDate(new Date(decisionByRule.effectiveFrom))
-              : undefined,
+            effectiveFrom: decisionByRule?.effectiveFrom ?? undefined,
             validUntil: decisionByRule?.validUntil
               ? formatDate(new Date(decisionByRule.validUntil))
               : undefined,

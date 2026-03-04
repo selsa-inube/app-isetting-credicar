@@ -32,6 +32,15 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
     notifChannelDeleted,
     riskScoreApiUrlInserted,
     riskScoreApiUrlDeleted,
+    contribQuotaUpdated,
+    incomeQuotaUpdated,
+    scoreModelsUpdated,
+    minimumUpdated,
+    basicNotifFormatUpdated,
+    basicNotifRecipientUpdated,
+    minCredBureauRiskScoreUpdated,
+    notifChannelUpdated,
+    riskScoreApiUrlUpdated,
     decisions,
     minimumInserted,
     minimumDeleted,
@@ -125,6 +134,15 @@ const DetailsRequestInProcess = (props: IDetailsRequest) => {
           scoreModelsDeleted={scoreModelsDeleted}
           minimumInserted={minimumInserted}
           minimumDeleted={minimumDeleted}
+          contribQuotaUpdated={contribQuotaUpdated}
+          incomeQuotaUpdated={incomeQuotaUpdated}
+          scoreModelsUpdated={scoreModelsUpdated}
+          minimumUpdated={minimumUpdated}
+          basicNotifFormatUpdated={basicNotifFormatUpdated}
+          basicNotifRecipientUpdated={basicNotifRecipientUpdated}
+          minCredBureauRiskScoreUpdated={minCredBureauRiskScoreUpdated}
+          notifChannelUpdated={notifChannelUpdated}
+          riskScoreApiUrlUpdated={riskScoreApiUrlUpdated}
           basicNotifFormatInserted={basicNotifFormatInserted}
           basicNotifFormatDeleted={basicNotifFormatDeleted}
           basicNotifRecipientInserted={basicNotifRecipientInserted}

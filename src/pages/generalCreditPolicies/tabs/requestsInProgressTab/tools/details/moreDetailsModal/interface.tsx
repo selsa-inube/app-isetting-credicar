@@ -40,6 +40,15 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     showRiskScoreApiUrl,
     showRiskScoreApiUrlInserted,
     showRiskScoreApiUrlDeleted,
+    showContribUpdated,
+    showIncomeUpdated,
+    showScoreModelsUpdated,
+    showMinimumUpdated,
+    showBasicNotifFormatUpdated,
+    showBasicNotifRecipientUpdated,
+    showMinCredBureauRiskUpdated,
+    showNotifChanneUpdated,
+    showRiskScoreApiUrlUpdated,
     minimumInserted,
     minimumDeleted,
     data,
@@ -61,6 +70,15 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
     notifChannelDeleted,
     riskScoreApiUrlInserted,
     riskScoreApiUrlDeleted,
+    contribQuotaUpdated,
+    incomeQuotaUpdated,
+    scoreModelsUpdated,
+    minimumUpdated,
+    basicNotifFormatUpdated,
+    basicNotifRecipientUpdated,
+    minCredBureauRiskScoreUpdated,
+    notifChannelUpdated,
+    riskScoreApiUrlUpdated,
     isMobile,
     loading,
     onCloseModal,
@@ -97,15 +115,21 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showContribInserted && (
           <DecisionTab data={contribQuotaInserted ?? []} />
         )}
+        {showContribUpdated && <DecisionTab data={contribQuotaUpdated ?? []} />}
         {showContribDeleted && <DecisionTab data={contribQuotaDeleted ?? []} />}
         {showDecisionsIncome && (
           <DecisionTab data={decisions.incomePortfolio} />
         )}
         {showIncomeInserted && <DecisionTab data={incomeQuotaInserted ?? []} />}
+        {showIncomeUpdated && <DecisionTab data={incomeQuotaUpdated ?? []} />}
         {showIncomeDeleted && <DecisionTab data={incomeQuotaDeleted ?? []} />}
+
         {showScoreModels && <DecisionTab data={decisions.scoreModels} />}
         {showScoreModelsInserted && (
           <DecisionTab data={scoreModelsInserted ?? []} />
+        )}
+        {showScoreModelsUpdated && (
+          <DecisionTab data={scoreModelsUpdated ?? []} />
         )}
         {showScoreModelsDeleted && (
           <DecisionTab data={scoreModelsDeleted ?? []} />
@@ -113,6 +137,7 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
 
         {showMinimum && <DecisionTab data={decisions.minimum} />}
         {showMinimumInserted && <DecisionTab data={minimumInserted ?? []} />}
+        {showMinimumUpdated && <DecisionTab data={minimumUpdated ?? []} />}
         {showMinimumDeleted && <DecisionTab data={minimumDeleted ?? []} />}
 
         {showBasicNotifFormat && (
@@ -120,6 +145,9 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         )}
         {showBasicNotifFormatInserted && (
           <DecisionTab data={basicNotifFormatInserted ?? []} />
+        )}
+        {showBasicNotifFormatUpdated && (
+          <DecisionTab data={basicNotifFormatUpdated ?? []} />
         )}
         {showBasicNotifFormatDeleted && (
           <DecisionTab data={basicNotifFormatDeleted ?? []} />
@@ -131,6 +159,9 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showBasicNotifRecipientInserted && (
           <DecisionTab data={basicNotifRecipientInserted ?? []} />
         )}
+        {showBasicNotifRecipientUpdated && (
+          <DecisionTab data={basicNotifRecipientUpdated ?? []} />
+        )}
         {showBasicNotifRecipientDeleted && (
           <DecisionTab data={basicNotifRecipientDeleted ?? []} />
         )}
@@ -141,6 +172,9 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
         {showMinCredBureauRiskInserted && (
           <DecisionTab data={minCredBureauRiskScoreInserted ?? []} />
         )}
+        {showMinCredBureauRiskUpdated && (
+          <DecisionTab data={minCredBureauRiskScoreUpdated ?? []} />
+        )}
         {showMinCredBureauRiskDeleted && (
           <DecisionTab data={minCredBureauRiskScoreDeleted ?? []} />
         )}
@@ -149,6 +183,9 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
 
         {showNotifChanneInserted && (
           <DecisionTab data={notifChannelInserted ?? []} />
+        )}
+        {showNotifChanneUpdated && (
+          <DecisionTab data={notifChannelUpdated ?? []} />
         )}
         {showNotifChanneDeleted && (
           <DecisionTab data={notifChannelDeleted ?? []} />
@@ -160,6 +197,9 @@ const MoreDetailsModalUI = (props: IMoreDetailsModalUI) => {
 
         {showRiskScoreApiUrlInserted && (
           <DecisionTab data={riskScoreApiUrlInserted ?? []} />
+        )}
+        {showRiskScoreApiUrlUpdated && (
+          <DecisionTab data={riskScoreApiUrlUpdated ?? []} />
         )}
         {showRiskScoreApiUrlDeleted && (
           <DecisionTab data={riskScoreApiUrlDeleted ?? []} />

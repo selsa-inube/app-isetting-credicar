@@ -57,6 +57,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showRiskScoreApiUrl,
     rulesData,
     disabledButton,
+    setEditDecision,
     setDecisionData,
     handleFinishForm,
     handleToggleInfoModal,
@@ -175,6 +176,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       setDecisionData={setDecisionData}
       disabledButton={disabledButton}
       handleToggleDateModal={handleToggleDateModal}
+      setEditDecision={setEditDecision}
     />
   );
 };
