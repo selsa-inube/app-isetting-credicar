@@ -140,8 +140,14 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     methods: methodsArray.join(", "),
     methodsAdded: methodsAdded.join(", "),
     methodsRemoved: methodsRemoved.join(", "),
-    additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
-    guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
+    additionalDebtors:
+      additionalDebtors !== undefined
+        ? valueBoolean(additionalDebtors ?? EBooleanText.NO)
+        : undefined,
+    guarantees:
+      realGuarantees !== undefined
+        ? valueBoolean(realGuarantees ?? EBooleanText.NO)
+        : undefined,
     creditBureaus: validateOptionVerification(
       optionsGenDecision,
       "creditBureaus",

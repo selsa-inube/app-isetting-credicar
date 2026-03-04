@@ -14,13 +14,13 @@ const useRules = (props: IUseRules) => {
     value: string | boolean | number | undefined,
   ) => {
     const data =
-      typeof value === "boolean"
+      typeof value !== "boolean"
         ? value
+        : value === true
           ? EBooleanText.Y
-          : EBooleanText.N
-        : value;
+          : EBooleanText.N;
 
-    return value
+    return value !== undefined && value !== null && value !== ""
       ? [
           {
             decisionsByRule: [
