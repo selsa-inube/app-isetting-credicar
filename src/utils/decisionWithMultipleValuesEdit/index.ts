@@ -64,7 +64,9 @@ const decisionWithMultipleValuesEdit = (
   return {
     ruleName,
     decisionsByRule,
-    modifyJustification: `${decisionsLabels.modifyJustification}${ruleName}`,
+    ...(!option && {
+      modifyJustification: `${decisionsLabels.modifyJustification}${ruleName}`,
+    }),
   };
 };
 

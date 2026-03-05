@@ -52,20 +52,55 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     option,
   } = props;
 
+  const initial: IRuleState = {
+    ReciprocityFactorForCreditLimit: (contributionsData ?? []).map((data) => ({
+      ...data,
+      ruleName: data.ruleName ?? ENameRules.CONTRIBUTIONS_PORTFOLIO,
+    })),
+    RiskScoreFactorForCreditLimit: (incomeData ?? []).map((data) => ({
+      ...data,
+      ruleName: data.ruleName ?? ENameRules.INCOME_PORTFOLIO,
+    })),
+    MinimumSubsistenceReservePercentage: (minimumIncomeData ?? []).map(
+      (data) => ({
+        ...data,
+        ruleName: data.ruleName ?? ENameRules.MINIMUM_INCOME_PERCENTAGE,
+      }),
+    ),
+    CreditRiskScoringModel: (scoreModelsData ?? []).map((data) => ({
+      ...data,
+      ruleName: data.ruleName ?? ENameRules.SCORE_MODELS,
+    })),
+    BasicNotificationFormat: (basicNotificFormatData ?? []).map((data) => ({
+      ...data,
+      ruleName: data.ruleName ?? ENameRules.BASIC_NOTIFICATION_FORMAT,
+    })),
+    BasicNotificationRecipient: (basicNotificationRecData ?? []).map(
+      (data) => ({
+        ...data,
+        ruleName: data.ruleName ?? ENameRules.BASIC_NOTIFICATION_RECIPIENT,
+      }),
+    ),
+    MinimumCreditBureauRiskScore: (minCredBureauRiskScoreData ?? []).map(
+      (data) => ({
+        ...data,
+        ruleName: data.ruleName ?? ENameRules.MINIMUM_CREDIT_BUREAU_RISKSCORE,
+      }),
+    ),
+    NotificationChannel: (notifChannelData ?? []).map((data) => ({
+      ...data,
+      ruleName: data.ruleName ?? ENameRules.NOTIFICATION_CHANNEL,
+    })),
+    RiskScoreApiUrl: (riskScoreApiUrlData ?? []).map((data) => ({
+      ...data,
+      ruleName: data.ruleName ?? ENameRules.RISKSCORE_API_URL,
+    })),
+  };
+
   const [isCurrentFormValid, setIsCurrentFormValid] = useState<boolean>(false);
   const [showRequestProcessModal, setShowRequestProcessModal] =
     useState<boolean>(false);
-  const [rulesData, setRulesData] = useState<IRuleState>({
-    ReciprocityFactorForCreditLimit: contributionsData ?? [],
-    RiskScoreFactorForCreditLimit: incomeData ?? [],
-    MinimumSubsistenceReservePercentage: minimumIncomeData ?? [],
-    CreditRiskScoringModel: scoreModelsData ?? [],
-    BasicNotificationFormat: basicNotificFormatData ?? [],
-    BasicNotificationRecipient: basicNotificationRecData ?? [],
-    MinimumCreditBureauRiskScore: minCredBureauRiskScoreData ?? [],
-    NotificationChannel: notifChannelData ?? [],
-    RiskScoreApiUrl: riskScoreApiUrlData ?? [],
-  });
+  const [rulesData, setRulesData] = useState<IRuleState>(initial);
   const [newDecisions, setNewDecisions] = useState<IRuleDecisionExtended[]>();
   const [dateDecisions, setDateDecisions] = useState<IDateVerification>();
   const [generalDecisions, setGeneralDecisions] = useState<
@@ -188,8 +223,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const valueTransactionOperation = (value: boolean) =>
     value ? ETransactionOperation.INSERT : ETransactionOperation.DELETE;
 
-  const calculationValues = (option ||
-    initialGeneralData.PaymentCapacityBasedCreditLimit !==
+  const calculationValues = (option
+    ? formValues.PaymentCapacityBasedCreditLimit
+    : initialGeneralData.PaymentCapacityBasedCreditLimit !==
       formValues.PaymentCapacityBasedCreditLimit) && {
     ...(!option && {
       transactionOperation: valueTransactionOperation(
@@ -199,8 +235,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     value: ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY,
   };
 
-  const factorValues = (option ||
-    initialGeneralData.RiskAnalysisBasedCreditLimit !==
+  const factorValues = (option
+    ? formValues.RiskAnalysisBasedCreditLimit
+    : initialGeneralData.RiskAnalysisBasedCreditLimit !==
       formValues.RiskAnalysisBasedCreditLimit) && {
     ...(!option && {
       transactionOperation: valueTransactionOperation(
@@ -210,8 +247,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     value: ERulesOfDecisions.RISK_FACTOR,
   };
 
-  const reciprocityValues = (option ||
-    initialGeneralData.ReciprocityBasedCreditLimit !==
+  const reciprocityValues = (option
+    ? formValues.ReciprocityBasedCreditLimit
+    : initialGeneralData.ReciprocityBasedCreditLimit !==
       formValues.ReciprocityBasedCreditLimit) && {
     ...(!option && {
       transactionOperation: valueTransactionOperation(
@@ -297,12 +335,12 @@ const useNewDecisions = (props: IUseNewDecisions) => {
 
     Object.entries(prevRefsMap).forEach(([key, prevRef]) => {
       const rules = rulesData[key as keyof IRuleState];
-
       const newInsert = getNewInsertDecisions(
         prevRef,
         rules,
         option,
         dateDecisions?.date,
+        key,
       );
 
       const newUpdate = getUpdateDecisionsPolicies(
@@ -344,7 +382,9 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       if (validMethods.length > 0) {
         methods = {
           ruleName: ENameRules.METHODS,
-          modifyJustification: `${decisionsLabels.modifyJustification} ${ENameRules.METHODS}`,
+          ...(!option && {
+            modifyJustification: `${decisionsLabels.modifyJustification} ${ENameRules.METHODS}`,
+          }),
           decisionsByRule: validMethods.map((method) => ({
             decisionId: getDecisionIdMethods(methodsData, method.value),
             effectiveFrom: String(formatDate(new Date())),
@@ -375,13 +415,26 @@ const useNewDecisions = (props: IUseNewDecisions) => {
 
   const disabledButton = useMemo(() => {
     const { insertValues, updateValues, deleteValues } = rulesDecisions;
+
+    if (option) {
+      const hasRulesDataChanged =
+        // eslint-disable-next-line @typescript-eslint/array-type
+        (Object.keys(initial) as Array<keyof IRuleState>).some((key) => {
+          const initialData = JSON.stringify(initial[key] ?? []);
+          const currentData = JSON.stringify(rulesData[key] ?? []);
+          return initialData !== currentData;
+        });
+
+      return hasRulesDataChanged;
+    }
+
     return (
       insertValues.length > 0 ||
       updateValues.length > 0 ||
       deleteValues.length > 0 ||
       generalDecisions.length > 0
     );
-  }, [rulesDecisions, generalDecisions]);
+  }, [rulesDecisions, generalDecisions, rulesData]);
 
   useEffect(() => {
     const { insertValues, updateValues, deleteValues } = rulesDecisions;
