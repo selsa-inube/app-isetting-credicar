@@ -49,8 +49,8 @@ const StyledContentImg = styled(Link)`
 `;
 
 const StyledLogo = styled.img`
-  max-width: 150px;
-  max-height: 48px;
+  max-width: 100px;
+  max-height: 32px;
   height: auto;
 `;
 
