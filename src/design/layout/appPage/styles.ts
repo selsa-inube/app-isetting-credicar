@@ -7,8 +7,14 @@ interface IStyledCollapseIcon {
 }
 
 const StyledAppPage = styled.div`
-  display: inherit;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   box-sizing: border-box;
+  margin: auto;
+  max-width: 1440px;
+  outline: 1px solid
+    ${({ theme }) => theme?.palette?.neutral?.N40 ?? inube.palette.neutral.N40};
 `;
 
 const StyledContainer = styled.div`
@@ -24,6 +30,7 @@ const StyledContainer = styled.div`
 interface IStyledMain {
   $isMobile: boolean;
   $maxWidthPage: string;
+  $fullWidth: boolean;
 }
 
 const StyledMain = styled.main<IStyledMain>`
@@ -31,8 +38,7 @@ const StyledMain = styled.main<IStyledMain>`
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  width: auto;
-  width: 100%;
+  max-width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "1192px")};
   height: calc(100vh - 54px);
   overflow-y: auto;
 

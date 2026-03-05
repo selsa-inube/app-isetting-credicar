@@ -15,6 +15,7 @@ import { IHomeUI } from "@ptypes/home/IHomeUI";
 import {
   StyledCollapse,
   StyledCollapseIcon,
+  StyledContainerPage,
   StyledFooter,
   StyledHeaderContainer,
   StyledLogo,
@@ -45,7 +46,7 @@ const HomeUI = (props: IHomeUI) => {
   } = props;
 
   return (
-    <>
+    <StyledContainerPage>
       <BoxContainer
         width="100%"
         direction="column"
@@ -188,7 +189,7 @@ const HomeUI = (props: IHomeUI) => {
           </StyledFooter>
         )}
       </BoxContainer>
-    </>
+    </StyledContainerPage>
   );
 };
 

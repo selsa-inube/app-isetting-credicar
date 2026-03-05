@@ -1,3 +1,4 @@
+import { inube } from "@inubekit/inubekit";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { tokens } from "@design/tokens";
@@ -20,6 +21,17 @@ interface IStyledContainerCards {
 interface IStyledFooter {
   $isMobile: boolean;
 }
+
+const StyledContainerPage = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin: auto;
+  max-width: 1440px;
+  outline: 1px solid
+    ${({ theme }) => theme?.palette?.neutral?.N40 ?? inube.palette.neutral.N40};
+`;
 
 const StyledContainer = styled.div`
   display: flex;
@@ -111,4 +123,5 @@ export {
   StyledContainerSection,
   StyledCollapseIcon,
   StyledCollapse,
+  StyledContainerPage,
 };

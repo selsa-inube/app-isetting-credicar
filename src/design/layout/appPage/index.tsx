@@ -98,7 +98,11 @@ const AppPage = () => {
             {!isTablet && (
               <Nav navigation={optionsNav} actions={actionsConfig()} />
             )}
-            <StyledMain $maxWidthPage={maxWidthPage} $isMobile={isTabletMain}>
+            <StyledMain
+              $maxWidthPage={maxWidthPage}
+              $isMobile={isTabletMain}
+              $fullWidth
+            >
               <Outlet />
             </StyledMain>
           </Grid>

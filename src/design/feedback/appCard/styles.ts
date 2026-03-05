@@ -31,7 +31,10 @@ const StyledAppCard = styled(Link)<IStyledAppCard>`
     background-color: ${({ theme }) =>
       theme?.appCard.background.color.hover ??
       tokensAppCard.background.color.hover};
-    box-shadow: none;
+    box-shadow: 1px 1px 4px 3px
+      ${({ theme }) =>
+        theme?.appCard.boxShadow.color.regular ??
+        tokensAppCard.boxShadow.color.regular};
   }
   ${({ $isMobile }) =>
     $isMobile &&
