@@ -18,7 +18,7 @@ const RadioBusinessUnit = (props: IRadioBusinessUnit) => {
   const mediaQueries = ["(max-width: 532px)", "(max-width: 460px)"];
   const matches = useMediaQueries(mediaQueries);
   return (
-    <StyledRadioBusinessUnit>
+    <StyledRadioBusinessUnit $isTablet={matches["(max-width: 532px)"]}>
       <Grid
         templateColumns={
           matches["(max-width: 532px)"] ? "auto 1fr" : "auto 1fr 130px"

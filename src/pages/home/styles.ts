@@ -25,7 +25,6 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding-bottom: ${tokens.spacing.s500};
   height: 100vh;
   overflow-y: auto;
 `;
@@ -50,8 +49,8 @@ const StyledContentImg = styled(Link)`
 `;
 
 const StyledLogo = styled.img`
-  max-width: 100px;
-  max-height: 32px;
+  max-width: 150px;
+  max-height: 48px;
   height: auto;
 `;
 
@@ -81,8 +80,8 @@ const StyledContainerCards = styled.div<IStyledContainerCards>`
 const StyledFooter = styled.footer<IStyledFooter>`
   display: flex;
   margin-top: auto;
-  padding: ${tokens.spacing.s0} ${tokens.spacing.s1600} ${tokens.spacing.s0};
-  justify-content: center;
+  padding: ${tokens.spacing.s100} ${tokens.spacing.s200} ${tokens.spacing.s100};
+  justify-content: end;
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`

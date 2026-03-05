@@ -1,8 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { Stack, Text, Grid } from "@inubekit/inubekit";
 
-import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
+import { businessUnitsLabel } from "@config/businessUnits/businessUnitsLabel";
 import { tokens } from "@design/tokens";
+import { IAppData } from "@ptypes/context/authAndPortalDataProvider/IAppData";
 import {
   StyledWelcomeContainer,
   StyledOutletContainer,
@@ -35,18 +36,23 @@ const SelectBusinessUnitsUI = (props: ISelectBusinessUnitsUI) => {
           }
         >
           <Stack direction="column" alignItems="center">
+            <Text weight="bold" type="headline" size="small" textAlign="center">
+              {businessUnitsLabel.welcome}
+            </Text>
             <Text
-              as="h1"
               type="headline"
               size={screenTablet ? "medium" : "large"}
               textAlign="center"
             >
-              Bienvenido a iSetting Credicar
+              {businessUnitsLabel.portalName}
             </Text>
           </Stack>
           <StyledImage
-            src={appData.businessManager.urlLogo}
-            alt="Sistemas Enlinea"
+            src={
+              appData.businessManager.urlLogo ??
+              appData.businessManager.urlBrand
+            }
+            alt={appData.businessManager.abbreviatedName}
             width={imageWidth()}
           />
         </Stack>

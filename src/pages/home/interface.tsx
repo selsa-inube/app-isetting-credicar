@@ -179,7 +179,12 @@ const HomeUI = (props: IHomeUI) => {
         </BoxContainer>
         {dataExists && (
           <StyledFooter $isMobile={screenMobile}>
-            <StyledLogo src={appData.businessManager.urlBrand} />
+            <StyledLogo
+              src={
+                appData.businessManager.urlLogo ??
+                appData.businessManager.urlBrand
+              }
+            />
           </StyledFooter>
         )}
       </BoxContainer>
