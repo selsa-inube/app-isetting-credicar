@@ -46,6 +46,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showRiskScoreApiUrl,
     showContributions,
     disabledButton,
+    option,
     setEditDecision,
     handleToggleDateModal,
     setShowFactor,
@@ -67,12 +68,16 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       height="auto"
       backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="border-box"
-      borderColor={EComponentAppearance.DARK}
-      borderRadius={tokens.spacing.s100}
+      borderColor={
+        option ? EComponentAppearance.LIGHT : EComponentAppearance.DARK
+      }
+      borderRadius={option ? tokens.spacing.s0 : tokens.spacing.s100}
       padding={
-        smallScreen
-          ? `${tokens.spacing.s200}`
-          : `${tokens.spacing.s300} ${tokens.spacing.s800}`
+        option
+          ? ` ${tokens.spacing.s0}`
+          : smallScreen
+            ? `${tokens.spacing.s200}`
+            : `${tokens.spacing.s300} ${tokens.spacing.s800}`
       }
     >
       <Stack gap={tokens.spacing.s300} direction="column" height="auto">

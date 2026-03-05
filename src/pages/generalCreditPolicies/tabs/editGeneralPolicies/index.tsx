@@ -183,6 +183,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       disabledButton={disabledButton}
       handleToggleDateModal={handleToggleDateModal}
       setEditDecision={setEditDecision}
+      option={Boolean(option === EManagementType.IN_PROGRESS)}
     />
   );
 };

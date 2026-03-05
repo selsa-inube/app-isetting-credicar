@@ -417,13 +417,20 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     const { insertValues, updateValues, deleteValues } = rulesDecisions;
 
     if (option) {
-      const hasRulesDataChanged =
-        // eslint-disable-next-line @typescript-eslint/array-type
-        (Object.keys(initial) as Array<keyof IRuleState>).some((key) => {
-          const initialData = JSON.stringify(initial[key] ?? []);
-          const currentData = JSON.stringify(rulesData[key] ?? []);
-          return initialData !== currentData;
-        });
+      const hasRulesDataChanged = (
+        Object.keys(initial) as (keyof IRuleState)[]
+      ).some((key) => {
+        const initialData = initial[key] ?? [];
+        const currentData = rulesData[key] ?? [];
+
+        const extractRelevantFields = (arr: typeof initialData) =>
+          arr.map(({ value, effectiveFrom }) => ({ value, effectiveFrom }));
+
+        return (
+          JSON.stringify(extractRelevantFields(initialData)) !==
+          JSON.stringify(extractRelevantFields(currentData))
+        );
+      });
 
       return hasRulesDataChanged;
     }
