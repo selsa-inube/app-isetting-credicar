@@ -93,6 +93,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     minCredBureauRiskScoreData,
     notifChannelData,
     riskScoreApiUrlData,
+    option: Boolean(option === EManagementType.IN_PROGRESS),
   });
 
   const {

@@ -48,6 +48,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     minCredBureauRiskScoreData,
     notifChannelData,
     riskScoreApiUrlData,
+    option,
   } = props;
   const { appData } = useContext(AuthAndPortalData);
 
@@ -236,6 +237,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevRiskScoreApiUrlRef,
     user: appData.user.userAccount,
     editDecision,
+    option,
   });
 
   const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({

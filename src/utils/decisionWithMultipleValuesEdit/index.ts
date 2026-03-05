@@ -8,6 +8,7 @@ const decisionWithMultipleValuesEdit = (
   ruleName: string,
   value: string,
   prevValue: string,
+  option: boolean,
   data?: IRuleDecisionExtended[],
 ) => {
   const normalizeValues = (dataRule: string): string[] => {
@@ -24,6 +25,18 @@ const decisionWithMultipleValuesEdit = (
 
   const addedValues = [...currentValues].filter((v) => !prevValues.has(v));
   const deletedValues = [...prevValues].filter((v) => !currentValues.has(v));
+
+  if (option) {
+    const decisionsByRule = [...currentValues].map((val) => ({
+      value: val,
+      effectiveFrom: String(formatDate(new Date())),
+      decisionId: getDecisionIdMethods(data, val),
+    }));
+
+    return decisionsByRule.length > 0
+      ? { ruleName, decisionsByRule }
+      : undefined;
+  }
 
   if (addedValues.length === 0 && deletedValues.length === 0) {
     return undefined;

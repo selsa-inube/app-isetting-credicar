@@ -49,6 +49,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
     editDecision,
+    option,
   } = props;
 
   const [isCurrentFormValid, setIsCurrentFormValid] = useState<boolean>(false);
@@ -187,28 +188,36 @@ const useNewDecisions = (props: IUseNewDecisions) => {
   const valueTransactionOperation = (value: boolean) =>
     value ? ETransactionOperation.INSERT : ETransactionOperation.DELETE;
 
-  const calculationValues =
+  const calculationValues = (option ||
     initialGeneralData.PaymentCapacityBasedCreditLimit !==
-      formValues.PaymentCapacityBasedCreditLimit && {
+      formValues.PaymentCapacityBasedCreditLimit) && {
+    ...(!option && {
       transactionOperation: valueTransactionOperation(
         formValues.PaymentCapacityBasedCreditLimit,
       ),
-      value: ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY,
-    };
+    }),
+    value: ERulesOfDecisions.CALCULATION_BY_PAYMENT_CAPACITY,
+  };
 
-  const factorValues = initialGeneralData.RiskAnalysisBasedCreditLimit !==
-    formValues.RiskAnalysisBasedCreditLimit && {
-    transactionOperation: valueTransactionOperation(
-      formValues.RiskAnalysisBasedCreditLimit ?? false,
-    ),
+  const factorValues = (option ||
+    initialGeneralData.RiskAnalysisBasedCreditLimit !==
+      formValues.RiskAnalysisBasedCreditLimit) && {
+    ...(!option && {
+      transactionOperation: valueTransactionOperation(
+        formValues.RiskAnalysisBasedCreditLimit ?? false,
+      ),
+    }),
     value: ERulesOfDecisions.RISK_FACTOR,
   };
 
-  const reciprocityValues = initialGeneralData.ReciprocityBasedCreditLimit !==
-    formValues.ReciprocityBasedCreditLimit && {
-    transactionOperation: valueTransactionOperation(
-      formValues.ReciprocityBasedCreditLimit ?? false,
-    ),
+  const reciprocityValues = (option ||
+    initialGeneralData.ReciprocityBasedCreditLimit !==
+      formValues.ReciprocityBasedCreditLimit) && {
+    ...(!option && {
+      transactionOperation: valueTransactionOperation(
+        formValues.ReciprocityBasedCreditLimit ?? false,
+      ),
+    }),
     value: ERulesOfDecisions.RECIPROCITY_OF_CONTRIBUTIONS,
   };
 
@@ -218,6 +227,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.ADDITIONAL_DEBTORS,
     formValues.additionalDebtors ?? "",
     initialGeneralData.additionalDebtors,
+    option,
     additionalDebtorsData,
   );
 
@@ -225,6 +235,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.REAL_GUARANTEES,
     formValues.realGuarantees ?? "",
     initialGeneralData.realGuarantees,
+    option,
     realGuaranteesData,
   );
 
@@ -232,6 +243,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.INQUIRY_VALIDITY_PERIOD,
     formValues.inquiryValidityPeriod ?? undefined,
     String(initialGeneralData.inquiryValidityPeriod ?? 0),
+    option,
     inquiryValidityPeriodData,
   );
 
@@ -239,6 +251,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.CREDIT_BUREAUS_CONSULTATION_REQUIRED,
     formValues.creditBureausConsultReq ?? undefined,
     String(initialGeneralData.creditBureausConsultReq ?? ""),
+    option,
     creditBureausConsultReqData,
   );
 
@@ -246,12 +259,14 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.LINE_CREDIT_PAYROLL_ADVANCE,
     formValues.lineCreditPayrollAdvance ?? "",
     initialGeneralData.lineCreditPayrollAdvance,
+    option,
     lineCreditPayrollAdvanceData,
   );
   const lineCreditPayrollSpecialAdvance = decisionWithoutConditions(
     ENameRules.LINE_CREDIT_PAYROLL_SPECIAL_ADVANCE,
     formValues.lineCreditPayrollSpecialAdvance ?? "",
     initialGeneralData.lineCreditPayrollSpecialAdvance,
+    option,
     lineCreditPayrollSpecialAdvanceData,
   );
 
@@ -259,6 +274,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
     ENameRules.MAXIMUM_NOTIFICATION_DOCUMENT_SIZE,
     formValues.maximumNotifDocSize ?? undefined,
     String(initialGeneralData.inquiryValidityPeriod ?? 0),
+    option,
     maximumNotifDocSizeData,
   );
 
@@ -285,6 +301,7 @@ const useNewDecisions = (props: IUseNewDecisions) => {
       const newInsert = getNewInsertDecisions(
         prevRef,
         rules,
+        option,
         dateDecisions?.date,
       );
 
@@ -292,12 +309,14 @@ const useNewDecisions = (props: IUseNewDecisions) => {
         editDecision,
         prevRef,
         rules,
+        option,
         dateDecisions?.date,
       );
 
       const newDelete = getNewDeletedDecisions(
         prevRef,
         rules,
+        option,
         dateDecisions?.date,
       );
 

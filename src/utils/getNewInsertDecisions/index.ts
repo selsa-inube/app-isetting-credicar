@@ -11,6 +11,7 @@ import { normalizedCodeList } from "../normalizedCodeList";
 const getNewInsertDecisions = (
   prevRef: React.MutableRefObject<IRuleDecisionExtended[]>,
   current: IRuleDecisionExtended[],
+  option: boolean,
   dateFrom?: string,
 ) => {
   if (!arraysEqual(prevRef.current, current)) {
@@ -35,20 +36,24 @@ const getNewInsertDecisions = (
                             condition.listOfPossibleValuesHidden?.list,
                           )
                         : condition.value,
-                    transactionOperation: ETransactionOperation.INSERT,
+                    ...(!option && {
+                      transactionOperation: ETransactionOperation.INSERT,
+                    }),
                   })) as IConditionsTheDecision[]) || [];
 
               return {
-                transactionOperation:
-                  conditionsThatEstablishesTheDecision.length > 0
-                    ? ETransactionOperation.INSERT
-                    : undefined,
+                ...(!option && {
+                  transactionOperation:
+                    conditionsThatEstablishesTheDecision.length > 0
+                      ? ETransactionOperation.INSERT
+                      : undefined,
+                }),
                 conditionsThatEstablishesTheDecision,
               };
             })
             .filter(
               (group: IConditionGroups) =>
-                group.conditionsThatEstablishesTheDecision.length > 0,
+                (group.conditionsThatEstablishesTheDecision?.length ?? 0) > 0,
             );
 
           if (mappedGroups.length > 0) {
@@ -66,12 +71,16 @@ const getNewInsertDecisions = (
             : formatDateDecision(decision.effectiveFrom as string),
           ...(validUntil && { validUntil }),
           value: decision.value,
-          transactionOperation: ETransactionOperation.INSERT,
+          ...(!option && {
+            transactionOperation: ETransactionOperation.INSERT,
+          }),
           ...(conditionGroups && { conditionGroups }),
         };
 
         return {
-          modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+          ...(!option && {
+            modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+          }),
           ruleName: decision.ruleName,
           decisionsByRule: [decisionObject],
         };

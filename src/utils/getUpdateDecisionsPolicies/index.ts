@@ -9,6 +9,7 @@ const getUpdateDecisionsPolicies = (
   useCase: boolean,
   prevRef: React.MutableRefObject<IRuleDecisionExtended[]>,
   current: IRuleDecisionExtended[],
+  option: boolean,
   dateFrom?: string,
 ) => {
   if (!useCase) return;
@@ -86,14 +87,18 @@ const getUpdateDecisionsPolicies = (
                           condition.listOfPossibleValuesHidden?.list,
                         )
                       : condition.value,
-                  transactionOperation: validateTransOperation,
+                  ...(!option && {
+                    transactionOperation: validateTransOperation,
+                  }),
                 })) as IConditionsTheDecision[]) || [];
 
             return {
-              transactionOperation:
-                conditionsThatEstablishesTheDecision.length > 0
-                  ? validateTransOperation
-                  : undefined,
+              ...(!option && {
+                transactionOperation:
+                  conditionsThatEstablishesTheDecision.length > 0
+                    ? validateTransOperation
+                    : undefined,
+              }),
               conditionGroupId,
               conditionsThatEstablishesTheDecision,
             };
@@ -111,7 +116,9 @@ const getUpdateDecisionsPolicies = (
       const validUntil = decision.validUntil;
 
       return {
-        modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+        ...(!option && {
+          modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+        }),
         ruleName: decision.ruleName,
         decisionsByRule: [
           {
