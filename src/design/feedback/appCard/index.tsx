@@ -29,7 +29,7 @@ const AppCard = (props: IAppCard) => {
   return (
     <StyledAppCard to={url ?? ""} $isMobile={screenMobile}>
       <Stack justifyContent="space-between">
-        <Text type="title" size="medium" weight="bold">
+        <Text type="title" size="medium" weight="bold" ellipsis>
           {label}
         </Text>
         <Icon icon={icon} appearance="dark" size="22px" cursorHover />
