@@ -333,7 +333,7 @@ const sistemasenlinea = {
   appCard: {
     boxShadow: {
       color: {
-        regular: inube.palette.neutral.N30,
+        regular: inube.palette.neutral.N40,
       },
     },
     background: {
