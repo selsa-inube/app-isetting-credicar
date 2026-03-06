@@ -76,22 +76,26 @@ const StyledMain = styled.main<IStyledMain>`
 
 const StyledHeaderContainer = styled.div`
   position: relative;
+  & div > div {
+    cursor: pointer;
+  }
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
   transition: all 500ms ease;
   position: absolute;
-  top: 13.5px;
+  top: ${({ $isTablet }) => ($isTablet ? "15px" : "13px")};
   transform: ${({ $collapse }) =>
     $collapse ? "rotate(-90deg)" : "rotate(90deg)"};
-  left: ${({ $isTablet }) => ($isTablet ? "150px" : "142px")};
+  margin-left: 110px;
+  z-index: 3;
 `;
 
 const StyledCollapse = styled.div`
   position: absolute;
   margin-top: 55px;
-  z-index: 2;
+  z-index: 1;
 `;
 
 export {

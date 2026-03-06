@@ -26,7 +26,7 @@ const RadioBusinessUnit = (props: IRadioBusinessUnit) => {
         padding={
           matches["(max-width: 532px)"]
             ? `${tokens.spacing.s100} ${tokens.spacing.s200}`
-            : `${tokens.spacing.s200} ${tokens.spacing.s300}`
+            : `${tokens.spacing.s200} ${tokens.spacing.s250}`
         }
         height={matches["(max-width: 532px)"] ? "auto" : "72px"}
         alignItems="center"

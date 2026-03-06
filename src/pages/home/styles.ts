@@ -90,20 +90,26 @@ const StyledContainerCards = styled.div<IStyledContainerCards>`
 `;
 
 const StyledFooter = styled.footer<IStyledFooter>`
+  width: 100%;
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: ${tokens.spacing.s100} ${tokens.spacing.s200};
+  background-color: ${({ theme }) =>
+    theme?.palette?.neutral?.N10 || inube.palette.neutral.N10};
+  box-sizing: border-box;
   margin-top: auto;
-  padding: ${tokens.spacing.s100} ${tokens.spacing.s200} ${tokens.spacing.s100};
-  justify-content: end;
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
   transition: all 500ms ease;
   position: absolute;
-  top: 13.5px;
+  top: ${({ $isTablet }) => ($isTablet ? "15px" : "13px")};
   transform: ${({ $collapse }) =>
     $collapse ? "rotate(-90deg)" : "rotate(90deg)"};
-  left: ${({ $isTablet }) => ($isTablet ? "150px" : "142px")};
+  margin-left: 110px;
+  z-index: 3;
 `;
 
 const StyledCollapse = styled.div`

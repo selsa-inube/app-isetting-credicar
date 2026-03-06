@@ -11,7 +11,7 @@ const StyledAppCard = styled(Link)<IStyledAppCard>`
   box-sizing: border-box;
   padding: ${`${tokens.spacing.s150} ${tokens.spacing.s300}`};
   height: 130px;
-  width: ${({ $isMobile }) => ($isMobile ? "296px" : "305px")};
+  width: ${({ $isMobile }) => ($isMobile ? "296px" : "240px")};
   min-height: ${({ $isMobile }) => $isMobile && "100px"};
   gap: ${tokens.spacing.s150};
   display: flex;
@@ -21,7 +21,7 @@ const StyledAppCard = styled(Link)<IStyledAppCard>`
   background-color: ${({ theme }) =>
     theme?.appCard.background.color.regular ??
     tokensAppCard.background.color.regular};
-  box-shadow: 1px 1px 4px 3px
+  box-shadow: 2px 1px 4px 3px
     ${({ theme }) =>
       theme?.appCard.boxShadow.color.regular ??
       tokensAppCard.boxShadow.color.regular};
