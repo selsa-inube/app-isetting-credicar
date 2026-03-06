@@ -27,6 +27,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     setSendData,
     sendData,
     setShowModal,
+    setProcessedModal,
     useCase,
     token,
     optionRequest,
@@ -42,6 +43,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [hasError, setHasError] = useState(false);
+
   const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
@@ -150,9 +152,13 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       handleStatusChange();
     }
     if (useCase !== EUseCase.DELETE) {
-      setTimeout(() => {
-        navigate(navigatePage);
-      }, 3000);
+      if (isStatusCloseModal() || (optionRequest && isStatusRequestFinished()))
+        setTimeout(() => {
+          navigate(navigatePage);
+        }, 3000);
+      if (!optionRequest && isStatusRequestFinished()) {
+        setProcessedModal(true);
+      }
     }
   };
 

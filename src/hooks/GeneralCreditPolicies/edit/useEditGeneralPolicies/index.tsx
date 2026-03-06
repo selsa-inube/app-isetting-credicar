@@ -111,6 +111,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
+  const [processedModal, setProcessedModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const [editDecision, setEditDecision] = useState<boolean>(false);
@@ -344,6 +345,16 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     setShowGoBackModal(false);
   };
 
+  const handleProcessed = () => {
+    setProcessedModal(false);
+    navigate("/credit-lines");
+  };
+
+  const handleCloseProcessed = () => {
+    setProcessedModal(false);
+    navigate("/");
+  };
+
   const handleGoBack = () => {
     setCanRefresh(true);
     navigate(-1);
@@ -467,6 +478,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
     disabledButton,
+    processedModal,
+    handleProcessed,
+    setProcessedModal,
+    handleCloseProcessed,
     setEditDecision,
     setDecisionData,
     handleToggleInfoModal,

@@ -52,6 +52,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [decisionData, setDecisionData] = useState<IRuleDecision[]>([]);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
+  const [processedModal, setProcessedModal] = useState(false);
 
   const [rulesData, setRulesData] = useState<IRuleState>({
     ReciprocityFactorForCreditLimit: [],
@@ -292,6 +293,16 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     navigate("/");
   };
 
+  const handleProcessed = () => {
+    setProcessedModal(false);
+    navigate("/credit-lines");
+  };
+
+  const handleCloseProcessed = () => {
+    setProcessedModal(false);
+    navigate("/");
+  };
+
   return {
     currentStep,
     formValues,
@@ -307,6 +318,9 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     disabledButton,
     rulesData,
     optionsGenDecision,
+    processedModal,
+    handleProcessed,
+    handleCloseProcessed,
     setOptionsGenDecision,
     setDecisionData,
     setRulesData,
@@ -323,6 +337,7 @@ const useAddGeneralPolicies = (props: IUseAddGenCredPolicies) => {
     setIsCurrentFormValid,
     setShowModal,
     setShowRequestProcessModal,
+    setProcessedModal,
   };
 };
 
