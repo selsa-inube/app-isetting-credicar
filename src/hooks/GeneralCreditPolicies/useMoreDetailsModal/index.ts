@@ -13,6 +13,8 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
 
   const showContribInserted =
     isMoreDetails && isSelected === detailsTabsConfig.contribQuotaIncluded?.id;
+  const showContribUpdated =
+    isMoreDetails && isSelected === detailsTabsConfig.contribQuotaUpdated?.id;
   const showContribDeleted =
     isMoreDetails && isSelected === detailsTabsConfig.contribQuotaRemoved?.id;
 
@@ -23,6 +25,9 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
 
   const showIncomeInserted =
     isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaIncluded?.id;
+
+  const showIncomeUpdated =
+    isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaUpdated?.id;
 
   const showIncomeDeleted =
     isMoreDetails && isSelected === detailsTabsConfig.incomeQuotaRemoved?.id;
@@ -35,6 +40,9 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
   const showScoreModelsInserted =
     isMoreDetails && isSelected === detailsTabsConfig.scoreModelsIncluded?.id;
 
+  const showScoreModelsUpdated =
+    isMoreDetails && isSelected === detailsTabsConfig.scoreModelsUpdated?.id;
+
   const showScoreModelsDeleted =
     isMoreDetails && isSelected === detailsTabsConfig.scoreModelsRemoved?.id;
 
@@ -45,6 +53,9 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
 
   const showMinimumInserted =
     isMoreDetails && isSelected === detailsTabsConfig.minimumIncomeIncluded?.id;
+
+  const showMinimumUpdated =
+    isMoreDetails && isSelected === detailsTabsConfig.minimumIncomeUpdated?.id;
 
   const showMinimumDeleted =
     isMoreDetails && isSelected === detailsTabsConfig.minimumIncomeRemoved?.id;
@@ -57,6 +68,10 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
   const showBasicNotifFormatInserted =
     isMoreDetails &&
     isSelected === detailsTabsConfig.basicNotifFormatIncluded?.id;
+
+  const showBasicNotifFormatUpdated =
+    isMoreDetails &&
+    isSelected === detailsTabsConfig.basicNotifFormatUpdated?.id;
 
   const showBasicNotifFormatDeleted =
     isMoreDetails &&
@@ -71,6 +86,10 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
     isMoreDetails &&
     isSelected === detailsTabsConfig.basicNotifRecipientIncluded?.id;
 
+  const showBasicNotifRecipientUpdated =
+    isMoreDetails &&
+    isSelected === detailsTabsConfig.basicNotifRecipientUpdated?.id;
+
   const showBasicNotifRecipientDeleted =
     isMoreDetails &&
     isSelected === detailsTabsConfig.basicNotifRecipientRemoved?.id;
@@ -84,6 +103,10 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
     isMoreDetails &&
     isSelected === detailsTabsConfig.minCredBureauRiskScoreIncluded?.id;
 
+  const showMinCredBureauRiskUpdated =
+    isMoreDetails &&
+    isSelected === detailsTabsConfig.minCredBureauRiskScoreUpdated?.id;
+
   const showMinCredBureauRiskDeleted =
     isMoreDetails &&
     isSelected === detailsTabsConfig.minCredBureauRiskScoreRemoved?.id;
@@ -96,6 +119,10 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
   const showNotifChanneInserted =
     isMoreDetails &&
     isSelected === detailsTabsConfig.notificationChannelIncluded?.id;
+
+  const showNotifChanneUpdated =
+    isMoreDetails &&
+    isSelected === detailsTabsConfig.notificationChannelUpdated?.id;
 
   const showNotifChanneDeleted =
     isMoreDetails &&
@@ -113,6 +140,10 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
   const showRiskScoreApiUrlDeleted =
     isMoreDetails &&
     isSelected === detailsTabsConfig.riskScoreApiUrlRemoved?.id;
+
+  const showRiskScoreApiUrlUpdated =
+    isMoreDetails &&
+    isSelected === detailsTabsConfig.riskScoreApiUrlUpdated?.id;
 
   return {
     showGeneralDecisionsTab,
@@ -143,6 +174,15 @@ const useMoreDetailsModal = (props: IUseMoreDetailsModal) => {
     showRiskScoreApiUrl,
     showRiskScoreApiUrlInserted,
     showRiskScoreApiUrlDeleted,
+    showContribUpdated,
+    showIncomeUpdated,
+    showScoreModelsUpdated,
+    showMinimumUpdated,
+    showBasicNotifFormatUpdated,
+    showBasicNotifRecipientUpdated,
+    showMinCredBureauRiskUpdated,
+    showNotifChanneUpdated,
+    showRiskScoreApiUrlUpdated,
   };
 };
 

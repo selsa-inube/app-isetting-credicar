@@ -59,6 +59,15 @@ const Details = (props: IDetails) => {
     notifChannelDeleted,
     riskScoreApiUrlInserted,
     riskScoreApiUrlDeleted,
+    contribQuotaUpdated,
+    incomeQuotaUpdated,
+    scoreModelsUpdated,
+    minimumUpdated,
+    basicNotifFormatUpdated,
+    basicNotifRecipientUpdated,
+    minCredBureauRiskScoreUpdated,
+    notifChannelUpdated,
+    riskScoreApiUrlUpdated,
   } = useDetailsPoliciesModal({
     data: moreDetailsData,
     detailsTabsConfig,
@@ -98,6 +107,15 @@ const Details = (props: IDetails) => {
       notifChannelDeleted={notifChannelDeleted}
       riskScoreApiUrlInserted={riskScoreApiUrlInserted}
       riskScoreApiUrlDeleted={riskScoreApiUrlDeleted}
+      contribQuotaUpdated={contribQuotaUpdated}
+      incomeQuotaUpdated={incomeQuotaUpdated}
+      scoreModelsUpdated={scoreModelsUpdated}
+      minimumUpdated={minimumUpdated}
+      basicNotifFormatUpdated={basicNotifFormatUpdated}
+      basicNotifRecipientUpdated={basicNotifRecipientUpdated}
+      minCredBureauRiskScoreUpdated={minCredBureauRiskScoreUpdated}
+      notifChannelUpdated={notifChannelUpdated}
+      riskScoreApiUrlUpdated={riskScoreApiUrlUpdated}
       titleRequest={titleRequest}
       isSelectedRequest={isSelectedRequest ?? defaultSelectedRequestTab ?? ""}
       filteredTabs={filteredRequestTabs}

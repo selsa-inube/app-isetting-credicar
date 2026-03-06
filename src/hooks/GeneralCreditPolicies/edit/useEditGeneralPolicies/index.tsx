@@ -112,6 +112,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const [showDateModal, setShowDateModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [editDecision, setEditDecision] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
@@ -234,6 +235,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
     user: appData.user.userAccount,
+    editDecision,
   });
 
   const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
@@ -463,6 +465,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
     disabledButton,
+    setEditDecision,
     setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,

@@ -7,8 +7,14 @@ interface IStyledCollapseIcon {
 }
 
 const StyledAppPage = styled.div`
-  display: inherit;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   box-sizing: border-box;
+  margin: auto;
+  max-width: 1440px;
+  outline: 1px solid
+    ${({ theme }) => theme?.palette?.neutral?.N40 ?? inube.palette.neutral.N40};
 `;
 
 const StyledContainer = styled.div`
@@ -24,6 +30,7 @@ const StyledContainer = styled.div`
 interface IStyledMain {
   $isMobile: boolean;
   $maxWidthPage: string;
+  $fullWidth: boolean;
 }
 
 const StyledMain = styled.main<IStyledMain>`
@@ -31,8 +38,7 @@ const StyledMain = styled.main<IStyledMain>`
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  width: auto;
-  width: 100%;
+  max-width: ${({ $fullWidth }) => ($fullWidth ? "100%" : "1192px")};
   height: calc(100vh - 54px);
   overflow-y: auto;
 
@@ -70,22 +76,26 @@ const StyledMain = styled.main<IStyledMain>`
 
 const StyledHeaderContainer = styled.div`
   position: relative;
+  & div > div {
+    cursor: pointer;
+  }
 `;
 
 const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   display: flex;
   transition: all 500ms ease;
   position: absolute;
-  top: 13.5px;
+  top: ${({ $isTablet }) => ($isTablet ? "15px" : "13px")};
   transform: ${({ $collapse }) =>
     $collapse ? "rotate(-90deg)" : "rotate(90deg)"};
-  left: ${({ $isTablet }) => ($isTablet ? "150px" : "142px")};
+  margin-left: 110px;
+  z-index: 3;
 `;
 
 const StyledCollapse = styled.div`
   position: absolute;
   margin-top: 55px;
-  z-index: 2;
+  z-index: 1;
 `;
 
 export {

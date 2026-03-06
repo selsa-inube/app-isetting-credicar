@@ -57,7 +57,7 @@ const AppPage = () => {
             navigation={optionsHeader}
             user={{
               username: appData.user.userName,
-              breakpoint: "1281px",
+              breakpoint: "848px",
             }}
             logoURL={RenderLogo({ imgUrl: appData.businessUnit.urlLogo })}
             menu={userMenu}
@@ -78,6 +78,7 @@ const AppPage = () => {
                 cursorHover
               />
             </StyledCollapseIcon>
+
             {collapse && (
               <StyledCollapse ref={businessUnitChangeRef}>
                 <BusinessUnitChange
@@ -89,6 +90,7 @@ const AppPage = () => {
             )}
           </>
         )}
+
         <StyledContainer>
           <Grid
             templateColumns={!isTablet ? "auto 1fr" : "1fr"}
@@ -98,7 +100,11 @@ const AppPage = () => {
             {!isTablet && (
               <Nav navigation={optionsNav} actions={actionsConfig()} />
             )}
-            <StyledMain $maxWidthPage={maxWidthPage} $isMobile={isTabletMain}>
+            <StyledMain
+              $maxWidthPage={maxWidthPage}
+              $isMobile={isTabletMain}
+              $fullWidth
+            >
               <Outlet />
             </StyledMain>
           </Grid>

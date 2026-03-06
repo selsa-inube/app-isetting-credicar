@@ -27,10 +27,11 @@ const StyledBusinessUnits = styled.div<IStyledBusinessUnits>`
 const StyledBusinessUnitsList = styled.div<IStyledBusinessUnitsList>`
   & > div {
     list-style: none;
-    max-height: 330px;
+    max-height: 310px;
     min-height: ${({ $isTablet }) => $isTablet && "200px"};
-    width: ${({ $isMobile }) => ($isMobile ? "250px" : "500px")};
+    width: ${({ $isMobile }) => ($isMobile ? "300px" : "500px")};
     overflow-y: auto;
+    gap: ${tokens.spacing.s200};
   }
 `;
 

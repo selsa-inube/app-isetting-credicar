@@ -15,6 +15,7 @@ const NewDecisionForm = (props: INewDecisions) => {
     disabledButton,
     labelBusinessRules,
     nameRule,
+    setEditDecision,
     onSave,
     decisionTemplateConfig,
     setDecisionData,
@@ -56,6 +57,7 @@ const NewDecisionForm = (props: INewDecisions) => {
     nameRule,
     decisionTemplateConfig,
     setDecisionData,
+    setEditDecision,
   });
 
   return (

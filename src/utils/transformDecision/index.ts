@@ -17,12 +17,14 @@ const transformDecision = (
   editDecision?: boolean,
   initialDecision?: IRuleDecision,
   idInitial?: string,
+  optionPolicies?: boolean,
 ): IRuleDecision => {
   const loc = ensureArrayGroupsDeep(
     localizeDecision(d, language),
     editDecision,
     initialDecision,
     idInitial,
+    optionPolicies,
   );
   const withSentences = loc;
   const mappedRecord = mapByGroupNew(

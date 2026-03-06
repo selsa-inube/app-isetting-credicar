@@ -15,6 +15,7 @@ import { IHomeUI } from "@ptypes/home/IHomeUI";
 import {
   StyledCollapse,
   StyledCollapseIcon,
+  StyledContainerPage,
   StyledFooter,
   StyledHeaderContainer,
   StyledLogo,
@@ -45,7 +46,7 @@ const HomeUI = (props: IHomeUI) => {
   } = props;
 
   return (
-    <>
+    <StyledContainerPage>
       <BoxContainer
         width="100%"
         direction="column"
@@ -179,11 +180,16 @@ const HomeUI = (props: IHomeUI) => {
         </BoxContainer>
         {dataExists && (
           <StyledFooter $isMobile={screenMobile}>
-            <StyledLogo src={appData.businessManager.urlBrand} />
+            <StyledLogo
+              src={
+                appData.businessManager.urlLogo ??
+                appData.businessManager.urlBrand
+              }
+            />
           </StyledFooter>
         )}
       </BoxContainer>
-    </>
+    </StyledContainerPage>
   );
 };
 
