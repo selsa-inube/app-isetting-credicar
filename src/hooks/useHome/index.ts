@@ -91,7 +91,7 @@ const useHome = () => {
 
   const padding = !dataExists
     ? tokens.spacing.s0
-    : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s500}`;
+    : `${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s150}`;
 
   return {
     businessUnitChangeRef,
