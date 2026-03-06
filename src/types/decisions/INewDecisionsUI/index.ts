@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { IOption } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { EComponentAppearance } from "@enum/appearances";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IRulesFormTextValues } from "../IRulesFormTextValues";
 
@@ -21,6 +22,8 @@ interface INewDecisionsUI {
   mesaggeEmpty: string;
   message: string;
   multipleChoicesOptions: IOption[];
+  modalData: IModalData;
+  showDecision: boolean;
   cancelButton: () => void;
   disabledPrevius: boolean;
   cancelButtonLabel: string;

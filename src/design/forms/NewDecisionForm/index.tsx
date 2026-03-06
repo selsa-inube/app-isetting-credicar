@@ -1,4 +1,5 @@
 import { useNewDecisionsForm } from "@hooks/forms/useNewDecisionsForm";
+import { useAlertDecisionPolicies } from "@hooks/GeneralCreditPolicies/useAlertDecisionPolicies";
 import { commonTextValues } from "@config/creditLines/decisionTemplates/commonTextValues";
 import { INewDecisions } from "@ptypes/generalCredPolicies/INewDecisions";
 import { NewDecisionFormUI } from "./interface";
@@ -41,6 +42,8 @@ const NewDecisionForm = (props: INewDecisions) => {
     loadingList,
     saveButtonLabel,
     maxHeight,
+    showAlertModal,
+    handleToggleModal,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,
@@ -58,6 +61,11 @@ const NewDecisionForm = (props: INewDecisions) => {
     decisionTemplateConfig,
     setDecisionData,
     setEditDecision,
+  });
+
+  const { modalData, showDecision } = useAlertDecisionPolicies({
+    showAlertModal,
+    handleToggleModal,
   });
 
   return (
@@ -95,6 +103,8 @@ const NewDecisionForm = (props: INewDecisions) => {
       loadingList={loadingList}
       saveButtonLabel={saveButtonLabel}
       maxHeight={maxHeight}
+      showDecision={showDecision}
+      modalData={modalData}
     />
   );
 };

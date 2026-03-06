@@ -40,6 +40,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     setShowModal,
     setEntryDeleted,
     token,
+    id,
   } = props;
   const [saveMoneyDestination, setSaveMoneyDestination] =
     useState<ISaveDataResponse>();
@@ -79,7 +80,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
     configurationRequestData: data?.configurationRequestData,
     modifyJustification: modifyRequestLabels(EPayrollAgreement.OPTION_NAME)
       .modifyJustification,
-    settingRequestId: data?.configurationRequestData.moneyDestinationId,
+    settingRequestId: id,
   };
 
   const fetchSaveRequestData = async () => {
