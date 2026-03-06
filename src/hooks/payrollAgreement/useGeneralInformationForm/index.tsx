@@ -29,7 +29,6 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     initialValues,
     setSourcesOfIncomeValues,
     sourcesOfIncomeValues,
-    initialGeneralInfData,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -164,13 +163,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     (value) => value === "" || value === null || value === undefined,
   );
 
-  const valuesEqualBoton =
-    JSON.stringify(initialGeneralInfData) === JSON.stringify(formik.values);
-
   useEffect(() => {
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
+        setIsDisabledButton(!formik.isValid || valuesEmpty);
       } else {
         setIsDisabledButton(!formik.isValid);
       }

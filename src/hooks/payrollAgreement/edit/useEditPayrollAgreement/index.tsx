@@ -40,7 +40,7 @@ import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
-  const { data, loading } = props;
+  const { data, loading, option } = props;
   const { appData } = useContext(AuthAndPortalData);
 
   const regularPaymentValues = useMemo(() => {
@@ -215,6 +215,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       sourcesOfIncome: formValues.generalInformation.values.sourcesOfIncome,
       initialSourcesOfIncome: initialValues.sourcesOfIncome,
       payrollId: data?.payrollForDeductionAgreementId,
+      option,
     });
 
   const extraordinaryData = extraordinaryPaymentValues;
@@ -378,6 +379,9 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     const changedFields: {
       abbreviatedName?: string;
       applicationDaysPayroll?: string;
+      payrollForDeductionAgreementType?: string;
+      payingIdentification?: string;
+      payingEntityName?: string;
       numberOfDaysForReceivingTheDiscounts?: number;
       payrollForDeductionAgreementId?: string;
       regularPaymentCycles?: IRegularPaymentCycles[];
@@ -427,6 +431,19 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
 
     if (payrollSpeBenPayment.length > 0) {
       changedFields.payrollSpecialBenefitPaymentCycles = payrollSpeBenPayment;
+    }
+
+    if (option) {
+      changedFields.abbreviatedName =
+        formValues.generalInformation.values.abbreviatedName;
+      changedFields.numberOfDaysForReceivingTheDiscounts =
+        Number(formValues.generalInformation.values.applicationDaysPayroll) ||
+        0;
+      changedFields.incomeTypes = newSourcesIncome().incomeTypes;
+      changedFields.payrollForDeductionAgreementType =
+        data?.payrollForDeductionAgreementType;
+      changedFields.payingIdentification = data?.payingIdentification;
+      changedFields.payingEntityName = data?.payingEntityName;
     }
 
     if (

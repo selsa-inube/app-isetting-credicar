@@ -70,6 +70,7 @@ const EditPayrollAgreement = () => {
   } = useEditPayrollAgreement({
     data: data as IPayrollAgreementData,
     loading,
+    option: Boolean(option === EManagementType.IN_PROGRESS),
   });
 
   const {
