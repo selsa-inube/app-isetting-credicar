@@ -31,10 +31,13 @@ const EditPayrollAgreement = () => {
     payrollData,
   });
 
+  const validateOption = Boolean(option === EManagementType.IN_PROGRESS);
   const {
     companyAgreement,
     formValues,
+    initialData,
     generalInformationRef,
+    companyRef,
     isSelected,
     saveData,
     typePayroll,
@@ -48,9 +51,12 @@ const EditPayrollAgreement = () => {
     extraordinaryPayment,
     showDeletedAlertModal,
     showGeneralInfPayrollForm,
+    showCompanyPayrollForm,
     showRegularPaymentCyclesForm,
     showExtraPaymentCyclesForm,
     filteredTabs,
+    defaultSelectedTab,
+    setCurrentTypePayroll,
     setIncludeExtraPayDay,
     setRegularDeleted,
     handleToggleDeletedAlertModal,
@@ -70,7 +76,7 @@ const EditPayrollAgreement = () => {
   } = useEditPayrollAgreement({
     data: data as IPayrollAgreementData,
     loading,
-    option: Boolean(option === EManagementType.IN_PROGRESS),
+    option: validateOption,
   });
 
   const {
@@ -98,7 +104,7 @@ const EditPayrollAgreement = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
-    optionRequest: Boolean(option === EManagementType.IN_PROGRESS),
+    optionRequest: validateOption,
     id,
   });
 
@@ -115,7 +121,7 @@ const EditPayrollAgreement = () => {
     typePayroll,
     hasErrorInProgress,
     errorDataInProgress,
-    optionInProgress: Boolean(option === EManagementType.IN_PROGRESS),
+    optionInProgress: validateOption,
     request: String(requestNumber ?? ""),
     handleToggleDeletedAlertModal,
     handleCloseGoBackModal,
@@ -125,18 +131,17 @@ const EditPayrollAgreement = () => {
     handleToggleEditedModal,
   });
 
-  const validateOption = option === EManagementType.IN_PROGRESS;
-
   return (
     <EditPayrollAgreementUI
       formReferences={generalInformationRef}
+      companyRef={companyRef}
       formValues={formValues}
-      initialValues={formValues}
+      initialValues={initialData}
       setIsCurrentFormValid={setIsCurrentFormValid}
       smallScreen={smallScreen}
       sourcesOfIncomeValues={sourcesOfIncomeValues}
       setSourcesOfIncomeValues={setSourcesOfIncomeValues}
-      isSelected={isSelected}
+      isSelected={isSelected ?? defaultSelectedTab ?? ""}
       onTabChange={handleTabChange}
       onReset={handleReset}
       handleOpenModal={handleOpenModal}
@@ -173,6 +178,8 @@ const EditPayrollAgreement = () => {
       data={data}
       validateOption={validateOption}
       hasError={hasErrorInProgress}
+      showCompanyPayrollForm={Boolean(showCompanyPayrollForm)}
+      setCurrentTypePayroll={setCurrentTypePayroll}
     />
   );
 };

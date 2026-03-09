@@ -13,13 +13,23 @@ import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { optionsFromEnumI18n } from "@utils/optionsFromEnumI18n";
 import { mediaQueryTablet } from "@config/environment";
+import { companyLabels } from "@config/payrollAgreement/payrollAgreementTab/forms/companyLabels";
 import { alertModal } from "@config/payrollAgreement/payrollAgreementTab/generic/alertModal";
 import { IUseCompanyForm } from "@ptypes/hooks/IUseCompanyForm";
 import { ILanguage } from "@ptypes/i18n";
 import { useLegalPerson } from "../useLegalPerson";
 
 const useCompanyForm = (props: IUseCompanyForm) => {
-  const { initialValues, ref, onSubmit, onFormValid } = props;
+  const {
+    initialValues,
+    editDataOption,
+    option,
+    initialCompanyData,
+    ref,
+    onSubmit,
+    onFormValid,
+  } = props;
+
   const validationSchema = object().shape({
     companySelected: validationRules.string.required(
       validationMessages.required,
@@ -37,6 +47,7 @@ const useCompanyForm = (props: IUseCompanyForm) => {
 
   const [dynamicValidationSchema, setDynamicValidationSchema] =
     useState(validationSchema);
+  const [isDisabledButton, setIsDisabledButton] = useState(false);
 
   const formik = useFormik({
     initialValues,
@@ -77,6 +88,15 @@ const useCompanyForm = (props: IUseCompanyForm) => {
         item.identificationDocumentNumber === String(companyNumberIdent),
     );
   };
+
+  const isAddingCompany =
+    formik.values.companySelected === EPayrollAgreement.ADD_COMPANY;
+
+  useEffect(() => {
+    if (option && initialValues.companySelected === "") {
+      formik.setFieldValue("companySelected", EPayrollAgreement.ADD_COMPANY);
+    }
+  }, [initialValues.companySelected]);
 
   useEffect(() => {
     legalPersonExists(formik.values.companyNumberIdent ?? "");
@@ -184,8 +204,38 @@ const useCompanyForm = (props: IUseCompanyForm) => {
     setShowModal(!showModal);
   };
 
-  const isAddingCompany =
-    formik.values.companySelected === EPayrollAgreement.ADD_COMPANY;
+  const valuesEmpty = Object.values(formik.values).every(
+    (value) => value === "" || value === null || value === undefined,
+  );
+
+  const valuesEqualBoton = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { companySelected: _, ...initialWithoutSelected } =
+      initialCompanyData ?? {};
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { companySelected: __, ...formikWithoutSelected } = formik.values;
+    return (
+      JSON.stringify(initialWithoutSelected) ===
+      JSON.stringify(formikWithoutSelected)
+    );
+  };
+
+  useEffect(() => {
+    const updateButton = () => {
+      if (editDataOption) {
+        setIsDisabledButton(
+          !formik.isValid || valuesEmpty || valuesEqualBoton(),
+        );
+      } else {
+        setIsDisabledButton(!formik.isValid);
+      }
+    };
+    updateButton();
+  }, [formik.values, formik.isValid, initialValues, editDataOption]);
+
+  const buttonLabel = editDataOption
+    ? companyLabels.labelButtonSave
+    : companyLabels.labelButtonNext;
 
   return {
     formik,
@@ -200,6 +250,8 @@ const useCompanyForm = (props: IUseCompanyForm) => {
     showModal,
     isAddingCompany,
     optionsIdentification,
+    buttonLabel,
+    isDisabledButton,
     handleChange,
     handleCompanyChange,
     handleToggleAlertModal,

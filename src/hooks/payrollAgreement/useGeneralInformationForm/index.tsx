@@ -27,6 +27,8 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     onSubmit,
     onFormValid,
     initialValues,
+    initialGeneralInfData,
+    setCurrentTypePayroll,
     setSourcesOfIncomeValues,
     sourcesOfIncomeValues,
   } = props;
@@ -124,7 +126,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   };
 
   useEffect(() => {
-    if (payrollAgreement && !editDataOption) {
+    if (payrollAgreement) {
       codeExists(formik.values.code ?? "");
       const inter = setTimeout(() => {
         const codePayroll = codeExists(formik.values.code ?? "");
@@ -163,12 +165,19 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     (value) => value === "" || value === null || value === undefined,
   );
 
+  const valuesEqualBoton =
+    JSON.stringify(initialGeneralInfData) === JSON.stringify(formik.values);
+
   useEffect(() => {
     const updateButton = () => {
       if (editDataOption) {
-        setIsDisabledButton(!formik.isValid || valuesEmpty);
+        setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
       } else {
         setIsDisabledButton(!formik.isValid);
+      }
+
+      if (setCurrentTypePayroll && formik.values.typePayroll) {
+        setCurrentTypePayroll(formik.values.typePayroll);
       }
     };
     updateButton();

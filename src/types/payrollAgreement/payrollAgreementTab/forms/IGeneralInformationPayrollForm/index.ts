@@ -13,9 +13,11 @@ interface IGeneralInformationPayrollForm {
   onSubmit?: (values: IGeneralInformationEntry) => void;
   onReset?: () => void;
   onPreviousStep?: () => void;
+  setCurrentTypePayroll?: React.Dispatch<React.SetStateAction<string>>;
   editDataOption?: boolean;
   initialGeneralInfData?: IGeneralInformationEntry;
   companyAgreement?: string;
+  option?: boolean;
 }
 
 export type { IGeneralInformationPayrollForm };

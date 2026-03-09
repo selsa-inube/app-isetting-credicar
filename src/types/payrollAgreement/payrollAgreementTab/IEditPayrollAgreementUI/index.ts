@@ -9,11 +9,13 @@ import { IExtraordinaryCyclesEntry } from "../forms/IExtraordinaryCyclesEntry";
 import { IGeneralInformationEntry } from "../forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "../forms/IEditPayrollAgreementForms";
 import { IPayrollAgreementData } from "../IPayrollAgreementData";
+import { ICompanyEntry } from "../forms/ICompanyEntry";
 
 interface IEditPayrollAgreementUI {
   isSelected: string;
   onTabChange: (id: string) => void;
   formReferences: React.RefObject<FormikProps<IGeneralInformationEntry> | null>;
+  companyRef: React.RefObject<FormikProps<ICompanyEntry> | null>;
   formValues: IEditPayrollAgreementForms;
   initialValues: IEditPayrollAgreementForms;
   smallScreen: boolean;
@@ -28,6 +30,7 @@ interface IEditPayrollAgreementUI {
   showRegularPaymentCyclesForm: boolean;
   showExtraPaymentCyclesForm: boolean;
   showGeneralInfPayrollForm: boolean;
+  showCompanyPayrollForm: boolean;
   showRequestStatus: string | false | undefined;
   filteredTabs: ITab[];
   titleRequest: string;
@@ -39,6 +42,7 @@ interface IEditPayrollAgreementUI {
   hasError: boolean;
   data: IPayrollAgreementData | undefined;
   validateOption: boolean;
+  setCurrentTypePayroll: React.Dispatch<React.SetStateAction<string>>;
   setIncludeExtraPayDay: React.Dispatch<
     React.SetStateAction<IOrdinaryCyclesEntry[]>
   >;

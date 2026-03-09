@@ -8,7 +8,17 @@ import { CompanyFormUI } from "./interface";
 
 const CompanyForm = forwardRef<FormikProps<ICompanyEntry>, ICompanyForm>(
   (
-    { initialValues, onFormValid, onSubmit, onButtonClick, loading = false },
+    {
+      initialValues,
+      initialCompanyData,
+      onFormValid,
+      onSubmit,
+      onReset = () => void 0,
+      option = false,
+      editDataOption = false,
+      onButtonClick,
+      loading = false,
+    },
     ref,
   ) => {
     const {
@@ -24,10 +34,20 @@ const CompanyForm = forwardRef<FormikProps<ICompanyEntry>, ICompanyForm>(
       moreDetails,
       isAddingCompany,
       optionsIdentification,
+      buttonLabel,
+      isDisabledButton,
       handleToggleAlertModal,
       handleChange,
       handleCompanyChange,
-    } = useCompanyForm({ initialValues, ref, onSubmit, onFormValid });
+    } = useCompanyForm({
+      initialValues,
+      editDataOption,
+      ref,
+      onSubmit,
+      onFormValid,
+      option,
+      initialCompanyData,
+    });
 
     return (
       <CompanyFormUI
@@ -35,7 +55,7 @@ const CompanyForm = forwardRef<FormikProps<ICompanyEntry>, ICompanyForm>(
         formik={formik}
         onButtonClick={onButtonClick}
         onChange={handleChange}
-        isDisabledButton={!formik.isValid}
+        isDisabledButton={isDisabledButton}
         onCompanyChange={handleCompanyChange}
         optionsCountries={optionsCountries}
         optionsCities={optionsCities}
@@ -49,6 +69,9 @@ const CompanyForm = forwardRef<FormikProps<ICompanyEntry>, ICompanyForm>(
         moreDetailsModal={moreDetails}
         isAddingCompany={isAddingCompany}
         optionsIdentification={optionsIdentification as IOption[]}
+        editDataOption={editDataOption}
+        buttonLabel={buttonLabel}
+        onReset={onReset}
       />
     );
   },

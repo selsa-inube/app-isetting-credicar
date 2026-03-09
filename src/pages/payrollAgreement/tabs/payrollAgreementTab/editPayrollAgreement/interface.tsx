@@ -2,6 +2,7 @@ import { Breadcrumbs, Stack, Tabs } from "@inubekit/inubekit";
 
 import { GeneralInformationPayrollForm } from "@pages/payrollAgreement/tabs/forms/generalInfoPayrollAgreement";
 import { RegularPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/regularPaymentCycles";
+import { CompanyForm } from "@pages/payrollAgreement/tabs/forms/companyPayrollAgreement";
 import { ExtraordinaryPaymentCyclesForm } from "@pages/payrollAgreement/tabs/forms/extraordinaryPaymentCycles";
 import { RequestStatusModal } from "@design/modals/requestStatusModal";
 import { RequestProcess } from "@design/feedback/RequestProcess";
@@ -16,10 +17,12 @@ import { crumbsEditPayrollAgreement } from "@config/payrollAgreement/payrollAgre
 import { editPayrollLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/editPayrollLabels";
 import { portalId } from "@config/portalId";
 import { IEditPayrollAgreementUI } from "@ptypes/payrollAgreement/payrollAgreementTab/IEditPayrollAgreementUI";
+import { ICompanyEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyEntry";
 
 const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
   const {
     formReferences,
+    companyRef,
     formValues,
     isSelected,
     initialValues,
@@ -34,6 +37,7 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     typeRegularPayroll,
     extraordinaryPayment,
     showGeneralInfPayrollForm,
+    showCompanyPayrollForm,
     showRegularPaymentCyclesForm,
     showExtraPaymentCyclesForm,
     filteredTabs,
@@ -46,6 +50,7 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
     data,
     validateOption,
     hasError,
+    setCurrentTypePayroll,
     setIncludeExtraPayDay,
     setRegularDeleted,
     setExtraordinaryPayment,
@@ -96,6 +101,19 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
                 scroll={smallScreen ? true : false}
               />
               <Stack direction="column">
+                {showCompanyPayrollForm && (
+                  <CompanyForm
+                    ref={companyRef}
+                    initialValues={formValues.company?.values as ICompanyEntry}
+                    onFormValid={setIsCurrentFormValid}
+                    onButtonClick={onToggleEditedModal}
+                    editDataOption
+                    option={validateOption}
+                    initialCompanyData={
+                      initialValues.company?.values as ICompanyEntry
+                    }
+                  />
+                )}
                 {showGeneralInfPayrollForm && (
                   <GeneralInformationPayrollForm
                     ref={formReferences}
@@ -110,6 +128,8 @@ const EditPayrollAgreementUI = (props: IEditPayrollAgreementUI) => {
                     initialGeneralInfData={
                       initialValues.generalInformation.values
                     }
+                    option={validateOption}
+                    setCurrentTypePayroll={setCurrentTypePayroll}
                   />
                 )}
                 {showRegularPaymentCyclesForm && (
