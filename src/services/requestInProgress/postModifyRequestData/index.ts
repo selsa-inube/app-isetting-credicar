@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import { isaasPerAxiosInstance } from "@api/isaasPersistence";
+import { isettingPerAxiosInstance } from "@api/isettingPersistence";
 import { patchWithRetries } from "@services/core/patchWithRetries";
 import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 import { IModifyRequestResponse } from "@ptypes/requestInProgress/IModifyRequestResponse";
@@ -21,7 +21,7 @@ const postModifyRequestData = async (
     `/requests`,
     config,
     data as unknown as string[],
-    isaasPerAxiosInstance,
+    isettingPerAxiosInstance,
   );
 
   return saveData;

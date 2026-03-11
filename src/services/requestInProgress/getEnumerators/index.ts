@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 
 import { getWithRetries } from "@services/core/getWithRetries";
 import { IEnumerators } from "@ptypes/IEnumerators";
-import { queryProcessAxiosInstance } from "@api/isettingProcess";
+import { queryProcessAxiosInstance } from "@api/isettingQuery";
 import { mapEnumToEntities } from "./mappers/mapEnumToEntities";
 
 const getEnumeratorsRequest = async (
