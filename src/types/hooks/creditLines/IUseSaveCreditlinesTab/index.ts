@@ -9,6 +9,7 @@ interface IUseSaveCreditlinesTab {
   data: ISaveDataRequest;
   token: string;
   optionRequest: boolean;
+  settingRequestId: string;
   setShowUnconfiguredModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSendData: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;

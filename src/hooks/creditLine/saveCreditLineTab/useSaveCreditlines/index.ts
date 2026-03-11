@@ -27,6 +27,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     userAccount,
     data,
     optionRequest,
+    settingRequestId,
     setSendData,
     sendData,
     setShowModal,
@@ -73,7 +74,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     configurationRequestData: data?.configurationRequestData,
     modifyJustification: modifyRequestLabels(ECreditLines.OPTION_NAME)
       .modifyJustification,
-    settingRequestId: data?.configurationRequestData.moneyDestinationId,
+    settingRequestId: settingRequestId,
   };
 
   const fetchSaveRequestData = async () => {

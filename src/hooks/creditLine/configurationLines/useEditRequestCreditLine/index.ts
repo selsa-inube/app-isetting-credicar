@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { IRuleDecision } from "@isettingkit/input";
 import { EUseCase } from "@enum/useCase";
-import { formatEditRuleDecisionsConfig } from "@utils/formatEditRuleDecisionsConfig";
+import { formatRuleDecisionsConfig } from "@utils/formatRuleDecisionsConfig";
 import { IUseEditRequestCreditLine } from "@ptypes/hooks/creditLines/IUseEditRequestCreditLine";
 
 const useEditRequestCreditLine = (props: IUseEditRequestCreditLine) => {
@@ -9,21 +9,25 @@ const useEditRequestCreditLine = (props: IUseEditRequestCreditLine) => {
     useCaseConfiguration,
     decisionsData,
     linesConstructionData,
+    option,
+    currentValues,
+    conditionCreditLine,
     setLinesConstructionData,
     mergeRules,
   } = props;
 
   useEffect(() => {
-    const validate = useCaseConfiguration === EUseCase.ADD;
+    const validate = option && useCaseConfiguration === EUseCase.ADD;
 
     if (!validate || decisionsData.length === 0) {
       return;
     }
 
-    const newFormattedRules = formatEditRuleDecisionsConfig(
+    const newFormattedRules = formatRuleDecisionsConfig(
       decisionsData,
       false,
       linesConstructionData.abbreviatedName as string,
+      conditionCreditLine,
     );
 
     setLinesConstructionData((prev) => {
@@ -32,10 +36,13 @@ const useEditRequestCreditLine = (props: IUseEditRequestCreditLine) => {
       return {
         ...prev,
         settingRequestId: linesConstructionData.settingRequestId,
+        alias: prev.alias,
+        abbreviatedName: prev.abbreviatedName,
+        descriptionUse: prev.descriptionUse,
         rules: mergeRules(existingRules, newFormattedRules),
       };
     });
-  }, [decisionsData, useCaseConfiguration]);
+  }, [decisionsData, useCaseConfiguration, currentValues]);
 };
 
 export { useEditRequestCreditLine };

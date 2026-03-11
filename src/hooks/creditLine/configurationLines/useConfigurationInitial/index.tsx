@@ -93,7 +93,15 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
       if (Object.values(data).length === 0) return;
 
       if (data.configurationRequestData === undefined) {
-        const dataInitial = {
+        const dataInitial: {
+          configurationRequestData: {
+            abbreviatedName: string;
+            alias: string;
+            descriptionUse: string;
+          };
+          settingRequestId: string;
+          requestNumber?: string;
+        } = {
           configurationRequestData: {
             abbreviatedName: data.abbreviatedName,
             alias: data.alias,
@@ -101,12 +109,25 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
           },
           settingRequestId: data.lineOfCreditId,
         };
+
+        if (data.requestNumber) {
+          dataInitial.requestNumber = data.requestNumber;
+        }
         setLinesData(dataInitial);
       } else {
-        const dataFormatted = {
+        const dataFormatted: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          configurationRequestData: any;
+          settingRequestId: string;
+          requestNumber?: string;
+        } = {
           settingRequestId: data.settingRequestId,
           configurationRequestData: data.configurationRequestData,
         };
+
+        if (data.requestNumber) {
+          dataFormatted.requestNumber = data.requestNumber;
+        }
         setLinesData(dataFormatted);
       }
 
@@ -214,6 +235,9 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
         ) {
           const normalizeData: ILinesConstructionData = {
             settingRequestId: linesData.settingRequestId,
+            ...(data.requestNumber && {
+              requestNumber: linesData.requestNumber,
+            }),
             abbreviatedName: String(
               linesData.configurationRequestData?.abbreviatedName ?? "",
             ),

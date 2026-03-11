@@ -14,6 +14,7 @@ const useSave = (props: IUseSave) => {
     data,
     editData,
     optionRequest,
+    settingRequestId,
     setShowUnconfiguredModal,
     setShowRequestProcessModal,
     setShowSaveModal,
@@ -22,7 +23,9 @@ const useSave = (props: IUseSave) => {
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
-  const isEdit = useCaseConfiguration === EUseCase.EDIT;
+  const isEdit =
+    useCaseConfiguration === EUseCase.EDIT ||
+    (optionRequest && useCaseConfiguration === EUseCase.ADD);
 
   const commonParams = {
     businessUnits: appData.businessUnit.publicCode,
@@ -36,8 +39,9 @@ const useSave = (props: IUseSave) => {
     const editResult = useSaveCreditlinesTab({
       ...commonParams,
       optionRequest,
+      settingRequestId,
       useCase: EUseCase.EDIT,
-      data: editData as ISaveDataRequest,
+      data: optionRequest ? data : (editData as ISaveDataRequest),
       setShowModal,
       setShowUnconfiguredModal: setShowEditSubmitModal,
     });

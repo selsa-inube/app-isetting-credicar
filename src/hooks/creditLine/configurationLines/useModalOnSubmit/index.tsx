@@ -2,6 +2,7 @@ import { MdOutlineInfo, MdOutlineReportProblem } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { EComponentAppearance } from "@enum/appearances";
 import { submitRequestLabels } from "@config/creditLines/submitRequestLabels";
+import { editSubmitInProgressLabels } from "@config/creditLines/editSubmitInProgressLabels";
 import { editSubmitRequestLabels } from "@config/creditLines/editSubmitRequestLabels";
 import { IUseModalEditConfig } from "@ptypes/hooks/creditLines/IUseModalEditConfig";
 
@@ -11,6 +12,8 @@ const useModalOnSubmit = (props: IUseModalEditConfig) => {
     showEditSubmitModal,
     unconfiguredRules,
     editedRules,
+    option,
+    numberRequest,
     onSaveModal,
     onEditSubmitModal,
     onToggleUnconfiguredRules,
@@ -48,9 +51,21 @@ const useModalOnSubmit = (props: IUseModalEditConfig) => {
       };
     }
 
-    if (showEditSubmitModal) {
+    if (!option && showEditSubmitModal) {
       return {
         ...editSubmitRequestLabels,
+        onCloseModal: onEditSubmitModal,
+        onClick: onSaveModal,
+        unconfiguredRules: editedRules,
+        appearanceItemIcon: EComponentAppearance.WARNING,
+        loading: false,
+        itemIcon: <MdOutlineReportProblem />,
+      };
+    }
+
+    if (option && showEditSubmitModal) {
+      return {
+        ...editSubmitInProgressLabels(numberRequest),
         onCloseModal: onEditSubmitModal,
         onClick: onSaveModal,
         unconfiguredRules: editedRules,

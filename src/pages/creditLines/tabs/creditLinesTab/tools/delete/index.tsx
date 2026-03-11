@@ -61,6 +61,7 @@ const Delete = (props: IDelete) => {
       return false;
     },
     optionRequest: false,
+    settingRequestId: "",
   });
 
   const { modalData, showDecision } = useModalDeleteCreditLine({
