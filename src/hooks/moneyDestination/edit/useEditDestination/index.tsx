@@ -401,6 +401,7 @@ const useEditDestination = (props: IUseEditDestination) => {
 
     const configurationRequestData: {
       modifyJustification: string;
+      moneyDestinationType?: string;
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
@@ -437,6 +438,16 @@ const useEditDestination = (props: IUseEditDestination) => {
           configurationRequestData.descriptionUse = formValues.description;
         }
       }
+
+    if (optionInProgress) {
+      configurationRequestData.moneyDestinationType =
+        currentValues?.typeDestination;
+      configurationRequestData.abbreviatedName = valueName(
+        currentValues?.nameDestination ?? "",
+      );
+      configurationRequestData.iconReference = currentValues?.icon;
+      configurationRequestData.descriptionUse = currentValues?.description;
+    }
 
     if (newDecisions && newDecisions.length > 0) {
       configurationRequestData.rules = newDecisions;
