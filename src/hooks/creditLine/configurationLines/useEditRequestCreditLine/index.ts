@@ -28,6 +28,7 @@ const useEditRequestCreditLine = (props: IUseEditRequestCreditLine) => {
       false,
       linesConstructionData.abbreviatedName as string,
       conditionCreditLine,
+      option,
     );
 
     setLinesConstructionData((prev) => {

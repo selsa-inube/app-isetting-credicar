@@ -325,6 +325,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
+    ruletimeUnit,
     dataType,
   } = getConditionsTraduction(ruleData, language);
 
@@ -420,6 +421,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
         ruleNameTraduction as string,
         listValuesDecision as IValue,
         dataType as string,
+        ruletimeUnit,
       );
     });
 
@@ -499,6 +501,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
           false,
           prev.abbreviatedName as string,
           conditionCreditLine,
+          false,
           conditionTraduction,
         );
 
