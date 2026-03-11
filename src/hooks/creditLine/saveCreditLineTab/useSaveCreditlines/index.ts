@@ -6,14 +6,19 @@ import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest"
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
 import { patchModifyCreditLine } from "@services/creditLines/patchModifyCreditLine";
 import { deleteCreditLineTab } from "@services/creditLines/deleteCreditLineTab";
+import { postModifyRequestData } from "@services/requestInProgress/postModifyRequestData";
 import { EUseCase } from "@enum/useCase";
+import { ECreditLines } from "@enum/creditLines";
 import { errorObject } from "@utils/errorObject";
+import { modifyRequestLabels } from "@config/modifyRequestLabels";
+import { editRequestMessage } from "@config/creditLines/generic/editRequestMessage";
 import { interventionHumanMessage } from "@config/creditLines/generic/interventionHumanMessage";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IUseSaveCreditlinesTab } from "@ptypes/hooks/creditLines/IUseSaveCreditlinesTab";
 import { IErrors } from "@ptypes/IErrors";
 import { IRequestCreditLine } from "@ptypes/creditLines/IRequestCreditLine";
 import { IModifyCreditLine } from "@ptypes/creditLines/IModifyCreditLine";
+import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 import { useRequest } from "../useRequest";
 
 const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
@@ -21,6 +26,7 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     businessUnits,
     userAccount,
     data,
+    optionRequest,
     setSendData,
     sendData,
     setShowModal,
@@ -41,7 +47,6 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
 
   const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
   const { setChangeTab } = useContext(ChangeToRequestTab);
-
   const navigate = useNavigate();
   const navigatePage = "/credit-lines";
 
@@ -57,6 +62,39 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
     } catch (error) {
       console.info(error);
       setSendData(false);
+      setHasError(true);
+      setErrorData(errorObject(error));
+    } finally {
+      setLoadingSendData(false);
+    }
+  };
+
+  const modifyRequestConfig = {
+    configurationRequestData: data?.configurationRequestData,
+    modifyJustification: modifyRequestLabels(ECreditLines.OPTION_NAME)
+      .modifyJustification,
+    settingRequestId: data?.configurationRequestData.moneyDestinationId,
+  };
+
+  const fetchSaveRequestData = async () => {
+    setLoadingSendData(true);
+    try {
+      await postModifyRequestData(
+        userAccount,
+        modifyRequestConfig as IModifyRequestData,
+        token,
+      );
+      setShowModal(false);
+      setChangeTab(true);
+      navigate(navigatePage);
+      addFlag({
+        title: editRequestMessage.title,
+        description: editRequestMessage.description,
+        appearance: editRequestMessage.appearance as IFlagAppearance,
+        duration: editRequestMessage.duration,
+      });
+    } catch (error) {
+      console.info(error);
       setHasError(true);
       setErrorData(errorObject(error));
     } finally {
@@ -132,7 +170,12 @@ const useSaveCreditlinesTab = (props: IUseSaveCreditlinesTab) => {
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSavecreditLineData();
+
+    if (optionRequest) {
+      fetchSaveRequestData();
+    } else {
+      fetchSavecreditLineData();
+    }
   }, [sendData]);
 
   useEffect(() => {

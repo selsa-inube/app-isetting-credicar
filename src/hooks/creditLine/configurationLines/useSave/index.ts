@@ -13,6 +13,7 @@ const useSave = (props: IUseSave) => {
     showRequestProcessModal,
     data,
     editData,
+    optionRequest,
     setShowUnconfiguredModal,
     setShowRequestProcessModal,
     setShowSaveModal,
@@ -34,6 +35,7 @@ const useSave = (props: IUseSave) => {
   if (isEdit) {
     const editResult = useSaveCreditlinesTab({
       ...commonParams,
+      optionRequest,
       useCase: EUseCase.EDIT,
       data: editData as ISaveDataRequest,
       setShowModal,

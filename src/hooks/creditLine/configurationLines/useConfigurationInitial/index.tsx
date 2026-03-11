@@ -7,6 +7,7 @@ import { useEnumAllRulesConfiguration } from "@hooks/useEnumAllRulesConfiguratio
 import { useGroupRules } from "@hooks/creditLine/useGroupRules";
 import { errorObject } from "@utils/errorObject";
 import { ECreditLines } from "@enum/creditLines";
+import { EManagementType } from "@enum/managementType";
 import { EUseCase } from "@enum/useCase";
 import { ILinesConstructionData } from "@ptypes/context/creditLinesConstruction/ILinesConstructionData";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
@@ -16,7 +17,7 @@ import { INavigationRule } from "@ptypes/creditLines/INavigationRule";
 import { useModalConfigurationInitial } from "../useModalConfigurationInitial";
 
 const useConfigurationInitial = (props: IUseConfigurationInitial) => {
-  const { data, option } = props;
+  const { data, option, loadingCreditData, optionRequest } = props;
   const { appData } = useContext(AuthAndPortalData);
   const {
     optionsAllRules,
@@ -27,6 +28,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     setLinesEditData,
     setLoadingInitial,
     setUseCaseConfiguration,
+    setOptionRequest,
   } = useContext(CreditLinesConstruction);
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [showErrorRulesModal, setShowErrorRulesModal] =
@@ -50,6 +52,10 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
   const ruleCatalog = ECreditLines.RULE_CATALOG;
   const catalogAction = ECreditLines.CATALOG_ACTION;
+
+  useEffect(() => {
+    setOptionRequest("");
+  }, []);
 
   const {
     optionsGroups,
@@ -80,8 +86,12 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     }
   }, [enumRuleData]);
 
+  const validateOptionrequest = optionRequest === EManagementType.IN_PROGRESS;
+
   useEffect(() => {
     if (!withoutData) {
+      if (Object.values(data).length === 0) return;
+
       if (data.configurationRequestData === undefined) {
         const dataInitial = {
           configurationRequestData: {
@@ -93,22 +103,35 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
         };
         setLinesData(dataInitial);
       } else {
-        setLinesData({
+        const dataFormatted = {
           settingRequestId: data.settingRequestId,
           configurationRequestData: data.configurationRequestData,
-        });
+        };
+        setLinesData(dataFormatted);
       }
-      setUseCaseConfiguration(option);
+
+      if (option) {
+        setUseCaseConfiguration(option);
+      }
+
+      if (optionRequest) {
+        setOptionRequest(optionRequest);
+      }
     }
-  }, [option, data]);
+  }, [option, data, optionRequest]);
 
   useEffect(() => {
+    if (!linesData?.settingRequestId) return;
     const fetchLinesConstructiontData = async () => {
       setHasError(false);
       setErrorData({} as IErrors);
       setBorrowerData({} as IModifyConstructionResponse);
 
-      if (linesData && option === EUseCase.ADD) {
+      if (
+        optionRequest !== EManagementType.IN_PROGRESS &&
+        linesData &&
+        option === EUseCase.ADD
+      ) {
         setLoading(true);
         try {
           const data = await patchModifyConstruction(
@@ -131,14 +154,14 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     };
 
     fetchLinesConstructiontData();
-  }, [linesData?.settingRequestId]);
+  }, [JSON.stringify(linesData)]);
 
   useEffect(() => {
-    if (loading) {
+    if (loading || loadingCreditData) {
       setLoadingInitial(true);
     } else {
-      setLoadingInitial(false);
-      if (!loading) {
+      setTimeout(() => setLoadingInitial(false), 2000);
+      if (!loading || !loadingCreditData) {
         if (option === EUseCase.ADD && borrowerData?.settingRequestId) {
           const normalizeData: ILinesConstructionData = {
             settingRequestId: data.settingRequestId,
@@ -167,14 +190,16 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
       if (
         !hasErrorAllRules &&
         shouldNavigate.current &&
-        !hasNavigatedToError.current
+        !hasNavigatedToError.current &&
+        data &&
+        Object.values(data).length > 0
       ) {
         setTimeout(() => {
           navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
         }, 500);
       }
     }
-  }, [loading, option, borrowerData?.settingRequestId, hasErrorAllRules]);
+  }, [loading, data, option, borrowerData?.settingRequestId, hasErrorAllRules]);
 
   useEffect(() => {
     if (!linesData) {
@@ -182,7 +207,11 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     } else {
       setLoadingInitial(false);
       if (!loading) {
-        if (option !== EUseCase.ADD && linesData) {
+        if (
+          (option !== EUseCase.ADD ||
+            (validateOptionrequest && option === EUseCase.ADD)) &&
+          linesData
+        ) {
           const normalizeData: ILinesConstructionData = {
             settingRequestId: linesData.settingRequestId,
             abbreviatedName: String(
@@ -209,16 +238,28 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
 
       if (
         !loadingAllRules &&
+        !loadingCreditData &&
         !hasErrorAllRules &&
         shouldNavigate.current &&
-        !hasNavigatedToError.current
+        !hasNavigatedToError.current &&
+        data &&
+        Object.values(data).length > 0
       ) {
         setTimeout(() => {
           navigate("/credit-lines/edit-credit-lines/line-Names-Descriptions");
         }, 500);
       }
     }
-  }, [loading, option, linesData, hasErrorAllRules, loadingAllRules]);
+  }, [
+    loading,
+    option,
+    linesData,
+    hasErrorAllRules,
+    loadingAllRules,
+    loadingCreditData,
+    data,
+    optionRequest,
+  ]);
 
   const handleToggleErrorModal = () => {
     setHasError(!hasError);
@@ -261,6 +302,7 @@ const useConfigurationInitial = (props: IUseConfigurationInitial) => {
     loadingAllRules,
     hasErrorGroupRules,
     errorDataGroupRules,
+    optionRequest: validateOptionrequest,
     handleToggleErrorModal,
     handleToggleWithouDataModal,
     handleToggleErrorRulesModal,

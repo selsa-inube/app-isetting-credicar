@@ -17,6 +17,7 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
     showWithoutDataModal,
     withoutData,
     hasError,
+    optionRequest,
     hasErrorAllRules,
     hasErrorGroupRules,
     loadingAllRules,
@@ -35,7 +36,7 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
       hasError ||
       hasErrorAllRules ||
       showErrorRulesModal ||
-      withoutData ||
+      (withoutData && !optionRequest) ||
       hasErrorGroupRules;
     setShowDecision(decision);
   }, [
@@ -44,6 +45,7 @@ const useModalConfigurationInitial = (props: IUseModalConfigurationInitial) => {
     hasError,
     hasErrorAllRules,
     hasErrorGroupRules,
+    optionRequest,
   ]);
 
   const modal = () => {

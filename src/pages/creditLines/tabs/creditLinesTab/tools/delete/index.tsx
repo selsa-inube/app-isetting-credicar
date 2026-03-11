@@ -60,6 +60,7 @@ const Delete = (props: IDelete) => {
     setShowUnconfiguredModal: () => {
       return false;
     },
+    optionRequest: false,
   });
 
   const { modalData, showDecision } = useModalDeleteCreditLine({

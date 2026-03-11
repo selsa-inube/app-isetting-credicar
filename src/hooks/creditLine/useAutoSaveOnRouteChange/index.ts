@@ -9,6 +9,7 @@ const useAutoSaveOnRouteChange = (props: IUseAutoSaveOnRouteChange) => {
     withNeWData,
     setIsUpdated,
     option,
+    optionRequest,
     token,
   } = props;
 
@@ -18,6 +19,7 @@ const useAutoSaveOnRouteChange = (props: IUseAutoSaveOnRouteChange) => {
     linesData,
     userAccount,
     withNeWData: withNeWData,
+    optionRequest,
     setIsUpdated,
     token,
   });

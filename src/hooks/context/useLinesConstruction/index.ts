@@ -8,6 +8,7 @@ const useLinesConstruction = () => {
   const [optionsAllRules, setOptionsAllRules] = useState<INavigationRule[]>([]);
   const [allValidRules, setAllValidRules] = useState<string[]>([]);
   const [filterRules, setFilterRules] = useState<string[]>([]);
+  const [optionRequest, setOptionRequest] = useState<string | undefined>("");
 
   const [errorOptionsAllRules, setErrorOptionsAllRules] = useState<IErrors>(
     {} as IErrors,
@@ -37,6 +38,8 @@ const useLinesConstruction = () => {
       errorOptionsAllRules,
       allValidRules,
       filterRules,
+      optionRequest,
+      setOptionRequest,
       setFilterRules,
       setAllValidRules,
       setErrorOptionsAllRules,

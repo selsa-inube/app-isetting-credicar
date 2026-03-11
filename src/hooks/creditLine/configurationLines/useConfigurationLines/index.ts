@@ -7,7 +7,7 @@ import {
   IDropdownMenuGroup,
 } from "@isettingkit/business-rules";
 import { FormikProps } from "formik";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { CreditLinesConstruction } from "@context/creditLinesConstruction";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { postCheckLineRuleConsistency } from "@services/creditLines/postCheckLineRuleConsistency";
@@ -31,6 +31,7 @@ import { EUseCase } from "@enum/useCase";
 import { ERequestType } from "@enum/requestType";
 import { clientsSupportLineLabels } from "@config/creditLines/configuration/clientsSupportLineLabels";
 import { EGeneral } from "@enum/general";
+import { EManagementType } from "@enum/managementType";
 import { creditLineLabels } from "@config/creditLines/configuration/creditLineLabels";
 import { editCreditLabels } from "@config/creditLines/creditLinesTab/generic/editCreditLabels";
 import { IErrors } from "@ptypes/IErrors";
@@ -49,6 +50,7 @@ import { useModalConfiguration } from "../useModalConfiguration";
 import { useEditCreditLines } from "../useEditCreditLines";
 import { useSave } from "../useSave";
 import { useModalOnSubmit } from "../useModalOnSubmit";
+import { useEditRequestCreditLine } from "../useEditRequestCreditLine";
 
 const useConfigurationLines = (props: IUseConfigurationLines) => {
   const { templateKey } = props;
@@ -79,6 +81,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     setLoadingInitial,
     linesConstructionData,
     useCaseConfiguration,
+    optionRequest,
     optionsAllRules,
     filterRules,
   } = useContext(CreditLinesConstruction);
@@ -154,7 +157,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   useEffect(() => {
     if (!loading) {
-      if (initialData.settingRequestId.length > 0) {
+      if ((initialData.settingRequestId?.length ?? 0) > 0) {
         const dataConfig: {
           nameAndDescription: {
             aliasLine: string;
@@ -186,6 +189,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
   const { borrowerData, loading: loadingModify } = useAutoSaveOnRouteChange({
     option: useCaseConfiguration,
+    optionRequest: Boolean(optionRequest === EManagementType.IN_PROGRESS),
     linesData,
     userAccount: appData.user.userAccount,
     withNeWData: isUpdated,
@@ -379,6 +383,14 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     deleteDecision,
   });
 
+  useEditRequestCreditLine({
+    useCaseConfiguration,
+    decisionsData,
+    linesConstructionData,
+    setLinesConstructionData,
+    mergeRules,
+  });
+
   useEffect(() => {
     if (configuredDecisions && configuredDecisions.length > 0) {
       configurationLinesEventBus.emit(
@@ -389,7 +401,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
   }, [configuredDecisions]);
 
   const initialDecisions: any[] = (linesConstructionData.rules ?? [])
-    .filter((r) => r.ruleName === ruleData.ruleName)
+    .filter((r) => ruleData?.ruleName && r.ruleName === ruleData.ruleName)
     .flatMap((r) => {
       const rule: IRuleDecisionExtended = {
         ...r,
@@ -452,7 +464,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
 
       let updatedRules: IRuleDecision[];
 
-      if (decisionsData.length === 0) {
+      if (!decisionsData || decisionsData.length === 0) {
         updatedRules = existingRules.filter(
           (rule) => rule.ruleName !== currentRuleName,
         );
@@ -675,6 +687,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     }
   }, [loadingModify, borrowerData?.settingRequestId, setLinesConstructionData]);
 
+  const option = useMemo(() => {
+    return Boolean(optionRequest === EManagementType.IN_PROGRESS);
+  }, [optionRequest]);
+
   const {
     saveCreditLines,
     requestSteps,
@@ -693,6 +709,7 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     useCaseConfiguration,
     showRequestProcessModal,
     data,
+    optionRequest: option,
     editData: editData as ISaveDataRequest,
     setShowRequestProcessModal,
     setShowSaveModal,
@@ -755,8 +772,10 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
       ? true
       : false;
 
-  const { title, description, optionCrumb } =
-    optionTitleConfiguration(useCaseConfiguration);
+  const { title, description, optionCrumb } = optionTitleConfiguration(
+    useCaseConfiguration,
+    option,
+  );
 
   const beforeDropdownNavigate: IBeforeNavigate = async (_to) => {
     return await handleStep(true);
