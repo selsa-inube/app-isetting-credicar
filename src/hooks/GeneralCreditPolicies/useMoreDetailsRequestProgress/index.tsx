@@ -73,9 +73,9 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const creditBureausRemoved: string[] = [];
   const creditBureausAdded: string[] = [];
 
-  data.configurationRequestData.rules.forEach((rule: IEntry) => {
+  data.configurationRequestData?.rules?.forEach((rule: IEntry) => {
     if (rule === null) return;
-    rule.decisionsByRule?.forEach((decision: IRuleDecision) => {
+    rule?.decisionsByRule?.forEach((decision: IRuleDecision) => {
       if (rule.ruleName === ENameRules.ADDITIONAL_DEBTORS) {
         additionalDebtors = decision.value;
       }

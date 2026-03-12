@@ -7,9 +7,9 @@ import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
-import { IUseModalAddPayroll } from "@ptypes/hooks/payrollAgreement/IUseModalAddPayroll";
+import { IUseModalAddGeneral } from "@ptypes/hooks/generalCreditPolicies/IUseModalAddGeneral";
 
-const useModalAddGeneral = (props: IUseModalAddPayroll) => {
+const useModalAddGeneral = (props: IUseModalAddGeneral) => {
   const {
     showGoBackModal,
     loading,

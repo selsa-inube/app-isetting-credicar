@@ -31,6 +31,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     token,
     optionRequest,
     id,
+    setProcessedModal,
   } = props;
 
   const [saveGeneralPolicies, setSaveGeneralPolicies] =
@@ -42,6 +43,7 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
   const [errorFetchRequest, setErrorFetchRequest] = useState(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [hasError, setHasError] = useState(false);
+
   const [networkError, setNetworkError] = useState<IErrors>({} as IErrors);
   const { setChangeTab } = useContext(ChangeToRequestTab);
 
@@ -80,7 +82,16 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
         token,
       );
       setShowModal(false);
-      navigate(-1);
+      navigate("/");
+      addFlag({
+        title: interventionHumanMessage.SuccessCreatePoliciesEditreq.title,
+        description:
+          interventionHumanMessage.SuccessCreatePoliciesEditreq.description,
+        appearance: interventionHumanMessage.SuccessCreatePoliciesEditreq
+          .appearance as IFlagAppearance,
+        duration:
+          interventionHumanMessage.SuccessCreatePoliciesEditreq.duration,
+      });
     } catch (error) {
       console.info(error);
       setHasError(true);
@@ -150,9 +161,13 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       handleStatusChange();
     }
     if (useCase !== EUseCase.DELETE) {
-      setTimeout(() => {
-        navigate(navigatePage);
-      }, 3000);
+      if (setProcessedModal && !optionRequest && isStatusRequestFinished()) {
+        setProcessedModal(true);
+      } else {
+        setTimeout(() => {
+          navigate(navigatePage);
+        }, 3000);
+      }
     }
   };
 

@@ -27,6 +27,7 @@ import { getAfterDay } from "@utils/getAfterDay";
 import { normalizeCondition } from "@utils/decisions/normalizeCondition";
 import { keyOf } from "@utils/keyOf";
 import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
+import { compareValuesDupDecision } from "@utils/compareValuesDupDecision";
 import { safeSortDisplayDataSampleSwitchPlaces } from "@utils/safeSortDisplayDataSampleSwitchPlaces";
 import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
@@ -70,6 +71,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   const [selectedConditions, setSelectedConditions] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
 
   const [selectedDecision, setSelectedDecision] =
     useState<IRuleDecisionExtended | null>(null);
@@ -171,7 +173,18 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   };
 
   const submitForm = (dataDecision: any) => {
+    const validateValue = decisions.filter((decision) =>
+      compareValuesDupDecision(decision.value, dataDecision.value),
+    );
     const isEditing = selectedDecision !== null;
+
+    const isDuplicateNewDecision = validateValue.length > 0 && !isEditing;
+
+    if (isDuplicateNewDecision) {
+      setShowAlertModal(true);
+      setEditDecision(false);
+      return;
+    }
 
     if (!isEditing) {
       setEditDecision(false);
@@ -441,6 +454,10 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     return ensureArrayGroupsDeep(withFiltered);
   }, [localizedTemplate, appData.language, selectedIds, removedConditionKeys]);
 
+  const handleToggleModal = () => {
+    setShowAlertModal(!showAlertModal);
+  };
+
   const emptyConditionsTemplate = useMemo(() => {
     const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
     const tpl = safeSortDisplayDataSampleSwitchPlaces({
@@ -549,6 +566,8 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     loadingList,
     maxHeight,
     saveButtonLabel,
+    showAlertModal,
+    handleToggleModal,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,

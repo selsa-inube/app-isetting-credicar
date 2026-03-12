@@ -12,6 +12,7 @@ interface IUseSaveGeneralPolicies {
   setSendData: React.Dispatch<React.SetStateAction<boolean>>;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   setEntryDeleted?: (id: string | number) => void;
+  setProcessedModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type { IUseSaveGeneralPolicies };

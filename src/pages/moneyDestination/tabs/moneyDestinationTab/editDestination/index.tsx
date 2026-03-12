@@ -85,6 +85,7 @@ const EditDestination = () => {
     setShowModal,
     token: appData.token,
     optionRequest: option === EManagementType.IN_PROGRESS,
+    id: id ?? "",
   });
 
   const { modalData, showDecision } = useModalEditDestination({
