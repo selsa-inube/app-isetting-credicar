@@ -401,6 +401,7 @@ const useEditDestination = (props: IUseEditDestination) => {
 
     const configurationRequestData: {
       modifyJustification: string;
+      moneyDestinationType?: string;
       abbreviatedName?: string;
       descriptionUse?: string;
       iconReference?: string;
@@ -438,9 +439,21 @@ const useEditDestination = (props: IUseEditDestination) => {
         }
       }
 
+    if (optionInProgress) {
+      configurationRequestData.moneyDestinationType =
+        currentValues?.typeDestination;
+      configurationRequestData.abbreviatedName = valueName(
+        currentValues?.nameDestination ?? "",
+      );
+      configurationRequestData.iconReference = currentValues?.icon;
+      configurationRequestData.descriptionUse = currentValues?.description;
+    }
+
     if (newDecisions && newDecisions.length > 0) {
       configurationRequestData.rules = newDecisions;
     }
+
+    const settingRequestId = data?.id ? data?.id : undefined;
 
     setSaveData({
       applicationName: EGeneral.APPLICATION_NAME,
@@ -451,6 +464,7 @@ const useEditDestination = (props: IUseEditDestination) => {
       entityName: conditionRule,
       requestDate: formatDate(new Date()),
       useCaseName: EMoneyDestination.USE_CASE_EDIT,
+      settingRequestId,
       configurationRequestData,
     });
     setShowRequestProcessModal(true);

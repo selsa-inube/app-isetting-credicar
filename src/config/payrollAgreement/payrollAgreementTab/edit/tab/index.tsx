@@ -1,4 +1,9 @@
 const editPayrollAgTabsConfig = {
+  company: {
+    id: "company",
+    isDisabled: false,
+    label: "Empresa con convenio",
+  },
   generalInformation: {
     id: "generalInformation",
     isDisabled: false,

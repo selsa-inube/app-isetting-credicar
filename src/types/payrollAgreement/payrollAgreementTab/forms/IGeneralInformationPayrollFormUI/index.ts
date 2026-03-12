@@ -22,6 +22,7 @@ interface IGeneralInformationPayrollFormUI {
   actionTextCodeModal: string;
   moreDetailsCode: string;
   modalData: IModalData;
+  option: boolean;
   onToggleInfoTypeModal: () => void;
   onToggleCodeModal: () => void;
   onToggleInfoModalModal: () => void;

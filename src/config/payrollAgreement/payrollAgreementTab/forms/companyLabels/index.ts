@@ -11,7 +11,8 @@ const companyLabels = {
   companyAddressRes: "Nomenclatura",
   companyCountry: "País de residencia fiscal",
   companyCountryIdent: "País emisor del documento",
-  labelbutton: "Siguiente",
+  labelButtonSave: "Enviar",
+  labelButtonNext: "Siguiente",
   placeholderCompanyName: "Nombre de la empresa",
   placeholderCompanySelected: "Selecciona de la lista",
   placeholderCompanyTypeIdent: "Selecciona de la lista",
@@ -27,6 +28,7 @@ const companyLabels = {
   maxLengthCompanyName: 100,
   maxLengthcompanyNameCom: 30,
   maxLengthcompanyComplem: 30,
+  buttonCancelLabel: "Cancelar",
 };
 
 export { companyLabels };

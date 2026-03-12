@@ -82,12 +82,12 @@ const MoreDetails = (props: IMoreDetails) => {
       onCloseModal={onCloseModal}
     >
       <BoxContainer
-        gap={tokens.spacing.s100}
+        gap={tokens.spacing.s200}
         direction="column"
         borderColor={EComponentAppearance.DARK}
         borderRadius={tokens.spacing.s100}
         width="100%"
-        maxHeight={isMobile ? "410px" : "650px"}
+        maxHeight={isMobile ? "410px" : "600px"}
         padding={isMobile ? `${tokens.spacing.s050}` : `${tokens.spacing.s200}`}
         backgroundColor={EComponentAppearance.LIGHT}
         boxSizing="border-box"
@@ -145,7 +145,7 @@ const MoreDetails = (props: IMoreDetails) => {
         </BoxContainer>
         <Stack
           direction="column"
-          gap={tokens.spacing.s150}
+          gap={tokens.spacing.s100}
           padding={`${tokens.spacing.s0} ${tokens.spacing.s0} ${tokens.spacing.s025}`}
         >
           {hasAnyPaymentData && (

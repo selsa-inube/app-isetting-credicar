@@ -9,8 +9,8 @@ import { patchEditMoneyDestination } from "@services/moneyDestination/patchEditM
 import { deleteMoneyDestination } from "@services/moneyDestination/deleteMoneyDestination";
 import { postAddMoneyDestination } from "@services/moneyDestination/postAddMoneyDestination";
 import { errorObject } from "@utils/errorObject";
+import { EMoneyDestination } from "@enum/moneyDestination";
 import { EUseCase } from "@enum/useCase";
-import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
 import { modifyRequestLabels } from "@config/modifyRequestLabels";
@@ -78,7 +78,7 @@ const useSaveMoneyDestination = (props: IUseSaveMoneyDestination) => {
 
   const modifyRequestConfig = {
     configurationRequestData: data?.configurationRequestData,
-    modifyJustification: modifyRequestLabels(EPayrollAgreement.OPTION_NAME)
+    modifyJustification: modifyRequestLabels(EMoneyDestination.OPTION_NAME)
       .modifyJustification,
     settingRequestId: id,
   };

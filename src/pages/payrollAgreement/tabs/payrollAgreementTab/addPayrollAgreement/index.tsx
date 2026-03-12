@@ -68,6 +68,7 @@ const AddPayrollAgreement = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
+    optionRequest: false,
   });
 
   const { modalData, showDecision } = useModalAddPayroll({
