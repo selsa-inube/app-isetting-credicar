@@ -82,7 +82,14 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
         token,
       );
       setShowModal(false);
-      navigate(-1);
+      navigate("/");
+      addFlag({
+        title: interventionHumanMessage.SuccessCreatePolicies.title,
+        description: interventionHumanMessage.SuccessCreatePolicies.description,
+        appearance: interventionHumanMessage.SuccessCreatePolicies
+          .appearance as IFlagAppearance,
+        duration: interventionHumanMessage.SuccessCreatePolicies.duration,
+      });
     } catch (error) {
       console.info(error);
       setHasError(true);

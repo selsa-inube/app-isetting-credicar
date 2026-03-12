@@ -7,6 +7,12 @@ const interventionHumanMessage = {
     appearance: EComponentAppearance.SUCCESS,
     duration: 3000,
   },
+  SuccessCreatePolicies: {
+    title: "Politicas generales creadas con éxito",
+    description: "Las politicas generales ha sido creadas con éxito.",
+    appearance: EComponentAppearance.SUCCESS,
+    duration: 3000,
+  },
 };
 
 export { interventionHumanMessage };
