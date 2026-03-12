@@ -40,6 +40,8 @@ const DecisionsGeneralForm = forwardRef<
       payrollSpecialAdvanceOptions,
       creditBureausOptions,
       isLoadingEnums,
+      handleChangeInquiry,
+      handleChangeDocSize,
       handleChange,
       handleChangeCreditBureaus,
       handleInformationReferenceModal,
@@ -83,6 +85,8 @@ const DecisionsGeneralForm = forwardRef<
         isLoadingEnums={isLoadingEnums}
         creditBureausOptions={creditBureausOptions}
         onChangeCreditBureaus={handleChangeCreditBureaus}
+        handleChangeInquiry={handleChangeInquiry}
+        handleChangeDocSize={handleChangeDocSize}
       />
     );
   },

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useImperativeHandle, useState } from "react";
 import { useMediaQuery } from "@inubekit/inubekit";
 import { useFormik } from "formik";
-import { object, string } from "yup";
+import { number, object, string } from "yup";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsCrediboard } from "@hooks/useEnumeratorsCrediboard";
@@ -38,7 +38,16 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       ReciprocityBasedCreditLimit: validationRules.boolean,
       RiskAnalysisBasedCreditLimit: validationRules.boolean,
       creditBureausConsultReq: validationRules.string,
-      inquiryValidityPeriod: validationRules.number,
+      inquiryValidityPeriod: number()
+        .required(validationMessages.required)
+        .test({
+          name: "no-decimals",
+          message: validationMessages.noDecimals,
+          test(value) {
+            if (value === undefined || value === null) return true;
+            return Number.isInteger(Number(value));
+          },
+        }),
       toggleLineCreditPayrollAdvance: validationRules.boolean,
       lineCreditPayrollAdvance: string().when(
         "toggleLineCreditPayrollAdvance",
@@ -57,7 +66,16 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
           otherwise: (schema) => schema.notRequired(),
         },
       ),
-      maximumNotifDocSize: validationRules.number,
+      maximumNotifDocSize: number()
+        .required(validationMessages.required)
+        .test({
+          name: "no-decimals",
+          message: validationMessages.noDecimals,
+          test(value) {
+            if (value === undefined || value === null) return true;
+            return Number.isInteger(Number(value));
+          },
+        }),
     });
 
   const validationSchema = createValidationSchema();
@@ -122,6 +140,16 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
 
   const handleInformationReferenceModal = () => {
     setShowInfoRefModal(!showInformationReferenceModal);
+  };
+
+  const handleChangeInquiry = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[.,]/g, "");
+    formik.setFieldValue("inquiryValidityPeriod", value);
+  };
+
+  const handleChangeDocSize = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[.,]/g, "");
+    formik.setFieldValue("maximumNotifDocSize", value);
   };
 
   const handleInformationMethodsModal = () => {
@@ -239,6 +267,8 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
     payrollAdvanceOptions,
     payrollSpecialAdvanceOptions,
     creditBureausOptions,
+    handleChangeInquiry,
+    handleChangeDocSize,
     handleChangeCreditBureaus,
     handleChange,
     handleInformationReferenceModal,
