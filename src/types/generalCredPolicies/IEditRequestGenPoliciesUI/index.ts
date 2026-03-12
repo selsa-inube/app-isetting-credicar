@@ -1,11 +1,17 @@
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
-interface IUseEditGeneralPolicies {
-  option: boolean;
+interface IEditRequestGenPoliciesUI {
+  option: string;
+  id: string;
+  requestNumber: string;
+  smallScreen: boolean;
+  loading: boolean;
+  hasError: boolean;
+  data: Record<string, unknown[]> | undefined;
   contributionsData?: IRuleDecisionExtended[];
+  minimumIncomeData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
   scoreModelsData?: IRuleDecisionExtended[];
-  minimumIncomeData?: IRuleDecisionExtended[];
   methodsData?: IRuleDecisionExtended[];
   additionalDebtorsData?: IRuleDecisionExtended[];
   realGuaranteesData?: IRuleDecisionExtended[];
@@ -21,4 +27,4 @@ interface IUseEditGeneralPolicies {
   riskScoreApiUrlData?: IRuleDecisionExtended[];
 }
 
-export type { IUseEditGeneralPolicies };
+export type { IEditRequestGenPoliciesUI };

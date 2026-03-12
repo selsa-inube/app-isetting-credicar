@@ -4,6 +4,7 @@ import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 interface IUseNewDecisions {
   formValues: IDecisionsGeneralEntry;
   initialGeneralData: IDecisionsGeneralEntry;
+  option: boolean;
   decisionData: IRuleDecisionExtended[];
   prevContributionsRef: React.MutableRefObject<IRuleDecisionExtended[]>;
   prevIncomesRef: React.MutableRefObject<IRuleDecisionExtended[]>;

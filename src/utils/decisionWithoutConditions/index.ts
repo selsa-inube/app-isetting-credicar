@@ -8,11 +8,14 @@ const decisionWithoutConditions = (
   ruleName: string,
   value: string | boolean | number | undefined,
   prevValue: string | boolean | undefined,
+  option: boolean,
   data?: IRuleDecisionExtended[],
 ) => {
   const typeValue = typeof value === "number" ? String(value) : value;
 
-  if (prevValue === typeValue) {
+  if (value === "" || value === undefined) return undefined;
+
+  if (!option && prevValue === typeValue) {
     return undefined;
   }
   if (value === 0 || value === "0") {
@@ -29,14 +32,19 @@ const decisionWithoutConditions = (
         : value,
     decisionId: decisionIdData,
     effectiveFrom: String(formatDate(new Date())),
-    transactionOperation:
-      decisionIdData === undefined
-        ? ETransactionOperation.INSERT
-        : ETransactionOperation.PARTIAL_UPDATE,
+    ...(!option && {
+      transactionOperation:
+        decisionIdData === undefined
+          ? ETransactionOperation.INSERT
+          : ETransactionOperation.PARTIAL_UPDATE,
+    }),
   };
+
   return {
     ruleName: ruleName,
-    modifyJustification: `${decisionsLabels.modifyJustification}${ruleName}`,
+    ...(!option && {
+      modifyJustification: `${decisionsLabels.modifyJustification}${ruleName}`,
+    }),
     decisionsByRule: [decisionsByRule],
   };
 };

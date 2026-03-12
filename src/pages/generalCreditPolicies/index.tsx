@@ -67,6 +67,7 @@ const GeneralCreditPolicies = () => {
     minCredBureauRiskScoreData,
     notifChannelData,
     riskScoreApiUrlData,
+    option: false,
   });
 
   const { showDecision, modalData } = useModalGeneralCreditPolicies({

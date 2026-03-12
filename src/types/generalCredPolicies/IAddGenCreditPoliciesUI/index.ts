@@ -3,6 +3,7 @@ import { IRuleDecision } from "@isettingkit/input";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IOptionsGenDecision } from "@ptypes/hooks/generalCreditPolicies/IOptionsGenDecision";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IAddGenCredPoliciesRef } from "../forms/IAddGenCredPoliciesRef";
 import { IAddGenCredPoliciesForms } from "../forms/IAddGenCredPoliciesForms";
 import { IDateVerification } from "../forms/IDateVerification";
@@ -28,6 +29,23 @@ interface IAddGenCreditPoliciesUI {
   disabledButton: boolean;
   rulesData: IRuleState;
   optionsGenDecision: IOptionsGenDecision;
+  contributionsData?: IRuleDecisionExtended[];
+  minimumIncomeData?: IRuleDecisionExtended[];
+  incomeData?: IRuleDecisionExtended[];
+  scoreModelsData?: IRuleDecisionExtended[];
+  methodsData?: IRuleDecisionExtended[];
+  additionalDebtorsData?: IRuleDecisionExtended[];
+  realGuaranteesData?: IRuleDecisionExtended[];
+  basicNotificFormatData?: IRuleDecisionExtended[];
+  basicNotificationRecData?: IRuleDecisionExtended[];
+  creditBureausConsultReqData?: IRuleDecisionExtended[];
+  inquiryValidityPeriodData?: IRuleDecisionExtended[];
+  lineCreditPayrollAdvanceData?: IRuleDecisionExtended[];
+  lineCreditPayrollSpecialAdvanceData?: IRuleDecisionExtended[];
+  maximumNotifDocSizeData?: IRuleDecisionExtended[];
+  minCredBureauRiskScoreData?: IRuleDecisionExtended[];
+  notifChannelData?: IRuleDecisionExtended[];
+  riskScoreApiUrlData?: IRuleDecisionExtended[];
   setOptionsGenDecision: React.Dispatch<
     React.SetStateAction<IOptionsGenDecision>
   >;

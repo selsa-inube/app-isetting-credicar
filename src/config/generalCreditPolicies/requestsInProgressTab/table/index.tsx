@@ -2,6 +2,7 @@ import { IAction } from "@ptypes/design/table/IAction";
 import { ITitle } from "@ptypes/design/table/ITitle";
 import { Cancel } from "@pages/generalCreditPolicies/tabs/requestsInProgressTab/tools/cancel";
 import { Details } from "@pages/generalCreditPolicies/tabs/requestsInProgressTab/tools/details";
+import { Edit } from "@pages/generalCreditPolicies/tabs/requestsInProgressTab/tools/edit";
 
 const titles: ITitle[] = [
   {
@@ -27,7 +28,10 @@ const actionsConfig = (setEntryCanceled: (value: string | number) => void) => {
       id: "Details",
       content: (entry) => <Details data={entry} />,
     },
-
+    {
+      id: "edit",
+      content: (entry) => <Edit data={entry} />,
+    },
     {
       id: "cancel",
       content: (entry) => (

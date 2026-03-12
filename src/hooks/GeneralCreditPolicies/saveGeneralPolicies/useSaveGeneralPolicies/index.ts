@@ -4,15 +4,19 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { postModifyRequestData } from "@services/requestInProgress/postModifyRequestData";
 import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
 import { patchEditGeneralPolicies } from "@services/generalPolicies/patchEditGeneralPolicies";
 import { EUseCase } from "@enum/useCase";
+import { EGeneralPolicies } from "@enum/generalPolicies";
 import { errorObject } from "@utils/errorObject";
 import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
+import { modifyRequestLabels } from "@config/modifyRequestLabels";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IUseSaveGeneralPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseSaveGeneralPolicies";
 import { IRequestGeneralPol } from "@ptypes/generalCredPolicies/IRequestGeneralPol";
 import { IErrors } from "@ptypes/IErrors";
+import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 import { useRequest } from "../useRequest";
 
 const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
@@ -25,6 +29,8 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     setShowModal,
     useCase,
     token,
+    optionRequest,
+    id,
   } = props;
 
   const [saveGeneralPolicies, setSaveGeneralPolicies] =
@@ -51,6 +57,32 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     } catch (error) {
       console.info(error);
       setSendData(false);
+      setHasError(true);
+      setErrorData(errorObject(error));
+    } finally {
+      setLoadingSendData(false);
+    }
+  };
+
+  const modifyRequestConfig = {
+    configurationRequestData: data?.configurationRequestData,
+    modifyJustification: modifyRequestLabels(EGeneralPolicies.OPTION_NAME)
+      .modifyJustification,
+    settingRequestId: id,
+  };
+
+  const fetchSaveRequestData = async () => {
+    setLoadingSendData(true);
+    try {
+      await postModifyRequestData(
+        userAccount,
+        modifyRequestConfig as IModifyRequestData,
+        token,
+      );
+      setShowModal(false);
+      navigate(-1);
+    } catch (error) {
+      console.info(error);
       setHasError(true);
       setErrorData(errorObject(error));
     } finally {
@@ -126,7 +158,11 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSaveGeneralData();
+    if (optionRequest) {
+      fetchSaveRequestData();
+    } else {
+      fetchSaveGeneralData();
+    }
   }, [sendData]);
 
   useEffect(() => {

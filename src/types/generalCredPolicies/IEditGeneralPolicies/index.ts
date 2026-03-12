@@ -1,6 +1,8 @@
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IEditGeneralPolicies {
+  option: string;
+  id: string;
   contributionsData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
   scoreModelsData?: IRuleDecisionExtended[];
