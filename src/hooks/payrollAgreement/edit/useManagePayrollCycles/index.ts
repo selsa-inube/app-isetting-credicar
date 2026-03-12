@@ -27,6 +27,7 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
     sourcesOfIncome,
     initialSourcesOfIncome,
     payrollId,
+    option,
   } = props;
 
   const newObjRegularPayment = (
@@ -50,7 +51,7 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
       paymentDay: checkDayWeek(item.payday ?? ""),
       numberOfDaysBeforePaymentToBill: Number(item.numberDaysUntilCut),
       regulatoryFrameworkCode: item.laborRegulatorFramework ?? undefined,
-      transactionOperation: transactionOperation,
+      ...(!option && { transactionOperation: transactionOperation }),
     }));
 
   const newObjExtraordinaryPayment = (
@@ -66,7 +67,7 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
           ? item.payrollForDeductionAgreementId
           : undefined,
       regulatoryFrameworkCode: item.laborRegulatorFramework ?? undefined,
-      transactionOperation: transactionOperation,
+      ...(!option && { transactionOperation: transactionOperation }),
     }));
 
   const initialOrdinaryCyclesValues = useRef(initialData.ordinaryCycles.values);
@@ -136,13 +137,15 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
   }, [isSelected, deleteValuesRegular]);
 
   const newRegularPayment = () => {
-    const newValues = regularPaymentCycles.filter(
-      (formValue) =>
-        !initialData.ordinaryCycles.values.some(
-          (initialValue) =>
-            JSON.stringify(initialValue) === JSON.stringify(formValue),
-        ),
-    );
+    const newValues = option
+      ? regularPaymentCycles
+      : regularPaymentCycles.filter(
+          (formValue) =>
+            !initialData.ordinaryCycles.values.some(
+              (initialValue) =>
+                JSON.stringify(initialValue) === JSON.stringify(formValue),
+            ),
+        );
 
     const regularPayment = [
       ...newObjRegularPayment(newValues, ETransactionOperation.INSERT),
@@ -165,12 +168,14 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
       return JSON.stringify(rest1) === JSON.stringify(rest2);
     };
 
-    const newValues = extraordinaryPayment.filter(
-      (formValue) =>
-        !initialData.extraordinaryCycles.values.some((initialValue) =>
-          areEqualExcludingPaydayTranslation(formValue, initialValue),
-        ),
-    );
+    const newValues = option
+      ? extraordinaryPayment
+      : extraordinaryPayment.filter(
+          (formValue) =>
+            !initialData.extraordinaryCycles.values.some((initialValue) =>
+              areEqualExcludingPaydayTranslation(formValue, initialValue),
+            ),
+        );
 
     const deleteValues = initialData.extraordinaryCycles.values.filter(
       (formValue) =>
@@ -222,13 +227,15 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
     const dataIncome = sourcesOfIncome.split(",");
     const initialIncome = initialSourcesOfIncome.split(",");
 
-    const newValues = dataIncome.filter(
-      (formValue) =>
-        !initialIncome.some(
-          (initialValue) =>
-            JSON.stringify(initialValue) === JSON.stringify(formValue),
-        ),
-    );
+    const newValues = option
+      ? dataIncome
+      : dataIncome.filter(
+          (formValue) =>
+            !initialIncome.some(
+              (initialValue) =>
+                JSON.stringify(initialValue) === JSON.stringify(formValue),
+            ),
+        );
 
     const deleteValues = initialIncome.filter(
       (formValue) =>
@@ -244,11 +251,13 @@ const useManagePayrollCycles = (props: IUseManagePayrollCycles) => {
           newValues,
           payrollId,
           ETransactionOperation.INSERT,
+          option,
         ),
         ...getIncomeTypesEditData(
           deleteValues,
           payrollId,
           ETransactionOperation.DELETE,
+          option,
         ),
       ],
     };

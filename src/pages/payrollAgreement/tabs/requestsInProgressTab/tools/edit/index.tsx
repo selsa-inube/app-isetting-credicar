@@ -1,14 +1,13 @@
-import { useEditPayrollConsultation } from "@hooks/payrollAgreement/edit/useEditPayrollConsultation";
-import { EManagementType } from "@enum/managementType";
+import { useEditPayrollRequestCons } from "@hooks/payrollAgreement/useEditPayrollRequestCons";
 import { EditRecord } from "@design/feedback/editRecord";
+import { EManagementType } from "@enum/managementType";
 import { IEdit } from "@ptypes/payrollAgreement/payrollAgreementTab/IEdit";
 
 const Edit = (props: IEdit) => {
-  const { data, useCaseEdit } = props;
-  const { handleEdit, showInfoModal, modalData } = useEditPayrollConsultation({
+  const { data } = props;
+  const { handleEdit, showInfoModal, modalData } = useEditPayrollRequestCons({
     payrollAgreementData: data,
-    useCaseEdit: useCaseEdit as string,
-    option: EManagementType.CURRENT,
+    option: EManagementType.IN_PROGRESS,
   });
   return (
     <>

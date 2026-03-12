@@ -27,9 +27,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     onSubmit,
     onFormValid,
     initialValues,
+    initialGeneralInfData,
+    setCurrentTypePayroll,
     setSourcesOfIncomeValues,
     sourcesOfIncomeValues,
-    initialGeneralInfData,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -78,6 +79,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
     initialValues,
     validationSchema: validationSchema,
     validateOnBlur: true,
+    enableReinitialize: true,
     onSubmit: onSubmit ?? (() => true),
   });
   const [autosuggestValue, setAutosuggestValue] = useState(
@@ -124,7 +126,7 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
   };
 
   useEffect(() => {
-    if (payrollAgreement && !editDataOption) {
+    if (payrollAgreement) {
       codeExists(formik.values.code ?? "");
       const inter = setTimeout(() => {
         const codePayroll = codeExists(formik.values.code ?? "");
@@ -172,6 +174,10 @@ const useGeneralInformationForm = (props: IUseGeneralInformationForm) => {
         setIsDisabledButton(!formik.isValid || valuesEmpty || valuesEqualBoton);
       } else {
         setIsDisabledButton(!formik.isValid);
+      }
+
+      if (setCurrentTypePayroll && formik.values.typePayroll) {
+        setCurrentTypePayroll(formik.values.typePayroll);
       }
     };
     updateButton();

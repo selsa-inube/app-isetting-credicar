@@ -1,7 +1,7 @@
 import { ISeverancePaymentCycles } from "../ISeverancePaymentCycles";
 import { IPayrollSpecialBenefit } from "../IPayrollSpecialBenefit";
 import { IRegularPaymentCycles } from "../IRegularPaymentCycles";
-import { IIncomeTypes } from "../../RequestPayrollAgre/IIncomeTypes";
+import { IIncomeTypes } from "@ptypes/payrollAgreement/RequestPayrollAgre/IIncomeTypes/index.ts";
 
 interface IPayrollAgreementData {
   abbreviatedName: string;
@@ -17,6 +17,26 @@ interface IPayrollAgreementData {
   id?: string;
   incomeTypes?: IIncomeTypes[];
   code?: string;
+  companySelected?: string;
+  companyName?: string;
+  companyTypeIdent?: string;
+  companyNumberIdent?: string;
+  companyNameCommercial?: string;
+  companyComplement?: string;
+  companyCity?: string;
+  companyAddressRes?: string;
+  companyCountry?: string;
+  company?: {
+    payingEntityName?: string;
+    companyCountryIdent?: string;
+    countryOfIdentityDocument?: string;
+    countryTaxResidence?: string;
+    headquarterAddress?: string;
+    headquarterCity?: string;
+    identificationDocumentNumber?: string;
+    identificationTypeLegalPerson?: string;
+    tradename?: string;
+  };
 }
 
 export type { IPayrollAgreementData };

@@ -1,30 +1,51 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useValidateUseCase } from "@hooks/useValidateUseCase";
+import { useContext, useMemo, useState } from "react";
+import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { EComponentAppearance } from "@enum/appearances";
-import { disabledModal } from "@config/disabledModal";
+import { ERequestType } from "@enum/requestType";
+import { getResponsible } from "@utils/getResponsible";
+import { userResponsibleModal } from "@config/userResponsibleModal";
 import { IUseEditPayrollConsultation } from "@ptypes/hooks/IUseEditPayrollConsultation";
+import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
-const useEditPayrollConsultation = (props: IUseEditPayrollConsultation) => {
-  const { payrollAgreementData, useCaseEdit, option } = props;
+const useEditPayrollRequestCons = (props: IUseEditPayrollConsultation) => {
+  const { payrollAgreementData, option, requestType } = props;
+
+  const { appData } = useContext(AuthAndPortalData);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const { disabledButton } = useValidateUseCase({
-    useCase: useCaseEdit as string,
-  });
+  const validateResponsible = useMemo(() => {
+    if (
+      !payrollAgreementData.requester &&
+      !payrollAgreementData.userManagingConfigurationRequests
+    )
+      return false;
+    return getResponsible(
+      payrollAgreementData as IRequestsInProgress,
+      appData.user.userAccount,
+    );
+  }, [
+    payrollAgreementData.usermanamentsConfigurationrequest,
+    payrollAgreementData.requester,
+    appData.user.userAccount,
+  ]);
 
   const handleEdit = () => {
-    if (disabledButton) {
+    if (
+      payrollAgreementData.requestType !== ERequestType.ADD &&
+      !validateResponsible
+    ) {
       setShowInfoModal(!showInfoModal);
     } else {
       if (!payrollAgreementData) {
         console.error("payrollAgreementData is undefined or null");
         return;
       }
-      navigate(`/payroll-agreement/edit-payroll/${option}`, {
-        state: { data: payrollAgreementData },
-      });
+
+      navigate(
+        `/payroll-agreement/edit-payroll/${option}/${payrollAgreementData.id}/${payrollAgreementData.requestNumber}`,
+      );
     }
   };
 
@@ -48,7 +69,7 @@ const useEditPayrollConsultation = (props: IUseEditPayrollConsultation) => {
 
     if (showInfoModal) {
       return {
-        ...disabledModal,
+        ...userResponsibleModal(requestType === ERequestType.ADD),
         onCloseModal: handleToggleInfoModal,
         onClick: handleToggleInfoModal,
         withCancelButton: false,
@@ -70,4 +91,4 @@ const useEditPayrollConsultation = (props: IUseEditPayrollConsultation) => {
   };
 };
 
-export { useEditPayrollConsultation };
+export { useEditPayrollRequestCons };

@@ -3,13 +3,13 @@ import { EComponentAppearance } from "@enum/appearances";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorEvaluateRule } from "@utils/messageErrorRule";
+import { getDescriptionError } from "@utils/getDescriptionError";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { sendEditedModal } from "@config/moneyDestination/moneyDestinationTab/generics/sendEditModal";
 import { goBackModal } from "@config/goBackModal";
 import { IUseModalEditDestination } from "@ptypes/hooks/moneyDestination/IUseModalEditDestination";
-import { getDescriptionError } from "@utils/getDescriptionError";
 
 const useModalEditDestination = (props: IUseModalEditDestination) => {
   const {
@@ -24,6 +24,8 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
     descriptionError,
     optionInProgress,
     request,
+    hasErrorInProgress,
+    errorDataInProgress,
     handleToggleEditedModal,
     handleEditedModal,
     handleCloseGoBackModal,
@@ -84,6 +86,25 @@ const useModalEditDestination = (props: IUseModalEditDestination) => {
             operationTypes.editError,
             EMoneyDestination.OPTION_NAME,
             getDescriptionError(errorData.response),
+          ),
+        ),
+        onCloseModal: handleToggleErrorModal,
+        onClick: handleToggleErrorModal,
+        withCancelButton: false,
+        withIcon: true,
+        appearance: EComponentAppearance.WARNING,
+        appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (hasErrorInProgress) {
+      return {
+        ...errorModal(
+          messageErrorUseCases(
+            networkError.status,
+            operationTypes.editError,
+            EMoneyDestination.OPTION_NAME,
+            getDescriptionError(errorDataInProgress.response),
           ),
         ),
         onCloseModal: handleToggleErrorModal,

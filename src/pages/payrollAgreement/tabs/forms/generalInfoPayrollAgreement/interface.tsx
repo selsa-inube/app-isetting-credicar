@@ -34,6 +34,7 @@ const GeneralInformationPayrollFormUI = (
     autosuggestValue,
     isDisabledButton,
     modalData,
+    option,
     showModal,
     sourcesOfIncomeValues,
     isMobile,
@@ -85,9 +86,15 @@ const GeneralInformationPayrollFormUI = (
                 templateRows={gridTemplateRows}
                 width="100%"
                 height="100%"
-                gap={isMobile ? tokens.spacing.s450 : tokens.spacing.s200}
+                gap={
+                  isMobile
+                    ? tokens.spacing.s450
+                    : option
+                      ? tokens.spacing.s400
+                      : tokens.spacing.s200
+                }
               >
-                {editDataOption && (
+                {editDataOption && !option && (
                   <>
                     <Stack
                       height={
@@ -142,7 +149,7 @@ const GeneralInformationPayrollFormUI = (
                     </Stack>
                   </>
                 )}
-                {!editDataOption && (
+                {(!editDataOption || option) && (
                   <Stack height={tokens.spacing.s600} width="100%">
                     <Textfield
                       name="code"
@@ -178,7 +185,7 @@ const GeneralInformationPayrollFormUI = (
                     required
                   />
                 </Stack>
-                {!editDataOption && (
+                {(!editDataOption || option) && (
                   <Stack
                     height={tokens.spacing.s600}
                     width="100%"
@@ -276,7 +283,7 @@ const GeneralInformationPayrollFormUI = (
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
         <Button
-          onClick={editDataOption ? onResetEdit : onPreviousStep}
+          onClick={editDataOption || option ? onResetEdit : onPreviousStep}
           variant="outlined"
           appearance={EComponentAppearance.GRAY}
         >

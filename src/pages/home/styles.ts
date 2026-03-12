@@ -109,7 +109,7 @@ const StyledCollapseIcon = styled.div<IStyledCollapseIcon>`
   transform: ${({ $collapse }) =>
     $collapse ? "rotate(-90deg)" : "rotate(90deg)"};
   margin-left: 110px;
-  z-index: 3;
+  z-index: 2;
 `;
 
 const StyledCollapse = styled.div`

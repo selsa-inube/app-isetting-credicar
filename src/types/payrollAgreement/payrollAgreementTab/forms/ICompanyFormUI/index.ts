@@ -14,9 +14,12 @@ interface ICompanyFormUI {
   titleAlertModal: string;
   descriptionModal: string;
   actionTextModal: string;
+  optionsIdentification: IOption[];
+  editDataOption: boolean;
+  buttonLabel: string;
+  onReset: () => void;
   moreDetailsModal?: string;
   isAddingCompany?: boolean;
-  optionsIdentification: IOption[];
   onToggleAlertModal: () => void;
   onChange: (name: string, value: string) => void;
   onCompanyChange: (name: string, value: string) => void;
