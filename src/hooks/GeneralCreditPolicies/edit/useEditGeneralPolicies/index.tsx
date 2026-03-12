@@ -320,7 +320,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     };
 
     if (newDecisions && newDecisions.length > 0) {
-      configurationRequestData.rules = newDecisions;
+      const filteredDecisions = newDecisions.filter(
+        (decision) => !!decision.ruleName,
+      );
+      configurationRequestData.rules = filteredDecisions;
     }
 
     setSaveData({

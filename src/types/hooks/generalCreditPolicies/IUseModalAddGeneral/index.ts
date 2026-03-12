@@ -7,9 +7,6 @@ interface IUseModalAddGeneral {
   errorFetchRequest: boolean;
   errorData: IErrors;
   networkError: IErrors;
-  processedModal: boolean;
-  handleProcessed: () => void;
-  handleCloseProcessed: () => void;
   handleCloseModal: () => void;
   handleGoBack: () => void;
   handleToggleErrorModal: () => void;

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
+import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { postAddGeneralPolicies } from "@services/generalPolicies/postAddGeneralPolicies";
@@ -13,6 +14,8 @@ import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { EModalState } from "@enum/modalState";
 import { EGeneralPolicies } from "@enum/generalPolicies";
 import { EComponentAppearance } from "@enum/appearances";
+import { interventionHumanMessage } from "@config/generalCreditPolicies/generic/interventionHumanMessage";
+import { requestProcessedModal } from "@config/generalCreditPolicies/generic/processedModal";
 import { errorModal } from "@config/errorModal";
 import { detailsRequestInProgressModal } from "@config/generalCreditPolicies/requestsInProgressTab/details/detailsRequestInProgressModal";
 import { IEntry } from "@ptypes/design/table/IEntry";
@@ -26,10 +29,12 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   const { appData } = useContext(AuthAndPortalData);
   const [showModal, setShowModal] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
+  const [processedModal, setProcessedModal] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const navigate = useNavigate();
+  const { addFlag } = useFlag();
 
   const handleToggleModal = () => {
     setShowModal(!showModal);
@@ -48,6 +53,16 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         description: traceability.description,
       }),
     ),
+  };
+
+  const handleProcessed = () => {
+    setProcessedModal(false);
+    navigate("/credit-lines");
+  };
+
+  const handleCloseProcessed = () => {
+    setProcessedModal(false);
+    navigate("/");
   };
 
   const requestConfiguration = {
@@ -69,7 +84,15 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.token,
         );
         setShowModal(false);
-        navigate(-1);
+        setProcessedModal(true);
+        addFlag({
+          title: interventionHumanMessage.SuccessCreatePolicies.title,
+          description:
+            interventionHumanMessage.SuccessCreatePolicies.description,
+          appearance: interventionHumanMessage.SuccessCreatePolicies
+            .appearance as IFlagAppearance,
+          duration: interventionHumanMessage.SuccessCreatePolicies.duration,
+        });
       }
       if (data.useCaseName === EGeneralPolicies.USE_CASE_EDIT) {
         await patchEditGeneralPolicies(
@@ -79,7 +102,15 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
           appData.token,
         );
         setShowModal(false);
-        navigate(-1);
+        navigate("/");
+        addFlag({
+          title: interventionHumanMessage.SuccessCreatePoliciesEdit.title,
+          description:
+            interventionHumanMessage.SuccessCreatePoliciesEdit.description,
+          appearance: interventionHumanMessage.SuccessCreatePoliciesEdit
+            .appearance as IFlagAppearance,
+          duration: interventionHumanMessage.SuccessCreatePoliciesEdit.duration,
+        });
       }
     } catch (error) {
       console.info(error);
@@ -112,9 +143,9 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
   });
 
   useEffect(() => {
-    const decision = hasError;
+    const decision = hasError || processedModal;
     setShowDecision(decision);
-  }, [hasError]);
+  }, [hasError, processedModal]);
 
   const modal = () => {
     const initial = {
@@ -146,6 +177,19 @@ const useDetailsRequestInProgress = (props: IUseDetailsRequestInProgress) => {
         withIcon: true,
         appearance: EComponentAppearance.WARNING,
         appearanceButton: EComponentAppearance.WARNING,
+      };
+    }
+
+    if (processedModal) {
+      return {
+        ...requestProcessedModal,
+        onCloseModal: handleCloseProcessed,
+        onClick: handleProcessed,
+        moreDetails: "",
+        withCancelButton: true,
+        withIcon: true,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

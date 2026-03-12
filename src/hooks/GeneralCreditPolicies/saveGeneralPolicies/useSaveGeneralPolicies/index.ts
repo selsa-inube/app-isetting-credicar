@@ -27,11 +27,11 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
     setSendData,
     sendData,
     setShowModal,
-    setProcessedModal,
     useCase,
     token,
     optionRequest,
     id,
+    setProcessedModal,
   } = props;
 
   const [saveGeneralPolicies, setSaveGeneralPolicies] =
@@ -84,11 +84,13 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       setShowModal(false);
       navigate("/");
       addFlag({
-        title: interventionHumanMessage.SuccessCreatePolicies.title,
-        description: interventionHumanMessage.SuccessCreatePolicies.description,
-        appearance: interventionHumanMessage.SuccessCreatePolicies
+        title: interventionHumanMessage.SuccessCreatePoliciesEditreq.title,
+        description:
+          interventionHumanMessage.SuccessCreatePoliciesEditreq.description,
+        appearance: interventionHumanMessage.SuccessCreatePoliciesEditreq
           .appearance as IFlagAppearance,
-        duration: interventionHumanMessage.SuccessCreatePolicies.duration,
+        duration:
+          interventionHumanMessage.SuccessCreatePoliciesEditreq.duration,
       });
     } catch (error) {
       console.info(error);
@@ -159,12 +161,12 @@ const useSaveGeneralPolicies = (props: IUseSaveGeneralPolicies) => {
       handleStatusChange();
     }
     if (useCase !== EUseCase.DELETE) {
-      if (isStatusCloseModal() || (optionRequest && isStatusRequestFinished()))
+      if (setProcessedModal && !optionRequest && isStatusRequestFinished()) {
+        setProcessedModal(true);
+      } else {
         setTimeout(() => {
           navigate(navigatePage);
         }, 3000);
-      if (!optionRequest && isStatusRequestFinished()) {
-        setProcessedModal(true);
       }
     }
   };

@@ -5,7 +5,6 @@ import { messageErrorUseCases } from "@utils/messageErrorUseCases";
 import { messageErrorStatusRequest } from "@utils/messageErrorStatusRequest";
 import { getDescriptionError } from "@utils/getDescriptionError";
 import { errorModal } from "@config/errorModal";
-import { requestProcessedModal } from "@config/generalCreditPolicies/generic/processedModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
 import { IUseModalAddGeneral } from "@ptypes/hooks/generalCreditPolicies/IUseModalAddGeneral";
@@ -18,9 +17,6 @@ const useModalAddGeneral = (props: IUseModalAddGeneral) => {
     errorData,
     networkError,
     errorFetchRequest,
-    processedModal,
-    handleProcessed,
-    handleCloseProcessed,
     handleCloseModal,
     handleGoBack,
     handleToggleErrorModal,
@@ -92,19 +88,6 @@ const useModalAddGeneral = (props: IUseModalAddGeneral) => {
         moreDetails: "",
         withCancelButton: true,
         withIcon: false,
-        appearance: EComponentAppearance.PRIMARY,
-        appearanceButton: EComponentAppearance.PRIMARY,
-      };
-    }
-
-    if (processedModal) {
-      return {
-        ...requestProcessedModal,
-        onCloseModal: handleCloseProcessed,
-        onClick: handleProcessed,
-        moreDetails: "",
-        withCancelButton: true,
-        withIcon: true,
         appearance: EComponentAppearance.PRIMARY,
         appearanceButton: EComponentAppearance.PRIMARY,
       };
