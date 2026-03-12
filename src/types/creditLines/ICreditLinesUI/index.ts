@@ -11,6 +11,7 @@ interface ICreditLinesUI {
   showRequestsInProgressTab: boolean;
   smallScreen: boolean;
   modalData: IModalData;
+  onRequestsEmpty: () => void;
   handleTabChange: (tabId: string) => void;
   setShowUnderConstruction: React.Dispatch<React.SetStateAction<boolean>>;
 }

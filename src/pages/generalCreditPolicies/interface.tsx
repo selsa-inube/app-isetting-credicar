@@ -41,6 +41,7 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
     loadingRequest,
     modalData,
     showDecision,
+    onRequestsEmpty,
     handleOpenModal,
     onTabChange,
   } = props;
@@ -148,7 +149,11 @@ const GeneralCreditPoliciesUI = (props: IGeneralCreditPoliciesUI) => {
                           riskScoreApiUrlData={riskScoreApiUrlData}
                         />
                       )}
-                      {showrequestTab && <RequestsInProgressTab />}
+                      {showrequestTab && (
+                        <RequestsInProgressTab
+                          onRequestsEmpty={onRequestsEmpty}
+                        />
+                      )}
                     </Stack>
                   </Stack>
 

@@ -37,6 +37,7 @@ const GeneralCreditPolicies = () => {
     emptyData,
     withoutPrivilegesAdd,
     defaultSelectedTab,
+    handleRequestsEmpty,
     handleScreenModal,
     handleEmptyData,
     handleCloseModal,
@@ -118,6 +119,7 @@ const GeneralCreditPolicies = () => {
       minCredBureauRiskScoreData={minCredBureauRiskScoreData}
       notifChannelData={notifChannelData}
       riskScoreApiUrlData={riskScoreApiUrlData}
+      onRequestsEmpty={handleRequestsEmpty}
     />
   );
 };

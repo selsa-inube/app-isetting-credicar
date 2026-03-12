@@ -19,6 +19,7 @@ interface IGeneralCreditPoliciesUI {
   modalData: IModalData;
   onTabChange: (id: string) => void;
   handleOpenModal: () => void;
+  onRequestsEmpty: () => void;
   contributionsData?: IRuleDecisionExtended[];
   minimumIncomeData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];

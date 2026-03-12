@@ -17,6 +17,7 @@ const MoneyDestination = () => {
     showRequestsTab,
     moneyDestinationTabs,
     options,
+    handleRequestsEmpty,
     onCloseMenu,
     onToggleModal,
     onToggleInfoModal,
@@ -46,6 +47,7 @@ const MoneyDestination = () => {
       showMoneyTab={showMoneyTab}
       showRequestsTab={showRequestsTab}
       moneyDestinationTabs={moneyDestinationTabs}
+      onRequestsEmpty={handleRequestsEmpty}
     />
   );
 };

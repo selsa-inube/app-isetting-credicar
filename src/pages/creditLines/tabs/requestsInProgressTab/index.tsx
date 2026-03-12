@@ -3,9 +3,11 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { usePageLength } from "@hooks/usePageLength";
 import { useRequestsInProgress } from "@hooks/creditLine/useRequestsInProgress";
 import { IEntry } from "@ptypes/design/table/IEntry";
+import { IRequestsInProgressTab } from "@ptypes/creditLines/IRequestsInProgressTab";
 import { RequestsInProgressTabUI } from "./interface";
 
-const RequestsInProgressTab = () => {
+const RequestsInProgressTab = (props: IRequestsInProgressTab) => {
+  const { onRequestsEmpty } = props;
   const { appData } = useContext(AuthAndPortalData);
 
   const {
@@ -20,6 +22,7 @@ const RequestsInProgressTab = () => {
     businessUnits: appData.businessUnit.publicCode,
     businessManager: appData.businessManager.publicCode,
     token: appData.token,
+    onRequestsEmpty,
   });
 
   const pageLength = usePageLength();
