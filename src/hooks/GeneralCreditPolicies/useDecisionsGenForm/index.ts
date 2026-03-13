@@ -41,7 +41,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       inquiryValidityPeriod: number()
         .required(validationMessages.required)
         .test({
-          name: "no-decimals",
+          name: decisionsGenLabels.noDecimal,
           message: validationMessages.noDecimals,
           test(value) {
             if (value === undefined || value === null) return true;
@@ -69,7 +69,7 @@ const useDecisionsGenForm = (props: IUseDecisionsGenForm) => {
       maximumNotifDocSize: number()
         .required(validationMessages.required)
         .test({
-          name: "no-decimals",
+          name: decisionsGenLabels.noDecimal,
           message: validationMessages.noDecimals,
           test(value) {
             if (value === undefined || value === null) return true;
