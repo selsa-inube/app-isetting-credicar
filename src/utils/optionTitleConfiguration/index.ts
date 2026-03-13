@@ -13,7 +13,7 @@ const optionTitleConfiguration = (option: string) => {
   }
 
   if (option === EUseCase.EDIT) {
-    title = configurationLabels.descriptionEdit;
+    title = configurationLabels.titleEdit;
     description = configurationLabels.descriptionEdit;
     optionCrumb = configurationLabels.optionCrumbEdit;
   }

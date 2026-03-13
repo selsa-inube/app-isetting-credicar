@@ -48,7 +48,6 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
     description,
     optionCrumb,
     optionDetails,
-    optionIcon,
     useCaseConfiguration,
     optionsConditionsCSV,
     showSendModal,
@@ -113,12 +112,10 @@ const DecisionTemplateScreen = (props: IDecisionTemplateScreen) => {
           addUseCase={optionAddCreditline}
           onOpenModal={handleOpenModal}
           onToggleInfoModal={handleToggleInfoModal}
-          updateData={componentLoading}
           withDecisions
           title={title}
           description={description}
           optionCrumb={optionCrumb}
-          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
 

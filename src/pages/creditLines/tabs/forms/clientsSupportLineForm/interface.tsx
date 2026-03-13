@@ -23,7 +23,6 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     optionsExcluded,
     optionsIncluded,
     showInfoModal,
-    updateData,
     navigation,
     lineNameDecision,
     message,
@@ -34,7 +33,6 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
     description,
     optionCrumb,
     optionDetails,
-    optionIcon,
     editOption,
     submitModalData,
     showInfo,
@@ -66,7 +64,6 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
           lineType={
             titleOptionConfigLine(ECreditLines.CLIENT_SUPPORT_RULE) || ""
           }
-          updateData={updateData}
           loading={false}
           withoutDecisions={true}
           onToggleInfoModal={onToggleInfoModal}
@@ -74,7 +71,6 @@ const ClientsSupportLineFormUI = (props: IClientsSupportLineFormUI) => {
           title={title}
           description={description}
           optionCrumb={optionCrumb}
-          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
 

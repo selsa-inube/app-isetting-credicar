@@ -24,7 +24,6 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     creditOptionsIncluded,
     loading,
     nav,
-    loadingModify,
     lineNameDecision,
     showSendModal,
     submitModalData,
@@ -34,7 +33,6 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
     optionCrumb,
     optionDetails,
     useCaseConfiguration,
-    optionIcon,
     ruleLoadding,
     configuredDecisions,
     requestSteps,
@@ -97,7 +95,6 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       onToggleInfoModal={handleToggleInfoModal}
       optionsExcluded={creditOptionsExcluded}
       optionsIncluded={creditOptionsIncluded}
-      updateData={loadingModify}
       loading={loading}
       onOpenModal={handleOpenModal}
       onMove={handleMove}
@@ -112,7 +109,6 @@ const LineCreditFormForm = (props: IClientsSupportLineForm) => {
       description={description}
       optionCrumb={optionCrumb}
       optionDetails={optionDetails}
-      optionIcon={optionIcon}
       editOption={useCaseConfiguration === EUseCase.EDIT}
       showInfo={showInfo}
       requestSteps={requestSteps}

@@ -24,7 +24,6 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
     optionsIncluded,
     showInfo,
     showInfoModal,
-    updateData,
     navigation,
     lineNameDecision,
     message,
@@ -35,7 +34,6 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
     description,
     optionCrumb,
     optionDetails,
-    optionIcon,
     editOption,
     submitModalData,
     requestSteps,
@@ -64,7 +62,6 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
         <LineInformation
           lineName={lineNameDecision}
           lineType={titleOptionConfigLine(ECreditLines.CREDIT_LINE_RULE) || ""}
-          updateData={updateData}
           loading={false}
           withoutDecisions={true}
           onToggleInfoModal={onToggleInfoModal}
@@ -72,7 +69,6 @@ const LineCreditFormFormUI = (props: IClientsSupportLineFormUI) => {
           title={title}
           description={description}
           optionCrumb={optionCrumb}
-          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
 

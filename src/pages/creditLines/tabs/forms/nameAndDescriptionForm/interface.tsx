@@ -22,7 +22,6 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     modalData,
     loading,
     lineName,
-    isUpdated,
     navigation,
     message,
     requestSteps,
@@ -35,7 +34,6 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
     optionCrumb,
     disabledField,
     optionDetails,
-    optionIcon,
     showSendModal,
     submitModalData,
     editOption,
@@ -58,15 +56,13 @@ const NameAndDescriptionFormUI = (props: INameAndDescriptionFormUI) => {
         <LineInformation
           lineName={lineName}
           lineType={titleOptionConfigLine(ECreditLines.LINE_DESCRIPTIONS) || ""}
-          updateData={isUpdated}
           loading={loading}
-          withoutDecisions={true}
+          withoutDecisions
           title={title}
           description={description}
           optionCrumb={optionCrumb}
           onToggleInfoModal={onToggleInfoModal}
           onOpenModal={onOpenModal}
-          withIcon={!optionIcon}
           withBackModal={!optionDetails}
         />
         {!loading && (
