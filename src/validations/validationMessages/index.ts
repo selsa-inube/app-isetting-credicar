@@ -5,6 +5,7 @@ const validationMessages = {
   requiredShort: "Este campo esta vacío",
   identification: "Ya existe una empresa con esta identificación.",
   code: "Ya existe este codigo",
+  noDecimals: "No se permiten valores decimales",
 };
 
 export { validationMessages };

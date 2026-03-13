@@ -16,6 +16,7 @@ import { BoxContainer } from "@design/layout/boxContainer";
 import { tokens } from "@design/tokens";
 import { LoadingPage } from "@design/feedback/loadingPage";
 import { isInvalid } from "@utils/isInvalid";
+import { getFieldState } from "@utils/getFieldState";
 import { decisionsGenLabels } from "@config/generalCreditPolicies/assisted/decisionsGenLabels";
 import { IDecisionsGeneralFormUI } from "@ptypes/generalCredPolicies/forms/IDecisionsGeneralFormUI";
 import { infoObligationModal } from "@config/generalCreditPolicies/generic/infoObligationModal";
@@ -41,6 +42,8 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
     payrollSpecialAdvanceOptions,
     creditBureausOptions,
     isLoadingEnums,
+    handleChangeInquiry,
+    handleChangeDocSize,
     onChangeCreditBureaus,
     onToggle,
     onButtonClick,
@@ -157,8 +160,10 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                       name="inquiryValidityPeriod"
                       type="number"
                       value={formik.values.inquiryValidityPeriod}
-                      onChange={formik.handleChange}
+                      onChange={handleChangeInquiry}
                       onBlur={formik.handleBlur}
+                      message={formik.errors.inquiryValidityPeriod}
+                      status={getFieldState(formik, "inquiryValidityPeriod")}
                     />
                   </Stack>
                 </Stack>
@@ -232,8 +237,10 @@ const DecisionsGeneralFormUI = (props: IDecisionsGeneralFormUI) => {
                       name="maximumNotifDocSize"
                       type="number"
                       value={formik.values.maximumNotifDocSize}
-                      onChange={formik.handleChange}
+                      onChange={handleChangeDocSize}
                       onBlur={formik.handleBlur}
+                      message={formik.errors.maximumNotifDocSize}
+                      status={getFieldState(formik, "maximumNotifDocSize")}
                     />
                   </Stack>
                 </Stack>

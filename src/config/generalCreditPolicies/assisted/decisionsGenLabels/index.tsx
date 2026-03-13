@@ -19,6 +19,7 @@ const decisionsGenLabels = {
   buttonSaveLabel: "Enviar",
   buttonNextLabel: "Siguiente",
   placeholderReference: "Seleccione de la lista",
+  noDecimal: "no-decimals",
 };
 
 export { decisionsGenLabels };
