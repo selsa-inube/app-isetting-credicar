@@ -9,7 +9,7 @@ import { IUseRequestsInProgress } from "@ptypes/hooks/creditLines/IUseRequestsIn
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessUnits, businessManager, token } = props;
+  const { businessUnits, businessManager, token, onRequestsEmpty } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -50,9 +50,17 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
 
   useEffect(() => {
     if (entryCanceled) {
-      setRequestsInProgress((prev) =>
-        prev.filter((entry) => entry.settingRequestId !== entryCanceled),
-      );
+      setRequestsInProgress((prev) => {
+        const updated = prev.filter(
+          (entry) => entry.settingRequestId !== entryCanceled,
+        );
+
+        if (updated.length === 0) {
+          onRequestsEmpty?.();
+        }
+
+        return updated;
+      });
     }
   }, [entryCanceled]);
 

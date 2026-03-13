@@ -93,6 +93,11 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     }
   }, [isSelected]);
 
+  const handleRequestsEmpty = () => {
+    setRequestsInProgress([]);
+    setIsSelected(tabs.creditLines.id);
+  };
+
   const filteredTabsConfig = Object.keys(tabs).reduce((data, key) => {
     const tab = tabs[key as keyof typeof creditLinesTabsConfig];
 
@@ -186,6 +191,7 @@ const useCreditLinePage = (businessUnitSigla: string) => {
     modalData,
     handleTabChange,
     setShowUnderConstruction,
+    handleRequestsEmpty,
   };
 };
 
