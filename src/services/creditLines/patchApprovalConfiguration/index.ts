@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { patchWithRetries } from "@services/core/patchWithRetries";
-import { isaasPerAxiosInstance } from "@api/isaasPersistence";
+import { isettingPerAxiosInstance } from "@api/isettingPersistence";
 import { IApprovalResponse } from "@ptypes/saveData/IApprovalResponse";
 import { IApprovalRequest } from "@ptypes/saveData/IApprovalRequest";
 import { mapApprovalRequestEntityToApi } from "./mappers";
@@ -22,7 +22,7 @@ const patchApprovalConfiguration = async (
     `/requests`,
     config,
     mapApprovalRequestEntityToApi(data) as unknown as string[],
-    isaasPerAxiosInstance,
+    isettingPerAxiosInstance,
   );
 
   return saveData;

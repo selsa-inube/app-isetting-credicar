@@ -2,6 +2,7 @@ import { ECreditLines } from "@enum/creditLines";
 import { IValue } from "@ptypes/decisions/IValue";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IConditionTraduction } from "@ptypes/IConditionTraduction";
+import { IConditionExtended } from "@ptypes/decisions/IConditionExtended";
 
 const getConditionsTraduction = (
   data: IRuleDecisionExtended | undefined | null,
@@ -15,13 +16,16 @@ const getConditionsTraduction = (
     Array.isArray(data.conditionsThatEstablishesTheDecision)
   ) {
     data.conditionsThatEstablishesTheDecision.forEach((cond) => {
+      const condExtended = cond as IConditionExtended;
       conditionTraduction.push({
-        condition: cond.conditionName,
-        conditionDataType: cond.conditionDataType,
-        howToSetTheCondition: cond.howToSetTheCondition,
-        listPossibleValues: cond.listOfPossibleValues as IValue,
+        condition: condExtended.conditionName,
+        conditionDataType: condExtended.conditionDataType,
+        howToSetTheCondition: condExtended.howToSetTheCondition,
+        listPossibleValues: condExtended.listOfPossibleValues as IValue,
         label:
-          cond.i18n?.[language as keyof typeof cond.i18n] ?? cond.conditionName,
+          condExtended.i18n?.[language as keyof typeof cond.i18n] ??
+          cond.conditionName,
+        timeUnit: condExtended.timeUnit,
       });
     });
   }
@@ -36,6 +40,8 @@ const getConditionsTraduction = (
     (condition) => condition.condition === ECreditLines.CREDIT_LINE_RULE,
   )?.condition;
 
+  const ruletimeUnit = data?.timeUnit;
+
   const listValuesDecision = data?.listOfPossibleValues;
 
   return {
@@ -43,6 +49,7 @@ const getConditionsTraduction = (
     ruleNameTraduction,
     conditionCreditLine,
     listValuesDecision,
+    ruletimeUnit,
     dataType,
   };
 };

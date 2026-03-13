@@ -4,6 +4,7 @@ interface IUseLinesConstructionData {
   option: string;
   userAccount: string;
   withNeWData: boolean;
+  optionRequest: boolean;
   linesData?: IModifyConstructionRequest;
   debounceMs?: number;
   saveOn?: string | number;

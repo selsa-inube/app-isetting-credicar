@@ -13,6 +13,7 @@ const formatRuleDecisionsConfig = (
   validateUseEdit: boolean,
   abbreviatedName?: string,
   conditionHidden?: string,
+  option?: boolean,
   conditionTraduction?: IConditionTraduction[],
 ) => {
   return rule.map((decision) => {
@@ -25,7 +26,7 @@ const formatRuleDecisionsConfig = (
         decision.value,
         decision.listOfPossibleValues?.list as any,
       ),
-      howToSetTheCondition: "EqualTo",
+      ...(!option && { howToSetTheCondition: "EqualTo" }),
     };
 
     if (decision.validUntil) {
@@ -50,7 +51,7 @@ const formatRuleDecisionsConfig = (
               condition.conditionName,
             );
             return {
-              ...condition,
+              ...(!option && { ...condition }),
               conditionName: condition?.conditionName ?? "",
               value: condition?.value,
               i18nValue: geti18nValueDecision(

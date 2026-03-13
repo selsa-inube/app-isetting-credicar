@@ -24,7 +24,7 @@ const transformationDecisions = (
   ruleNameTraduction: string,
   listValuesDecision?: IValue,
   dataType?: string,
-
+  ruletimeUnit?: string,
   meta?: IMeta,
 ): IRuleDecisionExtended[] => {
   const ruleName = payload.ruleName;
@@ -75,8 +75,8 @@ const transformationDecisions = (
                 howToSetTheCondition: isRangeObject(c.value)
                   ? EValueHowToSetUp.RANGE
                   : EValueHowToSetUp.EQUAL,
-                TimeUnit: condMeta.TimeUnit ?? c.TimeUnit ?? "",
-                timeUnit: condMeta.timeUnit ?? c.timeUnit ?? "",
+                TimeUnit: c.TimeUnit ?? normalized?.timeUnit ?? "",
+                timeUnit: c.TimeUnit ?? normalized?.timeUnit ?? "",
                 listOfPossibleValues: normalized?.listPossibleValues ?? [],
                 hidden: false,
                 i18nValue: geti18nValueDecision(
@@ -113,6 +113,7 @@ const transformationDecisions = (
           ),
           listOfPossibleValues: listValuesDecision ?? [],
           conditionsThatEstablishesTheDecision: groupedConditions,
+          timeUnit: ruletimeUnit,
           decisionId: decisionByRuleArray?.decisionId || generateUUID(),
         };
 

@@ -94,7 +94,8 @@ const SubmitRequestModal = (props: ISubmitRequestModal) => {
 
             <BoxContainer
               width="100%"
-              height="250px"
+              height="auto"
+              maxHeight="250px"
               direction="column"
               backgroundColor={EComponentAppearance.LIGHT}
               boxSizing="border-box"
