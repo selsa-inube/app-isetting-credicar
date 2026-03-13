@@ -7,6 +7,7 @@ import { EGeneralPolicies } from "@enum/generalPolicies";
 import { errorModal } from "@config/errorModal";
 import { operationTypes } from "@config/useCase";
 import { goBackModal } from "@config/goBackModal";
+import { processedEditModal } from "@config/generalCreditPolicies/generic/processedEditModal";
 import { disabledModal } from "@config/disabledModal";
 import { sendEditedModal } from "@config/generalCreditPolicies/generic/sendEditModal";
 import { IUseModalEditPolicies } from "@ptypes/hooks/generalCreditPolicies/IUseModalEditPolicies";
@@ -21,6 +22,9 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
     errorFetchRequest,
     showInfoModal,
     showDateModal,
+    processedModal,
+    handleCloseProcessed,
+    handleProcessed,
     handleToggleDateModal,
     handleToggleInfoModal,
     handleFinishForm,
@@ -122,6 +126,18 @@ const useModalEditPolicies = (props: IUseModalEditPolicies) => {
         onClick: handleFinishForm,
         moreDetails: "",
         withCancelButton: false,
+      };
+    }
+    if (processedModal) {
+      return {
+        ...processedEditModal,
+        onCloseModal: handleCloseProcessed,
+        onClick: handleProcessed,
+        moreDetails: "",
+        withCancelButton: true,
+        withIcon: true,
+        appearance: EComponentAppearance.PRIMARY,
+        appearanceButton: EComponentAppearance.PRIMARY,
       };
     }
 

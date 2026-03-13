@@ -18,6 +18,41 @@ const decisionTemplateGenPolicies = (
   if (descriptionUse && decisionDataType) {
     const decisionData = decisionDataType.toLocaleUpperCase();
 
+    const buildGroup = (ConditionGroupId: string) => ({
+      ConditionGroupId,
+      conditionsThatEstablishesTheDecision:
+        conditionsThatEstablishesTheDecision?.map((condition) => ({
+          placeholder:
+            condition.listOfPossibleValues?.list &&
+            condition.listOfPossibleValues.list?.length > 0
+              ? "Selecciona una opción"
+              : "",
+          conditionName: condition.conditionName,
+          labelName: String(
+            condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
+          descriptionUse: String(
+            condition.i18n?.[language as keyof typeof i18n] ??
+              condition.descriptionUse,
+          ),
+          conditionDataType: condition.conditionDataType,
+          value:
+            condition.conditionName === "BusinessUnit"
+              ? businessUnit
+              : condition.value,
+          listOfPossibleValues:
+            Object.values(condition.listOfPossibleValues || []).length > 0
+              ? condition.listOfPossibleValues
+              : undefined,
+          listOfPossibleValuesHidden: condition.listOfPossibleValues,
+          howToSetTheCondition: condition.listOfPossibleValues
+            ? ValueHowToSetUp.LIST_OF_VALUES
+            : (condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL),
+          hidden: condition.conditionName === "BusinessUnit" ? true : false,
+        })),
+    });
+
     const decisionTemplate = {
       ruleName: ruleName,
       placeholder:
@@ -38,40 +73,9 @@ const decisionTemplateGenPolicies = (
       validUntil: "",
       listOfPossibleValues: listOfPossibleValues,
       conditionGroups: [
-        {
-          ConditionGroupId: "group-primary",
-          conditionsThatEstablishesTheDecision:
-            conditionsThatEstablishesTheDecision?.map((condition) => ({
-              placeholder:
-                condition.listOfPossibleValues?.list &&
-                condition.listOfPossibleValues.list?.length > 0
-                  ? "Selecciona una opción"
-                  : "",
-              conditionName: condition.conditionName,
-              labelName: String(
-                condition.i18n?.[language as keyof typeof i18n] ??
-                  condition.descriptionUse,
-              ),
-              descriptionUse: String(
-                condition.i18n?.[language as keyof typeof i18n] ??
-                  condition.descriptionUse,
-              ),
-              conditionDataType: condition.conditionDataType,
-              value:
-                condition.conditionName === "BusinessUnit"
-                  ? businessUnit
-                  : condition.value,
-              listOfPossibleValues:
-                Object.values(condition.listOfPossibleValues || []).length > 0
-                  ? condition.listOfPossibleValues
-                  : undefined,
-              listOfPossibleValuesHidden: condition.listOfPossibleValues,
-              howToSetTheCondition: condition.listOfPossibleValues
-                ? ValueHowToSetUp.LIST_OF_VALUES
-                : (condition.howToSetTheCondition ?? ValueHowToSetUp.EQUAL),
-              hidden: condition.conditionName === "BusinessUnit" ? true : false,
-            })),
-        },
+        buildGroup("group-primary"),
+        buildGroup("additional-group-1"),
+        buildGroup("additional-group-2"),
       ],
     };
 

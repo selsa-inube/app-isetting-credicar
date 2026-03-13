@@ -10,6 +10,9 @@ interface IUseModalEditPolicies {
   loadingSendData: boolean;
   showInfoModal: boolean;
   showDateModal: boolean;
+  processedModal: boolean;
+  handleCloseProcessed: () => void;
+  handleProcessed: () => void;
   handleToggleDateModal: () => void;
   handleToggleInfoModal: () => void;
   handleFinishForm: () => void;

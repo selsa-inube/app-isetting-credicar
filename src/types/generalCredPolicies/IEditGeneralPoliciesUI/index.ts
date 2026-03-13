@@ -36,6 +36,8 @@ interface IEditGeneralPoliciesUI {
   showDecision: boolean;
   rulesData: IRuleState;
   disabledButton: boolean;
+  option: boolean;
+  setEditDecision: React.Dispatch<React.SetStateAction<boolean>>;
   handleToggleDateModal: () => void;
   onEditedModal: () => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

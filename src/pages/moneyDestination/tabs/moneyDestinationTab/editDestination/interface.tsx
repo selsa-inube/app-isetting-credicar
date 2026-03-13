@@ -35,6 +35,8 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
     loading,
     loadingEnum,
     option,
+    hasError,
+    data,
     setCreditLineValues,
     onToggleEditedModal,
     onOpenModal,
@@ -75,7 +77,7 @@ const EditDestinationUI = (props: IEditDestinationUI) => {
           />
         </Stack>
 
-        {loading || loadingEnum ? (
+        {(!data && !hasError) || loading || loadingEnum ? (
           <LoadingPage />
         ) : (
           <>

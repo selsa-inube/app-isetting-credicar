@@ -9,6 +9,7 @@ interface INewDecisions {
   option: string;
   loading: boolean;
   labelBusinessRules: string;
+  setEditDecision: React.Dispatch<React.SetStateAction<boolean>>;
   onPreviousStep: () => void;
   disabledButton: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

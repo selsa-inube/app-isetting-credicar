@@ -6,12 +6,14 @@ import { getRequestsInProgress } from "@services/requestInProgress/getRequestsIn
 import { EManagementType } from "@enum/managementType";
 import { EMoneyDestination } from "@enum/moneyDestination";
 import { ERequestInProgress } from "@enum/requestInProgress";
+import { errorObject } from "@utils/errorObject";
 import { normalizeDestination } from "@utils/destination/normalizeDestination";
 import { IUseDataDestination } from "@ptypes/hooks/moneyDestination/IUseDataDestination";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 import { IEditData } from "@ptypes/hooks/moneyDestination/IEditData";
 import { IRules } from "@ptypes/context/creditLinesConstruction/IRules";
 import { IDecisionsByRule } from "@ptypes/context/creditLinesConstruction/IDecisionsByRule";
+import { IErrors } from "@ptypes/IErrors";
 
 const useDataDestination = (props: IUseDataDestination) => {
   const { id, requestNumber, option, moneyDestinationData } = props;
@@ -20,6 +22,8 @@ const useDataDestination = (props: IUseDataDestination) => {
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
+  const [hasError, setHasError] = useState(false);
+  const [errorData, setErrorData] = useState<IErrors>({} as IErrors);
   const [moneyDestination, setMoneyDestination] = useState<IEditData>({
     id: "",
     nameDestination: "",
@@ -70,6 +74,8 @@ const useDataDestination = (props: IUseDataDestination) => {
           setRequestsInProgress(result);
         } catch (error) {
           console.info(error);
+          setHasError(true);
+          setErrorData(errorObject(error));
         } finally {
           setTimeout(() => setLoading(false), 2000);
         }
@@ -140,7 +146,7 @@ const useDataDestination = (props: IUseDataDestination) => {
     };
   }, [data, type, loadingEnum, appData.language]);
 
-  return { transformedMoneyDestination, loading };
+  return { transformedMoneyDestination, loading, hasError, errorData };
 };
 
 export { useDataDestination };

@@ -37,6 +37,9 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
     isAddingCompany,
     optionsIdentification,
     optionsCities,
+    editDataOption,
+    buttonLabel,
+    onReset,
     onToggleAlertModal,
     onChange,
     onCompanyChange,
@@ -300,13 +303,22 @@ const CompanyFormUI = (props: ICompanyFormUI) => {
         </BoxContainer>
       </StyledFormContent>
       <Stack justifyContent="flex-end" gap={tokens.spacing.s250}>
+        {editDataOption && (
+          <Button
+            onClick={onReset}
+            variant="outlined"
+            appearance={EComponentAppearance.GRAY}
+          >
+            {companyLabels.buttonCancelLabel}
+          </Button>
+        )}
         <Button
           onClick={onButtonClick}
           disabled={isDisabledButton}
           loading={loading}
           appearance={EComponentAppearance.PRIMARY}
         >
-          {companyLabels.labelbutton}
+          {buttonLabel}
         </Button>
       </Stack>
       {showModal && (

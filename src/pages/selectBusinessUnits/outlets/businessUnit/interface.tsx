@@ -1,35 +1,16 @@
-import React from "react";
 import { MdSearch } from "react-icons/md";
 import { Button, Searchfield, Stack, Text } from "@inubekit/inubekit";
 
 import { tokens } from "@design/tokens";
 import { RadioBusinessUnit } from "@design/feedback/radioBusinessUnit";
-import { IBusinessUnitsPortalStaff } from "@ptypes/staffPortal/IBusinessUnitsPortalStaff";
-import { IBusinessUnitstate } from "@ptypes/selectBusinessUnits/outlets/businessUnit/IBusinessUnitstate";
 import { NoResultsMessage } from "@design/feedback/noResultsMessage";
 import { businessUnitsLabel } from "@config/businessUnits/businessUnitsLabel";
+import { IBusinessUnitsUI } from "@ptypes/IBusinessUnitsUI";
 import {
   StyledBusinessUnits,
   StyledBusinessUnitsItem,
   StyledBusinessUnitsList,
 } from "./styles";
-
-interface IBusinessUnitsUI {
-  businessUnits: IBusinessUnitsPortalStaff[];
-  search: string;
-  businessUnit: IBusinessUnitstate;
-  screenMobile: boolean;
-  screenTablet: boolean;
-  handleSearchChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleBussinessUnitChange: (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => void;
-  filterBusinessUnits: (
-    businessUnits: IBusinessUnitsPortalStaff[],
-    search: string,
-  ) => IBusinessUnitsPortalStaff[];
-  handleSubmit: () => void;
-}
 
 function BusinessUnitsUI(props: IBusinessUnitsUI) {
   const {
@@ -48,12 +29,15 @@ function BusinessUnitsUI(props: IBusinessUnitsUI) {
 
   return (
     <StyledBusinessUnits $isMobile={screenMobile}>
-      <Text type="title" as="h2" textAlign="center">
-        {businessUnitsLabel.title}
-      </Text>
-      <Text size="medium" textAlign="center">
-        {businessUnitsLabel.selectUnit}
-      </Text>
+      <Stack direction="column" gap={tokens.spacing.s200}>
+        <Text type="title" size="large" textAlign="center">
+          {businessUnitsLabel.title}
+        </Text>
+        <Text size="medium" textAlign="center">
+          {businessUnitsLabel.selectUnit}
+        </Text>
+      </Stack>
+
       <form>
         <Stack direction="column" alignItems="center" gap={tokens.spacing.s300}>
           {businessUnits.length > 5 && (
@@ -62,7 +46,7 @@ function BusinessUnitsUI(props: IBusinessUnitsUI) {
               name="searchBusinessUnits"
               id="searchBusinessUnits"
               value={search}
-              fullwidth={true}
+              fullwidth
               onChange={handleSearchChange}
               iconBefore={<MdSearch size={22} />}
             />

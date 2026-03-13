@@ -73,9 +73,9 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
   const creditBureausRemoved: string[] = [];
   const creditBureausAdded: string[] = [];
 
-  data.configurationRequestData.rules.forEach((rule: IEntry) => {
+  data.configurationRequestData?.rules?.forEach((rule: IEntry) => {
     if (rule === null) return;
-    rule.decisionsByRule?.forEach((decision: IRuleDecision) => {
+    rule?.decisionsByRule?.forEach((decision: IRuleDecision) => {
       if (rule.ruleName === ENameRules.ADDITIONAL_DEBTORS) {
         additionalDebtors = decision.value;
       }
@@ -130,8 +130,8 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     });
   });
 
-  const valueBoolean = (value: string) =>
-    value === EBooleanText.Y || value === EBooleanText.YES
+  const valueBoolean = (value?: string) =>
+    value && (value === EBooleanText.Y || value === EBooleanText.YES)
       ? EBooleanText.YES
       : EBooleanText.NO;
 
@@ -140,8 +140,14 @@ const useMoreDetailsRequestProgress = (props: IUseMoreDetailsRequest) => {
     methods: methodsArray.join(", "),
     methodsAdded: methodsAdded.join(", "),
     methodsRemoved: methodsRemoved.join(", "),
-    additionalDebtors: valueBoolean(additionalDebtors ?? EBooleanText.NO),
-    guarantees: valueBoolean(realGuarantees ?? EBooleanText.NO),
+    additionalDebtors:
+      additionalDebtors !== undefined
+        ? valueBoolean(additionalDebtors ?? EBooleanText.NO)
+        : undefined,
+    guarantees:
+      realGuarantees !== undefined
+        ? valueBoolean(realGuarantees ?? EBooleanText.NO)
+        : undefined,
     creditBureaus: validateOptionVerification(
       optionsGenDecision,
       "creditBureaus",

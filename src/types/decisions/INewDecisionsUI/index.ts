@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 import { IOption } from "@inubekit/inubekit";
 import { IRuleDecision } from "@isettingkit/input";
 import { EComponentAppearance } from "@enum/appearances";
+import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
+import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 import { IRulesFormTextValues } from "../IRulesFormTextValues";
 
 interface INewDecisionsUI {
@@ -10,7 +12,7 @@ interface INewDecisionsUI {
   controls: boolean;
   dataEmpty: boolean;
   decisions: IRuleDecision[];
-  decisionTemplate: IRuleDecision;
+  decisionTemplate: IRuleDecisionExtended;
   deleteDecision: (id: string) => void;
   editionMode: "classic" | "versioned";
   iconAppearance: EComponentAppearance;
@@ -20,6 +22,8 @@ interface INewDecisionsUI {
   mesaggeEmpty: string;
   message: string;
   multipleChoicesOptions: IOption[];
+  modalData: IModalData;
+  showDecision: boolean;
   cancelButton: () => void;
   disabledPrevius: boolean;
   cancelButtonLabel: string;

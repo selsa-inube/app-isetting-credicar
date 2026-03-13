@@ -11,6 +11,7 @@ import { normalizedCodeList } from "../normalizedCodeList";
 const getNewDeletedDecisions = (
   prevRef: React.MutableRefObject<IRuleDecisionExtended[]>,
   current: IRuleDecisionExtended[],
+  option: boolean,
   dateFrom?: string,
 ) => {
   if (!arraysEqual(prevRef.current, current)) {
@@ -34,11 +35,15 @@ const getNewDeletedDecisions = (
                                 condition.listOfPossibleValuesHidden?.list,
                               )
                             : condition.value,
-                        transactionOperation: ETransactionOperation.DELETE,
+                        ...(!option && {
+                          transactionOperation: ETransactionOperation.DELETE,
+                        }),
                       })) as IConditionsTheDecision[]) || [];
 
                   return {
-                    transactionOperation: ETransactionOperation.DELETE,
+                    ...(!option && {
+                      transactionOperation: ETransactionOperation.DELETE,
+                    }),
                     conditionsThatEstablishesTheDecision,
                   };
                 },
@@ -55,13 +60,17 @@ const getNewDeletedDecisions = (
             : formatDateDecision(decision.effectiveFrom as string),
           validUntil: validUntil,
           value: decision.value,
-          transactionOperation: ETransactionOperation.DELETE,
+          ...(!option && {
+            transactionOperation: ETransactionOperation.DELETE,
+          }),
           decisionId: decision.decisionId,
           ...(conditionGroups && { conditionGroups }),
         };
 
         return {
-          modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+          ...(!option && {
+            modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+          }),
           ruleName: decision.ruleName,
           decisionsByRule: [decisionObject],
         };

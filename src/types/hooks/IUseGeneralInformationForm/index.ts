@@ -7,6 +7,7 @@ interface IUseGeneralInformationForm {
   ref: React.ForwardedRef<FormikProps<IGeneralInformationEntry>>;
   editDataOption: boolean;
   loading: boolean | undefined;
+  option: boolean;
   sourcesOfIncomeValues: IServerDomain[];
   onSubmit: ((values: IGeneralInformationEntry) => void) | undefined;
   onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined;
@@ -14,6 +15,7 @@ interface IUseGeneralInformationForm {
     React.SetStateAction<IServerDomain[]>
   >;
   initialGeneralInfData?: IGeneralInformationEntry;
+  setCurrentTypePayroll?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export type { IUseGeneralInformationForm };

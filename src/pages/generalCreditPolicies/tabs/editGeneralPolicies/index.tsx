@@ -5,6 +5,7 @@ import { useEditGeneralPolicies } from "@hooks/GeneralCreditPolicies/edit/useEdi
 import { useModalEditPolicies } from "@hooks/GeneralCreditPolicies/edit/useModalEditPolicies";
 import { useSaveGeneralPolicies } from "@hooks/GeneralCreditPolicies/saveGeneralPolicies/useSaveGeneralPolicies";
 import { EUseCase } from "@enum/useCase";
+import { EManagementType } from "@enum/managementType";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IModalData } from "@ptypes/generalCredPolicies/IModalData";
@@ -30,6 +31,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     minCredBureauRiskScoreData,
     notifChannelData,
     riskScoreApiUrlData,
+    option,
+    id,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
@@ -57,6 +60,10 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showRiskScoreApiUrl,
     rulesData,
     disabledButton,
+    processedModal,
+    handleCloseProcessed,
+    handleProcessed,
+    setEditDecision,
     setDecisionData,
     handleFinishForm,
     handleToggleInfoModal,
@@ -71,6 +78,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     handleTabChange,
     setShowRequestProcessModal,
     setShowDateModal,
+    setProcessedModal,
   } = useEditGeneralPolicies({
     contributionsData,
     incomeData,
@@ -89,6 +97,7 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     minCredBureauRiskScoreData,
     notifChannelData,
     riskScoreApiUrlData,
+    option: Boolean(option === EManagementType.IN_PROGRESS),
   });
 
   const {
@@ -114,6 +123,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     setSendData: setShowRequestProcessModal,
     setShowModal: setShowDateModal,
     token: appData.token,
+    optionRequest: Boolean(option === EManagementType.IN_PROGRESS),
+    id,
+    setProcessedModal,
   });
 
   const { modalData, showDecision } = useModalEditPolicies({
@@ -126,6 +138,9 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
     showInfoModal,
     showDateModal,
     loadingSendData,
+    processedModal,
+    handleCloseProcessed,
+    handleProcessed,
     handleToggleInfoModal,
     handleFinishForm,
     handleToggleDateModal,
@@ -175,6 +190,8 @@ const EditGeneralPolicies = (props: IEditGeneralPolicies) => {
       setDecisionData={setDecisionData}
       disabledButton={disabledButton}
       handleToggleDateModal={handleToggleDateModal}
+      setEditDecision={setEditDecision}
+      option={Boolean(option === EManagementType.IN_PROGRESS)}
     />
   );
 };

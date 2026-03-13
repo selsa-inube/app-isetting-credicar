@@ -11,14 +11,17 @@ import { IRegularPaymentCycles } from "@ptypes/payrollAgreement/payrollAgreement
 import { severancePay } from "@config/payrollAgreement/payrollAgreementTab/assisted/severancePaymentCycles";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumeratorsIncome } from "@hooks/useEnumeratorsIncome";
+import { useLegalPerson } from "@hooks/payrollAgreement/useLegalPerson";
 import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { ERequestType } from "@enum/requestType";
+import { ECyclesPayroll } from "@enum/cyclesPayroll";
 import { EGeneral } from "@enum/general";
 import { dataTranslations } from "@utils/dataTranslations";
 import { getDayPayment } from "@utils/getDayPayment";
 import { transformToArray } from "@utils/transformToArray";
 import { includedPeriodicity } from "@config/payrollAgreement/payrollAgreementTab/assisted/excludedPeriodicity";
 import { formatPaymentDayExtra } from "@utils/formatPaymentDayExtra";
+import { getCompanyComp } from "@utils/getCompanyComp";
 import { getSourcesIncome } from "@utils/getSourcesIncome";
 import { jsonLabels } from "@config/payrollAgreement/payrollAgreementTab/edit/jsonlLabels";
 import { mediaQueryMobile } from "@config/environment";
@@ -36,89 +39,116 @@ import { ISeverancePaymentCycles } from "@ptypes/payrollAgreement/payrollAgreeme
 import { IGeneralInformationEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IGeneralInformationPayroll";
 import { IEditPayrollAgreementForms } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IEditPayrollAgreementForms";
 import { IServerDomain } from "@ptypes/IServerDomain";
+import { ICompanyEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/ICompanyEntry";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
+import { ILegalPerson } from "@ptypes/payrollAgreement/payrollAgreementTab/ILegalPerson";
 import { useManagePayrollCycles } from "../useManagePayrollCycles";
 
 const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
-  const { data } = props;
+  const { data, loading, option } = props;
   const { appData } = useContext(AuthAndPortalData);
 
-  const regularPaymentValues = () => {
+  const regularPaymentValues = useMemo(() => {
     const cycles = transformToArray<IRegularPaymentCycles>(
-      data.regularPaymentCycles,
+      data?.regularPaymentCycles,
     );
-
-    return cycles.map((entry, index) => ({
-      id: String(index + 1),
-      cycleId: `${addLeadingZero(index + 1).toString()}`,
-      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
-      regularPaymentCycleNumber: entry.regularPaymentCycleNumber,
-      nameCycle: entry.regularPaymentCycleName,
-      periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
-      payday: getDayPayment(entry.paymentDay),
-      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
-      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
-    }));
-  };
+    return cycles
+      ? cycles.map((entry, index) => ({
+          id: String(index + 1),
+          cycleId: `${addLeadingZero(index + 1).toString()}`,
+          payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+          regularPaymentCycleNumber: entry.regularPaymentCycleNumber,
+          nameCycle: entry.regularPaymentCycleName,
+          periodicity: dataTranslations[entry.schedule] ?? entry.schedule,
+          payday: getDayPayment(entry.paymentDay),
+          numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+          laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
+        }))
+      : [];
+  }, [data, loading, appData.language]);
 
   const extraordinaryPaymentValues = useMemo(() => {
-    const specials = transformToArray<IPayrollSpecialBenefit>(
-      data.payrollSpecialBenefitPaymentCycles,
-    ).map((entry, index) => ({
-      id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
-      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
-      nameCycle: entry.abbreviatedName,
-      typePayment: specialBenefitPayment[0],
-      payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
-      paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
-      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
-      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
-    }));
+    const specials = data?.payrollSpecialBenefitPaymentCycles
+      ? transformToArray<IPayrollSpecialBenefit>(
+          data.payrollSpecialBenefitPaymentCycles,
+        ).map((entry, index) => ({
+          id: `cycle-special-benefit-${addLeadingZero(index + 1).toString()}`,
+          payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+          nameCycle: entry.abbreviatedName,
+          typePayment: specialBenefitPayment[0],
+          payday: formatPaymentDayExtra(entry.paymentDay) ?? entry.paymentDay,
+          paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
+          numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+          laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
+        }))
+      : [];
 
-    const severances = transformToArray<ISeverancePaymentCycles>(
-      data.severancePaymentCycles,
-    ).map((entry, index) => ({
-      id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
-      payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
-      nameCycle: entry.abbreviatedName,
-      typePayment: severancePay[0],
-      payday: formatPaymentDayExtra(entry.paymentDay),
-      paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
-      numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
-      laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
-    }));
+    const severances = data?.severancePaymentCycles
+      ? transformToArray<ISeverancePaymentCycles>(
+          data.severancePaymentCycles,
+        ).map((entry, index) => ({
+          id: `cycle-severance-${addLeadingZero(index + 1).toString()}`,
+          payrollForDeductionAgreementId: entry.payrollForDeductionAgreementId,
+          nameCycle: entry.abbreviatedName,
+          typePayment: severancePay[0],
+          payday: formatPaymentDayExtra(entry.paymentDay),
+          paydayTranslation: formatPaymentDayExtra(entry.paymentDay),
+          numberDaysUntilCut: String(entry.numberOfDaysBeforePaymentToBill),
+          laborRegulatorFramework: entry.regulatoryFrameworkCode ?? "",
+        }))
+      : [];
 
     return [...specials, ...severances];
-  }, [data, appData.language]);
+  }, [data, loading, appData.language]);
+
+  const { addressRes, complement } = getCompanyComp(
+    data?.company?.headquarterAddress ?? "",
+  );
 
   const initialData = {
     generalInformation: {
       isValid: false,
       values: {
-        code: data.payrollForDeductionAgreementCode,
-        abbreviatedName: data.abbreviatedName ?? "",
+        code: data?.payrollForDeductionAgreementCode ?? "",
+        abbreviatedName: data?.abbreviatedName ?? "",
         typePayroll:
-          dataTranslations[data.payrollForDeductionAgreementType] ??
-          data.payrollForDeductionAgreementType,
-        sourcesOfIncome: getSourcesIncome(data.incomeTypes),
+          dataTranslations[data?.payrollForDeductionAgreementType] ??
+          data?.payrollForDeductionAgreementType ??
+          "",
+        sourcesOfIncome: getSourcesIncome(data?.incomeTypes ?? []),
         applicationDaysPayroll: String(
-          data.numberOfDaysForReceivingTheDiscounts ?? 0,
+          data?.numberOfDaysForReceivingTheDiscounts ?? 0,
         ),
       },
     },
     ordinaryCycles: {
       isValid: false,
-      values: regularPaymentValues(),
+      values: regularPaymentValues,
     },
     extraordinaryCycles: {
       isValid: false,
       values: extraordinaryPaymentValues,
     },
+    ...(option && {
+      company: {
+        isValid: false,
+        values: {
+          companySelected: data?.payingEntityName ?? "",
+          companyName: data?.company?.payingEntityName ?? "",
+          companyTypeIdent: data?.company?.identificationTypeLegalPerson ?? "",
+          companyNumberIdent: data?.company?.identificationDocumentNumber ?? "",
+          companyNameCommercial: data?.company?.tradename ?? "",
+          companyComplement: complement ?? "",
+          companyCity: data?.company?.headquarterCity ?? "",
+          companyAddressRes: addressRes ?? "",
+          companyCountry: data?.company?.countryTaxResidence ?? "",
+          companyCountryIdent: data?.company?.countryOfIdentityDocument ?? "",
+        },
+      },
+    }),
   };
-  const companyAgreement = data.payingEntityName ?? "";
-  const [isSelected, setIsSelected] = useState<string>(
-    editPayrollAgTabsConfig.generalInformation.id,
-  );
+  const companyAgreement = data?.payingEntityName ?? "";
+
   const [formValues, setFormValues] =
     useState<IEditPayrollAgreementForms>(initialData);
   const [isCurrentFormValid, setIsCurrentFormValid] = useState(false);
@@ -144,11 +174,86 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const { legalPersonData } = useLegalPerson({
+    businessUnits: appData.businessUnit.publicCode,
+    token: appData.token,
+  });
+
+  const [currentTypePayroll, setCurrentTypePayroll] = useState<string>(
+    initialData.generalInformation.values.typePayroll,
+  );
+
+  useEffect(() => {
+    if (!data) return;
+
+    setFormValues({
+      generalInformation: {
+        isValid: false,
+        values: {
+          code: data.payrollForDeductionAgreementCode ?? "",
+          abbreviatedName: data.abbreviatedName ?? "",
+          typePayroll:
+            dataTranslations[data.payrollForDeductionAgreementType] ??
+            data.payrollForDeductionAgreementType ??
+            "",
+          sourcesOfIncome: getSourcesIncome(data.incomeTypes ?? []),
+          applicationDaysPayroll: String(
+            data.numberOfDaysForReceivingTheDiscounts ?? 0,
+          ),
+        },
+      },
+      ordinaryCycles: {
+        isValid: false,
+        values: regularPaymentValues,
+      },
+      extraordinaryCycles: {
+        isValid: false,
+        values: extraordinaryPaymentValues,
+      },
+      ...(option && {
+        company: {
+          isValid: false,
+          values: {
+            companySelected: data?.payingEntityName ?? "",
+            companyName: data?.company?.payingEntityName ?? "",
+            companyTypeIdent:
+              data?.company?.identificationTypeLegalPerson ?? "",
+            companyNumberIdent:
+              data?.company?.identificationDocumentNumber ?? "",
+            companyNameCommercial: data?.company?.tradename ?? "",
+            companyComplement: complement ?? "",
+            companyCity: data?.company?.headquarterCity ?? "",
+            companyAddressRes: addressRes ?? "",
+            companyCountry: data?.company?.countryTaxResidence ?? "",
+            companyCountryIdent: data?.company?.countryOfIdentityDocument ?? "",
+          },
+        },
+      }),
+    });
+
+    setRegularPaymentCycles(regularPaymentValues);
+    setExtraordinaryPayment(extraordinaryPaymentValues);
+    setCurrentTypePayroll(
+      dataTranslations[data.payrollForDeductionAgreementType] ??
+        data.payrollForDeductionAgreementType ??
+        "",
+    );
+    setTypeRegularPayroll(
+      typePayrollForCyclesExtraord.includes(
+        dataTranslations[data.payrollForDeductionAgreementType] ??
+          data.payrollForDeductionAgreementType ??
+          "",
+      ),
+    );
+  }, [data, option]);
+
   const initialValues = initialData.generalInformation.values;
 
   const navigate = useNavigate();
   const conditionRule = EPayrollAgreement.CONDITION_RULE;
   const smallScreen = useMediaQuery(mediaQueryMobile);
+
+  const companyRef = useRef<FormikProps<ICompanyEntry>>(null);
 
   const generalInformationRef =
     useRef<FormikProps<IGeneralInformationEntry>>(null);
@@ -157,28 +262,6 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     businessUnits: appData.businessUnit.publicCode,
     token: appData.token,
   });
-
-  const { newRegularPayment, newExtraordinaryPayment, newSourcesIncome } =
-    useManagePayrollCycles({
-      initialData,
-      regularPaymentCycles,
-      isSelected,
-      extraordinaryPayment,
-      setExtraordinaryPayment,
-      sourcesOfIncome: formValues.generalInformation.values.sourcesOfIncome,
-      initialSourcesOfIncome: initialValues.sourcesOfIncome,
-      payrollId: data.payrollForDeductionAgreementId,
-    });
-
-  useEffect(() => {
-    setTypeRegularPayroll(
-      typePayrollForCyclesExtraord.includes(
-        formValues.generalInformation.values.typePayroll,
-      )
-        ? true
-        : false,
-    );
-  }, []);
 
   const extraordinaryData = extraordinaryPaymentValues;
 
@@ -193,18 +276,28 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     return !hasValidPeriodicity && extraordinaryData.length === 0;
   }, [extraordinaryData, regularPaymentCycles, includedPeriodicity]);
 
+  const shouldHideOrdinaryTab = useMemo(() => {
+    return typePayrollForCyclesExtraord.includes(currentTypePayroll);
+  }, [currentTypePayroll]);
+
   const filteredTabsConfig = useMemo(() => {
     return Object.keys(editPayrollAgTabsConfig).reduce((acc, key) => {
       const tab =
         editPayrollAgTabsConfig[key as keyof typeof editPayrollAgTabsConfig];
 
-      const ordinaryData = regularPaymentValues();
-      if (
-        key === editPayrollAgTabsConfig.regularPaymentCycles.id &&
-        ordinaryData.length === 0
-      ) {
+      const ordinaryData = regularPaymentValues;
+      if (!option && key === editPayrollAgTabsConfig.company.id) {
         return acc;
       }
+
+      if (key === editPayrollAgTabsConfig.regularPaymentCycles.id) {
+        if (!option) {
+          if (ordinaryData.length === 0) return acc;
+        } else {
+          if (!shouldHideOrdinaryTab) return acc;
+        }
+      }
+
       if (
         key === editPayrollAgTabsConfig.extraordinaryPaymentCycles.id &&
         shouldHideExtraordinaryTab
@@ -217,7 +310,39 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       }
       return acc;
     }, {} as IEditPayrollTabsConfig);
-  }, [regularPaymentValues, extraordinaryPaymentValues, regularPaymentCycles]);
+  }, [
+    option,
+    regularPaymentValues,
+    extraordinaryPaymentValues,
+    regularPaymentCycles,
+    currentTypePayroll,
+  ]);
+
+  const getFirstFilteredTab = (filteredTabsConfig: IEditPayrollTabsConfig) => {
+    const keys = Object.keys(filteredTabsConfig);
+    if (keys.length > 0) {
+      return filteredTabsConfig[keys[0] as keyof IEditPayrollTabsConfig];
+    }
+    return undefined;
+  };
+
+  const defaultSelectedTab = getFirstFilteredTab(filteredTabsConfig)?.id;
+  const [isSelected, setIsSelected] = useState<string>(
+    defaultSelectedTab ?? editPayrollAgTabsConfig.generalInformation.id,
+  );
+
+  const { newRegularPayment, newExtraordinaryPayment, newSourcesIncome } =
+    useManagePayrollCycles({
+      initialData,
+      regularPaymentCycles,
+      isSelected,
+      extraordinaryPayment,
+      setExtraordinaryPayment,
+      sourcesOfIncome: formValues.generalInformation.values.sourcesOfIncome,
+      initialSourcesOfIncome: initialValues.sourcesOfIncome,
+      payrollId: data?.payrollForDeductionAgreementId,
+      option,
+    });
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -270,6 +395,21 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     }
   }, [generalInformationRef.current?.values]);
 
+  useEffect(() => {
+    if (option && companyRef.current) {
+      setFormValues((prev) => ({
+        ...prev,
+        company: {
+          isValid: prev.company?.isValid ?? false,
+          values: {
+            ...prev.company?.values,
+            ...companyRef.current?.values,
+          },
+        },
+      }));
+    }
+  }, [companyRef.current?.values]);
+
   const handleTabChange = (tabId: string) => {
     const currentTabRegularEmpty =
       isSelected === editPayrollAgTabsConfig.regularPaymentCycles.id &&
@@ -285,16 +425,94 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       return;
     }
 
-    setFormValues((prev) => ({
-      ...prev,
-      generalInformation: {
-        ...prev.generalInformation,
-        values: {
-          ...prev.generalInformation.values,
-          ...generalInformationRef.current?.values,
+    const latestTypePayroll = generalInformationRef.current?.values.typePayroll;
+    const typePayrollChanged = latestTypePayroll !== initialValues.typePayroll;
+
+    if (typePayrollChanged && latestTypePayroll) {
+      setRegularPaymentCycles([]);
+      setExtraordinaryPayment([]);
+      setIncludeExtraPayDay([]);
+      setRegularDeleted([]);
+
+      setFormValues((prev) => ({
+        ...prev,
+        generalInformation: {
+          ...prev.generalInformation,
+          values: {
+            ...prev.generalInformation.values,
+            ...generalInformationRef.current?.values,
+          },
         },
-      },
-    }));
+        ordinaryCycles: {
+          isValid: false,
+          values: [
+            {
+              cycleId: "",
+              nameCycle: "",
+              periodicity: "",
+              payday: "",
+              numberDaysUntilCut: "",
+              laborRegulatorFramework: "",
+            },
+          ],
+        },
+        extraordinaryCycles: {
+          isValid: false,
+          values: [
+            {
+              nameCycle: "",
+              typePayment: "",
+              payday: "",
+              numberDaysUntilCut: "",
+              laborRegulatorFramework: "",
+            },
+          ],
+        },
+      }));
+    } else {
+      setFormValues((prev) => ({
+        ...prev,
+        generalInformation: {
+          ...prev.generalInformation,
+          values: {
+            ...prev.generalInformation.values,
+            ...generalInformationRef.current?.values,
+          },
+        },
+        ...(option && {
+          company: {
+            ...prev.company,
+            isValid: false,
+            values: {
+              ...prev.company?.values,
+              ...companyRef?.current?.values,
+            },
+          },
+        }),
+      }));
+    }
+
+    if (
+      isSelected === editPayrollAgTabsConfig.regularPaymentCycles.id &&
+      includeExtraPayDay?.length === 0
+    ) {
+      setFormValues((prev) => ({
+        ...prev,
+        extraordinaryCycles: {
+          isValid: false,
+          values: [
+            {
+              nameCycle: "",
+              typePayment: "",
+              payday: "",
+              numberDaysUntilCut: "",
+              laborRegulatorFramework: "",
+            },
+          ],
+        },
+      }));
+    }
+
     setIsSelected(tabId);
   };
 
@@ -336,12 +554,33 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     setCanRefresh(true);
     navigate(-1);
   };
+  const legalPersonIdent = legalPersonData.find(
+    (item) =>
+      item.payingEntityName === formValues.company?.values.companySelected,
+  );
+
+  const company = {
+    identificationDocumentNumber: formValues.company?.values.companyNumberIdent,
+    identificationTypeLegalPerson: formValues.company?.values.companyTypeIdent,
+    payingEntityName: formValues.company?.values.companyName,
+    tradename: formValues.company?.values.companyNameCommercial,
+    countryTaxResidence: formValues.company?.values.companyCountry,
+    headquarterCity: formValues.company?.values.companyCity,
+    headquarterAddress: `${formValues.company?.values.companyAddressRes} _ ${formValues.company?.values.companyComplement}`,
+    countryOfIdentityDocument: formValues.company?.values.companyCountryIdent,
+  };
 
   const onSubmit = () => {
     const changedFields: {
       abbreviatedName?: string;
       applicationDaysPayroll?: string;
+      payrollForDeductionAgreementType?: string;
+      payingIdentification?: string;
+      payingEntityName?: string;
       numberOfDaysForReceivingTheDiscounts?: number;
+      identificationDocumentNumber?: string;
+      company?: ILegalPerson;
+      typePayroll?: string;
       payrollForDeductionAgreementId?: string;
       regularPaymentCycles?: IRegularPaymentCycles[];
       payrollSpecialBenefitPaymentCycles?: IPayrollSpecialBenefit[];
@@ -349,7 +588,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       modifyJustification?: string;
       incomeTypes?: IIncomeTypes[];
     } = {
-      payrollForDeductionAgreementId: data.payrollForDeductionAgreementId,
+      payrollForDeductionAgreementId: data?.payrollForDeductionAgreementId,
       modifyJustification: jsonLabels(initialValues.abbreviatedName)
         .modifyJustification,
     };
@@ -392,6 +631,37 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
       changedFields.payrollSpecialBenefitPaymentCycles = payrollSpeBenPayment;
     }
 
+    if (option) {
+      changedFields.abbreviatedName =
+        formValues.generalInformation.values.abbreviatedName;
+      changedFields.numberOfDaysForReceivingTheDiscounts =
+        Number(formValues.generalInformation.values.applicationDaysPayroll) ||
+        0;
+      changedFields.incomeTypes = newSourcesIncome().incomeTypes;
+
+      changedFields.payrollForDeductionAgreementType =
+        formValues?.generalInformation?.values.typePayroll;
+
+      if (
+        formValues.company?.values.companySelected !==
+        ECyclesPayroll.ADD_COMPANY
+      ) {
+        changedFields.payingEntityName =
+          formValues.company?.values.companySelected;
+        if (legalPersonIdent) {
+          changedFields.payingIdentification =
+            legalPersonIdent.identificationDocumentNumber;
+        }
+      }
+
+      if (
+        formValues.company?.values.companySelected ===
+        ECyclesPayroll.ADD_COMPANY
+      ) {
+        changedFields.company = company as ILegalPerson;
+      }
+    }
+
     if (
       hasChanges ||
       newRegularPayment().length > 0 ||
@@ -421,6 +691,9 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
   const showGeneralInfPayrollForm =
     isSelected === editPayrollAgTabsConfig.generalInformation.id;
 
+  const showCompanyPayrollForm =
+    isSelected === editPayrollAgTabsConfig.company.id;
+
   const showRegularPaymentCyclesForm =
     typeRegularPayroll &&
     isSelected === editPayrollAgTabsConfig.regularPaymentCycles.id;
@@ -448,6 +721,7 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     showDeletedAlertModal,
     showExtraPaymentCyclesForm,
     showGeneralInfPayrollForm,
+    showCompanyPayrollForm,
     showGoBackModal,
     showModal,
     showRegularPaymentCyclesForm,
@@ -455,6 +729,9 @@ const useEditPayrollAgreement = (props: IUseEditPayrollAgreement) => {
     smallScreen,
     sourcesOfIncomeValues,
     typeRegularPayroll,
+    companyRef,
+    defaultSelectedTab,
+    setCurrentTypePayroll,
     setIncludeExtraPayDay,
     setRegularDeleted,
     handleToggleDeletedAlertModal,

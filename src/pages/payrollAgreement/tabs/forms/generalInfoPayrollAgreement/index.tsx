@@ -22,9 +22,11 @@ const GeneralInformationPayrollForm = forwardRef<
       onPreviousStep,
       setSourcesOfIncomeValues,
       onReset,
+      setCurrentTypePayroll,
       loading = false,
       editDataOption = false,
       initialGeneralInfData,
+      option = false,
     },
     ref,
   ) => {
@@ -62,6 +64,8 @@ const GeneralInformationPayrollForm = forwardRef<
       onFormValid,
       setSourcesOfIncomeValues,
       initialGeneralInfData,
+      option,
+      setCurrentTypePayroll,
     });
 
     return (
@@ -96,6 +100,7 @@ const GeneralInformationPayrollForm = forwardRef<
         moreDetailsCode={moreDetailsCode}
         onToggleInfoTypeModal={handleToggleInfoTypeModal}
         modalData={modalData}
+        option={option}
       />
     );
   },

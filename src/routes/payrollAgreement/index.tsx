@@ -8,7 +8,11 @@ const PayrollAgreementRoutes = () => {
     <Routes>
       <Route path="/" element={<PayrollAgreement />} />
       <Route path="add-payroll-agreement" element={<AddPayrollAgreement />} />
-      <Route path="edit-payroll" element={<EditPayrollAgreement />} />
+      <Route
+        path="edit-payroll/:option/:id/:requestNumber"
+        element={<EditPayrollAgreement />}
+      />
+      <Route path="edit-payroll/:option" element={<EditPayrollAgreement />} />
     </Routes>
   );
 };

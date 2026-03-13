@@ -28,6 +28,7 @@ import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdi
 import { mapDecisionIdsFromConfigured } from "@utils/mapDecisionIdsFromConfigured";
 import { configurationLinesEventBus } from "@events/configurationLinesEventBus";
 import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
+import { compareValuesDupDecision } from "@utils/compareValuesDupDecision";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const normalizeCondition = (c: any) => ({
@@ -260,8 +261,8 @@ const useBusinessRulesNew = (props: IUseBusinessRulesNewGeneral) => {
   const submitForm = (dataDecision: any) => {
     let hasDateError = false;
 
-    const validateValue = decisionsSorted.filter(
-      (decision) => decision.value === dataDecision.value,
+    const validateValue = decisionsSorted.filter((decision) =>
+      compareValuesDupDecision(decision.value, dataDecision.value),
     );
 
     const isEditing = selectedDecision !== null && !isCreatingNew;

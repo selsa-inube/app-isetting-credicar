@@ -1,6 +1,7 @@
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
 
 interface IUseEditGeneralPolicies {
+  option: boolean;
   contributionsData?: IRuleDecisionExtended[];
   incomeData?: IRuleDecisionExtended[];
   scoreModelsData?: IRuleDecisionExtended[];

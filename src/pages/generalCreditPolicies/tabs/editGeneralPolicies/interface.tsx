@@ -46,6 +46,8 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
     showRiskScoreApiUrl,
     showContributions,
     disabledButton,
+    option,
+    setEditDecision,
     handleToggleDateModal,
     setShowFactor,
     setShowReciprocity,
@@ -66,12 +68,16 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
       height="auto"
       backgroundColor={EComponentAppearance.LIGHT}
       boxSizing="border-box"
-      borderColor={EComponentAppearance.DARK}
-      borderRadius={tokens.spacing.s100}
+      borderColor={
+        option ? EComponentAppearance.LIGHT : EComponentAppearance.DARK
+      }
+      borderRadius={option ? tokens.spacing.s0 : tokens.spacing.s100}
       padding={
-        smallScreen
-          ? `${tokens.spacing.s200}`
-          : `${tokens.spacing.s300} ${tokens.spacing.s800}`
+        option
+          ? ` ${tokens.spacing.s0}`
+          : smallScreen
+            ? `${tokens.spacing.s200}`
+            : `${tokens.spacing.s300} ${tokens.spacing.s800}`
       }
     >
       <Stack gap={tokens.spacing.s300} direction="column" height="auto">
@@ -104,7 +110,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.contributionsPortfolio,
               )}
               initialDecisions={rulesData.ReciprocityFactorForCreditLimit}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -112,6 +118,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showIncomePort && (
@@ -123,7 +130,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.incomePortfolio,
               )}
               initialDecisions={rulesData.RiskScoreFactorForCreditLimit}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -131,6 +138,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showScoreModels && (
@@ -142,7 +150,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.scoreModels,
               )}
               initialDecisions={rulesData.CreditRiskScoringModel}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -150,6 +158,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showMinimumIncome && (
@@ -160,7 +169,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.minimumIncomePercentage,
               )}
               initialDecisions={rulesData.MinimumSubsistenceReservePercentage}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -168,6 +177,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showBasicNotificFormat && (
@@ -178,7 +188,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.basicNotificationFormat,
               )}
               initialDecisions={rulesData.BasicNotificationFormat}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -186,6 +196,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showBasicNotifRecipient && (
@@ -196,7 +207,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.basicNotificationRecipient,
               )}
               initialDecisions={rulesData.BasicNotificationRecipient}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -204,6 +215,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
 
@@ -215,7 +227,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.minimumCreditBureauRiskscore,
               )}
               initialDecisions={rulesData.MinimumCreditBureauRiskScore}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -223,6 +235,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showNotificationChannel && (
@@ -233,7 +246,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.notificationChannel,
               )}
               initialDecisions={rulesData.NotificationChannel}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -241,6 +254,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
           {showRiskScoreApiUrl && (
@@ -251,7 +265,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
                 decisionLabels.riskscoreApiUrl,
               )}
               initialDecisions={rulesData.RiskScoreApiUrl}
-              editionMode={EEditionMode.CLASSIC}
+              editionMode={EEditionMode.VERSIONED}
               option={EUseCase.EDIT}
               loading={false}
               onPreviousStep={onReset}
@@ -259,6 +273,7 @@ const EditGeneralPoliciesUI = (props: IEditGeneralPoliciesUI) => {
               decisionTemplateConfig={decisionTemplateGenPolicies}
               setDecisionData={setDecisionData}
               onSave={handleToggleDateModal}
+              setEditDecision={setEditDecision}
             />
           )}
         </Stack>

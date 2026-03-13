@@ -48,6 +48,7 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     minCredBureauRiskScoreData,
     notifChannelData,
     riskScoreApiUrlData,
+    option,
   } = props;
   const { appData } = useContext(AuthAndPortalData);
 
@@ -110,8 +111,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
   const [saveData, setSaveData] = useState<ISaveDataRequest>();
   const [showGoBackModal, setShowGoBackModal] = useState(false);
   const [showDateModal, setShowDateModal] = useState(false);
+  const [processedModal, setProcessedModal] = useState(false);
   const [canRefresh, setCanRefresh] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
+  const [editDecision, setEditDecision] = useState<boolean>(false);
   const [isSelected, setIsSelected] = useState<string>(
     () => editGeneralPoliciesTabsConfig.decisionsGeneral.id,
   );
@@ -234,6 +237,8 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
     user: appData.user.userAccount,
+    editDecision,
+    option,
   });
 
   const { disabledButton: withoutPrivilegesEdit } = useValidateUseCase({
@@ -315,7 +320,10 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     };
 
     if (newDecisions && newDecisions.length > 0) {
-      configurationRequestData.rules = newDecisions;
+      const filteredDecisions = newDecisions.filter(
+        (decision) => !!decision.ruleName,
+      );
+      configurationRequestData.rules = filteredDecisions;
     }
 
     setSaveData({
@@ -338,6 +346,16 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
 
   const handleCloseGoBackModal = () => {
     setShowGoBackModal(false);
+  };
+
+  const handleProcessed = () => {
+    setProcessedModal(false);
+    navigate("/credit-lines");
+  };
+
+  const handleCloseProcessed = () => {
+    setProcessedModal(false);
+    navigate("/");
   };
 
   const handleGoBack = () => {
@@ -463,6 +481,11 @@ const useEditGeneralPolicies = (props: IUseEditGeneralPolicies) => {
     prevNotifChannelRef,
     prevRiskScoreApiUrlRef,
     disabledButton,
+    processedModal,
+    handleProcessed,
+    setProcessedModal,
+    handleCloseProcessed,
+    setEditDecision,
     setDecisionData,
     handleToggleInfoModal,
     handleOpenModal,

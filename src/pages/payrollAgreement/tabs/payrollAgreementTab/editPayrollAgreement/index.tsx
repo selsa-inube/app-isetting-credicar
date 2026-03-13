@@ -1,24 +1,43 @@
 import { useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEditPayrollAgreement } from "@hooks/payrollAgreement/edit/useEditPayrollAgreement";
+import { useDataPayroll } from "@hooks/payrollAgreement/useDataPayroll";
 import { useModalEditPayroll } from "@hooks/payrollAgreement/edit/useModalEditPayroll";
 import { useSavePayrollAgreement } from "@hooks/payrollAgreement/savePayrollAgreement/useSavePayrollAgreement";
 import { EUseCase } from "@enum/useCase";
+import { EManagementType } from "@enum/managementType";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IOrdinaryCyclesEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/forms/IOrdinaryCyclesEntry";
+import { IPayrollAgreementData } from "@ptypes/payrollAgreement/payrollAgreementTab/IPayrollAgreementData";
 import { EditPayrollAgreementUI } from "./interface";
 
 const EditPayrollAgreement = () => {
+  const { id, option, requestNumber } = useParams();
   const location = useLocation();
-  const { data } = location.state ?? {};
+  const { data: payrollData } = location.state ?? {};
   const { appData } = useContext(AuthAndPortalData);
 
   const {
+    data,
+    loading,
+    hasError: hasErrorInProgress,
+    errorData: errorDataInProgress,
+  } = useDataPayroll({
+    id,
+    requestNumber,
+    option,
+    payrollData,
+  });
+
+  const validateOption = Boolean(option === EManagementType.IN_PROGRESS);
+  const {
     companyAgreement,
     formValues,
+    initialData,
     generalInformationRef,
+    companyRef,
     isSelected,
     saveData,
     typePayroll,
@@ -27,15 +46,17 @@ const EditPayrollAgreement = () => {
     showRequestProcessModal,
     smallScreen,
     sourcesOfIncomeValues,
-    initialData,
     typeRegularPayroll,
     regularPaymentCycles,
     extraordinaryPayment,
     showDeletedAlertModal,
     showGeneralInfPayrollForm,
+    showCompanyPayrollForm,
     showRegularPaymentCyclesForm,
     showExtraPaymentCyclesForm,
     filteredTabs,
+    defaultSelectedTab,
+    setCurrentTypePayroll,
     setIncludeExtraPayDay,
     setRegularDeleted,
     handleToggleDeletedAlertModal,
@@ -52,7 +73,11 @@ const EditPayrollAgreement = () => {
     setShowModal,
     setShowRequestProcessModal,
     setSourcesOfIncomeValues,
-  } = useEditPayrollAgreement({ data });
+  } = useEditPayrollAgreement({
+    data: data as IPayrollAgreementData,
+    loading,
+    option: validateOption,
+  });
 
   const {
     savePayrollAgreement,
@@ -79,6 +104,8 @@ const EditPayrollAgreement = () => {
     setSendData: setShowRequestProcessModal,
     setShowModal,
     token: appData.token,
+    optionRequest: validateOption,
+    id,
   });
 
   const { modalData, showDecision } = useModalEditPayroll({
@@ -92,6 +119,10 @@ const EditPayrollAgreement = () => {
     loadingSendData,
     showDeletedAlertModal,
     typePayroll,
+    hasErrorInProgress,
+    errorDataInProgress,
+    optionInProgress: validateOption,
+    request: String(requestNumber ?? ""),
     handleToggleDeletedAlertModal,
     handleCloseGoBackModal,
     handleEditedModal,
@@ -103,13 +134,14 @@ const EditPayrollAgreement = () => {
   return (
     <EditPayrollAgreementUI
       formReferences={generalInformationRef}
+      companyRef={companyRef}
       formValues={formValues}
       initialValues={initialData}
       setIsCurrentFormValid={setIsCurrentFormValid}
       smallScreen={smallScreen}
       sourcesOfIncomeValues={sourcesOfIncomeValues}
       setSourcesOfIncomeValues={setSourcesOfIncomeValues}
-      isSelected={isSelected}
+      isSelected={isSelected ?? defaultSelectedTab ?? ""}
       onTabChange={handleTabChange}
       onReset={handleReset}
       handleOpenModal={handleOpenModal}
@@ -142,6 +174,12 @@ const EditPayrollAgreement = () => {
       onCloseProcess={handleCloseProcess}
       modalData={modalData}
       showDecision={showDecision}
+      loading={loading}
+      data={data}
+      validateOption={validateOption}
+      hasError={hasErrorInProgress}
+      showCompanyPayrollForm={Boolean(showCompanyPayrollForm)}
+      setCurrentTypePayroll={setCurrentTypePayroll}
     />
   );
 };

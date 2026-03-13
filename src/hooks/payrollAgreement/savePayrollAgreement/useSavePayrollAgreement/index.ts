@@ -4,11 +4,13 @@ import { IFlagAppearance, useFlag } from "@inubekit/inubekit";
 
 import { ChangeToRequestTab } from "@context/changeToRequestTab/changeToRequest";
 import { postSaveRequest } from "@services/requestInProgress/postSaveRequest";
+import { postModifyRequestData } from "@services/requestInProgress/postModifyRequestData";
 import { postAddPayrollAgreement } from "@services/payrollAgreement/postAddPayrollAgreement";
 import { pacthEditPayrollAgreement } from "@services/payrollAgreement/pacthEditPayrollAgre";
 import { deletePayrollAgreement } from "@services/payrollAgreement/deletePayrollAgre";
 import { ERequestStepsStatus } from "@enum/requestStepsStatus";
 import { EUseCase } from "@enum/useCase";
+import { EPayrollAgreement } from "@enum/payrollAgreement";
 import { errorObject } from "@utils/errorObject";
 import { interventionHumanMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/interventionHumanMessage";
 import { flowAutomaticMessages } from "@config/payrollAgreement/payrollAgreementTab/generic/flowAutomaticMessages";
@@ -16,6 +18,7 @@ import { requestStepsInitial } from "@config/requestSteps";
 import { operationTypes } from "@config/useCase";
 import { requestStepsNames } from "@config/requestStepsNames";
 import { statusFlowAutomatic } from "@config/status/statusFlowAutomatic";
+import { modifyRequestLabels } from "@config/modifyRequestLabels";
 import { statusCloseModal } from "@config/status/statusCloseModal";
 import { requestStatusMessage } from "@config/payrollAgreement/payrollAgreementTab/generic/requestStatusMessage";
 import { statusRequestFinished } from "@config/status/statusRequestFinished";
@@ -24,6 +27,7 @@ import { IUseSavePayrollAgreement } from "@ptypes/hooks/payrollAgreement/IUseSav
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
 import { IRequestSteps } from "@ptypes/design/IRequestSteps";
 import { IErrors } from "@ptypes/IErrors";
+import { IModifyRequestData } from "@ptypes/requestInProgress/IModifyRequestData";
 
 const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   const {
@@ -32,11 +36,13 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     userAccount,
     sendData,
     data,
+    optionRequest,
     setSendData,
     setShowModal,
     setErrorFetchSaveData,
     setEntryDeleted,
     token,
+    id,
   } = props;
 
   const [savePayrollAgreement, setSavePayrollAgreement] =
@@ -75,6 +81,32 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
     }
   };
 
+  const modifyRequestConfig = {
+    configurationRequestData: data?.configurationRequestData,
+    modifyJustification: modifyRequestLabels(EPayrollAgreement.OPTION_NAME)
+      .modifyJustification,
+    settingRequestId: id,
+  };
+
+  const fetchSaveRequestData = async () => {
+    setLoadingSendData(true);
+    try {
+      await postModifyRequestData(
+        userAccount,
+        modifyRequestConfig as IModifyRequestData,
+        token,
+      );
+      setShowModal(false);
+      navigate(-1);
+    } catch (error) {
+      console.info(error);
+      setHasError(true);
+      setErrorData(errorObject(error));
+    } finally {
+      setLoadingSendData(false);
+    }
+  };
+
   const isStatusIntAutomatic = (status: string | undefined): boolean => {
     return status ? statusFlowAutomatic.includes(status) : false;
   };
@@ -87,39 +119,41 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
   };
 
   const fetchRequestData = async () => {
-    try {
-      if (useCase === EUseCase.ADD) {
-        const newData = await postAddPayrollAgreement(
-          userAccount,
-          businessUnits,
-          requestConfiguration as IRequestPayrollAgre,
-          token,
-        );
-        setStatusRequest(newData.settingRequest?.requestStatus);
+    if (!optionRequest) {
+      try {
+        if (useCase === EUseCase.ADD) {
+          const newData = await postAddPayrollAgreement(
+            userAccount,
+            businessUnits,
+            requestConfiguration as IRequestPayrollAgre,
+            token,
+          );
+          setStatusRequest(newData.settingRequest?.requestStatus);
+        }
+        if (useCase === EUseCase.EDIT) {
+          const newData = await pacthEditPayrollAgreement(
+            userAccount,
+            businessUnits,
+            requestConfiguration as IRequestPayrollAgre,
+            token,
+          );
+          setStatusRequest(newData.settingRequest?.requestStatus);
+        }
+        if (useCase === EUseCase.DELETE) {
+          const newData = await deletePayrollAgreement(
+            userAccount,
+            businessUnits,
+            requestConfiguration as IRequestPayrollAgre,
+            token,
+          );
+          setStatusRequest(newData.settingRequest?.requestStatus);
+        }
+      } catch (error) {
+        console.info(error);
+        setErrorFetchRequest(true);
+        setNetworkError(errorObject(error));
+        setShowModal(false);
       }
-      if (useCase === EUseCase.EDIT) {
-        const newData = await pacthEditPayrollAgreement(
-          userAccount,
-          businessUnits,
-          requestConfiguration as IRequestPayrollAgre,
-          token,
-        );
-        setStatusRequest(newData.settingRequest?.requestStatus);
-      }
-      if (useCase === EUseCase.DELETE) {
-        const newData = await deletePayrollAgreement(
-          userAccount,
-          businessUnits,
-          requestConfiguration as IRequestPayrollAgre,
-          token,
-        );
-        setStatusRequest(newData.settingRequest?.requestStatus);
-      }
-    } catch (error) {
-      console.info(error);
-      setErrorFetchRequest(true);
-      setNetworkError(errorObject(error));
-      setShowModal(false);
     }
   };
 
@@ -295,7 +329,12 @@ const useSavePayrollAgreement = (props: IUseSavePayrollAgreement) => {
 
   useEffect(() => {
     if (!sendData) return;
-    fetchSavePayrollData();
+
+    if (optionRequest) {
+      fetchSaveRequestData();
+    } else {
+      fetchSavePayrollData();
+    }
   }, [sendData]);
 
   useEffect(() => {

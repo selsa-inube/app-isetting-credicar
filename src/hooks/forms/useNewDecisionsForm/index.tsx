@@ -11,15 +11,24 @@ import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useEnumRules } from "@hooks/moneyDestination/useEnumRules";
 import { capitalizeText } from "@utils/capitalizeText";
 import { normalizeConditionTraduction } from "@utils/normalizeConditionTraduction";
+import { EEditionMode } from "@enum/editionMode";
 import { asArray } from "@utils/asArray";
 import { localizeLabel } from "@utils/localizeLabel";
 import { buildSelectedDecisionForEdit } from "@utils/buildSelectedDecisionForEdit";
 import { transformDecision } from "@utils/transformDecision";
 import { nextDecisionLabel } from "@utils/decisions/nextDecisionLabel";
 import { compareValueDecision } from "@utils/compareValueDecision";
-import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { localizeDecision } from "@utils/localizeDecision";
+import { ensureArrayGroupsDeep } from "@utils/ensureArrayGroupsDeep";
 import { transformDecisions } from "@utils/transforDecisionPolicies";
+import { getConditionsTraduction } from "@utils/getConditionsTraduction";
+import { formatDateDecision } from "@utils/date/formatDateDecision";
+import { getAfterDay } from "@utils/getAfterDay";
 import { normalizeCondition } from "@utils/decisions/normalizeCondition";
+import { keyOf } from "@utils/keyOf";
+import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
+import { compareValuesDupDecision } from "@utils/compareValuesDupDecision";
+import { safeSortDisplayDataSampleSwitchPlaces } from "@utils/safeSortDisplayDataSampleSwitchPlaces";
 import { EComponentAppearance } from "@enum/appearances";
 import { EUseCase } from "@enum/useCase";
 import { decisionsLabels } from "@config/decisions/decisionsLabels";
@@ -27,8 +36,7 @@ import { conditionsHidden } from "@config/creditLines/configuration/conditionsHi
 import { rulesLabels } from "@config/generalCreditPolicies/assisted/RulesLabels";
 import { IUseNewDecisionsForm } from "@ptypes/generalCredPolicies/IUseNewDecisionsForm";
 import { IRuleDecisionExtended } from "@ptypes/IRuleDecisionExtended";
-import { IConditionGroups } from "@ptypes/context/creditLinesConstruction/IConditionGroups";
-import { IConditionsTheDecision } from "@ptypes/context/creditLinesConstruction/IConditionsTheDecision";
+import { ILanguageDecision } from "@ptypes/ILanguageDecision";
 
 const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   const {
@@ -38,21 +46,12 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     nameRule = "",
     ruleCatalog,
     labelBusinessRules,
+    setEditDecision,
     setDecisionData,
     decisionTemplateConfig,
   } = props;
 
   const { appData } = useContext(AuthAndPortalData);
-  const [selectedConditions, setSelectedConditions] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isCreatingNew, setIsCreatingNew] = useState(false);
-
-  const [selectedDecision, setSelectedDecision] =
-    useState<IRuleDecisionExtended | null>(null);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [removedConditionKeys, setRemovedConditionKeys] = useState<Set<string>>(
-    new Set(),
-  );
 
   const { ruleData, loadingList } = useEnumRules({
     enumDestination: labelBusinessRules,
@@ -61,6 +60,29 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     businessUnits: appData.businessUnit.publicCode,
     token: appData.token,
   });
+
+  const {
+    conditionTraduction,
+    ruleNameTraduction,
+    listValuesDecision,
+    dataType,
+  } = getConditionsTraduction(ruleData, appData.language);
+
+  const [selectedConditions, setSelectedConditions] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreatingNew, setIsCreatingNew] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
+
+  const [selectedDecision, setSelectedDecision] =
+    useState<IRuleDecisionExtended | null>(null);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [removedConditionKeys, setRemovedConditionKeys] = useState<Set<string>>(
+    new Set(),
+  );
+
+  useEffect(() => {
+    setEditDecision(false);
+  }, []);
 
   const normalizeDecisions = (
     decisions: IRuleDecisionExtended[] | undefined,
@@ -76,16 +98,9 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     }));
   };
 
-  const [decisions, setDecisions] = useState<IRuleDecision[]>(
+  const [decisions, setDecisions] = useState<IRuleDecisionExtended[]>(
     normalizeDecisions(initialDecisions),
   );
-
-  const {
-    conditionTraduction,
-    ruleNameTraduction,
-    listValuesDecision,
-    dataType,
-  } = getConditionsTraduction(ruleData, appData.language);
 
   useEffect(() => {
     if (!conditionTraduction || conditionTraduction.length === 0) return;
@@ -98,7 +113,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
           dataType,
           listValuesDecision,
           conditionTraduction,
-        ) as IRuleDecision[],
+        ) as IRuleDecisionExtended[],
     );
   }, [ruleData]);
 
@@ -116,6 +131,17 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   };
 
   const decisionTemplate = getDecisionTemplate();
+
+  const localizedTemplate = useMemo(
+    () =>
+      ensureArrayGroupsDeep(
+        localizeDecision(
+          decisionTemplate,
+          appData.language as ILanguageDecision,
+        ),
+      ),
+    [decisionTemplate, appData.language],
+  );
 
   const originalName = (name: string) => name?.split(".").pop() || name;
 
@@ -147,12 +173,31 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
   };
 
   const submitForm = (dataDecision: any) => {
+    const validateValue = decisions.filter((decision) =>
+      compareValuesDupDecision(decision.value, dataDecision.value),
+    );
+    const isEditing = selectedDecision !== null;
+
+    const isDuplicateNewDecision = validateValue.length > 0 && !isEditing;
+
+    if (isDuplicateNewDecision) {
+      setShowAlertModal(true);
+      setEditDecision(false);
+      return;
+    }
+
+    if (!isEditing) {
+      setEditDecision(false);
+    } else {
+      setEditDecision(true);
+    }
     const base = {
-      ...decisionTemplate,
+      ...localizedTemplate,
       ...dataDecision,
+      effectiveFrom: formatDateDecision(dataDecision.effectiveFrom) ?? "",
     };
 
-    const tplGroups = (getConditionsByGroupNew(decisionTemplate) ||
+    const tplGroups = (getConditionsByGroupNew(localizedTemplate) ||
       {}) as Record<string, unknown>;
     const dataGroups = (getConditionsByGroupNew(dataDecision) || {}) as Record<
       string,
@@ -176,7 +221,7 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
             ...tplItem,
             labelName: localizeLabel(
               tplItem,
-              appData.language as "es" | "en" | undefined,
+              appData.language as ILanguageDecision,
             ),
             conditionDataType:
               tplItem.conditionDataType?.toLocaleLowerCase() ??
@@ -211,10 +256,8 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     const newDecision: IRuleDecision = {
       ...base,
       decisionId: decisionIdForNew,
-      labelName: localizeLabel(
-        base,
-        appData.language as "es" | "en" | undefined,
-      ),
+      effectiveFrom: formatDateDecision(base.effectiveFrom) ?? "",
+      labelName: localizeLabel(base, appData.language as ILanguageDecision),
       /* eslint-disable @typescript-eslint/no-explicit-any */
       conditionGroups: groupsRecordToArrayNew(
         mergedGroups as Record<string, any[]>,
@@ -222,25 +265,40 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     };
     const decisionWithSentences = transformDecision(
       newDecision,
-      appData.language as "es" | "en" | undefined,
-      option === EUseCase.EDIT,
+      appData.language as ILanguageDecision,
+      isEditing,
       compareValueDecision(initialDecisions, newDecision),
       base.decisionId,
+      true,
     );
 
     setDecisions((prev) => {
-      const exists = prev.some(
-        (d) => d.decisionId === decisionWithSentences.decisionId,
-      );
-      if (exists) {
-        return prev.map((d) =>
-          d.decisionId === decisionWithSentences.decisionId
+      if (isEditing && selectedDecision) {
+        const editionMode = getEditionModeForDecision(option, selectedDecision);
+        if (editionMode === EEditionMode.VERSIONED) {
+          const updatedPrev = prev.map((decision) => {
+            if (keyOf(decision) !== keyOf(selectedDecision)) {
+              return decision;
+            }
+
+            return {
+              ...decision,
+              validUntil: getAfterDay(
+                decisionWithSentences.effectiveFrom as string,
+              ),
+            };
+          });
+
+          return [...updatedPrev, decisionWithSentences];
+        }
+        return prev.map((decision) =>
+          keyOf(decision) === keyOf(selectedDecision)
             ? decisionWithSentences
-            : d,
+            : decision,
         );
-      } else {
-        return [...prev, decisionWithSentences];
       }
+
+      return [...prev, decisionWithSentences];
     });
 
     closeModal();
@@ -250,17 +308,13 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     if (decision) {
       const selectedFromTemplate = buildSelectedDecisionForEdit(
         decision,
-        decisionTemplateFiltered,
+        decisionTemplateFiltered as any,
       );
 
       setSelectedDecision(selectedFromTemplate);
       setIsCreatingNew(false);
     } else {
-      setSelectedDecision({
-        ...decisionTemplate,
-        ...decisionTemplateFiltered,
-        conditionGroups: decisionTemplateFiltered.conditionGroups || [],
-      } as IRuleDecision);
+      setSelectedDecision(null);
       setIsCreatingNew(true);
     }
 
@@ -271,10 +325,11 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     `${groupKey}.${originalName(conditionName)}`;
 
   const removeCondition = (conditionName: string) => {
-    const [firstPart, ...rest] = conditionName.split(".");
-    const groupKey = rest.length > 0 ? firstPart : "group-primary";
-    const plainName = rest.length > 0 ? rest.join(".") : firstPart;
-    const scopedKey = makeScopedKey(groupKey, plainName);
+    const parts = conditionName.split(".");
+    const groupKey = parts.length > 1 ? parts[0] : undefined;
+    const plainName = parts.length > 1 ? parts.slice(1).join(".") : parts[0];
+    const effectiveGroupKey = groupKey ?? "group-primary";
+    const scopedKey = makeScopedKey(effectiveGroupKey, plainName);
 
     setRemovedConditionKeys((prev) => {
       const next = new Set(prev);
@@ -285,42 +340,31 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     setSelectedDecision((prev) => {
       if (!prev) return prev;
 
-      const conditionGroups = prev.conditionGroups || [];
+      const groups = getConditionsByGroupNew(prev) || {};
 
-      const groups = Array.isArray(conditionGroups)
-        ? conditionGroups
-        : Object.entries(conditionGroups).map(([groupId, conditions]) => ({
-            ConditionGroupId: groupId,
-            conditionsThatEstablishesTheDecision: Array.isArray(conditions)
-              ? conditions
-              : [conditions],
-          }));
+      const updatedGroupsRecord = Object.fromEntries(
+        Object.entries(groups).map(([g, list]) => {
+          if (effectiveGroupKey && g !== effectiveGroupKey) return [g, list];
 
-      const updatedGroups = groups.map((group: IConditionGroups) => {
-        const currentGroupId = group.ConditionGroupId || "group-primary";
+          return [
+            g,
+            list.filter(
+              (c) => originalName(c.conditionName) !== originalName(plainName),
+            ),
+          ];
+        }),
+      );
 
-        if (currentGroupId !== groupKey) return group;
-
-        const conditions = group.conditionsThatEstablishesTheDecision || [];
-        const filteredConditions = conditions.filter(
-          (c: IConditionsTheDecision) =>
-            originalName(c.conditionName) !== originalName(plainName),
-        );
-
-        return {
-          ...group,
-          ConditionGroupId: currentGroupId,
-          conditionsThatEstablishesTheDecision: filteredConditions,
-        };
-      });
-
-      return {
+      const nextDecision: IRuleDecision = {
         ...prev,
-        conditionGroups: updatedGroups,
-        conditionsThatEstablishesTheDecision: updatedGroups as any,
+        conditionGroups: groupsRecordToArrayNew(updatedGroupsRecord) as any,
+        conditionsThatEstablishesTheDecision: updatedGroupsRecord as any,
       };
+
+      return nextDecision;
     });
   };
+
   const restoreConditions = (scopedNames: string[]) => {
     if (!scopedNames?.length) return;
 
@@ -338,13 +382,12 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
       return next;
     });
   };
-
   const multipleChoicesOptions = useMemo(() => {
-    if (!decisionTemplate || !decisionTemplate.conditionGroups) {
+    if (!localizedTemplate || !localizedTemplate.conditionGroups) {
       return [];
     }
 
-    const groups = (getConditionsByGroupNew(decisionTemplate) || {}) as Record<
+    const groups = (getConditionsByGroupNew(localizedTemplate) || {}) as Record<
       string,
       unknown
     >;
@@ -354,100 +397,88 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     return asArray(primaryGroup)
       .map((option: any) => ({
         id: option.conditionName,
-        label: localizeLabel(
-          option,
-          appData.language as "es" | "en" | undefined,
-        ),
+        label: localizeLabel(option, appData.language as ILanguageDecision),
         value: option.conditionName,
       }))
       .filter((condition) => !conditionsHidden.includes(condition.id));
-  }, [decisionTemplate, appData.language]);
+  }, [localizedTemplate, appData.language]);
 
   const filteredDecisionTemplate = useMemo(() => {
-    if (!decisionTemplate) return {} as IRuleDecision;
+    const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
+    const tpl = safeSortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: normalizedTemplate,
+    });
 
-    const template = JSON.parse(JSON.stringify(decisionTemplate));
+    const tplGroups = (getConditionsByGroupNew(tpl) || {}) as Record<
+      string,
+      unknown
+    >;
+    const filteredEntries = Object.entries(tplGroups).reduce(
+      (acc, [group, list]) => {
+        const kept = asArray(list).filter((c: any) => {
+          if (c?.hidden) return false;
 
-    if (!template.conditionGroups) {
-      return {
-        ...template,
-        conditionGroups: [],
-        labelName: localizeLabel(
-          template,
-          appData.language as "es" | "en" | undefined,
-        ),
-      };
-    }
+          const passesSelected =
+            selectedIds.size > 0 && selectedIds.has(c.conditionName);
 
-    const groups = Array.isArray(template.conditionGroups)
-      ? template.conditionGroups
-      : Object.entries(template.conditionGroups || {}).map(
-          ([groupId, conditions]) => ({
-            groupId,
-            conditions: Array.isArray(conditions) ? conditions : [conditions],
-          }),
-        );
+          const scopedKey = makeScopedKey(group, c.conditionName);
+          const notRemoved = !removedConditionKeys.has(scopedKey);
 
-    const filteredGroups = groups
-      .map((group: IConditionGroups) => ({
-        ...group,
-        conditionsThatEstablishesTheDecision: (
-          group.conditionsThatEstablishesTheDecision || []
-        ).filter((condition) => {
-          if (condition?.hidden) return false;
+          return passesSelected && notRemoved;
+        });
 
-          const hasSelection = selectedIds.size > 0;
-          if (hasSelection && !selectedIds.has(condition.conditionName))
-            return false;
+        if (kept.length > 0) acc.push([group, kept]);
+        return acc;
+      },
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      [] as [string, any[]][],
+    );
 
-          const key = `${group.ConditionGroupId}::${condition.conditionName}`;
-          if (removedConditionKeys.has(key)) return false;
+    const filtered = Object.fromEntries(filteredEntries);
 
-          return true;
-        }),
-      }))
-      .filter(
-        (group: IConditionGroups) =>
-          group.conditionsThatEstablishesTheDecision.length > 0,
-      );
-
-    const result = {
-      ...template,
+    const withFiltered: IRuleDecision = {
+      ...tpl,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       labelName: localizeLabel(
-        template,
-        appData.language as "es" | "en" | undefined,
+        tpl as any,
+        appData.language as ILanguageDecision,
       ),
-      conditionGroups: filteredGroups,
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      conditionGroups: groupsRecordToArrayNew(
+        filtered as Record<string, any[]>,
+      ) as any,
     };
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    delete (withFiltered as any).conditionsThatEstablishesTheDecision;
 
-    delete result.conditionsThatEstablishesTheDecision;
+    return ensureArrayGroupsDeep(withFiltered);
+  }, [localizedTemplate, appData.language, selectedIds, removedConditionKeys]);
 
-    return result;
-  }, [decisionTemplate, appData.language, selectedIds, removedConditionKeys]);
+  const handleToggleModal = () => {
+    setShowAlertModal(!showAlertModal);
+  };
 
   const emptyConditionsTemplate = useMemo(() => {
-    const existingGroups = decisionTemplate?.conditionGroups || [];
+    const normalizedTemplate = ensureArrayGroupsDeep(localizedTemplate);
+    const tpl = safeSortDisplayDataSampleSwitchPlaces({
+      decisionTemplate: normalizedTemplate,
+    });
+    const groups = (getConditionsByGroupNew(tpl) || {}) as Record<
+      string,
+      unknown
+    >;
 
-    const groupsArray = Array.isArray(existingGroups)
-      ? existingGroups
-      : Object.entries(existingGroups).map(([groupId]) => ({
-          groupId,
-          conditions: [],
-        }));
-
-    const emptyGroups =
-      groupsArray.length > 0
-        ? groupsArray.map((group) => ({
-            groupId: group.groupId || "group-primary",
-            conditions: [],
-          }))
-        : [{ groupId: "group-primary", conditions: [] }];
+    const groupKeys = Object.keys(groups);
+    const emptyRecord =
+      groupKeys.length > 0
+        ? Object.fromEntries(groupKeys.map((k) => [k, []]))
+        : { "group-primary": [] };
 
     return {
-      ...decisionTemplate,
-      conditionGroups: emptyGroups,
+      ...localizedTemplate,
+      conditionGroups: groupsRecordToArrayNew(emptyRecord),
     };
-  }, [decisionTemplate]);
+  }, [localizedTemplate]);
 
   const decisionTemplateFiltered =
     !selectedDecision && selectedConditions.length === 0
@@ -530,11 +561,13 @@ const useNewDecisionsForm = (props: IUseNewDecisionsForm) => {
     cancelButtonLabel,
     isCreatingNew,
     disabledNext,
-    decisionTemplate,
+    localizedTemplate,
     decisionTemplateFiltered,
     loadingList,
     maxHeight,
     saveButtonLabel,
+    showAlertModal,
+    handleToggleModal,
     closeModal,
     deleteDecision,
     onMultipleChoicesChange,

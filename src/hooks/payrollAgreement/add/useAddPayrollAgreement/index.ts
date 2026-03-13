@@ -415,7 +415,7 @@ const useAddPayrollAgreement = (props: IUseAddPayrollAgreement) => {
     tradename: formValues.company.values.companyNameCommercial,
     countryTaxResidence: formValues.company.values.companyCountry,
     headquarterCity: formValues.company.values.companyCity,
-    headquarterAddress: `${formValues.company.values.companyAddressRes} - ${formValues.company.values.companyComplement}`,
+    headquarterAddress: `${formValues.company.values.companyAddressRes} _ ${formValues.company.values.companyComplement}`,
     countryOfIdentityDocument: formValues.company.values.companyCountryIdent,
   };
 

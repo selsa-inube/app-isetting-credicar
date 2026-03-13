@@ -3,9 +3,12 @@ import { ICompanyEntry } from "@ptypes/payrollAgreement/payrollAgreementTab/form
 
 interface IUseCompanyForm {
   initialValues: ICompanyEntry;
+  editDataOption: boolean;
+  option: boolean;
   ref: React.ForwardedRef<FormikProps<ICompanyEntry>>;
   onSubmit: ((values: ICompanyEntry) => void) | undefined;
   onFormValid: React.Dispatch<React.SetStateAction<boolean>> | undefined;
+  initialCompanyData?: ICompanyEntry;
 }
 
 export type { IUseCompanyForm };

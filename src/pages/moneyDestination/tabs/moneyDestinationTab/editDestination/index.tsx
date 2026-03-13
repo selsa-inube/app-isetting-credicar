@@ -20,7 +20,12 @@ const EditDestination = () => {
   const { data: moneyDestinationData } = location.state ?? {};
   const { appData } = useContext(AuthAndPortalData);
 
-  const { transformedMoneyDestination: data, loading } = useDataDestination({
+  const {
+    transformedMoneyDestination: data,
+    loading,
+    hasError: hasErrorInProgress,
+    errorData: errorDataInProgress,
+  } = useDataDestination({
     moneyDestinationData,
     id,
     requestNumber,
@@ -80,6 +85,7 @@ const EditDestination = () => {
     setShowModal,
     token: appData.token,
     optionRequest: option === EManagementType.IN_PROGRESS,
+    id: id ?? "",
   });
 
   const { modalData, showDecision } = useModalEditDestination({
@@ -92,6 +98,8 @@ const EditDestination = () => {
     errorFetchRequest,
     showEditedModal: showModal,
     descriptionError,
+    hasErrorInProgress,
+    errorDataInProgress,
     optionInProgress: Boolean(option === EManagementType.IN_PROGRESS),
     request: String(requestNumber ?? ""),
     handleCloseGoBackModal,
@@ -138,6 +146,8 @@ const EditDestination = () => {
       loadingEnum={loadingEnum}
       setValuesLine={setValuesLine}
       option={option ?? ""}
+      data={data as IEditData}
+      hasError={hasErrorInProgress}
     />
   );
 };

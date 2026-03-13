@@ -11,72 +11,89 @@ import { normalizedCodeList } from "../normalizedCodeList";
 const getNewInsertDecisions = (
   prevRef: React.MutableRefObject<IRuleDecisionExtended[]>,
   current: IRuleDecisionExtended[],
+  option: boolean,
   dateFrom?: string,
+  rule?: string,
 ) => {
-  if (!arraysEqual(prevRef.current, current)) {
-    return current
-      .filter((decision) => !findDecision(prevRef.current, decision))
-      .map((decision) => {
-        let conditionGroups = undefined;
+  const normalizedCurrent = current.map((curr) => ({
+    ...curr,
+    ruleName: curr.ruleName ?? rule,
+  }));
+  const decisionsToProcess = option
+    ? normalizedCurrent
+    : !arraysEqual(prevRef.current, current)
+      ? current.filter((decision) => !findDecision(prevRef.current, decision))
+      : undefined;
 
-        if (decision.conditionGroups && decision.conditionGroups.length > 0) {
-          const mappedGroups = decision.conditionGroups
-            .map((conditionGroup: IConditionGroups) => {
-              const conditionsThatEstablishesTheDecision =
-                (conditionGroup.conditionsThatEstablishesTheDecision
-                  ?.filter((condition) => condition.value !== undefined)
-                  .map((condition) => ({
-                    conditionName: condition.conditionName,
-                    value:
-                      condition.listOfPossibleValues?.list &&
-                      condition.listOfPossibleValues?.list?.length > 0
-                        ? normalizedCodeList(
-                            condition.value,
-                            condition.listOfPossibleValuesHidden?.list,
-                          )
-                        : condition.value,
-                    transactionOperation: ETransactionOperation.INSERT,
-                  })) as IConditionsTheDecision[]) || [];
+  if (!decisionsToProcess) return;
 
-              return {
-                transactionOperation:
-                  conditionsThatEstablishesTheDecision.length > 0
-                    ? ETransactionOperation.INSERT
-                    : undefined,
-                conditionsThatEstablishesTheDecision,
-              };
-            })
-            .filter(
-              (group: IConditionGroups) =>
-                group.conditionsThatEstablishesTheDecision.length > 0,
-            );
+  return decisionsToProcess.map((decision) => {
+    let conditionGroups = undefined;
 
-          if (mappedGroups.length > 0) {
-            conditionGroups = mappedGroups;
-          }
-        }
+    if (decision.conditionGroups && decision.conditionGroups.length > 0) {
+      const mappedGroups = decision.conditionGroups
+        .map((conditionGroup: IConditionGroups) => {
+          const conditionsThatEstablishesTheDecision =
+            (conditionGroup.conditionsThatEstablishesTheDecision
+              ?.filter((condition) => condition.value !== undefined)
+              .map((condition) => ({
+                conditionName: condition.conditionName,
+                value:
+                  condition.listOfPossibleValues?.list &&
+                  condition.listOfPossibleValues?.list?.length > 0
+                    ? normalizedCodeList(
+                        condition.value,
+                        condition.listOfPossibleValuesHidden?.list,
+                      )
+                    : condition.value,
+                ...(!option && {
+                  transactionOperation: ETransactionOperation.INSERT,
+                }),
+              })) as IConditionsTheDecision[]) || [];
 
-        const validUntil = decision.validUntil
-          ? formatDateDecision(decision.validUntil as string)
-          : undefined;
+          return {
+            ...(!option && {
+              transactionOperation:
+                conditionsThatEstablishesTheDecision.length > 0
+                  ? ETransactionOperation.INSERT
+                  : undefined,
+            }),
+            conditionsThatEstablishesTheDecision,
+          };
+        })
+        .filter(
+          (group: IConditionGroups) =>
+            (group.conditionsThatEstablishesTheDecision?.length ?? 0) > 0,
+        );
 
-        const decisionObject = {
-          effectiveFrom: dateFrom
-            ? formatDateDecision(dateFrom)
-            : formatDateDecision(decision.effectiveFrom as string),
-          ...(validUntil && { validUntil }),
-          value: decision.value,
-          transactionOperation: ETransactionOperation.INSERT,
-          ...(conditionGroups && { conditionGroups }),
-        };
+      if (mappedGroups.length > 0) {
+        conditionGroups = mappedGroups;
+      }
+    }
 
-        return {
-          modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
-          ruleName: decision.ruleName,
-          decisionsByRule: [decisionObject],
-        };
-      });
-  }
+    const validUntil = decision.validUntil
+      ? formatDateDecision(decision.validUntil as string)
+      : undefined;
+
+    const decisionObject = {
+      effectiveFrom: dateFrom
+        ? formatDateDecision(dateFrom)
+        : formatDateDecision(decision.effectiveFrom as string),
+      ...(validUntil && { validUntil }),
+      value: decision.value,
+      ...(!option && {
+        transactionOperation: ETransactionOperation.INSERT,
+      }),
+      ...(conditionGroups && { conditionGroups }),
+    };
+
+    return {
+      ...(!option && {
+        modifyJustification: `${decisionsLabels.modifyJustification} ${decision.ruleName}`,
+      }),
+      ruleName: decision.ruleName ?? rule,
+      decisionsByRule: [decisionObject],
+    };
+  });
 };
-
 export { getNewInsertDecisions };

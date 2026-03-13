@@ -2,19 +2,21 @@ import { MdAdd } from "react-icons/md";
 import { BusinessRulesNew } from "@isettingkit/business-rules";
 import {
   Button,
-  Checkpicker,
   Fieldset,
   IOption,
   SkeletonLine,
   Stack,
 } from "@inubekit/inubekit";
+import { Checkpicker } from "@isettingkit/input";
 import { AlertMessage } from "@pages/creditLines/tabs/forms/alertMessage";
 import { StyledRulesScroll } from "@pages/creditLines/tabs/BusinessRulesNewHandler/styles";
 import { DecisionBox } from "@pages/creditLines/tabs/forms/loadingForm/DecisionBox";
 import { tokens } from "@design/tokens";
+import { DecisionModal } from "@design/modals/decisionModal";
 import { EComponentAppearance } from "@enum/appearances";
 import { rulesLabels } from "@config/generalCreditPolicies/assisted/RulesLabels";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
+import { portalId } from "@config/portalId";
 import { configurationLabels } from "@config/creditLines/configurationLabels";
 import { IRulesFormTextValues } from "@ptypes/decisions/IRulesFormTextValues";
 import { INewDecisionsUI } from "@ptypes/decisions/INewDecisionsUI";
@@ -45,6 +47,8 @@ const NewDecisionFormUI = (props: INewDecisionsUI) => {
     disabledNext,
     loadingList,
     maxHeight,
+    modalData,
+    showDecision,
     onSave,
     saveButtonLabel,
     closeModal,
@@ -143,7 +147,6 @@ const NewDecisionFormUI = (props: INewDecisionsUI) => {
                   selectedDecision={selectedDecision}
                   textValues={textValues as IRulesFormTextValues}
                   shouldRenderEmptyMessage={dataEmpty || decisions.length > 0}
-                  withEditOption={false}
                   withTerm={false}
                 />
 
@@ -201,6 +204,23 @@ const NewDecisionFormUI = (props: INewDecisionsUI) => {
             </Stack>
           )}
         </>
+      )}
+      {showDecision && (
+        <DecisionModal
+          portalId={portalId}
+          appearance={modalData.appearance}
+          appearanceButton={modalData.appearanceButton}
+          actionText={modalData.actionText}
+          description={modalData.description}
+          icon={modalData.icon}
+          onClick={modalData.onClick}
+          onCloseModal={modalData.onCloseModal}
+          title={modalData.title}
+          withCancelButton={modalData.withCancelButton}
+          withIcon={modalData.withIcon}
+          changeZIndex
+          valueZIndex={4}
+        />
       )}
     </Stack>
   );

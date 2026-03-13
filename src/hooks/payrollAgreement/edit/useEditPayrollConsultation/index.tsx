@@ -6,11 +6,13 @@ import { disabledModal } from "@config/disabledModal";
 import { IUseEditPayrollConsultation } from "@ptypes/hooks/IUseEditPayrollConsultation";
 
 const useEditPayrollConsultation = (props: IUseEditPayrollConsultation) => {
-  const { payrollAgreementData, useCaseEdit } = props;
+  const { payrollAgreementData, useCaseEdit, option } = props;
   const [showInfoModal, setShowInfoModal] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const { disabledButton } = useValidateUseCase({ useCase: useCaseEdit });
+  const { disabledButton } = useValidateUseCase({
+    useCase: useCaseEdit as string,
+  });
 
   const handleEdit = () => {
     if (disabledButton) {
@@ -20,8 +22,7 @@ const useEditPayrollConsultation = (props: IUseEditPayrollConsultation) => {
         console.error("payrollAgreementData is undefined or null");
         return;
       }
-
-      navigate(`/payroll-agreement/edit-payroll`, {
+      navigate(`/payroll-agreement/edit-payroll/${option}`, {
         state: { data: payrollAgreementData },
       });
     }
