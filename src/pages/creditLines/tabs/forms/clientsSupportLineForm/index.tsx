@@ -22,7 +22,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     optionsIncluded,
     loading,
     nav,
-    loadingModify,
     lineNameDecision,
     showSendModal,
     submitModalData,
@@ -32,7 +31,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
     optionCrumb,
     optionDetails,
     useCaseConfiguration,
-    optionIcon,
     ruleLoadding,
     configuredDecisions,
     requestSteps,
@@ -96,7 +94,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       onToggleInfoModal={handleToggleInfoModal}
       optionsExcluded={optionsExcluded}
       optionsIncluded={optionsIncluded}
-      updateData={loadingModify}
       loading={loading}
       onOpenModal={handleOpenModal}
       onMove={handleMove}
@@ -111,7 +108,6 @@ const ClientsSupportLineForm = (props: IClientsSupportLineForm) => {
       description={description}
       optionCrumb={optionCrumb}
       optionDetails={optionDetails}
-      optionIcon={optionIcon}
       editOption={useCaseConfiguration === EUseCase.EDIT}
       showInfo={showInfo}
       requestSteps={requestSteps}

@@ -6,6 +6,7 @@ const newBusinessRulesLabels = {
   NoDecision: "Sin Decisiones",
   before:
     "Antes de agregar tus decisiones, selecciona las condiciones que las determinan.",
+  description: "Consulta de las decisiones definidas",
 };
 
 export { newBusinessRulesLabels };

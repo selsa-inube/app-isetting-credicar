@@ -796,13 +796,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     onUnconfiguredModal: handleUnconfiguredRules,
   });
 
-  const optionIcon =
-    useCaseConfiguration === EUseCase.DETAILS ||
-    useCaseConfiguration === EUseCase.DETAILS_CONDITIONAL ||
-    useCaseConfiguration === EUseCase.EDIT
-      ? true
-      : false;
-
   const { title, description, optionCrumb } = optionTitleConfiguration(
     useCaseConfiguration,
     option,
@@ -849,7 +842,6 @@ const useConfigurationLines = (props: IUseConfigurationLines) => {
     description,
     optionCrumb,
     optionDetails,
-    optionIcon,
     optionsConditionsCSV,
     linesConstructionData,
     ruleLoadding,

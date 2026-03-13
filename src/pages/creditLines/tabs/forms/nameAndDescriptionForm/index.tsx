@@ -17,7 +17,6 @@ const NameAndDescriptionForm = () => {
     modalData,
     showDecision,
     formValues,
-    loadingModify,
     nav,
     saveCreditLines,
     requestSteps,
@@ -28,7 +27,6 @@ const NameAndDescriptionForm = () => {
     description,
     optionCrumb,
     optionDetails,
-    optionIcon,
     showSendModal,
     submitModalData,
     useCaseConfiguration,
@@ -74,7 +72,6 @@ const NameAndDescriptionForm = () => {
       onOpenModal={handleOpenModal}
       loading={loading}
       lineName={formValues.nameAndDescription.nameLine}
-      isUpdated={loadingModify}
       navigation={nav}
       message={message}
       showRequestProcessModal={showRequestProcessModal}
@@ -89,7 +86,6 @@ const NameAndDescriptionForm = () => {
       description={description}
       optionCrumb={optionCrumb}
       optionDetails={optionDetails}
-      optionIcon={optionIcon}
       disabledField={disabledNameDescription}
       showSendModal={showSendModal}
       submitModalData={submitModalData}

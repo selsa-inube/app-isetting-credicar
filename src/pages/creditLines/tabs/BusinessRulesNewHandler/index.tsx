@@ -1,13 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Fieldset, Stack, useMediaQuery } from "@inubekit/inubekit";
-import { MdAdd } from "react-icons/md";
-import type { IOption } from "@inubekit/inubekit";
-import { BusinessRulesNew } from "@isettingkit/business-rules";
+import {
+  Button,
+  Fieldset,
+  IOption,
+  Stack,
+  Text,
+  useMediaQuery,
+} from "@inubekit/inubekit";
 import { Checkpicker as Checkpick } from "@isettingkit/input";
+import { MdAdd } from "react-icons/md";
+import { BusinessRulesNew } from "@isettingkit/business-rules";
 import { useAlertDecisionModal } from "@hooks/creditLine/configurationLines/useAlertDecisionModal";
 import { useBusinessRulesNew } from "@hooks/creditLine/useBusinessRulesNew";
 import { tokens } from "@design/tokens";
 import { DecisionModal } from "@design/modals/decisionModal";
+import { EComponentAppearance } from "@enum/appearances";
 import { getEditionModeForDecision } from "@utils/getEditionModeForDecision";
 import { newBusinessRulesLabels } from "@config/creditLines/configuration/newBusinessRulesLabels";
 import { portalId } from "@config/portalId";
@@ -133,8 +140,19 @@ const BusinessRulesNewHandler = (props: IBusinessRulesNew) => {
                   />
                 </StyledMultipleChoiceContainer>
               </Fieldset>
-
-              <Stack justifyContent="flex-end">
+              <Stack
+                width="100%"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text
+                  size="medium"
+                  type="title"
+                  weight="bold"
+                  appearance={EComponentAppearance.GRAY}
+                >
+                  {newBusinessRulesLabels.description}
+                </Text>
                 <Button
                   appearance="primary"
                   cursorHover

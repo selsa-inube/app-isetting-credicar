@@ -15,7 +15,7 @@ const optionTitleConfiguration = (option: string, optionRequest?: boolean) => {
     description = configurationLabels.descriptionAdd;
     optionCrumb = configurationLabels.optionCrumbAdd;
   } else if (option === EUseCase.EDIT) {
-    title = configurationLabels.descriptionEdit;
+    title = configurationLabels.titleEdit;
     description = configurationLabels.descriptionEdit;
     optionCrumb = configurationLabels.optionCrumbEdit;
   } else if (

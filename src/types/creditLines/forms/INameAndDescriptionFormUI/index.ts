@@ -13,7 +13,6 @@ interface INameAndDescriptionFormUI {
   modalData: IModalData;
   loading: boolean;
   lineName: string;
-  isUpdated: boolean;
   navigation: INavigation;
   message: string;
   saveData: ISaveDataResponse;
@@ -22,7 +21,6 @@ interface INameAndDescriptionFormUI {
   showRequestStatusModal: boolean;
   language: string;
   optionDetails: boolean;
-  optionIcon: boolean;
   title: string;
   description: string;
   optionCrumb: string;

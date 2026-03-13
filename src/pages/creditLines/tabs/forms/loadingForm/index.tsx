@@ -1,11 +1,5 @@
 import { MdAdd } from "react-icons/md";
-import {
-  Button,
-  Divider,
-  Fieldset,
-  SkeletonLine,
-  Stack,
-} from "@inubekit/inubekit";
+import { Button, Fieldset, SkeletonLine, Stack } from "@inubekit/inubekit";
 import { tokens } from "@design/tokens";
 import { configurationLabels } from "@config/creditLines/configurationLabels";
 import { ILoadingForm } from "@ptypes/creditLines/ILoadingForm";
@@ -23,23 +17,12 @@ const LoadingForm = (props: ILoadingForm) => {
 
   return (
     <Stack direction="column" gap={tokens.spacing.s250} width="100%">
-      <Fieldset
-        legend={configurationLabels.lineInformation}
-        height="auto"
-        spacing="compact"
-      >
-        <Stack direction="column" width="100%" gap={tokens.spacing.s150}>
-          <Stack width="100%" justifyContent="space-between">
-            <SkeletonLine animated width="500px" height="24px" />
-            <SkeletonLine width="24px" height="24px" animated />
-          </Stack>
-          <Divider dashed />
-          <Stack width="100%" gap={tokens.spacing.s100}>
-            <SkeletonLine animated width="250px" height="24px" />
-            <SkeletonLine width="24px" height="24px" animated />
-          </Stack>
+      <Stack direction="column" width="100%" gap={tokens.spacing.s150}>
+        <Stack width="100%" justifyContent="space-between" alignItems="center">
+          <SkeletonLine animated width="400px" height="24px" />
+          <SkeletonLine animated width="100px" height="36px" />
         </Stack>
-      </Fieldset>
+      </Stack>
 
       {withoutDecisions && (
         <>
@@ -57,14 +40,6 @@ const LoadingForm = (props: ILoadingForm) => {
         <>
           {addUseCase ? (
             <>
-              <Fieldset
-                legend={configurationLabels.conditions}
-                height="auto"
-                spacing="compact"
-              >
-                <SkeletonLine width="100%" height="40px" animated />
-              </Fieldset>
-
               <Stack justifyContent="flex-end">
                 <Button iconBefore={<MdAdd />} spacing="compact" disabled>
                   {configurationLabels.addButton}

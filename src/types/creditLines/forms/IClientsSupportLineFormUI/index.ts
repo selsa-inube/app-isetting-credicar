@@ -9,7 +9,6 @@ interface IClientsSupportLineFormUI {
   optionsExcluded: IDragAndDropColumn;
   optionsIncluded: IDragAndDropColumn;
   showInfoModal: boolean;
-  updateData: boolean;
   loading: boolean;
   navigation: INavigation;
   lineNameDecision: string;
@@ -21,7 +20,6 @@ interface IClientsSupportLineFormUI {
   description: string;
   optionCrumb: string;
   optionDetails: boolean;
-  optionIcon: boolean;
   submitModalData: ISubmitModalData;
   editOption: boolean;
   showInfo: boolean;
