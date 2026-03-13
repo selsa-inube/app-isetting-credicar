@@ -96,8 +96,8 @@ const useUpdateData = (props: IUseUpateData) => {
         if (!initiaConditionGroups) return undefined;
 
         for (const decision of initiaConditionGroups) {
-          const group = decision.conditionGroups.find((group) =>
-            group.conditionsThatEstablishesTheDecision.some(
+          const group = decision.conditionGroups?.find((group) =>
+            group.conditionsThatEstablishesTheDecision?.some(
               (condition) => condition.value === rule,
             ),
           );
