@@ -5,6 +5,8 @@ interface IUseModalEditConfig {
   showEditSubmitModal: boolean;
   unconfiguredRules: IPostCheckLineRule[];
   editedRules: IPostCheckLineRule[];
+  option: boolean;
+  numberRequest: string;
   onSaveModal: () => void;
   onEditSubmitModal: () => void;
   onToggleUnconfiguredRules: () => void;

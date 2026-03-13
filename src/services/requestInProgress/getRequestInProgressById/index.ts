@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { getWithRetries } from "@services/core/getWithRetries";
-import { queryProcessAxiosInstance } from "@api/isettingProcess";
+import { queryProcessAxiosInstance } from "@api/isettingQuery";
 import { EGeneral } from "@enum/general";
 import { IRequestsInProgress } from "@ptypes/payrollAgreement/requestInProgTab/IRequestsInProgress";
 import { mapRequestsInProgressToEntity } from "./mappers/mapRequestsInProgToEntity";

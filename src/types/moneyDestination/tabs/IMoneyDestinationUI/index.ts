@@ -12,6 +12,7 @@ interface IMoneyDestinationUI {
   showMoneyTab: boolean;
   showRequestsTab: boolean;
   moneyDestinationTabs: ITab[];
+  onRequestsEmpty: () => void;
   onToggleInfoModal: () => void;
   onCloseMenu: () => void;
   onToggleModal: () => void;

@@ -21,6 +21,7 @@ const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
     showMoneyTab,
     showRequestsTab,
     moneyDestinationTabs,
+    onRequestsEmpty,
     onCloseMenu,
     onToggleModal,
     onToggleInfoModal,
@@ -78,7 +79,9 @@ const MoneyDestinationUI = (props: IMoneyDestinationUI) => {
           />
 
           {showMoneyTab && <MoneyDestinationTab />}
-          {showRequestsTab && <RequestsInProgressTab />}
+          {showRequestsTab && (
+            <RequestsInProgressTab onRequestsEmpty={onRequestsEmpty} />
+          )}
         </Stack>
       </Stack>
     </Stack>

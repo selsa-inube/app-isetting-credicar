@@ -109,6 +109,11 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
     }
   }, [isSelected]);
 
+  const handleRequestsEmpty = () => {
+    setRequestsInProgress([]);
+    setIsSelected(tabs.moneyDestination.id);
+  };
+
   const filteredTabsConfig = Object.keys(tabs).reduce((tabOption, key) => {
     const tab = tabs[key as keyof typeof tabs];
 
@@ -146,6 +151,7 @@ const useMoneryDestinationPage = (props: IUseMoneryDestinationPage) => {
     onToggleModal,
     onToggleInfoModal,
     handleTabChange,
+    handleRequestsEmpty,
   };
 };
 

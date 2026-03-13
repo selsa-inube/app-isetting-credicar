@@ -10,7 +10,7 @@ import { IUseRequestsInProgress } from "@ptypes/hooks/IUseRequestsInProgress";
 import { IRequestsInProgress } from "@ptypes/requestInProgress/IRequestsInProgress";
 
 const useRequestsInProgress = (props: IUseRequestsInProgress) => {
-  const { businessManager, businessUnits, token } = props;
+  const { businessManager, businessUnits, token, onRequestsEmpty } = props;
   const [requestsInProgress, setRequestsInProgress] = useState<
     IRequestsInProgress[]
   >([]);
@@ -61,7 +61,7 @@ const useRequestsInProgress = (props: IUseRequestsInProgress) => {
         );
 
         if (updatedRequests.length === 0) {
-          navigate("/");
+          onRequestsEmpty?.();
         }
 
         return updatedRequests;

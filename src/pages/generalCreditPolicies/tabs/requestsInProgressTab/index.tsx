@@ -3,10 +3,12 @@ import { useContext } from "react";
 import { usePageLength } from "@hooks/usePageLength";
 import { AuthAndPortalData } from "@context/authAndPortalDataProvider";
 import { useRequestsInProgress } from "@hooks/GeneralCreditPolicies/useRequestsInProgress";
+import { IRequestsInProgressTab } from "@ptypes/generalCredPolicies/IRequestsInProgressTab";
 import { IEntry } from "@ptypes/design/table/IEntry";
 import { RequestsInProgressTabUI } from "./interface";
 
-const RequestsInProgressTab = () => {
+const RequestsInProgressTab = (props: IRequestsInProgressTab) => {
+  const { onRequestsEmpty } = props;
   const { appData } = useContext(AuthAndPortalData);
 
   const {
@@ -21,6 +23,7 @@ const RequestsInProgressTab = () => {
     businessUnits: appData.businessUnit.publicCode,
     businessManager: appData.businessManager.publicCode,
     token: appData.token,
+    onRequestsEmpty,
   });
 
   const pageLength = usePageLength();

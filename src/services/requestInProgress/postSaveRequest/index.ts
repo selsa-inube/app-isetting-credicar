@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 import { postWithRetries } from "@services/core/postWithRetries";
 import { ISaveDataRequest } from "@ptypes/saveData/ISaveDataRequest";
 import { ISaveDataResponse } from "@ptypes/saveData/ISaveDataResponse";
-import { isaasPerAxiosInstance } from "@api/isaasPersistence";
+import { isettingPerAxiosInstance } from "@api/isettingPersistence";
 import { mapSavePayrollAgreementEntityToApi } from "./mappers/mapSaveMoneyDestEntity";
 
 const postSaveRequest = async (
@@ -22,7 +22,7 @@ const postSaveRequest = async (
     `/requests`,
     config,
     mapSavePayrollAgreementEntityToApi(data) as unknown as string[],
-    isaasPerAxiosInstance,
+    isettingPerAxiosInstance,
   );
 
   return saveData;

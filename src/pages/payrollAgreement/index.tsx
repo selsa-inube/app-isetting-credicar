@@ -18,6 +18,7 @@ const PayrollAgreement = () => {
     showModal,
     showInfoModal,
     options,
+    handleRequestsEmpty,
     onToggleInfoModal,
     onCloseMenu,
     onToggleModal,
@@ -47,6 +48,7 @@ const PayrollAgreement = () => {
       onToggleInfoModal={onToggleInfoModal}
       onCloseMenu={onCloseMenu}
       onToggleModal={onToggleModal}
+      onRequestsEmpty={handleRequestsEmpty}
     />
   );
 };

@@ -14,6 +14,7 @@ interface IUseModalConfigurationInitial {
   showErrorRulesModal: boolean;
   showWithoutDataModal: boolean;
   withoutData: boolean;
+  optionRequest: boolean;
   hasErrorGroupRules: boolean;
   handleToggleErrorModal: () => void;
   handleToggleErrorRulesModal: () => void;

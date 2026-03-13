@@ -6,8 +6,15 @@ import { IUseLinesConstructionData } from "@ptypes/hooks/creditLines/IUseLinesCo
 import { IErrors } from "@ptypes/IErrors";
 
 const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
-  const { option, userAccount, linesData, withNeWData, setIsUpdated, token } =
-    props;
+  const {
+    option,
+    userAccount,
+    linesData,
+    withNeWData,
+    optionRequest,
+    setIsUpdated,
+    token,
+  } = props;
   const [borrowerData, setBorrowerData] = useState<IModifyConstructionResponse>(
     {} as IModifyConstructionResponse,
   );
@@ -20,6 +27,8 @@ const useModifyLinesConstructionData = (props: IUseLinesConstructionData) => {
       setHasError(false);
       setErrorData({} as IErrors);
       setBorrowerData({} as IModifyConstructionResponse);
+
+      if (optionRequest) return;
 
       if (option && withNeWData && linesData?.configurationRequestData) {
         setLoading(true);

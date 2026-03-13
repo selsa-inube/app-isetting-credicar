@@ -1,3 +1,3 @@
-const statusFlowAutomatic = ["ProcessingRequest", "RequestReadyToProcess"];
+const statusFlowAutomatic = ["RequestInProgress"];
 
 export { statusFlowAutomatic };

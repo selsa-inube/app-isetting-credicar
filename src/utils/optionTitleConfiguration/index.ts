@@ -1,24 +1,27 @@
 import { EUseCase } from "@enum/useCase";
 import { configurationLabels } from "@config/creditLines/configurationLabels";
 
-const optionTitleConfiguration = (option: string) => {
+const optionTitleConfiguration = (option: string, optionRequest?: boolean) => {
   let title = "";
   let description = "";
   let optionCrumb = "";
 
-  if (option === EUseCase.ADD) {
+  if (optionRequest && option === EUseCase.ADD) {
+    title = configurationLabels.titleRequest;
+    description = configurationLabels.descriptionRequest;
+    optionCrumb = configurationLabels.optionCrumbRequest;
+  } else if (option === EUseCase.ADD) {
     title = configurationLabels.titleAdd;
     description = configurationLabels.descriptionAdd;
     optionCrumb = configurationLabels.optionCrumbAdd;
-  }
-
-  if (option === EUseCase.EDIT) {
+  } else if (option === EUseCase.EDIT) {
     title = configurationLabels.titleEdit;
     description = configurationLabels.descriptionEdit;
     optionCrumb = configurationLabels.optionCrumbEdit;
-  }
-
-  if (option === EUseCase.DETAILS || option === EUseCase.DETAILS_CONDITIONAL) {
+  } else if (
+    option === EUseCase.DETAILS ||
+    option === EUseCase.DETAILS_CONDITIONAL
+  ) {
     title = configurationLabels.titleDetails;
     description = configurationLabels.descriptionDetails;
     optionCrumb = configurationLabels.optionCrumbDetails;

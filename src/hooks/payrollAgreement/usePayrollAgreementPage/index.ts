@@ -108,6 +108,11 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     }
   }, [isSelected]);
 
+  const handleRequestsEmpty = () => {
+    setRequestsInProgress([]);
+    setIsSelected(tabs.payrollAgreement.id);
+  };
+
   const filteredTabsConfig = Object.keys(tabs).reduce((acc, key) => {
     const tab = tabs[key as keyof typeof payrollAgreementTabsConfig];
 
@@ -146,6 +151,7 @@ const usePayrollAgreementPage = (props: IUsePayrollAgreementPage) => {
     onCloseMenu,
     onToggleModal,
     handleTabChange,
+    handleRequestsEmpty,
   };
 };
 

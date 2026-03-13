@@ -12,6 +12,7 @@ interface IPayrollAgreementUI {
   showModal: boolean;
   showInfoModal: boolean;
   options: IMenuOptions[];
+  onRequestsEmpty: () => void;
   onToggleInfoModal: () => void;
   onCloseMenu: () => void;
   onToggleModal: () => void;

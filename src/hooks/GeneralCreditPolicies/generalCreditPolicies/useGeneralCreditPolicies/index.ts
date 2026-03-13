@@ -92,6 +92,17 @@ const useGeneralCreditPolicies = () => {
     setShowAddPolicies(validatePolicies && withoutPolicies);
   }, [loadingPolicies, withoutPolicies, requestsInProgress]);
 
+  const handleRequestsEmpty = () => {
+    setRequestsInProgress([]);
+
+    const validate = getFirstFilteredTab(filteredTabsConfig)?.id ?? "";
+    setIsSelected(validate);
+
+    if (validate === "" || validate === undefined) {
+      navigate("/");
+    }
+  };
+
   const filteredTabsConfig = useMemo(() => {
     return Object.keys(tabs).reduce((tabOption, key) => {
       const tab = tabs[key as keyof typeof tabs];
@@ -214,6 +225,7 @@ const useGeneralCreditPolicies = () => {
     handleCloseModal,
     handlePolicies,
     handleTabChange,
+    handleRequestsEmpty,
   };
 };
 

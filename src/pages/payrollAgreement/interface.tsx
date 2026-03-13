@@ -21,6 +21,7 @@ const PayrollAgreementUI = (props: IPayrollAgreementUI) => {
     showModal,
     showInfoModal,
     options,
+    onRequestsEmpty,
     onToggleInfoModal,
     onCloseMenu,
     onToggleModal,
@@ -77,7 +78,9 @@ const PayrollAgreementUI = (props: IPayrollAgreementUI) => {
           />
 
           {showPayrollAgreementTab && <PayrollAgreementTab />}
-          {showRequestsInProgressTab && <RequestsInProgressTab />}
+          {showRequestsInProgressTab && (
+            <RequestsInProgressTab onRequestsEmpty={onRequestsEmpty} />
+          )}
         </Stack>
       </Stack>
     </Stack>

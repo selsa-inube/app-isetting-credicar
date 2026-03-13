@@ -21,6 +21,7 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
     modalData,
     setShowUnderConstruction,
     handleTabChange,
+    onRequestsEmpty,
   } = props;
 
   return (
@@ -70,7 +71,9 @@ const CreditLinesUI = (props: ICreditLinesUI) => {
                 setShowUnderConstruction={setShowUnderConstruction}
               />
             )}
-            {showRequestsInProgressTab && <RequestsInProgressTab />}
+            {showRequestsInProgressTab && (
+              <RequestsInProgressTab onRequestsEmpty={onRequestsEmpty} />
+            )}
             {showLinesUnderConstructionTab && <LinesUnderConstructionTab />}
           </Stack>
         </Stack>
