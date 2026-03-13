@@ -12,6 +12,7 @@ interface IConditionEstablishesDecision {
   labelName?: string;
   descriptionUse?: string;
   i18n?: ILanguage;
+  timeUnit?: string;
 }
 
 export type { IConditionEstablishesDecision };

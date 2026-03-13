@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import { queryProcessAxiosInstance } from "@api/isettingProcess";
+import { queryProcessAxiosInstance } from "@api/isettingQuery";
 import { getWithRetries } from "@services/core/getWithRetries";
 import { EGeneral } from "@enum/general";
 import { ILineUnderConstructionData } from "@ptypes/creditLines/ILineUnderConstructionData";

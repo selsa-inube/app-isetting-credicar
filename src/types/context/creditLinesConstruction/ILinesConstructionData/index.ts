@@ -7,6 +7,7 @@ interface ILinesConstructionData {
   lineOfCreditId?: string;
   settingRequestId: string;
   rules?: IRuleDecisionExtended[];
+  requestNumber?: string;
 }
 
 export type { ILinesConstructionData };

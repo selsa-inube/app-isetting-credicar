@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import { patchWithRetries } from "@services/core/patchWithRetries";
-import { isaasPerAxiosInstance } from "@api/isaasPersistence";
+import { isettingPerAxiosInstance } from "@api/isettingPersistence";
 import { IModifyConstructionRequest } from "@ptypes/creditLines/IModifyConstructionRequest";
 import { IModifyConstructionResponse } from "@ptypes/creditLines/IModifyConstructionResponse";
 import { mapModifyConstructionEntityToApi } from "./mappers";
@@ -22,7 +22,7 @@ const patchModifyConstruction = async (
     `/requests`,
     config,
     mapModifyConstructionEntityToApi(data) as unknown as string[],
-    isaasPerAxiosInstance,
+    isettingPerAxiosInstance,
   );
 
   return saveData;

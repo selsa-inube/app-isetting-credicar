@@ -6,6 +6,7 @@ interface IUseAutoSaveOnRouteChange {
   userAccount: string;
   debounceMs?: number;
   token: string;
+  optionRequest: boolean;
   setIsUpdated?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

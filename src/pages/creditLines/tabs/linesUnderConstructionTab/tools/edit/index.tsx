@@ -7,7 +7,7 @@ const EditConstruction = (props: IEditConstruction) => {
   const { handleConfiguration, showInfoModal, modalData } =
     useConfigurationConsultation({
       configurationData: data,
-      useCaseConfiguration,
+      useCaseConfiguration: useCaseConfiguration ?? "",
     });
   return (
     <>

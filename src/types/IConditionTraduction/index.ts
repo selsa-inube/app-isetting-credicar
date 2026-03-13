@@ -6,6 +6,7 @@ interface IConditionTraduction {
   listPossibleValues?: IValue;
   howToSetTheCondition?: string;
   conditionDataType?: string;
+  timeUnit?: string;
 }
 
 export type { IConditionTraduction };

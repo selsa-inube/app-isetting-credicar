@@ -164,38 +164,46 @@ const DECISION_ROUTES: IRouteConfiguration[] = [
   { path: "increment-frequency", templateKey: "IncrementFrequency" },
 ];
 
+const ConfigurationLinesRoutes = () => (
+  <>
+    <Route index element={<NameAndDescriptionForm />} />
+    <Route
+      path="clients-supported"
+      element={<ClientsSupportLineForm templateKey="CreditLineByRiskProfile" />}
+    />
+    <Route
+      path="line-credit"
+      element={<LineCreditFormForm templateKey="LineOfCredit" />}
+    />
+    <Route
+      path="line-Names-Descriptions"
+      element={<NameAndDescriptionForm />}
+    />
+    {DECISION_ROUTES.map(({ path, templateKey }) => (
+      <Route
+        key={templateKey}
+        path={path}
+        element={
+          <DecisionTemplateScreen key={templateKey} templateKey={templateKey} />
+        }
+      />
+    ))}
+  </>
+);
+
 const CreditLinesRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<CreditLines />} />
       <Route path="edit-credit-lines" element={<ConfigurationLines />}>
-        <Route index element={<NameAndDescriptionForm />} />
-        <Route
-          path="clients-supported"
-          element={
-            <ClientsSupportLineForm templateKey="CreditLineByRiskProfile" />
-          }
-        />
-        <Route
-          path="line-credit"
-          element={<LineCreditFormForm templateKey="LineOfCredit" />}
-        />
-        <Route
-          path="line-Names-Descriptions"
-          element={<NameAndDescriptionForm />}
-        />
-        {DECISION_ROUTES.map(({ path, templateKey }) => (
-          <Route
-            key={templateKey}
-            path={path}
-            element={
-              <DecisionTemplateScreen
-                key={templateKey}
-                templateKey={templateKey}
-              />
-            }
-          />
-        ))}
+        {ConfigurationLinesRoutes()}
+      </Route>
+
+      <Route
+        path="edit-credit-lines/:optionUseCase/:option/:id"
+        element={<ConfigurationLines />}
+      >
+        {ConfigurationLinesRoutes()}
       </Route>
     </Routes>
   );
